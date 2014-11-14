@@ -1,0 +1,94 @@
+extends layout
+
+block head
+  nav.navbar.navbar-custom.navbar-fixed-top(role='navigation')
+    .container
+      .navbar-header
+        a.navbar-brand.page-scroll(href='/')
+          span.light Michael D'Angelo
+      .collapse.navbar-collapse.navbar-right.navbar-main-collapse
+        ul.nav.navbar-nav
+          li
+            a.page-scroll(href='#skills') Skills
+          li
+            a.page-scroll(href='#education') Education
+          li
+            a.page-scroll(href='#work') Work
+          li
+            a.page-scroll(href='#research') Research
+          li
+            a.page-scroll(href='#courses') Courses
+          li
+            a.page-scroll(href='#papers') Papers
+          li
+            a.page-scroll(href='#contact') Contact
+
+block content
+  body#page-top(data-spy='scroll', data-target='.navbar-fixed-top')
+    header.intro
+        .div.intro-body
+          h1 Resume
+          a.btn.page-scroll(href='#skills')
+            i.fa.fa-arrow-circle-o-down.animated
+
+    section#skills.container.content-section.text-center
+      .row
+        .col-lg-8.col-lg-offset-2
+          h2 Skills
+          p Node JS
+          p HTML5
+          p Optimization
+          p PCB Design
+          p Python
+          p C++ 
+          p C
+          p Matlab
+          p Satellite Design
+          p Project Management
+          p Web Design 
+           i.fa.fa-laptop
+            i.fa.fa-laptop
+             i.fa.fa-laptop
+          p FPGA Design
+          p Convex Optimization
+          p Machine Learning
+          p Linear Dyamical Systems
+          p Signal Processing
+          p Numerical Linear Algebra
+
+    section#work.container.content-section.text-center
+      .row
+        .col-lg-8.col-lg-offset-2
+          h2 Contact Me
+          p
+            a(href='mailto:mdangelo@stanford.edu') mdangelo@stanford.edu
+          p
+            a(href='http://facebook.com/d') facebook.com/d
+
+    section#research.container.content-section.text-center
+      .row
+        .col-lg-8.col-lg-offset-2
+          h2 Contact Me
+          p
+            a(href='mailto:mdangelo@stanford.edu') mdangelo@stanford.edu
+          p
+            a(href='http://facebook.com/d') facebook.com/d
+
+
+    section#papers.container.content-section.text-center
+      .row
+        .col-lg-8.col-lg-offset-2
+          h2 Contact Me
+          p
+            a(href='mailto:mdangelo@stanford.edu') mdangelo@stanford.edu
+          p
+            a(href='http://facebook.com/d') facebook.com/d
+
+    section#contact.container.content-section.text-center
+      .row
+        .col-lg-8.col-lg-offset-2
+          h2 Contact Me
+          p
+            a(href='mailto:mdangelo@stanford.edu') mdangelo@stanford.edu
+          p
+            a(href='http://facebook.com/d') facebook.com/d

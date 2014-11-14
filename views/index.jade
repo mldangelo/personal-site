@@ -1,0 +1,69 @@
+extends layout
+
+block head
+  nav.navbar.navbar-custom.navbar-fixed-top(role='navigation')
+    .container
+      .navbar-header
+        button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-main-collapse')
+          i.fa.fa-bars
+        a.navbar-brand.page-scroll(href='#page-top')
+          span.light Michael D'Angelo
+      .collapse.navbar-collapse.navbar-right.navbar-main-collapse
+        ul.nav.navbar-nav
+          li.hidden
+            a(href='#page-top')
+          li
+            a.page-scroll(href='#about') About
+          li
+            a.page-scroll(href='#projects') Projects
+          li
+            a.page-scroll(href='#work') Work
+          li
+            a.page-scroll(href='#contact') Contact
+
+block content
+  body#page-top(data-spy='scroll', data-target='.navbar-fixed-top')
+    header.intro
+        .div.intro-body
+          h1 Hi. I'm Michael 
+          h3 welcome to my site
+          a.btn.btn-circle.page-scroll(href='#about')
+            i.fa.fa-angle-double-down.animated
+
+    section#about.container.content-section.text-center
+      .row
+        .col-lg-8.col-lg-offset-2
+          h2 About Michael
+          p Part time rocket scientist, full time stanford graduate student, world record holder, quidditch enthusiast.
+
+    section#projects.container.content-section.text-center
+      .row
+        .col-lg-8.col-lg-offset-2
+          h2 Projects
+          .row
+            .col-md-4
+              p Arthena
+            .col-md-4
+              p Rapchat (51% Owner)
+            .col-md-4
+              p Photography
+
+    section#work.content-section.text-center
+      .work-section
+        .container
+          .col-lg-8.col-lg-offset-2
+            h2 Work
+            p Arthena
+            p Facebook
+            p Planetary Resources
+            p Planet Labs
+            p GLADOS 
+
+    section#contact.container.content-section.text-center
+      .row
+        .col-lg-8.col-lg-offset-2
+          h2 Contact Me
+          p
+            a(href='mailto:mdangelo@stanford.edu') mdangelo@stanford.edu
+          p
+            a(href='http://facebook.com/d') facebook.com/d
