@@ -19,6 +19,10 @@ app.get('/', (req, res) => {
   res.render('index');
 });
 
+app.get('*', (req, res) => {
+  res.status(302).redirect('/');
+});
+
 app.use((err, req, res, next) => {
   res.redirect('/');
 });
