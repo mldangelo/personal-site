@@ -3,10 +3,13 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
+    "start": "node index.js",
     "dev": "nodemon ./bin/www"
   },
   "dependencies": {
+    "babel-preset-es2015-node5": "^1.2.0",
+    "babel-preset-stage-0": "^6.5.0",
+    "babel-register": "^6.7.2",
     "body-parser": "~1.14.2",
     "co-views": "^2.1.0",
     "cookie-parser": "~1.4.1",

@@ -1,16 +1,15 @@
-var views = require('co-views');
-var koa = require('koa');
-const app = module.exports = new koa();
+import views from 'co-views';
+import Koa from 'koa';
+const app = new Koa();
 
-// setup views, appending .ejs
-// when no extname is given to render()
+const render = views(__dirname + '/views', { ext: 'jade' });
 
-var render = views(__dirname + '/views', { ext: 'jade' });
+// response
+app.use(async (ctx) => {
+  const page = await render('index', {});
+  ctx.body = page;
+})
 
-// render
+app.listen(7999, () => console.log('server started 7999'))
 
-app.use(function *(){
-  this.body = yield render('index', {});
-});
-
-if (!module.parent) app.listen(7999);
+export default app;

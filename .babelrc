@@ -1,0 +1,7 @@
+{
+  "presets": ["es2015-node5"],
+  "plugins": [
+    "transform-async-to-generator",
+    "syntax-async-functions"
+  ]
+}
