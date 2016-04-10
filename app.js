@@ -1,10 +1,11 @@
-import views from 'co-views';
 import Koa from 'koa';
-const app = new Koa();
+import views from 'co-views';
+import serve from 'koa-static';
 
+const app = new Koa();
 const render = views(__dirname + '/views', { ext: 'jade' });
 
-// response
+app.use(serve(__dirname + '/public'));
 app.use(async (ctx) => {
   const page = await render('index', {});
   ctx.body = page;

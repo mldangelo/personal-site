@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon ./bin/www"
+    "dev": "nodemon index.js"
   },
   "dependencies": {
     "babel-preset-es2015-node5": "^1.2.0",
@@ -19,6 +19,7 @@
     "koa": "^2.0.0",
     "koa-jade": "^2.1.0",
     "koa-router": "^5.4.0",
+    "koa-static": "^2.0.0",
     "morgan": "~1.6.1",
     "serve-favicon": "~2.3.0"
   },
