@@ -3,17 +3,18 @@ import views from 'koa-views';
 import serve from 'koa-static';
 import convert from 'koa-convert';
 import Router from 'koa-router';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const port = process.env.PORT || 7999;
 
 const app = new Koa();
 const router = Router();
 
-//app.use(router(app));
 app.use(convert(serve(__dirname + '/public')));
-
 app.use(convert(views(__dirname + '/public/dist', {
-  map: {
-    html: 'underscore',
-  }
+  html: 'underscore',
 })));
 /*
 app.use(async (ctx, next) => {
@@ -27,6 +28,6 @@ router.get('/', function *(next) {
 
 app.use(router.routes()).use(router.allowedMethods());
 
-app.listen(7999, () => console.log('server started 7999'))
+app.listen(port, () => console.log(`server started ${port}`))
 
 export default app;
