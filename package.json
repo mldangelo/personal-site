@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "build": "rimraf public/dist && set NODE_ENV=production && webpack --config ./webpack.production.config.js --progress --profile --colors",
+    "build-dev": "rimraf public/dist && set NODE_ENV=development && webpack --config ./webpack.config.js --progress --profile --colors",
     "clean": "rimraf public/dist",
-    "dev": "NODE_ENV=development && nodemon server.js --exec babel-node",
+    "dev": "NODE_ENV=development && npm run build-dev && nodemon server.js --exec babel-node",
     "lint": "./node_modules/.bin/eslint app server.js webpack.*.js",
     "start": "NODE_ENV=production && ./node_modules/.bin/babel-node server"
   },
