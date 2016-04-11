@@ -22,12 +22,12 @@ app.use(async (ctx, next) => {
 }); */
 
 
-router.get('/', function *(next) {
-    yield this.render('index', {});
+router.get('/', function *() {
+  yield this.render('index', {});
 });
 
 app.use(router.routes()).use(router.allowedMethods());
 
-app.listen(port, () => console.log(`server started ${port}`))
+app.listen(port, () => console.log(`server started ${port}`));
 
 export default app;
