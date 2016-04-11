@@ -5,7 +5,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        <h2> hi </h2>
+        <h2> hi asdad </h2>
         <Nav/>
       </div>
     );
