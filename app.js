@@ -1,16 +1,31 @@
 import Koa from 'koa';
-import views from 'co-views';
+import views from 'koa-views';
 import serve from 'koa-static';
 import convert from 'koa-convert';
+import Router from 'koa-router';
 
 const app = new Koa();
-const render = views(__dirname + '/views', { ext: 'jade' });
+const router = Router();
 
+//app.use(router(app));
 app.use(convert(serve(__dirname + '/public')));
-app.use(async (ctx) => {
-  const page = await render('index', {});
-  ctx.body = page;
-})
+
+app.use(convert(views(__dirname + '/public/dist', {
+  map: {
+    html: 'underscore',
+  }
+})));
+/*
+app.use(async (ctx, next) => {
+  await ctx.render('index', {});
+}); */
+
+
+router.get('/', function *(next) {
+    yield this.render('index', {});
+});
+
+app.use(router.routes()).use(router.allowedMethods());
 
 app.listen(7999, () => console.log('server started 7999'))
 
