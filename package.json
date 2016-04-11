@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "nodemon app.js --exec babel-node",
-    "start": "./node_modules/.bin/babel-node app",
-    "build": "rimraf dist && set NODE_ENV=production && webpack --config ./webpack.production.config.js --progress --profile --colors"
+    "build": "rimraf public/dist && set NODE_ENV=production && webpack --config ./webpack.production.config.js --progress --profile --colors",
+    "clean": "rimraf public/dist",
+    "dev": "NODE_ENV=development && nodemon app.js --exec babel-node",
+    "start": "NODE_ENV=production && ./node_modules/.bin/babel-node app"
   },
   "dependencies": {
     "autoprefixer": "^6.3.6",
