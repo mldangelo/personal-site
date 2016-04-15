@@ -1,0 +1,219 @@
+//@extend-elements
+//original selectors
+//body, input, select, textarea
+%extend_1 {
+	color: $color_asphalt_approx;
+	font-size: 16pt;
+	line-height: 1.75em;
+}
+
+//original selectors
+//h1, h2, h3, h4, h5, h6
+%extend_2 {
+	color: $color_asphalt_approx;
+	font-weight: 600;
+	line-height: 1em;
+	margin: 0 0 1em 0;
+}
+
+@import url(https://fonts.googleapis.com/css?family=Montserrat);
+@font-face {
+	font-family: $font_0, $font_1;
+}
+article {
+	display: block;
+}
+aside {
+	display: block;
+}
+details {
+	display: block;
+}
+figcaption {
+	display: block;
+}
+figure {
+	display: block;
+}
+footer {
+	display: block;
+}
+header {
+	display: block;
+}
+menu {
+	display: block;
+}
+nav {
+	display: block;
+}
+section {
+	display: block;
+}
+main {
+	display: block;
+}
+body {
+	line-height: 1;
+	background: $color_alabaster_approx;
+	font-family: $font_0, $font_1;
+	width: 100%;
+	@extend %extend_1;
+	height: 100%;
+}
+ol {
+	list-style: none;
+}
+ul {
+	list-style: none;
+}
+blockquote {
+	quotes: none;
+	&:before {
+		content: none;
+	}
+	&:after {
+		content: none;
+	}
+}
+q {
+	quotes: none;
+	&:before {
+		content: none;
+	}
+	&:after {
+		content: none;
+	}
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+html {
+	width: 100%;
+	height: 100%;
+}
+input {
+	@extend %extend_1;
+}
+select {
+	@extend %extend_1;
+}
+textarea {
+	@extend %extend_1;
+}
+a {
+	cursor: pointer;
+	text-decoration: none;
+	color: $black;
+}
+strong {
+	font-weight: 400;
+	font-size: .95em;
+}
+b {
+	font-weight: 400;
+	font-size: .95em;
+}
+p {
+	font-size: 0.7em;
+	line-height: 1.8em;
+	color: $color_mountain_mist_approx;
+}
+h1 {
+	@extend %extend_2;
+	font-family: $font_0, $font_1;
+	font-weight: bold;
+	font-size: 2.85em;
+	margin-bottom: .5em;
+	a {
+		color: inherit;
+		text-decoration: none;
+	}
+}
+h2 {
+	@extend %extend_2;
+	font-family: $font_0, $font_1;
+	font-weight: normal;
+	font-size: 1.14em;
+	line-height: 1.2em;
+	margin-bottom: 0;
+	a {
+		color: inherit;
+		text-decoration: none;
+	}
+}
+h3 {
+	@extend %extend_2;
+	font-size: 1em;
+	margin-bottom: 1.9em;
+	font-weight: 400;
+	a {
+		color: inherit;
+		text-decoration: none;
+	}
+}
+h4 {
+	@extend %extend_2;
+	a {
+		color: inherit;
+		text-decoration: none;
+	}
+}
+h5 {
+	@extend %extend_2;
+	a {
+		color: inherit;
+		text-decoration: none;
+	}
+}
+h6 {
+	@extend %extend_2;
+	a {
+		color: inherit;
+		text-decoration: none;
+	}
+}
+small {
+	font-size: 0.56em;
+	line-height: 1.7em;
+	color: $color_dove_gray_approx;
+}
+#main {
+	height: 100%;
+	margin-left: 25em;
+	width: calc(100% - 25em);
+	background: $white;
+}
+#header {
+	height: 100%;
+	left: 0;
+	padding: 2.85em 2.6em;
+	position: fixed;
+	text-align: left;
+	top: 0;
+	width: 25em;
+	min-width: 22.52em;
+	border-right: 1px solid $color_delta_approx;
+	h1 {
+		position: relative;
+	}
+	h2 {
+		position: relative;
+	}
+	h3 {
+		position: relative;
+	}
+	h4 {
+		position: relative;
+	}
+	h5 {
+		position: relative;
+	}
+	h6 {
+		position: relative;
+	}
+	p {
+		position: relative;
+	}
+}
