@@ -8,12 +8,14 @@ class About extends Component {
             <ul class="list-inline">
                 <li>
                     <header>
-                        <h3>What I Do</h3></header>
+                        <h3>What I Do</h3>
+                    </header>
                     <p>Product Management<br/> Data Science<br/> Machine Learning<br/> Full Stack Web Development<br/> Space Systems<br/> Hardware Design</p>
                 </li>
                 <li>
                     <header>
-                        <h3>What I Enjoy</h3></header>
+                        <h3>What I Enjoy</h3>
+                    </header>
                     <p>Space<br/> Skiing<br/> Photography<br/> Travel</p>
                 </li>
             </ul>
