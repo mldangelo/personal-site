@@ -1,4 +1,6 @@
 import path from 'path';
+import debug from 'debug';
+
 import express from 'express';
 import bodyParser from 'body-parser';
 
@@ -6,8 +8,6 @@ import webpack from 'webpack';
 import webpackMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import config from './webpack.config.js';
-
-import debug from 'debug';
 
 import dotenv from 'dotenv';
 dotenv.config();
@@ -22,6 +22,7 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 if (env == 'development') {
+  debug.enable('dev,express');
   const compiler = webpack(config);
   const middleware = webpackMiddleware(compiler, {
     publicPath: config.output.publicPath,
@@ -42,7 +43,9 @@ if (env == 'development') {
     res.write(middleware.fileSystem.readFileSync(path.join(__dirname, 'dist/index.html')));
     res.end();
   });
+  require('blocked')((ms) => debug('express')(`blocked for ${ms}ms`))
 } else {
+  debug.enable('express');
   app.use(express.static(__dirname + '/dist'));
   app.get('/', function response(req, res) {
     res.sendFile(path.join(__dirname, 'dist/index.html'));
@@ -51,9 +54,9 @@ if (env == 'development') {
 
 app.listen(port, '0.0.0.0', (err) => {
   if (err) {
-    console.log(err);
+    debug('express')(err);
   }
-  debug('koa')(`==> 🌎 Listening on port ${port}`)
+  debug('express')(` Application started. 🌎  Listening on port ${port}`)
 });
 
 export default app;

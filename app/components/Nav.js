@@ -5,7 +5,7 @@ class Nav extends Component {
     return (
       <div className='container'>
         <header id="header">
-            // Doesn't seem to work in react
+            {/* Doesn't seem to work in react */}
             <div className="unselectable">
                 <h1>MICHAEL D'ANGELO</h1>
             </div>
