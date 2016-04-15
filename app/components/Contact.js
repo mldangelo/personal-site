@@ -3,8 +3,8 @@ import React, {Component} from 'react';
 class Contact extends Component {
   render() {
     return (
-      <div>
-        <section id="contact-me">
+      <div className='row no-margin-lr'>
+        <div className='col-sm-12 contact'>
             <div>
                 <header>
                     <h3>Contact Me</h3>
@@ -21,7 +21,7 @@ class Contact extends Component {
                   <a href="https://angel.co/michael-d-angelo">Angel List</a>
                 </p>
             </div>
-        </section>
+        </div>
       </div>
     );
   }
