@@ -4,8 +4,8 @@ class About extends Component {
   render() {
     return (
       <div className="about">
-        <div classname='col-sm-12'>
-            <ul class="list-inline">
+        <div className="col-sm-12">
+            <ul className="list-inline">
                 <li>
                     <header>
                         <h3>What I Do</h3>

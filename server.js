@@ -21,7 +21,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-if (env == 'development') {
+// TODO(Michael) Rewrite linter rule for string compare
+if (env == 'development') { // eslint-disable-line eqeqeq
   debug.enable('dev,express');
   const compiler = webpack(config);
   const middleware = webpackMiddleware(compiler, {
@@ -43,7 +44,7 @@ if (env == 'development') {
     res.write(middleware.fileSystem.readFileSync(path.join(__dirname, 'dist/index.html')));
     res.end();
   });
-  require('blocked')((ms) => debug('express')(`blocked for ${ms}ms`))
+  require('blocked')((ms) => debug('express')(`blocked for ${ms}ms`));
 } else {
   debug.enable('express');
   app.use(express.static(__dirname + '/dist'));
@@ -56,7 +57,7 @@ app.listen(port, '0.0.0.0', (err) => {
   if (err) {
     debug('express')(err);
   }
-  debug('express')(` Application started. 🌎  Listening on port ${port}`)
+  debug('express')(` Application started. 🌎  Listening on port ${port}`);
 });
 
 export default app;

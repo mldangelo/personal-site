@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 class Nav extends Component {
   render() {
     return (
-      <div className='container'>
+      <div className="container">
         <header id="header">
             {/* Doesn't seem to work in react */}
             <div className="unselectable">
@@ -11,7 +11,7 @@ class Nav extends Component {
             </div>
             <h2><a href="mailto:michael.l.dangelo@gmail.com">michael.l.dangelo@gmail.com</a></h2>
             <br/>
-            <img src='/images/me.jpg' alt='' className='img-responsive'/>
+            <img src="/images/me.jpg" alt="" className="img-responsive"/>
             <br/>
         </header>
         <footer id="footer">

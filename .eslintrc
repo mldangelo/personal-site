@@ -73,7 +73,7 @@
     "dot-notation": [2, {            // http://eslint.org/docs/rules/dot-notation
       "allowKeywords": true
     }],
-    "eqeqeq": [2, "smart"],           // http://eslint.org/docs/rules/eqeqeq
+    "eqeqeq": [2, "smart"],             // http://eslint.org/docs/rules/eqeqeq
     "guard-for-in": 2,               // http://eslint.org/docs/rules/guard-for-in
     "no-caller": 2,                  // http://eslint.org/docs/rules/no-caller
     "no-else-return": 2,             // http://eslint.org/docs/rules/no-else-return
