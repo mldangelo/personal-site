@@ -1,84 +1,59 @@
 import path from 'path';
-import debug from 'debug';
-
-import Koa from 'koa';
-
-import helmet from 'koa-helmet';
-import logger from 'koa-logger';
-import favicon from 'koa-favicon';
-import responseTime from 'koa-response-time';
-
-
-import views from 'koa-views';
-import serve from 'koa-static';
-import convert from 'koa-convert';
-import Router from 'koa-router';
+import express from 'express';
+import bodyParser from 'body-parser';
 
 import webpack from 'webpack';
+import webpackMiddleware from 'webpack-dev-middleware';
+import webpackHotMiddleware from 'webpack-hot-middleware';
+import config from './webpack.config.js';
+
+import debug from 'debug';
 
 import dotenv from 'dotenv';
-
 dotenv.config();
-
-import compress from 'koa-compress';
-
 
 const port = process.env.PORT || 7999;
 const env = process.env.NODE_ENV || 'development';
 
-const app = new Koa();
-const router = Router();
+const app = express();
 
-// add header `X-Response-Time`
-app.use(convert(responseTime()));
-app.use(convert(logger()));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, 'public')));
 
-// various security headers
-app.use(helmet());
+if (env == 'development') {
+  const compiler = webpack(config);
+  const middleware = webpackMiddleware(compiler, {
+    publicPath: config.output.publicPath,
+    contentBase: 'src',
+    stats: {
+      colors: true,
+      hash: false,
+      timings: true,
+      chunks: false,
+      chunkModules: false,
+      modules: false
+    }
+  });
 
-if (env === 'production') {
-  // set debug env to `koa` only
-  debug.enable('koa');
-
-  // load production middleware
-  app.use(convert(require('koa-conditional-get')()));
-  app.use(convert(require('koa-etag')()));
-  app.use(convert(compress()));
-} else if (env === 'development') {
-  debug.enable('dev,koa');
-  const webpackConfig = require('./webpack.config');
-  const compiler = webpack(webpackConfig);
-  app.use(convert(require('koa-webpack-dev-middleware')(compiler)));
-  app.use(convert(require('koa-webpack-hot-middleware')(compiler)));
-
-  // log when process is blocked
-  require('blocked')((ms) => debug('koa')(`blocked for ${ms}ms`));
+  app.use(middleware);
+  app.use(webpackHotMiddleware(compiler));
+  app.get('/', function response(req, res) {
+    res.write(middleware.fileSystem.readFileSync(path.join(__dirname, 'dist/index.html')));
+    res.end();
+  });
+} else {
+  app.use(express.static(__dirname + '/dist'));
+  app.get('/', function response(req, res) {
+    res.sendFile(path.join(__dirname, 'dist/index.html'));
+  });
 }
-// Set favicon, not sure if I actually need to do this
-app.use(convert(favicon(path.join(__dirname, 'public/favicon.ico'))));
 
-// Public Assets
-app.use(convert(serve(__dirname + '/public')));
-
-app.use(convert(views(__dirname + '/public/dist', {
-  html: 'underscore',
-})));
-/*
-app.use(async (ctx, next) => {
-  await ctx.render('index', {});
-}); */
-
-
-router.get('/', function *() {
-  yield this.render('index', {});
+app.listen(port, '0.0.0.0', (err) => {
+  if (err) {
+    console.log(err);
+  }
+  debug('koa')(`==> 🌎 Listening on port ${port}`)
 });
-
-app.use(router.routes()).use(router.allowedMethods());
-
-app.listen(port, () => debug('koa')(`Application started on port ${port}`));
-
-// Tell parent process koa-server is started
-if (process.send) process.send('online');
-
 
 export default app;
