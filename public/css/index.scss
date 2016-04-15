@@ -16,7 +16,8 @@
     border-right: 1px solid $color_delta_approx;
     h1, h2, h3, h4, h5, h6, p {
       position: relative;
-    }
+    };
+		background: $portrait_background_color;
 }
 #footer {
     bottom: 0;
@@ -28,9 +29,10 @@
     width: 25em;
     min-width: 22.52em;
 }
+
 .about {
-    height: 100%;
-    margin-bottom: 4.5em;
+    // height: 100%;
+    // margin-bottom: 4.5em;
     ul {
         // position: absolute;
         // bottom: 0;

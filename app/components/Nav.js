@@ -3,12 +3,16 @@ import React, {Component} from 'react';
 class Nav extends Component {
   render() {
     return (
-      <div>
+      <div className='container'>
         <header id="header">
-            <div class="unselectable">
+            <div className="unselectable">
                 <h1>MICHAEL D'ANGELO</h1>
             </div>
-            <h2><a href="mailto:michael.l.dangelo@gmail.com">michael.l.dangelo@gmail.com</a></h2></header>
+            <h2><a href="mailto:michael.l.dangelo@gmail.com">michael.l.dangelo@gmail.com</a></h2>
+            <br/>
+            <img src='/images/me.jpg' alt='' className='img-responsive'/>
+            <br/>
+        </header>
         <footer id="footer">
             <header>
                 <h3>About Me</h3>
