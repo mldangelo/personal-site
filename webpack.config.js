@@ -38,7 +38,11 @@ module.exports = {
       loader: 'json'
     }, {
       test: /\.css$/,
-      loader: 'style!css?modules&localIdentName=[name]---[local]---[hash:base64:5]'
+      loader: 'style-loader!css-loader?modules&localIdentName=[name]---[local]---[hash:base64:5]'
+    },
+    {
+      test: /\.scss$/,
+      loaders: 'style-loader!css-loader!sass-loader?modules&localIdentName=[name]---[local]---[hash:base64:5]'
     }]
   }
 };
