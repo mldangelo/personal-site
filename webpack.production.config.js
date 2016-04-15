@@ -46,9 +46,14 @@ module.exports = {
       test: /\.json?$/,
       loader: 'json'
     }, {
-      test: /\.css$/,
-      loader: ExtractTextPlugin.extract('style', 'css?modules&localIdentName=[name]---[local]---[hash:base64:5]!postcss')
-    }]
+    test: /\.css$/,
+    loader: ExtractTextPlugin.extract('style-loader', 'css-loader?modules&localIdentName=[name]---[local]---[hash:base64:5]!postcss')
+    }, {
+    test: /\.scss$/,
+    loaders: 'style-loader!css-loader!sass-loader?modules&localIdentName=[name]---[local]---[hash:base64:5]'
+  }] // TODO(Michael): Verfiy css/scss loaders later. Remove -loader from loader names
+
+
   },
   postcss: [
     require('autoprefixer')
