@@ -4,6 +4,13 @@
     // width: calc(100% - 25em);
     background: $white;
 }
+
+.main {
+  width: calc(100% - #{$nav-width});
+  position: fixed;
+  right: 0;
+}
+
 .header {
     height: 100%;
     left: 0;
@@ -12,7 +19,7 @@
     position: fixed;
     text-align: left;
     top: 0;
-    width: 22.52em;
+    width: $nav-width;
     // min-width: 22.52em;
     // border-right: 2px solid $black;
     -webkit-box-shadow: -5px 0px 20px 10px rgba(0,0,0,0.25);
