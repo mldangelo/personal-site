@@ -8,12 +8,13 @@
     height: 100%;
     left: 0;
     padding: 2.85em 2.6em;
+    margin-top: 0em;
     position: fixed;
     text-align: left;
     top: 0;
-    width: 25em;
-    min-width: 22.52em;
-    border-right: 1px solid $color_delta_approx;
+    width: 22.52em;
+    // min-width: 22.52em;
+    border-right: 2px solid $black;
     h1,
     h2,
     h3,
@@ -23,21 +24,24 @@
     p {
         position: relative;
     };
-    background: $portrait_background_color;
+    background: $white;
+    z-index: 1;
 }
 .footer {
     bottom: 0;
     left: 0;
     padding: 0 2.6em;
-    height: 15.65em;
+    margin-bottom: 1em;
+    // height: 15.65em;
     position: fixed;
     text-align: left;
     width: 25em;
-    min-width: 22.52em;
+    min-width: 16.52em;
+    z-index: 1;
 }
 
 .side-nav {
-  z-index: 100;
+  z-index: 1000 !important;
 }
 
 .stats {

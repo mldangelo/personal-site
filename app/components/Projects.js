@@ -13,18 +13,17 @@ const data = [
   }
 ];
 
-class Row extends Component {
+class Cell extends Component {
   render() {
     return (
       <div className="col-sm-3 no-lr">
         <a href={this.props.pair.link}>{this.props.pair.title}</a>
-        <br/>
       </div>
     );
   }
 }
 
-Row.propTypes = {
+Cell.propTypes = {
   pair: PropTypes.object.isRequired,
 };
 
@@ -33,7 +32,7 @@ class Projects extends Component {
 
   getRows(){
     return data.map((pair) => {
-      return <Row pair={pair} />
+      return <Cell pair={pair} />
     });
   }
   render() {
@@ -44,9 +43,7 @@ class Projects extends Component {
                 <header>
                     <h3>Projects</h3>
                 </header>
-                <p>
-                  {this.getRows()}
-                </p>
+                {this.getRows()}
             </div>
         </div>
       </div>

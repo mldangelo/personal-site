@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 class Nav extends Component {
   render() {
     return (
-      <div className="container side-nav">
+      <div className="side-nav">
         <div className="header">
             {/* Doesn't seem to work in react */}
             <div className="unselectable">
