@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 
 
-// To be provided by an API
+// TODO To be provided by an API
 const data = [
   {
     label: 'Hours spent on Netflix',
@@ -46,11 +46,13 @@ TableRow.propTypes = {
 class Stats extends Component {
 
   getRows() {
-    return (
-      <TableRow
-        label={data[0].label}
-        value={data[0].value} />
-    );
+    return data.map((pair) => {
+      return (
+        <TableRow
+          label={pair.label}
+          value={pair.value} />
+      );
+    });
   }
 
   render() {
@@ -60,10 +62,6 @@ class Stats extends Component {
             <table class="table table-hover">
             <h5>
             <thead>
-              <tr>
-                <th>Firstname</th>
-                <th>Email</th>
-              </tr>
               {this.getRows()}
             </thead>
             </h5>
