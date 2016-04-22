@@ -3,6 +3,8 @@ import Nav from './components/Nav';
 import About from './components/About';
 import Stats from './components/Stats';
 import Contact from './components/Contact';
+import Projects from './components/Projects';
+
 
 class App extends Component {
   render() {
@@ -14,6 +16,7 @@ class App extends Component {
         <div className="container">
           <About/>
         </div>  */}
+        <Projects/>
         <Contact/>
       </div>
     );

@@ -61,6 +61,18 @@
         }
     }
 }
+
+.projects {
+    background-color: $white;
+    padding: 3.57em 5.8em;
+    p {
+        color: $color_asphalt_approx;
+    }
+    h3 {
+        color: $color_asphalt_approx;
+    }
+}
+
 .contact {
     background-color: $color_delta_approx;
     padding: 3.57em 5.8em;
