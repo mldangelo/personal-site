@@ -51,7 +51,28 @@
 }
 
 .side-nav {
-  z-index: 1000 !important;
+    z-index: 900 !important;
+    height: 100%;
+    left: 0;
+    padding: 2.85em 2.6em;
+    margin-top: 0em;
+    position: fixed;
+    text-align: left;
+    top: 0;
+    width: $nav-width;
+    -webkit-box-shadow: -5px 0px 20px 10px rgba(0,0,0,0.25);
+    -moz-box-shadow: -5px 0px 20px 10px rgba(0,0,0,0.25);
+    box-shadow: -5px 0px 20px 10px rgba(0,0,0,0.25);
+    h1,
+    h2,
+    h3,
+    p {
+        position: relative;
+    };
+    background: $white;
+    h3 {
+      margin-bottom: 1em;
+    }
 }
 
 .stats {
