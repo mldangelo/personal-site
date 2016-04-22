@@ -7,13 +7,14 @@ import Contact from './components/Contact';
 class App extends Component {
   render() {
     return (
-      <div className="container">
-        {/* <Nav/> */}
+      <div>
+        <Nav/>
+        {/*
         <Stats/>
         <div className="container">
           <About/>
-          <Contact/>
-        </div>
+        </div>  */}
+        <Contact/>
       </div>
     );
   }

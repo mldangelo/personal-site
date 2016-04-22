@@ -7,6 +7,9 @@ const data = [
     label: 'Hours spent on Netflix',
     value: 'Too many',
   },{
+    label: 'Hours spent on Reddit',
+    value: '11%',
+  },{
     label: 'Instagram photos posted',
     value: '3',
   },{
@@ -39,6 +42,9 @@ const data = [
   },{
     label: 'Flights taken',
     value: '7',
+  },{
+    label: 'Stars on Github',
+    value: '0',
   }
 ];
 
@@ -97,8 +103,15 @@ class Stats extends Component {
   render() {
     return (
       <div className="container stats">
+        <h2>Some stats about me</h2>
         <Table
-          label="Some stats about me"
+          label="Since Beginning of Time"
+          data={data} />
+        <Table
+          label="Last Year"
+          data={data} />
+        <Table
+          label="Last Month"
           data={data} />
       </div>
     );

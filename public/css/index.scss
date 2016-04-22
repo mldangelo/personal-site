@@ -4,7 +4,7 @@
     // width: calc(100% - 25em);
     background: $white;
 }
-#header {
+.header {
     height: 100%;
     left: 0;
     padding: 2.85em 2.6em;
@@ -14,12 +14,18 @@
     width: 25em;
     min-width: 22.52em;
     border-right: 1px solid $color_delta_approx;
-    h1, h2, h3, h4, h5, h6, p {
-      position: relative;
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p {
+        position: relative;
     };
-		background: $portrait_background_color;
+    background: $portrait_background_color;
 }
-#footer {
+.footer {
     bottom: 0;
     left: 0;
     padding: 0 2.6em;
@@ -30,12 +36,15 @@
     min-width: 22.52em;
 }
 
-.stats {
-  padding-top: 2em;
-  background: $portrait_background_color;
-  width: 100%;
+.side-nav {
+  z-index: 100;
 }
 
+.stats {
+    padding-top: 2em;
+    background: $portrait_background_color;
+    width: 100%;
+}
 .about {
     // height: 100%;
     // margin-bottom: 4.5em;
