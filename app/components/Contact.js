@@ -16,6 +16,9 @@ const data = [
   },{
     label: "Angel List",
     value: "https://angel.co/michael-d-angelo"
+  },{
+    label: "Github",
+    value: "https://github.com/mldangelo"
   }
 ];
 
