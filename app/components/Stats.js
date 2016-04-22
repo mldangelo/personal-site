@@ -24,7 +24,24 @@ const data = [
   },{
     label: 'Dollars spent on Gasoline',
     value: '58.23',
-}];
+  },{
+    label: 'Miles walked',
+    value: '31.7',
+  },{
+    label: 'Number of flights of stairs climbed',
+    value: '171',
+  },{
+    label: 'Days skied',
+    value: '15',
+  },{
+    label: 'Days away from home',
+    value: '62',
+  },{
+    label: 'Flights taken',
+    value: '7',
+  }
+];
+
 
 class TableRow extends Component {
   render(){
@@ -42,11 +59,10 @@ TableRow.propTypes = {
   value: PropTypes.string.isRequired,
 };
 
-
-class Stats extends Component {
+class Table extends Component {
 
   getRows() {
-    return data.map((pair) => {
+    return this.props.data.map((pair) => {
       return (
         <TableRow
           label={pair.label}
@@ -57,23 +73,33 @@ class Stats extends Component {
 
   render() {
     return (
-      <div className="container stats">
-          <h4>Some stats about me</h4>
-            <table class="table table-hover">
-            <h5>
-            <thead>
-              {this.getRows()}
-            </thead>
-            </h5>
-            <p>
+      <div>
+          <h4>{this.props.label}</h4>
+          <table class="table table-hover">
             <tbody>
-              <tr>
-                <td>Hours spent on Netflix</td>
-                <td>Too Many</td>
-              </tr>
+              {this.getRows()}
             </tbody>
-            </p>
           </table>
+      </div>
+    );
+  }
+}
+
+Table.propTypes = {
+  label: PropTypes.string.isRequired,
+  data: PropTypes.array.isRequired,
+};
+
+
+
+class Stats extends Component {
+
+  render() {
+    return (
+      <div className="container stats">
+        <Table
+          label="Some stats about me"
+          data={data} />
       </div>
     );
   }
