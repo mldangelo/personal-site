@@ -10,6 +10,9 @@ const data = [
   },{
     title: "Space Potato",
     link: "http://www.spacepotato.org"
+  },{
+    title: "Cat Detector",
+    link: "http://www.catdetector.biz"
   }
 ];
 

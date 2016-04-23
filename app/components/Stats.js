@@ -103,7 +103,7 @@ class Stats extends Component {
   render() {
     return (
       <div className="container stats">
-        <h2>Some stats about me</h2>
+        <h2>Some stats/facts about me</h2>
         <Table
           label="Since Beginning of Time"
           data={data} />

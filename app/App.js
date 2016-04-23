@@ -16,8 +16,9 @@ class App extends Component {
         <div className="container">
           <About/>
         </div>  */}
-        <div className="main">
+        <div className="container main no-lr">
         <Projects/>
+        {/* <Stats/> */}
         <Contact/>
         </div>
       </div>
