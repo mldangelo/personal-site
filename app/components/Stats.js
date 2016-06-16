@@ -79,9 +79,9 @@ class Table extends Component {
 
   render() {
     return (
-      <div>
+      <div className="container">
           <h4>{this.props.label}</h4>
-          <table class="table table-hover">
+          <table className="table table-hover">
             <tbody>
               {this.getRows()}
             </tbody>
@@ -102,17 +102,27 @@ class Stats extends Component {
 
   render() {
     return (
-      <div className="container stats">
-        <h2>Some stats/facts about me</h2>
-        <Table
-          label="Since Beginning of Time"
-          data={data} />
-        <Table
-          label="Last Year"
-          data={data} />
-        <Table
-          label="Last Month"
-          data={data} />
+      <div className="container stats no-lr">
+        <h4>Some stats/facts about me</h4>
+          <div className="col-sm-6">
+            <h4>Some stats/facts about me</h4>
+          </div>
+          <div className="col-sm-6">
+            <h4>Some stats/facts about me</h4>
+          </div>
+          {/*
+        <div className="col-sm-6">
+          <Table
+            label="Since Beginning of Time"
+            data={data} />
+          <Table
+            label="Last Year"
+            data={data} />
+          <Table
+            label="Last Month"
+            data={data} />
+        </div>
+        */}
       </div>
     );
   }

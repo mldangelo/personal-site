@@ -18,40 +18,20 @@
 @font-face {
     font-family: $font_0, $font_1;
 }
-article {
-    display: block;
-}
-aside {
-    display: block;
-}
-details {
-    display: block;
-}
-figcaption {
-    display: block;
-}
-figure {
-    display: block;
-}
-footer {
-    display: block;
-}
-header {
-    display: block;
-}
-menu {
-    display: block;
-}
-nav {
-    display: block;
-}
-section {
-    display: block;
-}
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+menu,
+nav,
+section,
 main {
     display: block;
 }
-body {
+html, body, div {
     line-height: 1;
     background: $color_alabaster_approx;
     font-family: $font_0, $font_1;
@@ -74,30 +54,12 @@ blockquote {
         content: none;
     }
 }
-q {
-    quotes: none;
-    &:before {
-        content: none;
-    }
-    &:after {
-        content: none;
-    }
-}
+
 table {
     border-collapse: collapse;
     border-spacing: 0;
 }
-html {
-    width: 100%;
-    height: 100%;
-}
-input {
-    @extend %extend_1;
-}
-select {
-    @extend %extend_1;
-}
-textarea {
+input, select, textarea {
     @extend %extend_1;
 }
 a {
@@ -151,21 +113,7 @@ h3 {
         text-decoration: none;
     }
 }
-h4 {
-    @extend %extend_2;
-    a {
-        color: inherit;
-        text-decoration: none;
-    }
-}
-h5 {
-    @extend %extend_2;
-    a {
-        color: inherit;
-        text-decoration: none;
-    }
-}
-h6 {
+h4, h5, h6 {
     @extend %extend_2;
     a {
         color: inherit;

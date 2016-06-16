@@ -17,9 +17,11 @@ class App extends Component {
           <About/>
         </div>  */}
         <div className="container main no-lr">
-        <Projects/>
-        {/* <Stats/> */}
-        <Contact/>
+          <Stats/>
+          {/*
+          <Projects/>
+          <Contact/>
+          */}
         </div>
       </div>
     );

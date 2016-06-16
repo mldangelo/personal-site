@@ -1,42 +1,42 @@
-#root {
-    height: 100%;
-    // margin-left: 25em;
-    // width: calc(100% - 25em);
+.side-nav {
+    z-index: 10 !important;
     background: $white;
-}
+    opacity: .2; // for testing
 
-.main {
-  width: calc(100% - #{$nav-width});
-  position: fixed;
-  right: 0;
-}
-
-.header {
-    height: 100%;
-    left: 0;
-    padding: 2.85em 2.6em;
-    margin-top: 0em;
-    position: fixed;
-    text-align: left;
-    top: 0;
     width: $nav-width;
-    // min-width: 22.52em;
-    // border-right: 2px solid $black;
+    height: 100%;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    padding: 2.85em 2.6em;
+    margin-top: 0;
+
+    text-align: left;
+
     -webkit-box-shadow: -5px 0px 20px 10px rgba(0,0,0,0.25);
     -moz-box-shadow: -5px 0px 20px 10px rgba(0,0,0,0.25);
     box-shadow: -5px 0px 20px 10px rgba(0,0,0,0.25);
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6,
-    p {
+
+    h1, h2, h3, p {
         position: relative;
-    };
-    background: $white;
-    z-index: 1;
+    }
+
+    h3 {
+      margin-bottom: 1em;
+    }
 }
+
+.main {
+  margin-left: $nav-width;
+  padding-left: -$nav-width;
+  // max-width: calc(100% - #{$nav-width});
+  max-width: 100vw;
+  margin-right: 0;
+  background-color: #009A00
+}
+/*
 .footer {
     bottom: 0;
     left: 0;
@@ -49,44 +49,14 @@
     min-width: 16.52em;
     z-index: 1;
 }
-
-.side-nav {
-    z-index: 900 !important;
-    height: 100%;
-    left: 0;
-    padding: 2.85em 2.6em;
-    margin-top: 0em;
-    position: fixed;
-    text-align: left;
-    top: 0;
-    width: $nav-width;
-    -webkit-box-shadow: -5px 0px 20px 10px rgba(0,0,0,0.25);
-    -moz-box-shadow: -5px 0px 20px 10px rgba(0,0,0,0.25);
-    box-shadow: -5px 0px 20px 10px rgba(0,0,0,0.25);
-    h1,
-    h2,
-    h3,
-    p {
-        position: relative;
-    };
-    background: $white;
-    h3 {
-      margin-bottom: 1em;
-    }
-}
-
+*/
 .stats {
-    padding-top: 2em;
-    background: $portrait_background_color;
-    width: 100%;
+    // padding-top: 2em;
+    // background: $portrait_background_color;
+    // width: 100%;
 }
 .about {
-    // height: 100%;
-    // margin-bottom: 4.5em;
     ul {
-        // position: absolute;
-        // bottom: 0;
-        // height: 15.65em;
         > li {
             margin-right: 4.3em;
             vertical-align: top;
