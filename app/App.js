@@ -10,8 +10,6 @@ import Contact from './components/Contact';
 
 import Nav from './components/Nav';
 
-
-
 class App extends Component {
   render() {
     return (

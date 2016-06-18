@@ -7,28 +7,28 @@ const data = [
     label: 'Stars this repository has on github',
     value: '0',
     link: 'https://github.com/mldangelo/mldangelo/stargazers',
-  },{
+  }, {
     label: 'number of lines of code powering this website',
     value: '9762',
     link: 'https://github.com/mldangelo/mldangelo/graphs/contributors',
-  },{
+  }, {
     label: 'number of forks',
     value: '3',
     link: 'https://github.com/mldangelo/mldangelo/network',
-  },{
+  }, {
     label: 'number of spoons',
     value: '0',
-  },{
+  }, {
     label: 'number of linter warnings',
     value: '2',
-  },{
+  }, {
     label: 'languages used',
     value: '6',
-  },{
+  }, {
     label: 'number of contributors',
     value: '1',
     link: 'https://github.com/mldangelo/mldangelo/graphs/contributors',
-  },{
+  }, {
     label: 'github issues',
     value: '0',
   }
@@ -36,7 +36,7 @@ const data = [
 
 
 class TableRow extends Component {
-  render(){
+  render() {
     return (
       <tr>
         <td>{this.props.label}</td>

@@ -9,7 +9,7 @@ const jobs = [
     points: [
       'Worked in Addis Ababa for the Ethiopian Ministry of Health and built data visualization tools in React, Flask.',
     ],
-  },{
+  }, {
     company: 'Matroid',
     position: 'Cofounder',
     link: 'http://matroid.com',
@@ -18,7 +18,7 @@ const jobs = [
       'Developed end to end machine learning pipeline to train visual classifiers from keywords using Node.JS, Express, Keystone, MongoDB, AWS, S3, Caffe, and other technologies.',
       'Received Series A term sheets for 20M+ valuations.',
     ],
-  },{
+  }, {
     company: 'Arthena',
     position: 'Software Engineer',
     link: 'http://arthena.com',
