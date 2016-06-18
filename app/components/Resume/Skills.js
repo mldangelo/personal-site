@@ -1,5 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 
+// TODO Make sort and filterable, update skill levels. Add more
+
 const skills = [
   {
     title: 'Javascript',
@@ -161,7 +163,7 @@ const colors = {
   orange: '#f46e23',
 };
 
-const getColor = function(type){
+const getColor = (type) => {
   const dict = {
     'web': colors.green,
     'data': colors.blue,

@@ -4,6 +4,7 @@
 	.education {
 		.title {
 			text-align: center;
+			margin-bottom: 2em;
 		}
 	}
 	.experience {
@@ -18,6 +19,7 @@
 		}
 	}
 	.courses {
+		padding-top: 1.6em;
 		.title {
 			text-align: center;
 		}
@@ -26,7 +28,11 @@
 		.title {
 			text-align: center;
 		}
-
+	}
+	.references {
+		.title {
+			text-align: center;
+		}
 	}
 }
 
@@ -44,7 +50,23 @@
 	//letter-spacing: 0.5em;
 }
 
+.courses .course-number {
+	display: inline;
+}
+.courses .course-name {
+	display: inline;
+	font-family: "Raleway", Helvetica, sans-serif;
+	font-size: 0.7em;
+  font-weight: 400;
+  letter-spacing: 0.25em;
+  line-height: 2.5;
+  margin-top: -1em;
+  text-transform: uppercase;
+}
 
+.courses ul li{
+  display: inline;
+}
 
 
 .skillbar {

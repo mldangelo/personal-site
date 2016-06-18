@@ -14,7 +14,7 @@ class About extends Component {
         <p> Source available here. </p>
         <footer>
           <ul className="stats">
-            <li><a href="#" className="icon fa-heart">28</a></li>
+            <li><a href="#" className="icon fa-heart">0</a></li>
           </ul>
         </footer>
       </article>
