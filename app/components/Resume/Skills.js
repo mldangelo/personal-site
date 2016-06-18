@@ -201,7 +201,6 @@ Skill.propTypes = {
   data: PropTypes.object.isRequired,
 };
 
-
 class Skills extends Component {
 
   getRows() {

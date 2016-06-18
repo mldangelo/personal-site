@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import { Link } from 'react-router';
 
 import Education from './Resume/Education';
-import Jobs from './Resume/Jobs';
+import Experience from './Resume/Experience';
 import Skills from './Resume/Skills';
 import Courses from './Resume/Courses';
 
@@ -17,7 +17,7 @@ class Resume extends Component {
         </header>
 
         <Education/>
-        <Jobs/>
+        <Experience/>
         <Skills/>
         <Courses/>
 

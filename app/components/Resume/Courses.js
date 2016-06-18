@@ -2,7 +2,6 @@ import React, {Component, PropTypes} from 'react';
 
 // TODO remove last bullet / figure out how to add bullets with css
 
-
 // TODO Package lodash sort instead.
 const dynamicSort = (property) => {
   let sortOrder = 1;

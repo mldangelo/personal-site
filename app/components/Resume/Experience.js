@@ -101,7 +101,7 @@ Job.propTypes = {
   data: PropTypes.object.isRequired,
 };
 
-class Jobs extends Component {
+class Experience extends Component {
 
   getRows() {
     return positions.map((job) => {
@@ -123,4 +123,4 @@ class Jobs extends Component {
   }
 }
 
-export default Jobs;
+export default Experience;
