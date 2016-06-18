@@ -80,7 +80,6 @@ class Table extends Component {
 }
 
 Table.propTypes = {
-  label: PropTypes.string.isRequired,
   data: PropTypes.array.isRequired,
 };
 
