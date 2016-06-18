@@ -5,42 +5,52 @@ const data = [
     title: "Nearest Dollar",
     link: "http://www.nearestdollar.com/",
     image: '/images/projects/nearestdollar.png',
-    date: 'November, 2015',
+    date: 'November, 2015', // TODO - Derive this from datetime field
+    datetime: '11-20-2015'
   },{
     title: "Harvest",
     link: "http://www.harvesters.club/",
     image: '/images/projects/harvest.png',
-
+    date: 'September, 2015',
+    datetime: '09-20-2015',
   },{
     title: "Space Potato",
     link: "http://www.spacepotato.org",
     image: '/images/projects/spacepotato.png',
+    date: 'June, 2015',
+    datetime: '06-28-2015',
   },{
     title: "Cat Detector",
     link: "http://www.catdetector.biz",
-    image: '/images/projects/catdetector.png',
+    image: '/images/projects/catdetector.jpg',
+    date: 'May, 2015',
+    datetime: '05-15-2015',
   }
 ];
 
 class Cell extends Component {
   render() {
     return (
-      <div className="col-sm-3 no-lr">
-        <a href={this.props.pair.link}>{this.props.pair.title}</a>
-      </div>
+      <article className="mini-post">
+        <header>
+          <h3><a href={this.props.data.link}>{this.props.data.title}</a></h3>
+          <time className="published" datetime={this.props.data.datetime}>{this.props.data.date}</time>
+        </header>
+        <a href={this.props.data.link} className="image"><img src={this.props.data.image} alt=""/></a>
+      </article>
     );
   }
 }
 
 Cell.propTypes = {
-  pair: PropTypes.object.isRequired,
+  data: PropTypes.object.isRequired,
 };
 
 class Projects extends Component {
 
   getRows(){
-    return data.map((pair) => {
-      return <Cell pair={pair} />
+    return data.map((project) => {
+      return <Cell data={project} />
     });
   }
 
@@ -53,45 +63,7 @@ class Projects extends Component {
             <p>A selection of projects that I'm not too ashamed of</p>
           </div>
         </header>
-
-
-        <article className="mini-post">
-  				<header>
-  					<h3><a href="http://www.spacepotato.org">SpacePotato</a></h3>
-  					<time className="published" datetime="2015-07-20">July, 2015</time>
-  				</header>
-  				<a href="http://www.spacepotato.org" className="image"><img src="images/projects/spacepotato.png" alt=""/></a>
-  			</article>
-
-        <article className="mini-post">
-  				<header>
-  					<h3><a href="http://www.spacepotato.org">Harvest</a></h3>
-  					<time className="published" datetime="2015-07-20">October, 2015</time>
-  				</header>
-  				<a href="http://www.spacepotato.org" className="image"><img src="images/projects/harvest.png" alt=""/></a>
-  			</article>
-
-        <article className="mini-post">
-  				<header>
-  					<h3><a href="http://www.spacepotato.org">NearestDollar</a></h3>
-  					<time className="published" datetime="2015-07-20">November, 2015</time>
-  				</header>
-  				<a href="http://www.spacepotato.org" className="image"><img src="images/projects/nearestdollar.png" alt=""/></a>
-  			</article>
-
-        <article className="mini-post">
-  				<header>
-  					<h3><a href="http://www.spacepotato.org">Cat Detector</a></h3>
-  					<time className="published" datetime="2015-07-20">June, 2015</time>
-  				</header>
-  				<a href="http://www.spacepotato.org" className="image"><img src="images/projects/catdetector.jpg" alt=""/></a>
-  			</article>
-
-        <footer>
-          <ul className="stats">
-            <li><a href="#" className="icon fa-heart">28</a></li>
-          </ul>
-        </footer>
+        {this.getRows()}
       </article>
     );
   }
