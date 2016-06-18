@@ -1,28 +1,25 @@
 import React, {Component} from 'react';
 
-class About extends Component {
+class AboutSite extends Component {
   render() {
     return (
-      <div className="about">
-        <div className="col-sm-12">
-            <ul className="list-inline">
-                <li>
-                    <header>
-                        <h3>What I Do</h3>
-                    </header>
-                    <p>Product Management<br/> Data Science<br/> Machine Learning<br/> Full Stack Web Development<br/> Space Systems<br/> Hardware Design</p>
-                </li>
-                <li>
-                    <header>
-                        <h3>What I Enjoy</h3>
-                    </header>
-                    <p>Space<br/> Skiing<br/> Photography<br/> Travel</p>
-                </li>
-            </ul>
-        </div>
-      </div>
+      <article className="post" id="about">
+        <header>
+          <div className="title">
+            <h2><a href="#about">About this site</a></h2>
+            <p>A beautiful, response, isomorphic, react app written with ES2016. Please hire me.</p>
+          </div>
+        </header>
+        <p> Go ahead, resize the page. See how beatifully it responds. </p>
+        <p> Source available here. </p>
+        <footer>
+          <ul className="stats">
+            <li><a href="#" className="icon fa-heart">28</a></li>
+          </ul>
+        </footer>
+      </article>
     );
   }
 }
 
-export default About;
+export default AboutSite;

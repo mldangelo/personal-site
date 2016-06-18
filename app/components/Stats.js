@@ -84,7 +84,7 @@ Table.propTypes = {
   data: PropTypes.array.isRequired,
 };
 
-class SiteStats extends Component {
+class Stats extends Component {
 
   render() {
     return (
@@ -110,4 +110,4 @@ class SiteStats extends Component {
   }
 }
 
-export default SiteStats;
+export default Stats;

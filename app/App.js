@@ -1,12 +1,15 @@
 import React, {Component} from 'react';
+
 import Header from './components/Header';
-import Nav from './components/Nav';
+
 import About from './components/About';
-import SiteStats from './components/SiteStats';
-import Contact from './components/Contact';
 import Projects from './components/Projects';
-import AboutSite from './components/AboutSite';
 import Resume from './components/Resume';
+import Stats from './components/Stats';
+import Contact from './components/Contact';
+
+import Nav from './components/Nav';
+
 
 
 class App extends Component {
@@ -16,10 +19,10 @@ class App extends Component {
         <Header/>
 
         <div id="main">
-          <AboutSite/>
+          <About/>
           <Projects/>
           <Resume/>
-          <SiteStats/>
+          <Stats/>
           <Contact/>
         </div>
 
