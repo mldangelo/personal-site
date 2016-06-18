@@ -10,11 +10,19 @@ import Resume from './components/Resume';
 import Stats from './components/Stats';
 import Contact from './components/Contact';
 
+import ReactGA from 'react-ga';
+ReactGA.initialize('UA-68649021-1');
+
+const update = () => {
+  window.scrollTo(0, 0);
+  ReactGA.pageview(window.location.pathname);
+};
+
 // All of our CSS
 require('!style!css!sass!../public/css/main.scss');
 
 ReactDOM.render(
-  <Router onUpdate={() => window.scrollTo(0, 0)} history={browserHistory}>
+  <Router onUpdate={update} history={browserHistory}>
     <Route path="/" component={App}>
       <IndexRoute component={About}/>
       <Route path="/resume" component={Resume}/>
