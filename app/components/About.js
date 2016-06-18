@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { IndexLink } from 'react-router';
 
 class About extends Component {
   render() {
@@ -6,7 +7,7 @@ class About extends Component {
       <article className="post" id="about">
         <header>
           <div className="title">
-            <h2><a href="#about">About this site</a></h2>
+            <h2><IndexLink to="/">About this site</IndexLink></h2>
             <p>A beautiful, responsive, <s>isomorphic,</s> react app written with ES2016. Please hire me.</p>
           </div>
         </header>

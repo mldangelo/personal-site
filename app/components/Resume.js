@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { Link } from 'react-router';
 
 import Education from './Resume/Education';
 import Jobs from './Resume/Jobs';
@@ -11,7 +12,7 @@ class Resume extends Component {
       <article className="post" id="resume">
         <header>
           <div className="title">
-            <h2><a href="#resume">Resume</a></h2>
+            <h2><Link to="/resume">Resume</Link></h2>
           </div>
         </header>
 
@@ -23,9 +24,9 @@ class Resume extends Component {
         <article>
           <div className="references">
             <div className="title">
-              <a href="#contact">
+              <Link to="/contact">
                 <h3>References are available upon request</h3>
-              </a>
+              </Link>
             </div>
           </div>
         </article>

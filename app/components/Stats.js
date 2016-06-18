@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { Link } from 'react-router';
 
 
 // TODO To be provided by an API
@@ -91,7 +92,7 @@ class Stats extends Component {
       <article className="post" id="stats">
         <header>
           <div className="title">
-            <h2><a href="#stats">Some stats about this site</a></h2>
+            <h2><Link to="/stats">Some stats about this site</Link></h2>
             <p>Click <a href="https://github.com/mldangelo/mldangelo/tree/master/scripts">here</a> to see how these are generated.</p>
           </div>
         </header>

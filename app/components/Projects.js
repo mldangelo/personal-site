@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { Link } from 'react-router';
 
 // TODO Put projects side by side (2x2) instead of (1x4)
 
@@ -66,7 +67,7 @@ class Projects extends Component {
       <article className="post" id="projects">
         <header>
           <div className="title">
-            <h2><a href="#projects">Projects</a></h2>
+            <h2><Link to="/projects">Projects</Link></h2>
             <p>A selection of projects that I'm not too ashamed of</p>
           </div>
         </header>

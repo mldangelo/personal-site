@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router';
+
 
 class Contact extends Component {
 
@@ -7,7 +9,7 @@ class Contact extends Component {
       <article className="post" id="contact">
         <header>
           <div className="title">
-            <h2><a href="#contact">Contact</a></h2>
+            <h2><Link to="/contact">Contact</Link></h2>
           </div>
         </header>
         <ul className="icons">
