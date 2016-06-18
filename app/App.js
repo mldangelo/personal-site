@@ -13,21 +13,12 @@ class App extends Component {
     return (
       <div id="wrapper">
         <Header/>
+
         <div id="main">
           <AboutSite/>
         </div>
-        <Nav/>
 
-        {/*
-          <Stats/>
-        <div className="container">
-          <About/>
-        </div>  */}
-        {/*
-          <Stats/>
-        <Projects/>
-        <Contact/>
-        */}
+        <Nav/>
       </div>
     );
   }
