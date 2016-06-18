@@ -20,7 +20,7 @@ const data = [
     value: '0',
   }, {
     label: 'number of linter warnings',
-    value: '2',
+    value: '15',
   }, {
     label: 'languages used',
     value: '6',

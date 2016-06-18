@@ -68,7 +68,8 @@ const positions = [
       'Elected to Board of Directors of the USA’s largest student space advocacy group based on 5+ years of work with SEDS.',
       'Responsibilities included: organizational strategy, conference presentations, fundraising, special projects, promoting SEDS nationally and internationally, and photographing conferences.',
     ],
-  },];
+  },
+];
 
 class Job extends Component {
 

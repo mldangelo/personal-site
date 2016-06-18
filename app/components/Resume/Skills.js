@@ -168,14 +168,14 @@ const getColor = (type) => {
     'web': colors.green,
     'data': colors.blue,
     'other': colors.orange,
-  }
-  for (let category in dict){
+  };
+  for (const category in dict) {
     if (category == type) {
       return  dict[type];
     }
   }
   return dict.other;
-}
+};
 
 class Skill extends Component {
 
@@ -185,7 +185,7 @@ class Skill extends Component {
     };
     const barStyle = {
       background: getColor(this.props.data.category),
-      width: String(Math.min(100,Math.max(this.props.data.compentency/5.0*100.0,0))) + '%',
+      width: `${String(Math.min(100, Math.max(this.props.data.compentency / 5.0 * 100.0, 0)))}%`,
     };
     return (
       <div className="skillbar clearfix">

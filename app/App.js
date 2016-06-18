@@ -18,13 +18,14 @@ class App extends Component {
 
         <div id="main">
           <About/>
-          {/* <Projects/> */}
+          <Projects/>
           <Resume/>
           <Stats/>
           <Contact/>
         </div>
 
         <Nav/>
+
       </div>
     );
   }
