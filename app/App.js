@@ -5,6 +5,7 @@ import About from './components/About';
 import Stats from './components/Stats';
 import Contact from './components/Contact';
 import Projects from './components/Projects';
+import AboutSite from './components/AboutSite';
 
 
 class App extends Component {
@@ -12,7 +13,11 @@ class App extends Component {
     return (
       <div id="wrapper">
         <Header/>
+        <div id="main">
+          <AboutSite/>
+        </div>
         <Nav/>
+
         {/*
           <Stats/>
         <div className="container">

@@ -6,7 +6,7 @@ class Nav extends Component {
       <section id="sidebar">
         {/* <!-- Intro --> */}
           <section id="intro">
-            <a href="#" className="logo"><img src="http://localhost:7999/images/me.jpg" alt="" /></a>
+            <a href="#" className="logo"><img src="/images/me.jpg" alt="" /></a>
             <header>
               <h2>Michael D'Angelo</h2>
               <p><a href="mailto:michael.l.dangelo@gmail.com">michael.l.dangelo@gmail.com</a></p>
