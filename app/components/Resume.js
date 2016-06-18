@@ -1,35 +1,8 @@
 import React, {Component} from 'react';
 
-const jobs = [
-  {
-    company: 'Zenysis',
-    position: 'Consultant',
-    link: 'http://zenysis.com',
-    time: 'February 2016 - March 2016',
-    points: [
-      'Worked in Addis Ababa for the Ethiopian Ministry of Health and built data visualization tools in React, Flask.',
-    ],
-  }, {
-    company: 'Matroid',
-    position: 'Cofounder',
-    link: 'http://matroid.com',
-    time: 'July 2015 - January 2016',
-    points: [
-      'Developed end to end machine learning pipeline to train visual classifiers from keywords using Node.JS, Express, Keystone, MongoDB, AWS, S3, Caffe, and other technologies.',
-      'Received Series A term sheets for 20M+ valuations.',
-    ],
-  }, {
-    company: 'Arthena',
-    position: 'Software Engineer',
-    link: 'http://arthena.com',
-    time: 'January 2014 - Present',
-    points: [
-      'First employee. Helped raise 1.3M in funding to develop new model for private equity investing.',
-      'Lead development team, set development lifecycle, and managed web product.',
-      'Worked on everything. Hired technical and nontechnical roles, found office space, staged corporate events, managed reimbursements and payroll, etc. etc.',
-    ],
-  },
-];
+import Education from './Resume/Education';
+import Jobs from './Resume/Jobs';
+
 
 const courses = [
   {
@@ -91,31 +64,9 @@ class Resume extends Component {
             <h2><a href="#resume">Resume</a></h2>
           </div>
         </header>
-        <div className="education">
-          <div className="title">
-            <h3>Education</h3>
-          </div>
-          <div className="school">
-            <p>M.S. Computational and Mathematical Engineering</p>
-            <p>Stanford University. 2016.</p>
-          </div>
-          <div className="school">
-            <p>B.S. Electical Engineering, Computer Engineering</p>
-            <p>University at Buffalo. 2012. Graduated first in class.</p>
-          </div>
-        </div>
 
-        <div className="experience">
-          <div className="title">
-            <h3>Experience</h3>
-          </div>
-
-          <div className="job">
-            <div className="company">
-              <p>Zenysis</p>
-            </div>
-          </div>
-        </div>
+      <Education/>
+      <Jobs/>
 
         <div className="skills">
           <div className="title">

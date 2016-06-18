@@ -1,26 +1,30 @@
 /* Resume */
 
-	#resume {
-		.education {
-			.title {
-				text-align: center;
-			}
-			.school {
-				margin: 1em;
-				p{
-					margin: 0;
-				}
-			}
+#resume {
+	.education {
+		.title {
+			text-align: center;
 		}
-		.experience {
-			.title {
-				text-align: center;
-			}
-			.job {
-				margin: 1em;
-				p{
-					margin: 0;
-				}
+		.school {
+			margin: 1em;
+			p{
+				margin: 0;
 			}
 		}
 	}
+	.experience {
+		.title {
+			text-align: center;
+		}
+		.job {
+			margin: 1em;
+			p{
+				margin: 0;
+			}
+		}
+	}
+}
+
+.daterange {
+	margin-bottom: .2em;
+}

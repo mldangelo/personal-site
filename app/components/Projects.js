@@ -53,7 +53,9 @@ class Projects extends Component {
 
   getRows() {
     return data.map((project) => {
-      return <Cell data={project} />;
+      return <Cell
+        data={project}
+        key={project.title} />;
     });
   }
 
