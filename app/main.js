@@ -14,7 +14,7 @@ import Contact from './components/Contact';
 require('!style!css!sass!../public/css/main.scss');
 
 ReactDOM.render(
-  <Router history={browserHistory}>
+  <Router onUpdate={() => window.scrollTo(0, 0)} history={browserHistory}>
     <Route path="/" component={App}>
       <IndexRoute component={About}/>
       <Route path="/resume" component={Resume}/>
