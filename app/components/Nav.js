@@ -4,7 +4,6 @@ class Nav extends Component {
   render() {
     return (
       <section id="sidebar">
-        {/* <!-- Intro --> */}
           <section id="intro">
             <a href="#" className="logo"><img src="/images/me.jpg" alt="" /></a>
             <header>
@@ -13,7 +12,6 @@ class Nav extends Component {
             </header>
           </section>
 
-        {/* <!-- About --> */}
           <section className="blurb">
             <h2>About</h2>
               <p>Hi, I'm Michael. I like building things.
@@ -25,7 +23,6 @@ class Nav extends Component {
             </ul>
           </section>
 
-        {/*  <!-- Footer -->  */}
           <section id="footer">
             <ul className="icons">
               <li><a href="https://github.com/mldangelo" className="fa-github"><span className="label">RSS</span></a></li>

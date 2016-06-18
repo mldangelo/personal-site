@@ -3,10 +3,10 @@ import React, {Component} from 'react';
 class AboutSite extends Component {
   render() {
     return (
-      <article className="post">
+      <article className="post" id="projects">
         <header>
           <div className="title">
-            <h2><a href="#">Projects</a></h2>
+            <h2><a href="#projects">Projects</a></h2>
             <p>A selection of projects that I'm not too ashamed of</p>
           </div>
         </header>

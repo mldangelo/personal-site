@@ -88,10 +88,10 @@ class SiteStats extends Component {
 
   render() {
     return (
-      <article className="post">
+      <article className="post" id="stats">
         <header>
           <div className="title">
-            <h2><a href="#">Some stats about this site</a></h2>
+            <h2><a href="#stats">Some stats about this site</a></h2>
             <p>Click <a href="https://github.com/mldangelo/mldangelo/tree/master/scripts">here</a> to see how these are generated.</p>
           </div>
         </header>

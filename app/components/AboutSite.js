@@ -3,10 +3,10 @@ import React, {Component} from 'react';
 class AboutSite extends Component {
   render() {
     return (
-      <article className="post">
+      <article className="post" id="about">
         <header>
           <div className="title">
-            <h2><a href="#">About this site</a></h2>
+            <h2><a href="#about">About this site</a></h2>
             <p>A beautiful, response, isomorphic, react app written with ES2016. Please hire me.</p>
           </div>
         </header>

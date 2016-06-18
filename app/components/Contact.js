@@ -4,10 +4,10 @@ class Contact extends Component {
 
   render() {
     return (
-      <article className="post">
+      <article className="post" id="contact">
         <header>
           <div className="title">
-            <h2><a href="#">Contact</a></h2>
+            <h2><a href="#contact">Contact</a></h2>
           </div>
         </header>
         <p>
