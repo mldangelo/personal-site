@@ -5,7 +5,7 @@ class Nav extends Component {
     return (
       <section id="sidebar">
           <section id="intro">
-            <a href="#" className="logo"><img src="/images/me.jpg" alt="" /></a>
+            <a href="" className="logo"><img src="/images/me.jpg" alt="" /></a>
             <header>
               <h2>Michael D'Angelo</h2>
               <p><a href="mailto:michael.l.dangelo@gmail.com">michael.l.dangelo@gmail.com</a></p>
@@ -19,7 +19,7 @@ class Nav extends Component {
                 the CTO of <a href="http://arthena.com">Arthena</a>. Before Arthena I was
                 at <a href="http://planet.com">Planet<s> Labs</s></a>, <a href="http://planetaryresources.com">Planetary Resources</a>, <a href="http://facebook.com">Facebook</a>, and <a href="http://seds.org">SEDS</a>.</p>
             <ul className="actions">
-              <li><a href="/resume" className="button">Learn More</a></li>
+              <li><a href="#resume" className="button">Learn More</a></li>
             </ul>
           </section>
 

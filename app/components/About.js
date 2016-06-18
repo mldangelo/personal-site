@@ -7,7 +7,7 @@ class About extends Component {
         <header>
           <div className="title">
             <h2><a href="#about">About this site</a></h2>
-            <p>A beautiful, response, isomorphic, react app written with ES2016. Please hire me.</p>
+            <p>A beautiful, responsive, <s>isomorphic,</s> react app written with ES2016. Please hire me.</p>
           </div>
         </header>
         <p> Go ahead, resize the page. See how beatifully it responds. </p>

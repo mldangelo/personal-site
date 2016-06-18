@@ -1,0 +1,26 @@
+/* Resume */
+
+	#resume {
+		.education {
+			.title {
+				text-align: center;
+			}
+			.school {
+				margin: 1em;
+				p{
+					margin: 0;
+				}
+			}
+		}
+		.experience {
+			.title {
+				text-align: center;
+			}
+			.job {
+				margin: 1em;
+				p{
+					margin: 0;
+				}
+			}
+		}
+	}
