@@ -62,6 +62,7 @@ class Table extends Component {
     return this.props.data.map((pair) => {
       return (
         <TableRow
+          key={pair.label}
           label={pair.label}
           value={pair.value} />
       );
