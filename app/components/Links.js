@@ -6,14 +6,10 @@ class AboutSite extends Component {
       <article className="post">
         <header>
           <div className="title">
-            <h2><a href="#">Projects</a></h2>
-            <p>A selection of projects that I'm not too ashamed of</p>
+            <h2><a href="#">Links I enjoy, sorted by my visit frequency</a></h2>
           </div>
         </header>
-        <p>Cat Detector</p>
-        <p>Harvest</p>
-        <p>Nearest Dollar</p>
-        <p>Space Potato</p>
+        <p>smbc, xkcd?, reddit/spacex, nytimes hackernews</p>
         <footer>
           <ul className="stats">
             <li><a href="#" className="icon fa-heart">28</a></li>

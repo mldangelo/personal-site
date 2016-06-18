@@ -6,14 +6,12 @@ class AboutSite extends Component {
       <article className="post">
         <header>
           <div className="title">
-            <h2><a href="#">Projects</a></h2>
-            <p>A selection of projects that I'm not too ashamed of</p>
+            <h2><a href="#">Resume</a></h2>
           </div>
         </header>
-        <p>Cat Detector</p>
-        <p>Harvest</p>
-        <p>Nearest Dollar</p>
-        <p>Space Potato</p>
+        <p>M.S. Computational and Mathematical Engineering, Stanford University. 2016.</p>
+        <p>B.S. Electical Engineering, Computer Engineering, University at Buffalo. 2012.</p>
+        <p> Source available here. </p>
         <footer>
           <ul className="stats">
             <li><a href="#" className="icon fa-heart">28</a></li>
