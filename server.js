@@ -40,7 +40,7 @@ if (env == 'development') { // eslint-disable-line eqeqeq
 
   app.use(middleware);
   app.use(webpackHotMiddleware(compiler));
-  app.get('/', function response(req, res) {
+  app.get('/*', function response(req, res) {
     res.write(middleware.fileSystem.readFileSync(path.join(__dirname, 'dist/index.html')));
     res.end();
   });
@@ -48,7 +48,7 @@ if (env == 'development') { // eslint-disable-line eqeqeq
 } else {
   debug.enable('express');
   app.use(express.static(__dirname + '/dist'));
-  app.get('/', function response(req, res) {
+  app.get('/*', function response(req, res) {
     res.sendFile(path.join(__dirname, 'dist/index.html'));
   });
 }
