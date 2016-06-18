@@ -5,12 +5,6 @@
 		.title {
 			text-align: center;
 		}
-		.school {
-			margin: 1em;
-			p{
-				margin: 0;
-			}
-		}
 	}
 	.experience {
 		.title {
@@ -27,4 +21,13 @@
 
 .daterange {
 	margin-bottom: .2em;
+}
+
+.degree {
+	margin-bottom: .1em;
+	text-transform: none;
+}
+
+.school {
+	text-transform: none;
 }
