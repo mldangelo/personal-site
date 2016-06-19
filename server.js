@@ -9,6 +9,8 @@ import webpackMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import config from './webpack.config.js';
 
+import apiRoutes from './routes/api.js';
+
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -40,6 +42,9 @@ if (env == 'development') { // eslint-disable-line eqeqeq
 
   app.use(middleware);
   app.use(webpackHotMiddleware(compiler));
+
+  apiRoutes(app);
+
   app.get('/*', function response(req, res) {
     res.write(middleware.fileSystem.readFileSync(path.join(__dirname, 'dist/index.html')));
     res.end();
@@ -48,10 +53,15 @@ if (env == 'development') { // eslint-disable-line eqeqeq
 } else {
   debug.enable('express');
   app.use(express.static(__dirname + '/dist'));
+
+  apiRoutes(app);
+
   app.get('/*', function response(req, res) {
     res.sendFile(path.join(__dirname, 'dist/index.html'));
   });
 }
+
+
 
 app.listen(port, '0.0.0.0', (err) => {
   if (err) {
