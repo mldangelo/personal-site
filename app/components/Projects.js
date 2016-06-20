@@ -1,54 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 
+import Cell from './Projects/Cell'
+import data from './Projects/data/projects.js'
+
 // TODO Put projects side by side (2x2) instead of (1x4)
-
-// TODO Add a couple lines about each project
-const data = [
-  {
-    title: 'Nearest Dollar',
-    link: 'http://www.nearestdollar.com/',
-    image: '/images/projects/nearestdollar.jpg',
-    date: 'November, 2015', // TODO - Derive this from datetime field
-    datetime: '11-20-2015',
-  }, {
-    title: 'Harvest',
-    link: 'http://www.harvesters.club/',
-    image: '/images/projects/harvest.jpg',
-    date: 'September, 2015',
-    datetime: '09-20-2015',
-  }, {
-    title: 'Space Potato',
-    link: 'http://www.spacepotato.org',
-    image: '/images/projects/spacepotato.jpg',
-    date: 'June, 2015',
-    datetime: '06-28-2015',
-  }, {
-    title: 'Cat Detector',
-    link: 'http://www.catdetector.biz',
-    image: '/images/projects/catdetector.jpg',
-    date: 'May, 2015',
-    datetime: '05-15-2015',
-  }
-];
-
-class Cell extends Component {
-  render() {
-    return (
-      <article className="mini-post">
-        <header>
-          <h3><a href={this.props.data.link}>{this.props.data.title}</a></h3>
-          <time className="published" dateTime={this.props.data.datetime}>{this.props.data.date}</time>
-        </header>
-        <a href={this.props.data.link} className="image"><img src={this.props.data.image} alt=""/></a>
-      </article>
-    );
-  }
-}
-
-Cell.propTypes = {
-  data: PropTypes.object.isRequired,
-};
 
 class Projects extends Component {
 
