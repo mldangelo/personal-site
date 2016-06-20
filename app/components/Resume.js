@@ -23,6 +23,7 @@ class Resume extends Component {
         */}
 
         <Skills/>
+          <Courses/>
 
         <div className="references">
           <div className="title">

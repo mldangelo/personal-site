@@ -1,5 +1,8 @@
 import React, {Component, PropTypes} from 'react';
-import _ from 'lodash';
+
+import _includes from 'lodash/includes';
+import _zipObject from 'lodash/zipObject';
+import _orderBy from 'lodash/orderBy';
 
 import CategoryButton from './Skills/CategoryButton';
 import SkillBar from './Skills/SkillBar';
@@ -11,7 +14,7 @@ class Skills extends Component {
   constructor(props) {
     super(props);
     this.state = {
-     buttons: _.zipObject(categories, false), // Althetic Skills, Office Skills
+     buttons: _zipObject(categories, false), // Althetic Skills, Office Skills
     };
     this.state.buttons['All'] = true;
   }
@@ -62,10 +65,12 @@ class Skills extends Component {
     }
 
     // TODO sort by reverse compentency
-    const sorted = _.sortBy(skills, ['compentency','category','title']); // doesn't work for category arrays
+    const sorted = _orderBy(skills,
+      ['compentency','category','title'],
+      ['desc','desc','asc']); // doesn't work for category arrays
 
     for (let skill of sorted) {
-      if (activeCategory == 'All' || _.includes(skill.category, activeCategory)) {
+      if (activeCategory == 'All' || _includes(skill.category, activeCategory)) {
         rows.push(
           <SkillBar
             data={skill}

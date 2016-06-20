@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _pick from 'lodash/pick';
 import GitHubApi from 'github';
 
 import dotenv from 'dotenv';
@@ -34,7 +34,7 @@ const routes = (app) => {
       if(err) console.log(err);
       const send = () => {
         res.send(JSON.stringify(
-          _.pick(_res,
+          _pick(_res,
           ['stargazers_count',
           'watchers_count',
           'forks',
