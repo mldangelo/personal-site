@@ -181,3 +181,86 @@
 			}
 		}
 	}
+
+	/* Position and sizing of burger button */
+	.bm-burger-button {
+	  position: fixed;
+	  width: 36px;
+	  height: 30px;
+	  left: 36px;
+	  top: 36px;
+		display: none;
+	}
+
+	/* Color/shape of burger icon bars */
+	.bm-burger-bars {
+		display: none;
+	}
+
+	/* Position and sizing of clickable cross button */
+	.bm-cross-button {
+	  height: 24px;
+	  width: 24px;
+		display: none;
+	}
+
+	/* Color/shape of close button cross */
+	.bm-cross {
+	  background: #bdc3c7;
+		display: none;
+	}
+
+	/* General sidebar styles */
+	.bm-menu {
+	  background: _palette(bg);
+	  padding: 2.5em 1.5em 0;
+	  font-size: 1.15em;
+	}
+
+	/* Morph shape necessary with bubble or elastic */
+	.bm-morph-shape {
+	  fill: #373a47;
+	}
+
+	/* Wrapper for item list */
+	.bm-item-list {
+	  color: _palette(fg-bold);
+	  padding: 0.8em;
+		font-family: "Raleway", Helvetica, sans-serif;
+	}
+
+	.hamburger-link{
+		text-transform: capitalize;
+	}
+
+	/* Styling of overlay */
+	.bm-overlay {
+	  background: rgba(0, 0, 0, 0.3);
+	}
+
+	#header {
+		.index-link {
+			z-index: 3;
+		}
+	}
+
+.open-menu{
+	position: fixed;
+	right: 0;
+	border: none;
+}
+
+.close-menu{
+	position: fixed;
+	right: 0;
+	z-index: 3;
+	border-left: 0;
+}
+
+#header .main .close-menu {
+	border: 0;
+}
+
+#header .main .open-menu {
+	border: 0;
+}
