@@ -4,7 +4,7 @@ import { Link, IndexLink } from 'react-router';
 import Menus from 'react-burger-menu';
 const Menu = Menus.slide;
 
-class Header extends Component {
+class Hamburger extends Component {
 
   constructor(props) {
     super(props);
@@ -34,6 +34,30 @@ class Header extends Component {
 
   render() {
     return (
+        <div className="hamburger-container">
+          <nav className="main" id="hambuger-nav">
+            <ul>
+              {this.getButton()}
+            </ul>
+          </nav>
+          <Menu right noOverlay isOpen={this.state.open}>
+            <IndexLink to="/">MICHAEL D'ANGELO</IndexLink>
+            <a></a><Link className="hamburger-link" to="/resume">RESUME</Link>
+            <a></a><Link to="/projects">PROJECTS</Link>
+            <a></a><Link to="/stats">STATS</Link>
+            <a></a><Link to="/contact">CONTACT</Link>
+          </Menu>
+        </div>
+    );
+  }
+
+}
+
+
+class Header extends Component {
+
+  render() {
+    return (
       <header id="header">
         <h1 className="index-link"><IndexLink to="/">Michael D'Angelo</IndexLink></h1>
         <nav className="links">
@@ -45,28 +69,9 @@ class Header extends Component {
             <li><Link to="/contact">Contact</Link></li>
           </ul>
         </nav>
-        <div className="hamburger-container">
-          <nav className="main" id="hambuger-nav">
 
-            <ul>
-              {this.getButton()}
-            </ul>
+        <Hamburger/>
 
-          </nav>
-          <Menu
-            right
-            noOverlay
-            customBurgerIcon={ false }
-            customCrossIcon={ false }
-            isOpen={this.state.open}
-          >
-            <IndexLink to="/">MICHAEL D'ANGELO</IndexLink>
-            <a></a><Link className="hamburger-link" to="/resume">RESUME</Link>
-            <a></a><Link to="/projects">PROJECTS</Link>
-            <a></a><Link to="/stats">STATS</Link>
-            <a></a><Link to="/contact">CONTACT</Link>
-          </Menu>
-        </div>
       </header>
     );
   }

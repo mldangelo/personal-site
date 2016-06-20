@@ -216,15 +216,16 @@
 		font-family: "Raleway", Helvetica, sans-serif;
 	}
 
-	/* Styling of overlay */
-	.bm-overlay {
-	  background: rgba(0, 0, 0, 0.3);
+	#header .index-link {
+		z-index: 3;
 	}
 
-	#header {
-		.index-link {
-			z-index: 3;
-		}
+	#header .main .close-menu {
+		border: 0;
+	}
+
+	#header .main .open-menu {
+		border: 0;
 	}
 
 .open-menu{
@@ -238,14 +239,6 @@
 	right: 0;
 	z-index: 3;
 	border-left: 0;
-}
-
-#header .main .close-menu {
-	border: 0;
-}
-
-#header .main .open-menu {
-	border: 0;
 }
 
 .hamburger-container  {
