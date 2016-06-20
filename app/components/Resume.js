@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router';
 
 import Education from './Resume/Education';
@@ -16,10 +16,13 @@ class Resume extends Component {
           </div>
         </header>
 
-        <Education/>
+        {/* <Education/>
         <Experience/>
         <Skills/>
         <Courses/>
+        */}
+
+        <Skills/>
 
         <div className="references">
           <div className="title">

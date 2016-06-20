@@ -4,26 +4,16 @@ import _ from 'lodash';
 import CategoryButton from './Skills/CategoryButton';
 import SkillBar from './Skills/SkillBar';
 
-import skills from './data/skills';
-
-// TODO Make sort and filterable, update skill levels. Add more
+import { skills, categories } from './data/skills';
 
 class Skills extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-     buttons: {
-       'All': true,
-       'Languages': false,
-       'Tools': false,
-       'Machine Learning': false,
-       'Data Science': false,
-       'Web Development': false,
-       'Aerospace': false,
-       'Design': false,
-     }, // Althetic Skills, Office Skills
+     buttons: _.zipObject(categories, false), // Althetic Skills, Office Skills
     };
+    this.state.buttons['All'] = true;
   }
 
   handleChildClick(label) {
@@ -47,7 +37,8 @@ class Skills extends Component {
 
   getButtons(){
     const buttons = []
-    for (let key in this.state.buttons) {
+    const keys = Object.keys(this.state.buttons).sort();
+    for (let key of keys) {
       buttons.push(
         <CategoryButton
           label={key}
@@ -72,10 +63,10 @@ class Skills extends Component {
     }
 
     // TODO sort by reverse compentency
-    const sorted = _.sortBy(skills, ['compentency','title']);
+    const sorted = _.sortBy(skills, ['compentency','category','title']); // doesn't work for category arrays
 
     for (let skill of sorted) {
-      if (skill.category == activeCategory || _.includes(skill.category, activeCategory)) {
+      if (activeCategory == 'All' || _.includes(skill.category, activeCategory)) {
         rows.push(
           <SkillBar
             data={skill}
@@ -83,14 +74,7 @@ class Skills extends Component {
           />
         );
       }
-      console.log(skill);
     }
-    /*
-    return skills.map((skill) => {
-      return <Skill
-        data={skill}
-        key={skill.title} />;
-    }); */
     return rows;
   }
 

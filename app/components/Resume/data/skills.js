@@ -1,16 +1,15 @@
-const categories = [
+export const categories = [
   'Languages',
   'Machine Learning',
   'Data Science',
   'Web Development',
-  'Aerospace',
   'Design',
   'Tools',
   'Frameworks',
   'Databases',
 ];
 
-const skills = [
+export const skills = [
   {
     title: 'Javascript',
     compentency: 4,
@@ -187,5 +186,3 @@ const skills = [
     category: ['Languages'],
   },
 ];
-
-export default skills;
