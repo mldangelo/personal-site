@@ -6,7 +6,7 @@ class Nav extends Component {
     return (
       <section id="sidebar">
           <section id="intro">
-            <IndexLink to="" className="logo"><img src="/images/me.jpg" alt="" /></IndexLink>
+            <IndexLink to="" className="logo"><img src="/images/me_icon.jpg" alt="" /></IndexLink>
             <header>
               <h2>Michael D'Angelo</h2>
               <p><a href="mailto:michael.l.dangelo@gmail.com">michael.l.dangelo@gmail.com</a></p>

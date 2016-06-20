@@ -16,7 +16,7 @@ class About extends Component {
           <Link to="/projects">projects</Link>, {' '}
           view <Link to="/stats">site statistics</Link>, {' '}
           or <Link to="/contact">contact</Link> me.</p>
-        <p> Source available <a href="https://github.com/mldangelo/mldangelo">here.</a> </p>
+        <p> Source available <a href="https://github.com/mldangelo/mldangelo">here</a>.</p>
       </article>
     );
   }

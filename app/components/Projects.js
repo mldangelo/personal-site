@@ -8,19 +8,19 @@ const data = [
   {
     title: 'Nearest Dollar',
     link: 'http://www.nearestdollar.com/',
-    image: '/images/projects/nearestdollar.png',
+    image: '/images/projects/nearestdollar.jpg',
     date: 'November, 2015', // TODO - Derive this from datetime field
     datetime: '11-20-2015',
   }, {
     title: 'Harvest',
     link: 'http://www.harvesters.club/',
-    image: '/images/projects/harvest.png',
+    image: '/images/projects/harvest.jpg',
     date: 'September, 2015',
     datetime: '09-20-2015',
   }, {
     title: 'Space Potato',
     link: 'http://www.spacepotato.org',
-    image: '/images/projects/spacepotato.png',
+    image: '/images/projects/spacepotato.jpg',
     date: 'June, 2015',
     datetime: '06-28-2015',
   }, {
