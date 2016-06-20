@@ -153,6 +153,7 @@ class Stats extends Component {
   render() {
     return (
       <article className="post" id="stats">
+        
         <header>
           <div className="title">
             <h2><Link to="/stats">Some stats about this site</Link></h2>
@@ -164,11 +165,6 @@ class Stats extends Component {
           data={data}
         />
 
-        <footer>
-          <ul className="stats">
-            <li><a href="#" className="icon fa-heart">0</a></li>
-          </ul>
-        </footer>
       </article>
     );
   }

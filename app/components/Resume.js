@@ -21,22 +21,13 @@ class Resume extends Component {
         <Skills/>
         <Courses/>
 
-        <article>
-          <div className="references">
-            <div className="title">
-              <Link to="/contact">
-                <h3>References are available upon request</h3>
-              </Link>
-            </div>
+        <div className="references">
+          <div className="title">
+            <Link to="/contact">
+              <h3>References are available upon request</h3>
+            </Link>
           </div>
-        </article>
-
-
-        <footer>
-          <ul className="stats">
-            <li><a href="#" className="icon fa-heart">0</a></li>
-          </ul>
-        </footer>
+        </div>
 
       </article>
     );
