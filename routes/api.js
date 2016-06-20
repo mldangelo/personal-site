@@ -8,19 +8,17 @@ const github = new GitHubApi();
 
 const authenticate = (cb) => {
   github.authenticate({
-      type: "oauth",
-      token: process.env.GITHUB_OAUTH,
+    type: 'oauth',
+    token: process.env.GITHUB_OAUTH,
   });
   if (typeof callback === 'function') cb();
 };
 
 let authenticated = false;
 
-const routes = (app) => {
-
+const routes = (app, debug) => {
   // TODO Cache to DB later
   app.get('/api/github', (req, res) => {
-
     // Handles authentication for the first time
     if (!authenticated) {
       authenticated = true;
@@ -31,7 +29,7 @@ const routes = (app) => {
       user: 'mldangelo',
       repo: 'mldangelo',
     }, (err, _res) => {
-      if(err) console.log(err);
+      if (err) debug('express')(err);
       const send = () => {
         res.send(JSON.stringify(
           _pick(_res,
@@ -44,7 +42,7 @@ const routes = (app) => {
         ])));
       };
 
-      if (err && err.status == 'Unauthorized'){
+      if (err && err.status === 'Unauthorized') {
         authenticate(send()); // retry authentication -- if token expires
       } else if (err) {
         res.send(JSON.stringify({})); // keep default values
@@ -53,7 +51,6 @@ const routes = (app) => {
       }
     });
   });
-
 };
 
 export default routes;

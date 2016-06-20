@@ -7,7 +7,7 @@
     "build-dev": "rimraf .dist && set NODE_ENV=development && webpack --config ./webpack.config.js --progress --profile --colors",
     "clean": "rimraf ./dist",
     "dev": "NODE_ENV=development && nodemon server.js --ignore app/ --exec babel-node",
-    "lint": "./node_modules/.bin/eslint app server.js webpack.*.js",
+    "lint": "./node_modules/.bin/eslint app routes server.js webpack.*.js",
     "start": "NODE_ENV=production && ./node_modules/.bin/babel-node server"
   },
   "dependencies": {

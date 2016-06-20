@@ -56,7 +56,7 @@ if (env == 'development') { // eslint-disable-line eqeqeq
   debug.enable('express');
   app.use(express.static(__dirname + '/dist'));
 
-  apiRoutes(app);
+  apiRoutes(app, debug);
 
   app.get('/*', function response(req, res) {
     res.sendFile(path.join(__dirname, 'dist/index.html'));
