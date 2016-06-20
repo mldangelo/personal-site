@@ -79,7 +79,7 @@ export const skills = [
   {
     title: 'Matlab',
     compentency: 3,
-    category: ['Data Science', 'Machine Learning'],
+    category: ['Data Science', 'Machine Learning','Languages'],
   },
   {
     title: 'Julia',
