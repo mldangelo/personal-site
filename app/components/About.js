@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { IndexLink } from 'react-router';
+import { Link, IndexLink } from 'react-router';
 
 class About extends Component {
   render() {
@@ -11,7 +11,11 @@ class About extends Component {
             <p>A beautiful, responsive, <s>isomorphic,</s> react app written with ES2016. Please hire me.</p>
           </div>
         </header>
-        <p> Go ahead, resize the page. See how beatifully it responds. I dare you.</p>
+        <p> Welcome to my website. Please feel free to check out my {' '}
+          <Link to="/resume">resume</Link>, {' '}
+          <Link to="/projects">projects</Link>, {' '}
+          view <Link to="/stats">site statistics</Link>, {' '}
+          or <Link to="/contact">contact</Link> me.</p>
         <p> Source available <a href="https://github.com/mldangelo/mldangelo">here.</a> </p>
       </article>
     );

@@ -25,7 +25,7 @@ class Skills extends Component {
       if (label != key) this.state.buttons[key] = false;
     }
 
-    let allFalse = true; // Turn on all if all other buttons are off
+    let allFalse = true; // Turn on all if all buttons are off
     for (let key in this.state.buttons) {
       if (this.state.buttons[key]) {
         allFalse = false;
@@ -39,7 +39,7 @@ class Skills extends Component {
 
   getButtons(){
     const buttons = []
-    const keys = Object.keys(this.state.buttons).sort();
+    const keys = Object.keys(this.state.buttons).sort(); // Sort keys alphabetically
     for (let key of keys) {
       buttons.push(
         <CategoryButton
@@ -56,15 +56,14 @@ class Skills extends Component {
   getRows() {
     const rows = [];
 
-    let activeCategory = 'All';
-    for (let key in this.state.buttons) {
+    let activeCategory = 'All'; // default active category
+    for (let key in this.state.buttons) { // search for true active categorys
       if (this.state.buttons[key]) {
         activeCategory = key;
         break;
       }
     }
 
-    // TODO sort by reverse compentency
     const sorted = _orderBy(skills,
       ['compentency','category','title'],
       ['desc','desc','asc']); // doesn't work for category arrays
@@ -89,12 +88,12 @@ class Skills extends Component {
           <h3>Skills</h3>
           <p>Note: I think these sections are silly, but everyone seems to have one.</p>
         </div>
-
         <div className="skill-button-container">
           {this.getButtons()}
         </div>
-
-        {this.getRows()}
+        <div className="skill-row-container">
+          {this.getRows()}
+        </div>
       </div>
     );
   }
