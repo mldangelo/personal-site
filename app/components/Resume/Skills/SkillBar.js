@@ -1,25 +1,18 @@
 import React, {Component, PropTypes} from 'react';
 
+import { categories } from '../data/skills';
+import _ from 'lodash';
+
+const colors = ['#515dd4','#3896e2','#747FFF','#64cb7b','#6968b3','#e47272','#C3423F','#40494e', '#CC7B94'];
+// const colors = new ColorScheme().from_hue(Math.floor((Math.random() * 255))).scheme('tetrade').variation('soft').colors();
+
 const getColor = (type) => {
 
-  const colors = {
-    green: '#88cd2a',
-    blue: '#00a8ff',
-    orange: '#f46e23',
-  };
-
-  const dict = {
-    'web': colors.blue,
-    'data': colors.orange,
-    'other': colors.green,
-  };
-
-  for (const category in dict) {
-    if (category == type) {
-      return  dict[type];
-    }
+  for (let idx in categories) {
+    if (_.includes(type, categories[idx])) return  colors[idx]};
   }
-  return dict.other;
+  return colors[colors.length-1]};
+;
 };
 
 class SkillBar extends Component {
