@@ -130,8 +130,7 @@ class Stats extends Component {
       const update = result.data;
       console.log(update);
       for (let field of data){
-        if (field.key) field.value = String(update[field.key]);
-        if (field.key == 'pushed_at') field.value = moment(field.value).format('MMMM DD, YYYY');
+        if (field.key) field.value = (field.key == 'pushed_at') ? moment(update[field.key]).format('MMMM DD, YYYY') : String(update[field.key]);
       }
       this.setState({
         data: data,
