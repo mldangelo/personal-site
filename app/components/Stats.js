@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 
 import axios from 'axios';
-
+import moment from 'moment';
 
 // TODO To be provided by an API
 const data = [
@@ -35,7 +35,7 @@ const data = [
   }, {
     label: 'Last updated at',
     key: 'pushed_at',
-    value: '0',
+    value: moment().format('MMMM Do YYYY'),
     link: 'https://github.com/mldangelo/mldangelo/commits',
   }
 ];
@@ -64,7 +64,7 @@ class TableRow extends Component {
       <a href={`${this.props.link}`}>{this.props.value}</a>
     ) : this.props.value;
   }
-  
+
   render() {
     return (
       <tr>
@@ -131,6 +131,7 @@ class Stats extends Component {
       console.log(update);
       for (let field of data){
         if (field.key) field.value = String(update[field.key]);
+        if (field.key == 'pushed_at') field.value = moment(field.value).format('MMMM DD, YYYY');
       }
       this.setState({
         data: data,
