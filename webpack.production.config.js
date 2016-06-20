@@ -17,6 +17,7 @@ module.exports = {
   },
   plugins: [
     new webpack.optimize.OccurenceOrderPlugin(),
+    // new webpack.optimize.DedupePlugin(),
     new HtmlWebpackPlugin({
       template: 'views/index.tpl.html',
       inject: 'body',
@@ -24,7 +25,7 @@ module.exports = {
     }),
     new ExtractTextPlugin('[name]-[hash].min.css'),
     new webpack.optimize.UglifyJsPlugin({
-      compressor: {
+      compress: {
         warnings: false,
         screw_ie8: true
       }
@@ -55,7 +56,10 @@ module.exports = {
       test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'url-loader?limit=10000&minetype=application/font-woff'
     }, {
       test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'file-loader'
-    }]
+    }, {
+      test: /\.js$/, loader: "strip-loader?strip[]=console.log"
+    }
+  ]
   },
   postcss: [
     require('autoprefixer')
