@@ -14,7 +14,7 @@ const data = [
   },{
     label: 'Number of people watching this repository',
     key: 'subscribers_count',
-    value: '0',
+    value: '1',
     link: 'https://github.com/mldangelo/mldangelo/stargazers',
   },{
     label: 'Number of forks',
@@ -153,7 +153,7 @@ class Stats extends Component {
   render() {
     return (
       <article className="post" id="stats">
-        
+
         <header>
           <div className="title">
             <h2><Link to="/stats">Some stats about this site</Link></h2>

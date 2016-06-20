@@ -28,8 +28,8 @@ const routes = (app) => {
     }
 
     github.repos.get({
-      user: 'typpo', // TODO Change to this repo
-      repo: 'ad-detector',
+      user: 'mldangelo',
+      repo: 'mldangelo',
     }, (err, _res) => {
       if(err) console.log(err);
       const send = () => {
