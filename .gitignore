@@ -36,3 +36,6 @@ dist/
 
 # OSX
 .DS_Store
+
+# Nohup
+nohup.out
