@@ -1,46 +1,65 @@
+const categories = [
+  'Languages',
+  'Machine Learning',
+  'Data Science',
+  'Web Development',
+  'Aerospace',
+  'Design',
+  'Tools',
+  'Frameworks',
+  'Databases',
+];
+
 const skills = [
   {
     title: 'Javascript',
     compentency: 4,
-    category: 'web',
+    category: ['Web Development', 'Languages'],
   },
   {
     title: 'Node.JS',
     compentency: 4,
-    category: 'web',
+    category: ['Web Development', 'Frameworks'],
   },
   {
     title: 'React',
     compentency: 4,
-    category: 'web',
+    category: ['Web Development', 'Frameworks'],
   },
   {
     title: 'Backbone',
     compentency: 3,
-    category: 'web',
+    category: ['Web Development', 'Frameworks'],
   },
   {
     title: 'Bash',
     compentency: 3,
+    category: ['Tools', 'Languages'],
   },
   {
     title: 'Amazon Web Services',
     compentency: 3,
+    category: ['Web Development', 'Tools'],
   },
   {
     title: 'MongoDB',
     compentency: 3,
-    category: 'web',
+    category: ['Web Development','Databases'],
   },
   {
     title: 'ElasticSearch',
     compentency: 3,
-    category: 'web',
+    category: ['Web Development','Databases'],
   },
   {
     title: 'PostgreSQL',
     compentency: 3,
-    category: 'web',
+    category: ['Web Development','Databases'],
+  },
+  {
+    title: 'SQLite3',
+    compentency: 3,
+    category: ['Web Development','Databases'],
   },
   {
     title: 'Matlab',
@@ -60,17 +79,17 @@ const skills = [
   {
     title: 'Express.JS',
     compentency: 4,
-    category: 'web',
+    category: 'Web Development',
   },
   {
-    title: 'Webpack',
+    title: 'Web Developmentpack',
     compentency: 4,
-    category: 'web',
+    category: 'Web Development',
   },
   {
     title: 'Flask',
     compentency: 4,
-    category: 'web',
+    category: ['Web Development', 'Frameworks'],
   },
   {
     title: 'Product Development',
@@ -79,17 +98,17 @@ const skills = [
   {
     title: 'Meteor',
     compentency: 3,
-    category: 'web',
+    category: ['Web Development', 'Frameworks'],
   },
   {
     title: 'Sails.js',
     compentency: 3,
-    category: 'web',
+    category: ['Web Development', 'Frameworks'],
   },
   {
     title: 'MEAN Stack',
     compentency: 3,
-    category: 'web',
+    category: 'Web Development',
   },
   {
     title: 'Data Analysis',
@@ -99,14 +118,17 @@ const skills = [
   {
     title: 'Mercurial',
     compentency: 3,
+    category: ['Tools'],
   },
   {
     title: 'Git',
     compentency: 3,
+    category: ['Tools'],
   },
   {
     title: 'Arc',
     compentency: 3,
+    category: ['Tools'],
   },
   {
     title: 'Numpy',
@@ -126,7 +148,7 @@ const skills = [
   {
     title: 'Typescript',
     compentency: 3,
-    category: 'web',
+    category: ['Web Development', 'Languages'],
   },
   {
     title: 'Data Science',
@@ -136,20 +158,33 @@ const skills = [
   {
     title: 'HTML',
     compentency: 5,
-    category: 'web',
+    category: ['Web Development', 'Languages'],
   },
   {
     title: 'CSS',
     compentency: 5,
-    category: 'web',
+    category: ['Web Development', 'Languages'],
+  },
+  {
+    title: 'SASS/SCSS',
+    compentency: 5,
+    category: ['Web Development', 'Languages'],
+  },
+  {
+    title: 'LESS',
+    compentency: 5,
+    category: ['Web Development', 'Languages'],
   },
   {
     title: 'Python',
     compentency: 5,
+    category: ['Languages'],
+
   },
   {
     title: 'C++',
     compentency: 3,
+    category: ['Languages'],
   },
 ];
 
