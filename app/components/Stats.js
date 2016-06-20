@@ -58,11 +58,18 @@ const data = [
 
 
 class TableRow extends Component {
+
+  getValue() {
+    return this.props.link ? (
+      <a href={`${this.props.link}`}>{this.props.value}</a>
+    ) : this.props.value;
+  }
+  
   render() {
     return (
       <tr>
         <td>{this.props.label}</td>
-        <td>{this.props.value}</td>
+        <td>{this.getValue()}</td>
       </tr>
     );
   }
@@ -71,6 +78,7 @@ class TableRow extends Component {
 TableRow.propTypes = {
   label: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
+  link: PropTypes.string,
 };
 
 
@@ -86,7 +94,8 @@ class Table extends Component {
         <TableRow
           key={pair.label}
           label={pair.label}
-          value={pair.value} />
+          value={pair.value}
+          link={pair.link} />
       );
     });
   }
