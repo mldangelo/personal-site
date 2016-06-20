@@ -1,36 +1,12 @@
 import React, {Component, PropTypes} from 'react';
 import _ from 'lodash';
 
+import CategoryButton from './Skills/CategoryButton';
 import SkillBar from './Skills/SkillBar';
 
 import skills from './data/skills';
 
 // TODO Make sort and filterable, update skill levels. Add more
-
-class CategoryButton extends Component {
-
-  handleClick() {
-    this.props.handleClick(this.props.label);
-  }
-
-  render() {
-    return (
-      <button
-        className={`skillbutton ${this.props.active[this.props.label] ? 'skillbutton-active' : ''}` }
-        type="button"
-        onClick={this.handleClick.bind(this)}
-        >
-          {this.props.label}
-      </button>
-    );
-  }
-}
-
-CategoryButton.propTypes = {
-  label: PropTypes.string.isRequired,
-  handleClick: PropTypes.func.isRequired,
-  active: PropTypes.object.isRequired,
-};
 
 class Skills extends Component {
 
