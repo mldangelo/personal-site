@@ -3,6 +3,7 @@ import debug from 'debug';
 
 import express from 'express';
 import bodyParser from 'body-parser';
+import compress from 'compression';
 
 import webpack from 'webpack';
 import webpackMiddleware from 'webpack-dev-middleware';
@@ -19,6 +20,7 @@ const env = process.env.NODE_ENV || 'development';
 
 const app = express();
 
+app.use(compress());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
