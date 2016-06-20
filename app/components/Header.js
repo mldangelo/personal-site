@@ -4,45 +4,6 @@ import { Link, IndexLink } from 'react-router';
 import Menus from 'react-burger-menu';
 const Menu = Menus.slide;
 
-class MenuWrap extends Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      hidden:  false,
-    };
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const sideChanged = this.props.children.props.right !== nextProps.children.props.right;
-    if (sideChanged) {
-      this.setState({ hidden : true });
-      setTimeout(() => {
-        this.show();
-      }, this.props.wait);
-    }
-  }
-
-  show() {
-    this.setState({ hidden : false });
-  }
-
-  render() {
-    let style;
-
-    if (this.state.hidden) {
-      style = { display: 'none' };
-    }
-
-    return (
-      <div style={ style } className={ this.props.side }>
-        { this.props.children }
-      </div>
-    );
-  }
-};
-
-
 class Header extends Component {
 
   constructor(props) {
@@ -84,14 +45,14 @@ class Header extends Component {
             <li><Link to="/contact">Contact</Link></li>
           </ul>
         </nav>
-        <nav className="main" id="hambuger-nav">
+        <div className="hamburger-container">
+          <nav className="main" id="hambuger-nav">
 
-          <ul>
-            {this.getButton()}
-          </ul>
+            <ul>
+              {this.getButton()}
+            </ul>
 
-        </nav>
-        <MenuWrap wait={ 20 }>
+          </nav>
           <Menu
             right
             noOverlay
@@ -105,7 +66,7 @@ class Header extends Component {
             <a></a><Link to="/stats">STATS</Link>
             <a></a><Link to="/contact">CONTACT</Link>
           </Menu>
-        </MenuWrap>
+        </div>
       </header>
     );
   }
