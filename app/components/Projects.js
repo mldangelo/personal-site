@@ -1,8 +1,8 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router';
 
-import Cell from './Projects/Cell'
-import data from './Projects/data/projects.js'
+import Cell from './Projects/Cell';
+import data from './Projects/data/projects.js';
 
 // TODO Put projects side by side (2x2) instead of (1x4)
 

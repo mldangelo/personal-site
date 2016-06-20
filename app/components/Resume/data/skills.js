@@ -54,27 +54,27 @@ export const skills = [
   {
     title: 'MongoDB',
     compentency: 4,
-    category: ['Web Development','Databases'],
+    category: ['Web Development', 'Databases'],
   },
   {
     title: 'ElasticSearch',
     compentency: 3,
-    category: ['Web Development','Databases'],
+    category: ['Web Development', 'Databases'],
   },
   {
     title: 'PostgreSQL',
     compentency: 3,
-    category: ['Web Development','Databases'],
+    category: ['Web Development', 'Databases'],
   },
   {
     title: 'SQLite3',
     compentency: 4,
-    category: ['Web Development','Databases'],
+    category: ['Web Development', 'Databases'],
   },
   {
     title: 'Redis',
     compentency: 3,
-    category: ['Web Development','Databases'],
+    category: ['Web Development', 'Databases'],
   },
   {
     title: 'Matlab',

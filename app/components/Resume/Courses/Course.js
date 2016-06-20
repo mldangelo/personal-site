@@ -21,4 +21,4 @@ Course.propTypes = {
   data: PropTypes.object.isRequired,
 };
 
-export default Course
+export default Course;

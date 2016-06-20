@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { PropTypes } from 'react';
 
 import Header from './components/Header';
 import Nav from './components/Nav';
@@ -12,5 +12,9 @@ const App = ({ children }) => (
     <Nav/>
   </div>
 );
+
+App.propTypes = {
+  children: PropTypes.object
+};
 
 export default App;
