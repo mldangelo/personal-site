@@ -63,8 +63,6 @@ if (env == 'development') { // eslint-disable-line eqeqeq
   });
 }
 
-
-
 app.listen(port, '0.0.0.0', (err) => {
   if (err) {
     debug('express')(err);

@@ -25,9 +25,16 @@ module.exports = {
     }),
     new ExtractTextPlugin('[name]-[hash].min.css'),
     new webpack.optimize.UglifyJsPlugin({
+      beautify: false,
+      comments: false,
       compress: {
         warnings: false,
-        screw_ie8: true
+        drop_console: true
+      },
+      mangle: {
+        except: ['webpackJsonp', 'exports', 'require'],
+        screw_ie8 : true,
+        keep_fnames: true
       }
     }),
     new StatsPlugin('webpack.stats.json', {
