@@ -28,6 +28,7 @@ before_install:
 install:
 - npm install
 - npm install mishoo/UglifyJS2#harmony
+- npm install eslint@v2.13.0
 before_script:
 - npm run lint
 - sleep 15
@@ -43,3 +44,6 @@ git:
 cache:
   directories:
   - node_modules
+addons:
+    code_climate:
+        repo_token: 321ece2c9941bf30bb07f0555343ad772bdbbc6235c866478afc7af46558a8b4
