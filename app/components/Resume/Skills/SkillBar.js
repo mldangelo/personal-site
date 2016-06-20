@@ -4,14 +4,13 @@ import { categories } from '../data/skills';
 import _ from 'lodash';
 
 const colors = ['#515dd4','#3896e2','#747FFF','#64cb7b','#6968b3','#e47272','#C3423F','#40494e', '#CC7B94'];
-// const colors = new ColorScheme().from_hue(Math.floor((Math.random() * 255))).scheme('tetrade').variation('soft').colors();
 
 const getColor = (type) => {
 
   for (let idx in categories) {
-    if (_.includes(type, categories[idx])) return  colors[idx]};
+    if (_.includes(type, categories[idx])) return colors[idx];
   }
-  return colors[colors.length-1]};
+  return colors[colors.length-1];
 ;
 };
 

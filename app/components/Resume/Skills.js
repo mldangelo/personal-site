@@ -21,7 +21,6 @@ class Skills extends Component {
     for (let key in this.state.buttons) { // Turn off all the other buttons
       if (label != key) this.state.buttons[key] = false;
     }
-    console.log("Button states: " + JSON.stringify(this.state.buttons));
 
     let allFalse = true; // Turn on all if all other buttons are off
     for (let key in this.state.buttons) {
@@ -86,7 +85,7 @@ class Skills extends Component {
           <p>Note: I think these sections are silly, but everyone seems to have one.</p>
         </div>
 
-        <div>
+        <div className="skill-button-container">
           {this.getButtons()}
         </div>
 
