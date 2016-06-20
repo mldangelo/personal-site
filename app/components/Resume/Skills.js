@@ -1,4 +1,4 @@
-import React, {Component, PropTypes} from 'react';
+import React, { Component } from 'react';
 
 import _includes from 'lodash/includes';
 import _zipObject from 'lodash/zipObject';
@@ -14,19 +14,19 @@ class Skills extends Component {
   constructor(props) {
     super(props);
     this.state = {
-     buttons: _zipObject(categories, false), // Althetic Skills, Office Skills
+      buttons: _zipObject(categories, false), // Althetic Skills, Office Skills
     };
     this.state.buttons['All'] = true;
   }
 
   handleChildClick(label) {
-    this.state.buttons[label] = !this.state.buttons[label]
-    for (let key in this.state.buttons) { // Turn off all the other buttons
-      if (label != key) this.state.buttons[key] = false;
+    this.state.buttons[label] = !this.state.buttons[label];
+    for (const key in this.state.buttons) { // Turn off all the other buttons
+      if (label !== key) this.state.buttons[key] = false;
     }
 
     let allFalse = true; // Turn on all if all buttons are off
-    for (let key in this.state.buttons) {
+    for (const key in this.state.buttons) {
       if (this.state.buttons[key]) {
         allFalse = false;
         break;
@@ -35,10 +35,10 @@ class Skills extends Component {
     if (allFalse) this.state.buttons['All'] = true;
 
     this.forceUpdate(); // TODO Don't do this.
- }
+  }
 
-  getButtons(){
-    const buttons = []
+  getButtons() {
+    const buttons = [];
     const keys = Object.keys(this.state.buttons).sort(); // Sort keys alphabetically
     for (let key of keys) {
       buttons.push(
@@ -57,7 +57,7 @@ class Skills extends Component {
     const rows = [];
 
     let activeCategory = 'All'; // default active category
-    for (let key in this.state.buttons) { // search for true active categorys
+    for (const key in this.state.buttons) { // search for true active categorys
       if (this.state.buttons[key]) {
         activeCategory = key;
         break;
@@ -65,11 +65,11 @@ class Skills extends Component {
     }
 
     const sorted = _orderBy(skills,
-      ['compentency','category','title'],
-      ['desc','desc','asc']); // doesn't work for category arrays
+      ['compentency', 'category', 'title'],
+      ['desc', 'desc', 'asc']); // doesn't work for category arrays
 
     for (let skill of sorted) {
-      if (activeCategory == 'All' || _includes(skill.category, activeCategory)) {
+      if (activeCategory === 'All' || _includes(skill.category, activeCategory)) {
         rows.push(
           <SkillBar
             data={skill}

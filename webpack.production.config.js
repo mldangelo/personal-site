@@ -33,7 +33,7 @@ module.exports = {
       },
       mangle: {
         except: ['webpackJsonp', 'exports', 'require'],
-        screw_ie8 : true,
+        screw_ie8: true,
         keep_fnames: true
       }
     }),
@@ -64,7 +64,7 @@ module.exports = {
     }, {
       test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'file-loader'
     }, {
-      test: /\.js$/, loader: "strip-loader?strip[]=console.log"
+      test: /\.js$/, loader: 'strip-loader?strip[]=console.log'
     }
   ]
   },

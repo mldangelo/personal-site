@@ -4,15 +4,13 @@ import { categories } from '../data/skills';
 
 import _includes from 'lodash/includes';
 
-const colors = ['#515dd4','#3896e2','#747FFF','#64cb7b','#6968b3','#e47272','#C3423F','#40494e', '#CC7B94'];
+const colors = ['#515dd4', '#3896e2', '#747FFF', '#64cb7b', '#6968b3', '#e47272', '#C3423F', '#40494e', '#CC7B94'];
 
 const getColor = (type) => {
-
-  for (let idx in categories) {
+  for (const idx in categories) {
     if (_includes(type, categories[idx])) return colors[idx];
   }
-  return colors[colors.length-1];
-;
+  return colors[colors.length - 1];
 };
 
 class SkillBar extends Component {
