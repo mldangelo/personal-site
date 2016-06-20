@@ -16,14 +16,10 @@ class Resume extends Component {
           </div>
         </header>
 
-        {/* <Education/>
+        <Education/>
         <Experience/>
         <Skills/>
         <Courses/>
-        */}
-
-        <Skills/>
-          <Courses/>
 
         <div className="references">
           <div className="title">

@@ -32,18 +32,28 @@ export const skills = [
     category: ['Web Development', 'Frameworks'],
   },
   {
+    title: 'Bootstrap',
+    compentency: 5,
+    category: ['Web Development', 'Frameworks'],
+  },
+  {
     title: 'Bash',
     compentency: 3,
     category: ['Tools', 'Languages'],
   },
   {
     title: 'Amazon Web Services',
-    compentency: 3,
+    compentency: 4,
+    category: ['Web Development', 'Tools'],
+  },
+  {
+    title: 'Heroku',
+    compentency: 2,
     category: ['Web Development', 'Tools'],
   },
   {
     title: 'MongoDB',
-    compentency: 3,
+    compentency: 4,
     category: ['Web Development','Databases'],
   },
   {
@@ -58,6 +68,11 @@ export const skills = [
   },
   {
     title: 'SQLite3',
+    compentency: 4,
+    category: ['Web Development','Databases'],
+  },
+  {
+    title: 'Redis',
     compentency: 3,
     category: ['Web Development','Databases'],
   },
@@ -78,8 +93,18 @@ export const skills = [
   },
   {
     title: 'Express.JS',
-    compentency: 4,
+    compentency: 5,
     category: ['Web Development', 'Frameworks'],
+  },
+  {
+    title: 'Koa',
+    compentency: 3,
+    category: ['Web Development', 'Frameworks'],
+  },
+  {
+    title: 'D3',
+    compentency: 3,
+    category: ['Web Development', 'Frameworks', 'Design'],
   },
   {
     title: 'Flask',
