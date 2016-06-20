@@ -9,12 +9,11 @@ class Hamburger extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      open:  false,
+      open: false,
     };
   }
 
   handleClick() {
-    console.log('open:',this.state.open);
     this.setState({
       open: !this.state.open,
     });
