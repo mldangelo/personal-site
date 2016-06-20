@@ -16,8 +16,22 @@ const authenticate = (cb) => {
 authenticate();
 
 const routes = (app) => {
-  // TODO Cache to DB later
+
+
   app.get('/api/github', (req, res) => {
+    const data = {
+      forks: 21,
+      open_issues_count: 10,
+      pushed_at: "2016-03-25T17:01:39Z",
+      stargazers_count: 171,
+      subscribers_count: 18,
+      watchers_count:171,
+    };
+    res.send(JSON.stringify(data));
+  })
+
+  // TODO Cache to DB later
+  app.get('/api/github2', (req, res) => {
     github.repos.get({
       user: 'typpo',
       repo: 'ad-detector',
@@ -32,12 +46,14 @@ const routes = (app) => {
           'pushed_at',
         ]);
 
+        const send = () => {
+          res.send(JSON.stringify(data));
+        };
+
         if (err && err.status == 'Unauthorized'){
-          authenticate(() => { // retry authentication -- if token expires
-            res.send(data);
-          });
+          authenticate(send()); // retry authentication -- if token expires
         } else {
-          res.send(data);
+          send();
         }
 
     });
