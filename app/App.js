@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 
-import Header from './components/Header';
-import Nav from './components/Nav';
+import Header from './components/Template/Header';
+import Nav from './components/Template/Nav';
 
 const App = ({ children }) => (
   <div id="wrapper">
