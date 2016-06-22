@@ -10,6 +10,8 @@ import Resume from './components/Resume';
 import Stats from './components/Stats';
 import Contact from './components/Contact';
 
+import PageNotFound from './components/PageNotFound';
+
 import ReactGA from 'react-ga';
 ReactGA.initialize('UA-68649021-1');
 
@@ -30,6 +32,7 @@ ReactDOM.render(
       <Route path="/stats" component={Stats}/>
       <Route path="/contact" component={Contact}/>
     </Route>
+    <Route path="*" component={PageNotFound} />
   </Router>,
   document.getElementById('root')
 );
