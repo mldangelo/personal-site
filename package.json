@@ -7,7 +7,7 @@
     "build-dev": "rimraf .dist && set NODE_ENV=development && webpack --config ./webpack.config.js --progress --profile --colors",
     "clean": "rimraf ./dist",
     "dev": "NODE_ENV=development && nodemon server.js --ignore app/ --exec babel-node",
-    "lint": "./node_modules/.bin/eslint app routes server.js webpack.*.js",
+    "lint": "./node_modules/.bin/eslint app routes server.js webpack.*.js || true",
     "start": "NODE_ENV=production && ./node_modules/.bin/babel-node server"
   },
   "dependencies": {
@@ -39,6 +39,8 @@
     "css-loader": "^0.23.1",
     "eslint": "^2.13.0",
     "eslint-config-airbnb": "^9.0.1",
+    "eslint-plugin-import": "^1.9.2",
+    "eslint-plugin-jsx-a11y": "^1.5.3",
     "eslint-plugin-react": "^5.2.2",
     "file-loader": "^0.9.0",
     "node-sass": "^3.4.2",
