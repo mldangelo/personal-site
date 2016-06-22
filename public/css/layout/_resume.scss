@@ -69,3 +69,17 @@
 .courses ul li{
   display: inline;
 }
+
+.course-dot {
+	display: inline;
+	// display: none;
+}
+
+@include breakpoint(small) {
+	.course-dot {
+		display: none;
+	}
+	.course-container a{
+		display: block;
+	}
+}
