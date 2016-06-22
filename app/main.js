@@ -7,10 +7,13 @@ import App from './App';
 import About from './components/About';
 import Projects from './components/Projects';
 import Resume from './components/Resume';
+
+import Skills from './components/Resume/Skills';
+
 import Stats from './components/Stats';
 import Contact from './components/Contact';
 
-import PageNotFound from './components/PageNotFound';
+import NotFound from './components/NotFound';
 
 import ReactGA from 'react-ga';
 ReactGA.initialize('UA-68649021-1');
@@ -27,12 +30,17 @@ ReactDOM.render(
   <Router onUpdate={update} history={browserHistory}>
     <Route path="/" component={App}>
       <IndexRoute component={About}/>
-      <Route path="/resume" component={Resume}/>
+
+      <Route path="/resume" component={App}>
+        <IndexRoute component={Resume}/>
+        <Route path="/resume/skills" component={Skills}/>
+      </Route>
+      
       <Route path="/projects" component={Projects}/>
       <Route path="/stats" component={Stats}/>
       <Route path="/contact" component={Contact}/>
     </Route>
-    <Route path="*" component={PageNotFound} />
+    <Route path="*" component={NotFound} />
   </Router>,
   document.getElementById('root')
 );
