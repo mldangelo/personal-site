@@ -11,7 +11,7 @@ class Course extends Component {
           <h4 className="course-number">{this.props.data.number}:</h4>
           <p className="course-name">{this.props.data.title}</p>
         </a>
-        <p className="course-name"> &#8226;</p>
+        {this.props.last ? null : <p className="course-name"> &#8226;</p>}
       </li>
     );
   }
@@ -19,6 +19,7 @@ class Course extends Component {
 
 Course.propTypes = {
   data: PropTypes.object.isRequired,
+  last: PropTypes.bool,
 };
 
 export default Course;

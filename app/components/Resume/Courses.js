@@ -8,14 +8,24 @@ import courses from './data/courses';
 class Courses extends Component {
 
   getRows() {
-    return _orderBy(courses, ['univerity', 'number'], ['desc', 'asc'])
-      .map((course) => {
+    const ordered = _orderBy(courses, ['univerity', 'number'], ['desc', 'asc']);
+    const rows = ordered.map((course) => {
         return (
           <Course
             data={course}
             key={course.title}
           />);
       });
+    // Remove dot after last course
+    const lastidx = ordered.length - 1;
+    rows[lastidx] = (
+      <Course
+        data={ordered[lastidx]}
+        key={ordered[lastidx].title}
+        last
+      />
+    );
+    return rows;
   }
 
   render() {
