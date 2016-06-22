@@ -40,12 +40,12 @@ class Hamburger extends Component {
             </ul>
           </nav>
           <Menu right noOverlay isOpen={this.state.open}>
-            <IndexLink to="/">MICHAEL DANGELO</IndexLink>
-            <a></a><Link className="hamburger-link" to="/resume">RESUME</Link>
-            <a></a><Link to="/projects">PROJECTS</Link>
+            <IndexLink to="/" onClick={this.handleClick.bind(this)}>MICHAEL DANGELO</IndexLink>
+            <a></a><Link to="/resume" onClick={this.handleClick.bind(this)}>RESUME</Link>
+            <a></a><Link to="/projects" onClick={this.handleClick.bind(this)}>PROJECTS</Link>
             {/* <a></a><Link to="/posts">POSTS</Link> */}
-            <a></a><Link to="/stats">STATS</Link>
-            <a></a><Link to="/contact">CONTACT</Link>
+            <a></a><Link to="/stats" onClick={this.handleClick.bind(this)}>STATS</Link>
+            <a></a><Link to="/contact" onClick={this.handleClick.bind(this)}>CONTACT</Link>
           </Menu>
         </div>
     );
