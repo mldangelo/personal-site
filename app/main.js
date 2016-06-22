@@ -30,17 +30,12 @@ ReactDOM.render(
   <Router onUpdate={update} history={browserHistory}>
     <Route path="/" component={App}>
       <IndexRoute component={About}/>
-
-      <Route path="/resume" component={App}>
-        <IndexRoute component={Resume}/>
-        <Route path="/resume/skills" component={Skills}/>
-      </Route>
-      
+      <Route path="/resume" component={Resume}/>
       <Route path="/projects" component={Projects}/>
       <Route path="/stats" component={Stats}/>
       <Route path="/contact" component={Contact}/>
     </Route>
-    <Route path="*" component={NotFound} />
+    <Route path="*" component={NotFound} status={404}/>
   </Router>,
   document.getElementById('root')
 );

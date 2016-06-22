@@ -1,8 +1,7 @@
 {
-  "presets": ["es2015-node5", "stage-0", "react"],
+  "presets": ["es2015", "stage-3", "react"],
   "plugins": [
-    "transform-async-to-generator",
-    "syntax-async-functions",
+    "add-module-exports",
     "lodash",
   ]
 }
