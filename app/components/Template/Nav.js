@@ -26,11 +26,11 @@ class Nav extends Component {
 
           <section id="footer">
             <ul className="icons">
-              <li><a href="https://github.com/mldangelo" className="fa-github"><span className="label">RSS</span></a></li>
+              <li><a href="https://github.com/mldangelo" className="fa-github"><span className="label">Github</span></a></li>
               <li><a href="https://facebook.com/d" className="fa-facebook"><span className="label">Facebook</span></a></li>
               <li><a href="https://www.instagram.com/dangelosaurus/" className="fa-instagram"><span className="label">Instagram</span></a></li>
-              <li><a href="https://www.linkedin.com/in/michaelldangelo" className="fa-linkedin"><span className="label">Instagram</span></a></li>
-              <li><a href="https://angel.co/michael-d-angelo" className="fa-angellist"><span className="label">Twitter</span></a></li>
+              <li><a href="https://www.linkedin.com/in/michaelldangelo" className="fa-linkedin"><span className="label">LinkedIn</span></a></li>
+              <li><a href="https://angel.co/michael-d-angelo" className="fa-angellist"><span className="label">Angel List</span></a></li>
               <li><a href="https://twitter.com/dangelosaurus" className="fa-twitter"><span className="label">Twitter</span></a></li>
               <li><a href="mailto:michael.l.dangelo@gmail.com" className="fa-envelope"><span className="label">Email</span></a></li>
             </ul>
