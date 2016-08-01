@@ -1,7 +1,7 @@
 ## [mldangelo.com](http://mldangelo.com)
 My personal website. Built using Node.js, React, Express, React-Router, Hot Module Reloading, Webpack and many other technologies.
 
-### Tests: 
+### Tests:
 [![Code Climate](https://codeclimate.com/github/mldangelo/mldangelo/badges/gpa.svg)](https://codeclimate.com/github/mldangelo/mldangelo)
 [![Build Status](https://travis-ci.org/mldangelo/mldangelo.svg?branch=master)](https://travis-ci.org/mldangelo/mldangelo)
 
@@ -22,7 +22,7 @@ npm install
 2. Optionally configure nginx. Run:
 
   ```bash
-  sudo ln [root directory]/nginx/mldangelo.conf /etc/nginx/sites-enabled/mldangelo.conf
+  sudo ln [root directory]/nginx/mldangelo.conf [nginx directory]/sites-enabled/mldangelo.conf
   sudo service nginx restart
   ```
 3. cd into [root directory] and run:
@@ -33,10 +33,6 @@ npm install
   ```
   If running in background, use nohup or screen.
 4. Navigate to `<ip>:<port> (default=7999)` and enjoy.
-
-### Notes
-
-If UglifyJs fails, try: ``` npm install mishoo/UglifyJS2#harmony ``` and build again.
 
 ### Contributors
 - [@mldangelo](https://github.com/mldangelo)
