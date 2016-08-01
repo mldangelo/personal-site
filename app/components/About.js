@@ -8,7 +8,7 @@ class About extends Component {
         <header>
           <div className="title">
             <h2><IndexLink to="/">About this site</IndexLink></h2>
-            <p>A beautiful, responsive, <s>isomorphic,</s> react app written with ES2016. Please hire me.</p>
+            <p>A beautiful, responsive, react app written with ES2016. Please hire me.</p>
           </div>
         </header>
         <p> Welcome to my website. Please feel free to check out my {' '}
