@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import cluster from 'cluster';
 
 const workers = process.env.WORKERS || 1;
