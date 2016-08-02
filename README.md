@@ -11,11 +11,11 @@ My personal website. Built using Node.js, React, Express, React-Router, Hot Modu
 ### Installation:
 
 1. Run the following commands:
-```bash
-git clone git://github.com/mldangelo/mldangelo.git
-cd mldangelo
-npm install
-```
+  ```bash
+  git clone git://github.com/mldangelo/mldangelo.git
+  cd mldangelo
+  npm install
+  ```
 
 2. Optionally configure nginx. Run:
 
@@ -26,10 +26,12 @@ npm install
   Note: HTTPS block should be removed if step 2 (below is not followed)
 3. Optionally configure a SSL certificate using Certbot. See [here](https://certbot.eff.org/#ubuntutrusty-nginx)
 for installation and setup instructions. A cronjob such as:
+
   ```bash
   0 0 1 * * sudo /home/ubuntu/certbot/certbot-auto renew --quiet --no-self-upgrade
   ```
-should be set to automatically renew the certificate in production.
+  
+  should be set to automatically renew the certificate in production.
 
 
 ###  Running:
