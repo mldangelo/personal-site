@@ -29,7 +29,10 @@ const routes = (app, debug) => {
       user: 'mldangelo',
       repo: 'mldangelo',
     }, (err, _res) => {
-      if (err) debug('express')(err);
+      if (err) {
+        console.error('github-api-error', err);
+        // debug('express')(err);
+      }
       const send = () => {
         res.send(JSON.stringify(
           _pick(_res,

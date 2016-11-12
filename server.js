@@ -24,7 +24,7 @@ const app = express();
 app.use(compress());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(morgan('combined'))
+app.use(morgan('combined')); 
 app.use(express.static(path.join(__dirname, 'public')));
 
 // TODO(Michael) Rewrite linter rule for string compare
