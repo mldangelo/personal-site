@@ -20,19 +20,14 @@ class Skills extends Component {
   }
 
   handleChildClick(label) {
-    this.state.buttons[label] = !this.state.buttons[label];
+    this.state.buttons[label] = !this.state.buttons[label]; // toggle button
     for (const key in this.state.buttons) { // Turn off all the other buttons
       if (label !== key) this.state.buttons[key] = false;
     }
 
-    let allFalse = true; // Turn on all if all buttons are off
-    for (const key in this.state.buttons) {
-      if (this.state.buttons[key]) {
-        allFalse = false;
-        break;
-      }
-    }
-    if (allFalse) this.state.buttons['All'] = true;
+    // Turn on all button if other buttons are off
+    const oneTrue = Object.keys(this.state.buttons).some(key => this.state.buttons[key]);
+    if (!oneTrue) this.state.buttons['All'] = true;
 
     this.forceUpdate(); // TODO Don't do this.
   }
@@ -40,7 +35,7 @@ class Skills extends Component {
   getButtons() {
     const buttons = [];
     const keys = Object.keys(this.state.buttons).sort(); // Sort keys alphabetically
-    for (let key of keys) {
+    for (const key of keys) {
       buttons.push(
         <CategoryButton
           label={key}
@@ -54,12 +49,10 @@ class Skills extends Component {
   }
 
   getRows() {
-    const rows = [];
-
-    let activeCategory = 'All'; // default active category
+    let actCat = 'All'; // default active category
     for (const key in this.state.buttons) { // search for true active categorys
       if (this.state.buttons[key]) {
-        activeCategory = key;
+        actCat = key;
         break;
       }
     }
@@ -68,17 +61,14 @@ class Skills extends Component {
       ['compentency', 'category', 'title'],
       ['desc', 'desc', 'asc']); // doesn't work for category arrays
 
-    for (let skill of sorted) {
-      if (activeCategory === 'All' || _includes(skill.category, activeCategory)) {
-        rows.push(
+    return sorted
+      .filter(skill => (actCat === 'All' || _includes(skill.category, actCat)))
+      .map(skill => (
           <SkillBar
             data={skill}
             key={skill.title}
           />
-        );
-      }
-    }
-    return rows;
+        ));
   }
 
   render() {

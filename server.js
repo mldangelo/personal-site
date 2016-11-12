@@ -24,8 +24,10 @@ const app = express();
 app.use(compress());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(morgan('combined')); 
+app.use(morgan('combined'));
 app.use(express.static(path.join(__dirname, 'public')));
+
+apiRoutes(app);
 
 // TODO(Michael) Rewrite linter rule for string compare
 if (env == 'development') { // eslint-disable-line eqeqeq
@@ -47,8 +49,6 @@ if (env == 'development') { // eslint-disable-line eqeqeq
   app.use(middleware);
   app.use(webpackHotMiddleware(compiler));
 
-  apiRoutes(app);
-
   app.get('/*', function response(req, res) {
     res.write(middleware.fileSystem.readFileSync(path.join(__dirname, 'dist/index.html')));
     res.end();
@@ -57,8 +57,6 @@ if (env == 'development') { // eslint-disable-line eqeqeq
 } else {
   debug.enable('express');
   app.use(express.static(__dirname + '/dist'));
-
-  apiRoutes(app, debug);
 
   app.get('/*', function response(req, res) {
     res.sendFile(path.join(__dirname, 'dist/index.html'));

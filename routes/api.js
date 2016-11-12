@@ -16,7 +16,7 @@ const authenticate = (cb) => {
 
 let authenticated = false;
 
-const routes = (app, debug) => {
+const routes = (app) => {
   // TODO Cache to DB later
   app.get('/api/github', (req, res) => {
     // Handles authentication for the first time
@@ -31,18 +31,17 @@ const routes = (app, debug) => {
     }, (err, _res) => {
       if (err) {
         console.error('github-api-error', err);
-        // debug('express')(err);
       }
       const send = () => {
         res.send(JSON.stringify(
           _pick(_res,
-          ['stargazers_count',
-          'watchers_count',
-          'forks',
-          'open_issues_count',
-          'subscribers_count',
-          'pushed_at',
-        ])));
+            ['stargazers_count',
+              'watchers_count',
+              'forks',
+              'open_issues_count',
+              'subscribers_count',
+              'pushed_at',
+            ])));
       };
 
       if (err && err.status === 'Unauthorized') {

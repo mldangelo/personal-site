@@ -66,7 +66,7 @@ module.exports = {
     }, {
       test: /\.js$/, loader: 'strip-loader?strip[]=console.log'
     }
-  ]
+    ]
   },
   postcss: [
     require('autoprefixer')
