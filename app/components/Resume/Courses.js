@@ -10,12 +10,12 @@ class Courses extends Component {
   getRows() {
     const ordered = _orderBy(courses, ['univerity', 'number'], ['desc', 'asc']);
     const rows = ordered.map((course) => {
-        return (
+      return (
           <Course
             data={course}
             key={course.title}
           />);
-      });
+    });
     // Remove dot after last course
     const lastidx = ordered.length - 1;
     rows[lastidx] = (

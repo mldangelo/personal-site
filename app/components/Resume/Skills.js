@@ -40,7 +40,7 @@ class Skills extends Component {
   getButtons() {
     const buttons = [];
     const keys = Object.keys(this.state.buttons).sort(); // Sort keys alphabetically
-    for (let key of keys) {
+    for (const key of keys) {
       buttons.push(
         <CategoryButton
           label={key}
@@ -68,7 +68,7 @@ class Skills extends Component {
       ['compentency', 'category', 'title'],
       ['desc', 'desc', 'asc']); // doesn't work for category arrays
 
-    for (let skill of sorted) {
+    for (const skill of sorted) {
       if (activeCategory === 'All' || _includes(skill.category, activeCategory)) {
         rows.push(
           <SkillBar

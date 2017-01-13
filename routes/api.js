@@ -33,13 +33,13 @@ const routes = (app, debug) => {
       const send = () => {
         res.send(JSON.stringify(
           _pick(_res,
-          ['stargazers_count',
-          'watchers_count',
-          'forks',
-          'open_issues_count',
-          'subscribers_count',
-          'pushed_at',
-        ])));
+            ['stargazers_count',
+              'watchers_count',
+              'forks',
+              'open_issues_count',
+              'subscribers_count',
+              'pushed_at',
+            ])));
       };
 
       if (err && err.status === 'Unauthorized') {
