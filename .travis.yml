@@ -26,9 +26,7 @@ before_install:
   - gcc --version
   - g++ --version
 install:
-- npm install
-- npm install mishoo/UglifyJS2#harmony
-- npm install eslint@v2.13.0
+- yarn
 before_script:
 - npm run lint
 - sleep 15
@@ -42,6 +40,7 @@ notifications:
 git:
   depth: 10
 cache:
+  yarn: true
   directories:
   - node_modules
 addons:
