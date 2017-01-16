@@ -20,25 +20,14 @@ class Stats extends Component {
     const source = '/api/github';
     this.serverRequest = axios.get(source).then((result) => {
       const update = result.data;
-      console.log(update);
       for (const field of data) {
         if (field.key) field.value = (field.key === 'pushed_at') ? moment(update[field.key]).format('MMMM DD, YYYY') : String(update[field.key]);
       }
       this.setState({
-        data: data,
+        data,
       });
     }).catch((error) => {
-      if (error.response) {
-        // The request was made, but the server responded with a status code
-        // that falls out of the range of 2xx
-        console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        console.log('Error', error.message);
-      }
-      console.log(error.config);
+      console.error('Error', error);
     });
   }
 

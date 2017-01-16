@@ -44,7 +44,9 @@
      * Possible errors
      */
     "no-cond-assign": [2, "always"], // http://eslint.org/docs/rules/no-cond-assign
-    "no-console": 1,                 // http://eslint.org/docs/rules/no-console
+    "no-console": ["error", {        // http://eslint.org/docs/rules/no-console
+      "allow": ["warn", "error"] 
+    }],
     "no-debugger": 1,                // http://eslint.org/docs/rules/no-debugger
     "no-alert": 1,                   // http://eslint.org/docs/rules/no-alert
     "no-constant-condition": 1,      // http://eslint.org/docs/rules/no-constant-condition
@@ -175,7 +177,7 @@
     "react/react-in-jsx-scope": 2,
     "react/self-closing-comp": 2,
     "react/sort-comp": 2,
-    "react/wrap-multilines": 2
+    "react/jsx-wrap-multilines": 2
   },
   "plugins": [
     "react"
