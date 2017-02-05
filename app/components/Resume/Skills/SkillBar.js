@@ -1,15 +1,11 @@
 import React, { PropTypes } from 'react';
-import _includes from 'lodash/includes';
 
-import { categories, colors } from '../data/skills';
+import { categories } from '../data/skills';
 
-// NOTE: Type is an array of categories. getColor finds the first matching color.
-const getColor = (type) => {
-  for (const idx in categories) {
-    if (_includes(type, categories[idx])) return colors[idx];
-  }
-  return colors[colors.length - 1];
-};
+// TODO: Consider averaging colors
+const getColor = types => Object.keys(categories)
+  .filter(key => types.includes(key))
+  .map(key => categories[key])[0];
 
 const SkillBar = (props) => {
   const titleStyle = {

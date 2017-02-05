@@ -1,26 +1,16 @@
-export const categories = [
-  'Languages',
-  'Machine Learning',
-  'Data Science',
-  'Web Development',
-  'Design',
-  'Tools',
-  'Frameworks',
-  'Databases',
-  'Other',
-]; // TODO: Add Althetic Skills, Office Skills
-
-export const colors = [
-  '#515dd4',
-  '#3896e2',
-  '#747FFF',
-  '#64cb7b',
-  '#6968b3',
-  '#e47272',
-  '#C3423F',
-  '#40494e',
-  '#CC7B94',
-];
+// TODO: How should these be sorted?
+// TODO: Add Althetic Skills, Office Skills (?)
+export const categories = {
+  'Data Science': '#515dd4',
+  Databases: '#3896e2',
+  Design: '#747fff',
+  Frameworks: '#64cb7b',
+  Languages: '#6968b3',
+  'Machine Learning': '#e47272',
+  Other: '#c3423f',
+  Tools: '#40494e',
+  'Web Development': '#cc7b94',
+};
 
 export const skills = [
   {

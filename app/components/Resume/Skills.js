@@ -13,7 +13,7 @@ class Skills extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      buttons: categories.sort().reduce((obj, key) => ({
+      buttons: Object.keys(categories).sort().reduce((obj, key) => ({
         ...obj,
         [key]: false,
       }), { All: true }),
