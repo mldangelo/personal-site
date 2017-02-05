@@ -59,7 +59,7 @@ if (env == 'development') { // eslint-disable-line eqeqeq
   blocked(ms => debug('express')(`blocked for ${ms}ms`));
 } else {
   debug.enable('express');
-  app.use(express.static(`${__dirname}/dist`));
+  app.use(express.static(`${__dirname}`));
 
   app.get('/*', (req, res) => {
     res.sendFile(path.join(__dirname, 'dist/index.html'));
