@@ -18,8 +18,7 @@ const data = [
     date: '2015-09-20',
     desc: 'Won ~ $7000 in prizes for an advanced, low cost monitoring solution '
       + 'for crops. Harvest was designed to catch irrigation leaks, overwatering, '
-      + 'and nutrient deficiencies and was designed to be affordable for farmers '
-      + 'everywhere.',
+      + 'and nutrient deficiencies at an affordable for the developing world.',
   }, {
     title: 'Space Potato',
     subtitle: 'A kickstarter funded potato powered weather balloon.',
