@@ -8,10 +8,10 @@ module.exports = {
   devtool: 'eval-source-map',
   entry: [
     'webpack-hot-middleware/client?path=http://localhost:7999/__webpack_hmr&reload=true',
-    path.join(__dirname, 'app/main.js'),
+    path.join(__dirname, '../app/main.js'),
   ],
   output: {
-    path: path.join(__dirname, '/dist/'),
+    path: path.join(__dirname, '../dist/'),
     filename: '[name].js',
     publicPath: '/',
   },

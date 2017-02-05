@@ -14,7 +14,7 @@ import webpackHotMiddleware from 'webpack-hot-middleware';
 
 import dotenv from 'dotenv';
 
-import config from './webpack.config';
+import config from './webpack/webpack.config';
 import apiRoutes from './routes/api';
 
 dotenv.config(); // TODO: Find a prettier way to do this.
