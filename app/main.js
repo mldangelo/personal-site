@@ -22,7 +22,7 @@ const update = () => {
 };
 
 // All of our CSS
-require('!style!css!sass!../public/css/main.scss');
+require('!style-loader!css-loader!sass-loader!../public/css/main.scss');
 
 ReactDOM.render(
   <Router onUpdate={update} history={browserHistory}>

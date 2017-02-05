@@ -16,7 +16,6 @@ module.exports = {
     publicPath: '/'
   },
   plugins: [
-    new webpack.optimize.OccurenceOrderPlugin(),
     // new webpack.optimize.DedupePlugin(),
     new HtmlWebpackPlugin({
       template: 'views/index.tpl.html',
@@ -49,13 +48,13 @@ module.exports = {
     loaders: [{
       test: /\.js?$/,
       exclude: /node_modules/,
-      loader: 'babel'
+      loader: 'babel-loader'
     }, {
       test: /\.json?$/,
       loader: 'json'
     }, { // TODO(Michael): Verfiy css/scss loaders later. Remove -loader from loader names
       test: /\.css$/,
-      loader: ExtractTextPlugin.extract('style-loader', 'css-loader?modules&localIdentName=[name]---[local]---[hash:base64:5]!postcss')
+      loader: ExtractTextPlugin.extract({ fallback: 'style-loader', use: 'css-loader?modules&localIdentName=[name]---[local]---[hash:base64:5]' })
     }, {
       test: /\.scss$/,
       loaders: 'style-loader!css-loader!sass-loader?modules&localIdentName=[name]---[local]---[hash:base64:5]'
@@ -67,8 +66,5 @@ module.exports = {
       test: /\.js$/, loader: 'strip-loader?strip[]=console.log'
     }
     ]
-  },
-  postcss: [
-    require('autoprefixer')
-  ]
+  }
 };
