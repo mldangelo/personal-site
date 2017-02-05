@@ -3,7 +3,7 @@ const data = [
   {
     title: 'Nearest Dollar',
     subtitle: '2015 BVP Hackathon',
-    link: 'http://www.nearestdollar.com/',
+    link: '/projects/nearestdollar/',
     image: '/images/projects/nearestdollar.jpg',
     date: '2015-11-20',
     desc: 'Built for a social impact hackathon. '
@@ -13,12 +13,12 @@ const data = [
   }, {
     title: 'Harvest',
     subtitle: 'Won 3rd. place in 2015 Techcrunch Disrupt SF Hackathon',
-    link: 'http://www.harvesters.club/',
+    link: 'https://devpost.com/software/harvest',
     image: '/images/projects/harvest.jpg',
     date: '2015-09-20',
     desc: 'Won ~ $7000 in prizes for an advanced, low cost monitoring solution '
       + 'for crops. Harvest was designed to catch irrigation leaks, overwatering, '
-      + 'and nutrient deficiencies at an affordable for the developing world.',
+      + 'and nutrient deficiencies at an affordable price for the developing world.',
   }, {
     title: 'Space Potato',
     subtitle: 'A kickstarter funded potato powered weather balloon.',
@@ -31,7 +31,7 @@ const data = [
   }, {
     title: 'Cat Detector',
     subtitle: 'A convolutional neural network to classify cats! (and dogs)',
-    link: 'http://www.catdetector.biz',
+    link: '/project/catdetector/',
     image: '/images/projects/catdetector.jpg',
     date: '2015-05-15',
     desc: 'Trained a convolutional neural network to classify between ~ 80 cats breeds. '
