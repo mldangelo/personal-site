@@ -22,18 +22,18 @@ const data = [
     value: '0',
   }, {
     label: 'Number of linter warnings',
-    value: '6', // TODO Update from travis / circle
+    value: '8', // TODO Update from travis / circle
   }, {
     label: 'Open github issues',
     key: 'open_issues_count',
     value: '0',
-    link: 'https://github.com/mldangelo/mldangelo/issues'
+    link: 'https://github.com/mldangelo/mldangelo/issues',
   }, {
     label: 'Last updated at',
     key: 'pushed_at',
     value: moment().format('MMMM Do YYYY'),
     link: 'https://github.com/mldangelo/mldangelo/commits',
-  }
+  },
 ];
 
 /* // TODO Add these fields later

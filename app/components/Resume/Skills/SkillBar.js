@@ -1,40 +1,35 @@
-import React, {Component, PropTypes} from 'react';
+import React, { PropTypes } from 'react';
 
 import { categories } from '../data/skills';
 
-import _includes from 'lodash/includes';
+// TODO: Consider averaging colors
+const getColor = types => Object.keys(categories)
+  .filter(key => types.includes(key))
+  .map(key => categories[key])[0];
 
-const colors = ['#515dd4', '#3896e2', '#747FFF', '#64cb7b', '#6968b3', '#e47272', '#C3423F', '#40494e', '#CC7B94'];
-
-const getColor = (type) => {
-  for (const idx in categories) {
-    if (_includes(type, categories[idx])) return colors[idx];
-  }
-  return colors[colors.length - 1];
+const SkillBar = (props) => {
+  const titleStyle = {
+    background: getColor(props.data.category),
+  };
+  const barStyle = {
+    background: getColor(props.data.category),
+    width: `${String(Math.min(100, Math.max((props.data.compentency / 5.0) * 100.0, 0)))}%`,
+  };
+  return (
+    <div className="skillbar clearfix">
+      <div className="skillbar-title" style={titleStyle}><span>{props.data.title}</span></div>
+      <div className="skillbar-bar" style={barStyle} />
+      <div className="skill-bar-percent">{props.data.compentency} / 5</div>
+    </div>
+  );
 };
 
-class SkillBar extends Component {
-
-  render() {
-    const titleStyle = {
-      background: getColor(this.props.data.category),
-    };
-    const barStyle = {
-      background: getColor(this.props.data.category),
-      width: `${String(Math.min(100, Math.max(this.props.data.compentency / 5.0 * 100.0, 0)))}%`,
-    };
-    return (
-      <div className="skillbar clearfix">
-      	<div className="skillbar-title" style={titleStyle}><span>{this.props.data.title}</span></div>
-      	<div className="skillbar-bar" style={barStyle} />
-      	<div className="skill-bar-percent">{this.props.data.compentency} / 5</div>
-      </div>
-    );
-  }
-}
-
 SkillBar.propTypes = {
-  data: PropTypes.object.isRequired,
+  data: PropTypes.shape({
+    category: PropTypes.arrayOf(PropTypes.string).isRequired,
+    compentency: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default SkillBar;

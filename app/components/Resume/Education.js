@@ -1,30 +1,22 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import Degree from './Education/Degree';
 import degrees from './data/degrees';
 
-class Education extends Component {
+const getRows = () => degrees.map(degree => (
+  <Degree
+    data={degree}
+    key={degree.school}
+  />
+));
 
-  getRows() {
-    return degrees.map((degree) => {
-      return (
-        <Degree
-          data={degree}
-          key={degree.school}
-        />);
-    });
-  }
-
-  render() {
-    return (
-      <div className="education">
-        <div className="title">
-          <h3>Education</h3>
-        </div>
-        {this.getRows()}
-      </div>
-    );
-  }
-}
+const Education = () => (
+  <div className="education">
+    <div className="title">
+      <h3>Education</h3>
+    </div>
+    {getRows()}
+  </div>
+);
 
 export default Education;

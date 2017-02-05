@@ -5,16 +5,23 @@ import Nav from './components/Template/Nav';
 
 const App = ({ children }) => (
   <div id="wrapper">
-    <Header/>
+    <Header />
     <div id="main">
       {children}
     </div>
-    <Nav/>
+    <Nav />
   </div>
 );
 
 App.propTypes = {
-  children: PropTypes.object
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]),
+};
+
+App.defaultProps = {
+  children: null,
 };
 
 export default App;

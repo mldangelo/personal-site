@@ -5,20 +5,19 @@ import TableRow from './TableRow';
 class Table extends Component {
 
   getRows() {
-    return this.props.data.map((pair) => {
-      return (
-        <TableRow
-          key={pair.label}
-          label={pair.label}
-          value={pair.value}
-          link={pair.link} />
-      );
-    });
+    return this.props.data.map(pair => (
+      <TableRow
+        key={pair.label}
+        label={pair.label}
+        value={pair.value}
+        link={pair.link}
+      />
+      ));
   }
 
   render() {
     return (
-      <table style={{width: '100%'}}>
+      <table style={{ width: '100%' }}>
         <tbody>
           {this.getRows()}
         </tbody>
@@ -28,7 +27,11 @@ class Table extends Component {
 }
 
 Table.propTypes = {
-  data: PropTypes.array.isRequired,
+  data: PropTypes.arrayOf(PropTypes.shape({
+    label: PropTypes.string.isRequired,
+    value: PropTypes.string.isRequired,
+    link: PropTypes.string,
+  })).isRequired,
 };
 
 export default Table;

@@ -1,21 +1,21 @@
-import React, {Component, PropTypes} from 'react';
+import React, { PropTypes } from 'react';
 
-class Degree extends Component {
-
-  render() {
-    return (
-      <article>
-        <header>
-          <p className="degree">{this.props.data.degree}</p>
-          <p className="school"><a href={this.props.data.link}>{this.props.data.school}</a>, {this.props.data.year}</p>
-        </header>
-      </article>
-    );
-  }
-}
+const Degree = props => (
+  <article>
+    <header>
+      <p className="degree">{props.data.degree}</p>
+      <p className="school"><a href={props.data.link}>{props.data.school}</a>, {props.data.year}</p>
+    </header>
+  </article>
+);
 
 Degree.propTypes = {
-  data: PropTypes.object.isRequired,
+  data: PropTypes.shape({
+    degree: PropTypes.string.isRequired,
+    link: PropTypes.string.isRequired,
+    school: PropTypes.string.isRequired,
+    year: PropTypes.number.isRequired,
+  }).isRequired,
 };
 
 export default Degree;

@@ -1,25 +1,29 @@
-import React, {Component, PropTypes} from 'react';
+import React, { PropTypes } from 'react';
 
 // TODO remove last bullet / figure out how to add bullets with css
 
-class Course extends Component {
-
-  render() {
-    return (
-      <li className="course-container">
-        <a href={this.props.data.link}>
-          <h4 className="course-number">{this.props.data.number}:</h4>
-          <p className="course-name">{this.props.data.title}</p>
-        </a>
-        {this.props.last ? null : <div className="course-dot"><p className="course-name"> &#8226;</p></div>}
-      </li>
-    );
-  }
-}
+const Course = props => (
+  <li className="course-container">
+    <a href={props.data.link}>
+      <h4 className="course-number">{props.data.number}:</h4>
+      <p className="course-name">{props.data.title}</p>
+    </a>
+    {props.last ? null : <div className="course-dot"><p className="course-name"> &#8226;</p></div>}
+  </li>
+);
 
 Course.propTypes = {
-  data: PropTypes.object.isRequired,
+  data: PropTypes.shape({
+    link: PropTypes.string.isRequired,
+    number: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+  }).isRequired,
   last: PropTypes.bool,
 };
+
+Course.defaultProps = {
+  last: false,
+};
+
 
 export default Course;
