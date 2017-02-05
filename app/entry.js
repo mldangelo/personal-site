@@ -3,7 +3,10 @@ import ReactDOM from 'react-dom';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import ReactGA from 'react-ga';
 
-import App from './App';
+// Layouts
+import Main from './layouts/Main';
+import FullPage from './layouts/FullPage';
+
 import About from './components/About';
 import Projects from './components/Projects';
 import Resume from './components/Resume';
@@ -25,15 +28,17 @@ require('../public/css/main.scss');
 
 ReactDOM.render(
   <Router onUpdate={update} history={browserHistory}>
-    <Route path="/" component={App}>
+    <Route path="/" component={Main}>
       <IndexRoute component={About} />
       <Route path="/resume" component={Resume} />
       <Route path="/projects" component={Projects} />
       <Route path="/stats" component={Stats} />
-      <Route path="/photography" component={Photography} />
       <Route path="/contact" component={Contact} />
     </Route>
-    <Route path="*" component={NotFound} status={404} />
+    <Route path="/" component={FullPage}>
+      <Route path="/photography" component={Photography} />
+      <Route path="*" component={NotFound} status={404} />
+    </Route>
   </Router>,
   document.getElementById('root'),
 );
