@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "autoprefixer": "^6.7.2",
+    "axios": "^0.15.3",
     "babel-cli": "^6.22.2",
     "babel-core": "^6.22.1",
     "babel-eslint": "^7.1.1",
@@ -46,7 +47,6 @@
     "webpack-hot-middleware": "^2.16.1"
   },
   "devDependencies": {
-    "axios": "^0.15.3",
     "css-loader": "^0.26.1",
     "eslint": "^3.15.0",
     "eslint-config-airbnb": "^14.0.0",

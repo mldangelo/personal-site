@@ -10,6 +10,18 @@ export const categories = [
   'Other',
 ];
 
+export const colors = [
+  '#515dd4',
+  '#3896e2',
+  '#747FFF',
+  '#64cb7b',
+  '#6968b3',
+  '#e47272',
+  '#C3423F',
+  '#40494e',
+  '#CC7B94',
+];
+
 export const skills = [
   {
     title: 'Javascript',

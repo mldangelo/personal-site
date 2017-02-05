@@ -1,12 +1,10 @@
 import React, { Component, PropTypes } from 'react';
-
-import { categories } from '../data/skills';
-
 import _includes from 'lodash/includes';
 
-const colors = ['#515dd4', '#3896e2', '#747FFF', '#64cb7b', '#6968b3', '#e47272', '#C3423F', '#40494e', '#CC7B94'];
+import { categories, colors } from '../data/skills';
 
-const getColor = (type) => {
+// NOTE: Type is an array of categories. getColor finds the first matching color.
+const getColor = (type) => {  
   for (const idx in categories) {
     if (_includes(type, categories[idx])) return colors[idx];
   }
