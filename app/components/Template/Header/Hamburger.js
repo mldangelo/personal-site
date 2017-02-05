@@ -46,6 +46,7 @@ class Hamburger extends Component {
           <a /><Link to="/projects" onClick={this.handleClick}>PROJECTS</Link>
           {/* <a></a><Link to="/posts">POSTS</Link> */}
           <a /><Link to="/stats" onClick={this.handleClick}>STATS</Link>
+          <a /><Link to="/photography" onClick={this.handleClick}>PHOTOGRAPHY</Link>
           <a /><Link to="/contact" onClick={this.handleClick}>CONTACT</Link>
         </Menu>
       </div>

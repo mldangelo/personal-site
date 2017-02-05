@@ -8,7 +8,9 @@ import About from './components/About';
 import Projects from './components/Projects';
 import Resume from './components/Resume';
 import Stats from './components/Stats';
+import Photography from './components/Photography';
 import Contact from './components/Contact';
+
 import NotFound from './components/NotFound';
 
 ReactGA.initialize('UA-68649021-1');
@@ -28,6 +30,7 @@ ReactDOM.render(
       <Route path="/resume" component={Resume} />
       <Route path="/projects" component={Projects} />
       <Route path="/stats" component={Stats} />
+      <Route path="/photography" component={Photography} />
       <Route path="/contact" component={Contact} />
     </Route>
     <Route path="*" component={NotFound} status={404} />
