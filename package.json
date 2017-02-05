@@ -6,7 +6,7 @@
     "build": "rimraf ./dist && set NODE_ENV=production && webpack --config ./webpack/webpack.production.config.js --progress --profile --colors",
     "build-dev": "rimraf .dist && set NODE_ENV=development && webpack --config ./webpack/webpack.config.js --progress --profile --colors",
     "clean": "rimraf ./dist",
-    "forever-start": "forever start -l forever.log -o out.log -e err.log -c 'nodemon server.js --exitcrash --exec babel-node' server.js",
+    "forever-start": "forever start --minUptime 1000ms --spinSleepTime 1000ms -a -l forever.log -o out.log -e err.log -c 'nodemon server.js --exitcrash --exec babel-node' server.js",
     "forever-stop": "forever stop server.js",
     "dev": "NODE_ENV=development && nodemon server.js --ignore app/ --exec babel-node",
     "lint": "./node_modules/.bin/eslint app routes server.js webpack.*.js || true",
