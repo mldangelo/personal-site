@@ -27,7 +27,11 @@ class Table extends Component {
 }
 
 Table.propTypes = {
-  data: PropTypes.array.isRequired,
+  data: PropTypes.arrayOf(PropTypes.shape({
+    label: PropTypes.string.isRequired,
+    value: PropTypes.string.isRequired,
+    link: PropTypes.string,
+  })).isRequired,
 };
 
 export default Table;

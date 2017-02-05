@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 
-const Degree = (props) => (
+const Degree = props => (
   <article>
     <header>
       <p className="degree">{props.data.degree}</p>
@@ -15,7 +15,7 @@ Degree.propTypes = {
     link: PropTypes.string.isRequired,
     school: PropTypes.string.isRequired,
     year: PropTypes.number.isRequired,
-  }),
+  }).isRequired,
 };
 
 export default Degree;

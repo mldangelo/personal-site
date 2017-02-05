@@ -26,7 +26,13 @@ class Job extends Component {
 }
 
 Job.propTypes = {
-  data: PropTypes.object.isRequired,
+  data: PropTypes.shape({
+    link: PropTypes.string.isRequired,
+    company: PropTypes.string.isRequired,
+    position: PropTypes.string.isRequired,
+    daterange: PropTypes.string.isRequired,
+    points: PropTypes.arrayOf(PropTypes.string).isRequired,
+  }).isRequired,
 };
 
 export default Job;

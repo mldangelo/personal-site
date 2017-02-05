@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link, IndexLink } from 'react-router';
 
 import Menus from 'react-burger-menu';
+
 const Menu = Menus.slide;
 
 class Hamburger extends Component {
@@ -13,22 +14,22 @@ class Hamburger extends Component {
     };
   }
 
-  handleClick() {
-    this.setState({
-      open: !this.state.open,
-    });
-  }
-
   getButton() {
     return this.state.open ? (
-      <li className="menu close-menu" onClick={this.handleClick.bind(this)}>
+      <li className="menu close-menu" onClick={this.handleClick}>
         <a className="fa-times close-menu">Menu</a>
       </li>
     ) : (
-      <li className="menu open-menu" onClick={this.handleClick.bind(this)}>
+      <li className="menu open-menu" onClick={this.handleClick}>
         <a className="fa-bars">Menu</a>
       </li>
     );
+  }
+
+  handleClick = () => {
+    this.setState({
+      open: !this.state.open,
+    });
   }
 
   render() {
@@ -40,12 +41,12 @@ class Hamburger extends Component {
           </ul>
         </nav>
         <Menu right noOverlay isOpen={this.state.open}>
-          <IndexLink to="/" onClick={this.handleClick.bind(this)}>MICHAEL DANGELO</IndexLink>
-          <a /><Link to="/resume" onClick={this.handleClick.bind(this)}>RESUME</Link>
-          <a /><Link to="/projects" onClick={this.handleClick.bind(this)}>PROJECTS</Link>
+          <IndexLink to="/" onClick={this.handleClick}>MICHAEL DANGELO</IndexLink>
+          <a /><Link to="/resume" onClick={this.handleClick}>RESUME</Link>
+          <a /><Link to="/projects" onClick={this.handleClick}>PROJECTS</Link>
           {/* <a></a><Link to="/posts">POSTS</Link> */}
-          <a /><Link to="/stats" onClick={this.handleClick.bind(this)}>STATS</Link>
-          <a /><Link to="/contact" onClick={this.handleClick.bind(this)}>CONTACT</Link>
+          <a /><Link to="/stats" onClick={this.handleClick}>STATS</Link>
+          <a /><Link to="/contact" onClick={this.handleClick}>CONTACT</Link>
         </Menu>
       </div>
     );

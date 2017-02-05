@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 
 class CategoryButton extends Component {
 
-  handleClick() {
+  handleClick = () => {
     this.props.handleClick(this.props.label);
   }
 
@@ -11,7 +11,7 @@ class CategoryButton extends Component {
       <button
         className={`skillbutton ${this.props.active[this.props.label] ? 'skillbutton-active' : ''}`}
         type="button"
-        onClick={this.handleClick.bind(this)}
+        onClick={this.handleClick}
       >
         {this.props.label}
       </button>

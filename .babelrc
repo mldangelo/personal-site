@@ -3,5 +3,6 @@
   "plugins": [
     "add-module-exports",
     "lodash",
+    "transform-class-properties",
   ]
 }

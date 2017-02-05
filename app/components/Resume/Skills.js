@@ -19,35 +19,6 @@ class Skills extends Component {
     this.state.buttons.All = true;
   }
 
-  handleChildClick(label) {
-    this.state.buttons[label] = !this.state.buttons[label]; // toggle button
-    for (const key in this.state.buttons) { // Turn off all the other buttons
-      if (label !== key) this.state.buttons[key] = false;
-    }
-
-    // Turn on all button if other buttons are off
-    const oneTrue = Object.keys(this.state.buttons).some(key => this.state.buttons[key]);
-    if (!oneTrue) this.state.buttons.All = true;
-
-    this.forceUpdate(); // TODO Don't do this.
-  }
-
-  getButtons() {
-    const buttons = [];
-    const keys = Object.keys(this.state.buttons).sort(); // Sort keys alphabetically
-    for (const key of keys) {
-      buttons.push(
-        <CategoryButton
-          label={key}
-          key={key}
-          active={this.state.buttons}
-          handleClick={this.handleChildClick.bind(this)}
-        />,
-      );
-    }
-    return buttons;
-  }
-
   getRows() {
     let actCat = 'All'; // default active category
     for (const key in this.state.buttons) { // search for true active categorys
@@ -69,6 +40,35 @@ class Skills extends Component {
           key={skill.title}
         />
         ));
+  }
+
+  getButtons() {
+    const buttons = [];
+    const keys = Object.keys(this.state.buttons).sort(); // Sort keys alphabetically
+    for (const key of keys) {
+      buttons.push(
+        <CategoryButton
+          label={key}
+          key={key}
+          active={this.state.buttons}
+          handleClick={this.handleChildClick}
+        />,
+      );
+    }
+    return buttons;
+  }
+
+  handleChildClick = (label) => {
+    this.state.buttons[label] = !this.state.buttons[label]; // toggle button
+    for (const key in this.state.buttons) { // Turn off all the other buttons
+      if (label !== key) this.state.buttons[key] = false;
+    }
+
+    // Turn on all button if other buttons are off
+    const oneTrue = Object.keys(this.state.buttons).some(key => this.state.buttons[key]);
+    if (!oneTrue) this.state.buttons.All = true;
+
+    this.forceUpdate(); // TODO Don't do this.
   }
 
   render() {
