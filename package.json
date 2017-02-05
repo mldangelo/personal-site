@@ -41,6 +41,7 @@
     "react-dom": "^15.4.2",
     "react-ga": "^2.1.2",
     "react-router": "^3.0.2",
+    "rimraf": "^2.5.4",
     "stats-webpack-plugin": "^0.4.3",
     "webpack": "^2.2.1",
     "webpack-dev-middleware": "^1.10.0",
