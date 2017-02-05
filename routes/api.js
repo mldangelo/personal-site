@@ -1,6 +1,5 @@
-import _pick from 'lodash/pick';
 import GitHubApi from 'github';
-
+import moment from 'moment';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -16,6 +15,15 @@ const authenticate = (cb) => {
 };
 
 let authenticated = false;
+
+const keys = [
+  'stargazers_count',
+  'watchers_count',
+  'forks',
+  'open_issues_count',
+  'subscribers_count',
+  'pushed_at',
+];
 
 const routes = (app) => {
   // TODO Cache to DB later
@@ -34,15 +42,12 @@ const routes = (app) => {
         console.error('github-api-error', err);
       }
       const send = () => {
-        res.send(JSON.stringify(
-          _pick(_res,
-            ['stargazers_count',
-              'watchers_count',
-              'forks',
-              'open_issues_count',
-              'subscribers_count',
-              'pushed_at',
-            ])));
+        const data = keys.reduce((obj, key) => ({
+          ...obj,
+          [key]: _res[key],
+        }), {});
+        data.pushed_at = moment(data.pushed_at).format('MMMM DD, YYYY');
+        res.send(JSON.stringify(data));
       };
 
       if (err && err.status === 'Unauthorized') {
