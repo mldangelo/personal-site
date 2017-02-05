@@ -1,6 +1,8 @@
 import path from 'path';
 import debug from 'debug';
 
+import blocked from 'blocked';
+
 import express from 'express';
 import bodyParser from 'body-parser';
 import compress from 'compression';
@@ -54,7 +56,7 @@ if (env == 'development') { // eslint-disable-line eqeqeq
     res.write(middleware.fileSystem.readFileSync(path.join(__dirname, 'dist/index.html')));
     res.end();
   });
-  require('blocked')(ms => debug('express')(`blocked for ${ms}ms`));
+  blocked(ms => debug('express')(`blocked for ${ms}ms`));
 } else {
   debug.enable('express');
   app.use(express.static(`${__dirname}/dist`));

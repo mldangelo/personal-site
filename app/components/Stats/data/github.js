@@ -22,7 +22,7 @@ const data = [
     value: '0',
   }, {
     label: 'Number of linter warnings',
-    value: '6', // TODO Update from travis / circle
+    value: '8', // TODO Update from travis / circle
   }, {
     label: 'Open github issues',
     key: 'open_issues_count',

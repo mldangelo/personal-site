@@ -22,7 +22,7 @@ class CategoryButton extends Component {
 CategoryButton.propTypes = {
   label: PropTypes.string.isRequired,
   handleClick: PropTypes.func.isRequired,
-  active: PropTypes.object.isRequired,
+  active: PropTypes.objectOf(PropTypes.bool.isRequired).isRequired,
 };
 
 export default CategoryButton;

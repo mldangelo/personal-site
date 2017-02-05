@@ -1,29 +1,18 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 
-class Job extends Component {
+const getPoints = data => data.points.map(point => <li key={point}>{point}</li>);
 
-  getPoints() {
-    return this.props.data.points.map(point => (
-      <li
-        key={point}
-      > {point} </li>
-      ));
-  }
-
-  render() {
-    return (
-      <article>
-        <header>
-          <h4><a href={this.props.data.link}>{this.props.data.company}</a> - {this.props.data.position}</h4>
-          <p className="daterange"> {this.props.data.daterange}</p>
-        </header>
-        <ul>
-          {this.getPoints()}
-        </ul>
-      </article>
-    );
-  }
-}
+const Job = props => (
+  <article>
+    <header>
+      <h4><a href={props.data.link}>{props.data.company}</a> - {props.data.position}</h4>
+      <p className="daterange"> {props.data.daterange}</p>
+    </header>
+    <ul>
+      {getPoints(props.data)}
+    </ul>
+  </article>
+);
 
 Job.propTypes = {
   data: PropTypes.shape({
