@@ -16,7 +16,7 @@ class Skills extends Component {
     this.state = {
       buttons: _zipObject(categories, false), // Althetic Skills, Office Skills
     };
-    this.state.buttons['All'] = true;
+    this.state.buttons.All = true;
   }
 
   handleChildClick(label) {
@@ -27,7 +27,7 @@ class Skills extends Component {
 
     // Turn on all button if other buttons are off
     const oneTrue = Object.keys(this.state.buttons).some(key => this.state.buttons[key]);
-    if (!oneTrue) this.state.buttons['All'] = true;
+    if (!oneTrue) this.state.buttons.All = true;
 
     this.forceUpdate(); // TODO Don't do this.
   }
@@ -42,7 +42,7 @@ class Skills extends Component {
           key={key}
           active={this.state.buttons}
           handleClick={this.handleChildClick.bind(this)}
-        />
+        />,
       );
     }
     return buttons;
@@ -64,10 +64,10 @@ class Skills extends Component {
     return sorted
       .filter(skill => (actCat === 'All' || _includes(skill.category, actCat)))
       .map(skill => (
-          <SkillBar
-            data={skill}
-            key={skill.title}
-          />
+        <SkillBar
+          data={skill}
+          key={skill.title}
+        />
         ));
   }
 

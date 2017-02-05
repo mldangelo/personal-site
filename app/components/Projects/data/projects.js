@@ -24,7 +24,7 @@ const data = [
     image: '/images/projects/catdetector.jpg',
     date: 'May, 2015',
     datetime: '05-15-2015',
-  }
+  },
 ];
 
 export default data;

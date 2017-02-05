@@ -9,12 +9,13 @@ import morgan from 'morgan';
 import webpack from 'webpack';
 import webpackMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
-import config from './webpack.config.js';
-
-import apiRoutes from './routes/api.js';
 
 import dotenv from 'dotenv';
-dotenv.config();
+
+import config from './webpack.config';
+import apiRoutes from './routes/api';
+
+dotenv.config(); // TODO: Find a prettier way to do this.
 
 const port = process.env.PORT || 7999;
 const env = process.env.NODE_ENV || 'development';
@@ -42,23 +43,23 @@ if (env == 'development') { // eslint-disable-line eqeqeq
       timings: true,
       chunks: false,
       chunkModules: false,
-      modules: false
-    }
+      modules: false,
+    },
   });
 
   app.use(middleware);
   app.use(webpackHotMiddleware(compiler));
 
-  app.get('/*', function response(req, res) {
+  app.get('/*', (req, res) => {
     res.write(middleware.fileSystem.readFileSync(path.join(__dirname, 'dist/index.html')));
     res.end();
   });
-  require('blocked')((ms) => debug('express')(`blocked for ${ms}ms`));
+  require('blocked')(ms => debug('express')(`blocked for ${ms}ms`));
 } else {
   debug.enable('express');
-  app.use(express.static(__dirname + '/dist'));
+  app.use(express.static(`${__dirname}/dist`));
 
-  app.get('/*', function response(req, res) {
+  app.get('/*', (req, res) => {
     res.sendFile(path.join(__dirname, 'dist/index.html'));
   });
 }

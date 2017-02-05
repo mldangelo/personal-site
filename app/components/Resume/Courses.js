@@ -9,13 +9,11 @@ class Courses extends Component {
 
   getRows() {
     const ordered = _orderBy(courses, ['univerity', 'number'], ['desc', 'asc']);
-    const rows = ordered.map((course) => {
-      return (
-          <Course
-            data={course}
-            key={course.title}
-          />);
-    });
+    const rows = ordered.map(course => (
+      <Course
+        data={course}
+        key={course.title}
+      />));
     // Remove dot after last course
     const lastidx = ordered.length - 1;
     rows[lastidx] = (
@@ -31,18 +29,18 @@ class Courses extends Component {
   render() {
     return (
       <article>
-      <div className="courses">
+        <div className="courses">
 
-        <div className="title">
-          <h3>Selected Courses</h3>
-        </div>
+          <div className="title">
+            <h3>Selected Courses</h3>
+          </div>
 
           <ul>
-          {this.getRows()}
+            {this.getRows()}
           </ul>
 
-      </div>
-    </article>
+        </div>
+      </article>
 
     );
   }

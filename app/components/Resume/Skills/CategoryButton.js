@@ -1,4 +1,4 @@
-import React, {Component, PropTypes} from 'react';
+import React, { Component, PropTypes } from 'react';
 
 class CategoryButton extends Component {
 
@@ -9,11 +9,11 @@ class CategoryButton extends Component {
   render() {
     return (
       <button
-        className={`skillbutton ${this.props.active[this.props.label] ? 'skillbutton-active' : ''}` }
+        className={`skillbutton ${this.props.active[this.props.label] ? 'skillbutton-active' : ''}`}
         type="button"
         onClick={this.handleClick.bind(this)}
-        >
-          {this.props.label}
+      >
+        {this.props.label}
       </button>
     );
   }

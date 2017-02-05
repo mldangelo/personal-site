@@ -6,13 +6,11 @@ import positions from './data/positions';
 class Experience extends Component {
 
   getRows() {
-    return positions.map((job) => {
-      return (
-        <Job
-          data={job}
-          key={job.company}
-        />);
-    });
+    return positions.map(job => (
+      <Job
+        data={job}
+        key={job.company}
+      />));
   }
 
   render() {

@@ -19,7 +19,7 @@ class Header extends Component {
           </ul>
         </nav>
 
-        <Hamburger/>
+        <Hamburger />
 
       </header>
     );

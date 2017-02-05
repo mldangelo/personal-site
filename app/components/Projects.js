@@ -9,13 +9,12 @@ import data from './Projects/data/projects.js';
 class Projects extends Component {
 
   getRows() {
-    return data.map((project) => {
-      return (
-        <Cell
-          data={project}
-          key={project.title} />
-      );
-    });
+    return data.map(project => (
+      <Cell
+        data={project}
+        key={project.title}
+      />
+      ));
   }
 
   render() {

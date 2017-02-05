@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { Link, IndexLink } from 'react-router';
 
 class About extends Component {

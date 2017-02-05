@@ -1,4 +1,4 @@
-import React, {Component, PropTypes} from 'react';
+import React, { Component, PropTypes } from 'react';
 
 import { categories } from '../data/skills';
 
@@ -25,9 +25,9 @@ class SkillBar extends Component {
     };
     return (
       <div className="skillbar clearfix">
-      	<div className="skillbar-title" style={titleStyle}><span>{this.props.data.title}</span></div>
-      	<div className="skillbar-bar" style={barStyle} />
-      	<div className="skill-bar-percent">{this.props.data.compentency} / 5</div>
+        <div className="skillbar-title" style={titleStyle}><span>{this.props.data.title}</span></div>
+        <div className="skillbar-bar" style={barStyle} />
+        <div className="skill-bar-percent">{this.props.data.compentency} / 5</div>
       </div>
     );
   }

@@ -3,12 +3,11 @@ import React, { Component, PropTypes } from 'react';
 class Job extends Component {
 
   getPoints() {
-    return this.props.data.points.map((point) => {
-      return (
-        <li
-        key={point}> {point} </li>
-      );
-    });
+    return this.props.data.points.map(point => (
+      <li
+        key={point}
+      > {point} </li>
+      ));
   }
 
   render() {

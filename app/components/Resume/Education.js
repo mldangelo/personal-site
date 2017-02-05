@@ -6,13 +6,11 @@ import degrees from './data/degrees';
 class Education extends Component {
 
   getRows() {
-    return degrees.map((degree) => {
-      return (
-        <Degree
-          data={degree}
-          key={degree.school}
-        />);
-    });
+    return degrees.map(degree => (
+      <Degree
+        data={degree}
+        key={degree.school}
+      />));
   }
 
   render() {

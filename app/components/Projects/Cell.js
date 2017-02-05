@@ -8,7 +8,7 @@ class Cell extends Component {
           <h3><a href={this.props.data.link}>{this.props.data.title}</a></h3>
           <time className="published" dateTime={this.props.data.datetime}>{this.props.data.date}</time>
         </header>
-        <a href={this.props.data.link} className="image"><img src={this.props.data.image} alt=""/></a>
+        <a href={this.props.data.link} className="image"><img src={this.props.data.image} alt="" /></a>
       </article>
     );
   }

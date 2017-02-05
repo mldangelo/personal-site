@@ -33,21 +33,21 @@ class Hamburger extends Component {
 
   render() {
     return (
-        <div className="hamburger-container">
-          <nav className="main" id="hambuger-nav">
-            <ul>
-              {this.getButton()}
-            </ul>
-          </nav>
-          <Menu right noOverlay isOpen={this.state.open}>
-            <IndexLink to="/" onClick={this.handleClick.bind(this)}>MICHAEL DANGELO</IndexLink>
-            <a /><Link to="/resume" onClick={this.handleClick.bind(this)}>RESUME</Link>
-            <a /><Link to="/projects" onClick={this.handleClick.bind(this)}>PROJECTS</Link>
-            {/* <a></a><Link to="/posts">POSTS</Link> */}
-            <a /><Link to="/stats" onClick={this.handleClick.bind(this)}>STATS</Link>
-            <a /><Link to="/contact" onClick={this.handleClick.bind(this)}>CONTACT</Link>
-          </Menu>
-        </div>
+      <div className="hamburger-container">
+        <nav className="main" id="hambuger-nav">
+          <ul>
+            {this.getButton()}
+          </ul>
+        </nav>
+        <Menu right noOverlay isOpen={this.state.open}>
+          <IndexLink to="/" onClick={this.handleClick.bind(this)}>MICHAEL DANGELO</IndexLink>
+          <a /><Link to="/resume" onClick={this.handleClick.bind(this)}>RESUME</Link>
+          <a /><Link to="/projects" onClick={this.handleClick.bind(this)}>PROJECTS</Link>
+          {/* <a></a><Link to="/posts">POSTS</Link> */}
+          <a /><Link to="/stats" onClick={this.handleClick.bind(this)}>STATS</Link>
+          <a /><Link to="/contact" onClick={this.handleClick.bind(this)}>CONTACT</Link>
+        </Menu>
+      </div>
     );
   }
 }

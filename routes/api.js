@@ -2,6 +2,7 @@ import _pick from 'lodash/pick';
 import GitHubApi from 'github';
 
 import dotenv from 'dotenv';
+
 dotenv.config();
 
 const github = new GitHubApi();
