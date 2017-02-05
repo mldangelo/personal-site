@@ -8,7 +8,7 @@ export const categories = [
   'Frameworks',
   'Databases',
   'Other',
-];
+]; // TODO: Add Althetic Skills, Office Skills
 
 export const colors = [
   '#515dd4',

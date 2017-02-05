@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import _includes from 'lodash/includes';
-import _zipObject from 'lodash/zipObject';
 import _orderBy from 'lodash/orderBy';
 
 import CategoryButton from './Skills/CategoryButton';
@@ -14,19 +13,18 @@ class Skills extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      buttons: _zipObject(categories, false), // Althetic Skills, Office Skills
+      buttons: categories.sort().reduce((obj, key) => ({
+        ...obj,
+        [key]: false,
+      }), { All: true }),
     };
-    this.state.buttons.All = true;
   }
 
   getRows() {
-    let actCat = 'All'; // default active category
-    for (const key in this.state.buttons) { // search for true active categorys
-      if (this.state.buttons[key]) {
-        actCat = key;
-        break;
-      }
-    }
+    // search for true active categorys
+    const actCat = Object.keys(this.state.buttons).reduce((cat, key) => (
+      this.state.buttons[key] ? key : cat
+    ), 'All');
 
     const sorted = _orderBy(skills,
       ['compentency', 'category', 'title'],
@@ -43,32 +41,25 @@ class Skills extends Component {
   }
 
   getButtons() {
-    const buttons = [];
-    const keys = Object.keys(this.state.buttons).sort(); // Sort keys alphabetically
-    for (const key of keys) {
-      buttons.push(
-        <CategoryButton
-          label={key}
-          key={key}
-          active={this.state.buttons}
-          handleClick={this.handleChildClick}
-        />,
-      );
-    }
-    return buttons;
+    return Object.keys(this.state.buttons).map(key => (
+      <CategoryButton
+        label={key}
+        key={key}
+        active={this.state.buttons}
+        handleClick={this.handleChildClick}
+      />
+    ));
   }
 
   handleChildClick = (label) => {
-    this.state.buttons[label] = !this.state.buttons[label]; // toggle button
-    for (const key in this.state.buttons) { // Turn off all the other buttons
-      if (label !== key) this.state.buttons[key] = false;
-    }
-
-    // Turn on all button if other buttons are off
-    const oneTrue = Object.keys(this.state.buttons).some(key => this.state.buttons[key]);
-    if (!oneTrue) this.state.buttons.All = true;
-
-    this.forceUpdate(); // TODO Don't do this.
+    // Toggle button that was clicked. Turn all other buttons off.
+    const buttons = Object.keys(this.state.buttons).reduce((obj, key) => ({
+      ...obj,
+      [key]: (label === key) && !this.state.buttons[key],
+    }), {});
+    // Turn on 'All' button if other buttons are off
+    buttons.All = !Object.keys(this.state.buttons).some(key => buttons[key]);
+    this.setState({ buttons });
   }
 
   render() {

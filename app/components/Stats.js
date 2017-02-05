@@ -19,8 +19,8 @@ class Stats extends Component {
     const source = '/api/github';
     this.serverRequest = axios.get(source).then((result) => {
       const update = data.map((field) => {
-        if (field.key) field.value = String(result.data[field.key]);
-        return field;
+        const value = field.key ? { value: String(result.data[field.key]) } : {};
+        return Object.assign(field, value);
       });
       this.setState({
         data: update,
