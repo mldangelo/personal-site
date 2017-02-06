@@ -1,5 +1,15 @@
 import moment from 'moment';
 
+// Keys returned by the github api
+export const githubKeys = [
+  'stargazers_count',
+  'watchers_count',
+  'forks',
+  'open_issues_count',
+  'subscribers_count',
+  'pushed_at',
+];
+
 // TODO To be provided by an API
 const data = [
   {
