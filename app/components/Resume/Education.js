@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Degree from './Education/Degree';
-import degrees from './data/degrees';
+import degrees from '../../data/degrees';
 
 const getRows = () => degrees.map(degree => (
   <Degree

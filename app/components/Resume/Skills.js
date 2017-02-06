@@ -6,7 +6,7 @@ import _orderBy from 'lodash/orderBy';
 import CategoryButton from './Skills/CategoryButton';
 import SkillBar from './Skills/SkillBar';
 
-import { skills, categories } from './data/skills';
+import { skills, categories } from '../../data/skills';
 
 class Skills extends Component {
 

@@ -9,7 +9,8 @@
   },
   "rules": {
     "no-console": ["error", { allow: ["warn", "error"] }],
-    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "react/jsx-wrap-multilines": [1, {declaration: true, assignment: true, return: true}],
   },
   "plugins": [
     "react"

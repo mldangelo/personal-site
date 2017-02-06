@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import axios from 'axios';
 
 import Table from './Stats/Table';
-import data from './Stats/data/github';
+import data from '../data/github';
 
 class Stats extends Component {
 
