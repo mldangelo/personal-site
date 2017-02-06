@@ -3,6 +3,8 @@ import { Link, IndexLink } from 'react-router';
 
 import Menus from 'react-burger-menu';
 
+import links from '../../../data/links';
+
 const Menu = Menus.slide;
 
 class Hamburger extends Component {
@@ -41,12 +43,20 @@ class Hamburger extends Component {
           </ul>
         </nav>
         <Menu right noOverlay isOpen={this.state.open}>
-          <IndexLink to="/" onClick={this.handleClick}>MICHAEL DANGELO</IndexLink>
-          <a /><Link to="/resume" onClick={this.handleClick}>RESUME</Link>
-          <a /><Link to="/projects" onClick={this.handleClick}>PROJECTS</Link>
-          {/* <a></a><Link to="/posts">POSTS</Link> */}
-          <a /><Link to="/stats" onClick={this.handleClick}>STATS</Link>
-          <a /><Link to="/contact" onClick={this.handleClick}>CONTACT</Link>
+          <ul className="hamburger-ul">
+            {links.filter(l => l.index).map(l => (
+              <li key={l.label}>
+                <IndexLink to={l.link} onClick={this.handleClick}>
+                  <h3 className="index-li">{l.label}</h3>
+                </IndexLink>
+              </li>
+            ))}
+            {links.filter(l => !l.index).map(l => (
+              <li key={l.label}>
+                <Link to={l.link} onClick={this.handleClick}><h3>{l.label}</h3></Link>
+              </li>
+            ))}
+          </ul>
         </Menu>
       </div>
     );

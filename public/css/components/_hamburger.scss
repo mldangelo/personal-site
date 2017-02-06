@@ -1,0 +1,28 @@
+// Not found page
+
+.bm-item-list {
+  margin-top: 0;
+}
+
+.hamburger-ul {
+  display: block;
+  
+  li a h3 {
+    border: 0;
+    border-top: dotted 1px rgba(160, 160, 160, 0.3);
+    margin: 1.5em 0 0 0;
+    padding: 1.5em 0 0 0;
+  }
+  
+  li {
+    display: block !important;
+  }
+  
+  h3 {
+    font-size: 0.7em;
+  }
+  
+  .index-li {
+    border-top: none;
+  }
+}
