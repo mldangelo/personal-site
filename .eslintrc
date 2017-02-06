@@ -8,7 +8,7 @@
   "globals": {
   },
   "rules": {
-    "no-console": ["error", { allow: ["warn", "error"] }],
+    "no-console": ["error", { allow: ["warn", "error", "info"] }],
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "react/jsx-wrap-multilines": [1, {declaration: true, assignment: true, return: true}],
   },

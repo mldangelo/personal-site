@@ -52,7 +52,6 @@ if (env === 'development') { // eslint-disable-line eqeqeq
     res.write(middleware.fileSystem.readFileSync(path.join(__dirname, 'dist/index.html')));
     res.end();
   });
-  
 } else {
   app.use(express.static(`${__dirname}`));
   app.get('/*', (req, res) => {
@@ -62,7 +61,7 @@ if (env === 'development') { // eslint-disable-line eqeqeq
 
 app.listen(port, '0.0.0.0', (err) => {
   if (err) {
-    console.err('application-err', err);
+    console.error('application-err', err);
   }
   console.info(`Started in ${env === 'development' ? 'development' : 'production'} mode on port ${port}.`);
 });
