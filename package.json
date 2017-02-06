@@ -10,8 +10,7 @@
     "forever-stop": "forever stop server.js",
     "dev": "NODE_ENV=development && nodemon server.js --ignore app/ --exec babel-node",
     "lint": "./node_modules/.bin/eslint app routes server.js webpack || true",
-    "start": "NODE_ENV=production && ./node_modules/.bin/babel-node server",
-    "cluster": "NODE_ENV=production && ./node_modules/.bin/babel-node cluster"
+    "start": "NODE_ENV=production && ./node_modules/.bin/babel-node server"
   },
   "dependencies": {
     "autoprefixer": "^6.7.2",
