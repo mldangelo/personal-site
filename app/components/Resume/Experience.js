@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Job from './Experience/Job';
-import positions from './data/positions';
+import positions from '../../data/positions';
 
 const getRows = () => positions.map(job => (
   <Job

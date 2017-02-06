@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 
-import { categories } from '../data/skills';
+import { categories } from '../../../data/skills';
 
 // TODO: Consider averaging colors
 const getColor = types => Object.keys(categories)

@@ -2,7 +2,11 @@ import GitHubApi from 'github';
 import moment from 'moment';
 import dotenv from 'dotenv';
 
+import { githubKeys as keys } from '../app/data/github';
+
 dotenv.config();
+
+let cached = {};
 
 const github = new GitHubApi();
 
@@ -11,53 +15,42 @@ const authenticate = (cb) => {
     type: 'oauth',
     token: process.env.GITHUB_OAUTH,
   });
-  if (typeof callback === 'function') cb();
+  if (typeof cb === 'function') cb();
 };
 
-let authenticated = false;
+const send = (res, _res) => {
+  const data = keys.reduce((obj, key) => ({
+    ...obj,
+    [key]: _res[key],
+  }), {});
+  data.pushed_at = moment(data.pushed_at).format('MMMM DD, YYYY');
+  data.updated_at = Date.now();
+  cached = data;
+  res.send(JSON.stringify(data));
+};
 
-const keys = [
-  'stargazers_count',
-  'watchers_count',
-  'forks',
-  'open_issues_count',
-  'subscribers_count',
-  'pushed_at',
-];
+authenticate();
 
 const routes = (app) => {
-  // TODO Cache to DB later
   app.get('/api/github', (req, res) => {
-    // Handles authentication for the first time
-    if (!authenticated) {
-      authenticated = true;
-      authenticate();
+    if (cached.updated_at && (Date.now() - cached.updated_at) / 1000 < 60) {
+      res.send(JSON.stringify(cached));
+    } else {
+      github.repos.get({
+        owner: 'mldangelo',
+        repo: 'mldangelo',
+      }, (err, _res) => {
+        if (err && err.status === 'Unauthorized') {
+          console.error('github-api-unauthorized-error', err);
+          authenticate(send(res, _res)); // retry authentication -- if token expires
+        } else if (err) {
+          console.error('github-api-error', err);
+          res.send(JSON.stringify(cached)); // keep cached values
+        } else {
+          send(res, _res);
+        }
+      });
     }
-
-    github.repos.get({
-      user: 'mldangelo',
-      repo: 'mldangelo',
-    }, (err, _res) => {
-      if (err) {
-        console.error('github-api-error', err);
-      }
-      const send = () => {
-        const data = keys.reduce((obj, key) => ({
-          ...obj,
-          [key]: _res[key],
-        }), {});
-        data.pushed_at = moment(data.pushed_at).format('MMMM DD, YYYY');
-        res.send(JSON.stringify(data));
-      };
-
-      if (err && err.status === 'Unauthorized') {
-        authenticate(send()); // retry authentication -- if token expires
-      } else if (err) {
-        res.send(JSON.stringify({})); // keep default values
-      } else {
-        send();
-      }
-    });
   });
 };
 

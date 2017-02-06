@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, IndexLink } from 'react-router';
 
+import data from '../../data/contact';
 
 const Nav = () => (
   <section id="sidebar">
@@ -25,13 +26,11 @@ const Nav = () => (
 
     <section id="footer">
       <ul className="icons">
-        <li><a href="https://github.com/mldangelo" className="fa-github"><span className="label">Github</span></a></li>
-        <li><a href="https://facebook.com/d" className="fa-facebook"><span className="label">Facebook</span></a></li>
-        <li><a href="https://www.instagram.com/dangelosaurus/" className="fa-instagram"><span className="label">Instagram</span></a></li>
-        <li><a href="https://www.linkedin.com/in/michaelldangelo" className="fa-linkedin"><span className="label">LinkedIn</span></a></li>
-        <li><a href="https://angel.co/michael-d-angelo" className="fa-angellist"><span className="label">Angel List</span></a></li>
-        <li><a href="https://twitter.com/dangelosaurus" className="fa-twitter"><span className="label">Twitter</span></a></li>
-        <li><a href="mailto:michael.l.dangelo@gmail.com" className="fa-envelope"><span className="label">Email</span></a></li>
+        {data.map(s => (
+          <li key={s.label}>
+            <a href={s.link} className={s.icon}><span className="label">{s.label}</span></a>
+          </li>
+        ))}
       </ul>
       <p className="copyright">&copy; Michael D&apos;Angelo <Link to="http://mldangelo.com">mldangelo.com</Link>.</p>
     </section>
