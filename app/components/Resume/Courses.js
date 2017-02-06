@@ -3,7 +3,7 @@ import React from 'react';
 import _orderBy from 'lodash/orderBy';
 
 import Course from './Courses/Course';
-import courses from './data/courses';
+import courses from '../../data/courses';
 
 const getRows = () => {
   const ordered = _orderBy(courses, ['univerity', 'number'], ['desc', 'asc']);
