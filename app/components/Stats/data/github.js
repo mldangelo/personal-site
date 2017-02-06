@@ -22,7 +22,8 @@ const data = [
     value: '0',
   }, {
     label: 'Number of linter warnings',
-    value: '8', // TODO Update from travis / circle
+    // `npm run lint | grep problems | tail -1 | awk '{print $2}'`
+    value: '6', // TODO Update from travis / circle
   }, {
     label: 'Open github issues',
     key: 'open_issues_count',
