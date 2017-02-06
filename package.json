@@ -8,9 +8,10 @@
     "clean": "rimraf ./dist",
     "forever-start": "forever start --minUptime 1000ms --spinSleepTime 1000ms -a -l forever.log -o out.log -e err.log -c 'nodemon server.js --exitcrash --exec babel-node' server.js",
     "forever-stop": "forever stop server.js",
-    "dev": "NODE_ENV=development && nodemon server.js --ignore app/ --exec babel-node",
+    "dev": "nodemon server.js --ignore app/ --exec babel-node",
     "lint": "./node_modules/.bin/eslint app routes server.js webpack || true",
-    "start": "NODE_ENV=production && ./node_modules/.bin/babel-node server"
+    "start": "./node_modules/.bin/babel-node server",
+    "deploy": "yarn && npm run build && npm run forever-stop || true && npm run forever-start"
   },
   "dependencies": {
     "autoprefixer": "^6.7.2",
@@ -30,6 +31,7 @@
     "dotenv": "^4.0.0",
     "express": "^4.14.1",
     "extract-text-webpack-plugin": "^2.0.0-rc.3",
+    "forever": "^0.15.3",
     "github": "8.1.1",
     "html-webpack-plugin": "^2.28.0",
     "lodash": "^4.17.4",
