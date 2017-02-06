@@ -1,38 +1,38 @@
 const data = [
   {
-    link: "https://github.com/mldangelo",
+    link: 'https://github.com/mldangelo',
     label: 'Github',
-    icon: "fa-github",
+    icon: 'fa-github',
   },
   {
-    link: "https://facebook.com/d",
+    link: 'https://facebook.com/d',
     label: 'Facebook',
-    icon: "fa-facebook",
+    icon: 'fa-facebook',
   },
   {
-    link: "https://www.instagram.com/dangelosaurus/",
+    link: 'https://www.instagram.com/dangelosaurus/',
     label: 'Instagram',
-    icon: "fa-instagram",
+    icon: 'fa-instagram',
   },
   {
-    link: "https://www.linkedin.com/in/michaelldangelo",
+    link: 'https://www.linkedin.com/in/michaelldangelo',
     label: 'LinkedIn',
-    icon: "fa-linkedin",
+    icon: 'fa-linkedin',
   },
   {
-    link: "https://angel.co/michael-d-angelo",
+    link: 'https://angel.co/michael-d-angelo',
     label: 'Angel List',
-    icon: "fa-angellist",
+    icon: 'fa-angellist',
   },
   {
-    link: "https://twitter.com/dangelosaurus",
+    link: 'https://twitter.com/dangelosaurus',
     label: 'Twitter',
-    icon: "fa-twitter",
+    icon: 'fa-twitter',
   },
   {
-    link: "mailto:michael.l.dangelo@gmail.com",
+    link: 'mailto:michael.l.dangelo@gmail.com',
     label: 'Email',
-    icon: "fa-envelope",
+    icon: 'fa-envelope',
   },
 ];
 
