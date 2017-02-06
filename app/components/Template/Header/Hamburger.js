@@ -45,12 +45,14 @@ class Hamburger extends Component {
         <Menu right noOverlay isOpen={this.state.open}>
           <ul className="hamburger-ul">
             {links.filter(l => l.index).map(l => (
-              <li>
-                <IndexLink to={l.link} onClick={this.handleClick}><h3>{l.label}</h3></IndexLink>
+              <li key={l.label}>
+                <IndexLink to={l.link} onClick={this.handleClick}>
+                  <h3 className="index-li">{l.label}</h3>
+                </IndexLink>
               </li>
             ))}
             {links.filter(l => !l.index).map(l => (
-              <li>
+              <li key={l.label}>
                 <Link to={l.link} onClick={this.handleClick}><h3>{l.label}</h3></Link>
               </li>
             ))}
