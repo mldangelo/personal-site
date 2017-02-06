@@ -1,7 +1,4 @@
 import path from 'path';
-import debug from 'debug';
-
-import blocked from 'blocked';
 
 import express from 'express';
 import bodyParser from 'body-parser';
@@ -33,8 +30,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 apiRoutes(app);
 
 // TODO(Michael) Rewrite linter rule for string compare
-if (env == 'development') { // eslint-disable-line eqeqeq
-  debug.enable('dev,express');
+if (env === 'development') { // eslint-disable-line eqeqeq
   const compiler = webpack(config);
   const middleware = webpackMiddleware(compiler, {
     publicPath: config.output.publicPath,
@@ -56,11 +52,9 @@ if (env == 'development') { // eslint-disable-line eqeqeq
     res.write(middleware.fileSystem.readFileSync(path.join(__dirname, 'dist/index.html')));
     res.end();
   });
-  blocked(ms => debug('express')(`blocked for ${ms}ms`));
+  
 } else {
-  debug.enable('express');
   app.use(express.static(`${__dirname}`));
-
   app.get('/*', (req, res) => {
     res.sendFile(path.join(__dirname, 'dist/index.html'));
   });
@@ -68,9 +62,9 @@ if (env == 'development') { // eslint-disable-line eqeqeq
 
 app.listen(port, '0.0.0.0', (err) => {
   if (err) {
-    debug('express')(err);
+    console.err('application-err', err);
   }
-  debug('express')(` Application started. 🌎  Listening on port ${port}`);
+  console.info(`Started in ${env === 'development' ? 'development' : 'production'} mode on port ${port}.`);
 });
 
 export default app;
