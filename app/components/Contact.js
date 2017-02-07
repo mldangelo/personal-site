@@ -8,7 +8,7 @@ const messages = [
   'hello',
   'hola',
   'you-can-email-me-at-literally-anything! Really',
-  'well, not anything. But most things should work.',
+  'well, not anything. But most things',
   'like-this',
   'or-this',
   'but not this :(  ',
