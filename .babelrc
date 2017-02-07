@@ -2,7 +2,6 @@
   "presets": ["es2015", "stage-3", "react"],
   "plugins": [
     "add-module-exports",
-    "lodash",
     "transform-class-properties",
   ]
 }
