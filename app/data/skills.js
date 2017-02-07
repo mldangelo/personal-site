@@ -229,4 +229,14 @@ export const skills = [
     compentency: 4,
     category: ['Design', 'Web Development'],
   },
+  {
+    title: 'Keras',
+    compentency: 4,
+    category: ['Machine Learning'],
+  },
+  {
+    title: 'Visualization',
+    compentency: 4,
+    category: ['Data Science'],
+  },
 ];
