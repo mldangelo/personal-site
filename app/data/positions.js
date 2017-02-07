@@ -1,12 +1,34 @@
 
 const positions = [
   {
+    company: 'Arthena',
+    position: 'Cofounder, C.T.O.',
+    link: 'https://arthena.com',
+    daterange: 'January 2014 - Present',
+    points: [
+      'Created a new financial product for private equity investing. Deployed models to predict the valuation of art at auction.',
+      'Lead development team, set development lifecycle, and managed analytics and web products.',
+      'Developed comprehensive simulations using MCMC, Modern Portfolio Theory, GLM, etc. using Scikit, PyMC3, and Jupyter',
+      'Worked on everything. Built a 16-person team.',
+    ],
+  }, {
+    company: 'Enveritas',
+    position: 'Consultant',
+    link: 'http://enveritas.org',
+    daterange: 'September 2016 - Present',
+    points: [
+      'Trained a model for the Brazilian Coffee Scenes Dataset with better than state of the art accurracy.',
+      'Collected training sets on the ground in Uganda. Built dashboards to visualize work of surveyors using Flask, React, and D3.',
+      'Performed supporting analysis to ensure data integrity using Pandas, t-SNE, SVM’s, and other techniques.',
+    ],
+  }, {
     company: 'Zenysis',
     position: 'Consultant',
     link: 'http://zenysis.com',
     daterange: 'February 2016 - March 2016',
     points: [
-      'Worked in Addis Ababa for the Ethiopian Ministry of Health and built data visualization tools in React, Flask.',
+      'Worked in Addis Ababa for the Ethiopian Ministry of Health and built data visualization tools in React and Flask.',
+      'Ingested multiple databases with different alphabets, calendars, and without official spellings of geographic locations.',
     ],
   }, {
     company: 'Matroid',
@@ -18,25 +40,14 @@ const positions = [
       'Received Series A term sheets for 20M+ valuations.',
     ],
   }, {
-    company: 'Arthena',
-    position: 'Software Engineer',
-    link: 'http://arthena.com',
-    daterange: 'January 2014 - Present',
-    points: [
-      'First employee. Helped raise 1.3M in funding to develop new model for private equity investing.',
-      'Lead development team, set development lifecycle, and managed web product.',
-      'Worked on everything. Hired technical and nontechnical roles, found office space, staged corporate events, managed reimbursements and payroll, etc. etc.',
-    ],
-  }, {
     company: 'Planet',
     position: 'Missions Intern',
     link: 'http://planet.com',
     daterange: 'June 2014 - January 2015',
     points: [
-      'Developed flight software in C/C++',
-      'Performed statistical analysis of images quality in Matlab/Python.',
-      'Built models to improve image quality, including but not limited to signal to noise ratio and dynamic range.',
-      'Photographed events; Designed sound activated remote camera shutters for rocket launches.',
+      'Built models to improve image quality, signal to noise ratio, and dynamic range.',
+      'Performed statistical analysis of image quality in Matlab and Python.  Developed flight software in C++.',
+      'Organized first hackathon, prototyped hardware, and designed and built photography equipment for rocket launches.',
     ],
   }, {
     company: 'Planetary Resources',
@@ -44,9 +55,9 @@ const positions = [
     link: 'http://planetaryresources.com',
     daterange: 'January 2014 - May 2014',
     points: [
-      'Built and assembled flight hardware in cleanroom.',
       'Developed simulations in Matlab for Attitude Determination and Control Subsystem.',
       'Developed processes for in lab testing and characterization of various subsystems.',
+      'Assembled flight hardware in cleanroom.',
     ],
   }, {
     company: 'Facebook',
@@ -59,13 +70,23 @@ const positions = [
       'Worked with vendors and ODM’s during triage to assist in risk mitigation.',
     ],
   }, {
-    company: 'SEDS USA',
+    company: 'SEDS-USA',
     position: 'At Large Board Member',
     link: 'http://seds.org',
     daterange: 'October 2013 - October 2014',
     points: [
       'Elected to Board of Directors of the USA’s largest student space advocacy group based on 5+ years of work with SEDS.',
       'Responsibilities included: organizational strategy, conference presentations, fundraising, special projects, promoting SEDS nationally and internationally, and photographing conferences.',
+    ],
+  },
+  {
+    company: 'University at Buffalo Nanosatellite Program',
+    position: 'Cofounder, Program Manager',
+    link: 'http://seds.org',
+    daterange: 'May 2011 – June 2012',
+    points: [
+      'Coauthored grant to build a multispectral imaging satellite as part of the AFRL University Nanosatellite Program.',
+      'Lead a team of 60 students through satellite development life cycle. Served as a technical expert, acquired intimate working knowledge of satellite subsystems.  Solicited funding through NASA, AFOSR, and several corporate sponsors.',
     ],
   },
 ];
