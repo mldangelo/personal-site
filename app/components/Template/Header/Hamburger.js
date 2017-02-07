@@ -18,12 +18,12 @@ class Hamburger extends Component {
 
   getButton() {
     return this.state.open ? (
-      <li className="menu close-menu" onClick={this.handleClick}>
-        <a className="fa-times close-menu">Menu</a>
+      <li className="menu close-menu">
+        <a onClick={this.handleClick} className="fa-times close-menu">Menu</a>
       </li>
     ) : (
-      <li className="menu open-menu" onClick={this.handleClick}>
-        <a className="fa-bars">Menu</a>
+      <li className="menu open-menu">
+        <a onClick={this.handleClick} className="fa-bars">Menu</a>
       </li>
     );
   }
@@ -45,15 +45,17 @@ class Hamburger extends Component {
         <Menu right noOverlay isOpen={this.state.open}>
           <ul className="hamburger-ul">
             {links.filter(l => l.index).map(l => (
-              <li key={l.label}>
-                <IndexLink to={l.link} onClick={this.handleClick}>
+              <li key={l.label} onClick={this.handleClick}>
+                <IndexLink to={l.link}>
                   <h3 className="index-li">{l.label}</h3>
                 </IndexLink>
               </li>
             ))}
             {links.filter(l => !l.index).map(l => (
-              <li key={l.label}>
-                <Link to={l.link} onClick={this.handleClick}><h3>{l.label}</h3></Link>
+              <li key={l.label} onClick={this.handleClick}>
+                <Link to={l.link}>
+                  <h3>{l.label}</h3>
+                </Link>
               </li>
             ))}
           </ul>
