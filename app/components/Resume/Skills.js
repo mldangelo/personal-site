@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
 
-import _includes from 'lodash/includes';
-import _orderBy from 'lodash/orderBy';
-
 import CategoryButton from './Skills/CategoryButton';
 import SkillBar from './Skills/SkillBar';
 
@@ -17,6 +14,9 @@ class Skills extends Component {
         ...obj,
         [key]: false,
       }), { All: true }),
+      skills: skills.map(skill =>
+        Object.assign(skill, { category: skill.category.sort() }),
+      ),
     };
   }
 
@@ -26,12 +26,16 @@ class Skills extends Component {
       this.state.buttons[key] ? key : cat
     ), 'All');
 
-    const sorted = _orderBy(skills,
-      ['compentency', 'category', 'title'],
-      ['desc', 'desc', 'asc']); // doesn't work for category arrays
-
-    return sorted
-      .filter(skill => (actCat === 'All' || _includes(skill.category, actCat)))
+    return this.state.skills.sort((a, b) => {
+      let ret = 0;
+      if (a.compentency > b.compentency) ret = -1;
+      else if (a.compentency < b.compentency) ret = 1;
+      else if (a.category[0] > b.category[0]) ret = -1;
+      else if (a.category[0] < b.category[0]) ret = 1;
+      else if (a.title > b.title) ret = 1;
+      else if (a.title < b.title) ret = -1;
+      return ret;
+    }).filter(skill => (actCat === 'All' || skill.category.includes(actCat)))
       .map(skill => (
         <SkillBar
           data={skill}
