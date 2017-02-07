@@ -18,6 +18,17 @@
 			}
 		}
 	}
+	
+	.jobs-container {
+		.points {
+			li {
+				margin: 0;
+				padding: 0;
+					font-size: .9em;
+			}
+		}
+	}
+	
 	.courses {
 		padding-top: 1.6em;
 		.title {
@@ -49,14 +60,23 @@
 	margin-bottom: .2em;
 }
 
-.degree {
-	margin-bottom: .1em;
-	text-transform: none;
-}
+.degree-container {
+	h4 {
+		font-weight: normal;
+	}
+	
+	.degree {
+		margin-bottom: .1em;
+		text-transform: none;
+		letter-spacing: 0.16em;
+		font-size: .8em;
+	}
 
-.school {
-	text-transform: none;
-	//letter-spacing: 0.5em;
+	.school {
+		text-transform: none;
+		padding-top: 0.3em;
+		margin-bottom: 1em;
+	}
 }
 
 .courses .course-number {
