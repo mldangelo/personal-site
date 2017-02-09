@@ -4,6 +4,7 @@ import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import ReactGA from 'react-ga';
 
 import App from './App';
+import Index from './components/Index';
 import About from './components/About';
 import Projects from './components/Projects';
 import Resume from './components/Resume';
@@ -24,7 +25,8 @@ require('../public/css/main.scss');
 ReactDOM.render(
   <Router onUpdate={update} history={browserHistory}>
     <Route path="/" component={App}>
-      <IndexRoute component={About} />
+      <IndexRoute component={Index} />
+      <Route path="/about" component={About} />
       <Route path="/resume" component={Resume} />
       <Route path="/projects" component={Projects} />
       <Route path="/stats" component={Stats} />
