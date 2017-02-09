@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, IndexLink } from 'react-router';
+import { Link } from 'react-router';
 import ReactMarkdown from 'react-markdown';
 
 import markdown from '../data/about.md';
