@@ -4,6 +4,7 @@ My personal website. Built using Node.js, React, Express, React-Router, Hot Modu
 ### Tests:
 [![Code Climate](https://codeclimate.com/github/mldangelo/mldangelo/badges/gpa.svg)](https://codeclimate.com/github/mldangelo/mldangelo)
 [![Build Status](https://travis-ci.org/mldangelo/mldangelo.svg?branch=master)](https://travis-ci.org/mldangelo/mldangelo)
+[![Dependency](https://david-dm.org/mldangelo/mldangelo.svg)](https://david-dm.org/)
 
 ### Requirements:
 * node >= v6.0
