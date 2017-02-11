@@ -25,7 +25,7 @@ My personal website. Built using Node.js, React, Express, React-Router, Hot Modu
   sudo ln [root directory]/nginx/mldangelo.conf [nginx directory]/sites-enabled/mldangelo.conf
   sudo service nginx restart
   ```
-  Note: HTTPS block should be removed if step 3. (below is not followed)
+  Note: HTTPS block should be removed if step 3 (below) is not followed.
 
 3. Optionally configure a SSL certificate using Certbot. See [here](https://certbot.eff.org/#ubuntutrusty-nginx)
 for installation and setup instructions. A cronjob such as:
@@ -41,14 +41,7 @@ for installation and setup instructions. A cronjob such as:
 
 1. ``` cp sample.env .env ``` and set values as appropriate.
 
-2. cd into [root directory] and run:
-
-  ```bash
-  npm run build
-  npm start
-  ```
-
-3. Run `npm run forever-start` and navigate to `<ip>:<port> (default=7999)`.
+2. Run `npm run forever-start` and navigate to `<ip>:<port> (default=7999)`.
 
 ###  Developing:
 1. Set `NODE_ENV=development` in `.env`.
