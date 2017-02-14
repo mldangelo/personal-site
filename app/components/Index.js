@@ -2,14 +2,15 @@ import React from 'react';
 import { Link, IndexLink } from 'react-router';
 
 const Index = () => (
-  <article className="post" id="about">
+  <article className="post" id="index">
     <header>
       <div className="title">
         <h2><IndexLink to="/">About this site</IndexLink></h2>
         <p>A beautiful, responsive, react app written with ES2016. Please hire me.</p>
       </div>
     </header>
-    <p> Welcome to my website. Please feel free to check out my {' '}
+    <p> Welcome to my website. Please feel free to read more <Link to="/about">about me</Link>,
+      or you can check out my {' '}
       <Link to="/resume">resume</Link>, {' '}
       <Link to="/projects">projects</Link>, {' '}
       view <Link to="/stats">site statistics</Link>, {' '}

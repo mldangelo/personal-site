@@ -250,5 +250,5 @@ export const skills = [
     title: 'Pylint',
     compentency: 4,
     category: ['Python'],
-  }
+  },
 ];
