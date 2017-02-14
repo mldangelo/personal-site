@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, IndexLink } from 'react-router';
 
-import Hamburger from './Header/Hamburger';
+import Hamburger from './Hamburger';
 import links from '../../data/links';
 
 const Header = () => (

@@ -3,7 +3,7 @@ import { Link, IndexLink } from 'react-router';
 
 import Menus from 'react-burger-menu';
 
-import links from '../../../data/links';
+import links from '../../data/links';
 
 const Menu = Menus.slide;
 

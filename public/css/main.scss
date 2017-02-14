@@ -1,3 +1,5 @@
+@import '../../node_modules/normalize.css/normalize.css';
+
 @import 'libs/vars';
 @import 'libs/functions';
 @import 'libs/mixins';
@@ -57,7 +59,9 @@
 	@import 'layout/footer';
 	@import 'layout/menu';
 
+	@import 'layout/about';
 	@import 'layout/resume';
 	@import 'layout/skills';
+	@import 'layout/stats';
 	@import 'layout/contact';
 	@import 'layout/notFound';

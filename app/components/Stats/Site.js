@@ -1,18 +1,15 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router';
 
 import axios from 'axios';
 
-import Table from './Stats/Table';
-import data from '../data/github';
+import Table from './Table';
+import data from '../../data/github';
 
 class Stats extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      data,
-    };
+    this.state = { data };
   }
 
   componentDidMount() {
@@ -32,17 +29,12 @@ class Stats extends Component {
 
   render() {
     return (
-      <article className="post" id="stats">
-        <header>
-          <div className="title">
-            <h2><Link to="/stats">Some stats about this site</Link></h2>
-            <p>Click <a href="https://github.com/mldangelo/mldangelo/tree/master/scripts">here</a> to see how these are generated.</p>
-          </div>
-        </header>
+      <div>
+        <h3>Some stats about this site</h3>
         <Table
           data={data}
         />
-      </article>
+      </div>
     );
   }
 }
