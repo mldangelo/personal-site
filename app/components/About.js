@@ -8,7 +8,7 @@ const About = () => (
   <article className="post" id="about">
     <header>
       <div className="title">
-        <h2><Link to="/about">About</Link></h2>
+        <h2><Link to="/about">About Me</Link></h2>
       </div>
     </header>
     <ReactMarkdown source={markdown} />

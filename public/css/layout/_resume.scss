@@ -1,7 +1,20 @@
 /* Resume */
 
 #resume {
+	
+	.link-container h4 {
+		text-decoration:none;
+		border-bottom: none;
+		display: inline;
+
+		a {
+				padding: 0 .5em;
+				margin: 0;
+		}
+	}
+
 	.education {
+
 		.title {
 			text-align: center;
 			margin-bottom: 2em;
@@ -42,6 +55,7 @@
 			}
 		}
 	}
+	
 	.skills {
 		margin-top: 2em;
 		.title {

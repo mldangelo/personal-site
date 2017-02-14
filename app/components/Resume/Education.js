@@ -11,7 +11,7 @@ const getRows = () => degrees.map(degree => (
 ));
 
 const Education = () => (
-  <div className="education">
+  <div className="education" id="education">
     <div className="title">
       <h3>Education</h3>
     </div>

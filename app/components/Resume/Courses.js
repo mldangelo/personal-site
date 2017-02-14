@@ -20,7 +20,7 @@ const getRows = () => courses.sort((a, b) => {
 
 const Courses = () => (
   <article>
-    <div className="courses">
+    <div className="courses" id="courses">
       <div className="title">
         <h3>Selected Courses</h3>
       </div>
