@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router';
 
-import Education from './Resume/Education';
-import Experience from './Resume/Experience';
-import Skills from './Resume/Skills';
-import Courses from './Resume/Courses';
-import References from './Resume/References';
+import Education from '../components/Resume/Education';
+import Experience from '../components/Resume/Experience';
+import Skills from '../components/Resume/Skills';
+import Courses from '../components/Resume/Courses';
+import References from '../components/Resume/References';
 
 const sections = [
   'Education',

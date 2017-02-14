@@ -4,13 +4,13 @@ import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import ReactGA from 'react-ga';
 
 import App from './App';
-import Index from './components/Index';
-import About from './components/About';
-import Projects from './components/Projects';
-import Resume from './components/Resume';
-import Stats from './components/Stats';
-import Contact from './components/Contact';
-import NotFound from './components/NotFound';
+import Index from './pages/Index';
+import About from './pages/About';
+import Projects from './pages/Projects';
+import Resume from './pages/Resume';
+import Stats from './pages/Stats';
+import Contact from './pages/Contact';
+import NotFound from './pages/NotFound';
 
 ReactGA.initialize('UA-68649021-1');
 
