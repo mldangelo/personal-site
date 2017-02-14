@@ -2,7 +2,8 @@ import React from 'react';
 import { Link } from 'react-router';
 
 const References = () => (
-  <div className="references" id="references">
+  <div className="references">
+    <div className="link-to" id="references" />
     <div className="title">
       <Link to="/contact">
         <h3>References are available upon request</h3>

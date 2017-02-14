@@ -11,7 +11,8 @@ const getRows = () => positions.map(job => (
 ));
 
 const Experience = () => (
-  <div className="experience" id="experience">
+  <div className="experience">
+    <div className="link-to" id="experience" />
     <div className="title">
       <h3>Experience</h3>
     </div>
