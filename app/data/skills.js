@@ -5,9 +5,11 @@ export const categories = {
   Databases: '#3896e2',
   Design: '#747fff',
   Frameworks: '#64cb7b',
+  Javascript: '#d75858',
   Languages: '#6968b3',
   'Machine Learning': '#e47272',
   Other: '#c3423f',
+  Python: '#37b1f5',
   Tools: '#40494e',
   'Web Development': '#cc7b94',
 };
@@ -15,23 +17,23 @@ export const categories = {
 export const skills = [
   {
     title: 'Javascript',
-    compentency: 4,
-    category: ['Web Development', 'Languages'],
+    compentency: 5,
+    category: ['Web Development', 'Languages', 'Javascript'],
   },
   {
     title: 'Node.JS',
-    compentency: 4,
-    category: ['Web Development', 'Frameworks'],
+    compentency: 5,
+    category: ['Web Development', 'Frameworks', 'Javascript'],
   },
   {
     title: 'React',
     compentency: 4,
-    category: ['Web Development', 'Frameworks'],
+    category: ['Web Development', 'Frameworks', 'Javascript'],
   },
   {
     title: 'Backbone',
     compentency: 3,
-    category: ['Web Development', 'Frameworks'],
+    category: ['Web Development', 'Frameworks', 'Javascript'],
   },
   {
     title: 'Bootstrap',
@@ -96,42 +98,27 @@ export const skills = [
   {
     title: 'Express.JS',
     compentency: 5,
-    category: ['Web Development', 'Frameworks'],
+    category: ['Web Development', 'Frameworks', 'Javascript'],
   },
   {
     title: 'Koa',
     compentency: 3,
-    category: ['Web Development', 'Frameworks'],
+    category: ['Web Development', 'Frameworks', 'Javascript'],
   },
   {
     title: 'D3',
     compentency: 3,
-    category: ['Web Development', 'Frameworks', 'Design'],
+    category: ['Web Development', 'Frameworks', 'Design', 'Javascript'],
   },
   {
     title: 'Flask',
     compentency: 4,
-    category: ['Web Development', 'Frameworks'],
+    category: ['Web Development', 'Frameworks', 'Python'],
   },
   {
     title: 'Product Development',
     compentency: 3,
     category: ['Other'],
-  },
-  {
-    title: 'Meteor',
-    compentency: 3,
-    category: ['Web Development', 'Frameworks'],
-  },
-  {
-    title: 'Sails.js',
-    compentency: 3,
-    category: ['Web Development', 'Frameworks'],
-  },
-  {
-    title: 'MEAN Stack',
-    compentency: 2,
-    category: ['Web Development', 'Frameworks'],
   },
   {
     title: 'Data Analysis',
@@ -156,7 +143,7 @@ export const skills = [
   {
     title: 'Numpy',
     compentency: 3,
-    category: ['Data Science', 'Machine Learning'],
+    category: ['Data Science', 'Machine Learning', 'Python'],
   },
   {
     title: 'Caffe',
@@ -166,12 +153,12 @@ export const skills = [
   {
     title: 'Tensorflow',
     compentency: 4,
-    category: ['Data Science', 'Machine Learning'],
+    category: ['Data Science', 'Machine Learning', 'Python'],
   },
   {
-    title: 'IPython',
+    title: 'Jupyter',
     compentency: 4,
-    category: ['Data Science', 'Machine Learning'],
+    category: ['Data Science', 'Machine Learning', 'Python'],
   },
   {
     title: 'Typescript',
@@ -201,7 +188,7 @@ export const skills = [
   {
     title: 'Python',
     compentency: 5,
-    category: ['Languages'],
+    category: ['Languages', 'Python'],
 
   },
   {
@@ -232,11 +219,36 @@ export const skills = [
   {
     title: 'Keras',
     compentency: 4,
-    category: ['Machine Learning'],
+    category: ['Machine Learning', 'Python'],
   },
   {
     title: 'Visualization',
     compentency: 4,
-    category: ['Data Science'],
+    category: ['Data Science', 'Javascript'],
   },
+  {
+    title: 'GraphQL',
+    compentency: 3,
+    category: ['Web Development', 'Databases'],
+  },
+  {
+    title: 'Pandas',
+    compentency: 4,
+    category: ['Data Science', 'Python'],
+  },
+  {
+    title: 'Matplotib',
+    compentency: 4,
+    category: ['Data Science', 'Python'],
+  },
+  {
+    title: 'Scikit-Lean',
+    compentency: 4,
+    category: ['Data Science', 'Python'],
+  },
+  {
+    title: 'Pylint',
+    compentency: 4,
+    category: ['Python'],
+  }
 ];
