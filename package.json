@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "rimraf ./dist && set NODE_ENV=production && webpack --config ./webpack/webpack.production.config.js --progress --profile --colors",
-    "build-dev": "rimraf .dist && set NODE_ENV=development && webpack --config ./webpack/webpack.config.js --progress --profile --colors",
-    "clean": "rimraf ./dist",
+    "build": "webpack -p --config ./webpack/webpack.production.config.js --progress --profile --colors && rimraf ./dist && mv ./tmp ./dist",
+    "build-dev": "rimraf ./dist && webpack --config ./webpack/webpack.config.js --progress --profile --colors",
+    "clean": "rimraf ./dist && rimraf ./tmp",
     "forever-start": "forever start --minUptime 1000ms --spinSleepTime 1000ms -a -l forever.log -o out.log -e err.log -c 'nodemon server.js --exitcrash --exec babel-node' server.js",
     "forever-stop": "forever stop server.js",
     "dev": "nodemon server.js --ignore app/ --exec babel-node",

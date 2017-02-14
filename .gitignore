@@ -33,6 +33,7 @@ node_modules
 # Webpack related
 public/dist/
 dist/
+tmp/
 
 # OSX
 .DS_Store

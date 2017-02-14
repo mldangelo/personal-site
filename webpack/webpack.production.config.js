@@ -11,7 +11,7 @@ module.exports = {
     path.join(__dirname, '../app/main.js'),
   ],
   output: {
-    path: path.join(__dirname, '../dist/'),
+    path: path.join(__dirname, '../tmp/'),
     filename: '[name]-[hash].min.js',
     publicPath: '/dist/',
   },
