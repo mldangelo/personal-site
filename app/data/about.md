@@ -8,7 +8,9 @@ I am available to consult on interesting projects. I am especially interested in
 At Arthena I have learned how to build teams and manage people, build relationships with customers, sell enterprise products, and build on-line predictive models for production environments. I've also learned how to build large web applications (see [arthena.com](https://arthena.com)).
 <br><br>
 #### Some History (Early Life): 
+
 - I was born on February 5th, 1990. I am {{age}} years old.
+
 - My parents put a computer in my bedroom when I was 3. It was an old Tandy that ran MS-DOS and could barely handle Wolfenstein 3D.
 
 - We subscribed to AOL in 1995. I still remember installing it from a floppy disk onto our brand new Packard Bell.

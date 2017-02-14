@@ -11,7 +11,7 @@ class TableRow extends Component {
   render() {
     return (
       <tr>
-        <td>{this.props.label}</td>
+        <td width="70%">{this.props.label}</td>
         <td>{this.getValue()}</td>
       </tr>
     );

@@ -17,7 +17,7 @@ class Table extends Component {
 
   render() {
     return (
-      <table style={{ width: '100%' }}>
+      <table>
         <tbody>
           {this.getRows()}
         </tbody>
