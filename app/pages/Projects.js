@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
+import Helmet from 'react-helmet';
 
 import Cell from '../components/Projects/Cell';
 import data from '../data/projects';
@@ -15,6 +16,7 @@ const getRows = () => data.map(project => (
 
 const Projects = () => (
   <article className="post" id="projects">
+    <Helmet title="Projects" />
     <header>
       <div className="title">
         <h2><Link to="/projects">Projects</Link></h2>

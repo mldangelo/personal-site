@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
+import Helmet from 'react-helmet';
 
 import data from '../data/contact';
 
@@ -68,6 +69,7 @@ class Contact extends Component {
     const message = this.state.message;
     return (
       <article className="post" id="contact">
+        <Helmet title="Contact" />
         <header>
           <div className="title">
             <h2><Link to="/contact">Contact</Link></h2>

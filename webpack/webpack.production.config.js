@@ -75,8 +75,8 @@ module.exports = {
       },
       {
         test: /\.html$/,
-        loader: 'raw-loader!html-minify-loader'
-      }
+        loader: 'raw-loader!html-minify-loader',
+      },
     ],
   },
 };

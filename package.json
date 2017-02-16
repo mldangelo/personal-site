@@ -44,6 +44,7 @@
     "react-burger-menu": "^1.10.12",
     "react-dom": "^15.4.2",
     "react-ga": "^2.1.2",
+    "react-helmet": "^4.0.0",
     "react-markdown": "^2.4.4",
     "react-router": "^3.0.2",
     "rimraf": "^2.5.4",

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
+import Helmet from 'react-helmet';
 
 import Education from '../components/Resume/Education';
 import Experience from '../components/Resume/Experience';
@@ -18,6 +19,7 @@ const sections = [
 
 const Resume = () => (
   <article className="post" id="resume">
+    <Helmet title="Resume" />
     <header>
       <div className="title">
         <h2><Link to="/resume">Resume</Link></h2>
