@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import ReactMarkdown from 'react-markdown';
 import Helmet from 'react-helmet';
+import LinkRenderer from '../components/About/LinkRenderer';
 
 import markdown from '../data/about.md';
 
@@ -14,7 +15,12 @@ const About = () => (
         <p>(in 1,000 words)</p>
       </div>
     </header>
-    <ReactMarkdown source={markdown} />
+    <ReactMarkdown
+      source={markdown}
+      renderers={{
+        Link: LinkRenderer,
+      }}
+    />
   </article>
 );
 

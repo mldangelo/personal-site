@@ -33,24 +33,24 @@ module.exports = {
         loader: 'babel-loader',
       }, {
         test: /\.md$/,
-        use: [
-            { loader: 'html-loader' },
-            { loader: 'markdown-loader' },
-        ],
+        use: [{
+          loader: 'raw-loader',
+        }],
       }, {
         test: /\.json?$/,
         loader: 'json-loader',
       }, {
         test: /\.css$/,
         loader: 'style-loader!css-loader?modules&localIdentName=[name]---[local]---[hash:base64:5]',
-      },
-      {
+      }, {
         test: /\.scss$/,
         loaders: 'style-loader!css-loader!sass-loader?modules&localIdentName=[name]---[local]---[hash:base64:5]',
       }, {
-        test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'url-loader?limit=10000&minetype=application/font-woff',
+        test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        loader: 'url-loader?limit=10000&minetype=application/font-woff',
       }, {
-        test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'file-loader',
+        test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        loader: 'file-loader',
       },
     ],
   },

@@ -1,4 +1,4 @@
-<div></div>
+
 #### Intro
 I am the CTO of [Arthena](https://arthena.com) where I work on building the most accurate models for pricing and valuating fine art. My primary job functions are as a data scientist and software engineer.
 <br>
