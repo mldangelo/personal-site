@@ -73,6 +73,10 @@ module.exports = {
       }, {
         test: /\.js$/, loader: 'strip-loader?strip[]=console.log',
       },
+      {
+        test: /\.html$/,
+        loader: 'raw-loader!html-minify-loader'
+      }
     ],
   },
 };
