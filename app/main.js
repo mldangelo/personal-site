@@ -17,11 +17,16 @@ import Music from './pages/Music';
 
 import NotFound from './pages/NotFound';
 
-ReactGA.initialize('UA-68649021-1');
+if (process.env.NODE_ENV === 'production') {
+  ReactGA.initialize('UA-68649021-1');
+}
 
 const update = () => {
   window.scrollTo(0, 0);
-  ReactGA.pageview(window.location.pathname);
+  if (process.env.NODE_ENV === 'production') {
+    ReactGA.set({ page: window.location.pathname });
+    ReactGA.pageview(window.location.pathname);
+  }
 };
 
 // All of our CSS

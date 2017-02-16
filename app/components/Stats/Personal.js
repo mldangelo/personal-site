@@ -14,12 +14,17 @@ class PersonalStats extends Component {
     this.timer = setInterval(() => this.tick(), 100);
   }
 
+  componentWillUnmount() {
+    clearInterval(this.timer);
+  }
+
   tick() {
     const divisor = 1000 * 60 * 60 * 24 * 365.2421897; // ms in an average year
     const birthTime = new Date('1990-02-05T09:24:00');
-    this.state.data.age.value = ((Date.now() - birthTime) / divisor).toFixed(9);
+    const update = this.state.data;
+    update.age.value = ((Date.now() - birthTime) / divisor).toFixed(9);
     this.setState({
-      data: this.state.data,
+      data: update,
     });
   }
 
