@@ -14,12 +14,12 @@
     "deploy": "yarn && npm run build && npm run forever-stop || true && npm run forever-start"
   },
   "dependencies": {
-    "autoprefixer": "^6.7.2",
+    "autoprefixer": "^6.7.3",
     "axios": "^0.15.3",
     "babel-cli": "^6.23.0",
     "babel-core": "^6.23.1",
     "babel-eslint": "^7.1.1",
-    "babel-loader": "^6.2.10",
+    "babel-loader": "^6.3.1",
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-transform-class-properties": "^6.23.0",
     "babel-preset-es2015": "^6.22.0",
@@ -51,7 +51,7 @@
     "stats-webpack-plugin": "^0.4.3",
     "webpack": "^2.2.1",
     "webpack-dev-middleware": "^1.10.0",
-    "webpack-hot-middleware": "^2.16.1"
+    "webpack-hot-middleware": "^2.17.0"
   },
   "devDependencies": {
     "css-loader": "^0.26.1",
@@ -59,7 +59,7 @@
     "eslint-config-airbnb": "^14.1.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
-    "eslint-plugin-react": "^6.9.0",
+    "eslint-plugin-react": "^6.10.0",
     "file-loader": "^0.10.0",
     "node-sass": "^4.5.0",
     "nodemon": "^1.11.0",
