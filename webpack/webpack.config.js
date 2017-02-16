@@ -1,8 +1,8 @@
-const path = require('path');
-const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+import path from 'path';
+import webpack from 'webpack';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 
-module.exports = {
+export default {
   devtool: 'eval-source-map',
   entry: [
     'webpack-hot-middleware/client?path=http://localhost:7999/__webpack_hmr&reload=true',
