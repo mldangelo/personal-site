@@ -71,8 +71,8 @@ const routes = (app) => {
         const data = {
           artists: payload.topartists.artist.map(artist => ({
             name: artist.name,
-            count: artist.playcount,
             link: artist.url,
+            image: artist.image[2]['#text'],
           })),
           updated_at: Date.now(),
         };

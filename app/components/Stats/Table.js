@@ -29,7 +29,10 @@ class Table extends Component {
 Table.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.string.isRequired,
-    value: PropTypes.string.isRequired,
+    value: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+    ]),
     link: PropTypes.string,
   })).isRequired,
 };
