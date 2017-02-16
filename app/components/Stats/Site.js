@@ -13,8 +13,7 @@ class Stats extends Component {
   }
 
   componentDidMount() {
-    const source = '/api/github';
-    this.serverRequest = axios.get(source).then((result) => {
+    axios.get('/api/github').then((result) => {
       const update = data.map((field) => {
         const value = field.key ? { value: String(result.data[field.key]) } : {};
         return Object.assign(field, value);

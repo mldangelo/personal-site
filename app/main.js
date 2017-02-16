@@ -4,19 +4,29 @@ import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import ReactGA from 'react-ga';
 
 import App from './App';
+import FullPage from './FullPage';
+
 import Index from './pages/Index';
 import About from './pages/About';
 import Projects from './pages/Projects';
 import Resume from './pages/Resume';
 import Stats from './pages/Stats';
 import Contact from './pages/Contact';
+
+import Music from './pages/Music';
+
 import NotFound from './pages/NotFound';
 
-ReactGA.initialize('UA-68649021-1');
+if (process.env.NODE_ENV === 'production') {
+  ReactGA.initialize('UA-68649021-1');
+}
 
 const update = () => {
   window.scrollTo(0, 0);
-  ReactGA.pageview(window.location.pathname);
+  if (process.env.NODE_ENV === 'production') {
+    ReactGA.set({ page: window.location.pathname });
+    ReactGA.pageview(window.location.pathname);
+  }
 };
 
 // All of our CSS
@@ -31,6 +41,9 @@ ReactDOM.render(
       <Route path="/projects" component={Projects} />
       <Route path="/stats" component={Stats} />
       <Route path="/contact" component={Contact} />
+    </Route>
+    <Route path="/" component={FullPage}>
+      <Route path="/music" component={Music} />
     </Route>
     <Route path="*" component={NotFound} status={404} />
   </Router>,

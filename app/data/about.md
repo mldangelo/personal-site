@@ -4,16 +4,16 @@ I am the CTO of [Arthena](https://arthena.com) where I work on building the most
 <br>
 I am available to consult on interesting projects. I am particularly interested in social impact, education, inclusively, space, and in applying machine learning to large data sets. I may even be available for pro-bono work depending on the time commitment and the project. If you'd like to meet, I am based in Palo Alto but travel to New York frequently. 
 <br><br>
-#### currently
+#### Currently
 At Arthena I have learned how to build teams and manage people, build relationships with customers, sell enterprise products, and build on-line predictive models for production environments. I've also learned how to build and maintain large web applications (see [arthena.com](https://arthena.com)). 
 <br><br>
-#### Some History (Early Life): 
+#### Some History
 
-- I was born on February 5th, 1990.
+- My parents put a computer in my bedroom in 1993 when I was 3. It was an old Tandy that ran MS-DOS. My favorite games were Street Rod 2, Wolfenstein 3D, and Tom and Jerry. It had a mechanical keyboard and a turbo button. To this day, I still don't know what pressing the turbo button really did. 
 
-- My parents put a computer in my bedroom when I was 3. It was an old Tandy that ran MS-DOS and could barely handle Wolfenstein 3D.
+- We subscribed to AOL in 1995. I still remember installing it from a floppy disk onto our brand new Packard Bell. It took years for me to send my first email.
 
-- We subscribed to AOL in 1995. I still remember installing it from a floppy disk onto our brand new Packard Bell.
+- At 7, I discovered the mini-games hidden in Microsoft Office. I also beat Minesweeper on expert for the first time.
 
 - At 8, my parents bought me a Sony Mavica MVC-FD71 digital camera after I stole their SLR one too many times. It could fit 10 images to a floppy disk at a 0.3MP resolution. I still have it and it still works. I've been taking photographs ever since, now with a Nikon D750, D800, and occasionally with a Mamiya 6II. 
 
@@ -23,9 +23,9 @@ At Arthena I have learned how to build teams and manage people, build relationsh
 
 - When I was 12, I set the all-time high record at my local laser tag facility by reverse engineering the charging station and weapon protocols with a photo-resistor, micro-cassette recorder, and a lot of patience. I was unstoppable.
 
-- At 13, I went to space camp and fell in love. I went back two more times and promised myself that I'd work in space. I've since worked on three generations of satellites.
+- At 13, I went to space camp and fell in love. I went back two more times and promised myself that I'd work in space. I've since helped build three generations of satellites and have tangentially worked on two more.
 
-- At 14, I was almost expelled for finding a backdoor into my high school's file server and telling everyone but the faculty members about it. Later that year, I figured out how to turn off the internet firewall by editing system registry keys and later anonymously shared my work. 
+- At 14, I was almost expelled for finding a backdoor into my high school's file server and telling everyone but the faculty members about it. Later that year, I figured out how to turn off the internet firewall by editing system registry keys. I anonymously shared my work months later. 
 
 - At 16, I participated in a foreign exchange program in Dortmund, Germany. Since then, I've gone back almost every year.
 
@@ -33,7 +33,7 @@ At Arthena I have learned how to build teams and manage people, build relationsh
 
 - At 18, In the summer before college, my friends and I started playing <a href="https://en.wikipedia.org/wiki/Quidditch_(sport)">Muggle Quidditch</a>. We went on to start over 8 teams in the [International Quidditch Association](https://en.wikipedia.org/wiki/International_Quidditch_Association) including the [Buffalo Quidditch Society](https://www.facebook.com/buffaloquidditch/). At our height, we were ranked third in the IQA. Although I don't play anymore, you can still see pictures of me holding a broom while wearing a chess camp t-shirt on facebook. 
 
-- At 19, I took my first graduate course and published my first paper.
+- At 19, I took my first graduate course and published my first academic paper.
 
 - At 20, I coauthored a grant to build a satellite and managed a 60+ person team through the end of undergrad. You can read more about that [here](https://ubnl.space/glados/).
 
@@ -47,8 +47,8 @@ You can ask me in person for stories that I'm afraid to share with the internet.
 - [Books](https://www.goodreads.com/mdangelo)
 - Colored pencils 
 - NPR podcasts
-- Obscure indie music
-- Good design 
+- [Obscure indie music](/music)
+- [Good design](/)
 - Photography 
 
 #### Travel / Geography

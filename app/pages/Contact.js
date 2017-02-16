@@ -47,6 +47,10 @@ class Contact extends Component {
     this.timer = setInterval(() => this.tick(), 100);
   }
 
+  componentWillUnmount() {
+    clearInterval(this.timer);
+  }
+
   tick() {
     let idx = this.state.idx;
     let char = this.state.char + 1;
