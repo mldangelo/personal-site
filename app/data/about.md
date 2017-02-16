@@ -47,8 +47,8 @@ You can ask me in person for stories that I'm afraid to share with the internet.
 - [Books](https://www.goodreads.com/mdangelo)
 - Colored pencils 
 - NPR podcasts
-- Obscure indie music
-- Good design 
+- [Obscure indie music](/music)
+- [Good design](/)
 - Photography 
 
 #### Travel / Geography
