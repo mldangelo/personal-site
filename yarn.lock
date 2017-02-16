@@ -244,18 +244,7 @@ asynckit@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
 
-autoprefixer@^6.3.1:
-  version "6.7.2"
-  resolved "https://registry.yarnpkg.com/autoprefixer/-/autoprefixer-6.7.2.tgz#172ab07b998ae9b957530928a59a40be54a45023"
-  dependencies:
-    browserslist "^1.7.1"
-    caniuse-db "^1.0.30000618"
-    normalize-range "^0.1.2"
-    num2fraction "^1.2.2"
-    postcss "^5.2.11"
-    postcss-value-parser "^3.2.3"
-
-autoprefixer@^6.7.3:
+autoprefixer@^6.3.1, autoprefixer@^6.7.3:
   version "6.7.3"
   resolved "https://registry.yarnpkg.com/autoprefixer/-/autoprefixer-6.7.3.tgz#bc2c28018e9a226f24f0ded36ce81014dccec817"
   dependencies:
@@ -1062,14 +1051,7 @@ browserify-zlib@^0.1.4:
   dependencies:
     pako "~0.2.0"
 
-browserslist@^1.0.1, browserslist@^1.5.2, browserslist@^1.7.1:
-  version "1.7.1"
-  resolved "https://registry.yarnpkg.com/browserslist/-/browserslist-1.7.1.tgz#cc9bd193979a2a4b09fdb3df6003fefe48ccefe1"
-  dependencies:
-    caniuse-db "^1.0.30000617"
-    electron-to-chromium "^1.2.1"
-
-browserslist@^1.7.2:
+browserslist@^1.0.1, browserslist@^1.5.2, browserslist@^1.7.2:
   version "1.7.3"
   resolved "https://registry.yarnpkg.com/browserslist/-/browserslist-1.7.3.tgz#25ead9c917b278ad668b83f39c8025697797b2ab"
   dependencies:
@@ -1159,11 +1141,7 @@ caniuse-api@^1.5.2:
     lodash.memoize "^4.1.0"
     lodash.uniq "^4.3.0"
 
-caniuse-db@^1.0.30000346, caniuse-db@^1.0.30000617, caniuse-db@^1.0.30000618:
-  version "1.0.30000622"
-  resolved "https://registry.yarnpkg.com/caniuse-db/-/caniuse-db-1.0.30000622.tgz#9d9690b577384990a58e33ebb903a14da735e5fd"
-
-caniuse-db@^1.0.30000623:
+caniuse-db@^1.0.30000346, caniuse-db@^1.0.30000623:
   version "1.0.30000623"
   resolved "https://registry.yarnpkg.com/caniuse-db/-/caniuse-db-1.0.30000623.tgz#6e9dc4385d00a8f587efbb23fcbed7916f186e5d"
 
@@ -1187,6 +1165,10 @@ chalk@^1.0.0, chalk@^1.1.0, chalk@^1.1.1, chalk@^1.1.3:
     has-ansi "^2.0.0"
     strip-ansi "^3.0.0"
     supports-color "^2.0.0"
+
+charenc@~0.0.1:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/charenc/-/charenc-0.0.2.tgz#c0a1d2f3a7092e03774bfa83f14c0fc5790a8667"
 
 chokidar@^1.0.1, chokidar@^1.4.3, chokidar@^1.6.1:
   version "1.6.1"
@@ -1521,6 +1503,10 @@ cross-spawn@^3.0.0:
   dependencies:
     lru-cache "^4.0.1"
     which "^1.2.9"
+
+crypt@~0.0.1:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/crypt/-/crypt-0.0.2.tgz#88d7ff7ec0dfb86f713dc87bbb42d044d3e6c41b"
 
 cryptiles@2.x.x:
   version "2.0.5"
@@ -1863,7 +1849,7 @@ ee-first@1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/ee-first/-/ee-first-1.1.1.tgz#590c61156b0ae2f4f0255732a158b266bc56b21d"
 
-electron-to-chromium@^1.2.1, electron-to-chromium@^1.2.2:
+electron-to-chromium@^1.2.2:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.2.2.tgz#e41bc9488c88e3cfa1e94bde28e8420d7d47c47c"
 
@@ -2794,6 +2780,12 @@ html-minify-loader@^1.1.0:
   dependencies:
     minimize "^1.8.1"
 
+html-parse-stringify2@^1.1.0:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/html-parse-stringify2/-/html-parse-stringify2-1.2.1.tgz#3d97afe806eac2b4e6963d52d190cf2638cd9c56"
+  dependencies:
+    void-elements "^1.0.0"
+
 html-webpack-plugin@^2.28.0:
   version "2.28.0"
   resolved "https://registry.yarnpkg.com/html-webpack-plugin/-/html-webpack-plugin-2.28.0.tgz#2e7863b57e5fd48fe263303e2ffc934c3064d009"
@@ -2983,7 +2975,7 @@ is-binary-path@^1.0.0:
   dependencies:
     binary-extensions "^1.0.0"
 
-is-buffer@^1.0.2:
+is-buffer@^1.0.2, is-buffer@~1.1.1:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/is-buffer/-/is-buffer-1.1.4.tgz#cfc86ccd5dc5a52fa80489111c6920c457e2d98b"
 
@@ -3253,6 +3245,18 @@ kuler@0.0.x:
   dependencies:
     colornames "0.0.2"
 
+last.fm.api@^0.1.3:
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/last.fm.api/-/last.fm.api-0.1.3.tgz#683babf4435b3b50887b063c8330c76d35143e3f"
+  dependencies:
+    colors "^1.1.2"
+    html-parse-stringify2 "^1.1.0"
+    lodash "^4.13.1"
+    md5 "^2.1.0"
+    pixl-xml "^1.0.7"
+    request "^2.72.0"
+    string-format-js "^0.1.8"
+
 latest-version@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/latest-version/-/latest-version-1.0.1.tgz#72cfc46e3e8d1be651e1ebb54ea9f6ea96f374bb"
@@ -3409,7 +3413,7 @@ lodash.uniq@^4.3.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.uniq/-/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
 
-lodash@^4.0.0, lodash@^4.14.0, lodash@^4.17.3, lodash@^4.2.0, lodash@^4.3.0:
+lodash@^4.0.0, lodash@^4.13.1, lodash@^4.14.0, lodash@^4.17.3, lodash@^4.2.0, lodash@^4.3.0:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
 
@@ -3481,6 +3485,14 @@ marked@^0.3.6:
 math-expression-evaluator@^1.2.14:
   version "1.2.16"
   resolved "https://registry.yarnpkg.com/math-expression-evaluator/-/math-expression-evaluator-1.2.16.tgz#b357fa1ca9faefb8e48d10c14ef2bcb2d9f0a7c9"
+
+md5@^2.1.0:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/md5/-/md5-2.2.1.tgz#53ab38d5fe3c8891ba465329ea23fac0540126f9"
+  dependencies:
+    charenc "~0.0.1"
+    crypt "~0.0.1"
+    is-buffer "~1.1.1"
 
 "mdurl@~ 1.0.1":
   version "1.0.1"
@@ -4095,6 +4107,10 @@ pinkie@^2.0.0:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/pinkie/-/pinkie-2.0.4.tgz#72556b80cfa0d48a974e80e77248e80ed4f7f870"
 
+pixl-xml@^1.0.7:
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/pixl-xml/-/pixl-xml-1.0.10.tgz#aedc1a47d8b16b9a71d9dad9f51332163f7a70ee"
+
 pkg-dir@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/pkg-dir/-/pkg-dir-1.0.0.tgz#7a4b508a8d5bb2d629d447056ff4e9c9314cf3d4"
@@ -4344,16 +4360,7 @@ postcss-zindex@^2.0.1:
     postcss "^5.0.4"
     uniqs "^2.0.0"
 
-postcss@^5.0.10, postcss@^5.0.11, postcss@^5.0.12, postcss@^5.0.13, postcss@^5.0.14, postcss@^5.0.16, postcss@^5.0.2, postcss@^5.0.4, postcss@^5.0.5, postcss@^5.0.6, postcss@^5.0.8, postcss@^5.2.11:
-  version "5.2.12"
-  resolved "https://registry.yarnpkg.com/postcss/-/postcss-5.2.12.tgz#6a2b15e35dd65634441bb0961fa796904c7890e0"
-  dependencies:
-    chalk "^1.1.3"
-    js-base64 "^2.1.9"
-    source-map "^0.5.6"
-    supports-color "^3.2.3"
-
-postcss@^5.2.13:
+postcss@^5.0.10, postcss@^5.0.11, postcss@^5.0.12, postcss@^5.0.13, postcss@^5.0.14, postcss@^5.0.16, postcss@^5.0.2, postcss@^5.0.4, postcss@^5.0.5, postcss@^5.0.6, postcss@^5.0.8, postcss@^5.2.13:
   version "5.2.13"
   resolved "https://registry.yarnpkg.com/postcss/-/postcss-5.2.13.tgz#1be52a32cf2ef58c0d75f1aedb3beabcf257cef3"
   dependencies:
@@ -4809,7 +4816,7 @@ repeating@^2.0.0:
   dependencies:
     is-finite "^1.0.0"
 
-request@2, request@^2.61.0, request@^2.79.0:
+request@2, request@^2.61.0, request@^2.72.0, request@^2.79.0:
   version "2.79.0"
   resolved "https://registry.yarnpkg.com/request/-/request-2.79.0.tgz#4dfe5bf6be8b8cdc37fcf93e04b65577722710de"
   dependencies:
@@ -5160,6 +5167,10 @@ stream-shift@^1.0.0:
 strict-uri-encode@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/strict-uri-encode/-/strict-uri-encode-1.1.0.tgz#279b225df1d582b1f54e65addd4352e18faa0713"
+
+string-format-js@^0.1.8:
+  version "0.1.9"
+  resolved "https://registry.yarnpkg.com/string-format-js/-/string-format-js-0.1.9.tgz#0d7981b3a6f9e6b10533c8038cc8a7d285aada35"
 
 string-length@^1.0.0:
   version "1.0.1"
@@ -5563,6 +5574,10 @@ vm-browserify@0.0.4:
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-0.0.4.tgz#5d7ea45bbef9e4a6ff65f95438e0a87c357d5a73"
   dependencies:
     indexof "0.0.1"
+
+void-elements@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/void-elements/-/void-elements-1.0.0.tgz#6e5db1e35d591f5ac690ce1a340f793a817b2c2a"
 
 warning@^3.0.0:
   version "3.0.0"
