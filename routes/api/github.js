@@ -5,7 +5,7 @@ import GithubAPI from 'github';
 
 import { githubKeys as keys } from '../../app/data/github';
 
-const cached = {};
+let cached = {};
 
 const github = new GithubAPI();
 
@@ -27,13 +27,13 @@ export default (req, res) => {
     }), {});
     data.pushed_at = moment(data.pushed_at).format('MMMM DD, YYYY');
     data.updated_at = Date.now();
-    cached.github = data;
+    cached = data;
     res.send(JSON.stringify(data));
   };
 
-  if (cached.github && cached.github.updated_at &&
-    ((Date.now() - cached.github.updated_at) / 1000 < 60)) {
-    res.send(JSON.stringify(cached.github));
+  if (cached.updated_at &&
+    ((Date.now() - cached.updated_at) / 1000 < 60)) {
+    res.send(JSON.stringify(cached));
   } else {
     github.repos.get({
       owner: 'mldangelo',
@@ -44,7 +44,7 @@ export default (req, res) => {
         authenticateGH(send(payload)); // retry authentication -- if token expires
       } else if (err) {
         console.error('github-api-error', err);
-        res.send(JSON.stringify(cached.github)); // keep cached values
+        res.send(JSON.stringify(cached)); // keep cached values
       } else {
         send(payload);
       }
