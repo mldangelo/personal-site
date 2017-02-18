@@ -12,7 +12,7 @@ import webpackHotMiddleware from 'webpack-hot-middleware';
 import dotenv from 'dotenv';
 
 import config from './webpack/webpack.config';
-import apiRoutes from './routes/api';
+import routes from './routes/init';
 
 dotenv.config(); // TODO: Find a prettier way to do this.
 
@@ -27,7 +27,7 @@ app.use(bodyParser.json());
 app.use(morgan('combined'));
 app.use(express.static(path.join(__dirname, 'public')));
 
-apiRoutes(app);
+routes(app);
 
 if (env === 'development') { // eslint-disable-line eqeqeq
   const compiler = webpack(config);
