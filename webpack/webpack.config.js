@@ -5,7 +5,7 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 export default {
   devtool: 'eval-source-map',
   entry: [
-    'webpack-hot-middleware/client?path=http://localhost:7999/__webpack_hmr&reload=true',
+    'webpack-hot-middleware/client?path=//localhost:7999/__webpack_hmr&reload=true',
     path.join(__dirname, '../app/main.js'),
   ],
   output: {

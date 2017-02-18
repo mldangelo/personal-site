@@ -3,5 +3,7 @@
   "plugins": [
     "add-module-exports",
     "transform-class-properties",
+    "transform-react-inline-elements",
+    "transform-react-remove-prop-types",
   ]
 }
