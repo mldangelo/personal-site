@@ -23,7 +23,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // prevents logs from polluting test results
-if (!module.parent) app.use(morgan('combined')); 
+if (!module.parent) app.use(morgan('combined'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 routes(app);
