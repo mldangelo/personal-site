@@ -21,10 +21,6 @@ const data = [
     label: 'Stats',
   },
   {
-    link: '/photography',
-    label: 'Photography',
-  },
-  {
     link: '/contact',
     label: 'Contact',
   },

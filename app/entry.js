@@ -12,7 +12,6 @@ import About from './pages/About';
 import Projects from './pages/Projects';
 import Resume from './pages/Resume';
 import Stats from './pages/Stats';
-import Photography from './pages/Photography';
 import Contact from './pages/Contact';
 
 import Music from './pages/Music';
@@ -46,7 +45,6 @@ ReactDOM.render(
     </Route>
     <Route path="/" component={FullPage}>
       <Route path="/music" component={Music} />
-      <Route path="/photography" component={Photography} />
     </Route>
     <Route path="*" component={NotFound} status={404} />
   </Router>,
