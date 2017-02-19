@@ -75,4 +75,4 @@ Palo Alto, Mountain View, San Francisco, Seattle, and New York.
 - always finding inspiration.
 - enabling a brighter future.
 - doing better.
-- no one checking my commit history for early drafts of this branch. 
+- no one checking my commit history for early drafts of this file. 
