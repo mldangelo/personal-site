@@ -42,7 +42,7 @@ ReactDOM.render(
       <Route path="/stats" component={Stats} />
       <Route path="/contact" component={Contact} />
     </Route>
-    
+
     <Route path="/" component={props => (<Main fullPage>{props.children}</Main>)}>
       <Route path="/music" component={Music} />
     </Route>
