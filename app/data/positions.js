@@ -42,7 +42,7 @@ const positions = [
   }, {
     company: 'Planet',
     position: 'Missions Intern',
-    link: 'http://planet.com',
+    link: 'https://planet.com',
     daterange: 'June 2014 - January 2015',
     points: [
       'Built models to improve image quality, signal to noise ratio, and dynamic range.',
@@ -62,7 +62,7 @@ const positions = [
   }, {
     company: 'Facebook',
     position: 'Intern',
-    link: 'http://facebook.com',
+    link: 'https://facebook.com',
     daterange: 'June 2013 - September 2013',
     points: [
       'Developed software in python for automated testing of servers.',
@@ -80,10 +80,10 @@ const positions = [
     ],
   },
   {
-    company: 'University at Buffalo Nanosatellite Program',
+    company: 'UB Nanosatellite Program',
     position: 'Cofounder, Program Manager',
-    link: 'http://seds.org',
-    daterange: 'May 2011 – June 2012',
+    link: 'https://ubnl.space/',
+    daterange: 'October 2010 – June 2012',
     points: [
       'Coauthored grant to build a multispectral imaging satellite as part of the AFRL University Nanosatellite Program.',
       'Lead a team of 60 students through satellite development life cycle. Served as a technical expert, acquired intimate working knowledge of satellite subsystems.  Solicited funding through NASA, AFOSR, and several corporate sponsors.',
