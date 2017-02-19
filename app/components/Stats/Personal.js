@@ -21,10 +21,13 @@ class PersonalStats extends Component {
   tick() {
     const divisor = 1000 * 60 * 60 * 24 * 365.2421897; // ms in an average year
     const birthTime = new Date('1990-02-05T09:24:00');
-    const update = this.state.data;
-    update.age.value = ((Date.now() - birthTime) / divisor).toFixed(9);
     this.setState({
-      data: update,
+      data: Object.assign({}, this.state.data, {
+        age: {
+          label: 'Current age',
+          value: ((Date.now() - birthTime) / divisor).toFixed(9),
+        },
+      }),
     });
   }
 
