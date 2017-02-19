@@ -22,7 +22,8 @@ app.use(compress());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-if (!module.parent) app.use(morgan('combined'));
+// prevents logs from polluting test results
+if (!module.parent) app.use(morgan('combined')); 
 app.use(express.static(path.join(__dirname, 'public')));
 
 routes(app);
@@ -63,7 +64,6 @@ if (!module.parent) {
     }
     console.info(`Started in ${env === 'development' ? env : 'production'} mode on port ${port}.`);
   });
-} 
-
+}
 
 export default app;
