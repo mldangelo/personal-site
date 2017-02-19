@@ -1,29 +1,31 @@
 import React, { PropTypes } from 'react';
 import Helmet from 'react-helmet';
 
-import Header from './components/Template/Header';
-import Nav from './components/Template/Nav';
+import Header from '../components/Template/Header';
+import Nav from '../components/Template/Nav';
 
-const App = ({ children }) => (
+const Main = props => (
   <div id="wrapper">
     <Helmet titleTemplate="%s | Michael D'Angelo" defaultTitle="Michael D'Angelo" />
     <Header />
     <div id="main">
-      {children}
+      {props.children}
     </div>
-    <Nav />
+    {props.fullPage ? '' : <Nav />}
   </div>
 );
 
-App.propTypes = {
+Main.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
   ]),
+  fullPage: PropTypes.boolean,
 };
 
-App.defaultProps = {
+Main.defaultProps = {
   children: null,
+  fullPage: false,
 };
 
-export default App;
+export default Main;
