@@ -32,8 +32,9 @@ const data = [
     value: '0',
   }, {
     label: 'Number of linter warnings',
+    // TODO ammend this with a pre-commit hook
     // `npm run lint | grep problems | tail -1 | awk '{print $2}'`
-    value: '6', // TODO Update from travis / circle
+    value: '0',
   }, {
     label: 'Open github issues',
     key: 'open_issues_count',
@@ -45,22 +46,12 @@ const data = [
     value: moment().format('MMMM Do YYYY'),
     link: 'https://github.com/mldangelo/mldangelo/commits',
   },
+  { /* find . | grep ".js" | grep -vE ".min.js|node_modules|.git|.json" |
+    xargs -I file cat file | wc -l */
+    label: 'Lines of Javascript powering this website',
+    value: '1962',
+    link: 'https://github.com/mldangelo/mldangelo/graphs/contributors',
+  },
 ];
-
-/* // TODO Add these fields later
-{
- label: 'number of lines of code powering this website',
- value: '9762',
- link: 'https://github.com/mldangelo/mldangelo/graphs/contributors',
-},
-{
- label: 'languages used',
- value: '6',
-}, {
- label: 'number of contributors',
- value: '1',
- link: 'https://github.com/mldangelo/mldangelo/graphs/contributors',
-},
-*/
 
 export default data;

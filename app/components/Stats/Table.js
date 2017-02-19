@@ -17,7 +17,7 @@ class Table extends Component {
 
   render() {
     return (
-      <table style={{ width: '100%' }}>
+      <table>
         <tbody>
           {this.getRows()}
         </tbody>
@@ -29,7 +29,10 @@ class Table extends Component {
 Table.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.string.isRequired,
-    value: PropTypes.string.isRequired,
+    value: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+    ]).isRequired,
     link: PropTypes.string,
   })).isRequired,
 };

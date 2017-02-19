@@ -1,9 +1,9 @@
 import React, { PropTypes } from 'react';
 
 const Degree = props => (
-  <article>
+  <article className="degree-container">
     <header>
-      <p className="degree">{props.data.degree}</p>
+      <h4 className="degree">{props.data.degree}</h4>
       <p className="school"><a href={props.data.link}>{props.data.school}</a>, {props.data.year}</p>
     </header>
   </article>

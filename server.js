@@ -12,7 +12,7 @@ import webpackHotMiddleware from 'webpack-hot-middleware';
 import dotenv from 'dotenv';
 
 import config from './webpack/webpack.config';
-import apiRoutes from './routes/api';
+import routes from './routes/init';
 
 dotenv.config(); // TODO: Find a prettier way to do this.
 
@@ -27,9 +27,8 @@ app.use(bodyParser.json());
 app.use(morgan('combined'));
 app.use(express.static(path.join(__dirname, 'public')));
 
-apiRoutes(app);
+routes(app);
 
-// TODO(Michael) Rewrite linter rule for string compare
 if (env === 'development') { // eslint-disable-line eqeqeq
   const compiler = webpack(config);
   const middleware = webpackMiddleware(compiler, {
@@ -63,7 +62,7 @@ app.listen(port, '0.0.0.0', (err) => {
   if (err) {
     console.error('application-err', err);
   }
-  console.info(`Started in ${env === 'development' ? 'development' : 'production'} mode on port ${port}.`);
+  console.info(`Started in ${env === 'development' ? env : 'production'} mode on port ${port}.`);
 });
 
 export default app;

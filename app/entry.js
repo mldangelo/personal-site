@@ -7,20 +7,28 @@ import ReactGA from 'react-ga';
 import Main from './layouts/Main';
 import FullPage from './layouts/FullPage';
 
-import About from './components/About';
-import Projects from './components/Projects';
-import Resume from './components/Resume';
-import Stats from './components/Stats';
-import Photography from './components/Photography';
-import Contact from './components/Contact';
+import Index from './pages/Index';
+import About from './pages/About';
+import Projects from './pages/Projects';
+import Resume from './pages/Resume';
+import Stats from './pages/Stats';
+import Photography from './pages/Photography';
+import Contact from './pages/Contact';
 
-import NotFound from './components/NotFound';
+import Music from './pages/Music';
 
-ReactGA.initialize('UA-68649021-1');
+import NotFound from './pages/NotFound';
+
+if (process.env.NODE_ENV === 'production') {
+  ReactGA.initialize('UA-68649021-1');
+}
 
 const update = () => {
   window.scrollTo(0, 0);
-  ReactGA.pageview(window.location.pathname);
+  if (process.env.NODE_ENV === 'production') {
+    ReactGA.set({ page: window.location.pathname });
+    ReactGA.pageview(window.location.pathname);
+  }
 };
 
 // All of our CSS
@@ -29,16 +37,18 @@ require('../public/css/main.scss');
 ReactDOM.render(
   <Router onUpdate={update} history={browserHistory}>
     <Route path="/" component={Main}>
-      <IndexRoute component={About} />
+      <IndexRoute component={Index} />
+      <Route path="/about" component={About} />
       <Route path="/resume" component={Resume} />
       <Route path="/projects" component={Projects} />
       <Route path="/stats" component={Stats} />
       <Route path="/contact" component={Contact} />
     </Route>
     <Route path="/" component={FullPage}>
+      <Route path="/music" component={Music} />
       <Route path="/photography" component={Photography} />
-      <Route path="*" component={NotFound} status={404} />
     </Route>
+    <Route path="*" component={NotFound} status={404} />
   </Router>,
   document.getElementById('root'),
 );

@@ -11,7 +11,7 @@ class TableRow extends Component {
   render() {
     return (
       <tr>
-        <td>{this.props.label}</td>
+        <td width="70%">{this.props.label}</td>
         <td>{this.getValue()}</td>
       </tr>
     );
@@ -20,7 +20,10 @@ class TableRow extends Component {
 
 TableRow.propTypes = {
   label: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]).isRequired,
   link: PropTypes.string,
 };
 

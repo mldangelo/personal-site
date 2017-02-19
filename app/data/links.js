@@ -5,6 +5,10 @@ const data = [
     index: true,
   },
   {
+    link: '/about',
+    label: 'About',
+  },
+  {
     link: '/resume',
     label: 'Resume',
   },
