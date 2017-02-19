@@ -5,7 +5,6 @@ import ReactGA from 'react-ga';
 
 // Layouts
 import Main from './layouts/Main';
-import FullPage from './layouts/FullPage';
 
 import Index from './pages/Index';
 import About from './pages/About';
@@ -43,7 +42,8 @@ ReactDOM.render(
       <Route path="/stats" component={Stats} />
       <Route path="/contact" component={Contact} />
     </Route>
-    <Route path="/" component={FullPage}>
+    
+    <Route path="/" component={props => (<Main fullPage>{props.children}</Main>)}>
       <Route path="/music" component={Music} />
     </Route>
     <Route path="*" component={NotFound} status={404} />
