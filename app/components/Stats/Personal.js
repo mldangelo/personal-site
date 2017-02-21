@@ -33,7 +33,7 @@ class PersonalStats extends Component {
       <div>
         <h3>Some stats about me</h3>
         <Table
-          data={Object.values(this.state.data)}
+          data={Object.keys(this.state.data).map(key => this.state.data[key])}
         />
       </div>
     );
