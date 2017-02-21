@@ -18,7 +18,6 @@ before_install:
 - npm --version
 - gcc --version
 - g++ --version
-- npm install -g yarn --cache-min 999999999
 install:
 - yarn
 before_script:
