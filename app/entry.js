@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import ReactGA from 'react-ga';
 
-import App from './App';
-import FullPage from './FullPage';
+// Layouts
+import Main from './layouts/Main';
 
 import Index from './pages/Index';
 import About from './pages/About';
@@ -34,7 +34,7 @@ require('../public/css/main.scss');
 
 ReactDOM.render(
   <Router onUpdate={update} history={browserHistory}>
-    <Route path="/" component={App}>
+    <Route path="/" component={Main}>
       <IndexRoute component={Index} />
       <Route path="/about" component={About} />
       <Route path="/resume" component={Resume} />
@@ -42,7 +42,8 @@ ReactDOM.render(
       <Route path="/stats" component={Stats} />
       <Route path="/contact" component={Contact} />
     </Route>
-    <Route path="/" component={FullPage}>
+
+    <Route path="/" component={props => (<Main fullPage>{props.children}</Main>)}>
       <Route path="/music" component={Music} />
     </Route>
     <Route path="*" component={NotFound} status={404} />

@@ -6,7 +6,7 @@ import StatsPlugin from 'stats-webpack-plugin';
 
 export default {
   entry: [
-    path.join(__dirname, '../app/main.js'),
+    path.join(__dirname, '../app/entry.js'),
   ],
   output: {
     path: path.join(__dirname, '../tmp/'),
