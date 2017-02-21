@@ -1,4 +1,4 @@
-sudo: required
+sudo: false
 language: node_js
 
 cache:
@@ -32,10 +32,12 @@ before_install:
 - npm --version
 - gcc --version
 - g++ --version
+
 addons:
   apt:
     packages:
       - xvfb
+
 install:
   - export DISPLAY=':99.0'
   - Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
@@ -43,7 +45,7 @@ install:
 
 before_script:
 - npm run lint
-- sleep 15
+- sleep 5
 
 script:
 - npm run build-dev
