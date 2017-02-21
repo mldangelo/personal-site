@@ -2,9 +2,6 @@ sudo: required
 language: node_js
 
 cache:
-  directories:
-    - $HOME/.npm
-    - $HOME/.yarn-cache
   yarn: true
 
 env:
