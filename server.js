@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import path from 'path';
 
 import express from 'express';
@@ -9,12 +10,8 @@ import webpack from 'webpack';
 import webpackMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 
-import dotenv from 'dotenv';
-
 import config from './webpack/webpack.config';
 import routes from './routes/init';
-
-dotenv.config(); // TODO: Find a prettier way to do this.
 
 const port = process.env.PORT || 7999;
 const env = process.env.NODE_ENV || 'development';
@@ -24,7 +21,9 @@ const app = express();
 app.use(compress());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(morgan('combined'));
+
+// prevents logs from polluting test results
+if (!module.parent) app.use(morgan('combined'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 routes(app);
@@ -58,11 +57,13 @@ if (env === 'development') { // eslint-disable-line eqeqeq
   });
 }
 
-app.listen(port, '0.0.0.0', (err) => {
-  if (err) {
-    console.error('application-err', err);
-  }
-  console.info(`Started in ${env === 'development' ? env : 'production'} mode on port ${port}.`);
-});
+if (!module.parent) {
+  app.listen(port, '0.0.0.0', (err) => {
+    if (err) {
+      console.error('application-err', err);
+    }
+    console.info(`Started in ${env === 'development' ? env : 'production'} mode on port ${port}.`);
+  });
+}
 
 export default app;
