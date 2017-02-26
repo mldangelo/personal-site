@@ -13,6 +13,11 @@ import Resume from './pages/Resume';
 import Stats from './pages/Stats';
 import Contact from './pages/Contact';
 
+import auth from './components/auth';
+
+import Login from './pages/Login';
+import Logout from './pages/Logout';
+
 import Music from './pages/Music';
 
 import NotFound from './pages/NotFound';
@@ -29,6 +34,15 @@ const update = () => {
   }
 };
 
+const requireAuth = (nextState, replace) => {
+  if (!auth.loggedIn()) {
+    replace({
+      pathname: '/login',
+      state: { nextPathname: nextState.location.pathname },
+    });
+  }
+};
+
 // All of our CSS
 require('../public/css/main.scss');
 
@@ -37,13 +51,15 @@ ReactDOM.render(
     <Route path="/" component={Main}>
       <IndexRoute component={Index} />
       <Route path="/about" component={About} />
-      <Route path="/resume" component={Resume} />
+      <Route path="/resume" component={Resume} onEnter={requireAuth} />
       <Route path="/projects" component={Projects} />
       <Route path="/stats" component={Stats} />
       <Route path="/contact" component={Contact} />
     </Route>
 
     <Route path="/" component={props => (<Main fullPage>{props.children}</Main>)}>
+      <Route path="/login" component={Login} />
+      <Route path="/logout" component={Logout} />
       <Route path="/music" component={Music} />
     </Route>
     <Route path="*" component={NotFound} status={404} />

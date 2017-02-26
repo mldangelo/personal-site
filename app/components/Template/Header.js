@@ -3,6 +3,7 @@ import { Link, IndexLink } from 'react-router';
 
 import Hamburger from './Hamburger';
 import links from '../../data/links';
+import auth from '../auth';
 
 const Header = () => (
   <header id="header">
@@ -18,6 +19,7 @@ const Header = () => (
             <Link to={l.link}>{l.label}</Link>
           </li>
         ))}
+        <li>{auth.loggedIn() ? <Link to="/logout">Logout</Link> : <Link to="/login">Login</Link>}</li>
       </ul>
     </nav>
     <Hamburger />
