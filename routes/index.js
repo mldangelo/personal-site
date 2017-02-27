@@ -14,26 +14,32 @@ passport.use(new Strategy({
   scope: ['email'],
 },
   (accessToken, refreshToken, profile, cb) => {
-    // In this example, the user's Facebook profile is supplied as the user
-    // record.  In a production-quality application, the Facebook profile should
-    // be associated with a user record in the application's database, which
-    // allows for account linking and authentication with other identity
-    // providers.
-    console.log('serialize', profile._json);
-
-    models.user.create(Object.assign({}, profile._json)).then(() => {
-      console.log('this works');
+    models.user.findOrCreate({
+      where: Object.assign({ token : accessToken }, profile._json),
+    }).then((user) => {
+      console.log('user.values', user.values);
       cb(null, profile);
+    }).catch((err) => {
+       console.log('Error occured', err);
     });
   },
 ));
 
 passport.serializeUser((user, cb) => {
-  cb(null, user);
+  cb(null, user.id);
 });
 
-passport.deserializeUser((obj, cb) => {
-  cb(null, obj);
+passport.deserializeUser((id, cb) => {
+  models.user.findOne({
+    where: {
+      id: id
+    }
+  }).then((user) => {
+    console.log('user1', user);
+    cb(null, user);
+  }).catch((err) => {
+     console.log('Error occured', err);
+  });
 });
 
 
@@ -41,14 +47,18 @@ const routes = (app) => {
   app.use(passport.initialize());
   app.use(passport.session());
 
-  app.get('/login/google',
-  passport.authenticate('google', { scope: ['email'] }));
+  app.get('/login/google', passport.authenticate('google'));
 
   app.get('/login/google/return', passport.authenticate('google', {
     failureRedirect: '/login' },
-  ), ({ user }, res) => {
-    console.log('req.user', user);
+  ), (req, res) => {
+    console.log('req.user', req.user);
+    res.redirect('/');
+  });
 
+  // NOTE should also delete token
+  app.get('/logout', (req, res) => {
+    if (req.user) req.logout();
     res.redirect('/');
   });
 

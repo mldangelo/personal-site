@@ -29,6 +29,9 @@ export default (sequelize, { STRING, BOOLEAN, INTEGER }) => sequelize.define('us
   logins: {
     type: INTEGER,
   },
+  hd: {
+    type: STRING,
+  }
 }, {
   freezeTableName: true, // Model tableName will be the same as the model name
 });
