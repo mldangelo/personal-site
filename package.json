@@ -10,7 +10,7 @@
     "dev": "nodemon server.js --ignore app/ --ignore tests/ --exec babel-node",
     "forever-start": "forever start --minUptime 1000ms --spinSleepTime 1000ms -a -l forever.log -o out.log -e err.log -c 'nodemon server.js --exitcrash --exec babel-node' server.js",
     "forever-stop": "forever stop server.js",
-    "lint": "./node_modules/.bin/eslint app routes server.js test webpack",
+    "lint": "./node_modules/.bin/eslint app models routes server.js test webpack",
     "start": "./node_modules/.bin/babel-node server",
     "test": "./node_modules/mocha/bin/mocha --compilers js:babel-core/register ./test/test.js"
   },
@@ -57,6 +57,9 @@
     "react-router": "^3.0.2",
     "rimraf": "^2.6.0",
     "sass-loader": "^6.0.1",
+    "sequelize": "^3.30.2",
+    "sequelize-cli": "^2.5.1",
+    "sqlite3": "^3.1.8",
     "stats-webpack-plugin": "^0.4.3",
     "strip-loader": "^0.1.2",
     "style-loader": "^0.13.1",

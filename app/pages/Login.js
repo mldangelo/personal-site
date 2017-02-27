@@ -40,6 +40,13 @@ class Login extends Component {
           </div>
         </header>
         <div>
+
+          <p> You&apos;re about to learn a lot about me. Let me learn a little about you. I only ask for your email address and I promise not to spam you.</p>
+
+          <h3> Login with Google</h3>
+          <ul className="icons">
+            <li><a href="/login/google" className="fa-google"><span className="label">Google</span></a></li>
+          </ul>
           <form onSubmit={this.handleSubmit}>
             <label htmlFor="email"><input ref={(input) => { this.email = input; }} placeholder="email" /></label>
             <label htmlFor="password"><input ref={(input) => { this.pass = input; }} placeholder="password" /></label> (hint: password)<br />

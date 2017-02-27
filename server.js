@@ -26,6 +26,15 @@ app.use(bodyParser.json());
 if (!module.parent) app.use(morgan('combined'));
 app.use(express.static(path.join(__dirname, 'public')));
 
+var models = require("./models");
+models.sequelize.sync().then(function () {
+  app.listen(port);
+  app.on('error', (error) => { console.error('error', error);});
+  app.on('listening', (info) => { console.info('info', info);});
+});
+
+
+
 routes(app);
 
 if (env === 'development') { // eslint-disable-line eqeqeq

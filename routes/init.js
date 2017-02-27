@@ -1,9 +1,17 @@
 /* eslint-disable global-require */
 import 'dotenv/config';
-
+import path from 'path';
+import Sequelize from 'sequelize';
+var models  = require('../models');
+console.log(Object.keys(models));
 const passport = require('passport');
 const Strategy = require('passport-google-oauth20').Strategy;
 const port = process.env.PORT || 7999;
+
+const sequelize = new Sequelize('db', null, null, {
+  dialect: 'sqlite',
+  storage: path.join(__dirname, '../', 'db.sqlite'),
+});
 
 passport.use(new Strategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
@@ -12,13 +20,20 @@ passport.use(new Strategy({
   userProfileURL: 'https://www.googleapis.com/oauth2/v3/userinfo',
   scope: ['email'],
 },
-  (accessToken, refreshToken, profile, cb) =>
+  (accessToken, refreshToken, profile, cb) => {
     // In this example, the user's Facebook profile is supplied as the user
     // record.  In a production-quality application, the Facebook profile should
     // be associated with a user record in the application's database, which
     // allows for account linking and authentication with other identity
     // providers.
-     cb(null, profile)));
+    console.log('serialize', profile._json);
+    
+    models.user.create(Object.assign({}, profile._json)).then(() => {
+      console.log('this works')
+      cb(null, profile);
+    });
+  },
+));
 
 passport.serializeUser((user, cb) => {
   cb(null, user);
@@ -39,7 +54,8 @@ const routes = (app) => {
   app.get('/login/google/return', passport.authenticate('google', {
     failureRedirect: '/login' },
   ), (req, res) => {
-    console.log(req);
+    console.log('req.user', req.user);
+    
     res.redirect('/');
   });
 
