@@ -11,7 +11,8 @@ import webpackMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 
 import config from './webpack/webpack.config';
-import routes from './routes/init';
+import routes from './routes';
+import models from './models';
 
 const port = process.env.PORT || 7999;
 const env = process.env.NODE_ENV || 'development';
@@ -26,13 +27,11 @@ app.use(bodyParser.json());
 if (!module.parent) app.use(morgan('combined'));
 app.use(express.static(path.join(__dirname, 'public')));
 
-var models = require("./models");
-models.sequelize.sync().then(function () {
+models.sequelize.sync().then(() => {
   app.listen(port);
-  app.on('error', (error) => { console.error('error', error);});
-  app.on('listening', (info) => { console.info('info', info);});
+  app.on('error', (error) => { console.error('error', error); });
+  app.on('listening', (info) => { console.info('info', info); });
 });
-
 
 
 routes(app);

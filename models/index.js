@@ -3,8 +3,6 @@ import path from 'path';
 import Sequelize from 'sequelize';
 import 'dotenv/config';
 
-const env = process.env.NODE_ENV || 'development';
-
 const sequelize = new Sequelize('db', null, null, {
   dialect: 'sqlite',
   storage: path.join(__dirname, '../', 'db.sqlite'),

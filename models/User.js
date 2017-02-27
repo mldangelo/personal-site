@@ -1,33 +1,33 @@
-module.exports = (sequelize, DataTypes) => sequelize.define('user', {
+export default (sequelize, { STRING, BOOLEAN, INTEGER }) => sequelize.define('user', {
   sub: {
-    type: DataTypes.STRING,
+    type: STRING,
   },
   name: {
-    type: DataTypes.STRING,
+    type: STRING,
   },
   given_name: {
-    type: DataTypes.STRING,
+    type: STRING,
   },
   family_name: {
-    type: DataTypes.STRING,
+    type: STRING,
   },
   profile: {
-    type: DataTypes.STRING,
+    type: STRING,
   },
   picture: {
-    type: DataTypes.STRING,
+    type: STRING,
   },
   email: {
-    type: DataTypes.STRING,
+    type: STRING,
   },
   email_verified: {
-    type: DataTypes.BOOLEAN,
+    type: BOOLEAN,
   },
   gender: {
-    type: DataTypes.STRING,
+    type: STRING,
   },
   logins: {
-    type: DataTypes.INTEGER,
+    type: INTEGER,
   },
 }, {
   freezeTableName: true, // Model tableName will be the same as the model name

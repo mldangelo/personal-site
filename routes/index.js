@@ -1,17 +1,10 @@
 /* eslint-disable global-require */
 import 'dotenv/config';
-import path from 'path';
-import Sequelize from 'sequelize';
-var models  = require('../models');
-console.log(Object.keys(models));
-const passport = require('passport');
-const Strategy = require('passport-google-oauth20').Strategy;
-const port = process.env.PORT || 7999;
+import passport from 'passport';
+import { Strategy } from 'passport-google-oauth20';
+import models from '../models';
 
-const sequelize = new Sequelize('db', null, null, {
-  dialect: 'sqlite',
-  storage: path.join(__dirname, '../', 'db.sqlite'),
-});
+const port = process.env.PORT || 7999;
 
 passport.use(new Strategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
@@ -27,9 +20,9 @@ passport.use(new Strategy({
     // allows for account linking and authentication with other identity
     // providers.
     console.log('serialize', profile._json);
-    
+
     models.user.create(Object.assign({}, profile._json)).then(() => {
-      console.log('this works')
+      console.log('this works');
       cb(null, profile);
     });
   },
@@ -53,9 +46,9 @@ const routes = (app) => {
 
   app.get('/login/google/return', passport.authenticate('google', {
     failureRedirect: '/login' },
-  ), (req, res) => {
-    console.log('req.user', req.user);
-    
+  ), ({ user }, res) => {
+    console.log('req.user', user);
+
     res.redirect('/');
   });
 
