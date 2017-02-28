@@ -5,6 +5,8 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import compress from 'compression';
 import morgan from 'morgan';
+import session from 'express-session';
+import store from 'connect-sqlite3';
 
 import webpack from 'webpack';
 import webpackMiddleware from 'webpack-dev-middleware';
@@ -19,9 +21,19 @@ const env = process.env.NODE_ENV || 'development';
 
 const app = express();
 
+const SQLiteStore = store(session);
+
 app.use(compress());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+app.use(session({
+  resave: false,
+  saveUninitialized: false,
+  store: new SQLiteStore({ dir: './db' }),
+  secret: 'testestestestestestest',
+  cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 } // 1 week 
+}));
 
 // prevents logs from polluting test results
 if (!module.parent) app.use(morgan('combined'));
