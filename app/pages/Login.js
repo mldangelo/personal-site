@@ -2,6 +2,19 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router';
 import auth from '../components/auth';
 
+const success = (response) => {
+  console.log(response);
+};
+
+const error = (response) => {
+  console.error(response);
+};
+
+const loading = () => {
+  console.log('loading');
+};
+
+
 class Login extends Component {
 
   constructor(props) {
@@ -32,7 +45,7 @@ class Login extends Component {
 
   render() {
     return (
-      <article className="post" id="login">
+      <article className="post" id="login" style={{width: '50%'}}>
         <header>
           <div className="title">
             <h2><Link to="/">Login</Link></h2>
@@ -41,20 +54,12 @@ class Login extends Component {
         </header>
         <div>
 
-          <p> You&apos;re about to learn a lot about me. Let me learn a little about you. I only ask for your email address and I promise not to spam you.</p>
+          <p> You&apos;re about to learn a lot about me. Let me learn a little about you. I only ask for your email address and I promise not to spam you. You can login with your google account below.</p>
 
           <h3> Login with Google</h3>
           <ul className="icons">
             <li><a href="/login/google" className="fa-google"><span className="label">Google</span></a></li>
           </ul>
-          <form onSubmit={this.handleSubmit}>
-            <label htmlFor="email"><input ref={(input) => { this.email = input; }} placeholder="email" /></label>
-            <label htmlFor="password"><input ref={(input) => { this.pass = input; }} placeholder="password" /></label> (hint: password)<br />
-            <button type="submit">login</button>
-            {this.state.error && (
-              <p>Bad login information</p>
-            )}
-          </form>
         </div>
       </article>
     );

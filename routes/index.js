@@ -15,7 +15,7 @@ passport.use(new Strategy({
 },
   (accessToken, refreshToken, profile, cb) => {
     models.user.findOrCreate({
-      where: Object.assign({ token : accessToken }, profile._json),
+      where: { email: profile._json.email },
     }).then((user) => {
       console.log('user.values', user.values);
       cb(null, profile);
@@ -25,20 +25,21 @@ passport.use(new Strategy({
   },
 ));
 
-passport.serializeUser((user, cb) => {
-  cb(null, user.id);
+passport.serializeUser((user, done) => {
+  done(null, user.id);
 });
 
-passport.deserializeUser((id, cb) => {
+passport.deserializeUser((id, done) => {
   models.user.findOne({
     where: {
       id: id
     }
-  }).then((user) => {
-    console.log('user1', user);
-    cb(null, user);
-  }).catch((err) => {
+  }).success((user) => {
+     console.log('user1', user);
+     done(null, user);
+  }).error((err) => {
      console.log('Error occured', err);
+     done(err, null);
   });
 });
 

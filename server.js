@@ -7,6 +7,7 @@ import compress from 'compression';
 import morgan from 'morgan';
 import session from 'express-session';
 import store from 'connect-sqlite3';
+import cookieParser from 'cookie-parser';
 
 import webpack from 'webpack';
 import webpackMiddleware from 'webpack-dev-middleware';
@@ -14,7 +15,6 @@ import webpackHotMiddleware from 'webpack-hot-middleware';
 
 import config from './webpack/webpack.config';
 import routes from './routes';
-import models from './models';
 
 const port = process.env.PORT || 7999;
 const env = process.env.NODE_ENV || 'development';
@@ -26,6 +26,7 @@ const SQLiteStore = store(session);
 app.use(compress());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 app.use(session({
   resave: false,
@@ -38,13 +39,6 @@ app.use(session({
 // prevents logs from polluting test results
 if (!module.parent) app.use(morgan('combined'));
 app.use(express.static(path.join(__dirname, 'public')));
-
-models.sequelize.sync().then(() => {
-  app.listen(port);
-  app.on('error', (error) => { console.error('error', error); });
-  app.on('listening', (info) => { console.info('info', info); });
-});
-
 
 routes(app);
 
