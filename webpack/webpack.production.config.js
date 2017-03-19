@@ -38,9 +38,6 @@ export default {
       source: false,
       modules: false,
     }),
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production'),
-    }),
     new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
   ],
   module: {
