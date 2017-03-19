@@ -42,11 +42,11 @@ export default (req, res) => {
       if (err && err.status === 'Unauthorized') {
         console.error('github-api-unauthorized-error', err);
         authenticateGH(send(payload)); // retry authentication -- if token expires
-      } else if (err) {
+      } else if (err || (payload && !payload.data)) {
         console.error('github-api-error', err);
         res.send(JSON.stringify(cached)); // keep cached values
       } else {
-        send(payload);
+        send(payload.data);
       }
     });
   }

@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import path from 'path';
 import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
@@ -36,9 +37,6 @@ export default {
     new StatsPlugin('webpack.stats.json', {
       source: false,
       modules: false,
-    }),
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
     }),
     new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
   ],
