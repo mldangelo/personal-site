@@ -19,6 +19,7 @@ const Header = () => (
             <Link to={l.link}>{l.label}</Link>
           </li>
         ))}
+        {/*         {auth.loggedIn() ? <li><Link to="/logout">Logout</Link></li> : null} */}
         <li>{auth.loggedIn() ? <Link to="/logout">Logout</Link> : <Link to="/login">Login</Link>}</li>
       </ul>
     </nav>

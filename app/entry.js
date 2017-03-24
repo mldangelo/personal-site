@@ -6,21 +6,21 @@ import ReactGA from 'react-ga';
 // Layouts
 import Main from './layouts/Main';
 
-import Index from './pages/Index';
-import About from './pages/About';
-import Projects from './pages/Projects';
-import Resume from './pages/Resume';
-import Stats from './pages/Stats';
-import Contact from './pages/Contact';
+import Index from './views/Index';
+import About from './views/About';
+import Projects from './views/Projects';
+import Resume from './views/Resume';
+import Stats from './views/Stats';
+import Contact from './views/Contact';
 
 import auth from './components/auth';
 
-import Login from './pages/Login';
-import Logout from './pages/Logout';
+import Login from './views/Login';
+import Logout from './views/Logout';
 
-import Music from './pages/Music';
+import Music from './views/Music';
 
-import NotFound from './pages/NotFound';
+import NotFound from './views/NotFound';
 
 if (process.env.NODE_ENV === 'production') {
   ReactGA.initialize('UA-68649021-1');
