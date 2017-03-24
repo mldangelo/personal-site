@@ -12,7 +12,7 @@ if (process.env.NODE_ENV === 'production') {
 
 class Main extends Component {
 
-  componentWillMount(){
+  componentWillMount() {
     window.scrollTo(0, 0);
     if (process.env.NODE_ENV === 'production') {
       ReactGA.set({ page: window.location.pathname });
@@ -22,14 +22,14 @@ class Main extends Component {
 
   render() {
     return (
-    <div id="wrapper">
-      <Helmet titleTemplate="%s | Michael D'Angelo" defaultTitle="Michael D'Angelo" />
-      <Header />
-      <div id="main">
-        {this.props.children}
-      </div>
-      {this.props.fullPage ? null : <Nav />}
-    </div>);
+      <div id="wrapper">
+        <Helmet titleTemplate="%s | Michael D'Angelo" defaultTitle="Michael D'Angelo" />
+        <Header />
+        <div id="main">
+          {this.props.children}
+        </div>
+        {this.props.fullPage ? null : <Nav />}
+      </div>);
   }
 
 }

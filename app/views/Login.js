@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router';
+import { Link, withRouter } from 'react-router-dom';
 import auth from '../components/auth';
+import Main from '../layouts/Main';
 
 const success = (response) => {
   console.log(response);
@@ -45,7 +46,8 @@ class Login extends Component {
 
   render() {
     return (
-      <article className="post" id="login" style={{width: '50%'}}>
+      <Main fullPage>
+      <article className="post" id="login">
         <header>
           <div className="title">
             <h2><Link to="/">Login</Link></h2>
@@ -62,6 +64,7 @@ class Login extends Component {
           </ul>
         </div>
       </article>
+      </Main>
     );
   }
 

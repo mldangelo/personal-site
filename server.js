@@ -17,8 +17,8 @@ import routes from './routes';
 const port = process.env.PORT || 7999;
 const env = process.env.NODE_ENV || 'development';
 
-var passport = require('passport');
-var session = require('express-session');
+const passport = require('passport');
+const session = require('express-session');
 
 
 const app = express();
@@ -31,13 +31,12 @@ app.use(cookieParser());
 app.use(session({
   secret: 'keyboard cat',
   resave: true,
-  saveUninitialized: true
+  saveUninitialized: true,
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/mldangelo');
-
 
 
 // prevents logs from polluting test results

@@ -11,16 +11,16 @@ import Site from '../components/Stats/Site';
 
 const Stats = () => (
   <Main>
-  <article className="post" id="stats">
-    <Helmet title="Stats" />
-    <header>
-      <div className="title">
-        <h2><Link to="/stats">Stats</Link></h2>
-      </div>
-    </header>
-    <Personal />
-    <Site />
-  </article>
+    <article className="post" id="stats">
+      <Helmet title="Stats" />
+      <header>
+        <div className="title">
+          <h2><Link to="/stats">Stats</Link></h2>
+        </div>
+      </header>
+      <Personal />
+      <Site />
+    </article>
   </Main>
 );
 

@@ -29,34 +29,34 @@ class Music extends Component {
   render() {
     return (
       <Main fullPage>
-      <article className="post" id="music">
-        <Helmet title="Music" />
-        <header>
-          <div className="title">
-            <h2><Link to="/music">Some bands that I like</Link></h2>
-            <p>Bands that I&apos;ve been listening to over the past year</p>
-          </div>
-        </header>
-        <div>
-          <section id="band-tile">
-            {this.state.data.map(image => (
-              <div key={image.name}>
-                <a href={image.link}>
-                  <img
-                    src={image.image}
-                    alt={String(image.name)}
-                    width={'100px'}
-                  />
-                  <h4>
-                    {String(image.name)}
-                  </h4>
-                </a>
-              </div>),
+        <article className="post" id="music">
+          <Helmet title="Music" />
+          <header>
+            <div className="title">
+              <h2><Link to="/music">Some bands that I like</Link></h2>
+              <p>Bands that I&apos;ve been listening to over the past year</p>
+            </div>
+          </header>
+          <div>
+            <section id="band-tile">
+              {this.state.data.map(image => (
+                <div key={image.name}>
+                  <a href={image.link}>
+                    <img
+                      src={image.image}
+                      alt={String(image.name)}
+                      width={'100px'}
+                    />
+                    <h4>
+                      {String(image.name)}
+                    </h4>
+                  </a>
+                </div>),
              )
             }
-          </section>
-        </div>
-      </article>
+            </section>
+          </div>
+        </article>
       </Main>
     );
   }

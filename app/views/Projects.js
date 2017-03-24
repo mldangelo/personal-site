@@ -20,16 +20,16 @@ const getRows = () => data.map(project => (
 
 const Projects = () => (
   <Main>
-  <article className="post" id="projects">
-    <Helmet title="Projects" />
-    <header>
-      <div className="title">
-        <h2><Link to="/projects">Projects</Link></h2>
-        <p>A selection of projects that I&apos;m not too ashamed of</p>
-      </div>
-    </header>
-    {getRows()}
-  </article>
+    <article className="post" id="projects">
+      <Helmet title="Projects" />
+      <header>
+        <div className="title">
+          <h2><Link to="/projects">Projects</Link></h2>
+          <p>A selection of projects that I&apos;m not too ashamed of</p>
+        </div>
+      </header>
+      {getRows()}
+    </article>
   </Main>
 );
 
