@@ -3,8 +3,6 @@ import React, { Component, PropTypes } from 'react';
 import CategoryButton from './Skills/CategoryButton';
 import SkillBar from './Skills/SkillBar';
 
-// import { skills, categories } from '../../data/skills';
-
 class Skills extends Component {
 
   constructor(props) {

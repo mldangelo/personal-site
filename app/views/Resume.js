@@ -62,7 +62,7 @@ class Resume extends Component {
           <Education data={this.state.data.degrees}/>
           <Experience data={this.state.data.positions}/>
           <Skills skills={this.state.data.skills} categories={this.state.data.categories}/>
-          <Courses />
+          <Courses data={this.state.data.courses}/>
           <References />
 
         </article>
