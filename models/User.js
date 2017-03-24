@@ -1,37 +1,16 @@
-export default (sequelize, { STRING, BOOLEAN, INTEGER }) => sequelize.define('user', {
-  sub: {
-    type: STRING,
-  },
-  name: {
-    type: STRING,
-  },
-  given_name: {
-    type: STRING,
-  },
-  family_name: {
-    type: STRING,
-  },
-  profile: {
-    type: STRING,
-  },
-  picture: {
-    type: STRING,
-  },
-  email: {
-    type: STRING,
-  },
-  email_verified: {
-    type: BOOLEAN,
-  },
-  gender: {
-    type: STRING,
-  },
-  logins: {
-    type: INTEGER,
-  },
-  hd: {
-    type: STRING,
-  }
-}, {
-  freezeTableName: true, // Model tableName will be the same as the model name
+import mongoose from 'mongoose';
+const Schema = mongoose.Schema;
+
+const User = new Schema({
+    name: String,
+    given_name: String,
+    family_name: String,
+    profile: String,
+    picture: String,
+    email: String,
+    email_verified: Boolean,
+    gender: String,
 });
+
+
+export default mongoose.model('users', User);

@@ -5,8 +5,6 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import compress from 'compression';
 import morgan from 'morgan';
-import session from 'express-session';
-import store from 'connect-sqlite3';
 import cookieParser from 'cookie-parser';
 
 import webpack from 'webpack';
@@ -19,9 +17,11 @@ import routes from './routes';
 const port = process.env.PORT || 7999;
 const env = process.env.NODE_ENV || 'development';
 
-const app = express();
+var passport = require('passport');
+var session = require('express-session');
 
-const SQLiteStore = store(session);
+
+const app = express();
 
 app.use(compress());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -29,12 +29,16 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 app.use(session({
-  resave: false,
-  saveUninitialized: false,
-  store: new SQLiteStore({ dir: './db' }),
-  secret: 'testestestestestestest',
-  cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 } // 1 week 
+  secret: 'keyboard cat',
+  resave: true,
+  saveUninitialized: true
 }));
+app.use(passport.initialize());
+app.use(passport.session());
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/mldangelo');
+
+
 
 // prevents logs from polluting test results
 if (!module.parent) app.use(morgan('combined'));
