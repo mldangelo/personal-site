@@ -45,12 +45,12 @@ passport.deserializeUser((id, done) => {
 
 
 const routes = (app) => {
+
   app.get('/login/google', passport.authenticate('google'));
 
   app.get('/login/google/return', passport.authenticate('google', {
     failureRedirect: '/login',
   }), (req, res) => {
-    console.log('req.user', req.user);
     res.redirect('/resume'); // the only protected page. this works for now
   });
 
@@ -62,8 +62,8 @@ const routes = (app) => {
   app.get('/api/github', require('./api/github'));
   app.get('/api/lastfm', require('./api/lastfm'));
 
-  app.get('/api/resume', require('./api/resume'));
-  app.get('/api/resume2', requireUserAPI, require('./api/resume'));
+  app.get('/api/resume', requireUserAPI, require('./api/resume'));
+
 };
 
 export default routes;
