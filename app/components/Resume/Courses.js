@@ -1,8 +1,8 @@
-import React, {PropTypes} from 'react';
+import React, { PropTypes } from 'react';
 
 import Course from './Courses/Course';
 
-const getRows = (courses) => courses.sort((a, b) => {
+const getRows = courses => courses.sort((a, b) => {
   let ret = 0;
   if (a.university > b.university) ret = -1;
   else if (a.unversity < b.university) ret = 1;
@@ -17,7 +17,7 @@ const getRows = (courses) => courses.sort((a, b) => {
   />
 ));
 
-const Courses = (props) => (
+const Courses = props => (
   <div className="courses">
     <div className="link-to" id="courses" />
     <div className="title">

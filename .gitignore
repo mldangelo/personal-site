@@ -1,6 +1,3 @@
-# Database
-db.sqlite 
-
 # Logs
 logs
 *.log

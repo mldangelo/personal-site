@@ -2,14 +2,14 @@ import React, { PropTypes } from 'react';
 
 import Degree from './Education/Degree';
 
-const getRows = (degrees) => degrees.map(degree => (
+const getRows = degrees => degrees.map(degree => (
   <Degree
     data={degree}
     key={degree.school}
   />
 ));
 
-const Education = (props) => (
+const Education = props => (
   <div className="education">
     <div className="link-to" id="education" />
     <div className="title">

@@ -26,17 +26,21 @@ import NotFound from './views/NotFound';
 require('../public/css/main.scss');
 
 const PrivateRoute = ({ component, ...rest }) => (
-  <Route {...rest} render={props => (
+  <Route
+    {...rest} render={props => (
     window.id ? (
       React.createElement(component, props)
     ) : (
-      <Redirect to={{
-        pathname: '/login',
-        state: { from: props.location }
-      }}/>
+      <Redirect
+        to={{
+          pathname: '/login',
+          state: { from: props.location },
+        }}
+      />
     )
-  )}/>
-)
+  )}
+  />
+);
 
 ReactDOM.render(
   <Router>

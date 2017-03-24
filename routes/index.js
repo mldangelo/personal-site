@@ -64,7 +64,6 @@ const routes = (app) => {
 
   app.get('/api/resume', require('./api/resume'));
   app.get('/api/resume2', requireUserAPI, require('./api/resume'));
-
 };
 
 export default routes;

@@ -12,7 +12,6 @@ import Courses from '../components/Resume/Courses';
 import References from '../components/Resume/References';
 
 
-
 const sections = [
   'Education',
   'Experience',
@@ -20,7 +19,6 @@ const sections = [
   'Courses',
   'References',
 ];
-
 
 
 class Resume extends Component {
@@ -59,10 +57,10 @@ class Resume extends Component {
 
             </div>
           </header>
-          <Education data={this.state.data.degrees}/>
-          <Experience data={this.state.data.positions}/>
-          <Skills skills={this.state.data.skills} categories={this.state.data.categories}/>
-          <Courses data={this.state.data.courses}/>
+          <Education data={this.state.data.degrees} />
+          <Experience data={this.state.data.positions} />
+          <Skills skills={this.state.data.skills} categories={this.state.data.categories} />
+          <Courses data={this.state.data.courses} />
           <References />
 
         </article>

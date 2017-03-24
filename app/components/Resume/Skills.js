@@ -27,7 +27,7 @@ class Skills extends Component {
       skills: nextProps.skills.map(skill =>
         Object.assign(skill, { category: skill.category.sort() }),
       ),
-    })
+    });
   }
 
   getRows() {

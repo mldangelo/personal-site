@@ -2,14 +2,14 @@ import React, { PropTypes } from 'react';
 
 import Job from './Experience/Job';
 
-const getRows = (positions) => positions.map(job => (
+const getRows = positions => positions.map(job => (
   <Job
     data={job}
     key={job.company}
   />
 ));
 
-const Experience = (props) => (
+const Experience = props => (
   <div className="experience">
     <div className="link-to" id="experience" />
     <div className="title">
