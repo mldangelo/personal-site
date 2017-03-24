@@ -48,12 +48,7 @@ class Login extends Component {
     return (
       <Main fullPage>
       <article className="post" id="login">
-        <header>
-          <div className="title">
-            <h2><Link to="/">Login</Link></h2>
-            <p>Please login to view this page.</p>
-          </div>
-        </header>
+
         <div>
 
           <p> You&apos;re about to learn a lot about me. Let me learn a little about you. I only ask for your email address and I promise not to spam you. You can login with your google account below.</p>
