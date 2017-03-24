@@ -41,7 +41,7 @@ mongoose.connect('mongodb://localhost/mldangelo');
 
 
 // prevents logs from polluting test results
-if (!module.parent) app.use(morgan('combined'));
+// if (!module.parent) app.use(morgan('combined'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 routes(app);
@@ -64,24 +64,26 @@ if (env === 'development') { // eslint-disable-line eqeqeq
   app.use(middleware);
   app.use(webpackHotMiddleware(compiler));
 
+
   app.get('/*', (req, res) => {
-    res.write(middleware.fileSystem.readFileSync(path.join(__dirname, 'dist/index.html')));
-    if (req.user) { // TODO move into html body
-      res.write(`<script type="text/javascript" async>window.id="${req.user._id}";</script>`);
-    }
-    res.end();
+    const key = '<div id="root"></div>';
+    const content = middleware.fileSystem.readFileSync(path.join(__dirname, 'dist/index.html'));
+    const index = content.indexOf(key) + key.length;
+    const inject = req.user ? `<script type="text/javascript">window.id="${req.user._id}";</script>` : '';
+    res.send(content.slice(0, index) + inject + content.slice(index));
   });
+  
 } else {
+
   app.use(express.static(`${__dirname}`));
+
+  const content = fs.readFileSync(path.join(__dirname, 'dist/index.html'), 'utf8');
+  const key = '<div id="root"></div>';
+  const index = content.indexOf(key) + key.length;
+
   app.get('/*', (req, res) => {
-    fs.readFile(path.join(__dirname, 'dist/index.html'), 'utf8', (err, contents) => {
-      res.write(contents);
-      if (req.user) { // TODO move into html body
-        res.write(`<script type="text/javascript" async>window.id="${req.user._id}";</script>`);
-      }
-      res.end();
-    });
-    // res.sendFile(path.join(__dirname, 'dist/index.html'));
+    const inject = req.user ? `<script type="text/javascript">window.id="${req.user._id}";</script>` : '';
+    res.send(content.slice(0, index) + inject + content.slice(index));
   });
 }
 
