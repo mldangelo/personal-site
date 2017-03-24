@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { Link, IndexLink } from 'react-router';
+import {
+  Link,
+} from 'react-router-dom';
 
 import Menus from 'react-burger-menu';
 
@@ -46,9 +48,9 @@ class Hamburger extends Component {
           <ul className="hamburger-ul">
             {links.filter(l => l.index).map(l => (
               <li key={l.label} onClick={this.handleClick}>
-                <IndexLink to={l.link}>
+                <Link to={l.link}>
                   <h3 className="index-li">{l.label}</h3>
-                </IndexLink>
+                </Link>
               </li>
             ))}
             {links.filter(l => !l.index).map(l => (

@@ -1,31 +1,43 @@
 import React, { PropTypes } from 'react';
 import Helmet from 'react-helmet';
 
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+} from 'react-router-dom';
+
+
+
 import Header from '../components/Template/Header';
 import Nav from '../components/Template/Nav';
 
-const Main = props => (
+import Index from '../views/Index';
+import About from '../views/About';
+import Projects from '../views/Projects';
+import Resume from '../views/Resume';
+import Stats from '../views/Stats';
+import Contact from '../views/Contact';
+
+
+const Main = (props) => (
+  <Router>
   <div id="wrapper">
     <Helmet titleTemplate="%s | Michael D'Angelo" defaultTitle="Michael D'Angelo" />
     <Header />
     <div id="main">
-      {props.children}
+      <Switch>
+        <Route path="/" exact component={Index}/>
+        <Route path="/about" component={About} />
+        <Route path="/resume" component={Resume} />
+        <Route path="/projects" component={Projects} />
+        <Route path="/stats" component={Stats} />
+        <Route path="/contact" component={Contact} />
+      </Switch>
     </div>
-    {props.fullPage ? '' : <Nav />}
+     <Nav />
   </div>
+  </Router>
 );
-
-Main.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node,
-  ]),
-  fullPage: PropTypes.boolean,
-};
-
-Main.defaultProps = {
-  children: null,
-  fullPage: false,
-};
 
 export default Main;

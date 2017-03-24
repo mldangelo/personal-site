@@ -1,11 +1,14 @@
 import React from 'react';
-import { Link, IndexLink } from 'react-router';
+
+import {
+  Link,
+} from 'react-router-dom';
 
 const Index = () => (
   <article className="post" id="index">
     <header>
       <div className="title">
-        <h2><IndexLink to="/">About this site</IndexLink></h2>
+        <h2><Link to="/">About this site</Link></h2>
         <p>A beautiful, responsive, react app written with ES2016. Please hire me.</p>
       </div>
     </header>
