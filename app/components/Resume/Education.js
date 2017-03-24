@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react';
 
 import Degree from './Education/Degree';
-// import degrees from '../../data/degrees';
 
 const getRows = (degrees) => degrees.map(degree => (
   <Degree

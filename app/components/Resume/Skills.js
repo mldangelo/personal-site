@@ -1,23 +1,35 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 
 import CategoryButton from './Skills/CategoryButton';
 import SkillBar from './Skills/SkillBar';
 
-import { skills, categories } from '../../data/skills';
+// import { skills, categories } from '../../data/skills';
 
 class Skills extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      buttons: Object.keys(categories).sort().reduce((obj, key) => ({
+      buttons: Object.keys(props.categories).sort().reduce((obj, key) => ({
         ...obj,
         [key]: false,
       }), { All: true }),
-      skills: skills.map(skill =>
+      skills: props.skills.map(skill =>
         Object.assign(skill, { category: skill.category.sort() }),
       ),
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      buttons: Object.keys(nextProps.categories).sort().reduce((obj, key) => ({
+        ...obj,
+        [key]: false,
+      }), { All: true }),
+      skills: nextProps.skills.map(skill =>
+        Object.assign(skill, { category: skill.category.sort() }),
+      ),
+    })
   }
 
   getRows() {
@@ -84,5 +96,20 @@ class Skills extends Component {
     );
   }
 }
+
+Skills.propTypes = {
+  skills: PropTypes.arrayOf(PropTypes.shape({
+    title: PropTypes.string,
+    compentency: PropTypes.number,
+    category: PropTypes.arrayOf(PropTypes.string),
+  })),
+  categories: PropTypes.object,
+};
+
+Skills.defaultProps = {
+  skills: [],
+  categories: {},
+};
+
 
 export default Skills;
