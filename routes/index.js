@@ -2,6 +2,8 @@
 import 'dotenv/config';
 import passport from 'passport';
 import { Strategy } from 'passport-google-oauth20';
+import { requireUserAPI } from './middleware';
+
 import User from '../models/User';
 const port = process.env.PORT || 7999;
 
@@ -47,10 +49,9 @@ const routes = (app) => {
     failureRedirect: '/login',
   }), (req, res) => {
     console.log('req.user', req.user);
-    res.redirect('/');
+    res.redirect('/resume'); // the only protected page. this works for now
   });
 
-  // NOTE should also delete token
   app.get('/logout', (req, res) => {
     if (req.user) req.logout();
     res.redirect('/');
@@ -58,6 +59,10 @@ const routes = (app) => {
 
   app.get('/api/github', require('./api/github'));
   app.get('/api/lastfm', require('./api/lastfm'));
+
+  app.get('/api/authenticated', require('./api/authenticated'));
+  app.get('/api/resume', requireUserAPI, require('./api/resume'));
+
 };
 
 export default routes;

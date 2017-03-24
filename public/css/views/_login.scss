@@ -3,10 +3,17 @@
 #login {
   width: 50%;
   margin: auto;
+  height: 20em;
+
+  p {
+    font-size: 0.9em;
+  }
 
   .horiztonal-container {
     display: flex;
-    margin: auto;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
 
     .auth-label {
       flex: 0;
