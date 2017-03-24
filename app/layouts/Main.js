@@ -3,8 +3,6 @@ import Helmet from 'react-helmet';
 
 import ReactGA from 'react-ga';
 
-
-
 import Header from '../components/Template/Header';
 import Nav from '../components/Template/Nav';
 
@@ -30,7 +28,7 @@ class Main extends Component {
       <div id="main">
         {this.props.children}
       </div>
-      {this.props.fullPage ? '' : <Nav />}
+      {this.props.fullPage ? null : <Nav />}
     </div>);
   }
 
@@ -41,7 +39,7 @@ Main.propTypes = {
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
   ]),
-  fullPage: PropTypes.boolean,
+  fullPage: PropTypes.bool,
 };
 
 Main.defaultProps = {
