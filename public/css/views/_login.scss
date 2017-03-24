@@ -3,4 +3,21 @@
 #login {
   width: 50%;
   margin: auto;
+
+  .horiztonal-container {
+    display: flex;
+    margin: auto;
+
+    .auth-label {
+      flex: 0;
+      white-space: nowrap;
+      padding: .1em 0;
+    }
+
+    .auth-button {
+      padding: 0 1em;
+      flex: 1;
+    }
+  }
+
 }
