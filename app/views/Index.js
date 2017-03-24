@@ -4,7 +4,10 @@ import {
   Link,
 } from 'react-router-dom';
 
+import Main from '../layouts/Main';
+
 const Index = () => (
+  <Main>
   <article className="post" id="index">
     <header>
       <div className="title">
@@ -20,6 +23,7 @@ const Index = () => (
       or <Link to="/contact">contact</Link> me.</p>
     <p> Source available <a href="https://github.com/mldangelo/mldangelo">here</a>.</p>
   </article>
+  </Main>
 );
 
 export default Index;

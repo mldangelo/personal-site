@@ -4,6 +4,8 @@ import {
 } from 'react-router-dom';
 import Helmet from 'react-helmet';
 
+import Main from '../layouts/Main';
+
 import Cell from '../components/Projects/Cell';
 import data from '../data/projects';
 
@@ -17,6 +19,7 @@ const getRows = () => data.map(project => (
   ));
 
 const Projects = () => (
+  <Main>
   <article className="post" id="projects">
     <Helmet title="Projects" />
     <header>
@@ -27,6 +30,7 @@ const Projects = () => (
     </header>
     {getRows()}
   </article>
+  </Main>
 );
 
 export default Projects;

@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router';
+import {
+  Link,
+} from 'react-router-dom';
 import Helmet from 'react-helmet';
 
 import axios from 'axios';
+import Main from '../layouts/Main';
 
 class Music extends Component {
 
@@ -25,6 +28,7 @@ class Music extends Component {
 
   render() {
     return (
+      <Main fullPage>
       <article className="post" id="music">
         <Helmet title="Music" />
         <header>
@@ -53,6 +57,7 @@ class Music extends Component {
           </section>
         </div>
       </article>
+      </Main>
     );
   }
 }

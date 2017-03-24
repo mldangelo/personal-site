@@ -4,6 +4,8 @@ import {
 } from 'react-router-dom';
 import Helmet from 'react-helmet';
 
+import Main from '../layouts/Main';
+
 import Education from '../components/Resume/Education';
 import Experience from '../components/Resume/Experience';
 import Skills from '../components/Resume/Skills';
@@ -20,6 +22,7 @@ const sections = [
 
 
 const Resume = () => (
+  <Main>
   <article className="post" id="resume">
     <Helmet title="Resume" />
     <header>
@@ -41,6 +44,7 @@ const Resume = () => (
     <References />
 
   </article>
+  </Main>
 );
 
 export default Resume;

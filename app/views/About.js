@@ -4,11 +4,14 @@ import {
 } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import Helmet from 'react-helmet';
-import LinkRenderer from '../components/About/LinkRenderer';
 
+import Main from '../layouts/Main';
+
+import LinkRenderer from '../components/About/LinkRenderer';
 import markdown from '../data/about.md';
 
 const About = () => (
+  <Main>
   <article className="post" id="about">
     <Helmet title="About" />
     <header>
@@ -24,6 +27,7 @@ const About = () => (
       }}
     />
   </article>
+  </Main>
 );
 
 export default About;

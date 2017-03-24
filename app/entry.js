@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom';
 import {
   BrowserRouter as Router,
   Route,
+  Switch,
 } from 'react-router-dom';
 
 import ReactGA from 'react-ga';
@@ -12,32 +13,35 @@ import ReactGA from 'react-ga';
 // Layouts
 import Main from './layouts/Main';
 
+import Index from './views/Index';
+import About from './views/About';
+import Projects from './views/Projects';
+import Resume from './views/Resume';
+import Stats from './views/Stats';
+import Contact from './views/Contact';
 
-if (process.env.NODE_ENV === 'production') {
-  ReactGA.initialize('UA-68649021-1');
-}
+import Music from './views/Music';
 
-const update = () => {
-  window.scrollTo(0, 0);
-  if (process.env.NODE_ENV === 'production') {
-    ReactGA.set({ page: window.location.pathname });
-    ReactGA.pageview(window.location.pathname);
-  }
-};
+import NotFound from './views/NotFound';
 
-const requireAuth = (nextState, replace) => {
-  if (!auth.loggedIn()) {
-    replace({
-      pathname: '/login',
-      state: { nextPathname: nextState.location.pathname },
-    });
-  }
-};
 
 // All of our CSS
 require('../public/css/main.scss');
 
 ReactDOM.render(
-  <Main />,
+    <Router>
+    <div id="wrapper">
+      <Switch>
+        <Route path="/" exact component={Index} />
+        <Route path="/about" component={About} />
+        <Route path="/resume" component={Resume} />
+        <Route path="/projects" component={Projects} />
+        <Route path="/stats" component={Stats} />
+        <Route path="/contact" component={Contact} />
+        <Route path="/music" component={Music} />
+        <Route component={NotFound} status={404} />
+      </Switch>
+    </div>
+  </Router>,
   document.getElementById('root'),
 );

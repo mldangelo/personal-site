@@ -4,10 +4,13 @@ import {
 } from 'react-router-dom';
 import Helmet from 'react-helmet';
 
+import Main from '../layouts/Main';
+
 import Personal from '../components/Stats/Personal';
 import Site from '../components/Stats/Site';
 
 const Stats = () => (
+  <Main>
   <article className="post" id="stats">
     <Helmet title="Stats" />
     <header>
@@ -18,6 +21,7 @@ const Stats = () => (
     <Personal />
     <Site />
   </article>
+  </Main>
 );
 
 export default Stats;

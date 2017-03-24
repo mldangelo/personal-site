@@ -4,6 +4,9 @@ import {
 } from 'react-router-dom';
 import Helmet from 'react-helmet';
 
+import Main from '../layouts/Main';
+
+
 import data from '../data/contact';
 
 const messages = [
@@ -74,6 +77,7 @@ class Contact extends Component {
   render() {
     const message = this.state.message;
     return (
+      <Main>
       <article className="post" id="contact">
         <Helmet title="Contact" />
         <header>
@@ -98,6 +102,7 @@ class Contact extends Component {
         ))}
         </ul>
       </article>
+      </Main>
     );
   }
 }

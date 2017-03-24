@@ -5,7 +5,7 @@ import {
 
 import Menus from 'react-burger-menu';
 
-import links from '../../data/links';
+import routes from '../../data/routes';
 
 const Menu = Menus.slide;
 
@@ -46,16 +46,16 @@ class Hamburger extends Component {
         </nav>
         <Menu right noOverlay isOpen={this.state.open}>
           <ul className="hamburger-ul">
-            {links.filter(l => l.index).map(l => (
+            {routes.filter(l => l.index).map(l => (
               <li key={l.label} onClick={this.handleClick}>
-                <Link to={l.link}>
+                <Link to={l.path}>
                   <h3 className="index-li">{l.label}</h3>
                 </Link>
               </li>
             ))}
-            {links.filter(l => !l.index).map(l => (
+            {routes.filter(l => !l.index).map(l => (
               <li key={l.label} onClick={this.handleClick}>
-                <Link to={l.link}>
+                <Link to={l.path}>
                   <h3>{l.label}</h3>
                 </Link>
               </li>

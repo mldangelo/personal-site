@@ -6,21 +6,21 @@ import {
 } from 'react-router-dom';
 
 import Hamburger from './Hamburger';
-import links from '../../data/links';
+import routes from '../../data/routes';
 import auth from '../auth';
 
 const Header = () => (
   <header id="header">
     <h1 className="index-link">
-      {links.filter(l => l.index).map(l => (
-        <Link key={l.label} to={l.link}>{l.label}</Link>
+      {routes.filter(l => l.index).map(l => (
+        <Link key={l.label} to={l.path}>{l.label}</Link>
       ))}
     </h1>
     <nav className="links">
       <ul>
-        {links.filter(l => !l.index).map(l => (
+        {routes.filter(l => !l.index).map(l => (
           <li key={l.label}>
-            <Link to={l.link}>{l.label}</Link>
+            <Link to={l.path}>{l.label}</Link>
           </li>
         ))}
         {/*         {auth.loggedIn() ? <li><Link to="/logout">Logout</Link></li> : null} */}
