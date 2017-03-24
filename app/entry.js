@@ -22,28 +22,12 @@ import Login from './views/Login';
 
 import NotFound from './views/NotFound';
 
-import axios from 'axios';
-
-
 // All of our CSS
 require('../public/css/main.scss');
 
-class Auth {
-  constructor(){
-    this.isAuthenticated = false;
-    axios.get('/api/authenticated').then((result) => {
-        this.isAuthenticated = result.data.authenticated;
-    }).catch((error) => {
-      console.error('auth-api-fetch-error', error);
-    });
-  }
-}
-
-const auth = new Auth();
-
 const PrivateRoute = ({ component, ...rest }) => (
   <Route {...rest} render={props => (
-    auth.isAuthenticated ? (
+    window.id ? (
       React.createElement(component, props)
     ) : (
       <Redirect to={{

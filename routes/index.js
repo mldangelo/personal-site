@@ -62,8 +62,8 @@ const routes = (app) => {
   app.get('/api/github', require('./api/github'));
   app.get('/api/lastfm', require('./api/lastfm'));
 
-  app.get('/api/authenticated', require('./api/authenticated'));
-  app.get('/api/resume', requireUserAPI, require('./api/resume'));
+  app.get('/api/resume', require('./api/resume'));
+  app.get('/api/resume2', requireUserAPI, require('./api/resume'));
 
 };
 

@@ -67,7 +67,7 @@ if (env === 'development') { // eslint-disable-line eqeqeq
   app.get('/*', (req, res) => {
     res.write(middleware.fileSystem.readFileSync(path.join(__dirname, 'dist/index.html')));
     if (req.user) { // TODO move into html body
-      res.write(`<script type="text/javascript">var id="${req.user._id}";</script>`);
+      res.write(`<script type="text/javascript" async>window.id="${req.user._id}";</script>`);
     }
     res.end();
   });
@@ -77,7 +77,7 @@ if (env === 'development') { // eslint-disable-line eqeqeq
     fs.readFile(path.join(__dirname, 'dist/index.html'), 'utf8', (err, contents) => {
       res.write(contents);
       if (req.user) { // TODO move into html body
-        res.write(`<script type="text/javascript">var id="${req.user._id}";</script>`);
+        res.write(`<script type="text/javascript" async>window.id="${req.user._id}";</script>`);
       }
       res.end();
     });

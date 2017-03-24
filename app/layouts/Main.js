@@ -15,9 +15,13 @@ class Main extends Component {
   componentWillMount() {
     window.scrollTo(0, 0);
     if (process.env.NODE_ENV === 'production') {
-      ReactGA.set({ page: window.location.pathname });
+      ReactGA.set({
+        page: window.location.pathname,
+        userId: window.id,
+      });
       ReactGA.pageview(window.location.pathname);
     }
+    console.log('window.id', window.id);
   }
 
   render() {
