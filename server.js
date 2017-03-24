@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import path from 'path';
+import fs from 'fs';
 
 import express from 'express';
 import bodyParser from 'body-parser';
@@ -65,12 +66,22 @@ if (env === 'development') { // eslint-disable-line eqeqeq
 
   app.get('/*', (req, res) => {
     res.write(middleware.fileSystem.readFileSync(path.join(__dirname, 'dist/index.html')));
+    if (req.user) { // TODO move into html body
+      res.write(`<script type="text/javascript">var id="${req.user._id}";</script>`);
+    }
     res.end();
   });
 } else {
   app.use(express.static(`${__dirname}`));
   app.get('/*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist/index.html'));
+    fs.readFile(path.join(__dirname, 'dist/index.html'), 'utf8', (err, contents) => {
+      res.write(contents);
+      if (req.user) { // TODO move into html body
+        res.write(`<script type="text/javascript">var id="${req.user._id}";</script>`);
+      }
+      res.end();
+    });
+    // res.sendFile(path.join(__dirname, 'dist/index.html'));
   });
 }
 

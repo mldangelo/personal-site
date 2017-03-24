@@ -7,12 +7,14 @@ import { requireUserAPI } from './middleware';
 import User from '../models/User';
 const port = process.env.PORT || 7999;
 
-const isProduction = process.env.NODE_ENV === 'production';
+// const isProduction = process.env.NODE_ENV === 'production';
+const hostname = process.env.HOSTNAME || `http://localhost:${port}`;
+
 
 passport.use(new Strategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  callbackURL: `${isProduction ? 'https://mldangelo.com' : `http://localhost:${port}`}/login/google/return`,
+  callbackURL: `${hostname}/login/google/return`,
   userProfileURL: 'https://www.googleapis.com/oauth2/v3/userinfo',
   scope: ['email'],
 }, (token, tokenSecret, profile, done) => {
