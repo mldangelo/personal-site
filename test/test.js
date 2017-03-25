@@ -37,6 +37,7 @@ describe('Page Load Tests:', function () {
     it(`check if ${args.route} renders`, function* () {
       let text = yield nightmare
         .goto(`http://localhost:${port}${args.route}`)
+        .wait(100)
         .evaluate(() => document.title);
       text.should.equal(args.title);
 

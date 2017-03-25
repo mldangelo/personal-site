@@ -26,8 +26,6 @@ class Main extends Component {
       });
       ReactGA.pageview(window.location.pathname);
     }
-
-    // console.log('window.id', window.id);
   }
 
   render() {
