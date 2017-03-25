@@ -54,6 +54,7 @@ describe('Page Load Tests:', function () {
   it('check if 404 renders', function* () {
     let text = yield nightmare
       .goto(`http://localhost:${port}/${randomString(10)}`)
+      .wait(100)
       .evaluate(() => document.title);
     text.should.equal('404');
 
