@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { withRouter } from 'react-router';
+
 import Helmet from 'react-helmet';
 import axios from 'axios';
 
@@ -32,13 +34,13 @@ class Resume extends Component {
 
   componentWillMount() {
     axios.get('/api/resume').then(({ data }) => {
-      if (data.success) {
-        this.setState({ data });
-      } else {
-        console.error(data);
+      if (!data.success) {
+        return Promise.reject(data.error);
       }
+      return this.setState({ data });
     }).catch((error) => {
       console.error('resume-api-fetch-error', error);
+      this.props.history.push('/login'); // eslint-disable-line react/prop-types
     });
   }
 
@@ -71,4 +73,4 @@ class Resume extends Component {
   }
 }
 
-export default Resume;
+export default withRouter(Resume);
