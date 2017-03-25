@@ -3,6 +3,7 @@ import 'dotenv/config';
 import passport from 'passport';
 import { Strategy } from 'passport-google-oauth20';
 
+import reactApp from './app';
 import User from '../models/User';
 import { requireUserAPI } from './middleware';
 
@@ -60,6 +61,8 @@ const routes = (app) => {
   app.get('/api/lastfm', require('./api/lastfm'));
 
   app.get('/api/resume', requireUserAPI, require('./api/resume'));
+
+  reactApp(app); // Catch all for react routes
 };
 
 export default routes;

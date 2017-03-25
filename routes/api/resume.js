@@ -5,6 +5,7 @@ import { skills, categories } from '../../app/data/protected/skills';
 
 export default (req, res) => {
   res.json({
+    success: true,
     courses,
     degrees,
     positions,
