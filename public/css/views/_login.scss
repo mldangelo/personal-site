@@ -3,7 +3,7 @@
 #login {
   width: 50%;
   margin: auto;
-  height: 20em;
+  height: 15em;
 
   p {
     font-size: 0.9em;
@@ -14,6 +14,7 @@
     position: absolute;
     left: 50%;
     transform: translate(-50%);
+    margin-bottom: 5em;
 
     .auth-label {
       flex: 0;
@@ -27,4 +28,21 @@
     }
   }
 
+}
+
+@media (max-width: 1200px) {
+  #login {
+    width: 70%;
+  }
+}
+@media (max-width: 1000px) {
+  #login {
+    width: 80%;
+  }
+}
+@media (max-width: 800px) {
+  #login {
+    width: 100%;
+    margin: auto;
+  }
 }

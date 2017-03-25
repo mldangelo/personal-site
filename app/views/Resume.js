@@ -31,10 +31,12 @@ class Resume extends Component {
   }
 
   componentWillMount() {
-    axios.get('/api/resume').then((result) => {
-      this.setState({
-        data: result.data,
-      });
+    axios.get('/api/resume').then(({ data }) => {
+      if (data.success) {
+        this.setState({ data });
+      } else {
+        console.error(data);
+      }
     }).catch((error) => {
       console.error('resume-api-fetch-error', error);
     });

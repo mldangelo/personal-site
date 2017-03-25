@@ -1,5 +1,10 @@
 import 'dotenv/config';
 
+import fs from 'fs';
+import path from 'path';
+
+import express from 'express';
+
 import webpack from 'webpack';
 import webpackMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
@@ -8,7 +13,6 @@ import config from '../webpack/webpack.config';
 const env = process.env.NODE_ENV || 'development';
 
 const routes = (app) => {
-
   if (env === 'development') { // eslint-disable-line eqeqeq
     const compiler = webpack(config);
     const middleware = webpackMiddleware(compiler, {
@@ -27,29 +31,25 @@ const routes = (app) => {
     app.use(middleware);
     app.use(webpackHotMiddleware(compiler));
 
+
     app.get('/*', (req, res) => {
-      const key = '<div id="root"></div>';
       const content = middleware.fileSystem.readFileSync(path.join(__dirname, 'dist/index.html'));
+      const key = '<div id="root"></div>';
       const index = content.indexOf(key) + key.length;
       const inject = req.user ? `<script type="text/javascript">window.id="${req.user._id}";</script>` : '';
       res.send(content.slice(0, index) + inject + content.slice(index));
     });
-
   } else {
-
-    app.use(express.static(`${__dirname}`));
-
-    const content = fs.readFileSync(path.join(__dirname, 'dist/index.html'), 'utf8');
-    const key = '<div id="root"></div>';
+    app.use('/dist', express.static(path.join(__dirname,'../dist')));
+    const content = fs.readFileSync(path.join(__dirname, '../dist/index.html'), 'utf8');
+    const key = '<div id=root></div>';
     const index = content.indexOf(key) + key.length;
 
     app.get('/*', (req, res) => {
       const inject = req.user ? `<script type="text/javascript">window.id="${req.user._id}";</script>` : '';
       res.send(content.slice(0, index) + inject + content.slice(index));
     });
-
   }
-
 };
 
 export default routes;
