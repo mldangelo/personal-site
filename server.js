@@ -10,14 +10,13 @@ import cookieParser from 'cookie-parser';
 
 import mongoose from 'mongoose';
 
+import session from 'express-session';
+import mongoStore from 'connect-mongodb-session';
+
 import routes from './routes';
 
 const port = process.env.PORT || 7999;
 const env = process.env.NODE_ENV || 'development';
-
-const passport = require('passport');
-const session = require('express-session');
-
 
 const app = express();
 
@@ -26,16 +25,28 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-app.use(session({
-  secret: 'keyboard cat',
-  resave: true,
-  saveUninitialized: true,
-}));
-
-app.use(passport.initialize());
-app.use(passport.session());
+const MongoDBStore = mongoStore(session);
 
 mongoose.connect('mongodb://localhost/mldangelo');
+
+const store = new MongoDBStore({
+  uri: 'mongodb://localhost/mldangelo',
+  collection: 'sessions',
+});
+
+store.on('error', (error) => {
+  console.error('session-store-error', error);
+});
+
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'keyboard cat',
+  resave: true,
+  saveUninitialized: true,
+  store,
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
+  },
+}));
 
 // prevents logs from polluting test results
 if (!module.parent) app.use(morgan('combined'));

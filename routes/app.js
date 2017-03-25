@@ -40,7 +40,7 @@ const routes = (app) => {
       res.send(content.slice(0, index) + inject + content.slice(index));
     });
   } else {
-    app.use('/dist', express.static(path.join(__dirname,'../dist')));
+    app.use('/dist', express.static(path.join(__dirname, '../dist')));
     const content = fs.readFileSync(path.join(__dirname, '../dist/index.html'), 'utf8');
     const key = '<div id=root></div>';
     const index = content.indexOf(key) + key.length;
