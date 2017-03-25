@@ -2,7 +2,7 @@
 import 'dotenv/config';
 import auth from './auth';
 import reactApp from './app';
-import { requireUserAPI } from './middleware';
+import { requireUserAPI, requireAdminAPI } from './middleware';
 
 
 const routes = (app) => {
@@ -17,9 +17,13 @@ const routes = (app) => {
   });
 
   app.get('/logout', require('./logout'));
+
   app.get('/api/github', require('./api/github'));
   app.get('/api/lastfm', require('./api/lastfm'));
+
   app.get('/api/resume', requireUserAPI, require('./api/resume'));
+
+  app.get('/api/admin', requireAdminAPI, require('./api/admin'));
 
   reactApp(app); // set up react routes
 };

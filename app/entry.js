@@ -19,6 +19,7 @@ import Contact from './views/Contact';
 import Music from './views/Music';
 
 import Login from './views/Login';
+import Admin from './views/Admin';
 
 import NotFound from './views/NotFound';
 
@@ -64,6 +65,7 @@ ReactDOM.render(
       <Route path="/contact" component={Contact} />
       <Route path="/music" component={Music} />
       <Route path="/login" component={Login} />
+      <Route path="/admin" component={Admin} />
       <Route component={NotFound} status={404} />
     </Switch>
   </Router>,

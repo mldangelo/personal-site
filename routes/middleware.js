@@ -18,4 +18,18 @@ const requireUserAPI = (req, res, next) => {
 };
 
 
-export { requireUser, requireUserAPI };
+const requireAdminAPI = (req, res, next) => {
+  requireUserAPI(req, res, () => {
+    if (!req.user.isAdmin) {
+      res.json({
+        success: false,
+        error: 'Insufficient access privileges. Please use an administrative account.',
+      });
+    } else {
+      next();
+    }
+  });
+};
+
+
+export { requireUser, requireUserAPI, requireAdminAPI };

@@ -18,6 +18,7 @@ const Header = () => (
             <Link to={l.path}>{l.label}</Link>
           </li>
         ))}
+        {window.admin ? <li><a href="/admin">Admin</a></li> : null}
         {window.id ? <li><a href="/logout">Logout</a></li> : null}
       </ul>
     </nav>
