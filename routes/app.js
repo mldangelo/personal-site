@@ -33,7 +33,7 @@ const routes = (app) => {
 
 
     app.get('/*', (req, res) => {
-      const content = middleware.fileSystem.readFileSync(path.join(__dirname, 'dist/index.html'));
+      const content = middleware.fileSystem.readFileSync(path.join(__dirname, '../dist/index.html'));
       const key = '<div id="root"></div>';
       const index = content.indexOf(key) + key.length;
       const inject = req.user ? `<script type="text/javascript">window.id="${req.user._id}";</script>` : '';

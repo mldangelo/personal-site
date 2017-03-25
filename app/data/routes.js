@@ -3,7 +3,6 @@ const data = [
     path: '/',
     label: 'Michael D\'Angelo',
     index: true,
-    exact: true,
   },
   {
     path: '/about',

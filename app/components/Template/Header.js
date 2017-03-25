@@ -18,8 +18,7 @@ const Header = () => (
             <Link to={l.path}>{l.label}</Link>
           </li>
         ))}
-        {/*         {auth.loggedIn() ? <li><Link to="/logout">Logout</Link></li> : null} */}
-        <li>{window.id ? <Link to="/logout">Logout</Link> : <Link to="/login">Login</Link>}</li>
+        <li>{window.id ? <a href="/logout">Logout</a> : <Link to="/login">Login</Link>}</li>
       </ul>
     </nav>
     <Hamburger />
