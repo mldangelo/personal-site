@@ -53,6 +53,7 @@ class Hamburger extends Component {
                 </Link>
               </li>
             ))}
+           {window.id ? <li><a href="/logout"><h3>Logout</h3></a></li> : null}
           </ul>
         </Menu>
       </div>

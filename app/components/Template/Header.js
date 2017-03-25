@@ -18,7 +18,7 @@ const Header = () => (
             <Link to={l.path}>{l.label}</Link>
           </li>
         ))}
-        <li>{window.id ? <a href="/logout">Logout</a> : <Link to="/login">Login</Link>}</li>
+        {window.id ? <li><a href="/logout">Logout</a></li> : null}
       </ul>
     </nav>
     <Hamburger />
