@@ -27,8 +27,8 @@ class Music extends Component {
   render() {
     return (
       <Main fullPage>
+        <Helmet title="Music" />
         <article className="post" id="music">
-          <Helmet title="Music" />
           <header>
             <div className="title">
               <h2><Link to="/music">Some bands that I like</Link></h2>

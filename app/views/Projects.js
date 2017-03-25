@@ -18,8 +18,8 @@ const getRows = () => data.map(project => (
 
 const Projects = () => (
   <Main>
+    <Helmet title="Projects" />
     <article className="post" id="projects">
-      <Helmet title="Projects" />
       <header>
         <div className="title">
           <h2><Link to="/projects">Projects</Link></h2>

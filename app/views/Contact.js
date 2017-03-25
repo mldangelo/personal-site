@@ -76,8 +76,8 @@ class Contact extends Component {
     const message = this.state.message;
     return (
       <Main>
+        <Helmet title="Contact" />
         <article className="post" id="contact">
-          <Helmet title="Contact" />
           <header>
             <div className="title">
               <h2><Link to="/contact">Contact</Link></h2>

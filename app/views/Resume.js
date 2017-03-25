@@ -45,8 +45,8 @@ class Resume extends Component {
   render() {
     return (
       <Main>
+        <Helmet title="Resume" />
         <article className="post" id="resume">
-          <Helmet title="Resume" />
           <header>
             <div className="title">
               <h2><Link to="/resume">Resume</Link></h2>
