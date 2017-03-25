@@ -2,14 +2,13 @@
 import 'dotenv/config';
 import passport from 'passport';
 import { Strategy } from 'passport-google-oauth20';
-import { requireUserAPI } from './middleware';
 
 import User from '../models/User';
+import { requireUserAPI } from './middleware';
+
 const port = process.env.PORT || 7999;
 
-// const isProduction = process.env.NODE_ENV === 'production';
 const hostname = process.env.HOSTNAME || `http://localhost:${port}`;
-
 
 passport.use(new Strategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
@@ -43,9 +42,7 @@ passport.deserializeUser((id, done) => {
   });
 });
 
-
 const routes = (app) => {
-
   app.get('/login/google', passport.authenticate('google'));
 
   app.get('/login/google/return', passport.authenticate('google', {
@@ -63,7 +60,6 @@ const routes = (app) => {
   app.get('/api/lastfm', require('./api/lastfm'));
 
   app.get('/api/resume', requireUserAPI, require('./api/resume'));
-
 };
 
 export default routes;

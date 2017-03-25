@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import {
   BrowserRouter as Router,
@@ -41,6 +41,18 @@ const PrivateRoute = ({ component, ...rest }) => (
   )}
   />
 );
+
+
+PrivateRoute.propTypes = {
+  component: PropTypes.func,
+  location: PropTypes.object,
+};
+
+PrivateRoute.defaultProps = {
+  component: null,
+  location: {},
+};
+
 
 ReactDOM.render(
   <Router>

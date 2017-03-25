@@ -1,4 +1,5 @@
 import 'dotenv/config';
+
 import path from 'path';
 import fs from 'fs';
 
@@ -11,6 +12,8 @@ import cookieParser from 'cookie-parser';
 import webpack from 'webpack';
 import webpackMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
+
+import mongoose from 'mongoose';
 
 import config from './webpack/webpack.config';
 import routes from './routes';
@@ -36,12 +39,14 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-const mongoose = require('mongoose');
+
+
 mongoose.connect('mongodb://localhost/mldangelo');
 
 
 // prevents logs from polluting test results
-// if (!module.parent) app.use(morgan('combined'));
+if (!module.parent) app.use(morgan('combined'));
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 routes(app);
@@ -72,9 +77,7 @@ if (env === 'development') { // eslint-disable-line eqeqeq
     const inject = req.user ? `<script type="text/javascript">window.id="${req.user._id}";</script>` : '';
     res.send(content.slice(0, index) + inject + content.slice(index));
   });
-  
 } else {
-
   app.use(express.static(`${__dirname}`));
 
   const content = fs.readFileSync(path.join(__dirname, 'dist/index.html'), 'utf8');

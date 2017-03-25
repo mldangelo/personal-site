@@ -13,6 +13,7 @@
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "react/jsx-wrap-multilines": [1, {declaration: true, assignment: true, return: true}],
     "jsx-a11y/no-static-element-interactions": 0,
+    "no-underscore-dangle": 0,
   },
   "plugins": [
     "mocha",

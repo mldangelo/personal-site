@@ -7,13 +7,13 @@ const requireUser = (req, res, next) => {
 };
 
 const requireUserAPI = (req, res, next) => {
-  if (req.user) {
-    next();
-  } else {
-    return res.json({
+  if (!req.user) {
+    res.json({
       success: false,
       error: 'Insufficient access privileges. Please authenticate your session.',
     });
+  } else {
+    next();
   }
 };
 
