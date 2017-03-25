@@ -42,15 +42,14 @@ const PrivateRoute = ({ component, ...rest }) => (
   />
 );
 
-
 PrivateRoute.propTypes = {
   component: PropTypes.func,
-  location: PropTypes.object,
+  location: PropTypes.string, // TODO Verify this type
 };
 
 PrivateRoute.defaultProps = {
   component: null,
-  location: {},
+  location: '',
 };
 
 
