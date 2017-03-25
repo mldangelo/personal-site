@@ -8,7 +8,7 @@ class Skills extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      buttons: Object.keys(props.categories).sort().reduce((obj, key) => ({
+      buttons: props.categories.map(cat => cat.name).reduce((obj, key) => ({
         ...obj,
         [key]: false,
       }), { All: true }),
@@ -20,7 +20,7 @@ class Skills extends Component {
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      buttons: Object.keys(nextProps.categories).sort().reduce((obj, key) => ({
+      buttons: nextProps.categories.map(cat => cat.name).reduce((obj, key) => ({
         ...obj,
         [key]: false,
       }), { All: true }),
@@ -48,6 +48,7 @@ class Skills extends Component {
     }).filter(skill => (actCat === 'All' || skill.category.includes(actCat)))
       .map(skill => (
         <SkillBar
+          categories={this.props.categories}
           data={skill}
           key={skill.title}
         />
@@ -101,12 +102,15 @@ Skills.propTypes = {
     compentency: PropTypes.number,
     category: PropTypes.arrayOf(PropTypes.string),
   })),
-  categories: PropTypes.object,
+  categories: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string,
+    color: PropTypes.string,
+  })),
 };
 
 Skills.defaultProps = {
   skills: [],
-  categories: {},
+  categories: [],
 };
 
 

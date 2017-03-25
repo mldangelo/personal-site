@@ -1,28 +1,39 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 
-import { categories } from '../../../data/skills';
+class SkillBar extends Component {
 
-// TODO: Consider averaging colors
-const getColor = types => Object.keys(categories)
-  .filter(key => types.includes(key))
-  .map(key => categories[key])[0];
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: props.data,
+      categories: props.categories,
+    };
+  }
 
-const SkillBar = (props) => {
-  const titleStyle = {
-    background: getColor(props.data.category),
-  };
-  const barStyle = {
-    background: getColor(props.data.category),
-    width: `${String(Math.min(100, Math.max((props.data.compentency / 5.0) * 100.0, 0)))}%`,
-  };
-  return (
-    <div className="skillbar clearfix">
-      <div className="skillbar-title" style={titleStyle}><span>{props.data.title}</span></div>
-      <div className="skillbar-bar" style={barStyle} />
-      <div className="skill-bar-percent">{props.data.compentency} / 5</div>
-    </div>
-  );
-};
+  // TODO: Consider averaging colors
+  getColor() {
+    return this.state.categories
+    .filter(cat => this.state.data.category.includes(cat.name))
+    .map(cat => cat.color)[0];
+  }
+
+  render() {
+    const titleStyle = {
+      background: this.getColor(),
+    };
+    const barStyle = {
+      ...titleStyle,
+      width: `${String(Math.min(100, Math.max((this.state.data.compentency / 5.0) * 100.0, 0)))}%`,
+    };
+    return (
+      <div className="skillbar clearfix">
+        <div className="skillbar-title" style={titleStyle}><span>{this.state.data.title}</span></div>
+        <div className="skillbar-bar" style={barStyle} />
+        <div className="skill-bar-percent">{this.state.data.compentency} / 5</div>
+      </div>
+    );
+  }
+}
 
 SkillBar.propTypes = {
   data: PropTypes.shape({
@@ -30,6 +41,14 @@ SkillBar.propTypes = {
     compentency: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
   }).isRequired,
+  categories: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string,
+    color: PropTypes.string,
+  })),
+};
+
+SkillBar.defaultProps = {
+  categories: [],
 };
 
 export default SkillBar;
