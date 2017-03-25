@@ -12,13 +12,8 @@ const Login = () => (
           I only ask for your email address and I promise not to spam you.
           You can login with your google account below.
         </p>
-        <div className="horiztonal-container">
-          <div className="auth-label">
-            <a href="/login/google"><h3> Login with Google</h3></a>
-          </div>
-          <ul className="icons auth-button">
-            <li><a href="/login/google" className="fa-google"><span className="label">Google</span></a></li>
-          </ul>
+        <div className="login-container">
+          <h3><a href="/login/google">LOGIN WITH GOOGLE</a></h3>
         </div>
       </div>
     </article>

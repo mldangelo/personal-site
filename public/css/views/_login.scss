@@ -3,46 +3,37 @@
 #login {
   width: 50%;
   margin: auto;
-  height: 15em;
+  left: auto;
 
   p {
     font-size: 0.9em;
+    margin: 0 0 1em 0;
   }
 
-  .horiztonal-container {
+  .login-container {
+
     display: flex;
-    position: absolute;
-    left: 50%;
-    transform: translate(-50%);
-    margin-bottom: 5em;
+    align-items: center;
+    justify-content: center;
+    margin: 0 0 .5em 0;
 
-    .auth-label {
-      flex: 0;
-      white-space: nowrap;
-      padding: .1em 0;
-    }
-
-    .auth-button {
-      padding: 0 1em;
-      flex: 1;
-    }
   }
 
 }
 
 @media (max-width: 1200px) {
   #login {
-    width: 70%;
+    width: 60%;
+    border: solid 1px rgba(160, 160, 160, 0.3);
   }
 }
 @media (max-width: 1000px) {
   #login {
-    width: 80%;
+    width: 70%;
   }
 }
 @media (max-width: 800px) {
   #login {
     width: 100%;
-    margin: auto;
   }
 }
