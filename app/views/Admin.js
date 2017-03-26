@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Helmet from 'react-helmet';
+import moment from 'moment';
 
 import axios from 'axios';
 import Main from '../layouts/Main';
@@ -37,12 +38,28 @@ class Admin extends Component {
           </header>
           <div>
             <section id="admin-table">
+            <table>
+            <thead>
+              <tr>
+                <th>Name &#9651;</th>
+                <th>Email &#9661;</th>
+                <th>Created At</th>
+                <th>Last Online</th>
+              </tr>
+              </thead>
+              <tbody>
               {this.state.data.map(user => (
-                <div key={user._id}>
-                  <p>{JSON.stringify(user)}</p>
-                </div>),
+                  <tr>
+                    <td>{`${user.given_name || ''} ${user.family_name || ''}`}</td>
+                    <td><a href={`mailto:${user.email}`}>{user.email}</a></td>
+                    <td>{moment(user.createdAt).format('MMMM DD, YYYY')}</td>
+                    <td>{moment(user.createdAt).format('MMMM DD, YYYY')}</td>
+                  </tr>
+                ),
              )
             }
+            </tbody>
+            </table>
             </section>
           </div>
         </article>

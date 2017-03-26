@@ -1,0 +1,22 @@
+// About page (/about)
+
+#admin {
+  table {
+      border-collapse: collapse;
+      width: 100%;
+  }
+
+  thead {
+    border-bottom: none;
+  }
+
+  td, th {
+      border: 1px solid _palette(border);
+      text-align: left;
+      padding: 8px;
+  }
+
+  tr:nth-child(even) {
+      background-color: _palette(border);
+  }
+}
