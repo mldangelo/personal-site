@@ -20,20 +20,14 @@ const auth = (app) => {
     scope: ['email'],
   }, (token, tokenSecret, profile, done) => {
         // update the user if s/he exists or add a new user
-    User.findOne({ email: profile._json.email})
-    .then(user => {
+    User.findOne({ email: profile._json.email })
+    .then((user) => {
       if (!user) {
-        console.log('data', Object.assign({ updatedAt: [ Date.now() ]}, profile._json))
-        return User.create(Object.assign({ updatedAt: [ Date.now() ]}, profile._json));
-      } else {
-        const data = Object.assign({ $push: { updatedAt: Date.now() } }, profile._json, user);
-        return user.update(data);
+        return User.create(Object.assign({ logins: [Date.now()] }, profile._json));
       }
-    }).then(user => {
-      return done(null, user);
-    }).catch(error => {
-      return done(error);
-    })
+      user.logins.push(Date.now());
+      return user.save();
+    }).then(user => done(null, user)).catch(error => done(error));
   },
   ));
 
