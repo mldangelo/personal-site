@@ -2,7 +2,7 @@
 import 'babel-polyfill';
 import 'dotenv/config';
 import Nightmare from 'nightmare';
-import server from '../server';
+import server from '../server/server';
 import { pages, randomString } from './helpers';
 
 require('mocha-generators').install();

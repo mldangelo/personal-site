@@ -1,13 +1,11 @@
 /* eslint-disable global-require */
 import 'dotenv/config';
-import auth from '../server/auth';
+import passport from 'passport';
 import reactApp from './views/app';
-import { requireUserAPI, requireAdminAPI } from './middleware';
+import { requireUserAPI } from './middleware';
 
 
 const routes = (app) => {
-  const passport = auth(app);
-
   app.get('/login/google', passport.authenticate('google'));
 
   app.get('/login/google/return', passport.authenticate('google', {

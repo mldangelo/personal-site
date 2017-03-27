@@ -42,8 +42,6 @@ const auth = (app) => {
       done(err, user);
     });
   });
-
-  return passport;
 };
 
 export default auth;

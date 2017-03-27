@@ -14,6 +14,7 @@ import session from 'express-session';
 import mongoStore from 'connect-mongodb-session';
 
 import routes from '../routes';
+import auth from './auth';
 
 const port = process.env.PORT || 7999;
 const env = process.env.NODE_ENV || 'development';
@@ -53,7 +54,8 @@ if (!module.parent) app.use(morgan('combined'));
 
 app.use(express.static(path.join(__dirname, '../public')));
 
-routes(app);
+auth(app); // initialize authentication
+routes(app); // initialize routes
 
 if (!module.parent) {
   app.listen(port, '0.0.0.0', (err) => {
