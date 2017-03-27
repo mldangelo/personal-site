@@ -11,13 +11,10 @@ const User = new Schema({
   email: String,
   email_verified: Boolean,
   gender: String,
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
+  updatedAt: [Date],
   isAdmin: {
     type: Boolean,
-    default: true,
+    default: false,
   },
 });
 

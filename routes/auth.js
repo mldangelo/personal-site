@@ -19,16 +19,15 @@ const auth = (app) => {
     userProfileURL: 'https://www.googleapis.com/oauth2/v3/userinfo',
     scope: ['email'],
   }, (token, tokenSecret, profile, done) => {
-        // update the user if s/he exists or add a new user
+    // update the user if s/he exists or add a new user
     User.findOneAndUpdate({
       email: profile._json.email,
-    }, Object.assign({}, profile._json, { updatedAt: Date.now() }), {
+    }, Object.assign({ $push: { updatedAt: Date.now() } }, profile._json), {
       upsert: true,
-    }, (err, user) => {
-      if (err) {
-        return done(err);
-      }
+    }).then(user => {
       return done(null, user);
+    }).catch(error => {
+      return done(error);
     });
   },
   ));
