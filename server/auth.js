@@ -2,7 +2,7 @@ import 'dotenv/config';
 import passport from 'passport';
 import { Strategy } from 'passport-google-oauth20';
 
-import User from '../models/User';
+import User from './models/User';
 
 const port = process.env.PORT || 7999;
 

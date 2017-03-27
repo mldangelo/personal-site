@@ -3,7 +3,7 @@ import moment from 'moment';
 
 import GithubAPI from 'github';
 
-import { githubKeys as keys } from '../../app/data/github';
+import { githubKeys as keys } from '../../../app/data/github';
 
 let cached = {};
 
