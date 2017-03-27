@@ -13,7 +13,7 @@ import mongoose from 'mongoose';
 import session from 'express-session';
 import mongoStore from 'connect-mongodb-session';
 
-import routes from './routes';
+import routes from '../routes';
 
 const port = process.env.PORT || 7999;
 const env = process.env.NODE_ENV || 'development';
@@ -51,7 +51,7 @@ app.use(session({
 // prevents logs from polluting test results
 if (!module.parent) app.use(morgan('combined'));
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '../public')));
 
 routes(app);
 

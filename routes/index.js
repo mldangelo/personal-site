@@ -1,8 +1,8 @@
 /* eslint-disable global-require */
 import 'dotenv/config';
-import auth from './auth';
-import reactApp from './app';
-import { requireUserAPI } from './middleware';
+import auth from '../server/auth';
+import reactApp from './views/app';
+import { requireUserAPI, requireAdminAPI } from './middleware';
 
 
 const routes = (app) => {
@@ -16,9 +16,11 @@ const routes = (app) => {
     res.redirect('/resume'); // the only protected page. this works for now
   });
 
-  app.get('/logout', require('./logout'));
+  app.get('/logout', require('./views/logout'));
+
   app.get('/api/github', require('./api/github'));
   app.get('/api/lastfm', require('./api/lastfm'));
+
   app.get('/api/resume', requireUserAPI, require('./api/resume'));
 
   reactApp(app); // set up react routes
