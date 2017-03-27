@@ -17,7 +17,7 @@ export default {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: 'views/index.tpl.html',
+      template: 'server/views/index.tpl.html',
       inject: 'body',
       filename: 'index.html',
     }),
