@@ -11,6 +11,11 @@ const User = new Schema({
   email: String,
   email_verified: Boolean,
   gender: String,
+  updatedAt: [ Date ],
+  isAdmin: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 export default mongoose.model('users', User);
