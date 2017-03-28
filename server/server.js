@@ -18,6 +18,7 @@ import auth from './auth';
 
 const port = process.env.PORT || 7999;
 const env = process.env.NODE_ENV || 'development';
+const database = process.env.DB_NAME || 'mldangelo';
 
 const app = express();
 
@@ -28,10 +29,10 @@ app.use(cookieParser());
 
 const MongoDBStore = mongoStore(session);
 
-mongoose.connect('mongodb://localhost/mldangelo');
+mongoose.connect(`mongodb://localhost/${database}`);
 
 const store = new MongoDBStore({
-  uri: 'mongodb://localhost/mldangelo',
+  uri: `mongodb://localhost/${database}`,
   collection: 'sessions',
 });
 
