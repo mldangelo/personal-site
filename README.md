@@ -1,4 +1,6 @@
 ## [mldangelo.com](http://mldangelo.com)
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/mldangelo/mldangelo.svg)](https://greenkeeper.io/)
 My personal website. Built using Node.js, React, Express, React-Router, Hot Module Reloading, Webpack and many other technologies.
 
 ### Tests:
