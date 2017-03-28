@@ -2,7 +2,7 @@ import 'dotenv/config';
 import passport from 'passport';
 import { Strategy } from 'passport-google-oauth20';
 
-import User from '../models/User';
+import User from './models/User';
 
 const port = process.env.PORT || 7999;
 
@@ -20,15 +20,14 @@ const auth = (app) => {
     scope: ['email'],
   }, (token, tokenSecret, profile, done) => {
     // update the user if s/he exists or add a new user
-    User.findOneAndUpdate({
-      email: profile._json.email,
-    }, Object.assign({ $push: { updatedAt: Date.now() } }, profile._json), {
-      upsert: true,
-    }).then(user => {
-      return done(null, user);
-    }).catch(error => {
-      return done(error);
-    });
+    User.findOne({ email: profile._json.email })
+    .then((user) => {
+      if (!user) {
+        return User.create(Object.assign({ logins: [Date.now()] }, profile._json));
+      }
+      user.logins.push(Date.now());
+      return user.save();
+    }).then(user => done(null, user)).catch(error => done(error));
   },
   ));
 
@@ -41,8 +40,6 @@ const auth = (app) => {
       done(err, user);
     });
   });
-
-  return passport;
 };
 
 export default auth;

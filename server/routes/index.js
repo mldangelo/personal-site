@@ -1,13 +1,10 @@
 /* eslint-disable global-require */
 import 'dotenv/config';
-import auth from './auth';
-import reactApp from './app';
+import passport from 'passport';
+import reactApp from './views/app';
 import { requireUserAPI, requireAdminAPI } from './middleware';
 
-
 const routes = (app) => {
-  const passport = auth(app);
-
   app.get('/login/google', passport.authenticate('google'));
 
   app.get('/login/google/return', passport.authenticate('google', {
@@ -16,7 +13,7 @@ const routes = (app) => {
     res.redirect('/resume'); // the only protected page. this works for now
   });
 
-  app.get('/logout', require('./logout'));
+  app.get('/logout', require('./views/logout'));
 
   app.get('/api/github', require('./api/github'));
   app.get('/api/lastfm', require('./api/lastfm'));

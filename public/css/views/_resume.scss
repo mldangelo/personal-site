@@ -1,16 +1,16 @@
-/* Resume */ 
+/* Resume */
 
 #resume {
-	
+
 	.link-to {
 		position: relative;
 		top: -4.5em;
 	}
-	
+
 	.link-container h4 {
 		text-decoration:none;
 		border-bottom: none;
-		display: inline;
+		display: inline-flex;
 
 		a {
 				padding: 0 .5em;
@@ -36,7 +36,7 @@
 			}
 		}
 	}
-	
+
 	.jobs-container {
 		.points {
 			li {
@@ -46,7 +46,7 @@
 			}
 		}
 	}
-	
+
 	.courses {
 		padding-top: 1.6em;
 		.title {
@@ -54,13 +54,13 @@
 		}
 		.course-list {
 			text-align: center;
-			
+
 			h4 {
 				white-space: nowrap;
 			}
 		}
 	}
-	
+
 	.skills {
 		margin-top: 2em;
 		.title {
@@ -86,7 +86,7 @@
 	h4 {
 		font-weight: normal;
 	}
-	
+
 	.degree {
 		margin-bottom: .1em;
 		text-transform: none;

@@ -16,10 +16,9 @@ class Admin extends Component {
   }
 
   componentDidMount() {
-    axios.get('/api/admin').then(({data}) => {
-      console.log(data.users);
+    axios.get('/api/admin').then((payload) => {
       this.setState({
-        data: data.users,
+        data: payload.data.users,
       });
     }).catch((error) => {
       console.error('admin-api-fetch-error', error);
@@ -38,28 +37,30 @@ class Admin extends Component {
           </header>
           <div>
             <section id="admin-table">
-            <table>
-            <thead>
-              <tr>
-                <th>Name &#9651;</th>
-                <th>Email &#9661;</th>
-                <th>Created At</th>
-                <th>Last Online</th>
-              </tr>
-              </thead>
-              <tbody>
-              {this.state.data.map(user => (
+              <table>
+                <thead>
                   <tr>
-                    <td>{`${user.given_name || ''} ${user.family_name || ''}`}</td>
-                    <td><a href={`mailto:${user.email}`}>{user.email}</a></td>
-                    <td>{moment(user.createdAt).format('MMMM DD, YYYY')}</td>
-                    <td>{moment(user.createdAt).format('MMMM DD, YYYY')}</td>
+                    <th>Name &#9651;</th>
+                    <th>Email &#9661;</th>
+                    <th>Created At</th>
+                    <th>Last Online</th>
+                    <th>Visits</th>
                   </tr>
+                </thead>
+                <tbody>
+                  {this.state.data.map(user => (
+                    <tr>
+                      <td>{`${user.name || ''}`}</td>
+                      <td><a href={`mailto:${user.email}`}>{user.email}</a></td>
+                      <td>{moment(user.createdAt).format('MMMM DD, YYYY')}</td>
+                      <td>{moment(user.lastOnline).format('MMMM DD, YYYY')}</td>
+                      <td>{user.visits}</td>
+                    </tr>
                 ),
              )
             }
-            </tbody>
-            </table>
+                </tbody>
+              </table>
             </section>
           </div>
         </article>

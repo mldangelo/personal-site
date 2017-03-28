@@ -8,7 +8,7 @@ import express from 'express';
 import webpack from 'webpack';
 import webpackMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
-import config from '../webpack/webpack.config';
+import config from '../../../webpack/webpack.config';
 
 const env = process.env.NODE_ENV || 'development';
 
@@ -33,15 +33,15 @@ const routes = (app) => {
 
 
     app.get('/*', (req, res) => {
-      const content = middleware.fileSystem.readFileSync(path.join(__dirname, '../dist/index.html'));
+      const content = middleware.fileSystem.readFileSync(path.join(__dirname, '../../../dist/index.html'));
       const key = '<div id="root"></div>';
       const index = content.indexOf(key) + key.length;
       const inject = req.user ? `<script type="text/javascript">window.id="${req.user._id}";window.admin=${req.user.isAdmin};</script>` : '';
       res.send(content.slice(0, index) + inject + content.slice(index));
     });
   } else {
-    app.use('/dist', express.static(path.join(__dirname, '../dist')));
-    const content = fs.readFileSync(path.join(__dirname, '../dist/index.html'), 'utf8');
+    app.use('/dist', express.static(path.join(__dirname, '../../../dist')));
+    const content = fs.readFileSync(path.join(__dirname, '../../../dist/index.html'), 'utf8');
     const key = '<div id=root></div>';
     const index = content.indexOf(key) + key.length;
 

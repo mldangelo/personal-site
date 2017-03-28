@@ -11,7 +11,7 @@ const User = new Schema({
   email: String,
   email_verified: Boolean,
   gender: String,
-  updatedAt: [Date],
+  logins: [Date],
   isAdmin: {
     type: Boolean,
     default: false,
