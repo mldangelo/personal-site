@@ -2,7 +2,7 @@
 import 'babel-polyfill';
 import 'dotenv/config';
 import Nightmare from 'nightmare';
-import server from '../server';
+import server from '../server/server';
 import { pages, randomString } from './helpers';
 
 require('mocha-generators').install();
@@ -37,6 +37,7 @@ describe('Page Load Tests:', function () {
     it(`check if ${args.route} renders`, function* () {
       let text = yield nightmare
         .goto(`http://localhost:${port}${args.route}`)
+        .wait(100)
         .evaluate(() => document.title);
       text.should.equal(args.title);
 
@@ -53,6 +54,7 @@ describe('Page Load Tests:', function () {
   it('check if 404 renders', function* () {
     let text = yield nightmare
       .goto(`http://localhost:${port}/${randomString(10)}`)
+      .wait(100)
       .evaluate(() => document.title);
     text.should.equal('404');
 

@@ -1,23 +1,37 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import Job from './Experience/Job';
-import positions from '../../data/positions';
 
-const getRows = () => positions.map(job => (
+const getRows = positions => positions.map(job => (
   <Job
     data={job}
     key={job.company}
   />
 ));
 
-const Experience = () => (
+const Experience = props => (
   <div className="experience">
     <div className="link-to" id="experience" />
     <div className="title">
       <h3>Experience</h3>
     </div>
-    {getRows()}
+    {getRows(props.data)}
   </div>
 );
+
+Experience.propTypes = {
+  data: PropTypes.arrayOf(PropTypes.shape({
+    company: PropTypes.string,
+    position: PropTypes.string,
+    link: PropTypes.string,
+    daterange: PropTypes.string,
+    points: PropTypes.arrayOf(PropTypes.string),
+  })),
+};
+
+Experience.defaultProps = {
+  data: [],
+};
+
 
 export default Experience;

@@ -59,10 +59,11 @@
 	@import 'layout/footer';
 	@import 'layout/menu';
 
-	@import 'pages/about';
-	@import 'pages/contact';
-	@import 'pages/music';
-	@import 'pages/notFound';
-	@import 'pages/resume';
-	@import 'pages/skills';
-	@import 'pages/stats';
+	@import 'views/about';
+	@import 'views/contact';
+	@import 'views/login';
+	@import 'views/music';
+	@import 'views/notFound';
+	@import 'views/resume';
+	@import 'views/skills';
+	@import 'views/stats';

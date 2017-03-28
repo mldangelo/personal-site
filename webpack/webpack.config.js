@@ -2,6 +2,7 @@ import 'dotenv/config';
 import path from 'path';
 import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import ScriptExtHtmlWebpackPlugin from 'script-ext-html-webpack-plugin';
 
 export default {
   devtool: 'eval-source-map',
@@ -16,9 +17,12 @@ export default {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: 'views/index.tpl.html',
+      template: 'server/views/index.tpl.html',
       inject: 'body',
       filename: 'index.html',
+    }),
+    new ScriptExtHtmlWebpackPlugin({
+      defaultAttribute: 'defer',
     }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),

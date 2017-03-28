@@ -16,11 +16,6 @@ const pages = [
     heading: 'ABOUT ME',
   },
   {
-    route: '/resume',
-    title: 'Resume | Michael D\'Angelo',
-    heading: 'RESUME',
-  },
-  {
     route: '/projects',
     title: 'Projects | Michael D\'Angelo',
     heading: 'PROJECTS',

@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import Course from './Courses/Course';
-import courses from '../../data/courses';
 
-const getRows = () => courses.sort((a, b) => {
+const getRows = courses => courses.sort((a, b) => {
   let ret = 0;
   if (a.university > b.university) ret = -1;
   else if (a.unversity < b.university) ret = 1;
@@ -18,16 +17,29 @@ const getRows = () => courses.sort((a, b) => {
   />
 ));
 
-const Courses = () => (
+const Courses = props => (
   <div className="courses">
     <div className="link-to" id="courses" />
     <div className="title">
       <h3>Selected Courses</h3>
     </div>
     <ul className="course-list">
-      {getRows()}
+      {getRows(props.data)}
     </ul>
   </div>
 );
+
+Courses.propTypes = {
+  data: PropTypes.arrayOf(PropTypes.shape({
+    title: PropTypes.string,
+    number: PropTypes.string,
+    link: PropTypes.string,
+    univerity: PropTypes.string,
+  })),
+};
+
+Courses.defaultProps = {
+  data: [],
+};
 
 export default Courses;

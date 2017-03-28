@@ -1,23 +1,24 @@
 import React from 'react';
-import { Link, IndexLink } from 'react-router';
+import { Link } from 'react-router-dom';
 
 import Hamburger from './Hamburger';
-import links from '../../data/links';
+import routes from '../../data/routes';
 
 const Header = () => (
   <header id="header">
     <h1 className="index-link">
-      {links.filter(l => l.index).map(l => (
-        <IndexLink key={l.label} to={l.link}>{l.label}</IndexLink>
+      {routes.filter(l => l.index).map(l => (
+        <Link key={l.label} to={l.path}>{l.label}</Link>
       ))}
     </h1>
     <nav className="links">
       <ul>
-        {links.filter(l => !l.index).map(l => (
+        {routes.filter(l => !l.index).map(l => (
           <li key={l.label}>
-            <Link to={l.link}>{l.label}</Link>
+            <Link to={l.path}>{l.label}</Link>
           </li>
         ))}
+        {window.id ? <li><a href="/logout">Logout</a></li> : null}
       </ul>
     </nav>
     <Hamburger />

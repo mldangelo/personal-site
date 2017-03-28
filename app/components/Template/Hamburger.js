@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { Link, IndexLink } from 'react-router';
+import {
+  Link,
+} from 'react-router-dom';
 
 import Menus from 'react-burger-menu';
 
-import links from '../../data/links';
+import routes from '../../data/routes';
 
 const Menu = Menus.slide;
 
@@ -44,20 +46,14 @@ class Hamburger extends Component {
         </nav>
         <Menu right noOverlay isOpen={this.state.open}>
           <ul className="hamburger-ul">
-            {links.filter(l => l.index).map(l => (
+            {routes.map(l => (
               <li key={l.label} onClick={this.handleClick}>
-                <IndexLink to={l.link}>
-                  <h3 className="index-li">{l.label}</h3>
-                </IndexLink>
-              </li>
-            ))}
-            {links.filter(l => !l.index).map(l => (
-              <li key={l.label} onClick={this.handleClick}>
-                <Link to={l.link}>
-                  <h3>{l.label}</h3>
+                <Link to={l.path}>
+                  <h3 className={l.index ? 'index-li' : null}>{l.label}</h3>
                 </Link>
               </li>
             ))}
+            {window.id ? <li><a href="/logout"><h3>Logout</h3></a></li> : null}
           </ul>
         </Menu>
       </div>

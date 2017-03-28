@@ -1,12 +1,15 @@
 import React from 'react';
-import { Link, IndexLink } from 'react-router';
+
+import {
+  Link,
+} from 'react-router-dom';
 
 import data from '../../data/contact';
 
 const Nav = () => (
   <section id="sidebar">
     <section id="intro">
-      <IndexLink to="" className="logo"><img src="/images/me_icon.jpg" alt="" /></IndexLink>
+      <Link to="" className="logo"><img src="/images/me_icon.jpg" alt="" /></Link>
       <header>
         <h2>Michael D&apos;Angelo</h2>
         <p><a href="mailto:michael.l.dangelo@gmail.com">michael.l.dangelo@gmail.com</a></p>

@@ -1,0 +1,39 @@
+// Login page (/login)
+
+#login {
+  width: 50%;
+  margin: auto;
+  left: auto;
+
+  p {
+    font-size: 0.9em;
+    margin: 0 0 1em 0;
+  }
+
+  .login-container {
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 0 .5em 0;
+
+  }
+
+}
+
+@media (max-width: 1200px) {
+  #login {
+    width: 60%;
+    border: solid 1px rgba(160, 160, 160, 0.3);
+  }
+}
+@media (max-width: 1000px) {
+  #login {
+    width: 70%;
+  }
+}
+@media (max-width: 800px) {
+  #login {
+    width: 100%;
+  }
+}

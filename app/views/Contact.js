@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import Helmet from 'react-helmet';
+
+import Main from '../layouts/Main';
+
 
 import data from '../data/contact';
 
@@ -72,30 +75,32 @@ class Contact extends Component {
   render() {
     const message = this.state.message;
     return (
-      <article className="post" id="contact">
+      <Main>
         <Helmet title="Contact" />
-        <header>
-          <div className="title">
-            <h2><Link to="/contact">Contact</Link></h2>
+        <article className="post" id="contact">
+          <header>
+            <div className="title">
+              <h2><Link to="/contact">Contact</Link></h2>
+            </div>
+          </header>
+          <div className="email-at">
+            <p>Feel free to get in touch. You can email me at: </p>
+            <div className="inline-container" style={validateText(message) ? {} : { color: 'red' }}>
+              <a href={validateText(message) ? `mailto:${message}@mldangelo.com` : ''}>
+                <span>{message}</span>
+                <span>@mldangelo.com</span>
+              </a>
+            </div>
           </div>
-        </header>
-        <div className="email-at">
-          <p>Feel free to get in touch. You can email me at: </p>
-          <div className="inline-container" style={validateText(message) ? {} : { color: 'red' }}>
-            <a href={validateText(message) ? `mailto:${message}@mldangelo.com` : ''}>
-              <span>{message}</span>
-              <span>@mldangelo.com</span>
-            </a>
-          </div>
-        </div>
-        <ul className="icons">
-          {data.map(s => (
-            <li key={s.label}>
-              <a href={s.link} className={s.icon}><span className="label">{s.label}</span></a>
-            </li>
+          <ul className="icons">
+            {data.map(s => (
+              <li key={s.label}>
+                <a href={s.link} className={s.icon}><span className="label">{s.label}</span></a>
+              </li>
         ))}
-        </ul>
-      </article>
+          </ul>
+        </article>
+      </Main>
     );
   }
 }

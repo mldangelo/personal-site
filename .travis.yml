@@ -1,29 +1,28 @@
 sudo: false
 language: node_js
-
+services: mongodb
 cache:
   yarn: true
-
 env:
   global:
   - secure: RMzwEd88VFWIw8R5j2RMkpFeiLGUM6tpoVooi30SOu/AkC0YxYNcxskIxDo0lfSuckvvggBxDq30WSXLrGaxCegCM5N5EyCdt/J67hnoD5C0x+hGFOrzp+nps/xfNerc47MLxVjG+Nglc8wk+gJNohG+l5AbEf33zwrVxARWqAPsqiUFyYGRcCSNMdFbUQnQtYrHFfxVpKU/MQMvsVPDvR8jNKjllIgCHHupYPtvfNP1/e33iWduJmEwP2k2kY7kJuEjy15RClrdW0y8k+uUibyKrjJQ0UhnAom0vwwIKbOZw8hBKRhvaGlJmvNRWBtsetpD60/xHo8s0POHMM12pfD7YQ2NZdriDXDdpArontMw5V0u6zUzWPV92yS99WXk/ufZIvCQl03nHEb6dK+8NPKquUmqZWWQYJylZc/tjzJJNliX03erDwNhYl2S4u+o5Br6iMMtxfIv1j7rBUk0sCHQwERWsYFm1HegvW2rwdOKBOcn2fOMBvKHZPSbLfDbJtJPSTetsT5MWyGIOPx8C+JIhobUNq5VpynOw+EInPfqG+qAV8HXJrZxoss/48o8IyjTBz0MTxNKrZD3v4R/pZrerq/+Jx/meCi6xHuMg4MEUnzj2o1DdSJB8C1vFindq2QrMah8u0wDscSNr2ihZg6treAnKCMeLe2PToqnlB0=
   - secure: Pw7qEKKiSACRYWFrGA4Nej6ZWTHDEnZbLO111H36+jkpg3n/dAghzWwn9qxjfH4z7lEZ5dvIGAh8SAiAQGkhuhZ22S5Hl98SF+6akZPbpf3xfWvDZn5cwpJljcFJG8/gDwP9mM/zfkMVhnmvDs3Q9saHG+7OnnobDQd8clRWbqJnyWizOAXhelGg8oiS/3NwstHFIR0+0nGWL/Zc5r9Y0vIaOiR5ePa7CgRiWbhjf9l6x91wFFSx2/BpPIijHbtN+rsRxMzE2Dxr7Id35rhGmUx7y0KER87It8CYgzudrQLzyRVN33Uju2Sh/kjhVOJ8Afl8xIwc2sQfn9ChHDN7NZM2rzvh/Aajk/ShYDHARlqSy9ZrzVQh2DtMkcEwJZFD4WqbHE2OjIABKdO53YAUBXDlng8ght4kL8QVrvM1pEoKGu4LKZnrmuBWaV/lztBwx/2RHER42XVXWAk+FMR1h8fPBpSON2HIHx3h68SDSAHzjibMiI4e+JcA0VgeFBR8xTx9wdBDXlNSk2i/hlTuMMhp4lyS3MSNP4bXPwQ6KK4HvD+U+s765/tc5pFRr+xrCfBlMeHWSiGWDCPbCDycuU8lb3e3CApY2Sg5SyERRopGXS6CZGPqbqPGLtC1jGOgOgUcFhOCLUnhe7BKNHTgZDiC7OdpmUWp1P+ehnEA2X4=
   - secure: J3CiJWSSJGZJMgzWR5ESQMFXLDY3MRq0zJ0inthQY0YbDYxS44FU94ayPzF15pn3BjvJij32xZepnGiNSl3aDR0g1mbcKWI3tGojuaGPNSP5jG8BOiRu74iilUv5kFW8Ku2DumTfET45T13xsY/aIexnAe2JOc9NUzD+UuOIDlzGgTB38vC/hPVn+bRBmUH3iA+uuPtnDMMXpwczVOHJ4ekmvju28nXMwXFqSJcDE0sN5zhdfFaT63/nTYEGUg5VSfwWzNSkjDMGnq2Ed3919VMxoZbQIwCWPW6KZiwq+zw74dh1tD4GirnJFcVuLfYxr3I+LONojjYE3lLRCQWZeZkAggxkdAspE1RmMUDHaspFfPFBN2p2izpzcvAyRVDS3ZgW0mP3GXoNRse7Z02lELmrndvF8a5Acyqhgx7qCZOBrG4I0uv0LNH1TWnFqpz2KHYV86AZT82TvkNi7aiddnabokOtA4HfD//VYIa+lR/JReBRlctT33RVZpVObpYbKC9p1bFOhopGssljVnWxZ2JMCS4IiwCLIUbT2Rd7Xs7N1yBuFRXhBSwuraSdXgqYEWHYl8yZmSxkKraG0bHETAQCcfzRthQTBfoKshT2GRorgSF/hpzrSwbVBY14VMOlqpo2THNAOime4MAPIkZ07N+TORcM4SBtBGKjcY/q7aQ=
-
+  - secure: NjjJblwWbnmclNYvei4sn8RHjsbhsYJJUur6Tlo1bE1iQbU2Z9txI0SI2zhyZqNJLBPkQp06VihHzZUkG8cnorK1C6zXwcRa72gdLUJDyYcuibT0P+odJEM5D0BbzaUe7z29ul6uOjVEKdzWPfCAKVh1pV7B2jTjRGo6KaZ+6ue26rlEC9xat9eJeeBRAVwK+0NAKFKvIZ6lKIhdxbZypIX/gEZQ73NgYrJju8+m47YeddDdHBOPjIzFEtFzSOoz/6HZTCdT9rfMG/8KQnVMlvpAMPxj5pwsFrQItQKUhF2PXn5JtfndFbV/VOyTJsl4lMyTvmvHyAekZ8G7EL1G5w3ETcU7A87KGdFm7DGpj3BWECK7UQ+1Ucnwo1LRUoR9ZjpZdaOsxewf5cNcLjbnaxVvyT/+dtA6NeIEcj2lGl881GFsrQimtPmVsjiAemXMHa+9LbTRyblHIVtUPBiYVUWI8pCZ9yduze8TeIhY669YTtgThpOmPMw4ywVtn+MSBPwEcSLcFTtpCM6JXgD42dWjYrSouljmJ8aX4RkygEOti6cZMgyTN41uh35u+RFxsXWEAmncyNh3xNxQRFq22WML4LWpq1581iuUJPo01e4BZNlhPWTSQfOlLLrl9asD4ByhW0yb6XJaDVw3wVvRB/su99uWvv9aKdon/8IidGE=
+  - secure: DBWxOpBhlAzO5zza4mJZkZa/XAIJdUlMVIqpCGJVGJsdjUIXlTdF/Vw+Q5U5ZUR2MQN1fbpvqOzllsBwHkQiND2lpztDXDn95UjW3SK8Fhb8+1TVfwR4HXXW4XV3nYQhGYXkPcJ1kTVtTLqkp4WCmXulkQ1WqQT1zGPmvu73Mj6QgowTGaHf0DrbfQQouQyt+ji1bn1RLwvaZuNmgoYw1N/8NVssQEeJqb0X8cK2cQv3iGk0lnTXc+k4nWTa+IOLBHbmCyRMoVRBt2CnIKc9SuG3dZRi6g7FIhlBEF21oyxC7vYOw7Hvgr4T6dLfZaArAd+th1RiKl1trXtz6es+KofWo/Fzw3NcSxrknA3HzDr+LjRUgWj+Bi0WF3o6G5EdUbaIZgolVy76xj4P9ZN4mDKIvrtS6ZoiPssT3zM3eNSzrqkvCZAgRO198oepUDG/9RGxnQrCZCJxIRWcCl5NybiKd+3Nk9hRT2ZdTDeskhH7h2as73IkVN9+Um0TszvaJMzZbyOAOFInJwZfcpS0uWX+3+bpahx3UDLqhDltSLV5O/THzhDoP2TselXZ5ZFzQ/U4MHxwesuRfEE37e0Uc2adoyzuVFtFNL+6S3G1kzJFO7kyAkJ4u5Sg+Qsw1r/WTZbvFvmnPr4wE9Mu4r1/AbHzcG1MJu8MfTRbRYTsKnA=
 matrix:
   include:
-    - os: linux
-      node_js: "7"
-      env: NODE_ENV=development
-    - os: linux
-      node_js: "7"
-      env: NODE_ENV=production
+  - os: linux
+    node_js: '7'
+    env: NODE_ENV=development
+  - os: linux
+    node_js: '7'
+    env: NODE_ENV=production
   fast_finish: true
-
 addons:
-  code_climate:
-    repo_token: 321ece2c9941bf30bb07f0555343ad772bdbbc6235c866478afc7af46558a8b4
-
+  apt:
+    packages:
+    - xvfb
 before_install:
 - curl -o- -L https://yarnpkg.com/install.sh | bash
 - export PATH=$HOME/.yarn/bin:$PATH
@@ -32,29 +31,19 @@ before_install:
 - npm --version
 - gcc --version
 - g++ --version
-
-addons:
-  apt:
-    packages:
-      - xvfb
-
 install:
-  - export DISPLAY=':99.0'
-  - Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
-  - NODE_ENV=development yarn
-
+- export DISPLAY=':99.0'
+- Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+- NODE_ENV=development yarn
 before_script:
 - npm run lint
 - sleep 5
-
 script:
 - npm run build-dev
 - npm run build
 - npm test
-
 notifications:
   email:
   - michael.l.dangelo@gmail.com
-
 git:
   depth: 10
