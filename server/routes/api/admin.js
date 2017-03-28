@@ -6,8 +6,8 @@ export default (req, res) => {
       email: user.email,
       name: user.name,
         // NOTE: In the future, we can assume user.logins is always sorted
-      lastOnline: new Date(user.logins.reduce((a, b) => Math.max(a, b), user.logins[0])),
-      createdAt: new Date(user.logins.reduce((a, b) => Math.min(a, b), user.logins[0])),
+      lastOnline: new Date(Math.max(...user.logins)),
+      createdAt: new Date(Math.min(...user.logins)),
       visits: user.logins.length,
     }));
     res.json({

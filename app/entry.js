@@ -1,11 +1,13 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import {
   BrowserRouter as Router,
   Route,
   Switch,
-  Redirect,
 } from 'react-router-dom';
+
+import PrivateRoute from './components/Routes/PrivateRoute';
+import AdminRoute from './components/Routes/AdminRoute';
 
 // Featured
 import Index from './views/Index';
@@ -26,46 +28,20 @@ import NotFound from './views/NotFound';
 // All of our CSS
 require('../public/css/main.scss');
 
-const PrivateRoute = ({ component, ...rest }) => (
-  <Route
-    {...rest} render={props => (
-    window.id ? (
-      React.createElement(component, props)
-    ) : (
-      <Redirect
-        to={{
-          pathname: '/login',
-          state: { from: props.location },
-        }}
-      />
-    )
-  )}
-  />
-);
-
-PrivateRoute.propTypes = {
-  component: PropTypes.func,
-  location: PropTypes.string, // TODO Verify this type
-};
-
-PrivateRoute.defaultProps = {
-  component: null,
-  location: '',
-};
-
-
 ReactDOM.render(
   <Router>
     <Switch>
       <Route path="/" exact component={Index} />
       <Route path="/about" component={About} />
-      <PrivateRoute path="/resume" component={Resume} />
       <Route path="/projects" component={Projects} />
       <Route path="/stats" component={Stats} />
       <Route path="/contact" component={Contact} />
       <Route path="/music" component={Music} />
       <Route path="/login" component={Login} />
-      <Route path="/admin" component={Admin} />
+
+      <PrivateRoute path="/resume" component={Resume} />
+      <AdminRoute path="/admin" component={Admin} />
+
       <Route component={NotFound} status={404} />
     </Switch>
   </Router>,
