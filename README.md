@@ -1,10 +1,12 @@
 ## [mldangelo.com](http://mldangelo.com)
+
 My personal website. Built using Node.js, React, Express, React-Router, Hot Module Reloading, Webpack and many other technologies.
 
 ### Tests:
 [![Code Climate](https://codeclimate.com/github/mldangelo/mldangelo/badges/gpa.svg)](https://codeclimate.com/github/mldangelo/mldangelo)
 [![Build Status](https://travis-ci.org/mldangelo/mldangelo.svg?branch=master)](https://travis-ci.org/mldangelo/mldangelo)
 [![Dependency Tracking](https://david-dm.org/mldangelo/mldangelo.svg)](https://david-dm.org/)
+[![Greenkeeper badge](https://badges.greenkeeper.io/mldangelo/mldangelo.svg)](https://greenkeeper.io/)
 
 ### Dependencies:
 * node >= v6.0.0
