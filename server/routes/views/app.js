@@ -36,7 +36,7 @@ const routes = (app) => {
       const content = middleware.fileSystem.readFileSync(path.join(__dirname, '../../../dist/index.html'));
       const key = '<div id="root"></div>';
       const index = content.indexOf(key) + key.length;
-      const inject = req.user ? `<script type="text/javascript">window.id="${req.user._id}";</script>` : '';
+      const inject = req.user ? `<script type="text/javascript">window.id="${req.user._id}";window.admin=${req.user.isAdmin};</script>` : '';
       res.send(content.slice(0, index) + inject + content.slice(index));
     });
   } else {
@@ -46,7 +46,7 @@ const routes = (app) => {
     const index = content.indexOf(key) + key.length;
 
     app.get('/*', (req, res) => {
-      const inject = req.user ? `<script type="text/javascript">window.id="${req.user._id}";</script>` : '';
+      const inject = req.user ? `<script type="text/javascript">window.id="${req.user._id}";window.admin=${req.user.isAdmin};</script>` : '';
       res.send(content.slice(0, index) + inject + content.slice(index));
     });
   }

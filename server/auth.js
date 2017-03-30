@@ -19,7 +19,7 @@ const auth = (app) => {
     userProfileURL: 'https://www.googleapis.com/oauth2/v3/userinfo',
     scope: ['email'],
   }, (token, tokenSecret, profile, done) => {
-        // update the user if s/he exists or add a new user
+    // update the user if s/he exists or add a new user
     User.findOne({ email: profile._json.email })
     .then((user) => {
       if (!user) {
