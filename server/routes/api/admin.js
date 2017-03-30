@@ -9,7 +9,7 @@ export default (req, res) => {
       lastOnline: new Date(Math.max(...user.logins)),
       createdAt: new Date(Math.min(...user.logins)),
       visits: user.logins.length,
-    }));
+    })).sort((a, b) => new Date(b.lastOnline) - new Date(a.lastOnline));
     res.json({
       users: processed,
       success: true,

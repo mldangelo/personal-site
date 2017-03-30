@@ -6,6 +6,7 @@ import moment from 'moment';
 import axios from 'axios';
 import Main from '../layouts/Main';
 
+
 class Admin extends Component {
 
   constructor(props) {
@@ -40,8 +41,8 @@ class Admin extends Component {
               <table>
                 <thead>
                   <tr>
-                    <th>Name &#9651;</th>
-                    <th>Email &#9661;</th>
+                    <th>Name</th>
+                    <th>Email</th>
                     <th>Created At</th>
                     <th>Last Online</th>
                     <th>Visits</th>
@@ -52,8 +53,8 @@ class Admin extends Component {
                     <tr>
                       <td>{`${user.name || ''}`}</td>
                       <td><a href={`mailto:${user.email}`}>{user.email}</a></td>
-                      <td>{moment(user.createdAt).format('MMMM DD, YYYY')}</td>
-                      <td>{moment(user.lastOnline).format('MMMM DD, YYYY')}</td>
+                      <td>{moment(user.createdAt).format('MM/DD/YY')}</td>
+                      <td>{moment(user.lastOnline).format('MM/DD/YY h:mm:ss a')}</td>
                       <td>{user.visits}</td>
                     </tr>
                 ),
