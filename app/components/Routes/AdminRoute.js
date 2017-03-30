@@ -9,7 +9,7 @@ const AdminRoute = ({ component, ...rest }) => (
     ) : (
       <Redirect
         to={{
-          pathname: '/unauthorized',
+          pathname: window.id ? '/unauthorized' : '/login',
           state: { from: props.location },
         }}
       />
