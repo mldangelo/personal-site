@@ -14,11 +14,12 @@ class Main extends Component {
 
   componentWillMount() {
     window.scrollTo(0, 0);
-
     if (window.location.href.endsWith('#')) { // For Google Oauth
       window.history.replaceState({}, '', window.location.href.slice(0, -1));
     }
+  }
 
+  componentDidMount() {
     if (process.env.NODE_ENV === 'production') {
       ReactGA.set({
         page: window.location.pathname,
