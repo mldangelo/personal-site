@@ -37,7 +37,7 @@ describe('Page Load Tests:', function () {
     it(`check if ${args.route} renders`, function* () {
       let text = yield nightmare
         .goto(`http://localhost:${port}${args.route}`)
-        .wait(100)
+        .wait(1000)
         .evaluate(() => document.title);
       text.should.equal(args.title);
 
@@ -54,7 +54,7 @@ describe('Page Load Tests:', function () {
   it('check if 404 renders', function* () {
     let text = yield nightmare
       .goto(`http://localhost:${port}/${randomString(10)}`)
-      .wait(100)
+      .wait(1000)
       .evaluate(() => document.title);
     text.should.equal('404');
 

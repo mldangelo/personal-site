@@ -10,7 +10,8 @@ My personal website. Built using Node.js, React, Express, React-Router, Hot Modu
 
 ### Dependencies:
 * node >= v6.0.0
-* yarn >= v0.18.
+* yarn >= v0.20.0
+* mongodb >= 3.4.0
 
 ### Installation:
 
@@ -18,7 +19,7 @@ My personal website. Built using Node.js, React, Express, React-Router, Hot Modu
   ```bash
   git clone git://github.com/mldangelo/mldangelo.git
   cd mldangelo
-  yarn 
+  yarn
   ```
 
 2. Optionally configure nginx. Run:
@@ -35,7 +36,7 @@ for installation and setup instructions. A cronjob such as:
   ```bash
   0 0 1 * * sudo /home/ubuntu/certbot/certbot-auto renew --quiet --no-self-upgrade
   ```
-  
+
   should be set to automatically renew the certificate in production.
 
 
