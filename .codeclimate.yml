@@ -3,26 +3,19 @@ engines:
   csslint:
     enabled: true
   duplication:
-    enabled: true
+    enabled: false
     config:
       languages:
-      - ruby
       - javascript
-      - python
-      - php
+      - scss
+      - json
   eslint:
     enabled: true
-    channel: "eslint-2"
   fixme:
     enabled: true
 ratings:
   paths:
-  - "**.css"
-  - "**.inc"
+  - "**.scss"
+  - "**.json"
   - "**.js"
-  - "**.jsx"
-  - "**.module"
-  - "**.php"
-  - "**.py"
-  - "**.rb"
 exclude_paths: []
