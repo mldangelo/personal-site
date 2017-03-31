@@ -75,7 +75,7 @@
     "babel-eslint": "^7.2.1",
     "babel-polyfill": "^6.23.0",
     "chai": "^3.5.0",
-    "eslint": "^3.18.0",
+    "eslint": "^3.19.0",
     "eslint-config-airbnb": "^14.1.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
