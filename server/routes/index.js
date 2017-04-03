@@ -10,10 +10,9 @@ const routes = (app) => {
   app.get('/login/google/return', passport.authenticate('google', {
     failureRedirect: '/login',
   }), (req, res) => {
-    if (req.user && req.user.isAdmin) {
-      return res.redirect('/admin'); // redirect to admin dash for admin accounts
-    }
-    return res.redirect('/resume'); // the only other protected page. this works for now
+    const target = req.cookies.target || '/';
+    res.clearCookie('target', { path: '/' });
+    return res.redirect(target);
   });
 
   app.get('/logout', require('./views/logout'));
