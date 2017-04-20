@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import cookie from 'react-cookie';
 import { Route, Redirect } from 'react-router-dom';
 
@@ -26,12 +27,24 @@ const AdminRoute = ({ component, ...rest }) => (
 
 AdminRoute.propTypes = {
   component: PropTypes.func,
-  location: PropTypes.string, // TODO Verify this type
+  location: PropTypes.shape({
+    hash: PropTypes.string,
+    key: PropTypes.string,
+    pathname: PropTypes.string,
+    search: PropTypes.string,
+    state: PropTypes.string,
+  }),
 };
 
 AdminRoute.defaultProps = {
   component: null,
-  location: '',
+  location: {
+    hash: '',
+    key: '',
+    pathname: '',
+    search: '',
+    state: '',
+  },
 };
 
 export default AdminRoute;

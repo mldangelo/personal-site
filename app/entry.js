@@ -28,6 +28,10 @@ import NotFound from './views/NotFound';
 // All of our CSS
 require('../public/css/main.scss');
 
+if (window.location.href.endsWith('#')) { // For Google Oauth
+  window.history.replaceState({}, '', window.location.href.slice(0, -1));
+}
+
 ReactDOM.render(
   <Router>
     <Switch>

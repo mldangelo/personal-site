@@ -29,11 +29,11 @@ acorn@^3.0.4:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-3.3.0.tgz#45e37fb39e8da3f25baee3ff5369e2bb5f22017a"
 
-acorn@^4.0.3, acorn@^4.0.4:
+acorn@^4.0.3:
   version "4.0.11"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-4.0.11.tgz#edcda3bd937e7556410d42ed5860f67399c794c0"
 
-acorn@^5.0.1:
+acorn@^5.0.0, acorn@^5.0.1:
   version "5.0.3"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-5.0.3.tgz#c460df08491463f028ccb82eab3730bf01087b3d"
 
@@ -134,10 +134,6 @@ arr-flatten@^1.0.1:
 array-find-index@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/array-find-index/-/array-find-index-1.0.2.tgz#df010aa1287e164bbda6f9723b0a96a1ec4187a1"
-
-array-find@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/array-find/-/array-find-1.0.0.tgz#6c8e286d11ed768327f8e62ecee87353ca3e78b8"
 
 array-flatten@1.1.1:
   version "1.1.1"
@@ -765,9 +761,9 @@ babel-plugin-transform-react-jsx@^6.24.1:
     babel-plugin-syntax-jsx "^6.8.0"
     babel-runtime "^6.22.0"
 
-babel-plugin-transform-react-remove-prop-types@^0.3.3:
-  version "0.3.3"
-  resolved "https://registry.yarnpkg.com/babel-plugin-transform-react-remove-prop-types/-/babel-plugin-transform-react-remove-prop-types-0.3.3.tgz#d09f48b9a9503a69c1ced39b3825c2f45d29333c"
+babel-plugin-transform-react-remove-prop-types@^0.4.1:
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/babel-plugin-transform-react-remove-prop-types/-/babel-plugin-transform-react-remove-prop-types-0.4.1.tgz#50d6376d3973c6052087b274ca9bd21b8a07409a"
 
 babel-plugin-transform-regenerator@^6.24.1:
   version "6.24.1"
@@ -875,21 +871,7 @@ babel-template@^6.24.1:
     babylon "^6.11.0"
     lodash "^4.2.0"
 
-babel-traverse@^6.23.1:
-  version "6.23.1"
-  resolved "https://registry.yarnpkg.com/babel-traverse/-/babel-traverse-6.23.1.tgz#d3cb59010ecd06a97d81310065f966b699e14f48"
-  dependencies:
-    babel-code-frame "^6.22.0"
-    babel-messages "^6.23.0"
-    babel-runtime "^6.22.0"
-    babel-types "^6.23.0"
-    babylon "^6.15.0"
-    debug "^2.2.0"
-    globals "^9.0.0"
-    invariant "^2.2.0"
-    lodash "^4.2.0"
-
-babel-traverse@^6.24.1:
+babel-traverse@^6.23.1, babel-traverse@^6.24.1:
   version "6.24.1"
   resolved "https://registry.yarnpkg.com/babel-traverse/-/babel-traverse-6.24.1.tgz#ab36673fd356f9a0948659e7b338d5feadb31695"
   dependencies:
@@ -903,18 +885,9 @@ babel-traverse@^6.24.1:
     invariant "^2.2.0"
     lodash "^4.2.0"
 
-babel-types@^6.19.0, babel-types@^6.24.1:
+babel-types@^6.19.0, babel-types@^6.23.0, babel-types@^6.24.1:
   version "6.24.1"
   resolved "https://registry.yarnpkg.com/babel-types/-/babel-types-6.24.1.tgz#a136879dc15b3606bda0d90c1fc74304c2ff0975"
-  dependencies:
-    babel-runtime "^6.22.0"
-    esutils "^2.0.2"
-    lodash "^4.2.0"
-    to-fast-properties "^1.0.1"
-
-babel-types@^6.23.0:
-  version "6.23.0"
-  resolved "https://registry.yarnpkg.com/babel-types/-/babel-types-6.23.0.tgz#bb17179d7538bad38cd0c9e115d340f77e7e9acf"
   dependencies:
     babel-runtime "^6.22.0"
     esutils "^2.0.2"
@@ -993,10 +966,6 @@ boom@2.x.x:
   resolved "https://registry.yarnpkg.com/boom/-/boom-2.10.1.tgz#39c8918ceff5799f83f9492a848f625add0c766f"
   dependencies:
     hoek "2.x.x"
-
-bowser@^1.0.0:
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/bowser/-/bowser-1.6.0.tgz#37fc387b616cb6aef370dab4d6bd402b74c5c54d"
 
 brace-expansion@^1.0.0:
   version "1.1.6"
@@ -3115,10 +3084,6 @@ https-proxy-agent@^1.0.0:
     debug "2"
     extend "3"
 
-hyphenate-style-name@^1.0.1:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/hyphenate-style-name/-/hyphenate-style-name-1.0.2.tgz#31160a36930adaf1fc04c6074f7eb41465d4ec4b"
-
 i@0.3.x:
   version "0.3.5"
   resolved "https://registry.yarnpkg.com/i/-/i-0.3.5.tgz#1d2b854158ec8169113c6cb7f6b6801e99e211d5"
@@ -3187,13 +3152,6 @@ inherits@2.0.1:
 ini@1.x.x, ini@~1.3.0:
   version "1.3.4"
   resolved "https://registry.yarnpkg.com/ini/-/ini-1.3.4.tgz#0537cb79daf59b59a1a517dff706c86ec039162e"
-
-inline-style-prefixer@^2.0.5:
-  version "2.0.5"
-  resolved "https://registry.yarnpkg.com/inline-style-prefixer/-/inline-style-prefixer-2.0.5.tgz#c153c7e88fd84fef5c602e95a8168b2770671fe7"
-  dependencies:
-    bowser "^1.0.0"
-    hyphenate-style-name "^1.0.1"
 
 inquirer@^0.12.0:
   version "0.12.0"
@@ -3501,7 +3459,7 @@ json3@3.3.2:
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/json3/-/json3-3.3.2.tgz#3c0434743df93e2f5c42aee7b19bcb483575f4e1"
 
-json5@^0.5.0:
+json5@^0.5.0, json5@^0.5.1:
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/json5/-/json5-0.5.1.tgz#1eade7acc012034ad84e2396767ead9fa5495821"
 
@@ -4018,9 +3976,9 @@ mongodb@2.2.25, mongodb@~2.2.0:
     mongodb-core "2.1.9"
     readable-stream "2.1.5"
 
-mongoose@^4.9.4:
-  version "4.9.4"
-  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-4.9.4.tgz#212be4597e2db57b05286cc53ee894f30f3d8fad"
+mongoose@^4.9.5:
+  version "4.9.5"
+  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-4.9.5.tgz#856b856700032748dd68122cb0371f8980442975"
   dependencies:
     async "2.1.4"
     bson "~1.0.4"
@@ -4969,7 +4927,7 @@ prompt@0.2.14:
     utile "0.2.x"
     winston "0.8.x"
 
-prop-types@^15.5.1, prop-types@^15.5.4, prop-types@^15.5.6, prop-types@^15.5.7, prop-types@~15.5.7:
+prop-types@^15.5.1, prop-types@^15.5.4, prop-types@^15.5.6, prop-types@^15.5.7, prop-types@^15.5.8, prop-types@~15.5.7:
   version "15.5.8"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.5.8.tgz#6b7b2e141083be38c8595aa51fc55775c7199394"
   dependencies:
@@ -5043,15 +5001,6 @@ querystring@0.2.0, querystring@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/querystring/-/querystring-0.2.0.tgz#b209849203bb25df820da756e747005878521620"
 
-radium@^0.18.1:
-  version "0.18.2"
-  resolved "https://registry.yarnpkg.com/radium/-/radium-0.18.2.tgz#1e296966d0bcac6652085cbe84c7b8ed0196d7c1"
-  dependencies:
-    array-find "^1.0.0"
-    exenv "^1.2.1"
-    inline-style-prefixer "^2.0.5"
-    rimraf "^2.6.1"
-
 ramda@^0.23.0:
   version "0.23.0"
   resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.23.0.tgz#ccd13fff73497a93974e3e86327bfd87bd6e8e2b"
@@ -5096,14 +5045,14 @@ rc@^1.0.1, rc@^1.1.2, rc@^1.1.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-burger-menu@^1.10.14:
-  version "1.10.14"
-  resolved "https://registry.yarnpkg.com/react-burger-menu/-/react-burger-menu-1.10.14.tgz#3917c1c33dd74e6e28c871eba45293a2f41284e5"
+react-burger-menu@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-burger-menu/-/react-burger-menu-2.0.0.tgz#678578b1d09c24df2c360dc4604523aa3e59fd71"
   dependencies:
     browserify-optional "^1.0.0"
     classnames "^2.1.1"
     eve "~0.4.2"
-    radium "^0.18.1"
+    prop-types "^15.5.8"
     snapsvg-cjs "0.0.4"
 
 react-cookie@^1.0.5:
@@ -6337,11 +6286,11 @@ webpack-sources@^0.2.3:
     source-list-map "^1.1.1"
     source-map "~0.5.3"
 
-webpack@^2.3.3:
-  version "2.3.3"
-  resolved "https://registry.yarnpkg.com/webpack/-/webpack-2.3.3.tgz#eecc083c18fb7bf958ea4f40b57a6640c5a0cc78"
+webpack@^2.4.1:
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/webpack/-/webpack-2.4.1.tgz#15a91dbe34966d8a4b99c7d656efd92a2e5a6f6a"
   dependencies:
-    acorn "^4.0.4"
+    acorn "^5.0.0"
     acorn-dynamic-import "^2.0.0"
     ajv "^4.7.0"
     ajv-keywords "^1.1.1"
@@ -6349,6 +6298,7 @@ webpack@^2.3.3:
     enhanced-resolve "^3.0.0"
     interpret "^1.0.0"
     json-loader "^0.5.4"
+    json5 "^0.5.1"
     loader-runner "^2.3.0"
     loader-utils "^0.2.16"
     memory-fs "~0.4.1"

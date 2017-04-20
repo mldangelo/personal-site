@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 
 import ReactGA from 'react-ga';
@@ -14,9 +15,6 @@ class Main extends Component {
 
   componentWillMount() {
     window.scrollTo(0, 0);
-    if (window.location.href.endsWith('#')) { // For Google Oauth
-      window.history.replaceState({}, '', window.location.href.slice(0, -1));
-    }
   }
 
   componentDidMount() {

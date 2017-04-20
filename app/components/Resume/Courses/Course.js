@@ -1,5 +1,5 @@
-import React, { PropTypes } from 'react';
-
+import React from 'react';
+import PropTypes from 'prop-types';
 // TODO remove last bullet / figure out how to add bullets with css
 
 const Course = props => (
