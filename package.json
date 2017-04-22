@@ -55,7 +55,7 @@
     "raw-loader": "^0.5.1",
     "react": "^15.5.4",
     "react-burger-menu": "^2.0.0",
-    "react-cookie": "^1.0.5",
+    "react-cookie": "^2.0.1",
     "react-dom": "^15.5.4",
     "react-ga": "^2.2.0",
     "react-helmet": "^5.0.3",
