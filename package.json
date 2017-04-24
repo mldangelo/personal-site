@@ -83,7 +83,7 @@
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-mocha": "^4.9.0",
     "eslint-plugin-react": "^6.10.3",
-    "mocha": "^3.2.0",
+    "mocha": "^3.3.0",
     "mocha-generators": "^2.0.0",
     "nightmare": "^2.10.0"
   }
