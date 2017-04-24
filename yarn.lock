@@ -893,11 +893,11 @@ babel-types@^6.19.0, babel-types@^6.23.0, babel-types@^6.24.1:
     lodash "^4.2.0"
     to-fast-properties "^1.0.1"
 
-babylon@^6.11.0, babylon@^6.15.0:
+babylon@^6.11.0:
   version "6.16.1"
   resolved "https://registry.yarnpkg.com/babylon/-/babylon-6.16.1.tgz#30c5a22f481978a9e7f8cdfdf496b11d94b404d3"
 
-babylon@^6.17.0:
+babylon@^6.15.0, babylon@^6.17.0:
   version "6.17.0"
   resolved "https://registry.yarnpkg.com/babylon/-/babylon-6.17.0.tgz#37da948878488b9c4e3c4038893fa3314b3fc932"
 
@@ -1524,7 +1524,7 @@ cookie-signature@1.0.6:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/cookie-signature/-/cookie-signature-1.0.6.tgz#e303a882b342cc3ee8ca513a79999734dab3ae2c"
 
-cookie@0.3.1, cookie@^0.3.1:
+cookie@0.3.1:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/cookie/-/cookie-0.3.1.tgz#e7e0a1f9ef43b4c8ba925c5c5a96e806d16873bb"
 
@@ -3277,10 +3277,6 @@ is-my-json-valid@^2.10.0:
     jsonpointer "^4.0.0"
     xtend "^4.0.0"
 
-is-node@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/is-node/-/is-node-1.0.2.tgz#d7d002745ef7debbb7477e988956ab0a4fccb653"
-
 is-npm@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/is-npm/-/is-npm-1.0.0.tgz#f2fb63a65e4905b406c86072765a1a4dc793b9f4"
@@ -3409,6 +3405,10 @@ jodid25519@^1.0.0:
 js-base64@^2.1.9:
   version "2.1.9"
   resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-2.1.9.tgz#f0e80ae039a4bd654b5f281fc93f04a914a7fcce"
+
+js-cookie@^2.1.4:
+  version "2.1.4"
+  resolved "https://registry.yarnpkg.com/js-cookie/-/js-cookie-2.1.4.tgz#da4ec503866f149d164cf25f579ef31015025d8d"
 
 js-tokens@^3.0.0:
   version "3.0.1"
@@ -4945,7 +4945,7 @@ prompt@0.2.14:
     utile "0.2.x"
     winston "0.8.x"
 
-prop-types@^15.0.0, prop-types@^15.5.1, prop-types@^15.5.4, prop-types@^15.5.6, prop-types@^15.5.7, prop-types@^15.5.8, prop-types@~15.5.7:
+prop-types@^15.5.1, prop-types@^15.5.4, prop-types@^15.5.6, prop-types@^15.5.7, prop-types@^15.5.8, prop-types@~15.5.7:
   version "15.5.8"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.5.8.tgz#6b7b2e141083be38c8595aa51fc55775c7199394"
   dependencies:
@@ -5073,15 +5073,6 @@ react-burger-menu@^2.0.0:
     prop-types "^15.5.8"
     snapsvg-cjs "0.0.4"
 
-react-cookie@^2.0.6:
-  version "2.0.6"
-  resolved "https://registry.yarnpkg.com/react-cookie/-/react-cookie-2.0.6.tgz#8db17f772494896dc9f2c25d9c3e581617bab735"
-  dependencies:
-    hoist-non-react-statics "^1.2.0"
-    prop-types "^15.0.0"
-    react "^15.0.0"
-    universal-cookie "^2.0.1"
-
 react-dom@^15.5.4:
   version "15.5.4"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.5.4.tgz#ba0c28786fd52ed7e4f2135fe0288d462aef93da"
@@ -5145,7 +5136,7 @@ react-side-effect@^1.1.0:
     exenv "^1.2.1"
     shallowequal "^0.2.2"
 
-react@^15.0.0, react@^15.5.4:
+react@^15.5.4:
   version "15.5.4"
   resolved "https://registry.yarnpkg.com/react/-/react-15.5.4.tgz#fa83eb01506ab237cdc1c8c3b1cea8de012bf047"
   dependencies:
@@ -5191,7 +5182,7 @@ readable-stream@1.0:
     isarray "0.0.1"
     string_decoder "~0.10.x"
 
-readable-stream@2.1.5, readable-stream@^2.0.1, readable-stream@^2.0.5:
+readable-stream@2.1.5:
   version "2.1.5"
   resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-2.1.5.tgz#66fa8b720e1438b364681f2ad1a63c618448c9d0"
   dependencies:
@@ -5203,7 +5194,7 @@ readable-stream@2.1.5, readable-stream@^2.0.1, readable-stream@^2.0.5:
     string_decoder "~0.10.x"
     util-deprecate "~1.0.1"
 
-readable-stream@2.2.7:
+readable-stream@2.2.7, readable-stream@^2.0.0, "readable-stream@^2.0.0 || ^1.1.13", readable-stream@^2.0.1, readable-stream@^2.0.2, readable-stream@^2.0.5, readable-stream@^2.1.0, readable-stream@^2.1.4, readable-stream@^2.1.5, readable-stream@^2.2.2:
   version "2.2.7"
   resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-2.2.7.tgz#07057acbe2467b22042d36f98c5ad507054e95b1"
   dependencies:
@@ -5213,18 +5204,6 @@ readable-stream@2.2.7:
     isarray "~1.0.0"
     process-nextick-args "~1.0.6"
     string_decoder "~1.0.0"
-    util-deprecate "~1.0.1"
-
-readable-stream@^2.0.0, "readable-stream@^2.0.0 || ^1.1.13", readable-stream@^2.0.2, readable-stream@^2.1.0, readable-stream@^2.1.4, readable-stream@^2.1.5, readable-stream@^2.2.2:
-  version "2.2.6"
-  resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-2.2.6.tgz#8b43aed76e71483938d12a8d46c6cf1a00b1f816"
-  dependencies:
-    buffer-shims "^1.0.0"
-    core-util-is "~1.0.0"
-    inherits "~2.0.1"
-    isarray "~1.0.0"
-    process-nextick-args "~1.0.6"
-    string_decoder "~0.10.x"
     util-deprecate "~1.0.1"
 
 readable-stream@~1.1.9:
@@ -6150,14 +6129,6 @@ uniqid@^4.0.0:
 uniqs@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/uniqs/-/uniqs-2.0.0.tgz#ffede4b36b25290696e6e165d4a59edb998e6b02"
-
-universal-cookie@^2.0.1:
-  version "2.0.5"
-  resolved "https://registry.yarnpkg.com/universal-cookie/-/universal-cookie-2.0.5.tgz#e8fae5212bb5c8f231401ce9bf52d384a600c80b"
-  dependencies:
-    cookie "^0.3.1"
-    is-node "^1.0.2"
-    object-assign "^4.1.0"
 
 unpipe@1.0.0, unpipe@~1.0.0:
   version "1.0.0"

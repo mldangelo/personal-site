@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import cookie from 'react-cookie';
+import cookie from 'js-cookie';
 import { Route, Redirect } from 'react-router-dom';
 
 const AdminRoute = ({ component, ...rest }) => (
   <Route
     {...rest} render={(props) => {
       if (!window.id) { // checks for non authenticated accounts
-        cookie.save('target', props.location.pathname, { path: '/' });
+        cookie.set('target', props.location.pathname);
       }
       return (
         window.admin ? (
