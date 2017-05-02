@@ -49,7 +49,7 @@
     "morgan": "^1.8.1",
     "node-sass": "^4.5.2",
     "nodemon": "^1.11.0",
-    "normalize.css": "^6.0.0",
+    "normalize.css": "^7.0.0",
     "passport": "^0.3.2",
     "passport-google-oauth20": "^1.0.0",
     "prop-types": "^15.5.8",
