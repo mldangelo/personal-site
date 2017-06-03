@@ -5,7 +5,8 @@ import { Route, Redirect } from 'react-router-dom';
 
 const AdminRoute = ({ component, ...rest }) => (
   <Route
-    {...rest} render={(props) => {
+    {...rest}
+    render={(props) => {
       if (!window.id) { // checks for non authenticated accounts
         cookie.set('target', props.location.pathname);
       }
