@@ -2,7 +2,7 @@
 #### Intro
 I am a co-founder and the CTO of [Arthena](https://arthena.com) where I work on building the most accurate models for pricing and valuating fine art. My primary job functions are as a data scientist and software engineer.
 <br>
-I am available to consult on interesting projects. I am particularly interested in social impact, education, inclusively, space, and in applying machine learning to large data sets. I may even be available for pro-bono work depending on the time commitment and the project. If you'd like to meet, I am based in Palo Alto but travel to New York frequently.
+I am available to consult on interesting projects. I am particularly interested in social impact, education, inclusively, space, and in applying machine learning to large data sets. I may even be available for pro-bono work depending on the time commitment and the project. If you'd like to meet, I am based in New York but travel to Palo Alto frequently.
 <br><br>
 #### Currently
 At Arthena I have learned how to build teams and manage people, build relationships with customers, sell enterprise products, and build on-line predictive models for production environments. I've also learned how to build and maintain large web applications (see [arthena.com](https://arthena.com)).
@@ -13,7 +13,7 @@ At Arthena I have learned how to build teams and manage people, build relationsh
 
 - We subscribed to AOL in 1995. I still remember installing it from a floppy disk onto our brand new Packard Bell. It took years for me to send my first email.
 
-- In 1996, my uncle purchased [MegaRace](https://en.wikipedia.org/wiki/MegaRace) from [Media Play](https://en.wikipedia.org/wiki/Media_Play) and installed it on my mom's work computer. That summer, I might have endangered her business by using her computer too much.
+- In the summer of 1996, my uncle purchased [MegaRace](https://en.wikipedia.org/wiki/MegaRace) from [Media Play](https://en.wikipedia.org/wiki/Media_Play) and installed it on my mom's work computer. I might have endangered her business by using her computer too much.
 
 - At 7, I discovered the mini-games hidden in Microsoft Office. I also beat Minesweeper on expert for the first time.
 
@@ -62,7 +62,7 @@ Palo Alto, Mountain View, San Francisco, Seattle, and New York.
 
 - In 2016, I visited: Canada, Ethiopia, Austria, Germany, Belgium, Ireland, Northern Ireland, Italy, Romania, Sweden, Norway, Svalbard, Panama, Costa Rica, Uganda, Japan, and the UAE, mostly in that order.
 
-- In 2017, so far I have visited: Canada, Japan, Denmark, Germany, Sweden, Estonia, Russia, the Netherlands, Belgium, and Spain. I plan to visit: France, U.K., Hong Kong, Nepal, Indonesia, Norway, and Uganda.
+- In 2017, so far I have visited: Canada, Japan, Denmark, Germany, Sweden, Estonia, Russia, the Netherlands, Belgium, the U.K., and Spain. I plan to visit: France, Hong Kong, Nepal, Australia, Indonesia, Norway, and Uganda.
 
 - I am an Oregon Trail II enthusiast.
 
