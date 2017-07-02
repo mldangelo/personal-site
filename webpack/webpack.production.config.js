@@ -25,6 +25,12 @@ export default {
       defaultAttribute: 'defer',
     }),
     new ExtractTextPlugin('[name]-[hash].min.css'),
+    new StatsPlugin('webpack.stats.json', {
+      source: false,
+      modules: false,
+    }),
+    new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
+    new webpack.optimize.ModuleConcatenationPlugin(),
     new webpack.optimize.UglifyJsPlugin({
       beautify: false,
       comments: false,
@@ -38,11 +44,6 @@ export default {
         keep_fnames: true,
       },
     }),
-    new StatsPlugin('webpack.stats.json', {
-      source: false,
-      modules: false,
-    }),
-    new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
   ],
   module: {
     loaders: [

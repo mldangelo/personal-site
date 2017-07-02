@@ -12,7 +12,8 @@
     "forever-stop": "forever stop server/server.js",
     "lint": "./node_modules/.bin/eslint app models routes server test webpack",
     "start": "./node_modules/.bin/babel-node server/server.js",
-    "test": "./node_modules/mocha/bin/mocha --compilers js:babel-core/register ./test/test.js"
+    "test": "./node_modules/mocha/bin/mocha --compilers js:babel-core/register ./test/test.js",
+    "analyze": "babel-node ./node_modules/webpack/bin/webpack --config ./webpack/webpack.production.config.js --json | webpack-bundle-size-analyzer"
   },
   "dependencies": {
     "autoprefixer": "^7.1.1",
@@ -85,6 +86,7 @@
     "eslint-plugin-react": "^7.1.0",
     "mocha": "^3.4.2",
     "mocha-generators": "^2.0.0",
-    "nightmare": "^2.10.0"
+    "nightmare": "^2.10.0",
+    "webpack-bundle-size-analyzer": "^2.7.0"
   }
 }
