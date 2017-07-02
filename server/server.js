@@ -29,7 +29,7 @@ app.use(cookieParser());
 
 const MongoDBStore = mongoStore(session);
 
-mongoose.connect(`mongodb://localhost/${database}`, { useMongoClient: true });
+mongoose.connect(`mongodb://localhost/${database}`);
 
 const store = new MongoDBStore({
   uri: `mongodb://localhost/${database}`,

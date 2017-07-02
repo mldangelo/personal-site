@@ -8,6 +8,10 @@ import Main from '../layouts/Main';
 import LinkRenderer from '../components/About/LinkRenderer';
 import markdown from '../data/about.md';
 
+const count = markdown.split(/\s+/)
+  .map(s => s.replace(/\W/g, ''))
+  .filter(s => s.length).length;
+
 const About = () => (
   <Main>
     <Helmet title="About" />
@@ -15,7 +19,7 @@ const About = () => (
       <header>
         <div className="title">
           <h2><Link to="/about">About Me</Link></h2>
-          <p>(in 1,000 words)</p>
+          <p>(in about {count} words)</p>
         </div>
       </header>
       <ReactMarkdown
