@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 class CategoryButton extends Component {
-
   handleClick = () => {
     this.props.handleClick(this.props.label);
   }

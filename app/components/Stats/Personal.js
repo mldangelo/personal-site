@@ -4,7 +4,6 @@ import Table from './Table';
 import data from '../../data/stats';
 
 class PersonalStats extends Component {
-
   constructor(props) {
     super(props);
     this.state = { data };

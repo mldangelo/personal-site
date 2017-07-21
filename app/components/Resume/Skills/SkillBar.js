@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 class SkillBar extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -14,8 +13,8 @@ class SkillBar extends Component {
   // TODO: Consider averaging colors
   getColor() {
     return this.state.categories
-    .filter(cat => this.state.data.category.includes(cat.name))
-    .map(cat => cat.color)[0];
+      .filter(cat => this.state.data.category.includes(cat.name))
+      .map(cat => cat.color)[0];
   }
 
   render() {

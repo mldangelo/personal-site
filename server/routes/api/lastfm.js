@@ -18,21 +18,21 @@ export default (req, res) => {
       period: '12month',
       limit: 50,
     })
-    .then((payload) => {
-      const data = {
-        artists: payload.topartists.artist.map(artist => ({
-          name: artist.name,
-          link: artist.url,
-          image: artist.image[2]['#text'],
-        })),
-        updated_at: Date.now(),
-      };
-      cached = data;
-      res.send(JSON.stringify(data.artists));
-    })
-    .catch((err) => {
-      console.error('lastfm-api-error', err);
-      res.send(cached.artists);
-    });
+      .then((payload) => {
+        const data = {
+          artists: payload.topartists.artist.map(artist => ({
+            name: artist.name,
+            link: artist.url,
+            image: artist.image[2]['#text'],
+          })),
+          updated_at: Date.now(),
+        };
+        cached = data;
+        res.send(JSON.stringify(data.artists));
+      })
+      .catch((err) => {
+        console.error('lastfm-api-error', err);
+        res.send(cached.artists);
+      });
   }
 };

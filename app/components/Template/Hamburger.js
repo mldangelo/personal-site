@@ -8,7 +8,6 @@ import routes from '../../data/routes';
 const Menu = Menus.slide;
 
 class Hamburger extends Component {
-
   constructor(props) {
     super(props);
     this.state = {

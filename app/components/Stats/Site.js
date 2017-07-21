@@ -6,7 +6,6 @@ import Table from './Table';
 import data from '../../data/github';
 
 class Stats extends Component {
-
   constructor(props) {
     super(props);
     this.state = { data };

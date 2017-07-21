@@ -12,7 +12,6 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 class Main extends Component {
-
   componentWillMount() {
     window.scrollTo(0, 0);
   }
@@ -38,7 +37,6 @@ class Main extends Component {
         {this.props.fullPage ? null : <Nav />}
       </div>);
   }
-
 }
 
 Main.propTypes = {

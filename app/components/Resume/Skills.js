@@ -5,7 +5,6 @@ import CategoryButton from './Skills/CategoryButton';
 import SkillBar from './Skills/SkillBar';
 
 class Skills extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -53,7 +52,7 @@ class Skills extends Component {
           data={skill}
           key={skill.title}
         />
-        ));
+      ));
   }
 
   getButtons() {

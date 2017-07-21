@@ -35,7 +35,6 @@ const validateText = (text) => {
 };
 
 class Contact extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -97,7 +96,7 @@ class Contact extends Component {
               <li key={s.label}>
                 <a href={s.link} className={s.icon}><span className="label">{s.label}</span></a>
               </li>
-        ))}
+            ))}
           </ul>
         </article>
       </Main>

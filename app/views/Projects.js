@@ -14,7 +14,7 @@ const getRows = () => data.map(project => (
     data={project}
     key={project.title}
   />
-  ));
+));
 
 const Projects = () => (
   <Main>

@@ -8,7 +8,6 @@ import Main from '../layouts/Main';
 
 
 class Admin extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -57,9 +56,9 @@ class Admin extends Component {
                       <td>{moment(user.lastOnline).format('MM/DD/YY h:mm:ss a')}</td>
                       <td>{user.visits}</td>
                     </tr>
-                ),
-             )
-            }
+                  ),
+                  )
+                  }
                 </tbody>
               </table>
             </section>

@@ -5,7 +5,7 @@ export default (req, res) => {
     const processed = users.map(user => ({
       email: user.email,
       name: user.name,
-        // NOTE: In the future, we can assume user.logins is always sorted
+      // NOTE: In the future, we can assume user.logins is always sorted
       lastOnline: new Date(Math.max(...user.logins)),
       createdAt: new Date(Math.min(...user.logins)),
       visits: user.logins.length,

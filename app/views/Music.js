@@ -6,7 +6,6 @@ import axios from 'axios';
 import Main from '../layouts/Main';
 
 class Music extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -50,8 +49,8 @@ class Music extends Component {
                     </h4>
                   </a>
                 </div>),
-             )
-            }
+              )
+              }
             </section>
           </div>
         </article>
