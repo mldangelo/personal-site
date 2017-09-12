@@ -75,7 +75,7 @@
     "webpack-hot-middleware": "^2.18.2"
   },
   "devDependencies": {
-    "babel-eslint": "^7.2.3",
+    "babel-eslint": "^8.0.0",
     "babel-polyfill": "^6.23.0",
     "chai": "^4.1.1",
     "eslint": "^4.4.1",
