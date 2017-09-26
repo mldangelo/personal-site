@@ -55,7 +55,7 @@
     "passport-google-oauth20": "^1.0.0",
     "prop-types": "^15.5.10",
     "raw-loader": "^0.5.1",
-    "react": "^15.6.1",
+    "react": "^16.0.0",
     "react-burger-menu": "^2.1.4",
     "react-dom": "^15.6.1",
     "react-ga": "^2.2.0",
