@@ -29,7 +29,9 @@ app.use(cookieParser());
 
 const MongoDBStore = mongoStore(session);
 
-mongoose.connect(`mongodb://localhost/${database}`);
+mongoose.connection.openUri(`mongodb://localhost/${database}`)
+  .once('open', () => console.info(`Connected to mongodb://localhost/${database}`))
+  .on('error', error => console.error('Database connection error:', error));
 
 const store = new MongoDBStore({
   uri: `mongodb://localhost/${database}`,
