@@ -10,8 +10,7 @@ const data = {
   },
   location: {
     label: 'Current city',
-    value: 'Palo Alto, CA',
-    link: 'https://goo.gl/maps/eXsXbdUGRAt',
+    value: 'New York, NY',
   },
 };
 
