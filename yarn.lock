@@ -2786,9 +2786,9 @@ file-entry-cache@^2.0.0:
     flat-cache "^1.2.1"
     object-assign "^4.0.1"
 
-file-loader@^1.1.3:
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/file-loader/-/file-loader-1.1.3.tgz#ad5d143d8b614114873df3661ab5c9b8ebd5345a"
+file-loader@^1.1.4:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/file-loader/-/file-loader-1.1.4.tgz#5ca9384adfafe008077c3439a435b2781a889ef5"
   dependencies:
     loader-utils "^1.0.2"
     schema-utils "^0.3.0"
@@ -5478,9 +5478,9 @@ raw-body@2.3.2:
     iconv-lite "0.4.19"
     unpipe "1.0.0"
 
-raw-loader@^0.5.1:
-  version "0.5.1"
-  resolved "https://registry.yarnpkg.com/raw-loader/-/raw-loader-0.5.1.tgz#0c3d0beaed8a01c966d9787bf778281252a979aa"
+raw-loader@^1.0.0-beta.0:
+  version "1.0.0-beta.0"
+  resolved "https://registry.yarnpkg.com/raw-loader/-/raw-loader-1.0.0-beta.0.tgz#617853ce8314d1166c06758d9302d24faf08d44c"
 
 rc@^1.0.1, rc@^1.1.2, rc@^1.1.6, rc@^1.1.7:
   version "1.2.1"
