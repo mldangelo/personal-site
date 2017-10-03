@@ -68,7 +68,7 @@
     "script-ext-html-webpack-plugin": "^1.8.5",
     "stats-webpack-plugin": "^0.6.1",
     "strip-loader": "^0.1.2",
-    "style-loader": "^0.18.2",
+    "style-loader": "^0.19.0",
     "url-loader": "^0.5.9",
     "webpack": "^3.6.0",
     "webpack-dev-middleware": "^1.12.0",
