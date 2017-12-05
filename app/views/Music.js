@@ -42,14 +42,13 @@ class Music extends Component {
                     <img
                       src={image.image}
                       alt={String(image.name)}
-                      width={'100px'}
+                      width="100px"
                     />
                     <h4>
                       {String(image.name)}
                     </h4>
                   </a>
-                </div>),
-              )
+                </div>))
               }
             </section>
           </div>

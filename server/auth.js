@@ -28,8 +28,7 @@ const auth = (app) => {
         user.logins.push(Date.now());
         return user.save();
       }).then(user => done(null, user)).catch(error => done(error));
-  },
-  ));
+  }));
 
   passport.serializeUser((user, done) => {
     done(null, user.id);

@@ -15,6 +15,10 @@ class Hamburger extends Component {
     };
   }
 
+  /* TODO(Michael): this style hierarchy is required by burger menu.
+   * Find an alternative that does not require violations later.
+   */
+  /* eslint-disable jsx-a11y/click-events-have-key-events, jsx-a11y/anchor-is-valid */
   getButton() {
     return this.state.open ? (
       <li className="menu close-menu">
@@ -26,6 +30,7 @@ class Hamburger extends Component {
       </li>
     );
   }
+  /* eslint-enable jsx-a11y/click-events-have-key-events, jsx-a11y/anchor-is-valid */
 
   handleClick = () => {
     this.setState({

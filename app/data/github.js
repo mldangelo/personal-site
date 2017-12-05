@@ -1,6 +1,8 @@
 import moment from 'moment';
 
-// Keys returned by the github api
+/* Keys returned by the github api. The other keys in the array below
+ * are mostly jokes. These are the keys the github api query searches for.
+ */
 export const githubKeys = [
   'stargazers_count',
   'watchers_count',

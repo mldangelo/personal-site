@@ -13,8 +13,7 @@ class Skills extends Component {
         [key]: false,
       }), { All: true }),
       skills: props.skills.map(skill =>
-        Object.assign(skill, { category: skill.category.sort() }),
-      ),
+        Object.assign(skill, { category: skill.category.sort() })),
     };
   }
 
@@ -25,8 +24,7 @@ class Skills extends Component {
         [key]: false,
       }), { All: true }),
       skills: nextProps.skills.map(skill =>
-        Object.assign(skill, { category: skill.category.sort() }),
-      ),
+        Object.assign(skill, { category: skill.category.sort() })),
     });
   }
 

@@ -30,7 +30,7 @@ class Stats extends Component {
       <div>
         <h3>Some stats about this site</h3>
         <Table
-          data={data}
+          data={this.state.data}
         />
       </div>
     );
