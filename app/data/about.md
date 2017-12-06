@@ -62,7 +62,9 @@ Palo Alto, Mountain View, San Francisco, Seattle, and New York.
 
 - In 2016, I visited: Canada, Ethiopia, Austria, Germany, Belgium, Ireland, Northern Ireland, Italy, Romania, Sweden, Norway, Svalbard, Panama, Costa Rica, Uganda, Japan, and the UAE, mostly in that order.
 
-- In 2017, so far I have visited: Canada, Japan, Denmark, Germany, Sweden, Estonia, Russia, the Netherlands, Belgium, the U.K., Spain, Iceland, France, and Luxembourg. I plan to visit: Australia, Indonesia, Nepal, and Norway.
+- In 2017, I visited: Canada, Japan, Denmark, Germany, Sweden, Estonia, Russia, the Netherlands, Belgium, the U.K., Spain, Iceland, France, Switzerland, Ethiopia, and Luxembourg.
+
+- In 2018, I plan to visit: Australia, Taiwan, Indonesia, Nepal, and Norway.
 
 - I am an Oregon Trail II enthusiast.
 
