@@ -5,5 +5,6 @@
     "transform-class-properties",
     "transform-react-inline-elements",
     "transform-react-remove-prop-types",
+    "transform-async-to-generator",
   ]
 }

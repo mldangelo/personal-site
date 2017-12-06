@@ -15,6 +15,11 @@ const env = process.env.NODE_ENV || 'development';
 const routes = (app) => {
   if (env === 'development') { // eslint-disable-line eqeqeq
     const compiler = webpack(config);
+
+    compiler.plugin('done', () => {
+      console.info('Webpack finished compiling.');
+    });
+
     const middleware = webpackMiddleware(compiler, {
       publicPath: config.output.publicPath,
       contentBase: 'src',
@@ -30,7 +35,6 @@ const routes = (app) => {
 
     app.use(middleware);
     app.use(webpackHotMiddleware(compiler));
-
 
     app.get('/*', (req, res) => {
       const content = middleware.fileSystem.readFileSync(path.join(__dirname, '../../../dist/index.html'));
