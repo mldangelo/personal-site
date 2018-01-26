@@ -20,7 +20,7 @@ import update from './update';
 
 const port = process.env.PORT || 7999;
 const env = process.env.NODE_ENV || 'development';
-const database = process.env.DB_NAME || 'mldangelo';
+const database = 'mldangelo_test4'; //process.env.DB_NAME || 'mldangelo';
 
 const app = express();
 
@@ -33,7 +33,7 @@ const MongoDBStore = mongoStore(session);
 
 mongoose.connection.openUri(`mongodb://localhost/${database}`)
   .once('open', () => {
-    console.info(`Connected to mongodb://localhost/${database}`)
+    console.info(`Connected to mongodb://localhost/${database}`);
     update(); // create default models if they don't exist
   })
   .on('error', error => console.error('Database connection error:', error));
