@@ -16,7 +16,7 @@ import mongoStore from 'connect-mongodb-session';
 import routes from './routes';
 import auth from './auth';
 
-import update from './update'; //default database models 
+import update from './update'; // default database models
 
 const port = process.env.PORT || 7999;
 const env = process.env.NODE_ENV || 'development';
