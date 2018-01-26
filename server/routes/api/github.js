@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import moment from 'moment';
 
-import GithubAPI from 'github';
+import GithubAPI from '@octokit/rest';
 
 import { githubKeys as keys } from '../../../app/data/github';
 
