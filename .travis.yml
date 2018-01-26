@@ -13,10 +13,10 @@ env:
 matrix:
   include:
   - os: linux
-    node_js: '7'
+    node_js: '8'
     env: NODE_ENV=development
   - os: linux
-    node_js: '7'
+    node_js: '8'
     env: NODE_ENV=production
   fast_finish: true
 addons:
@@ -32,8 +32,6 @@ before_install:
 - gcc --version
 - g++ --version
 install:
-- export DISPLAY=':99.0'
-- Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
 - NODE_ENV=development yarn
 before_script:
 - npm run lint
