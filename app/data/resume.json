@@ -1,0 +1,264 @@
+{
+  "basics": {
+    "name": "Michael D'Angelo",
+    "label": "Software Engineer & Data Scientist",
+    "picture": "",
+    "email": "michael.l.dangelo@gmail.com",
+    "phone": "+1 (716) 830-2024",
+    "website": "https://mldangelo.com",
+    "summary": "Richard hails from Tulsa. He has earned degrees from the University of Oklahoma and Stanford. (Go Sooners and Cardinal!) Before starting Pied Piper, he worked for Hooli as a part time software developer. While his work focuses on applied information theory, mostly optimizing lossless compression schema of both the length-limited and adaptive variants, his non-work interests range widely, everything from quantum computing to chaos theory. He could tell you about it, but THAT would NOT be a “length-limited” conversation!",
+    "location": {
+      "address": "376 Broadway, Apt. 4C",
+      "postalCode": "14072",
+      "city": "New York",
+      "countryCode": "US",
+      "region": "New York"
+    },
+    "profiles": [
+      {
+        "network": "Facebook",
+        "username": "d",
+        "url": "https://facebook.com/d"
+      },
+      {
+        "network": "Instagram",
+        "username": "dangelosaurus ",
+        "url": "https://instagram.com/dangelosaurus/"
+      },
+      {
+        "network": "LinkedIn",
+        "username": "michaelldangelo",
+        "url": "https://www.linkedin.com/in/michaelldangelo"
+      },
+      {
+        "network": "Github",
+        "username": "mldangelo",
+        "url": "https://github.com/mldangelo"
+      },
+      {
+        "network": "AngelList",
+        "username": "michael-d-angelo",
+        "url": "https://angel.co/michael-d-angelo"
+      },
+      {
+        "network": "Twitter",
+        "username": "dangelosaurus",
+        "url": "https://twitter.com/dangelosaurus"
+      }
+    ]
+  },
+  "work": [
+    {
+      "company": "Arthena",
+      "position": "Co-founder, CTO",
+      "website": "https://arthena.com",
+      "startDate": "2014-01-01",
+      "endDate": "current",
+      "summary": "Pied Piper is a multi-platform technology based on a proprietary universal compression algorithm that has consistently fielded high Weisman Scores™ that are not merely competitive, but approach the theoretical limit of lossless compression.",
+      "highlights": [
+        "Created a new financial product for private equity investing. Deployed models to predict the valuation of art at auction.",
+        "Lead development team, set development lifecycle, and managed analytics and web products.",
+        "Developed comprehensive simulations using MCMC, Modern Portfolio Theory, GLM, etc. using Scikit, PyMC3, and Jupyter.",
+        "YC Alumn. Worked on everything. Built a 16-person team."
+      ]
+    },
+    {
+      "company": "Enveritas",
+      "position": "Consultant",
+      "website": "https://enveritas.org",
+      "startDate": "2016-09-01",
+      "endDate": "current",
+      "summary": "",
+      "highlights": [
+        "Trained a model for the Brazilian Coffee Scenes Dataset with better than state of the art accuracy.",
+        "Collected training sets on the ground in Uganda. Built dashboards to visualize work of surveyors using Flask, React, and D3.",
+        "Performed supporting analysis to ensure data integrity using Pandas, t-SNE, SVM’s, and other techniques."
+      ]
+    },
+    {
+      "company": "Zenysis",
+      "position": "Consultant",
+      "website": "https://zenysis.com/",
+      "startDate": "2016-02",
+      "endDate": "2016-03",
+      "summary": "",
+      "highlights": [
+        "Worked in Addis Ababa for the Ethiopian Ministry of Health and built data visualization tools in React and Flask.",
+        "Ingested multiple databases with different alphabets, calendars, and without official spellings of geographic locations."
+      ]
+    },
+    {
+      "company": "Matroid",
+      "position": "Co-founder",
+      "website": "https://matroid.com",
+      "startDate": "2015-07",
+      "endDate": "2016-01",
+      "summary": "",
+      "highlights": [
+        "Developed end to end machine learning pipeline to train visual classifiers from keywords using Node.JS, Express, Keystone, MongoDB, AWS, S3, Caffe, and other technologies.",
+        " Received Series A term sheets for 20M+ valuations."
+      ]
+    },
+    {
+      "company": "Planet",
+      "position": "Missions Intern",
+      "website": "https://planet.com",
+      "startDate": "2014-06",
+      "endDate": "2015-01",
+      "summary": "",
+      "highlights": [
+        "Built models to improve image quality, signal to noise ratio, and dynamic range.",
+        "Performed statistical analysis of image quality in Matlab and Python. Developed flight software in C++.",
+        "Organized first hackathon, prototyped hardware, and designed and built photography equipment for rocket launches."
+      ]
+    },
+    {
+      "company": "Planetary Resources",
+      "position": "Avionics Intern",
+      "website": "https://www.planetaryresources.com/",
+      "startDate": "2014-01",
+      "endDate": "2014-05",
+      "summary": "",
+      "highlights": [
+        "Developed simulations in Matlab for Attitude Determination and Control Subsystem.",
+        "Developed processes for in lab testing and characterization of various subsystems.",
+        "Assembled flight hardware in cleanroom."
+      ]
+    },
+    {
+      "company": "Facbeook",
+      "position": "Intern",
+      "website": "https://facebook.com",
+      "startDate": "2013-06",
+      "endDate": "2013-09",
+      "summary": "",
+      "highlights": [
+        "Developed software in python for automated testing of servers.",
+        "Performed statistical analysis with R, HIVE to assist in triage of malfunctioning servers.",
+        "Worked with vendors and ODM’s during triage to assist in risk mitigation."
+      ]
+    }
+  ],
+  "volunteer": [
+    {
+      "organization": "SEDS-USA",
+      "position": "Board Member",
+      "website": "https://seds.org",
+      "startDate": "2013-10",
+      "endDate": "2014-10",
+      "summary": "Global movement of free coding clubs for young people.",
+      "highlights": [
+        "Elected to Board of Directors of the USA’s largest student space advocacy group based on 5+ years of work with SEDS.",
+        "Responsibilities included: organizational strategy, conference presentations, fundraising, special projects, promoting SEDS nationally and internationally, and photographing conferences."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Stanford University",
+      "area": "Computational and Mathematical Engineering",
+      "studyType": "Master of Science",
+      "startDate": "2012",
+      "endDate": "2016",
+      "gpa": "",
+      "courses": [
+        "AA 236A: Spacecraft Design",
+        "CME 212: Advanced Programming",
+        "CME 302: Numerical Linear Algebra",
+        "CME 303 PDE's of Applied Mathematics",
+        "CME 304: Numerical Optimization",
+        "CME 305: Discrete Mathematics and Algorithms",
+        "CS 224D: Deep Learning for Natural Language Processing",
+        "CS 229: Machine Learning",
+        "CS 231N: Convolutional Neural Networks for Visual Recognition",
+        "EE 263: Introduction to Linear Dynamical Systems",
+        "EE 266: Stochastic Control",
+        "EE 278B: Introduction to Digital Signal Processing",
+        "MAE 397: Design Theory and Methodology",
+        "MS&E 223: Simulation",
+        "MS&E 226: Small Data"
+      ]
+    },
+    {
+      "institution": "University at Buffalo",
+      "area": "Electrical Engineering, Computer Engineering",
+      "studyType": "Batchelor of Science",
+      "startDate": "2009",
+      "endDate": "2012",
+      "gpa": "4.0",
+      "courses": [
+        "CSE 321: Realtime Embedded Systems",
+        "CSE 442: Software Engineering Concepts",
+        "CSE 453: Hardware/Software Integrated System Design",
+        "CSE 573: Computer Vision and Image Processing",
+        "CSE 590: Computer Architecture",
+        "EAS 305: Applied Probability and Statistical Inference",
+        "EE 516: Introduction to Digital Signal Processing",
+        "EE 324: Electromagnetic Theory",
+        "EE 478: Digital Design"
+      ]
+    }
+  ],
+  "awards": [
+    {
+      "title": "Digital Compression Pioneer Award",
+      "date": "2014-11-01",
+      "awarder": "Techcrunch",
+      "summary": "There is no spoon."
+    }
+  ],
+  "publications": [
+    {
+      "name": "Video compression for 3d media",
+      "publisher": "Hooli",
+      "releaseDate": "2014-10-01",
+      "website": "https://en.wikipedia.org/wiki/Silicon_Valley_(TV_series)",
+      "summary": "Innovative middle-out compression algorithm that changes the way we store data."
+    }
+  ],
+  "skills": [
+    {
+      "name": "Web Development",
+      "level": "Master",
+      "keywords": [
+        "HTML",
+        "CSS",
+        "Javascript"
+      ]
+    },
+    {
+      "name": "Compression",
+      "level": "Master",
+      "keywords": [
+        "Mpeg",
+        "MP4",
+        "GIF"
+      ]
+    }
+  ],
+  "languages": [
+    {
+      "language": "English",
+      "fluency": "Native speaker"
+    },
+    {
+      "language": "German",
+      "fluency": "Limited working proficiency "
+    }
+  ],
+  "interests": [
+    {
+      "name": "Wildlife",
+      "keywords": [
+        "Ferrets",
+        "Unicorns"
+      ]
+    }
+  ],
+  "references": [
+    {
+      "name": "Erlich Bachman",
+      "reference": "It is my pleasure to recommend Richard, his performance working as a consultant for Main St. Company proved that he will be a valuable addition to any company."
+    }
+  ]
+}
