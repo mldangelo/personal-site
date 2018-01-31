@@ -54,9 +54,9 @@
     lodash "^4.2.0"
     to-fast-properties "^2.0.0"
 
-"@octokit/rest@^14.0.6":
-  version "14.0.6"
-  resolved "https://registry.yarnpkg.com/@octokit/rest/-/rest-14.0.6.tgz#92d18601ecc346b0349ad4a3219ccc5bc00e6254"
+"@octokit/rest@^14.0.8":
+  version "14.0.8"
+  resolved "https://registry.yarnpkg.com/@octokit/rest/-/rest-14.0.8.tgz#594292f9c30eb86a832f99f7d464ee7c9c8114c5"
   dependencies:
     before-after-hook "^1.1.0"
     debug "^3.1.0"
@@ -2358,6 +2358,10 @@ dotenv@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-4.0.0.tgz#864ef1379aced55ce6f95debecdce179f7a0cd1d"
 
+dotenv@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-5.0.0.tgz#0206eb5b336639bf377618a2a304ff00c6a1fddb"
+
 duplexer3@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/duplexer3/-/duplexer3-0.1.4.tgz#ee01dd1cac0ed3cbc7fdbea37dc0a8f1ce002ce2"
@@ -2651,9 +2655,9 @@ eslint-plugin-mocha@^4.11.0:
   dependencies:
     ramda "^0.24.1"
 
-eslint-plugin-react@^7.6.0:
-  version "7.6.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-react/-/eslint-plugin-react-7.6.0.tgz#351651188c74c5b2fecc2717e3936b7207baa728"
+eslint-plugin-react@^7.6.1:
+  version "7.6.1"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-react/-/eslint-plugin-react-7.6.1.tgz#5d0e908be599f0c02fbf4eef0c7ed6f29dff7633"
   dependencies:
     doctrine "^2.0.2"
     has "^1.0.1"
@@ -4243,9 +4247,9 @@ jsx-ast-utils@^2.0.0, jsx-ast-utils@^2.0.1:
   dependencies:
     array-includes "^3.0.3"
 
-kareem@2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/kareem/-/kareem-2.0.1.tgz#f17f77e9032f64aa402b334f91fb4407fe4c042c"
+kareem@2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/kareem/-/kareem-2.0.2.tgz#fefa6228859beb67f75ab4962869a8d1b0b2dda2"
 
 kind-of@^2.0.1:
   version "2.0.1"
@@ -4772,18 +4776,18 @@ mongoose-legacy-pluralize@1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/mongoose-legacy-pluralize/-/mongoose-legacy-pluralize-1.0.1.tgz#31ae25db45c30f1448c0f93f52769e903367c701"
 
-mongoose@5.0.1:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-5.0.1.tgz#ded04311b9f13c8004e2b0097f3a61653a394361"
+mongoose@5.0.2:
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-5.0.2.tgz#0fd45f4db8c2a8365e18e9896b4990b37cafde50"
   dependencies:
     async "2.1.4"
     bson "~1.0.4"
-    kareem "2.0.1"
+    kareem "2.0.2"
     lodash.get "4.4.2"
     mongodb "3.0.1"
     mongoose-legacy-pluralize "1.0.1"
     mpath "0.3.0"
-    mquery "3.0.0-rc0"
+    mquery "3.0.0"
     ms "2.0.0"
     regexp-clone "0.0.1"
     sliced "1.0.1"
@@ -4802,9 +4806,9 @@ mpath@0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/mpath/-/mpath-0.3.0.tgz#7a58f789e9b5fd3c94520634157960f26bd5ef44"
 
-mquery@3.0.0-rc0:
-  version "3.0.0-rc0"
-  resolved "https://registry.yarnpkg.com/mquery/-/mquery-3.0.0-rc0.tgz#05ec656e92f079828bedf4202e60fb8eaacb9f47"
+mquery@3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/mquery/-/mquery-3.0.0.tgz#e5f387dbabc0b9b69859e550e810faabe0ceabb0"
   dependencies:
     bluebird "3.5.0"
     debug "2.6.9"

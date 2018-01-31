@@ -16,7 +16,7 @@
     "analyze": "babel-node ./node_modules/webpack/bin/webpack --config ./webpack/webpack.production.config.js --json | webpack-bundle-size-analyzer"
   },
   "dependencies": {
-    "@octokit/rest": "^14.0.6",
+    "@octokit/rest": "^14.0.8",
     "autoprefixer": "^7.2.5",
     "axios": "^0.17.1",
     "babel-cli": "^6.26.0",
@@ -36,7 +36,7 @@
     "connect-mongodb-session": "^1.4.0",
     "cookie-parser": "^1.4.3",
     "css-loader": "^0.28.9",
-    "dotenv": "^4.0.0",
+    "dotenv": "^5.0.0",
     "express": "^4.16.2",
     "express-session": "^1.15.6",
     "extract-text-webpack-plugin": "^3.0.2",
@@ -47,7 +47,7 @@
     "js-cookie": "^2.2.0",
     "last.fm.api": "^0.1.3",
     "moment": "^2.20.1",
-    "mongoose": "5.0.1",
+    "mongoose": "5.0.2",
     "morgan": "^1.9.0",
     "node-sass": "^4.7.2",
     "nodemon": "^1.14.11",
@@ -85,7 +85,7 @@
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jsx-a11y": "6.0.3",
     "eslint-plugin-mocha": "^4.11.0",
-    "eslint-plugin-react": "^7.6.0",
+    "eslint-plugin-react": "^7.6.1",
     "mocha": "^5.0.0",
     "webpack-bundle-size-analyzer": "^2.7.0"
   }
