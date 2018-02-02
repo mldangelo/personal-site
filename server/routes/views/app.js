@@ -10,7 +10,13 @@ import webpackMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import config from '../../../webpack/webpack.config';
 
+import data from '../../../app/data/routes';
+
 const env = process.env.NODE_ENV || 'development';
+const ssr = process.env.SERVER_SIDE_RENDER || false;
+
+
+const slugs = data.map(route => route.path.substr(1));
 
 const routes = (app) => {
   if (env === 'development') { // eslint-disable-line eqeqeq
@@ -52,9 +58,12 @@ const routes = (app) => {
     });
   } else {
     app.use('/dist', express.static(path.join(__dirname, '../../../dist')));
-    const content = fs.readFileSync(path.join(__dirname, '../../../dist/index.html'), 'utf8');
+    // let content = fs.readFileSync(path.join(__dirname, '../../../dist/index.html'), 'utf8');
 
-    app.get('/*', (req, res) => {
+    app.get(['/', '/:route', '/*'], (req, res) => {
+      let content;
+      console.info('req.params.route', req.params.route);
+
       if (req.user) {
         res.cookie('id', req.user._id.toString(), { path: '/' });
         res.cookie('admin', req.user.isAdmin, { path: '/' });
@@ -62,6 +71,13 @@ const routes = (app) => {
         res.clearCookie('admin', { path: '/' });
         res.clearCookie('id', { path: '/' });
       }
+
+      if (slugs.includes(req.params.route) && ssr) {
+        content = fs.readFileSync(path.join(__dirname, `../../../dist/${req.params.route}/index.html`), 'utf8');
+      } else {
+        content = fs.readFileSync(path.join(__dirname, '../../../dist/index.html'), 'utf8');
+      }
+
 
       res.set('Content-Type', 'text/html');
       res.send(content);
