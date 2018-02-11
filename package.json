@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@octokit/rest": "^14.0.8",
-    "autoprefixer": "^7.2.5",
+    "autoprefixer": "^8.0.0",
     "axios": "^0.17.1",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
