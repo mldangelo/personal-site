@@ -16,7 +16,7 @@
     "analyze": "babel-node ./node_modules/webpack/bin/webpack --config ./webpack/webpack.production.config.js --json | webpack-bundle-size-analyzer"
   },
   "dependencies": {
-    "@octokit/rest": "^14.0.8",
+    "@octokit/rest": "^15.0.0",
     "autoprefixer": "^7.2.5",
     "axios": "^0.17.1",
     "babel-cli": "^6.26.0",
