@@ -2,10 +2,11 @@ import 'dotenv/config';
 import path from 'path';
 import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-import ScriptExtHtmlWebpackPlugin from 'script-ext-html-webpack-plugin';
+// import ScriptExtHtmlWebpackPlugin from 'script-ext-html-webpack-plugin';
 
 export default {
   devtool: 'eval-source-map',
+  mode: 'development',
   entry: [
     'webpack-hot-middleware/client?path=//localhost:7999/__webpack_hmr&reload=true',
     path.join(__dirname, '../app/entry.js'),
@@ -21,26 +22,24 @@ export default {
       inject: 'body',
       filename: 'index.html',
     }),
-    new ScriptExtHtmlWebpackPlugin({
+    /* new ScriptExtHtmlWebpackPlugin({
       defaultAttribute: 'defer',
-    }),
+    }), */
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
   ],
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js?$/,
         exclude: /node_modules/,
         loader: 'babel-loader',
-      }, {
+      },
+      {
         test: /\.md$/,
         use: [{
           loader: 'raw-loader',
         }],
-      }, {
-        test: /\.json?$/,
-        loader: 'json-loader',
       }, {
         test: /\.css$/,
         loader: 'style-loader!css-loader?modules&localIdentName=[name]---[local]---[hash:base64:5]',
