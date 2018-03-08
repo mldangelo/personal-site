@@ -33,7 +33,7 @@
     "babel-register": "^6.26.0",
     "body-parser": "^1.18.2",
     "compression": "^1.7.1",
-    "connect-mongodb-session": "^1.4.0",
+    "connect-mongodb-session": "^2.0.0",
     "cookie-parser": "^1.4.3",
     "css-loader": "^0.28.9",
     "dotenv": "^5.0.0",
