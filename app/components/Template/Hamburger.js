@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 import Menus from 'react-burger-menu';
+import cookie from 'js-cookie';
 
 import routes from '../../data/routes';
 
@@ -39,6 +40,7 @@ class Hamburger extends Component {
   }
 
   render() {
+    const { id, admin } = cookie.get();
     return (
       <div className="hamburger-container">
         <nav className="main" id="hambuger-nav">
@@ -55,8 +57,8 @@ class Hamburger extends Component {
                 </Link>
               </li>
             ))}
-            {window.admin ? <li><a href="/admin"><h3>Admin</h3></a></li> : null}
-            {window.id ? <li><a href="/logout"><h3>Logout</h3></a></li> : null}
+            {admin ? <li><a href="/admin"><h3>Admin</h3></a></li> : null}
+            {id ? <li><a href="/logout"><h3>Logout</h3></a></li> : null}
           </ul>
         </Menu>
       </div>
