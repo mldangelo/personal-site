@@ -3,15 +3,16 @@ import PropTypes from 'prop-types';
 import cookie from 'js-cookie';
 import { Route, Redirect } from 'react-router-dom';
 
+const { id } = cookie.get();
 const PrivateRoute = ({ component, ...rest }) => (
   <Route
     {...rest}
     render={(props) => {
-      if (!window.id) { // checks for non authenticated accounts
+      if (!id) { // checks for non authenticated accounts
         cookie.set('target', props.location.pathname);
       }
       return (
-        window.id ? (
+        id ? (
           React.createElement(component, props)
         ) : (
           <Redirect

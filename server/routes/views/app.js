@@ -38,20 +38,36 @@ const routes = (app) => {
 
     app.get('/*', (req, res) => {
       const content = middleware.fileSystem.readFileSync(path.join(__dirname, '../../../dist/index.html'));
-      const key = '<div id="root"></div>';
-      const index = content.indexOf(key) + key.length;
-      const inject = req.user ? `<script type="text/javascript">window.id="${req.user._id}";window.admin=${req.user.isAdmin};</script>` : '';
-      res.send(content.slice(0, index) + inject + content.slice(index));
+
+      if (req.user) {
+        res.cookie('id', req.user._id.toString(), { path: '/' });
+        if (req.user.isAdmin) {
+          res.cookie('admin', req.user.isAdmin, { path: '/' });
+        }
+      } else {
+        res.clearCookie('admin', { path: '/' });
+        res.clearCookie('id', { path: '/' });
+      }
+
+      res.set('Content-Type', 'text/html');
+      res.send(content);
     });
   } else {
     app.use('/dist', express.static(path.join(__dirname, '../../../dist')));
     const content = fs.readFileSync(path.join(__dirname, '../../../dist/index.html'), 'utf8');
-    const key = '<div id=root></div>';
-    const index = content.indexOf(key) + key.length;
 
     app.get('/*', (req, res) => {
-      const inject = req.user ? `<script type="text/javascript">window.id="${req.user._id}";window.admin=${req.user.isAdmin};</script>` : '';
-      res.send(content.slice(0, index) + inject + content.slice(index));
+      if (req.user) {
+        res.cookie('id', req.user._id.toString(), { path: '/' });
+        if (req.user.isAdmin) {
+          res.cookie('admin', req.user.isAdmin, { path: '/' });
+        }
+      } else {
+        res.clearCookie('admin', { path: '/' });
+        res.clearCookie('id', { path: '/' });
+      }
+      res.set('Content-Type', 'text/html');
+      res.send(content);
     });
   }
 };

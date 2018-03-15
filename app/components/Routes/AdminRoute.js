@@ -3,20 +3,22 @@ import PropTypes from 'prop-types';
 import cookie from 'js-cookie';
 import { Route, Redirect } from 'react-router-dom';
 
+const { id, admin } = cookie.get();
+
 const AdminRoute = ({ component, ...rest }) => (
   <Route
     {...rest}
     render={(props) => {
-      if (!window.id) { // checks for non authenticated accounts
+      if (!id) { // checks for non authenticated accounts
         cookie.set('target', props.location.pathname);
       }
       return (
-        window.admin ? (
+        admin ? (
           React.createElement(component, props)
         ) : (
           <Redirect
             to={{
-              pathname: window.id ? '/unauthorized' : '/login',
+              pathname: id ? '/unauthorized' : '/login',
               state: { from: props.location },
             }}
           />
