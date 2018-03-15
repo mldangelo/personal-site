@@ -47,7 +47,9 @@ const routes = (app) => {
 
       if (req.user) {
         res.cookie('id', req.user._id.toString(), { path: '/' });
-        res.cookie('admin', req.user.isAdmin, { path: '/' });
+        if (req.user.isAdmin) {
+          res.cookie('admin', req.user.isAdmin, { path: '/' });
+        }
       } else {
         res.clearCookie('admin', { path: '/' });
         res.clearCookie('id', { path: '/' });
@@ -58,26 +60,19 @@ const routes = (app) => {
     });
   } else {
     app.use('/dist', express.static(path.join(__dirname, '../../../dist')));
-    // let content = fs.readFileSync(path.join(__dirname, '../../../dist/index.html'), 'utf8');
+    let content = fs.readFileSync(path.join(__dirname, '../../../dist/index.html'), 'utf8');
 
-    app.get(['/', '/:route', '/*'], (req, res) => {
-      let content;
-      console.info('req.params.route', req.params.route);
+    app.get('/*', (req, res) => {
 
       if (req.user) {
         res.cookie('id', req.user._id.toString(), { path: '/' });
-        res.cookie('admin', req.user.isAdmin, { path: '/' });
+        if (req.user.isAdmin) {
+          res.cookie('admin', req.user.isAdmin, { path: '/' });
+        }
       } else {
         res.clearCookie('admin', { path: '/' });
         res.clearCookie('id', { path: '/' });
       }
-
-      if (slugs.includes(req.params.route) && ssr) {
-        content = fs.readFileSync(path.join(__dirname, `../../../dist/${req.params.route}/index.html`), 'utf8');
-      } else {
-        content = fs.readFileSync(path.join(__dirname, '../../../dist/index.html'), 'utf8');
-      }
-
 
       res.set('Content-Type', 'text/html');
       res.send(content);
