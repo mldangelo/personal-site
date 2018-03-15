@@ -56,14 +56,6 @@
   /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
 }
 
-.icon-mail:before { content: '\e800'; } /* '' */
-.icon-mail-1:before { content: '\e801'; } /* '' */
-.icon-mail-2:before { content: '\e802'; } /* '' */
-.icon-mail-3:before { content: '\e803'; } /* '' */
-.icon-mail-4:before { content: '\e804'; } /* '' */
-.icon-mail-5:before { content: '\e805'; } /* '' */
-.icon-mail-6:before { content: '\e806'; } /* '' */
-.icon-mail-7:before { content: '\e807'; } /* '' */
 .icon-twitter:before { content: '\f099'; } /* '' */
 .icon-facebook:before { content: '\f09a'; } /* '' */
 .icon-github-circled:before { content: '\f09b'; } /* '' */
@@ -71,4 +63,3 @@
 .icon-linkedin:before { content: '\f0e1'; } /* '' */
 .icon-instagram:before { content: '\f16d'; } /* '' */
 .icon-angellist:before { content: '\f209'; } /* '' */
-.icon-email:before { content: '\f800'; } /* '' */
