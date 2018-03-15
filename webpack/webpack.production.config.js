@@ -23,7 +23,7 @@ export default {
       filename: 'index.html',
     }),
     new ScriptExtHtmlWebpackPlugin({
-      defaultAttribute: 'defer',
+      defaultAttribute: 'async',
     }),
     new ExtractTextPlugin('[name]-[hash].min.css'),
     new StatsPlugin('webpack.stats.json', {

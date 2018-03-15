@@ -1,10 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import PrivateRoute from './components/Routes/PrivateRoute';
 import AdminRoute from './components/Routes/AdminRoute';
@@ -26,7 +22,7 @@ import Admin from './views/Admin';
 import NotFound from './views/NotFound';
 
 // All of our CSS
-require('../public/css/main.scss');
+require('./static/css/main.scss');
 
 if (window.location.href.endsWith('#')) { // For Google Oauth
   window.history.replaceState({}, '', window.location.href.slice(0, -1));

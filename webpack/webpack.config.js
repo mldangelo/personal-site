@@ -23,7 +23,7 @@ export default {
       filename: 'index.html',
     }),
     new ScriptExtHtmlWebpackPlugin({
-      defaultAttribute: 'defer',
+      defaultAttribute: 'async',
     }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
