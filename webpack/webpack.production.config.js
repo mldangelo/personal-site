@@ -10,6 +10,7 @@ export default {
   entry: [
     path.join(__dirname, '../app/entry.js'),
   ],
+  mode: 'production',
   output: {
     path: path.join(__dirname, '../tmp/'),
     filename: '[name]-[hash].min.js',
@@ -31,22 +32,9 @@ export default {
     }),
     new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
     new webpack.optimize.ModuleConcatenationPlugin(),
-    new webpack.optimize.UglifyJsPlugin({
-      beautify: false,
-      comments: false,
-      compress: {
-        warnings: false,
-        drop_console: true,
-      },
-      mangle: {
-        except: ['webpackJsonp', 'exports', 'require'],
-        screw_ie8: true,
-        keep_fnames: true,
-      },
-    }),
   ],
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js?$/,
         exclude: /node_modules/,
@@ -56,9 +44,6 @@ export default {
         use: [{
           loader: 'raw-loader',
         }],
-      }, {
-        test: /\.json?$/,
-        loader: 'json-loader',
       }, {
         test: /\.css$/,
         loader: ExtractTextPlugin.extract({
@@ -83,7 +68,7 @@ export default {
         loader: 'strip-loader?strip[]=console.log',
       }, {
         test: /\.html$/,
-        loader: 'raw-loader!html-minify-loader',
+        loader: 'raw-loader',
       },
     ],
   },
