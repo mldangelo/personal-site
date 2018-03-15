@@ -12,8 +12,6 @@ if (process.env.NODE_ENV === 'production') {
   ReactGA.initialize('UA-68649021-1');
 }
 
-// const { id, admin } = cookie.get();
-
 class Main extends Component {
   componentWillMount() {
     window.scrollTo(0, 0);
