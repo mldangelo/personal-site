@@ -6,15 +6,14 @@
     "build": "node -r babel-register ./node_modules/webpack/bin/webpack --config ./webpack/webpack.production.config.js --progress --profile --colors && rimraf ./dist && mv ./tmp ./dist",
     "build-dev": "rimraf ./dist && babel-node ./node_modules/webpack/bin/webpack --config ./webpack/webpack.config.js --progress --profile --colors",
     "clean": "rimraf ./dist && rimraf ./tmp",
-    "predeploy": "yarn && npm run build && npm run forever-stop || true && npm run render",
-    "deploy": "npm run forever-start",
+    "predeploy": "yarn && npm run build",
+    "deploy": "npm run forever-stop || true && npm run forever-start",
     "dev": "nodemon server/server.js --ignore app/ --ignore test/ --exec babel-node",
     "forever-start": "forever start --minUptime 1000ms --spinSleepTime 1000ms -a -l forever.log -o out.log -e err.log -c 'nodemon server/server.js --exitcrash --exec babel-node' server/server.js",
     "forever-stop": "forever stop server/server.js",
     "lint": "./node_modules/.bin/eslint app models routes server test utils webpack",
     "start": "./node_modules/.bin/babel-node server/server.js",
     "test": "./node_modules/mocha/bin/mocha --exit --require babel-core/register ./test/test.js",
-    "render": "./node_modules/.bin/babel-node utils/render.js",
     "analyze": "babel-node ./node_modules/webpack/bin/webpack --config ./webpack/webpack.production.config.js --json | webpack-bundle-size-analyzer"
   },
   "dependencies": {

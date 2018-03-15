@@ -10,13 +10,7 @@ import webpackMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import config from '../../../webpack/webpack.config';
 
-import data from '../../../app/data/routes';
-
 const env = process.env.NODE_ENV || 'development';
-const ssr = process.env.SERVER_SIDE_RENDER || false;
-
-
-const slugs = data.map(route => route.path.substr(1));
 
 const routes = (app) => {
   if (env === 'development') { // eslint-disable-line eqeqeq
@@ -60,10 +54,9 @@ const routes = (app) => {
     });
   } else {
     app.use('/dist', express.static(path.join(__dirname, '../../../dist')));
-    let content = fs.readFileSync(path.join(__dirname, '../../../dist/index.html'), 'utf8');
+    const content = fs.readFileSync(path.join(__dirname, '../../../dist/index.html'), 'utf8');
 
     app.get('/*', (req, res) => {
-
       if (req.user) {
         res.cookie('id', req.user._id.toString(), { path: '/' });
         if (req.user.isAdmin) {
@@ -73,7 +66,6 @@ const routes = (app) => {
         res.clearCookie('admin', { path: '/' });
         res.clearCookie('id', { path: '/' });
       }
-
       res.set('Content-Type', 'text/html');
       res.send(content);
     });
