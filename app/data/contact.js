@@ -2,37 +2,37 @@ const data = [
   {
     link: 'https://github.com/mldangelo',
     label: 'Github',
-    icon: 'fa-github',
+    icon: 'icon-github-circled',
   },
   {
     link: 'https://facebook.com/d',
     label: 'Facebook',
-    icon: 'fa-facebook',
+    icon: 'icon-facebook',
   },
   {
     link: 'https://www.instagram.com/dangelosaurus/',
     label: 'Instagram',
-    icon: 'fa-instagram',
+    icon: 'icon-instagram',
   },
   {
     link: 'https://www.linkedin.com/in/michaelldangelo',
     label: 'LinkedIn',
-    icon: 'fa-linkedin',
+    icon: 'icon-linkedin',
   },
   {
     link: 'https://angel.co/michael-d-angelo',
     label: 'Angel List',
-    icon: 'fa-angellist',
+    icon: 'icon-angellist',
   },
   {
     link: 'https://twitter.com/dangelosaurus',
     label: 'Twitter',
-    icon: 'fa-twitter',
+    icon: 'icon-twitter',
   },
   {
     link: 'mailto:michael.l.dangelo@gmail.com',
     label: 'Email',
-    icon: 'fa-envelope',
+    icon: 'icon-mail-alt',
   },
 ];
 
