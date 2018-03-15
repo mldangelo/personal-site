@@ -2,7 +2,7 @@ import 'dotenv/config';
 import path from 'path';
 import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-// import ScriptExtHtmlWebpackPlugin from 'script-ext-html-webpack-plugin';
+import ScriptExtHtmlWebpackPlugin from 'script-ext-html-webpack-plugin';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import StatsPlugin from 'stats-webpack-plugin';
 
@@ -22,9 +22,9 @@ export default {
       inject: 'body',
       filename: 'index.html',
     }),
-    /* new ScriptExtHtmlWebpackPlugin({
+    new ScriptExtHtmlWebpackPlugin({
       defaultAttribute: 'defer',
-    }), */
+    }),
     new ExtractTextPlugin('[name]-[hash].min.css'),
     new StatsPlugin('webpack.stats.json', {
       source: false,
