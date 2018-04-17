@@ -23,7 +23,7 @@ class Hamburger extends Component {
   getButton() {
     return this.state.open ? (
       <li className="menu close-menu">
-        <i onClick={this.handleClick} className="icon-cancel-3 close-menu"></i>
+        <i onClick={this.handleClick} className="icon-cancel-3 close-menu" />
       </li>
     ) : (
       <li className="menu open-menu">
