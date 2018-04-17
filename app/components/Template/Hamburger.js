@@ -23,11 +23,11 @@ class Hamburger extends Component {
   getButton() {
     return this.state.open ? (
       <li className="menu close-menu">
-        <a onClick={this.handleClick} className="fa-times close-menu">Menu</a>
+        <i onClick={this.handleClick} className="icon-cancel-3 close-menu"></i>
       </li>
     ) : (
       <li className="menu open-menu">
-        <a onClick={this.handleClick} className="fa-bars">Menu</a>
+        <a onClick={this.handleClick} className="icon-bars">Menu</a>
       </li>
     );
   }

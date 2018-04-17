@@ -1,24 +1,10 @@
 @font-face {
   font-family: 'fontello';
-  src: url('../font/fontello.eot?30292141');
-  src: url('../font/fontello.eot?30292141#iefix') format('embedded-opentype'),
-       url('../font/fontello.woff2?30292141') format('woff2'),
-       url('../font/fontello.woff?30292141') format('woff'),
-       url('../font/fontello.ttf?30292141') format('truetype'),
-       url('../font/fontello.svg?30292141#fontello') format('svg');
+  src: url('../font/fontello.woff2?52913898') format('woff2'),
+       url('../font/fontello.svg?52913898#fontello') format('svg');
   font-weight: normal;
   font-style: normal;
 }
-/* Chrome hack: SVG is rendered more smooth in Windozze. 100% magic, uncomment if you need it. */
-/* Note, that will break hinting! In other OS-es font will be not as sharp as it could be */
-/*
-@media screen and (-webkit-min-device-pixel-ratio:0) {
-  @font-face {
-    font-family: 'fontello';
-    src: url('../font/fontello.svg?30292141#fontello') format('svg');
-  }
-}
-*/
 
  [class^="icon-"]:before, [class*=" icon-"]:before {
   font-family: "fontello";
@@ -28,7 +14,6 @@
 
   display: inline-block;
   text-decoration: inherit;
-
   /* width: 1em;
   margin-right: .2em; */
   text-align: center;
@@ -56,10 +41,30 @@
   /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
 }
 
+.icon-cancel-circled-outline:before { content: '\e800'; } /* '' */
+.icon-cancel-circled-1:before { content: '\e801'; } /* '' */
+.icon-cancel-circled2:before { content: '\e809'; } /* '' */
+.icon-cancel-circle:before { content: '\e803'; } /* '' */
+.icon-cancel-circle-1:before { content: '\e805'; } /* '' */
+
+.icon-cancel:before { content: '\f402'; } /* '' */
+.icon-cancel-1:before { content: '\e802'; } /* '' */
+.icon-cancel-2:before { content: '\e804'; } /* '' */
+.icon-cancel-3:before { content: '\e806'; } /* '' */
+.icon-cancel-4:before { content: '\e807'; } /* '' */
+.icon-cancel-5:before { content: '\e80a'; } /* '' */
+
+.icon-cancel-circled:before { content: '\f043'; } /* '' */
+.icon-cancel-circled-2:before { content: '\f06e'; } /* '' */
+.icon-cancel-circled-3:before { content: '\e808'; } /* '' */
+.icon-cancel-circled-4:before { content: '\e80b'; } /* '' */
+
 .icon-twitter:before { content: '\f099'; } /* '' */
 .icon-facebook:before { content: '\f09a'; } /* '' */
 .icon-github-circled:before { content: '\f09b'; } /* '' */
+.icon-bars:before { content: '\f0c9'; } /* '' */
 .icon-mail-alt:before { content: '\f0e0'; } /* '' */
 .icon-linkedin:before { content: '\f0e1'; } /* '' */
 .icon-instagram:before { content: '\f16d'; } /* '' */
 .icon-angellist:before { content: '\f209'; } /* '' */
+.icon-times:before { content: '\f042'; } /* '' */
