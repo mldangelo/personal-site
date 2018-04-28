@@ -18,10 +18,10 @@
   },
   "dependencies": {
     "@octokit/rest": "^15.2.6",
-    "autoprefixer": "^8.3.0",
+    "autoprefixer": "^8.4.1",
     "axios": "^0.18.0",
     "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.0",
+    "babel-core": "^6.26.3",
     "babel-loader": "^7.1.4",
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-transform-async-to-generator": "^6.24.1",
@@ -37,6 +37,7 @@
     "connect-mongodb-session": "^2.0.2",
     "cookie-parser": "^1.4.3",
     "css-loader": "^0.28.11",
+    "dayjs": "^1.5.16",
     "dotenv": "^5.0.1",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
@@ -47,10 +48,9 @@
     "html-webpack-plugin": "^3.2.0",
     "js-cookie": "^2.2.0",
     "last.fm.api": "^0.1.3",
-    "moment": "^2.22.1",
-    "mongoose": "5.0.15",
+    "mongoose": "5.0.16",
     "morgan": "^1.9.0",
-    "node-sass": "^4.8.3",
+    "node-sass": "^4.9.0",
     "nodemon": "^1.17.3",
     "normalize.css": "^8.0.0",
     "passport": "^0.4.0",
@@ -60,7 +60,7 @@
     "react": "^16.3.2",
     "react-burger-menu": "^2.4.2",
     "react-dom": "^16.3.2",
-    "react-ga": "^2.4.1",
+    "react-ga": "^2.5.0",
     "react-helmet": "^5.2.0",
     "react-markdown": "^3.3.0",
     "react-router": "^4.2.0",
@@ -70,11 +70,11 @@
     "script-ext-html-webpack-plugin": "^2.0.1",
     "stats-webpack-plugin": "^0.6.2",
     "strip-loader": "^0.1.2",
-    "style-loader": "^0.20.3",
+    "style-loader": "^0.21.0",
     "url-loader": "^1.0.1",
-    "webpack": "^4.5.0",
-    "webpack-dev-middleware": "^3.1.2",
-    "webpack-hot-middleware": "^2.22.0"
+    "webpack": "^4.6.0",
+    "webpack-dev-middleware": "^3.1.3",
+    "webpack-hot-middleware": "^2.22.1"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.3",
@@ -87,8 +87,8 @@
     "eslint-plugin-jsx-a11y": "6.0.3",
     "eslint-plugin-mocha": "^5.0.0",
     "eslint-plugin-react": "^7.7.0",
-    "mocha": "^5.1.0",
+    "mocha": "^5.1.1",
     "webpack-bundle-size-analyzer": "^2.7.0",
-    "webpack-cli": "^2.0.14"
+    "webpack-cli": "^2.0.15"
   }
 }

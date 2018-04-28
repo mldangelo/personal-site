@@ -30,7 +30,6 @@ export default {
       source: false,
       modules: false,
     }),
-    new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
     new webpack.optimize.ModuleConcatenationPlugin(),
   ],
   module: {

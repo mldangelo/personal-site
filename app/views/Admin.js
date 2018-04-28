@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Helmet from 'react-helmet';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 import axios from 'axios';
 import Main from '../layouts/Main';
@@ -52,8 +52,8 @@ class Admin extends Component {
                     <tr>
                       <td>{`${user.name || ''}`}</td>
                       <td><a href={`mailto:${user.email}`}>{user.email}</a></td>
-                      <td>{moment(user.createdAt).format('MM/DD/YY')}</td>
-                      <td>{moment(user.lastOnline).format('MM/DD/YY h:mm:ss a')}</td>
+                      <td>{dayjs(user.createdAt).format('MM/DD/YY')}</td>
+                      <td>{dayjs(user.lastOnline).format('MM/DD/YY h:mm:ss a')}</td>
                       <td>{user.visits}</td>
                     </tr>
                   ))
