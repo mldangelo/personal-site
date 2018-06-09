@@ -1,6 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+
+import faGithub from '@fortawesome/fontawesome-free-brands/faGithub';
+import faFacebook from '@fortawesome/fontawesome-free-brands/faFacebookF';
+import faInstagram from '@fortawesome/fontawesome-free-brands/faInstagram';
+import faLinkedinIn from '@fortawesome/fontawesome-free-brands/faLinkedinIn';
+import faAngellist from '@fortawesome/fontawesome-free-brands/faAngellist';
+import faTwitter from '@fortawesome/fontawesome-free-brands/faTwitter';
+import faEnvelope from '@fortawesome/fontawesome-free-regular/faEnvelope';
+
 import data from '../../data/contact';
 
 const Nav = () => (
@@ -29,7 +40,7 @@ const Nav = () => (
       <ul className="icons">
         {data.map(s => (
           <li key={s.label}>
-            <a href={s.link} className={s.icon}><span className="label">{s.label}</span></a>
+            <a href={s.link}><FontAwesomeIcon icon={s.icon} /></a>
           </li>
         ))}
       </ul>
