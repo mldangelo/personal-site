@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import faTwitter from '@fortawesome/fontawesome-free-brands/faTwitter';
+import faEnvelope from '@fortawesome/fontawesome-free-regular/faEnvelope';
 
 import Menus from 'react-burger-menu';
 import cookie from 'js-cookie';
@@ -23,11 +26,13 @@ class Hamburger extends Component {
   getButton() {
     return this.state.open ? (
       <li className="menu close-menu">
-        <i onClick={this.handleClick} className="icon-cancel-3 close-menu" />
+        <i className="close-menu">
+          <FontAwesomeIcon onClick={this.handleClick} icon={faTwitter} className="menu-hover"/>
+        </i>
       </li>
     ) : (
       <li className="menu open-menu">
-        <a onClick={this.handleClick} className="icon-bars">Menu</a>
+        <i><FontAwesomeIcon onClick={this.handleClick} icon={faEnvelope} className="menu-hover"/></i>
       </li>
     );
   }

@@ -1,16 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
-
-import faGithub from '@fortawesome/fontawesome-free-brands/faGithub';
-import faFacebook from '@fortawesome/fontawesome-free-brands/faFacebookF';
-import faInstagram from '@fortawesome/fontawesome-free-brands/faInstagram';
-import faLinkedinIn from '@fortawesome/fontawesome-free-brands/faLinkedinIn';
-import faAngellist from '@fortawesome/fontawesome-free-brands/faAngellist';
-import faTwitter from '@fortawesome/fontawesome-free-brands/faTwitter';
-import faEnvelope from '@fortawesome/fontawesome-free-regular/faEnvelope';
 
 import data from '../../data/contact';
 
@@ -39,9 +30,7 @@ const Nav = () => (
     <section id="footer">
       <ul className="icons">
         {data.map(s => (
-          <li key={s.label}>
-            <a href={s.link}><FontAwesomeIcon icon={s.icon} /></a>
-          </li>
+          <li key={s.label}><a href={s.link}><FontAwesomeIcon icon={s.icon} /></a></li>
         ))}
       </ul>
       <p className="copyright">&copy; Michael D&apos;Angelo <Link to="http://mldangelo.com">mldangelo.com</Link>.</p>
