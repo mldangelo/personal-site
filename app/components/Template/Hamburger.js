@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
-import faTwitter from '@fortawesome/fontawesome-free-brands/faTwitter';
-import faEnvelope from '@fortawesome/fontawesome-free-regular/faEnvelope';
 
 import Menus from 'react-burger-menu';
 import cookie from 'js-cookie';
@@ -58,7 +55,7 @@ class Hamburger extends Component {
                 <Link to={l.path} onClick={this.handleClick}>
                   <h3 className={l.index ? 'index-li' : null}>{l.label}</h3>
                 </Link>
-                </li>
+              </li>
             ))}
             {admin ? <li><Link to="/admin"><h3>Admin</h3></Link></li> : null}
             {id ? <li><a href="/logout"><h3>Logout</h3></a></li> : null}
