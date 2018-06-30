@@ -26,13 +26,11 @@ class Hamburger extends Component {
   getButton() {
     return this.state.open ? (
       <li className="menu close-menu">
-        <i className="close-menu">
-          <FontAwesomeIcon onClick={this.handleClick} icon={faTwitter} className="menu-hover"/>
-        </i>
+        <div onClick={this.handleClick} className="menu-hover">&#10005;</div>
       </li>
     ) : (
       <li className="menu open-menu">
-        <i><FontAwesomeIcon onClick={this.handleClick} icon={faEnvelope} className="menu-hover"/></i>
+        <div onClick={this.handleClick} className="menu-hover">&#9776;</div>
       </li>
     );
   }
@@ -53,16 +51,16 @@ class Hamburger extends Component {
             {this.getButton()}
           </ul>
         </nav>
-        <Menu right noOverlay isOpen={this.state.open}>
+        <Menu right isOpen={this.state.open}>
           <ul className="hamburger-ul">
             {routes.map(l => (
               <li key={l.label}>
                 <Link to={l.path} onClick={this.handleClick}>
                   <h3 className={l.index ? 'index-li' : null}>{l.label}</h3>
                 </Link>
-              </li>
+                </li>
             ))}
-            {admin ? <li><a href="/admin"><h3>Admin</h3></a></li> : null}
+            {admin ? <li><Link to="/admin"><h3>Admin</h3></Link></li> : null}
             {id ? <li><a href="/logout"><h3>Logout</h3></a></li> : null}
           </ul>
         </Menu>
