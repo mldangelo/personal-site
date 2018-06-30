@@ -4,6 +4,14 @@
   margin-top: 0;
 }
 
+.menu-hover {
+ margin-right: 1em;
+}
+
+.menu-hover:hover {
+  opacity: 0.5;
+}
+
 .hamburger-ul {
   display: block;
 

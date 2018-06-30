@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Helmet from 'react-helmet';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 import Main from '../layouts/Main';
 
@@ -92,9 +93,7 @@ class Contact extends Component {
           </div>
           <ul className="icons">
             {data.map(s => (
-              <li key={s.label}>
-                <a href={s.link} className={s.icon}><span className="label">{s.label}</span></a>
-              </li>
+              <li key={s.label}><a href={s.link}><FontAwesomeIcon icon={s.icon} /></a></li>
             ))}
           </ul>
         </article>
