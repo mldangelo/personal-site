@@ -23,7 +23,9 @@ const Nav = () => (
             at <a href="http://matroid.com">Matroid</a>, <a href="http://planet.com">Planet</a>, <a href="http://planetaryresources.com">Planetary Resources</a>, <a href="http://facebook.com">Facebook</a>, and <a href="http://seds.org">SEDS</a>.
       </p>
       <ul className="actions">
-        <li><Link to="/resume" className="button">Learn More</Link></li>
+        <li>
+          {window.location.pathname !== '/resume' ? <Link to="/resume" className="button">Learn More</Link> : <Link to="/about" className="button">About Me</Link>}
+        </li>
       </ul>
     </section>
 
