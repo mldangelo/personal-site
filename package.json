@@ -25,7 +25,7 @@
     "@fortawesome/fontawesome-free-regular": "^5.0.13",
     "@fortawesome/react-fontawesome": "0.0.20",
     "@octokit/rest": "^15.4.1",
-    "autoprefixer": "^8.5.0",
+    "autoprefixer": "^9.0.0",
     "axios": "^0.18.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
