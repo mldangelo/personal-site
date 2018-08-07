@@ -23,7 +23,7 @@
     "@fortawesome/fontawesome": "^1.1.8",
     "@fortawesome/fontawesome-free-brands": "^5.0.13",
     "@fortawesome/fontawesome-free-regular": "^5.0.13",
-    "@fortawesome/react-fontawesome": "0.0.20",
+    "@fortawesome/react-fontawesome": "0.1.1",
     "@octokit/rest": "^15.4.1",
     "autoprefixer": "^8.5.0",
     "axios": "^0.18.0",
