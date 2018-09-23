@@ -27,7 +27,6 @@ export default {
     }),
     new MiniCssExtractPlugin({
       filename: '[name]-[hash].min.css',
-      // chunkFilename: "[id].css"
     }),
     new StatsPlugin('webpack.stats.json', {
       source: false,
