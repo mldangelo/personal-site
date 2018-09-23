@@ -14,7 +14,7 @@
     "forever-stop": "forever stop server/server.js",
     "lint": "./node_modules/.bin/eslint app server test webpack",
     "start": "./node_modules/.bin/babel-node server/server.js",
-    "test": "./node_modules/mocha/bin/mocha --exit --require babel-core/register ./test/test.js",
+    "test": "./node_modules/mocha/bin/mocha --exit --require @babel/register ./test/test.js",
     "analyze": "babel-node ./node_modules/webpack/bin/webpack --config ./webpack/webpack.production.config.js --json | webpack-bundle-size-analyzer",
     "snyk-protect": "snyk protect",
     "prepare": "npm run snyk-protect"
