@@ -51,7 +51,7 @@
     "dotenv": "^6.0.0",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
-    "extract-text-webpack-plugin": "^4.0.0-alpha.0",
+    "extract-text-webpack-plugin@next": "*",
     "file-loader": "^2.0.0",
     "font-awesome": "^4.7.0",
     "forever": "^0.15.3",

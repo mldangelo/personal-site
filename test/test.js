@@ -11,7 +11,7 @@ require('chai').should();
 const port = process.env.PORT || 7999;
 
 describe('Page Load Tests:', async function () {
-  this.timeout(60000);
+  this.timeout(120000);
   let instance;
   let chromy;
 
