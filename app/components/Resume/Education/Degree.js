@@ -5,12 +5,7 @@ const Degree = props => (
   <article className="degree-container">
     <header>
       <h4 className="degree">{props.data.degree}</h4>
-      <p className="school">
-        <a href={props.data.link}>{props.data.school}</a>
-,
-        {' '}
-        {props.data.year}
-      </p>
+      <p className="school"><a href={props.data.link}>{props.data.school}</a>, {props.data.year}</p>
     </header>
   </article>
 );

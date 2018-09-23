@@ -17,26 +17,10 @@ const Nav = () => (
 
     <section className="blurb">
       <h2>About</h2>
-      <p>
-Hi, I&apos;m Michael. I like building things.
-            I am a
-        <a href="https://icme.stanford.edu/">Stanford ICME</a>
-        {' '}
-graduate, YC Alumni, and
-            the co-founder and CTO of
-        <a href="http://arthena.com">Arthena</a>
-. Before Arthena I was
-            at
-        <a href="http://matroid.com">Matroid</a>
-,
-        <a href="http://planet.com">Planet</a>
-,
-        <a href="http://planetaryresources.com">Planetary Resources</a>
-,
-        <a href="http://facebook.com">Facebook</a>
-, and
-        <a href="http://seds.org">SEDS</a>
-.
+      <p>Hi, I&apos;m Michael. I like building things.
+            I am a <a href="https://icme.stanford.edu/">Stanford ICME</a> graduate, YC Alumni, and
+            the co-founder and CTO of <a href="http://arthena.com">Arthena</a>. Before Arthena I was
+            at <a href="http://matroid.com">Matroid</a>, <a href="http://planet.com">Planet</a>, <a href="http://planetaryresources.com">Planetary Resources</a>, <a href="http://facebook.com">Facebook</a>, and <a href="http://seds.org">SEDS</a>.
       </p>
       <ul className="actions">
         <li>
@@ -51,11 +35,7 @@ graduate, YC Alumni, and
           <li key={s.label}><a href={s.link}><FontAwesomeIcon icon={s.icon} /></a></li>
         ))}
       </ul>
-      <p className="copyright">
-&copy; Michael D&apos;Angelo
-        <Link to="http://mldangelo.com">mldangelo.com</Link>
-.
-      </p>
+      <p className="copyright">&copy; Michael D&apos;Angelo <Link to="http://mldangelo.com">mldangelo.com</Link>.</p>
     </section>
   </section>
 );
