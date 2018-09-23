@@ -34,9 +34,9 @@ class Hamburger extends Component {
   /* eslint-enable jsx-a11y/click-events-have-key-events, jsx-a11y/anchor-is-valid */
 
   handleClick = () => {
-    this.setState({
-      open: !this.state.open,
-    });
+    this.setState(prevState => ({
+      open: !prevState.open,
+    }));
   }
 
   render() {
