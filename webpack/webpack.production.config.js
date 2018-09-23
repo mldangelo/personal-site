@@ -53,8 +53,8 @@ export default {
             loader: MiniCssExtractPlugin.loader,
             options: {},
           },
-         'css-loader?modules&localIdentName=[name]---[local]---[hash:base64:5]',
-        ]
+          'css-loader?modules&localIdentName=[name]---[local]---[hash:base64:5]',
+        ],
       }, {
         test: /\.scss$/,
         loaders: 'style-loader!css-loader!sass-loader?modules&localIdentName=[name]---[local]---[hash:base64:5]',
