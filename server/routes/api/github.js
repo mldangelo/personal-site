@@ -31,8 +31,8 @@ export default (req, res) => {
     res.send(JSON.stringify(data));
   };
 
-  if (cached.updated_at &&
-    ((Date.now() - cached.updated_at) / 1000 < 60)) {
+  if (cached.updated_at
+    && ((Date.now() - cached.updated_at) / 1000 < 60)) {
     res.send(JSON.stringify(cached));
   } else {
     github.repos.get({

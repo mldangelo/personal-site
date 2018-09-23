@@ -29,7 +29,11 @@ class SkillBar extends Component {
       <div className="skillbar clearfix">
         <div className="skillbar-title" style={titleStyle}><span>{this.state.data.title}</span></div>
         <div className="skillbar-bar" style={barStyle} />
-        <div className="skill-bar-percent">{this.state.data.compentency} / 5</div>
+        <div className="skill-bar-percent">
+          {this.state.data.compentency}
+          {' '}
+/ 5
+        </div>
       </div>
     );
   }

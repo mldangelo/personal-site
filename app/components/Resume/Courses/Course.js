@@ -5,7 +5,10 @@ import PropTypes from 'prop-types';
 const Course = props => (
   <li className="course-container">
     <a href={props.data.link}>
-      <h4 className="course-number">{props.data.number}:</h4>
+      <h4 className="course-number">
+        {props.data.number}
+:
+      </h4>
       <p className="course-name">{props.data.title}</p>
     </a>
     {props.last ? null : <div className="course-dot"><p className="course-name"> &#8226;</p></div>}

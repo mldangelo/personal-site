@@ -8,8 +8,17 @@ const getPoints = data => data.points.map(point => (
 const Job = props => (
   <article className="jobs-container">
     <header>
-      <h4><a href={props.data.link}>{props.data.company}</a> - {props.data.position}</h4>
-      <p className="daterange"> {props.data.daterange}</p>
+      <h4>
+        <a href={props.data.link}>{props.data.company}</a>
+        {' '}
+-
+        {' '}
+        {props.data.position}
+      </h4>
+      <p className="daterange">
+        {' '}
+        {props.data.daterange}
+      </p>
     </header>
     <ul className="points">
       {getPoints(props.data)}
