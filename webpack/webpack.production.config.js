@@ -14,7 +14,7 @@ export default {
   output: {
     path: path.join(__dirname, '../tmp/'),
     filename: '[name]-[hash].min.js',
-    publicPath: '/dist/',
+    publicPath: '/',
   },
   plugins: [
     new HtmlWebpackPlugin({
