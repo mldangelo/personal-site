@@ -11,14 +11,13 @@ My personal website. Built using Node.js, React, Express, React-Router, Hot Modu
 ### Dependencies:
 * node >= v6.0.0
 * yarn >= v0.20.0
-* mongodb >= 3.4.0
 
 ### Installation:
 
 1. Run the following commands:
   ```bash
-  git clone git://github.com/mldangelo/mldangelo.git
-  cd mldangelo
+  git clone git://github.com/mldangelo/personal-site.git
+  cd personal-site
   yarn
   ```
 
@@ -38,7 +37,6 @@ for installation and setup instructions. A cronjob such as:
   ```
 
   should be set to automatically renew the certificate in production.
-
 
 ###  Running:
 
