@@ -1,5 +1,4 @@
 /* eslint-disable global-require */
-import 'dotenv/config';
 import reactApp from './views/app';
 
 const routes = (app) => {
