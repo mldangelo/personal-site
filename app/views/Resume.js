@@ -1,9 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { withRouter } from 'react-router';
 
 import Helmet from 'react-helmet';
-import axios from 'axios';
 
 import Main from '../layouts/Main';
 
@@ -13,6 +11,10 @@ import Skills from '../components/Resume/Skills';
 import Courses from '../components/Resume/Courses';
 import References from '../components/Resume/References';
 
+import courses from '../data/resume/courses';
+import degrees from '../data/resume/degrees';
+import positions from '../data/resume/positions';
+import { skills, categories } from '../data/resume/skills';
 
 const sections = [
   'Education',
@@ -22,54 +24,30 @@ const sections = [
   'References',
 ];
 
+const Resume = () => (
+  <Main>
+    <Helmet title="Resume" />
+    <article className="post" id="resume">
+      <header>
+        <div className="title">
+          <h2><Link to="/resume">Resume</Link></h2>
+          <div className="link-container">
+            {sections.map(sec => (
+              <h4 key={sec}>
+                <a href={`#${sec.toLowerCase()}`}>{sec}</a>
+              </h4>))}
+          </div>
 
-class Resume extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      data: {},
-    };
-  }
+        </div>
+      </header>
+      <Education data={degrees} />
+      <Experience data={positions} />
+      <Skills skills={skills} categories={categories} />
+      <Courses data={courses} />
+      <References />
 
-  componentWillMount() {
-    axios.get('/api/resume').then(({ data }) => {
-      if (!data.success) {
-        return Promise.reject(data.error);
-      }
-      return this.setState({ data });
-    }).catch((error) => {
-      console.error('resume-api-fetch-error', error);
-      this.props.history.push('/login'); // eslint-disable-line react/prop-types
-    });
-  }
+    </article>
+  </Main>
+);
 
-  render() {
-    return (
-      <Main>
-        <Helmet title="Resume" />
-        <article className="post" id="resume">
-          <header>
-            <div className="title">
-              <h2><Link to="/resume">Resume</Link></h2>
-              <div className="link-container">
-                {sections.map(sec => (
-                  <h4 key={sec}>
-                    <a href={`#${sec.toLowerCase()}`}>{sec}</a>
-                  </h4>))}
-              </div>
-
-            </div>
-          </header>
-          <Education data={this.state.data.degrees} />
-          <Experience data={this.state.data.positions} />
-          <Skills skills={this.state.data.skills} categories={this.state.data.categories} />
-          <Courses data={this.state.data.courses} />
-          <References />
-
-        </article>
-      </Main>
-    );
-  }
-}
-
-export default withRouter(Resume);
+export default Resume;

@@ -6,18 +6,13 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import compress from 'compression';
 import morgan from 'morgan';
-import cookieParser from 'cookie-parser';
-
-import mongoose from 'mongoose';
 
 import session from 'express-session';
-import mongoStore from 'connect-mongodb-session';
 
 import routes from './routes';
 
 const port = process.env.PORT || 7999;
 const env = process.env.NODE_ENV || 'development';
-const database = process.env.DB_NAME || 'mldangelo';
 
 const app = express();
 
