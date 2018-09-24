@@ -14,9 +14,6 @@ import session from 'express-session';
 import mongoStore from 'connect-mongodb-session';
 
 import routes from './routes';
-import auth from './auth';
-
-import update from './update'; // default database models
 
 const port = process.env.PORT || 7999;
 const env = process.env.NODE_ENV || 'development';
@@ -27,31 +24,11 @@ const app = express();
 app.use(compress());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(cookieParser());
-
-const MongoDBStore = mongoStore(session);
-
-mongoose.connection.openUri(`mongodb://localhost/${database}`, { useNewUrlParser: true })
-  .once('open', () => {
-    console.info(`Connected to mongodb://localhost/${database}`);
-    update(); // create default models if they don't exist
-  })
-  .on('error', error => console.error('Database connection error:', error));
-
-const store = new MongoDBStore({
-  uri: `mongodb://localhost/${database}`,
-  collection: 'sessions',
-});
-
-store.on('error', (error) => {
-  console.error('session-store-error', error);
-});
 
 app.use(session({
   secret: process.env.SESSION_SECRET || 'keyboard cat',
   resave: true,
   saveUninitialized: true,
-  store,
   cookie: {
     maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
   },
@@ -62,7 +39,6 @@ if (!module.parent) app.use(morgan('combined'));
 
 app.use(express.static(path.join(__dirname, '../public')));
 
-auth(app); // initialize authentication
 routes(app); // initialize routes
 
 if (!module.parent) {

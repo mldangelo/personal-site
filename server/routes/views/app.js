@@ -38,17 +38,6 @@ const routes = (app) => {
 
     app.get('/*', (req, res) => {
       const content = middleware.fileSystem.readFileSync(path.join(__dirname, '../../../dist/index.html'));
-
-      if (req.user) {
-        res.cookie('id', req.user._id.toString(), { path: '/' });
-        if (req.user.isAdmin) {
-          res.cookie('admin', req.user.isAdmin, { path: '/' });
-        }
-      } else {
-        res.clearCookie('admin', { path: '/' });
-        res.clearCookie('id', { path: '/' });
-      }
-
       res.set('Content-Type', 'text/html');
       res.send(content);
     });
@@ -57,15 +46,6 @@ const routes = (app) => {
     const content = fs.readFileSync(path.join(__dirname, '../../../dist/index.html'), 'utf8');
 
     app.get('/*', (req, res) => {
-      if (req.user) {
-        res.cookie('id', req.user._id.toString(), { path: '/' });
-        if (req.user.isAdmin) {
-          res.cookie('admin', req.user.isAdmin, { path: '/' });
-        }
-      } else {
-        res.clearCookie('admin', { path: '/' });
-        res.clearCookie('id', { path: '/' });
-      }
       res.set('Content-Type', 'text/html');
       res.send(content);
     });
