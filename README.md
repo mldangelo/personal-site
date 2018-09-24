@@ -17,15 +17,15 @@ My personal website. Built using Node.js, React, Express, React-Router, Hot Modu
 
 1. Run the following commands:
   ```bash
-  git clone git://github.com/mldangelo/mldangelo.git
-  cd mldangelo
+  git clone git://github.com/mldangelo/personal-site.git
+  cd personal-site
   yarn
   ```
 
 2. Optionally configure nginx. Run:
 
   ```bash
-  sudo ln [root directory]/nginx/mldangelo.conf [nginx directory]/sites-enabled/mldangelo.conf
+  sudo ln [root directory]/nginx/mldangelo.conf [nginx directory]/sites-enabled/personal-site.conf
   sudo service nginx restart
   ```
   Note: HTTPS block should be removed if step 3 (below) is not followed.
@@ -43,8 +43,8 @@ for installation and setup instructions. A cronjob such as:
 ###  Running:
 
 1. ``` cp sample.env .env ``` and set values as appropriate.
-
-2. Run `npm run forever-start` and navigate to `<ip>:<port> (default=7999)`.
+2. Run `npm run deploy` OR  
+2. Run `npm run build` followed by `npm run start` and navigate to `<ip>:<port> (default=7999)`.
 
 ###  Developing:
 1. Set `NODE_ENV=development` in `.env`.
