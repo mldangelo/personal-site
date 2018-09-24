@@ -9,8 +9,8 @@ const lastfm = new LastfmAPI({
 });
 
 export default (req, res) => {
-  if (cached.updated_at &&
-    ((Date.now() - cached.updated_at) / 1000 < 60)) {
+  if (cached.updated_at
+    && ((Date.now() - cached.updated_at) / 1000 < 60)) {
     res.send(JSON.stringify(cached.artists));
   } else {
     lastfm.user.getTopArtists({

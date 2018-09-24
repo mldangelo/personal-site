@@ -10,7 +10,7 @@ class PersonalStats extends Component {
   }
 
   componentDidMount() {
-    this.timer = setInterval(() => this.tick(), 100);
+    this.timer = setInterval(() => this.tick(), 25);
   }
 
   componentWillUnmount() {
@@ -20,14 +20,14 @@ class PersonalStats extends Component {
   tick() {
     const divisor = 1000 * 60 * 60 * 24 * 365.2421897; // ms in an average year
     const birthTime = new Date('1990-02-05T09:24:00');
-    this.setState({
-      data: Object.assign({}, this.state.data, {
+    this.setState(prevState => ({
+      data: Object.assign({}, prevState.data, {
         age: {
           label: 'Current age',
-          value: ((Date.now() - birthTime) / divisor).toFixed(9),
+          value: ((Date.now() - birthTime) / divisor).toFixed(11),
         },
       }),
-    });
+    }));
   }
 
   render() {

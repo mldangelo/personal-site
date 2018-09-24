@@ -3,7 +3,7 @@ import path from 'path';
 import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import ScriptExtHtmlWebpackPlugin from 'script-ext-html-webpack-plugin';
-import ExtractTextPlugin from 'extract-text-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import StatsPlugin from 'stats-webpack-plugin';
 
 export default {
@@ -25,7 +25,9 @@ export default {
     new ScriptExtHtmlWebpackPlugin({
       defaultAttribute: 'async',
     }),
-    new ExtractTextPlugin('[name]-[hash].min.css'),
+    new MiniCssExtractPlugin({
+      filename: '[name]-[hash].min.css',
+    }),
     new StatsPlugin('webpack.stats.json', {
       source: false,
       modules: false,
@@ -45,10 +47,13 @@ export default {
         }],
       }, {
         test: /\.css$/,
-        loader: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: 'css-loader?modules&localIdentName=[name]---[local]---[hash:base64:5]',
-        }),
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {},
+          },
+          'css-loader?modules&localIdentName=[name]---[local]---[hash:base64:5]',
+        ],
       }, {
         test: /\.scss$/,
         loaders: 'style-loader!css-loader!sass-loader?modules&localIdentName=[name]---[local]---[hash:base64:5]',

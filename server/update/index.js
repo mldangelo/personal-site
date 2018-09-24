@@ -13,7 +13,7 @@ const defaultUser = {
 };
 
 const populate = async () => {
-  const count = await User.count();
+  const count = await User.countDocuments();
   if (count === 0) {
     console.info(`Creating default user with email ${defaultUser.email}.`);
     await User.create(defaultUser);
