@@ -10,9 +10,6 @@ import Resume from './views/Resume';
 import Stats from './views/Stats';
 import Contact from './views/Contact';
 
-// Hidden
-import Music from './views/Music';
-
 import NotFound from './views/NotFound';
 
 // All of our CSS
@@ -37,7 +34,6 @@ ReactDOM.render(
       <Route path="/projects" component={Projects} />
       <Route path="/stats" component={Stats} />
       <Route path="/contact" component={Contact} />
-      <Route path="/music" component={Music} />
       <Route path="/resume" component={Resume} />
       {/* Only useful in development mode */}
       <Route component={NotFound} status={404} />
