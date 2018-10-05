@@ -2,6 +2,9 @@
 
 My personal website. Built using Node.js, React, Express, React-Router, Hot Module Reloading, Webpack and many other technologies.
 
+Note: Please see the [github-hosting](https://github.com/mldangelo/personal-site/tree/github-hosting) branch for a stripped down version of this site that can be deployed easily to github pages. Feel free to contact me at any valid email address at @mldangelo.com (ex. help@mldangelo.com) for questions about running, modifying, or contributing to this project.
+
+
 ### Tests:
 [![Code Climate](https://codeclimate.com/github/mldangelo/mldangelo/badges/gpa.svg)](https://codeclimate.com/github/mldangelo/mldangelo)
 [![Build Status](https://travis-ci.org/mldangelo/mldangelo.svg?branch=master)](https://travis-ci.org/mldangelo/mldangelo)
@@ -9,20 +12,34 @@ My personal website. Built using Node.js, React, Express, React-Router, Hot Modu
 [![Greenkeeper badge](https://badges.greenkeeper.io/mldangelo/mldangelo.svg)](https://greenkeeper.io/)
 
 ### Dependencies:
-* node >= v6.0.0
-* yarn >= v0.20.0
+Tested with:
+* node >= v8.12.0
+* yarn >= v1.10.0
 * mongodb >= 3.4.0
+
 
 ### Installation:
 
 1. Run the following commands:
-  ```bash
-  git clone git://github.com/mldangelo/personal-site.git
-  cd personal-site
-  yarn
-  ```
+```bash
+git clone git://github.com/mldangelo/personal-site.git
+cd personal-site
+yarn
+```
 
-2. Optionally configure nginx. Run:
+2. ``` cp sample.env .env ``` and set values as appropriate.
+
+###  Developing:
+1. Set `NODE_ENV=development` in `.env`.
+2. Run `npm run dev` and navigate to `<ip>:<port> (default=localhost:7999)`.
+
+###  Running:
+1. Set `NODE_ENV=production` in `.env`.
+2. Run `npm run deploy` OR  
+3. Run `npm run build` followed by `npm run start` and navigate to `<ip>:<port> (default=localhost:7999)`.
+
+### Deploying:
+1. Optionally configure nginx. Run:
 
   ```bash
   sudo ln [root directory]/nginx/mldangelo.conf [nginx directory]/sites-enabled/personal-site.conf
@@ -30,7 +47,7 @@ My personal website. Built using Node.js, React, Express, React-Router, Hot Modu
   ```
   Note: HTTPS block should be removed if step 3 (below) is not followed.
 
-3. Optionally configure a SSL certificate using Certbot. See [here](https://certbot.eff.org/#ubuntutrusty-nginx)
+2. Optionally configure a SSL certificate using Certbot. See [here](https://certbot.eff.org/#ubuntutrusty-nginx)
 for installation and setup instructions. A cronjob such as:
 
   ```bash
@@ -39,16 +56,6 @@ for installation and setup instructions. A cronjob such as:
 
   should be set to automatically renew the certificate in production.
 
-
-###  Running:
-
-1. ``` cp sample.env .env ``` and set values as appropriate.
-2. Run `npm run deploy` OR  
-2. Run `npm run build` followed by `npm run start` and navigate to `<ip>:<port> (default=7999)`.
-
-###  Developing:
-1. Set `NODE_ENV=development` in `.env`.
-2. Run `npm run dev`
 
 ### Contributors
 - [@mldangelo](https://github.com/mldangelo)
