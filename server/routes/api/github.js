@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 import GithubAPI from '@octokit/rest';
 
@@ -25,14 +25,14 @@ export default (req, res) => {
       ...obj,
       [key]: payload[key],
     }), {});
-    data.pushed_at = moment(data.pushed_at).format('MMMM DD, YYYY');
+    data.pushed_at = dayjs(data.pushed_at).format('MMMM DD, YYYY');
     data.updated_at = Date.now();
     cached = data;
     res.send(JSON.stringify(data));
   };
 
-  if (cached.updated_at &&
-    ((Date.now() - cached.updated_at) / 1000 < 60)) {
+  if (cached.updated_at
+    && ((Date.now() - cached.updated_at) / 1000 < 60)) {
     res.send(JSON.stringify(cached));
   } else {
     github.repos.get({

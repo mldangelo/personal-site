@@ -99,6 +99,15 @@
 					line-height: inherit;
 					white-space: nowrap;
 
+					> i {
+					    text-decoration: none;
+					    border-bottom: 0;
+					    overflow: hidden;
+					    position: relative;
+					    text-indent: 4em;
+							margin-right: 1.5em;
+					}
+
 					> * {
 						display: block;
 						float: left;
@@ -126,37 +135,6 @@
 						}
 					}
 				}
-			}
-		}
-
-		form {
-			margin: 0;
-
-			input {
-				display: inline-block;
-				height: 2.5em;
-				position: relative;
-				top: -2px;
-				vertical-align: middle;
-			}
-		}
-
-		#search {
-			@include vendor('transition', 'all 0.5s ease');
-			max-width: 0;
-			opacity: 0;
-			overflow: hidden;
-			padding: 0;
-			white-space: nowrap;
-
-			input {
-				width: 12em;
-			}
-
-			&.visible {
-				max-width: 12.5em;
-				opacity: 1;
-				padding: 0 0.5em 0 0;
 			}
 		}
 
@@ -222,6 +200,7 @@
 
 	#header .main .close-menu {
 		border: 0;
+		z-index: 10000;
 	}
 
 	#header .main .open-menu {

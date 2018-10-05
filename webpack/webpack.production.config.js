@@ -3,13 +3,14 @@ import path from 'path';
 import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import ScriptExtHtmlWebpackPlugin from 'script-ext-html-webpack-plugin';
-import ExtractTextPlugin from 'extract-text-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import StatsPlugin from 'stats-webpack-plugin';
 
 export default {
   entry: [
     path.join(__dirname, '../app/entry.js'),
   ],
+  mode: 'production',
   output: {
     path: path.join(__dirname, '../tmp/'),
     filename: '[name]-[hash].min.js',
@@ -22,31 +23,19 @@ export default {
       filename: 'index.html',
     }),
     new ScriptExtHtmlWebpackPlugin({
-      defaultAttribute: 'defer',
+      defaultAttribute: 'async',
     }),
-    new ExtractTextPlugin('[name]-[hash].min.css'),
+    new MiniCssExtractPlugin({
+      filename: '[name]-[hash].min.css',
+    }),
     new StatsPlugin('webpack.stats.json', {
       source: false,
       modules: false,
     }),
-    new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
     new webpack.optimize.ModuleConcatenationPlugin(),
-    new webpack.optimize.UglifyJsPlugin({
-      beautify: false,
-      comments: false,
-      compress: {
-        warnings: false,
-        drop_console: true,
-      },
-      mangle: {
-        except: ['webpackJsonp', 'exports', 'require'],
-        screw_ie8: true,
-        keep_fnames: true,
-      },
-    }),
   ],
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js?$/,
         exclude: /node_modules/,
@@ -57,14 +46,14 @@ export default {
           loader: 'raw-loader',
         }],
       }, {
-        test: /\.json?$/,
-        loader: 'json-loader',
-      }, {
         test: /\.css$/,
-        loader: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: 'css-loader?modules&localIdentName=[name]---[local]---[hash:base64:5]',
-        }),
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {},
+          },
+          'css-loader?modules&localIdentName=[name]---[local]---[hash:base64:5]',
+        ],
       }, {
         test: /\.scss$/,
         loaders: 'style-loader!css-loader!sass-loader?modules&localIdentName=[name]---[local]---[hash:base64:5]',
@@ -83,7 +72,7 @@ export default {
         loader: 'strip-loader?strip[]=console.log',
       }, {
         test: /\.html$/,
-        loader: 'raw-loader!html-minify-loader',
+        loader: 'raw-loader',
       },
     ],
   },

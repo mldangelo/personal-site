@@ -1,10 +1,16 @@
 {
-  "presets": ["env", "stage-3", "react"],
+  "presets": [
+    "@babel/preset-env",
+    "@babel/preset-react"
+  ],
   "plugins": [
     "add-module-exports",
-    "transform-class-properties",
-    "transform-react-inline-elements",
+    "@babel/plugin-proposal-class-properties",
+    "@babel/plugin-transform-react-inline-elements",
     "transform-react-remove-prop-types",
-    "transform-async-to-generator",
+    "@babel/plugin-transform-async-to-generator",
+    "@babel/plugin-syntax-dynamic-import",
+    "@babel/plugin-syntax-import-meta",
+    "@babel/plugin-proposal-json-strings"
   ]
 }

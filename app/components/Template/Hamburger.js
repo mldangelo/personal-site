@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 import Menus from 'react-burger-menu';
+import cookie from 'js-cookie';
 
 import routes from '../../data/routes';
 
@@ -22,23 +23,24 @@ class Hamburger extends Component {
   getButton() {
     return this.state.open ? (
       <li className="menu close-menu">
-        <a onClick={this.handleClick} className="fa-times close-menu">Menu</a>
+        <div onClick={this.handleClick} className="menu-hover">&#10005;</div>
       </li>
     ) : (
       <li className="menu open-menu">
-        <a onClick={this.handleClick} className="fa-bars">Menu</a>
+        <div onClick={this.handleClick} className="menu-hover">&#9776;</div>
       </li>
     );
   }
   /* eslint-enable jsx-a11y/click-events-have-key-events, jsx-a11y/anchor-is-valid */
 
   handleClick = () => {
-    this.setState({
-      open: !this.state.open,
-    });
+    this.setState(prevState => ({
+      open: !prevState.open,
+    }));
   }
 
   render() {
+    const { id, admin } = cookie.get();
     return (
       <div className="hamburger-container">
         <nav className="main" id="hambuger-nav">
@@ -46,7 +48,7 @@ class Hamburger extends Component {
             {this.getButton()}
           </ul>
         </nav>
-        <Menu right noOverlay isOpen={this.state.open}>
+        <Menu right isOpen={this.state.open}>
           <ul className="hamburger-ul">
             {routes.map(l => (
               <li key={l.label}>
@@ -55,8 +57,8 @@ class Hamburger extends Component {
                 </Link>
               </li>
             ))}
-            {window.admin ? <li><a href="/admin"><h3>Admin</h3></a></li> : null}
-            {window.id ? <li><a href="/logout"><h3>Logout</h3></a></li> : null}
+            {admin ? <li><Link to="/admin"><h3>Admin</h3></Link></li> : null}
+            {id ? <li><a href="/logout"><h3>Logout</h3></a></li> : null}
           </ul>
         </Menu>
       </div>

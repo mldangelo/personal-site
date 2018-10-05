@@ -4,28 +4,24 @@ import PropTypes from 'prop-types';
 import CategoryButton from './Skills/CategoryButton';
 import SkillBar from './Skills/SkillBar';
 
+const handleProps = ({ categories, skills }) => ({
+  buttons: categories.map(cat => cat.name).reduce((obj, key) => ({
+    ...obj,
+    [key]: false,
+  }), { All: true }),
+  skills: skills.map(skill => Object.assign(skill, {
+    category: skill.category.sort(),
+  })),
+});
+
 class Skills extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      buttons: props.categories.map(cat => cat.name).reduce((obj, key) => ({
-        ...obj,
-        [key]: false,
-      }), { All: true }),
-      skills: props.skills.map(skill =>
-        Object.assign(skill, { category: skill.category.sort() })),
-    };
+    this.state = handleProps({ categories: props.categories, skills: props.skills });
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({
-      buttons: nextProps.categories.map(cat => cat.name).reduce((obj, key) => ({
-        ...obj,
-        [key]: false,
-      }), { All: true }),
-      skills: nextProps.skills.map(skill =>
-        Object.assign(skill, { category: skill.category.sort() })),
-    });
+    this.setState(handleProps({ categories: nextProps.categories, skills: nextProps.skills }));
   }
 
   getRows() {
@@ -65,14 +61,16 @@ class Skills extends Component {
   }
 
   handleChildClick = (label) => {
-    // Toggle button that was clicked. Turn all other buttons off.
-    const buttons = Object.keys(this.state.buttons).reduce((obj, key) => ({
-      ...obj,
-      [key]: (label === key) && !this.state.buttons[key],
-    }), {});
-    // Turn on 'All' button if other buttons are off
-    buttons.All = !Object.keys(this.state.buttons).some(key => buttons[key]);
-    this.setState({ buttons });
+    this.setState((prevState) => {
+      // Toggle button that was clicked. Turn all other buttons off.
+      const buttons = Object.keys(prevState.buttons).reduce((obj, key) => ({
+        ...obj,
+        [key]: (label === key) && !prevState.buttons[key],
+      }), {});
+      // Turn on 'All' button if other buttons are off
+      buttons.All = !Object.keys(prevState.buttons).some(key => buttons[key]);
+      return { buttons };
+    });
   }
 
   render() {
