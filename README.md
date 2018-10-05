@@ -9,8 +9,9 @@ My personal website. Built using Node.js, React, Express, React-Router, Hot Modu
 [![Greenkeeper badge](https://badges.greenkeeper.io/mldangelo/mldangelo.svg)](https://greenkeeper.io/)
 
 ### Dependencies:
-* node >= v6.0.0
-* yarn >= v0.20.0
+Tested with:
+* node >= v8.12.0
+* yarn >= v1.10.0
 
 ### Installation:
 
@@ -21,32 +22,22 @@ My personal website. Built using Node.js, React, Express, React-Router, Hot Modu
   yarn
   ```
 
-2. Optionally configure nginx. Run:
-
-  ```bash
-  sudo ln [root directory]/nginx/mldangelo.conf [nginx directory]/sites-enabled/mldangelo.conf
-  sudo service nginx restart
-  ```
-  Note: HTTPS block should be removed if step 3 (below) is not followed.
-
-3. Optionally configure a SSL certificate using Certbot. See [here](https://certbot.eff.org/#ubuntutrusty-nginx)
-for installation and setup instructions. A cronjob such as:
-
-  ```bash
-  0 0 1 * * sudo /home/ubuntu/certbot/certbot-auto renew --quiet --no-self-upgrade
-  ```
-
-  should be set to automatically renew the certificate in production.
-
-###  Running:
-
-1. ``` cp sample.env .env ``` and set values as appropriate.
-
-2. Run `npm run forever-start` and navigate to `<ip>:<port> (default=7999)`.
-
 ###  Developing:
-1. Set `NODE_ENV=development` in `.env`.
-2. Run `npm run dev`
+1. ``` cp sample.env .env ``` and set values as appropriate.
+2. Run `npm run dev` and navigate to `<ip>:<port> (localhost:7999)`.
+
+###  Deploying:
+This branch is configured for deployment with github pages. To deploy:
+1. Modify the `CNAME` file to reference your custom domain.
+2. Change `NODE_ENV` to `production` in `.env`
+3. Run `npm run deploy`
+4. Go to `https://github.com/[your github username]/personal-site/settings` and configure accordingly
+
+<img" src="docs/gh-pages.png">
+
+5. Configure your domains DNS record. See https://help.github.com/articles/using-a-custom-domain-with-github-pages/ for more information.
+
+Please feel free to reach out to me by filing an issue or at help@mldangelo.com for help configuring your project.
 
 ### Contributors
 - [@mldangelo](https://github.com/mldangelo)
