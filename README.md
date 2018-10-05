@@ -33,7 +33,8 @@ This branch is configured for deployment with github pages. To deploy:
 3. Run `npm run deploy`
 4. Go to `https://github.com/[your github username]/personal-site/settings` and configure accordingly
 
-<img" src="docs/gh-pages.png">
+![github hosting instructions](docs/gh-pages.png)
+
 
 5. Configure your domains DNS record. See https://help.github.com/articles/using-a-custom-domain-with-github-pages/ for more information.
 
