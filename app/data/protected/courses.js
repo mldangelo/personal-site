@@ -71,7 +71,7 @@ const courses = [
     univerity: 'Buffalo',
   }, {
     title: 'Data Structures',
-    number: 'CS 250',
+    number: 'CSE 250',
     link: 'http://www.cse.buffalo.edu/~hungngo/classes/2013/Fall/250/',
     univerity: 'Buffalo',
   }, {

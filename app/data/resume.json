@@ -6,10 +6,10 @@
     "email": "michael.l.dangelo@gmail.com",
     "phone": "+1 (716) 830-2024",
     "website": "https://mldangelo.com",
-    "summary": "Richard hails from Tulsa. He has earned degrees from the University of Oklahoma and Stanford. (Go Sooners and Cardinal!) Before starting Pied Piper, he worked for Hooli as a part time software developer. While his work focuses on applied information theory, mostly optimizing lossless compression schema of both the length-limited and adaptive variants, his non-work interests range widely, everything from quantum computing to chaos theory. He could tell you about it, but THAT would NOT be a “length-limited” conversation!",
+    "summary": "Michael is a co-founder and the CTO of Arthena where he works on building the most accurate models for pricing fine art. His primary job functions are as a data scientist and software engineer. He is available to consult on interesting projects and is particularly interested in social impact, education, inclusively, space.",
     "location": {
-      "address": "376 Broadway, Apt. 4C",
-      "postalCode": "14072",
+      "address": "675 Hudson, Floor 2",
+      "postalCode": "10014",
       "city": "New York",
       "countryCode": "US",
       "region": "New York"
@@ -54,7 +54,7 @@
       "website": "https://arthena.com",
       "startDate": "2014-01-01",
       "endDate": "current",
-      "summary": "Pied Piper is a multi-platform technology based on a proprietary universal compression algorithm that has consistently fielded high Weisman Scores™ that are not merely competitive, but approach the theoretical limit of lossless compression.",
+      "summary": "At Arthena I have learned how to build teams and manage people, build relationships with customers, sell enterprise products, and build on-line predictive models for production environments. I've also learned how to build and maintain large web applications.",
       "highlights": [
         "Created a new financial product for private equity investing. Deployed models to predict the valuation of art at auction.",
         "Lead development team, set development lifecycle, and managed analytics and web products.",
@@ -126,7 +126,7 @@
       ]
     },
     {
-      "company": "Facbeook",
+      "company": "Facebook",
       "position": "Intern",
       "website": "https://facebook.com",
       "startDate": "2013-06",
@@ -136,6 +136,19 @@
         "Developed software in python for automated testing of servers.",
         "Performed statistical analysis with R, HIVE to assist in triage of malfunctioning servers.",
         "Worked with vendors and ODM’s during triage to assist in risk mitigation."
+      ]
+    },
+    {
+      "company": "UB Nanosatellite Program",
+      "position": "Cofounder, Program Manager",
+      "website": "https://ubnl.space/",
+      "startDate": "2010-10",
+      "endDate": "2012-06",
+      "summary": "",
+      "highlights": [
+        "Coauthored grant to build a multispectral imaging satellite as part of the AFRL University Nanosatellite Program.",
+        "Lead a team of 60 students through satellite development life cycle. Served as a technical expert, acquired intimate working knowledge of satellite subsystems.  Solicited funding through NASA, AFOSR, and several corporate sponsors.",
+
       ]
     }
   ],
@@ -174,6 +187,7 @@
         "EE 263: Introduction to Linear Dynamical Systems",
         "EE 266: Stochastic Control",
         "EE 278B: Introduction to Digital Signal Processing",
+        "EE 364A: Convex Optimization",
         "MAE 397: Design Theory and Methodology",
         "MS&E 223: Simulation",
         "MS&E 226: Small Data"
@@ -187,6 +201,7 @@
       "endDate": "2012",
       "gpa": "4.0",
       "courses": [
+        "CSE 250: Data Structures",
         "CSE 321: Realtime Embedded Systems",
         "CSE 442: Software Engineering Concepts",
         "CSE 453: Hardware/Software Integrated System Design",
@@ -202,14 +217,35 @@
   "awards": [
     {
       "title": "Digital Compression Pioneer Award",
-      "date": "2014-11-01",
-      "awarder": "Techcrunch",
-      "summary": "There is no spoon."
+      "date": "2015-09-01",
+      "awarder": "Techcrunch DisruptSF Hackathon",
+      "summary": "Placed 3rd in the 2015 DisruptSF Hackathon for Harvest, a low cost airal platform for preventable water stress."
     }
   ],
   "publications": [
     {
-      "name": "Video compression for 3d media",
+      "name": "Space Potato: A Jorney of Excellence",
+      "publisher": "Hooli",
+      "releaseDate": "2014-10-01",
+      "website": "https://en.wikipedia.org/wiki/Silicon_Valley_(TV_series)",
+      "summary": "Innovative middle-out compression algorithm that changes the way we store data."
+    },
+    {
+      "name": "Photon Counting Star Tracker",
+      "publisher": "Hooli",
+      "releaseDate": "2014-10-01",
+      "website": "https://en.wikipedia.org/wiki/Silicon_Valley_(TV_series)",
+      "summary": "Innovative middle-out compression algorithm that changes the way we store data."
+    },
+    {
+      "name": "RNN Paper",
+      "publisher": "Hooli",
+      "releaseDate": "2014-10-01",
+      "website": "https://en.wikipedia.org/wiki/Silicon_Valley_(TV_series)",
+      "summary": "Innovative middle-out compression algorithm that changes the way we store data."
+    },
+    {
+      "name": "...?",
       "publisher": "Hooli",
       "releaseDate": "2014-10-01",
       "website": "https://en.wikipedia.org/wiki/Silicon_Valley_(TV_series)",
@@ -227,12 +263,14 @@
       ]
     },
     {
-      "name": "Compression",
+      "name": "Data Science",
       "level": "Master",
       "keywords": [
-        "Mpeg",
-        "MP4",
-        "GIF"
+        "Kubernetes",
+        "Docker",
+        "Pandas",
+        "Scikit-learn",
+        "Tensorflow"
       ]
     }
   ],
@@ -243,22 +281,27 @@
     },
     {
       "language": "German",
-      "fluency": "Limited working proficiency "
+      "fluency": "Limited working proficiency"
     }
   ],
   "interests": [
     {
-      "name": "Wildlife",
+      "name": "Photography",
       "keywords": [
-        "Ferrets",
-        "Unicorns"
+        "medium format",
+        "digital"
       ]
     }
   ],
   "references": [
     {
-      "name": "Erlich Bachman",
-      "reference": "It is my pleasure to recommend Richard, his performance working as a consultant for Main St. Company proved that he will be a valuable addition to any company."
+      "name": "Ian Webster",
+      "reference": "Michael is one of the most talented and hard working people I know. I've known him throughout the years to be an excellent programmer and hacker, someone who can architect and execute a project from idea to polished completion way quicker than you'd expect. Michael has an excellent work ethic and will go to extraordinary lengths to make a project succeed. He's also really great at coming up with novel approaches, learning and applying new technologies. He cares about the office and the people in it. Overall a very good person to have around!"
+    },
+    {
+      "name": "Johanna Flato",
+      "reference": "Michael is not only a highly capable developer, but he is also an incredibly thoughtful and committed team player. He is entrepreneurial, creative, resourceful, and a problem-solver. Invaluable traits for a small company. A pleasure to work with, and I hope to again in the future!"
     }
+
   ]
 }
