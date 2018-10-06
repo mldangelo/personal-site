@@ -15,7 +15,7 @@
     "snyk-protect": "snyk protect",
     "prepare": "npm run snyk-protect",
     "parse-routes": "node -r @babel/register parseRoutes.js",
-    "predeploy": "npm run build && cp -r public/* dist/ && cp server/views/404.html dist/ && npm run parse-routes",
+    "predeploy": "npm run build && cp -r public/* dist/ && cp server/views/404.html dist/ && npm run parse-routes && cp CNAME dist/",
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
