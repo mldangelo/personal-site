@@ -59,7 +59,7 @@ for installation and setup instructions. A cronjob such as:
 
 ### Contributors
 - [@mldangelo](https://github.com/mldangelo)
-- [@typpo](https://github/typpo)
+- [@typpo](https://github.com/typpo)
 
 ### Acknowlegements
 - Special thanks to [@typpo](https://github.com/typpo) for tirelessly answering all of my node.js and react questions.
