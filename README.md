@@ -6,7 +6,6 @@ Note: Please see the [github-hosting](https://github.com/mldangelo/personal-site
 
 
 ### Tests:
-[![Code Climate](https://codeclimate.com/github/mldangelo/personal-site/badges/gpa.svg)](https://codeclimate.com/github/mldangelo/personal-site)
 [![Build Status](https://travis-ci.org/mldangelo/personal-site.svg?branch=master)](https://travis-ci.org/mldangelo/personal-site)
 [![Dependency Tracking](https://david-dm.org/mldangelo/personal-site.svg)](https://david-dm.org/)
 [![Greenkeeper badge](https://badges.greenkeeper.io/mldangelo/personal-site.svg)](https://greenkeeper.io/)
