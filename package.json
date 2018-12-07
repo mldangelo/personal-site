@@ -58,7 +58,7 @@
     "html-webpack-plugin": "^3.2.0",
     "js-cookie": "^2.2.0",
     "last.fm.api": "^0.1.3",
-    "mini-css-extract-plugin": "^0.4.4",
+    "mini-css-extract-plugin": "^0.5.0",
     "mongoose": "5.3.11",
     "morgan": "^1.9.1",
     "node-sass": "^4.10.0",
