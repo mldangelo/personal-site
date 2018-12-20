@@ -51,7 +51,7 @@
     "dotenv": "^6.1.0",
     "express": "^4.16.4",
     "express-session": "^1.15.6",
-    "file-loader": "^2.0.0",
+    "file-loader": "^3.0.0",
     "font-awesome": "^4.7.0",
     "forever": "^0.15.3",
     "html-minify-loader": "^1.4.0",
