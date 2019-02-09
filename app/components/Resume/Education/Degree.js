@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Degree = props => (
+const Degree = ({ data }) => (
   <article className="degree-container">
     <header>
-      <h4 className="degree">{props.data.degree}</h4>
-      <p className="school"><a href={props.data.link}>{props.data.school}</a>, {props.data.year}</p>
+      <h4 className="degree">{data.degree}</h4>
+      <p className="school"><a href={data.link}>{data.school}</a>, {data.year}</p>
     </header>
   </article>
 );
