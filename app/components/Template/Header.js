@@ -21,8 +21,8 @@ const Header = () => (
             <Link to={l.path}>{l.label}</Link>
           </li>
         ))}
-        {admin ? <li><a href="/admin">Admin</a></li> : null}
-        {id ? <li><a href="/logout">Logout</a></li> : null}
+        {admin && <li><a href="/admin">Admin</a></li>}
+        {id && <li><a href="/logout">Logout</a></li>}
       </ul>
     </nav>
     <Hamburger />

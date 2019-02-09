@@ -7,7 +7,7 @@ const Course = ({ data, last }) => (
       <h4 className="course-number">{data.number}:</h4>
       <p className="course-name">{data.title}</p>
     </a>
-    {last ? null : <div className="course-dot"><p className="course-name"> &#8226;</p></div>}
+    {!last && <div className="course-dot"><p className="course-name"> &#8226;</p></div>}
   </li>
 );
 

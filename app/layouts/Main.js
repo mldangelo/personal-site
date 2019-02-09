@@ -36,7 +36,7 @@ class Main extends Component {
         <div id="main">
           {this.props.children}
         </div>
-        {this.props.fullPage ? null : <Nav />}
+        {!this.props.fullPage && <Nav />}
       </div>);
   }
 }
