@@ -8,10 +8,10 @@ import { githubKeys as keys } from '../../../app/data/github';
 let cached = {};
 
 const github = new GithubAPI({
-  auth: `token ${process.env.GITHUB_OAUTH}`
+  auth: `token ${process.env.GITHUB_OAUTH}`,
 });
 
-export default (req, res) => {
+const apiCall = async (req, res) => {
   const send = (payload) => {
     const data = keys.reduce((obj, key) => ({
       ...obj,
@@ -27,16 +27,17 @@ export default (req, res) => {
     && ((Date.now() - cached.updated_at) / 1000 < 60)) {
     res.send(JSON.stringify(cached));
   } else {
-    github.repos.get({
+    const { data } = await github.repos.get({
       owner: 'mldangelo',
-      repo: 'mldangelo',
-    }, (err, payload) => {
-      if (err || (payload && !payload.data)) {
-        console.error('github-api-error', err);
-        res.send(JSON.stringify(cached)); // keep cached values
-      } else {
-        send(payload.data);
-      }
+      repo: 'personal-site',
     });
+    if (!data) {
+      console.error('github-api-error');
+      res.send(JSON.stringify(cached)); // keep cached values
+    } else {
+      send(data);
+    }
   }
 };
+
+export default apiCall;
