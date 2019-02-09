@@ -1,23 +1,15 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
-class CategoryButton extends Component {
-  handleClick = () => {
-    this.props.handleClick(this.props.label);
-  }
-
-  render() {
-    return (
-      <button
-        className={`skillbutton ${this.props.active[this.props.label] ? 'skillbutton-active' : ''}`}
-        type="button"
-        onClick={this.handleClick}
-      >
-        {this.props.label}
-      </button>
-    );
-  }
-}
+const CategoryButton = ({ handleClick, active, label }) => (
+  <button
+    className={`skillbutton ${active[label] ? 'skillbutton-active' : ''}`}
+    type="button"
+    onClick={() => handleClick(label)}
+  >
+    {label}
+  </button>
+);
 
 CategoryButton.propTypes = {
   label: PropTypes.string.isRequired,
