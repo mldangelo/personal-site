@@ -1,40 +1,31 @@
-import React, { Component } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 
 import axios from 'axios';
 
 import Table from './Table';
-import data from '../../data/github';
+import initialData from '../../data/github';
 
-class Stats extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { data };
-  }
+const Stats = () => {
+  const [data, setData] = useState(initialData);
 
-  componentDidMount() {
-    axios.get('/api/github').then((result) => {
-      const update = data.map((field) => {
-        const value = field.key ? { value: String(result.data[field.key]) } : {};
-        return Object.assign(field, value);
-      });
-      this.setState({
-        data: update,
-      });
-    }).catch((error) => {
-      console.error('github-api-fetch-error', error);
-    });
-  }
+  const fetchData = async () => {
+    const result = await axios('/api/github');
+    setData(initialData.map((field) => {
+      const value = field.key ? { value: String(result.data[field.key]) } : {};
+      return Object.assign(field, value);
+    }));
+  };
 
-  render() {
-    return (
-      <div>
-        <h3>Some stats about this site</h3>
-        <Table
-          data={this.state.data}
-        />
-      </div>
-    );
-  }
-}
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  return (
+    <Fragment>
+      <h3>Some stats about this site</h3>
+      <Table data={data} />
+    </Fragment>
+  );
+};
 
 export default Stats;

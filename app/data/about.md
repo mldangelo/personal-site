@@ -1,8 +1,8 @@
 
 #### Intro
-I am a co-founder and the CTO of [Arthena](https://arthena.com) where I work on building the most accurate models for pricing and valuating fine art. My primary job functions are as a data scientist and software engineer.
+I am a co-founder and the CTO of [Arthena](https://arthena.com) where I work on engineering infrastructure and build tools to price fine art. My primary job functions are as a data scientist and software engineer.
 <br>
-I am available to consult on interesting projects. I am particularly interested in social impact, education, inclusively, space, and in applying machine learning to large data sets. I may even be available for pro-bono work depending on the time commitment and the project. If you'd like to meet, I am based in New York but travel to Palo Alto frequently.
+I am available to consult on interesting projects. I am particularly interested in social impact, education, inclusively, and space. I enjoy advising companies and may even be available for pro-bono work depending on the time commitment and the project. If you would like to arrange a meeting, I am based in New York but travel to the San Francisco Bay Area frequently.
 <br><br>
 #### Currently
 At Arthena I have learned how to build teams and manage people, build relationships with customers, sell enterprise products, and build on-line predictive models for production environments. I've also learned how to build and maintain large web applications (see [arthena.com](https://arthena.com)).
@@ -43,7 +43,7 @@ You can ask me in person for other stories that I'm afraid to share with the int
 <br><br>
 #### I like
 - Skiing
-- The sea
+- Sailing and the sea
 - Space
 - Summer
 - [Books](https://www.goodreads.com/mdangelo)
@@ -51,7 +51,7 @@ You can ask me in person for other stories that I'm afraid to share with the int
 - NPR podcasts
 - [Obscure indie music](/music)
 - [Good design](/)
-- Photography
+- [Photography](https://instagram.com/dangelosaurus)
 
 #### Travel / Geography
 
@@ -64,7 +64,9 @@ Palo Alto, Mountain View, San Francisco, Seattle, and New York.
 
 - In 2017, I visited: Canada, Japan, Denmark, Germany, Sweden, Estonia, Russia, the Netherlands, Belgium, the U.K., Spain, Iceland, France, Switzerland, Ethiopia, and Luxembourg.
 
-- In 2018, I plan to visit: Australia, Taiwan, Indonesia, Nepal, and Norway.
+- In 2018, I visited: Canada, France, Italy, Israel, and the U.K.
+
+- In 2019, I plan to visit: the U.K., France, Canada, Australia, Chile, Nepal, and Norway.
 
 - I am an Oregon Trail II enthusiast.
 
@@ -73,6 +75,7 @@ Palo Alto, Mountain View, San Francisco, Seattle, and New York.
 - I have a list of thousands of ideas, like creating matching bow ties for cats and humans.
 - I almost always have a sketchbook with me.
 - I can't locate every country on a map.
+- I operate a [small angel fund](http://skepticalinvestments.biz/) with terrible returns.
 - I added this page because so many people complained that my site was just a resume.
 
 #### I dream of

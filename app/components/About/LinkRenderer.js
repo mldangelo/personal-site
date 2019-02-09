@@ -2,16 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-const LinkRenderer = (props) => {
-  if (props.href.match(/^(https?:)?\/\//)) {
+const LinkRenderer = ({ href, children }) => {
+  if (href.match(/^(https?:)?\/\//)) {
     return (
-      <a href={props.href}>
-        {props.children}
+      <a href={href}>
+        {children}
       </a>
     );
   }
   return (
-    <Link to={props.href}>{props.children}</Link>
+    <Link to={href}>{children}</Link>
   );
 };
 

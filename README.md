@@ -12,7 +12,7 @@ Note: Please see the [github-hosting](https://github.com/mldangelo/personal-site
 
 ### Dependencies:
 Tested with:
-* node >= v8.12.0
+* node >= v11
 * yarn >= v1.10.0
 * mongodb >= 3.4.0
 
@@ -65,4 +65,4 @@ for installation and setup instructions. A cronjob such as:
 - Template based on [Future Imperfect](https://html5up.net/future-imperfect) by [@ajlkn](https://github.com/ajlkn) for [HTML5 UP](html5up.net).
 
 ### License
-[MIT](https://github.com/mldangelo/mldangelo/blob/master/LICENSE)
+[MIT](https://github.com/mldangelo/personal-site/blob/master/LICENSE)
