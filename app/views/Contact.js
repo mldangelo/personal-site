@@ -53,7 +53,7 @@ const useInterval = (callback, delay) => {
 };
 
 const Contact = () => {
-  const hold = 50; // ticks to wait after message is complete
+  const hold = 50; // ticks to wait after message is complete before rendering next message
   const delay = 50; // tick length in mS
 
   const [idx, updateIter] = useState(0); // points to current message
@@ -75,7 +75,7 @@ const Contact = () => {
       updateIter(newIdx);
       updateChar(newChar + 1);
     }
-  }, isActive && delay);
+  }, isActive ? delay : null);
 
   return (
     <Main>

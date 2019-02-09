@@ -22,7 +22,7 @@ import Admin from './views/Admin';
 import NotFound from './views/NotFound';
 
 // All of our CSS
-require('./static/css/main.scss');
+import './static/css/main.scss';
 
 if (window.location.href.endsWith('#')) { // For Google Oauth
   window.history.replaceState({}, '', window.location.href.slice(0, -1));
