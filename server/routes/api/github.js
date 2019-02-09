@@ -5,19 +5,22 @@ import GithubAPI from '@octokit/rest';
 
 import { githubKeys as keys } from '../../../app/data/github';
 
+const { GITHUB_OAUTH } = process.env;
+
 let cached = {};
 
 const github = new GithubAPI({
-  auth: `token ${process.env.GITHUB_OAUTH}`,
+  auth: `token ${GITHUB_OAUTH}`,
 });
 
 const updateCache = (payload) => {
   const data = keys.reduce((obj, key) => ({
     ...obj,
     [key]: payload[key],
-  }), {});
+  }), {
+    updated_at: Date.now(),
+  });
   data.pushed_at = dayjs(data.pushed_at).format('MMMM DD, YYYY');
-  data.updated_at = Date.now();
   cached = data;
 };
 
