@@ -66,4 +66,4 @@ for installation and setup instructions. A cronjob such as:
 - Template based on [Future Imperfect](https://html5up.net/future-imperfect) by [@ajlkn](https://github.com/ajlkn) for [HTML5 UP](html5up.net).
 
 ### License
-[MIT](https://github.com/mldangelo/mldangelo/blob/master/LICENSE)
+[MIT](https://github.com/mldangelo/personal-site/blob/master/LICENSE)
