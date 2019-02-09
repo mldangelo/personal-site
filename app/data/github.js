@@ -51,7 +51,7 @@ const data = [
   { /* find . | grep ".js" | grep -vE ".min.js|node_modules|.git|.json" |
     xargs -I file cat file | wc -l */
     label: 'Lines of Javascript powering this website',
-    value: '2625',
+    value: '2528',
     link: 'https://github.com/mldangelo/personal-site/graphs/contributors',
   },
 ];
