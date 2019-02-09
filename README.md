@@ -13,7 +13,7 @@ Note: Please see the [github-hosting](https://github.com/mldangelo/personal-site
 
 ### Dependencies:
 Tested with:
-* node >= v8.12.0
+* node >= v11
 * yarn >= v1.10.0
 * mongodb >= 3.4.0
 

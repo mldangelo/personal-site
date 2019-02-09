@@ -7,17 +7,9 @@ import { githubKeys as keys } from '../../../app/data/github';
 
 let cached = {};
 
-const github = new GithubAPI();
-
-const authenticateGH = (cb) => {
-  github.authenticate({
-    type: 'oauth',
-    token: process.env.GITHUB_OAUTH,
-  });
-  if (typeof cb === 'function') cb();
-};
-
-authenticateGH();
+const github = new GithubAPI({
+  auth: `token ${process.env.GITHUB_OAUTH}`
+});
 
 export default (req, res) => {
   const send = (payload) => {
@@ -39,10 +31,7 @@ export default (req, res) => {
       owner: 'mldangelo',
       repo: 'mldangelo',
     }, (err, payload) => {
-      if (err && err.status === 'Unauthorized') {
-        console.error('github-api-unauthorized-error', err);
-        authenticateGH(send(payload)); // retry authentication -- if token expires
-      } else if (err || (payload && !payload.data)) {
+      if (err || (payload && !payload.data)) {
         console.error('github-api-error', err);
         res.send(JSON.stringify(cached)); // keep cached values
       } else {
