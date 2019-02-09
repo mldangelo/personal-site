@@ -1,45 +1,33 @@
-import React, { Component } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 
 import Table from './Table';
-import data from '../../data/stats';
+import personalData from '../../data/stats';
 
-class PersonalStats extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { data };
-  }
+const PersonalStats = () => {
+  const [data, setData] = useState(personalData);
 
-  componentDidMount() {
-    this.timer = setInterval(() => this.tick(), 25);
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.timer);
-  }
-
-  tick() {
+  const tick = () => {
     const divisor = 1000 * 60 * 60 * 24 * 365.2421897; // ms in an average year
     const birthTime = new Date('1990-02-05T09:24:00');
-    this.setState(prevState => ({
-      data: Object.assign({}, prevState.data, {
-        age: {
-          label: 'Current age',
-          value: ((Date.now() - birthTime) / divisor).toFixed(11),
-        },
-      }),
+    setData(Object.assign({}, data, {
+      age: {
+        label: 'Current age',
+        value: ((Date.now() - birthTime) / divisor).toFixed(11),
+      },
     }));
-  }
+  };
 
-  render() {
-    return (
-      <div>
-        <h3>Some stats about me</h3>
-        <Table
-          data={Object.keys(this.state.data).map(key => this.state.data[key])}
-        />
-      </div>
-    );
-  }
-}
+  useEffect(() => {
+    const timer = setInterval(() => tick(), 25);
+    return () => { clearInterval(timer); };
+  }, []);
+
+  return (
+    <Fragment>
+      <h3>Some stats about me</h3>
+      <Table data={Object.keys(data).map(key => data[key])} />
+    </Fragment>
+  );
+};
 
 export default PersonalStats;
