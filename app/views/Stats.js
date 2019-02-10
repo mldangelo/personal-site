@@ -7,8 +7,6 @@ import Main from '../layouts/Main';
 import Personal from '../components/Stats/Personal';
 import Site from '../components/Stats/Site';
 
-const { BASE_PATH } = process.env; // base url, usually ''
-
 const Stats = () => (
   <Main>
     <Helmet title="Stats" />

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Table from './Table';
-import initialData from '../../data/github';
+import data from '../../data/github';
 
 const Stats = () => (
   <div>

@@ -49,8 +49,6 @@ You can ask me in person for other stories that I'm afraid to share with the int
 - [Books](https://www.goodreads.com/mdangelo)
 - Colored pencils
 - NPR podcasts
-- [Obscure indie music](/music)
-- [Good design](/)
 - [Photography](https://instagram.com/dangelosaurus)
 
 #### Travel / Geography

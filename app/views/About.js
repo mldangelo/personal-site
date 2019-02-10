@@ -18,7 +18,7 @@ const About = () => (
     <article className="post" id="about">
       <header>
         <div className="title">
-          <h2><Link to="/about">About Me</Link></h2>
+          <h2><Link to={`${BASE_PATH}/about`}>About Me</Link></h2>
           <p>(in about {count} words)</p>
         </div>
       </header>
