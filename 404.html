@@ -17,6 +17,7 @@
     <link rel="canonical" href="index.html">
 </head>
 
+<%= JSON.stringify(htmlWebpackPlugin.options.basePath) %>
 <!-- Redirect from 404 by building URL parameter -->
 <script type="text/javascript">
   window.location = window.location.origin + <%= JSON.stringify(htmlWebpackPlugin.options.basePath) %> + '?path=' + window.location.pathname;
