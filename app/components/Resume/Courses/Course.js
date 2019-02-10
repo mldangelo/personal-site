@@ -1,14 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// TODO remove last bullet / figure out how to add bullets with css
 
-const Course = props => (
+const Course = ({ data, last }) => (
   <li className="course-container">
-    <a href={props.data.link}>
-      <h4 className="course-number">{props.data.number}:</h4>
-      <p className="course-name">{props.data.title}</p>
+    <a href={data.link}>
+      <h4 className="course-number">{data.number}:</h4>
+      <p className="course-name">{data.title}</p>
     </a>
-    {props.last ? null : <div className="course-dot"><p className="course-name"> &#8226;</p></div>}
+    {!last && <div className="course-dot"><p className="course-name"> &#8226;</p></div>}
   </li>
 );
 

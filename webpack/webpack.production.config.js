@@ -6,6 +6,8 @@ import ScriptExtHtmlWebpackPlugin from 'script-ext-html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import StatsPlugin from 'stats-webpack-plugin';
 
+const basePath = process.env.BASE_PATH || '/';
+
 export default {
   entry: [
     path.join(__dirname, '../app/entry.js'),
@@ -17,6 +19,12 @@ export default {
     publicPath: '/',
   },
   plugins: [
+    new webpack.EnvironmentPlugin({
+      NODE_ENV: 'production',
+    }),
+    new webpack.DefinePlugin({
+      BASE_PATH: JSON.stringify(basePath),
+    }),
     new HtmlWebpackPlugin({
       template: 'server/views/index.tpl.html',
       inject: 'body',

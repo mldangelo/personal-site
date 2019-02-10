@@ -3,20 +3,18 @@ import PropTypes from 'prop-types';
 
 import Job from './Experience/Job';
 
-const getRows = positions => positions.map(job => (
-  <Job
-    data={job}
-    key={job.company}
-  />
-));
-
-const Experience = props => (
+const Experience = ({ data }) => (
   <div className="experience">
     <div className="link-to" id="experience" />
     <div className="title">
       <h3>Experience</h3>
     </div>
-    {getRows(props.data)}
+    {data.map(job => (
+      <Job
+        data={job}
+        key={job.company}
+      />
+    ))}
   </div>
 );
 

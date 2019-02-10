@@ -4,6 +4,8 @@ import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import ScriptExtHtmlWebpackPlugin from 'script-ext-html-webpack-plugin';
 
+const basePath = process.env.BASE_PATH || '';
+
 export default {
   devtool: 'eval-source-map',
   mode: 'development',
@@ -17,6 +19,12 @@ export default {
     publicPath: '/',
   },
   plugins: [
+    new webpack.EnvironmentPlugin({
+      NODE_ENV: 'development', // use 'development' unless process.env.NODE_ENV is defined
+    }),
+    new webpack.DefinePlugin({
+      BASE_PATH: JSON.stringify(basePath),
+    }),
     new HtmlWebpackPlugin({
       template: 'server/views/index.tpl.html',
       inject: 'body',

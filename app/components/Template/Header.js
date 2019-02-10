@@ -8,14 +8,14 @@ const Header = () => (
   <header id="header">
     <h1 className="index-link">
       {routes.filter(l => l.index).map(l => (
-        <Link key={l.label} to={l.path}>{l.label}</Link>
+        <Link key={l.label} to={`${BASE_PATH}${l.path}`}>{l.label}</Link>
       ))}
     </h1>
     <nav className="links">
       <ul>
         {routes.filter(l => !l.index).map(l => (
           <li key={l.label}>
-            <Link to={l.path}>{l.label}</Link>
+            <Link to={`${BASE_PATH}${l.path}`}>{l.label}</Link>
           </li>
         ))}
       </ul>

@@ -13,6 +13,7 @@ import routes from './routes';
 
 const port = process.env.PORT || 7999;
 const env = process.env.NODE_ENV || 'development';
+const basePath = process.env.BASE_PATH || '/';
 
 const app = express();
 
@@ -32,7 +33,7 @@ app.use(session({
 // prevents logs from polluting test results
 if (!module.parent) app.use(morgan('combined'));
 
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(basePath, express.static(path.join(__dirname, '../public')));
 
 routes(app); // initialize routes
 
