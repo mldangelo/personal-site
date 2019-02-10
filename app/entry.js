@@ -38,7 +38,7 @@ ReactDOM.render(
       <Route
         exact
         path="/"
-        render={() => (path !== '/' ? (<Redirect to={`${path}`} />) : (<Index />))}
+        render={() => (path !== '/' ? (<Redirect to={path} />) : (<Index />))}
       />
       <Route path="/about" component={About} />
       <Route path="/projects" component={Projects} />
