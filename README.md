@@ -1,4 +1,4 @@
-## [mldangelo.com](http://mldangelo.com) and simplified [https://mldangelo.github.io/personal-site/](https://mldangelo.github.io/personal-site/)
+## [mldangelo.com](http://mldangelo.com) and simplified [mldangelo.github.io/personal-site](https://mldangelo.github.io/personal-site/)
 
 My personal website. Easily modifiable, and built using modern javascript with Node.js, React, Express, React-Router, Hot Module Reloading, Webpack and many other technologies.
 
