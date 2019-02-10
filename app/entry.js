@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {
-  BrowserRouter as Router, Redirect, Switch, Route,
+  BrowserRouter as Router, Switch, Route,
 } from 'react-router-dom';
 
 // Featured
