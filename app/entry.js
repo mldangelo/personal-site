@@ -17,29 +17,10 @@ import NotFound from './views/NotFound';
 // All of our CSS
 import './static/css/main.scss';
 
-// url search parameters, in our case ?path=[:slug]
-const params = window.location.search;
-
-
-/* this is a hack for github hosting redirects. It is difficult to host multipage
-applications on github, so I built a custom 404 page to redirect all traffic
-to /?path=wherever which will load this react application. This code extracts the requested
-path and then attempts to route the user to their intended destination.
-*/
-
-let path = '/'; // path we will redirect to if param exit
-if (params.search('path=') > -1) { // check if exists
-  path = params.substr(1 + 'path='.length).trim();
-}
-
 ReactDOM.render(
   <Router basename={BASE_PATH}>
     <Switch>
-      <Route
-        exact
-        path="/"
-        render={() => (path !== '/' ? (<Redirect to={path} />) : (<Index />))}
-      />
+      <Route exact path="/" component={Index} />
       <Route path="/about" component={About} />
       <Route path="/projects" component={Projects} />
       <Route path="/stats" component={Stats} />

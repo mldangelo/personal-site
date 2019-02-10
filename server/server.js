@@ -7,8 +7,6 @@ import bodyParser from 'body-parser';
 import compress from 'compression';
 import morgan from 'morgan';
 
-import session from 'express-session';
-
 import routes from './routes';
 
 const port = process.env.PORT || 7999;
@@ -20,15 +18,6 @@ const app = express();
 app.use(compress());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'keyboard cat',
-  resave: true,
-  saveUninitialized: true,
-  cookie: {
-    maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
-  },
-}));
 
 // prevents logs from polluting test results
 if (!module.parent) app.use(morgan('combined'));

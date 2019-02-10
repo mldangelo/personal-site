@@ -16,7 +16,7 @@ export default {
   output: {
     path: path.join(__dirname, '../dist/'),
     filename: '[name].js',
-    publicPath: '/',
+    publicPath: `${basePath}/`,
   },
   plugins: [
     new webpack.EnvironmentPlugin({

@@ -12,7 +12,7 @@
     "start": "./node_modules/.bin/babel-node server/server.js",
     "dev": "nodemon server/server.js --ignore app/ --ignore test/ --exec babel-node",
     "parse-routes": "node -r @babel/register parseRoutes.js",
-    "predeploy": "npm run build && cp -r public/* dist/ && cp server/views/404.html dist/ && npm run parse-routes",
+    "predeploy": "npm run build && cp -r public/* dist/ && cp dist/index.html dist/404.html && npm run parse-routes",
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {

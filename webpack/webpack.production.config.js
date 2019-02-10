@@ -16,7 +16,7 @@ export default {
   output: {
     path: path.join(__dirname, '../tmp/'),
     filename: '[name]-[hash].min.js',
-    publicPath: '/',
+    publicPath: `${basePath}/`,
   },
   plugins: [
     new webpack.EnvironmentPlugin({
