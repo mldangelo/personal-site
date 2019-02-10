@@ -17,6 +17,10 @@ export default {
     publicPath: '/',
   },
   plugins: [
+    new webpack.DefinePlugin({
+      NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
+      GA_ID: JSON.stringify(process.env.GA_ID || ''),
+    }),
     new HtmlWebpackPlugin({
       template: 'server/views/index.tpl.html',
       inject: 'body',

@@ -1,12 +1,14 @@
 {
   "extends": "airbnb",
-  "parser": "babel-eslint", // https://github.com/babel/babel-eslint
+  "parser": "babel-eslint",
   "env": {
     "browser": true,
     "node": true,
     "mocha": true
   },
   "globals": {
+    "GA_ID": "readable",
+    "NODE_ENV": "readable"
   },
   "rules": {
     "no-console": ["error", { allow: ["warn", "error", "info"] }],

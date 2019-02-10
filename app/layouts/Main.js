@@ -8,8 +8,8 @@ import cookie from 'js-cookie';
 import Header from '../components/Template/Header';
 import Nav from '../components/Template/Nav';
 
-if (process.env.NODE_ENV === 'production') {
-  ReactGA.initialize('UA-68649021-1');
+if (NODE_ENV === 'production') {
+  ReactGA.initialize(GA_ID);
 }
 
 class Main extends Component {
@@ -18,7 +18,7 @@ class Main extends Component {
   }
 
   componentDidMount() {
-    if (process.env.NODE_ENV === 'production') {
+    if (NODE_ENV === 'production') {
       const { id } = cookie.get();
       ReactGA.set({
         page: window.location.pathname,
