@@ -7,8 +7,8 @@ import ReactGA from 'react-ga';
 import Header from '../components/Template/Header';
 import Nav from '../components/Template/Nav';
 
-if (process.env.NODE_ENV === 'production') {
-  ReactGA.initialize(process.env.GA_ID);
+if (NODE_ENV === 'production') {
+  ReactGA.initialize(GA_ID);
 }
 
 class Main extends Component {
@@ -17,7 +17,7 @@ class Main extends Component {
   }
 
   componentDidMount() {
-    if (process.env.NODE_ENV === 'production') {
+    if (NODE_ENV === 'production') {
       ReactGA.set({
         page: window.location.pathname,
       });

@@ -19,11 +19,10 @@ export default {
     publicPath: `${basePath}/`,
   },
   plugins: [
-    new webpack.EnvironmentPlugin({
-      NODE_ENV: 'development', // use 'development' unless process.env.NODE_ENV is defined
-    }),
     new webpack.DefinePlugin({
       BASE_PATH: JSON.stringify(basePath),
+      NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
+      GA_ID: JSON.stringify(process.env.GA_ID || ''),
     }),
     new HtmlWebpackPlugin({
       template: 'server/views/index.tpl.html',

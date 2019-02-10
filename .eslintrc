@@ -7,7 +7,9 @@
     "mocha": true
   },
   "globals": {
-    "BASE_PATH": "readable"
+    "BASE_PATH": "readable",
+    "GA_ID": "readable",
+    "NODE_ENV": "readable"
   },
   "rules": {
     "no-console": ["error", { allow: ["warn", "error", "info"] }],
