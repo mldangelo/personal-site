@@ -1,11 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import Helmet from 'react-helmet';
+import Link from '../components/Link';
 
 import Main from '../layouts/Main';
 
-import LinkRenderer from '../components/About/LinkRenderer';
 import markdown from '../data/about.md';
 
 const count = markdown.split(/\s+/)
@@ -18,14 +17,14 @@ const About = () => (
     <article className="post" id="about">
       <header>
         <div className="title">
-          <h2><Link to={`${BASE_PATH}/about`}>About Me</Link></h2>
+          <h2><Link to="/about">About Me</Link></h2>
           <p>(in about {count} words)</p>
         </div>
       </header>
       <ReactMarkdown
         source={markdown}
         renderers={{
-          Link: LinkRenderer,
+          Link,
         }}
         escapeHtml={false}
       />

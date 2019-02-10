@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 
 import Menus from 'react-burger-menu';
+import Link from '../Link';
 
 import routes from '../../data/routes';
 
@@ -29,7 +29,7 @@ const Hamburger = () => {
         <ul className="hamburger-ul">
           {routes.map(l => (
             <li key={l.label}>
-              <Link to={`${BASE_PATH}${l.path}`} onClick={() => setOpen(!open)}>
+              <Link to={l.path} onClick={() => setOpen(!open)}>
                 <h3 className={l.index && 'index-li'}>{l.label}</h3>
               </Link>
             </li>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
 import Helmet from 'react-helmet';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Link from '../components/Link';
 
 import Main from '../layouts/Main';
 
@@ -83,7 +83,7 @@ const Contact = () => {
       <article className="post" id="contact">
         <header>
           <div className="title">
-            <h2><Link to={`${BASE_PATH}/contact`}>Contact</Link></h2>
+            <h2><Link to="/contact">Contact</Link></h2>
           </div>
         </header>
         <div className="email-at">

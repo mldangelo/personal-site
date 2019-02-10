@@ -6,7 +6,7 @@ import ScriptExtHtmlWebpackPlugin from 'script-ext-html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import StatsPlugin from 'stats-webpack-plugin';
 
-const basePath = process.env.BASE_PATH || '/';
+const basePath = process.env.BASE_PATH || '';
 
 export default {
   entry: [

@@ -1,14 +1,17 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import Link from '../Link';
 
 import data from '../../data/contact';
 
 const Nav = () => (
   <section id="sidebar">
     <section id="intro">
-      <Link to={`${BASE_PATH}/`} className="logo"><img src={`${BASE_PATH}/images/me_icon.jpg`} alt="" /></Link>
+      <Link to={`${BASE_PATH}/`} className="logo">
+        <img src={`${BASE_PATH}/images/me_icon.jpg`} alt="" />
+      </Link>
       <header>
         <h2>Michael D&apos;Angelo</h2>
         <p><a href="mailto:michael.l.dangelo@gmail.com">michael.l.dangelo@gmail.com</a></p>
@@ -24,7 +27,7 @@ const Nav = () => (
       </p>
       <ul className="actions">
         <li>
-          {window.location.pathname !== `${BASE_PATH}/resume` ? <Link to={`${BASE_PATH}/resume`} className="button">Learn More</Link> : <Link to={`${BASE_PATH}/about`} className="button">About Me</Link>}
+          {window.location.pathname !== `${BASE_PATH}/resume` ? <Link to="/resume" className="button">Learn More</Link> : <Link to="/about" className="button">About Me</Link>}
         </li>
       </ul>
     </section>
@@ -35,7 +38,7 @@ const Nav = () => (
           <li key={s.label}><a href={s.link}><FontAwesomeIcon icon={s.icon} /></a></li>
         ))}
       </ul>
-      <p className="copyright">&copy; Michael D&apos;Angelo <Link to={`${BASE_PATH}/`}>mldangelo.com</Link>.</p>
+      <p className="copyright">&copy; Michael D&apos;Angelo <Link to="/">mldangelo.com</Link>.</p>
     </section>
   </section>
 );
