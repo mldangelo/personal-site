@@ -63,11 +63,11 @@ Please feel free to reach out to me by filing an issue or at help@mldangelo.com 
 
 ### Contributors
 - [@mldangelo](https://github.com/mldangelo)
-- [@typpo](https://github/typpo)
+- [@typpo](https://github.com/typpo)
 
 ### Acknowlegements
 - Special thanks to [@typpo](https://github.com/typpo) for tirelessly answering all of my node.js and react questions.
 - Template based on [Future Imperfect](https://html5up.net/future-imperfect) by [@ajlkn](https://github.com/ajlkn) for [HTML5 UP](html5up.net).
 
 ### License
-[MIT](https://github.com/mldangelo/mldangelo/blob/master/LICENSE)
+[MIT](https://github.com/mldangelo/personal-site/blob/master/LICENSE)

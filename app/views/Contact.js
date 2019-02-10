@@ -1,12 +1,19 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Helmet from 'react-helmet';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import Main from '../layouts/Main';
 
-
 import data from '../data/contact';
+
+// Validates the first half of an email address.
+const validateText = (text) => {
+  // NOTE: Passes RFC 5322 but not tested on google's standard.
+  // eslint-disable-next-line no-useless-escape
+  const re = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))$/;
+  return re.test(text) || text.length === 0;
+};
 
 const messages = [
   'hi',
@@ -27,79 +34,80 @@ const messages = [
   'thanks',
 ];
 
-// Validates the first half of an email address.
-const validateText = (text) => {
-  // NOTE: Passes RFC 5322 but not tested on google's standard.
-  // eslint-disable-next-line no-useless-escape
-  const re = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))$/;
-  return re.test(text) || text.length === 0;
+const useInterval = (callback, delay) => {
+  const savedCallback = useRef();
+
+  useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
+
+  useEffect(() => {
+    if (delay) {
+      const id = setInterval(() => {
+        savedCallback.current();
+      }, delay);
+      return () => clearInterval(id);
+    }
+    return () => {}; // pass linter
+  }, [delay]);
 };
 
-class Contact extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      char: 2,
-      idx: 0,
-      hold: 20,
-      message: messages[0],
-    };
-  }
+const Contact = () => {
+  const hold = 50; // ticks to wait after message is complete before rendering next message
+  const delay = 50; // tick length in mS
 
-  componentDidMount() {
-    this.timer = setInterval(() => this.tick(), 100);
-  }
+  const [idx, updateIter] = useState(0); // points to current message
+  const [message, updateMessage] = useState(messages[idx]);
+  const [char, updateChar] = useState(messages[idx].length); // points to current char
+  const [isActive, setIsActive] = useState(true); // disable when all messages are printed
 
-  componentWillUnmount() {
-    clearInterval(this.timer);
-  }
-
-  tick() {
-    let { idx, char } = this.state;
-    if (char - this.state.hold >= messages[idx].length) {
-      idx += 1;
-      char = 0;
+  useInterval(() => {
+    let newIdx = idx;
+    let newChar = char;
+    if (char - hold >= messages[idx].length) {
+      newIdx += 1;
+      newChar = 0;
     }
-    if (idx === messages.length) {
-      clearInterval(this.timer);
+    if (newIdx === messages.length) {
+      setIsActive(false);
     } else {
-      this.setState({
-        idx,
-        char: char + 1,
-        message: messages[idx].slice(0, char + 1),
-      });
+      updateMessage(messages[newIdx].slice(0, newChar));
+      updateIter(newIdx);
+      updateChar(newChar + 1);
     }
-  }
+  }, isActive ? delay : null);
 
-  render() {
-    const { message } = this.state;
-    return (
-      <Main>
-        <Helmet title="Contact" />
-        <article className="post" id="contact">
-          <header>
-            <div className="title">
-              <h2><Link to="/contact">Contact</Link></h2>
-            </div>
-          </header>
-          <div className="email-at">
-            <p>Feel free to get in touch. You can email me at: </p>
-            <div className="inline-container" style={validateText(message) ? {} : { color: 'red' }}>
-              <a href={validateText(message) ? `mailto:${message}@mldangelo.com` : ''}>
-                <span>{message}</span>
-                <span>@mldangelo.com</span>
-              </a>
-            </div>
+  return (
+    <Main>
+      <Helmet title="Contact" />
+      <article className="post" id="contact">
+        <header>
+          <div className="title">
+            <h2><Link to="/contact">Contact</Link></h2>
           </div>
-          <ul className="icons">
-            {data.map(s => (
-              <li key={s.label}><a href={s.link}><FontAwesomeIcon icon={s.icon} /></a></li>
-            ))}
-          </ul>
-        </article>
-      </Main>
-    );
-  }
-}
+        </header>
+        <div className="email-at">
+          <p>Feel free to get in touch. You can email me at: </p>
+          <div
+            className="inline-container"
+            style={validateText(message) ? {} : { color: 'red' }}
+            onMouseEnter={() => setIsActive(false)}
+            onMouseLeave={() => (idx < messages.length) && setIsActive(true)}
+          >
+            <a href={validateText(message) ? `mailto:${message}@mldangelo.com` : ''}>
+              <span>{message}</span>
+              <span>@mldangelo.com</span>
+            </a>
+          </div>
+        </div>
+        <ul className="icons">
+          {data.map(s => (
+            <li key={s.label}><a href={s.link}><FontAwesomeIcon icon={s.icon} /></a></li>
+          ))}
+        </ul>
+      </article>
+    </Main>
+  );
+};
 
 export default Contact;
