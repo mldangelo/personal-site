@@ -47,8 +47,8 @@ You can ask me in person for other stories that I'm afraid to share with the int
 - Space
 - Summer
 - [Books](https://www.goodreads.com/mdangelo)
-- Colored pencils
-- NPR podcasts
+- Colored pencils (Faber-Castell Polychromos)
+- Podcasts ([Planet Money](https://www.npr.org/sections/money/), [The Indicator](https://www.npr.org/podcasts/510325/the-indicator-from-planet-money), [99% Invisible](https://99percentinvisible.org/episodes/), [The Economist](http://radio.economist.com/), [Radiolab](https://www.wnycstudios.org/shows/radiolab), [Hidden Brain](https://www.npr.org/series/423302056/hidden-brain), and others.)
 - [Obscure indie music](/music)
 - [Good design](/)
 - [Photography](https://instagram.com/dangelosaurus)
