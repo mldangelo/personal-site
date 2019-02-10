@@ -52,7 +52,8 @@ This completes set up instructions. Please continue reading to learn how to modi
 ![github hosting instructions](docs/gh-pages.png)
 
 8. Configure your domains DNS record. See [here]( https://help.github.com/articles/using-a-custom-domain-with-github-pages/) for more information.
-9. Modify the `CNAME` file to point to your URL. Note: if you do not plan on using a custom domain, you should remove this file and modify the npm deploy script by removing `&& cp CNAME dist/` from the `predeploy` line in the scripts section of package.json. If you plan to deploy to a /[path]
+9. If using a custom url, modify the `CNAME` file to point to your URL. Modify the npm deploy script by appending `&& cp CNAME dist/` to the end of the `predeploy` line in the scripts section of package.json.
+If you plan to deploy to a /[path]
 (e.g. http://mldangelo.github.io/personal-site/), you should modify `BASE_PATH` in your `.env` and `sample.env` files and restart the express server. Note that you will now have to navigate to `localhost:[port]/[BASE_PATH]` when developing.
 
 ###  Deploying to Github Pages:
