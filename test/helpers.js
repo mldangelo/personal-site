@@ -30,11 +30,6 @@ const pages = [
     title: 'Contact | Michael D\'Angelo',
     heading: 'CONTACT',
   },
-  {
-    route: '/music',
-    title: 'Music | Michael D\'Angelo',
-    heading: 'SOME BANDS THAT I LIKE',
-  },
 ];
 
 export { pages, randomString };
