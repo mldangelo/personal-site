@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import Menus from 'react-burger-menu';
-import Link from '../Link';
+import { Link } from 'react-router-dom';
 
 import routes from '../../data/routes';
 

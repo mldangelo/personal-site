@@ -1,7 +1,7 @@
 import React from 'react';
-import ReactMarkdown from 'react-markdown';
+import { Link } from 'react-router-dom';
 import Helmet from 'react-helmet';
-import Link from '../components/Link';
+import ReactMarkdown from 'react-markdown';
 
 import Main from '../layouts/Main';
 
@@ -10,6 +10,9 @@ import markdown from '../data/about.md';
 const count = markdown.split(/\s+/)
   .map(s => s.replace(/\W/g, ''))
   .filter(s => s.length).length;
+
+// Make all hrefs react router links
+const LinkRenderer = ({ ...children }) => <Link {...children} />;
 
 const About = () => (
   <Main>
@@ -24,7 +27,7 @@ const About = () => (
       <ReactMarkdown
         source={markdown}
         renderers={{
-          Link,
+          Link: LinkRenderer,
         }}
         escapeHtml={false}
       />

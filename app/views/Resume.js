@@ -1,8 +1,7 @@
 import React from 'react';
-
+import { Link } from 'react-router-dom';
 import Helmet from 'react-helmet';
 
-import Link from '../components/Link';
 import Main from '../layouts/Main';
 
 import Education from '../components/Resume/Education';

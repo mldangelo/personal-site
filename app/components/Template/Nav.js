@@ -1,15 +1,15 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import Link from '../Link';
 
 import data from '../../data/contact';
 
 const Nav = () => (
   <section id="sidebar">
     <section id="intro">
-      <Link to={`${BASE_PATH}/`} className="logo">
+      <Link to="/" className="logo">
         <img src={`${BASE_PATH}/images/me_icon.jpg`} alt="" />
       </Link>
       <header>

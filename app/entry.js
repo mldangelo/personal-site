@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {
-  BrowserRouter as Router, Route, Redirect, Switch,
+  BrowserRouter as Router, Redirect, Switch, Route,
 } from 'react-router-dom';
 
 // Featured
@@ -33,18 +33,18 @@ if (params.search('path=') > -1) { // check if exists
 }
 
 ReactDOM.render(
-  <Router>
+  <Router basename={BASE_PATH}>
     <Switch>
       <Route
         exact
-        path={`${BASE_PATH}/`}
-        render={() => (path !== '/' ? (<Redirect to={`${BASE_PATH}/${path}`} />) : (<Index />))}
+        path="/"
+        render={() => (path !== '/' ? (<Redirect to={`${path}`} />) : (<Index />))}
       />
-      <Route path={`${BASE_PATH}/about`} component={About} />
-      <Route path={`${BASE_PATH}/projects`} component={Projects} />
-      <Route path={`${BASE_PATH}/stats`} component={Stats} />
-      <Route path={`${BASE_PATH}/contact`} component={Contact} />
-      <Route path={`${BASE_PATH}/resume`} component={Resume} />
+      <Route path="/about" component={About} />
+      <Route path="/projects" component={Projects} />
+      <Route path="/stats" component={Stats} />
+      <Route path="/contact" component={Contact} />
+      <Route path="/resume" component={Resume} />
       {/* Only useful in development mode */}
       <Route component={NotFound} status={404} />
     </Switch>
