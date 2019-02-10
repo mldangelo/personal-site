@@ -1,8 +1,8 @@
-## [mldangelo.com](http://mldangelo.com) and [https://mldangelo.github.io/personal-site/](https://mldangelo.github.io/personal-site/)
+## [mldangelo.com](http://mldangelo.com) and simplified [https://mldangelo.github.io/personal-site/](https://mldangelo.github.io/personal-site/)
 
 My personal website. Easily modifiable, and built using modern javascript with Node.js, React, Express, React-Router, Hot Module Reloading, Webpack and many other technologies.
 
-The master branch of [this](https://github.com/mldangelo/personal-site) repository contains a simplified version of my website intended for serverless hosting on github pages. To view the source for the version hosted at [mldangelo.com](http://mldangelo.com), checkout the [server](https://github.com/mldangelo/personal-site/tree/server) branch.
+The master branch of this repository contains a simplified version of my website intended for serverless hosting on github pages. To view the source for the version hosted at [mldangelo.com](http://mldangelo.com), checkout the [server](https://github.com/mldangelo/personal-site/tree/server) branch.
 
 ## A note on adapting this repository to your own personal website
 Many people have contacted me about adapting this website. I have tried to make things as simple as possible. There are still bugs. I am sorry. If you find a bug, please email me (help@mldangelo.com) or submit an issue or a pull request.
