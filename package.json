@@ -53,7 +53,7 @@
     "node-sass": "^4.11.0",
     "nodemon": "^1.18.10",
     "normalize.css": "^8.0.1",
-    "prop-types": "^15.6.2",
+    "prop-types": "^15.7.1",
     "raw-loader": "^1.0.0",
     "react": "^16.8.1",
     "react-burger-menu": "^2.6.4",
@@ -85,6 +85,6 @@
     "eslint-plugin-mocha": "^5.2.1",
     "eslint-plugin-react": "^7.12.4",
     "mocha": "^5.2.0",
-    "puppeteer": "^1.4.0"
+    "puppeteer": "^1.12.2"
   }
 }
