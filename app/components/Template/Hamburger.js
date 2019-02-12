@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import Menus from 'react-burger-menu';
-import cookie from 'js-cookie';
+import cookie from 'js-cookie'
+import Menu from 'react-burger-menu/lib/menus/slide';
 
 import routes from '../../data/routes';
-
-const { slide: Menu } = Menus;
 
 const Hamburger = () => {
   const [open, setOpen] = useState(false);
