@@ -30,7 +30,7 @@ describe('Page Load Tests:', async function () {
   async function checkRender(args) {
     it(`check if ${args.route} renders`, async () => {
       await page.goto(`http://localhost:${port}${args.route}`);
-
+      await page.waitFor(1000);
       const title = await page.evaluate(() => document.title);
       title.should.equal(args.title);
 
@@ -45,6 +45,7 @@ describe('Page Load Tests:', async function () {
 
   it('check if 404 renders', async () => {
     await page.goto(`http://localhost:${port}/${randomString(10)}`);
+    await page.waitFor(1000);
     await page.waitForSelector('#root > div > h1');
     const title = await page.evaluate(() => document.title);
     title.should.equal('404');
