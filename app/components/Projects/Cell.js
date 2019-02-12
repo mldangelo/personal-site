@@ -2,16 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 
-const Cell = props => (
+const Cell = ({ data }) => (
   <div className="cell-container">
     <article className="mini-post">
       <header>
-        <h3><a href={props.data.link}>{props.data.title}</a></h3>
-        <time className="published">{dayjs(props.data.date).format('MMMM, YYYY')}</time>
+        <h3><a href={data.link}>{data.title}</a></h3>
+        <time className="published">{dayjs(data.date).format('MMMM, YYYY')}</time>
       </header>
-      <a href={props.data.link} className="image"><img src={props.data.image} alt="" /></a>
+      <a href={data.link} className="image"><img src={data.image} alt="" /></a>
       <div className="description">
-        <p>{props.data.desc}</p>
+        <p>{data.desc}</p>
       </div>
     </article>
   </div>

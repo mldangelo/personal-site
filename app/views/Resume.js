@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router';
 
@@ -13,7 +14,6 @@ import Skills from '../components/Resume/Skills';
 import Courses from '../components/Resume/Courses';
 import References from '../components/Resume/References';
 
-
 const sections = [
   'Education',
   'Experience',
@@ -22,54 +22,49 @@ const sections = [
   'References',
 ];
 
+const Resume = ({ history }) => {
+  const [data, setData] = useState({});
 
-class Resume extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      data: {},
-    };
-  }
+  const fetchData = async () => {
+    const { data: resumeData } = await axios('/api/resume');
+    if (!resumeData.success) {
+      history.push('/login');
+    }
+    setData(resumeData);
+  };
 
-  componentWillMount() {
-    axios.get('/api/resume').then(({ data }) => {
-      if (!data.success) {
-        return Promise.reject(data.error);
-      }
-      return this.setState({ data });
-    }).catch((error) => {
-      console.error('resume-api-fetch-error', error);
-      this.props.history.push('/login'); // eslint-disable-line react/prop-types
-    });
-  }
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-  render() {
-    return (
-      <Main>
-        <Helmet title="Resume" />
-        <article className="post" id="resume">
-          <header>
-            <div className="title">
-              <h2><Link to="/resume">Resume</Link></h2>
-              <div className="link-container">
-                {sections.map(sec => (
-                  <h4 key={sec}>
-                    <a href={`#${sec.toLowerCase()}`}>{sec}</a>
-                  </h4>))}
-              </div>
-
+  return (
+    <Main>
+      <Helmet title="Resume" />
+      <article className="post" id="resume">
+        <header>
+          <div className="title">
+            <h2><Link to="/resume">Resume</Link></h2>
+            <div className="link-container">
+              {sections.map(sec => (
+                <h4 key={sec}>
+                  <a href={`#${sec.toLowerCase()}`}>{sec}</a>
+                </h4>))}
             </div>
-          </header>
-          <Education data={this.state.data.degrees} />
-          <Experience data={this.state.data.positions} />
-          <Skills skills={this.state.data.skills} categories={this.state.data.categories} />
-          <Courses data={this.state.data.courses} />
-          <References />
+          </div>
+        </header>
+        <Education data={data.degrees} />
+        <Experience data={data.positions} />
+        <Skills skills={data.skills} categories={data.categories} />
+        <Courses data={data.courses} />
+        <References />
 
-        </article>
-      </Main>
-    );
-  }
-}
+      </article>
+    </Main>
+  );
+};
+
+Resume.propTypes = {
+  history: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+};
 
 export default withRouter(Resume);

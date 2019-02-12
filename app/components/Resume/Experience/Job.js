@@ -1,18 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const getPoints = data => data.points.map(point => (
-  <li key={point}>{point}</li>
-));
-
-const Job = props => (
+const Job = ({ data }) => (
   <article className="jobs-container">
     <header>
-      <h4><a href={props.data.link}>{props.data.company}</a> - {props.data.position}</h4>
-      <p className="daterange"> {props.data.daterange}</p>
+      <h4><a href={data.link}>{data.company}</a> - {data.position}</h4>
+      <p className="daterange"> {data.daterange}</p>
     </header>
     <ul className="points">
-      {getPoints(props.data)}
+      {data.points.map(point => (
+        <li key={point}>{point}</li>
+      ))}
     </ul>
   </article>
 );

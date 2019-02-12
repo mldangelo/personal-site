@@ -31,7 +31,7 @@ app.use(cookieParser());
 
 const MongoDBStore = mongoStore(session);
 
-mongoose.connection.openUri(`mongodb://localhost/${database}`)
+mongoose.connection.openUri(`mongodb://localhost/${database}`, { useNewUrlParser: true })
   .once('open', () => {
     console.info(`Connected to mongodb://localhost/${database}`);
     update(); // create default models if they don't exist

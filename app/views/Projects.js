@@ -7,15 +7,6 @@ import Main from '../layouts/Main';
 import Cell from '../components/Projects/Cell';
 import data from '../data/projects';
 
-// TODO: Put projects side by side (2x2) instead of (1x4)
-
-const getRows = () => data.map(project => (
-  <Cell
-    data={project}
-    key={project.title}
-  />
-));
-
 const Projects = () => (
   <Main>
     <Helmet title="Projects" />
@@ -26,7 +17,12 @@ const Projects = () => (
           <p>A selection of projects that I&apos;m not too ashamed of</p>
         </div>
       </header>
-      {getRows()}
+      {data.map(project => (
+        <Cell
+          data={project}
+          key={project.title}
+        />
+      ))}
     </article>
   </Main>
 );
