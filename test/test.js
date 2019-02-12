@@ -1,7 +1,7 @@
 /* eslint-disable func-names */
 import 'dotenv/config';
 
-import Chromy from 'chromy';
+import puppeteer from 'puppeteer';
 
 import server from '../server/server';
 import { pages, randomString } from './helpers';
@@ -13,40 +13,42 @@ const port = process.env.PORT || 7999;
 describe('Page Load Tests:', async function () {
   this.timeout(120000);
   let instance;
-  let chromy;
+  let browser;
+  let page;
 
-  before((done) => { // before all of the tests
-    instance = server.listen(port, done);
-    chromy = new Chromy();
+  before(async () => { // before all of the tests
+    instance = server.listen(port);
+    browser = await puppeteer.launch();
+    page = await browser.newPage();
   });
 
   after(async () => {
-    await Chromy.cleanup();
+    await browser.close();
     await instance.close();
   });
 
   async function checkRender(args) {
     it(`check if ${args.route} renders`, async () => {
-      await chromy.goto(`http://localhost:${port}${args.route}`);
+      await page.goto(`http://localhost:${port}${args.route}`);
 
-      const title = await chromy.evaluate(() => document.title);
+      const title = await page.evaluate(() => document.title);
       title.should.equal(args.title);
 
-      await chromy.wait('article > header > div > h2 > a');
-      const header = await chromy.evaluate(() => document.querySelector('article > header > div > h2 > a').innerText);
+      await page.waitForSelector('article > header > div > h2 > a');
+      const header = await page.evaluate(() => document.querySelector('article > header > div > h2 > a').innerText);
       header.should.equal(args.heading);
     });
   }
 
   // Check each page except for 404 and API routes
-  pages.forEach(page => checkRender(page));
+  pages.forEach(url => checkRender(url));
 
   it('check if 404 renders', async () => {
-    await chromy.goto(`http://localhost:${port}/${randomString(10)}`);
-    await chromy.wait('#root > div > h1');
-    const title = await chromy.evaluate(() => document.title);
+    await page.goto(`http://localhost:${port}/${randomString(10)}`);
+    await page.waitForSelector('#root > div > h1');
+    const title = await page.evaluate(() => document.title);
     title.should.equal('404');
-    const header = await chromy.evaluate(() => document.querySelector('.not-found > h1').innerText);
+    const header = await page.evaluate(() => document.querySelector('.not-found > h1').innerText);
     header.should.equal('PAGE NOT FOUND.');
   });
 });
