@@ -1,8 +1,6 @@
 /* eslint-disable func-names */
-import 'babel-polyfill';
 import 'dotenv/config';
 
-// import Chromy from 'chromy';
 import puppeteer from 'puppeteer';
 
 import server from '../server/server';
