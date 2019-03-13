@@ -42,7 +42,7 @@
     "compression": "^1.7.3",
     "css-loader": "^2.1.0",
     "dayjs": "^1.8.5",
-    "dotenv": "^6.2.0",
+    "dotenv": "^7.0.0",
     "express": "^4.16.4",
     "file-loader": "^3.0.1",
     "gh-pages": "^2.0.1",
