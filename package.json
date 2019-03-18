@@ -54,7 +54,7 @@
     "nodemon": "^1.18.10",
     "normalize.css": "^8.0.1",
     "prop-types": "^15.7.1",
-    "raw-loader": "^1.0.0",
+    "raw-loader": "^2.0.0",
     "react": "^16.8.1",
     "react-burger-menu": "^2.6.4",
     "react-dom": "^16.8.1",
