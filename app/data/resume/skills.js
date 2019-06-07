@@ -55,16 +55,6 @@ export const skills = [
     category: ['Web Development', 'Frameworks', 'Javascript'],
   },
   {
-    title: 'Backbone',
-    compentency: 3,
-    category: ['Web Development', 'Frameworks', 'Javascript'],
-  },
-  {
-    title: 'Bootstrap',
-    compentency: 5,
-    category: ['Web Development', 'Frameworks'],
-  },
-  {
     title: 'Bash',
     compentency: 3,
     category: ['Tools', 'Languages'],
@@ -91,7 +81,7 @@ export const skills = [
   },
   {
     title: 'PostgreSQL',
-    compentency: 3,
+    compentency: 4,
     category: ['Web Development', 'Databases'],
   },
   {
@@ -106,12 +96,12 @@ export const skills = [
   },
   {
     title: 'Matlab',
-    compentency: 3,
+    compentency: 2,
     category: ['Data Science', 'Machine Learning', 'Languages'],
   },
   {
     title: 'Julia',
-    compentency: 4,
+    compentency: 3,
     category: ['Data Science', 'Machine Learning'],
   },
   {
@@ -121,7 +111,7 @@ export const skills = [
   },
   {
     title: 'Express.JS',
-    compentency: 5,
+    compentency: 4,
     category: ['Web Development', 'Frameworks', 'Javascript'],
   },
   {
@@ -165,6 +155,16 @@ export const skills = [
     category: ['Tools'],
   },
   {
+    title: 'Kubernetes',
+    compentency: 3,
+    category: ['Tools'],
+  },
+  {
+    title: 'Google Cloud Compute',
+    compentency: 3,
+    category: ['Tools'],
+  },
+  {
     title: 'Numpy',
     compentency: 3,
     category: ['Data Science', 'Machine Learning', 'Python'],
@@ -191,22 +191,22 @@ export const skills = [
   },
   {
     title: 'HTML',
-    compentency: 5,
+    compentency: 3,
     category: ['Web Development', 'Languages'],
   },
   {
     title: 'CSS',
-    compentency: 5,
+    compentency: 3,
     category: ['Web Development', 'Languages'],
   },
   {
     title: 'SASS/SCSS',
-    compentency: 5,
+    compentency: 3,
     category: ['Web Development', 'Languages'],
   },
   {
     title: 'LESS',
-    compentency: 5,
+    compentency: 3,
     category: ['Web Development', 'Languages'],
   },
   {
@@ -217,7 +217,7 @@ export const skills = [
   },
   {
     title: 'C++',
-    compentency: 3,
+    compentency: 2,
     category: ['Languages'],
   },
   {
@@ -252,7 +252,7 @@ export const skills = [
   },
   {
     title: 'GraphQL',
-    compentency: 3,
+    compentency: 2,
     category: ['Web Development', 'Databases'],
   },
   {
