@@ -12,7 +12,9 @@
     "dev": "nodemon server/server.js --ignore app/ --ignore test/ --exec babel-node",
     "parse-routes": "node -r @babel/register parseRoutes.js",
     "predeploy": "npm run build && cp -r public/* dist/ && cp dist/index.html dist/404.html && npm run parse-routes",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "dependencies": {
     "@babel/cli": "^7.4.4",
@@ -74,7 +76,8 @@
     "webpack": "^4.33.0",
     "webpack-cli": "^3.3.2",
     "webpack-dev-middleware": "^3.7.0",
-    "webpack-hot-middleware": "^2.25.0"
+    "webpack-hot-middleware": "^2.25.0",
+    "snyk": "^1.189.0"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",
@@ -87,5 +90,6 @@
     "eslint-plugin-react": "^7.13.0",
     "mocha": "^6.1.4",
     "puppeteer": "^1.17.0"
-  }
+  },
+  "snyk": true
 }
