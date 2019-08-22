@@ -25,7 +25,7 @@ before_install:
 - gcc --version
 - g++ --version
 install:
-- npm install --dev
+- npm install
 before_script:
 - npm run lint
 - sleep 5
