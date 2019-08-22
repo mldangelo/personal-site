@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import Course from './Courses/Course';
 
-const getRows = courses => courses.sort((a, b) => {
+const getRows = (courses) => courses.sort((a, b) => {
   let ret = 0;
   if (a.university > b.university) ret = -1;
   else if (a.unversity < b.university) ret = 1;

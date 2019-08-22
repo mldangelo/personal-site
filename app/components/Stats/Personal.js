@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Table from './Table';
 import personalData from '../../data/stats';
@@ -9,12 +9,13 @@ const PersonalStats = () => {
   const tick = () => {
     const divisor = 1000 * 60 * 60 * 24 * 365.2421897; // ms in an average year
     const birthTime = new Date('1990-02-05T09:24:00');
-    setData(Object.assign({}, data, {
+    setData({
+      ...data,
       age: {
         label: 'Current age',
         value: ((Date.now() - birthTime) / divisor).toFixed(11),
       },
-    }));
+    });
   };
 
   useEffect(() => {
@@ -23,10 +24,10 @@ const PersonalStats = () => {
   }, []);
 
   return (
-    <Fragment>
+    <>
       <h3>Some stats about me</h3>
-      <Table data={Object.keys(data).map(key => data[key])} />
-    </Fragment>
+      <Table data={Object.keys(data).map((key) => data[key])} />
+    </>
   );
 };
 
