@@ -6,7 +6,7 @@ import TableRow from './TableRow';
 const Table = ({ data }) => (
   <table>
     <tbody>
-      {data.map(pair => (
+      {data.map((pair) => (
         <TableRow
           key={pair.label}
           label={pair.label}

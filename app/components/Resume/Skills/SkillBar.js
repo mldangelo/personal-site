@@ -7,8 +7,8 @@ const SkillBar = ({ data, categories }) => {
   // TODO: Consider averaging colors
   const titleStyle = {
     background: categories
-      .filter(cat => category.includes(cat.name))
-      .map(cat => cat.color)[0],
+      .filter((cat) => category.includes(cat.name))
+      .map((cat) => cat.color)[0],
   };
 
   const barStyle = {
