@@ -10,7 +10,7 @@ const lastfm = new LastfmAPI({ apiKey: LASTFM_KEY });
 
 const updateCache = (data) => {
   cached = {
-    artists: data.artist.map(artist => ({
+    artists: data.artist.map((artist) => ({
       name: artist.name,
       link: artist.url,
       image: artist.image[2]['#text'],

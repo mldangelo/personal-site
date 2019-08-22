@@ -2,7 +2,7 @@ import User from '../../models/User';
 
 export default (req, res) => {
   User.find().select('name email logins').then((users) => {
-    const processed = users.map(user => ({
+    const processed = users.map((user) => ({
       email: user.email,
       name: user.name,
       // NOTE: In the future, we can assume user.logins is always sorted

@@ -29,7 +29,7 @@ const Music = () => {
         </header>
         <div>
           <section id="band-tile">
-            {bands.map(image => (
+            {bands.map((image) => (
               <div key={image.name}>
                 <a href={image.link}>
                   <img
@@ -41,8 +41,7 @@ const Music = () => {
                     {String(image.name)}
                   </h4>
                 </a>
-              </div>))
-              }
+              </div>))}
           </section>
         </div>
       </article>

@@ -40,7 +40,7 @@ const Admin = () => {
                 </tr>
               </thead>
               <tbody>
-                {users.map(user => (
+                {users.map((user) => (
                   <tr>
                     <td>{`${user.name || ''}`}</td>
                     <td><a href={`mailto:${user.email}`}>{user.email}</a></td>
@@ -48,8 +48,7 @@ const Admin = () => {
                     <td>{dayjs(user.lastOnline).format('MM/DD/YY h:mm:ss a')}</td>
                     <td>{user.visits}</td>
                   </tr>
-                ))
-                  }
+                ))}
               </tbody>
             </table>
           </section>

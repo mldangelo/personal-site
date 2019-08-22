@@ -5,11 +5,11 @@ import CategoryButton from './Skills/CategoryButton';
 import SkillBar from './Skills/SkillBar';
 
 const handleProps = ({ categories, skills }) => ({
-  buttons: categories.map(cat => cat.name).reduce((obj, key) => ({
+  buttons: categories.map((cat) => cat.name).reduce((obj, key) => ({
     ...obj,
     [key]: false,
   }), { All: true }),
-  skills: skills.map(skill => Object.assign(skill, {
+  skills: skills.map((skill) => Object.assign(skill, {
     category: skill.category.sort(),
   })),
 });
@@ -39,8 +39,8 @@ class Skills extends Component {
       else if (a.title > b.title) ret = 1;
       else if (a.title < b.title) ret = -1;
       return ret;
-    }).filter(skill => (actCat === 'All' || skill.category.includes(actCat)))
-      .map(skill => (
+    }).filter((skill) => (actCat === 'All' || skill.category.includes(actCat)))
+      .map((skill) => (
         <SkillBar
           categories={this.props.categories}
           data={skill}
@@ -50,7 +50,7 @@ class Skills extends Component {
   }
 
   getButtons() {
-    return Object.keys(this.state.buttons).map(key => (
+    return Object.keys(this.state.buttons).map((key) => (
       <CategoryButton
         label={key}
         key={key}
@@ -68,7 +68,7 @@ class Skills extends Component {
         [key]: (label === key) && !prevState.buttons[key],
       }), {});
       // Turn on 'All' button if other buttons are off
-      buttons.All = !Object.keys(prevState.buttons).some(key => buttons[key]);
+      buttons.All = !Object.keys(prevState.buttons).some((key) => buttons[key]);
       return { buttons };
     });
   }

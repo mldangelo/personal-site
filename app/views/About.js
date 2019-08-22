@@ -9,8 +9,8 @@ import LinkRenderer from '../components/About/LinkRenderer';
 import markdown from '../data/about.md';
 
 const count = markdown.split(/\s+/)
-  .map(s => s.replace(/\W/g, ''))
-  .filter(s => s.length).length;
+  .map((s) => s.replace(/\W/g, ''))
+  .filter((s) => s.length).length;
 
 const About = () => (
   <Main>

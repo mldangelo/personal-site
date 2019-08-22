@@ -23,11 +23,11 @@ const auth = (app) => {
     User.findOne({ email: profile._json.email })
       .then((user) => {
         if (!user) {
-          return User.create(Object.assign({ logins: [Date.now()] }, profile._json));
+          return User.create({ logins: [Date.now()], ...profile._json });
         }
         user.logins.push(Date.now());
         return user.save();
-      }).then(user => done(null, user)).catch(error => done(error));
+      }).then((user) => done(null, user)).catch((error) => done(error));
   }));
 
   passport.serializeUser((user, done) => {

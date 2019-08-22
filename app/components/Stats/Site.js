@@ -21,10 +21,10 @@ const Stats = () => {
   }, []);
 
   return (
-    <Fragment>
+    <>
       <h3>Some stats about this site</h3>
       <Table data={data} />
-    </Fragment>
+    </>
   );
 };
 

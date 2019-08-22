@@ -8,7 +8,7 @@ const Job = ({ data }) => (
       <p className="daterange"> {data.daterange}</p>
     </header>
     <ul className="points">
-      {data.points.map(point => (
+      {data.points.map((point) => (
         <li key={point}>{point}</li>
       ))}
     </ul>

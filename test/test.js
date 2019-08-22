@@ -41,7 +41,7 @@ describe('Page Load Tests:', async function () {
   }
 
   // Check each page except for 404 and API routes
-  pages.forEach(url => checkRender(url));
+  pages.forEach((url) => checkRender(url));
 
   it('check if 404 renders', async () => {
     await page.goto(`http://localhost:${port}/${randomString(10)}`);
