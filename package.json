@@ -15,15 +15,12 @@
     "lint": "./node_modules/.bin/eslint app server test webpack",
     "start": "./node_modules/.bin/babel-node server/server.js",
     "test": "./node_modules/mocha/bin/mocha --exit --require @babel/register ./test/test.js",
-    "analyze": "babel-node ./node_modules/webpack/bin/webpack --config ./webpack/webpack.production.config.js --json | webpack-bundle-size-analyzer",
-    "snyk-protect": "snyk protect",
-    "prepare": "npm run snyk-protect"
+    "analyze": "babel-node ./node_modules/webpack/bin/webpack --config ./webpack/webpack.production.config.js --json | webpack-bundle-size-analyzer"
   },
   "dependencies": {
     "@babel/cli": "^7.5.5",
     "@babel/core": "^7.5.5",
     "@babel/node": "^7.5.5",
-    "@babel/polyfill": "^7.4.4",
     "@babel/plugin-proposal-class-properties": "^7.5.5",
     "@babel/plugin-proposal-json-strings": "^7.2.0",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
@@ -83,15 +80,14 @@
     "rimraf": "^3.0.0",
     "sass-loader": "^7.3.1",
     "script-ext-html-webpack-plugin": "^2.1.4",
-    "snyk": "^1.217.3",
     "stats-webpack-plugin": "^0.7.0",
     "strip-loader": "^0.1.2",
     "style-loader": "^1.0.0",
     "url-loader": "^2.1.0",
     "webpack": "^4.39.2",
+    "webpack-cli": "^3.3.7",
     "webpack-dev-middleware": "^3.7.0",
-    "webpack-hot-middleware": "^2.25.0",
-    "webpack-cli": "^3.3.7"
+    "webpack-hot-middleware": "^2.25.0"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.2",
@@ -105,6 +101,5 @@
     "mocha": "^6.2.0",
     "puppeteer": "^1.19.0",
     "webpack-bundle-size-analyzer": "^3.0.0"
-  },
-  "snyk": true
+  }
 }
