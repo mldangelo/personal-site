@@ -36,7 +36,7 @@ mongoose.connection.openUri(`mongodb://localhost/${database}`, { useNewUrlParser
     console.info(`Connected to mongodb://localhost/${database}`);
     update(); // create default models if they don't exist
   })
-  .on('error', error => console.error('Database connection error:', error));
+  .on('error', (error) => console.error('Database connection error:', error));
 
 const store = new MongoDBStore({
   uri: `mongodb://localhost/${database}`,

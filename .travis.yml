@@ -1,8 +1,6 @@
 sudo: false
 language: node_js
 services: mongodb
-cache:
-  yarn: true
 env:
   global:
   - secure: RMzwEd88VFWIw8R5j2RMkpFeiLGUM6tpoVooi30SOu/AkC0YxYNcxskIxDo0lfSuckvvggBxDq30WSXLrGaxCegCM5N5EyCdt/J67hnoD5C0x+hGFOrzp+nps/xfNerc47MLxVjG+Nglc8wk+gJNohG+l5AbEf33zwrVxARWqAPsqiUFyYGRcCSNMdFbUQnQtYrHFfxVpKU/MQMvsVPDvR8jNKjllIgCHHupYPtvfNP1/e33iWduJmEwP2k2kY7kJuEjy15RClrdW0y8k+uUibyKrjJQ0UhnAom0vwwIKbOZw8hBKRhvaGlJmvNRWBtsetpD60/xHo8s0POHMM12pfD7YQ2NZdriDXDdpArontMw5V0u6zUzWPV92yS99WXk/ufZIvCQl03nHEb6dK+8NPKquUmqZWWQYJylZc/tjzJJNliX03erDwNhYl2S4u+o5Br6iMMtxfIv1j7rBUk0sCHQwERWsYFm1HegvW2rwdOKBOcn2fOMBvKHZPSbLfDbJtJPSTetsT5MWyGIOPx8C+JIhobUNq5VpynOw+EInPfqG+qAV8HXJrZxoss/48o8IyjTBz0MTxNKrZD3v4R/pZrerq/+Jx/meCi6xHuMg4MEUnzj2o1DdSJB8C1vFindq2QrMah8u0wDscSNr2ihZg6treAnKCMeLe2PToqnlB0=
@@ -21,15 +19,13 @@ addons:
     packages:
     - xvfb
 before_install:
-- curl -o- -L https://yarnpkg.com/install.sh | bash
-- export PATH=$HOME/.yarn/bin:$PATH
 - nvm --version
 - node --version
 - npm --version
 - gcc --version
 - g++ --version
 install:
-- yarn install --production=false
+- npm install
 before_script:
 - npm run lint
 - sleep 5
