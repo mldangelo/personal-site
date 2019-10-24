@@ -86,6 +86,6 @@
     "eslint-plugin-react": "^7.14.3",
     "eslint-plugin-react-hooks": "^2.0.1",
     "mocha": "^6.2.0",
-    "puppeteer": "^1.19.0"
+    "puppeteer": "^2.0.0"
   }
 }
