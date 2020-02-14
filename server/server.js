@@ -31,7 +31,7 @@ if (!module.parent) {
     if (err) {
       console.error('application-err', err);
     }
-    console.info(`Started in ${env === 'development' ? env : 'production'} mode on port ${port}.`);
+    console.info(`Started in ${env === 'development' ? env : 'production'} mode on port http://localhost:${port}`);
   });
 }
 

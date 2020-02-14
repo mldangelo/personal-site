@@ -62,6 +62,7 @@
     "react-markdown": "^4.1.0",
     "react-router": "^5.0.1",
     "react-router-dom": "^5.0.1",
+    "react-select": "^3.0.8",
     "rimraf": "^3.0.0",
     "sass-loader": "^7.3.1",
     "script-ext-html-webpack-plugin": "^2.1.4",

@@ -28,6 +28,10 @@ const data = [
     path: '/services',
     label: 'Services',
   },
+  {
+    path: '/servicesEs',
+    label: 'Services Español',
+  },
 ];
 
 export default data;
