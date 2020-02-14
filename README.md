@@ -12,8 +12,8 @@ Many people have contacted me about adapting this website. I have tried to make 
 
 Tested with:
 
-* node >= v8, v9, v10, v11
-* Recommend [nvm](https://github.com/creationix/nvm#installation) for managing node versions
+* yarn add node
+* Recommend yarn for installing node_modules
 
 ## Set up
 
@@ -24,7 +24,7 @@ You may wish to fork this repository or remove my remote origin and add your own
     ```bash
     git clone git://github.com/messidagod/personal-site.git
     cd personal-site
-    npm install
+    yarn install
     ```
 
     If you do not have `yarn` installed, you may run `npm install` instead.
@@ -71,17 +71,9 @@ If you plan to deploy to a /[path]
 
 That's it.
 
-Please feel free to reach out to me by filing an issue or at help@messidagod.com for help configuring your project.
-
 ## Contributors
 
-* [@messidagod](https://github.com/messidagod)
 * [@typpo](https://github.com/typpo)
-
-## Acknowledgements
-
-* Special thanks to [@typpo](https://github.com/typpo) for tirelessly answering all of my node.js and react questions.
-* Template based on [Future Imperfect](https://html5up.net/future-imperfect) by [@ajlkn](https://github.com/ajlkn) for [HTML5 UP](html5up.net).
 
 ## License
 
