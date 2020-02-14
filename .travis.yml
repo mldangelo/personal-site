@@ -35,6 +35,6 @@ script:
 - npm test
 notifications:
   email:
-  - joeshakely@gmail.com
+  - casillaslawgroup@gmail.com
 git:
   depth: 10

@@ -38,7 +38,7 @@ const data = [
     icon: faTwitter,
   },
   {
-    link: 'mailto:joeshakely@gmail.com',
+    link: 'mailto:casillaslawgroup@gmail.com',
     label: 'Email',
     icon: faEnvelope,
   },

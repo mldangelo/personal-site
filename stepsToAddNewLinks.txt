@@ -1,7 +1,7 @@
-add path to C:\Users\Joe Shakely\source\repos\personal-site\app\entry.js
+add path to C:\Users\Casillas Law Group\source\repos\personal-site\app\entry.js
 
-add new .js file in C:\Users\Joe Shakely\source\repos\personal-site\app\views\
+add new .js file in C:\Users\Casillas Law Group\source\repos\personal-site\app\views\
 
-add scss if needed C:\Users\Joe Shakely\source\repos\personal-site\app\static\css\views\
+add scss if needed C:\Users\Casillas Law Group\source\repos\personal-site\app\static\css\views\
 
-add .md file to C:\Users\Joe Shakely\source\repos\personal-site\app\data\
+add .md file to C:\Users\Casillas Law Group\source\repos\personal-site\app\data\

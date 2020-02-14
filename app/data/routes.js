@@ -1,24 +1,12 @@
 const data = [
   {
     path: '/',
-    label: 'Joe Shakely',
+    label: 'Casillas Law Group',
     index: true,
   },
   {
     path: '/about',
     label: 'About',
-  },
-  {
-    path: '/resume',
-    label: 'Resume',
-  },
-  {
-    path: '/projects',
-    label: 'Projects',
-  },
-  {
-    path: '/stats',
-    label: 'Stats',
   },
   {
     path: '/contact',

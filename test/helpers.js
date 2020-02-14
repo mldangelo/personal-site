@@ -7,27 +7,27 @@ const randomString = (length) => {
 const pages = [
   {
     route: '/',
-    title: 'Joe Shakely',
+    title: 'Casillas Law Group',
     heading: 'ABOUT THIS SITE',
   },
   {
     route: '/about',
-    title: 'About | Joe Shakely',
+    title: 'About | Casillas Law Group',
     heading: 'ABOUT ME',
   },
   {
     route: '/projects',
-    title: 'Projects | Joe Shakely',
+    title: 'Projects | Casillas Law Group',
     heading: 'PROJECTS',
   },
   {
     route: '/stats',
-    title: 'Stats | Joe Shakely',
+    title: 'Stats | Casillas Law Group',
     heading: 'STATS',
   },
   {
     route: '/contact',
-    title: 'Contact | Joe Shakely',
+    title: 'Contact | Casillas Law Group',
     heading: 'CONTACT',
   },
 ];
