@@ -10,7 +10,7 @@ const data = {
   },
   location: {
     label: 'Current city',
-    value: 'New York, NY',
+    value: 'San Francisco, CA',
   },
 };
 
