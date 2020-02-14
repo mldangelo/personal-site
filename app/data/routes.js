@@ -24,6 +24,10 @@ const data = [
     path: '/contact',
     label: 'Contact',
   },
+  {
+    path: '/services',
+    label: 'Services',
+  },
 ];
 
 export default data;

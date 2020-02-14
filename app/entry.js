@@ -11,6 +11,7 @@ import Projects from './views/Projects';
 import Resume from './views/Resume';
 import Stats from './views/Stats';
 import Contact from './views/Contact';
+import Services from './views/Services';
 
 import NotFound from './views/NotFound';
 
@@ -26,6 +27,7 @@ ReactDOM.render(
       <Route path="/stats" component={Stats} />
       <Route path="/contact" component={Contact} />
       <Route path="/resume" component={Resume} />
+      <Route path="/services" component={Services} />
       {/* Only useful in development mode */}
       <Route component={NotFound} status={404} />
     </Switch>
