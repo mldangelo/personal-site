@@ -1,0 +1,7 @@
+add path to C:\Users\Joe Shakely\source\repos\personal-site\app\entry.js
+
+add new .js file in C:\Users\Joe Shakely\source\repos\personal-site\app\views\
+
+add scss if needed C:\Users\Joe Shakely\source\repos\personal-site\app\static\css\views\
+
+add .md file to C:\Users\Joe Shakely\source\repos\personal-site\app\data\
