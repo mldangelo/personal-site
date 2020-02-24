@@ -20,7 +20,7 @@ const About = () => (
     <article className="post" id="about">
       <header>
         <div className="title">
-          <h2><Link to="/about">Sobre la</Link></h2>
+          <h2><Link to="/about">Sobre la Abogada</Link></h2>
           <p>(in about {count} words)</p>
         </div>
       </header>
