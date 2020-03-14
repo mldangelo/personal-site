@@ -12,10 +12,6 @@ if (NODE_ENV === 'production') {
 }
 
 class Main extends Component {
-  componentWillMount() {
-    window.scrollTo(0, 0);
-  }
-
   componentDidMount() {
     if (NODE_ENV === 'production') {
       ReactGA.set({
@@ -33,7 +29,7 @@ class Main extends Component {
         <div id="main">
           {this.props.children}
         </div>
-        {!this.props.fullPage && <Nav />}
+        {this.props.fullPage ? null : <Nav />}
       </div>);
   }
 }

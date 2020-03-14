@@ -25,7 +25,7 @@ class Skills extends Component {
   }
 
   getRows() {
-    // search for true active categorys
+    // search for true active categories
     const actCat = Object.keys(this.state.buttons).reduce((cat, key) => (
       this.state.buttons[key] ? key : cat
     ), 'All');
