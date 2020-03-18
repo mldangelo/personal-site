@@ -16,7 +16,7 @@ const positions = [
     company: 'Enveritas',
     position: 'Consultant',
     link: 'http://enveritas.org',
-    daterange: 'September 2016 - Present',
+    daterange: 'September 2016 - 2018',
     points: [
       'Trained a model for the Brazilian Coffee Scenes Dataset with better than state of the art accuracy.',
       'Collected training sets on the ground in Uganda. Built dashboards to visualize work of surveyors using Flask, React, and D3.',

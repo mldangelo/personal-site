@@ -32,8 +32,8 @@ class Skills extends Component {
 
     return this.state.skills.sort((a, b) => {
       let ret = 0;
-      if (a.compentency > b.compentency) ret = -1;
-      else if (a.compentency < b.compentency) ret = 1;
+      if (a.competency > b.competency) ret = -1;
+      else if (a.competency < b.competency) ret = 1;
       else if (a.category[0] > b.category[0]) ret = -1;
       else if (a.category[0] < b.category[0]) ret = 1;
       else if (a.title > b.title) ret = 1;
@@ -95,7 +95,7 @@ class Skills extends Component {
 Skills.propTypes = {
   skills: PropTypes.arrayOf(PropTypes.shape({
     title: PropTypes.string,
-    compentency: PropTypes.number,
+    competency: PropTypes.number,
     category: PropTypes.arrayOf(PropTypes.string),
   })),
   categories: PropTypes.arrayOf(PropTypes.shape({
