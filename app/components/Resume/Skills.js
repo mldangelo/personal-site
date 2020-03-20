@@ -9,19 +9,13 @@ const handleProps = ({ categories, skills }) => ({
     ...obj,
     [key]: false,
   }), { All: true }),
-  skills: skills.map((skill) => Object.assign(skill, {
-    category: skill.category.sort(),
-  })),
+  skills,
 });
 
 class Skills extends Component {
   constructor(props) {
     super(props);
     this.state = handleProps({ categories: props.categories, skills: props.skills });
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState(handleProps({ categories: nextProps.categories, skills: nextProps.skills }));
   }
 
   getRows() {
