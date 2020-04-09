@@ -58,7 +58,7 @@
     "react-burger-menu": "^2.6.11",
     "react-dom": "^16.9.0",
     "react-ga": "^2.6.0",
-    "react-helmet": "^5.2.1",
+    "react-helmet": "^6.0.0",
     "react-markdown": "^4.1.0",
     "react-router": "^5.0.1",
     "react-router-dom": "^5.0.1",
