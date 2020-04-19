@@ -5,6 +5,7 @@ import {
 } from 'react-router-dom';
 
 import ScrollToTop from './components/Template/ScrollToTop';
+import Analytics from './components/Template/Analytics';
 
 // Featured
 import About from './views/About';
@@ -21,6 +22,7 @@ import './static/css/main.scss';
 ReactDOM.render(
   <Router basename={BASE_PATH}>
     <ScrollToTop />
+    <Analytics />
     <Switch>
       <Route exact path="/" component={Index} />
       <Route path="/about" component={About} />
