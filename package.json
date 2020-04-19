@@ -38,6 +38,7 @@
     "babel-plugin-add-module-exports": "^1.0.2",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "body-parser": "^1.19.0",
+    "color-hash": "^1.0.3",
     "compression": "^1.7.4",
     "css-loader": "^3.4.2",
     "dayjs": "^1.8.23",
