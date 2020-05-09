@@ -11,7 +11,7 @@ env:
 matrix:
   include:
   - os: linux
-    node_js: '11'
+    node_js: '12'
     env: NODE_ENV=development
   fast_finish: true
 addons:
