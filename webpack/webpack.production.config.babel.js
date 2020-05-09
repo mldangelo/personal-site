@@ -14,7 +14,7 @@ export default {
   ],
   mode: 'production',
   output: {
-    path: path.join(__dirname, '../tmp/'),
+    path: path.join(__dirname, '../build/'),
     filename: '[name]-[hash].min.js',
     publicPath: `${basePath}/`,
   },

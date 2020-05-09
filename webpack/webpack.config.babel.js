@@ -14,7 +14,7 @@ export default {
     path.join(__dirname, '../app/entry.js'),
   ],
   output: {
-    path: path.join(__dirname, '../dist/'),
+    path: path.join(__dirname, '../build/'),
     filename: '[name].js',
     publicPath: `${basePath}/`,
   },

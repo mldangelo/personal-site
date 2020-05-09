@@ -1,22 +1,18 @@
 {
-  "name": "mldangelo.com",
-  "homepage": "https://github.com/mldangelo/personal-site",
-  "version": "1.0.1",
-  "private": true,
+  "name": "personal-site",
+  "version": "2.0.0",
   "scripts": {
-    "build": "node -r @babel/register  ./node_modules/webpack/bin/webpack --config ./webpack/webpack.production.config.js --progress --profile --colors && rimraf ./dist && mv ./tmp ./dist",
-    "build-dev": "rimraf ./dist && babel-node ./node_modules/webpack/bin/webpack --config ./webpack/webpack.config.js --progress --profile --colors",
-    "clean": "rimraf ./dist && rimraf ./tmp",
-    "lint": "./node_modules/.bin/eslint app server test webpack",
-    "test": "./node_modules/mocha/bin/mocha --exit --require @babel/register ./test/test.js",
+    "build": "rimraf ./build && webpack --config ./webpack/webpack.production.config.babel.js --progress --profile --colors",
+    "postbuild": "react-snap",
+    "build-dev": "rimraf ./build && babel-node webpack-cli --config ./webpack/webpack.config.babel.js --progress --profile --colors",
+    "lint": "eslint app server test webpack",
+    "test": "mocha --exit --require @babel/register ./test/test.js",
     "dev": "nodemon server/server.js --ignore app/ --ignore test/ --exec babel-node",
-    "parse-routes": "node -r @babel/register parseRoutes.js",
-    "predeploy": "npm run build && cp -r public/* dist/ && cp dist/index.html dist/404.html && npm run parse-routes",
-    "deploy": "gh-pages -d dist"
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "dependencies": {
     "@babel/cli": "^7.8.4",
-    "@babel/core": "^7.9.6",
     "@babel/node": "^7.8.7",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/plugin-proposal-json-strings": "^7.8.3",
@@ -25,7 +21,6 @@
     "@babel/plugin-transform-async-to-generator": "^7.8.3",
     "@babel/plugin-transform-react-inline-elements": "^7.9.0",
     "@babel/plugin-transform-runtime": "^7.9.6",
-    "@babel/preset-env": "^7.9.6",
     "@babel/preset-react": "^7.9.4",
     "@babel/register": "^7.9.0",
     "@babel/runtime": "^7.9.6",
@@ -34,9 +29,6 @@
     "@fortawesome/fontawesome-free-regular": "^5.0.13",
     "@fortawesome/fontawesome-svg-core": "^1.2.28",
     "@fortawesome/react-fontawesome": "0.1.9",
-    "babel-loader": "^8.1.0",
-    "babel-plugin-add-module-exports": "^1.0.2",
-    "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "body-parser": "^1.19.0",
     "color-hash": "^1.0.3",
     "compression": "^1.7.4",
@@ -71,13 +63,15 @@
     "style-loader": "^1.2.1",
     "url": "^0.11.0",
     "url-loader": "^4.1.0",
-    "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.11",
     "webpack-dev-middleware": "^3.7.2",
     "webpack-hot-middleware": "^2.25.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.9.6",
+    "@babel/preset-env": "^7.9.6",
     "babel-eslint": "^10.1.0",
+    "babel-loader": "^8.1.0",
+    "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "chai": "^4.2.0",
     "eslint": "^7.0.0",
     "eslint-config-airbnb": "^18.1.0",
@@ -87,6 +81,9 @@
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^4.0.0",
     "mocha": "^7.1.2",
-    "puppeteer": "^3.0.4"
+    "puppeteer": "^3.0.4",
+    "react-snap": "^1.23.0",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
   }
 }
