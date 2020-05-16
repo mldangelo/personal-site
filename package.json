@@ -1,6 +1,7 @@
 {
   "name": "personal-site",
-  "version": "2.0.0",
+  "version": "2.1.0",
+  "homepage": "https://mldangelo.github.io/personal-site/",
   "scripts": {
     "build": "rimraf ./build && webpack --config ./webpack/webpack.production.config.babel.js --progress --profile --colors",
     "postbuild": "react-snap",
@@ -8,7 +9,7 @@
     "lint": "eslint app server test webpack",
     "test": "mocha --exit --require @babel/register ./test/test.js",
     "dev": "nodemon server/server.js --ignore app/ --ignore test/ --exec babel-node",
-    "predeploy": "npm run build",
+    "predeploy": "npm run build && cp -r public/* build/",
     "deploy": "gh-pages -d build"
   },
   "dependencies": {

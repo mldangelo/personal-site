@@ -60,8 +60,7 @@ You may wish to fork this repository or remove my remote origin and add your own
     ![github hosting instructions](docs/gh-pages.png)
 
 8. Configure your domains DNS record. See [here]( https://help.github.com/articles/using-a-custom-domain-with-github-pages/) for more information.
-9. If using a custom url, modify the [CNAME](/public/CNAME) file to point to your URL.
-10. If you plan to deploy to a /[path]
+9. Change `homepage` in `package.json` to reflect where you plan to host the site. This is important for react-snap. If using a custom url, modify the [CNAME](/public/CNAME) file to point to your URL. If you plan to deploy to a /[path]
 (e.g. [https://mldangelo.github.io/personal-site/](https://mldangelo.github.io/personal-site/)), you should modify `BASE_PATH` in your `.env` and `sample.env` files and restart the express server. Note that you will now have to navigate to `localhost:[port]/[BASE_PATH]` when developing.
 
 ## Deploying to Github Pages
