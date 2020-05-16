@@ -71,7 +71,7 @@ You may wish to fork this repository or remove my remote origin and add your own
 
 That's it.
 
-Please feel free to reach out to me by filing an issue or at [help@mldangelo.com] for help configuring your project.
+Please feel free to reach out to me by filing an issue or at [help@mldangelo.com](mailto:help@mldangelo.com) for help configuring your project.
 
 ## Contributors
 
