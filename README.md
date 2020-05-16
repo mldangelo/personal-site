@@ -12,7 +12,7 @@ Many people have contacted me about adapting this website. I have tried to make 
 
 Tested with:
 
-* node >= v8, v9, v10, v11
+* node >= v8, v9, v10, v11, v12
 * Recommend [nvm](https://github.com/creationix/nvm#installation) for managing node versions
 
 ## Set up
@@ -60,8 +60,7 @@ You may wish to fork this repository or remove my remote origin and add your own
     ![github hosting instructions](docs/gh-pages.png)
 
 8. Configure your domains DNS record. See [here]( https://help.github.com/articles/using-a-custom-domain-with-github-pages/) for more information.
-9. If using a custom url, modify the `CNAME` file to point to your URL. Modify the npm deploy script by appending `&& cp CNAME dist/` to the end of the `predeploy` line in the scripts section of package.json.
-If you plan to deploy to a /[path]
+9. Change `homepage` in `package.json` to reflect where you plan to host the site. This is important for react-snap. If using a custom url, modify the [CNAME](/public/CNAME) file to point to your URL. If you plan to deploy to a /[path]
 (e.g. [https://mldangelo.github.io/personal-site/](https://mldangelo.github.io/personal-site/)), you should modify `BASE_PATH` in your `.env` and `sample.env` files and restart the express server. Note that you will now have to navigate to `localhost:[port]/[BASE_PATH]` when developing.
 
 ## Deploying to Github Pages
@@ -71,12 +70,13 @@ If you plan to deploy to a /[path]
 
 That's it.
 
-Please feel free to reach out to me by filing an issue or at help@mldangelo.com for help configuring your project.
+Please feel free to reach out to me by filing an issue or at [help@mldangelo.com](mailto:help@mldangelo.com) for help configuring your project.
 
 ## Contributors
 
 * [@mldangelo](https://github.com/mldangelo)
 * [@typpo](https://github.com/typpo)
+* [@notrueblood](https://github.com/notrueblood)
 
 ## Acknowledgements
 

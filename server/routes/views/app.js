@@ -8,7 +8,7 @@ import express from 'express';
 import webpack from 'webpack';
 import webpackMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
-import config from '../../../webpack/webpack.config';
+import config from '../../../webpack/webpack.config.babel';
 
 const env = process.env.NODE_ENV || 'development';
 
@@ -37,13 +37,13 @@ const routes = (app) => {
     app.use(webpackHotMiddleware(compiler));
 
     app.get('/*', (req, res) => {
-      const content = middleware.fileSystem.readFileSync(path.join(__dirname, '../../../dist/index.html'));
+      const content = middleware.fileSystem.readFileSync(path.join(__dirname, '../../../build/index.html'));
       res.set('Content-Type', 'text/html');
       res.send(content);
     });
   } else {
-    app.use('/dist', express.static(path.join(__dirname, '../../../dist')));
-    const content = fs.readFileSync(path.join(__dirname, '../../../dist/index.html'), 'utf8');
+    app.use('/dist', express.static(path.join(__dirname, '../../../build')));
+    const content = fs.readFileSync(path.join(__dirname, '../../../build/index.html'), 'utf8');
 
     app.get('/*', (req, res) => {
       res.set('Content-Type', 'text/html');

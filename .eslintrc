@@ -12,7 +12,7 @@
     "NODE_ENV": "readable"
   },
   "rules": {
-    "no-console": ["error", { allow: ["warn", "error", "info"] }],
+    "no-console": ["error", { "allow": ["warn", "error", "info"] }],
     "no-underscore-dangle": 0,
     "react/destructuring-assignment": 0,
     "react/jsx-one-expression-per-line": 0,

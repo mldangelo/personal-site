@@ -37,6 +37,7 @@ node_modules
 public/dist/
 dist/
 tmp/
+build/
 
 # OSX
 .DS_Store

@@ -9,9 +9,7 @@ const handleProps = ({ categories, skills }) => ({
     ...obj,
     [key]: false,
   }), { All: true }),
-  skills: skills.map((skill) => Object.assign(skill, {
-    category: skill.category.sort(),
-  })),
+  skills,
 });
 
 class Skills extends Component {
@@ -20,20 +18,16 @@ class Skills extends Component {
     this.state = handleProps({ categories: props.categories, skills: props.skills });
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState(handleProps({ categories: nextProps.categories, skills: nextProps.skills }));
-  }
-
   getRows() {
-    // search for true active categorys
+    // search for true active categories
     const actCat = Object.keys(this.state.buttons).reduce((cat, key) => (
       this.state.buttons[key] ? key : cat
     ), 'All');
 
     return this.state.skills.sort((a, b) => {
       let ret = 0;
-      if (a.compentency > b.compentency) ret = -1;
-      else if (a.compentency < b.compentency) ret = 1;
+      if (a.competency > b.competency) ret = -1;
+      else if (a.competency < b.competency) ret = 1;
       else if (a.category[0] > b.category[0]) ret = -1;
       else if (a.category[0] < b.category[0]) ret = 1;
       else if (a.title > b.title) ret = 1;
@@ -79,7 +73,9 @@ class Skills extends Component {
         <div className="link-to" id="skills" />
         <div className="title">
           <h3>Skills</h3>
-          <p>Note: I think these sections are silly, but everyone seems to have one.</p>
+          <p>Note: I think these sections are silly, but everyone seems to have one.
+            Here is a *mostly* honest overview of my skills.
+          </p>
         </div>
         <div className="skill-button-container">
           {this.getButtons()}
@@ -95,7 +91,7 @@ class Skills extends Component {
 Skills.propTypes = {
   skills: PropTypes.arrayOf(PropTypes.shape({
     title: PropTypes.string,
-    compentency: PropTypes.number,
+    competency: PropTypes.number,
     category: PropTypes.arrayOf(PropTypes.string),
   })),
   categories: PropTypes.arrayOf(PropTypes.shape({

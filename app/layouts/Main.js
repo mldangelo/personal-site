@@ -1,42 +1,26 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import Helmet from 'react-helmet';
+import { Helmet } from 'react-helmet';
 
-import ReactGA from 'react-ga';
-
+import Analytics from '../components/Template/Analytics';
 import Header from '../components/Template/Header';
 import Nav from '../components/Template/Nav';
+import ScrollToTop from '../components/Template/ScrollToTop';
 
-if (NODE_ENV === 'production') {
-  ReactGA.initialize(GA_ID);
-}
-
-class Main extends Component {
-  componentWillMount() {
-    window.scrollTo(0, 0);
-  }
-
-  componentDidMount() {
-    if (NODE_ENV === 'production') {
-      ReactGA.set({
-        page: window.location.pathname,
-      });
-      ReactGA.pageview(window.location.pathname);
-    }
-  }
-
-  render() {
-    return (
-      <div id="wrapper">
-        <Helmet titleTemplate="%s | Michael D'Angelo" defaultTitle="Michael D'Angelo" />
-        <Header />
-        <div id="main">
-          {this.props.children}
-        </div>
-        {!this.props.fullPage && <Nav />}
-      </div>);
-  }
-}
+const Main = (props) => (
+  <>
+    <Analytics />
+    <ScrollToTop />
+    <Helmet titleTemplate="%s | Michael D'Angelo" defaultTitle="Michael D'Angelo" />
+    <div id="wrapper">
+      <Header />
+      <div id="main">
+        {props.children}
+      </div>
+      {props.fullPage ? null : <Nav />}
+    </div>
+  </>
+);
 
 Main.propTypes = {
   children: PropTypes.oneOfType([

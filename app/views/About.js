@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Helmet from 'react-helmet';
+import { Helmet } from 'react-helmet';
 import ReactMarkdown from 'react-markdown';
 
 import Main from '../layouts/Main';
