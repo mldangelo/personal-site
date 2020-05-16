@@ -1,7 +1,6 @@
-// TODO: How should these be sorted?
-import ColorHash from 'color-hash';
+// TODO: Add Athletic Skills, Office Skills,
+// Data Engineering, Data Science, ML Engineering, ... ?
 
-// TODO: Add Athletic Skills, Office Skills (?)
 const skills = [{
   title: 'Javascript',
   competency: 4,
@@ -194,16 +193,27 @@ const skills = [{
 },
 ].map((skill) => ({ ...skill, category: skill.category.sort() }));
 
-const colorHash = new ColorHash({ lightness: [0.5, 0.3, 0.5], saturation: [0.3, 0.3, 0.5] });
-
+// this is a list of colors that I like. The length should be == to the
+// number of categories. Re-arrange this list until you find a pattern you like.
+const colors = [
+  '#6968b3',
+  '#37b1f5',
+  '#40494e',
+  '#515dd4',
+  '#e47272',
+  '#cc7b94',
+  '#3896e2',
+  '#c3423f',
+  '#d75858',
+  '#747fff',
+  '#64cb7b',
+];
 
 const categories = [...new Set(
   skills.reduce((acc, { category }) => acc.concat(category), []),
-)].sort().map((category) => ({
+)].sort().map((category, index) => ({
   name: category,
-  color: colorHash.hex(category),
+  color: colors[index],
 }));
 
-
 export { categories, skills };
-// Skills Data Engineering, Data Science, ML Engineering, ...
