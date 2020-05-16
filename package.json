@@ -63,6 +63,7 @@
     "style-loader": "^1.2.1",
     "url": "^0.11.0",
     "url-loader": "^4.1.0",
+    "webpack": "^4.43.0",
     "webpack-dev-middleware": "^3.7.2",
     "webpack-hot-middleware": "^2.25.0"
   },
@@ -83,7 +84,6 @@
     "mocha": "^7.1.2",
     "puppeteer": "^3.0.4",
     "react-snap": "^1.23.0",
-    "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11"
   }
 }
