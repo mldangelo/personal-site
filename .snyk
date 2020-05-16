@@ -1,0 +1,32 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.14.1
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  SNYK-JS-LODASH-567746:
+    - '@babel/node > lodash':
+        patched: '2020-05-16T23:20:38.187Z'
+    - html-webpack-plugin > lodash:
+        patched: '2020-05-16T23:20:38.187Z'
+    - node-sass > lodash:
+        patched: '2020-05-16T23:20:38.187Z'
+    - stats-webpack-plugin > lodash:
+        patched: '2020-05-16T23:20:38.187Z'
+    - '@babel/node > @babel/register > lodash':
+        patched: '2020-05-16T23:20:38.187Z'
+    - gh-pages > async > lodash:
+        patched: '2020-05-16T23:20:38.187Z'
+    - node-sass > sass-graph > lodash:
+        patched: '2020-05-16T23:20:38.187Z'
+    - '@babel/plugin-transform-react-inline-elements > @babel/helper-builder-react-jsx > @babel/types > lodash':
+        patched: '2020-05-16T23:20:38.187Z'
+    - node-sass > gaze > globule > lodash:
+        patched: '2020-05-16T23:20:38.187Z'
+    - '@babel/preset-react > @babel/plugin-transform-react-jsx-development > @babel/helper-builder-react-jsx-experimental > @babel/types > lodash':
+        patched: '2020-05-16T23:20:38.187Z'
+    - '@babel/plugin-transform-async-to-generator > @babel/helper-remap-async-to-generator > @babel/helper-wrap-function > @babel/traverse > @babel/generator > lodash':
+        patched: '2020-05-16T23:20:38.187Z'
+    - '@babel/plugin-transform-async-to-generator > @babel/helper-remap-async-to-generator > @babel/helper-wrap-function > @babel/traverse > @babel/helper-split-export-declaration > @babel/types > lodash':
+        patched: '2020-05-16T23:20:38.187Z'
+    - '@babel/plugin-transform-async-to-generator > @babel/helper-remap-async-to-generator > @babel/helper-wrap-function > @babel/traverse > @babel/helper-function-name > @babel/template > @babel/types > lodash':
+        patched: '2020-05-16T23:20:38.187Z'
