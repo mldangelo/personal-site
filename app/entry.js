@@ -4,9 +4,6 @@ import {
   BrowserRouter as Router, Switch, Route,
 } from 'react-router-dom';
 
-import ScrollToTop from './components/Template/ScrollToTop';
-import Analytics from './components/Template/Analytics';
-
 // Featured
 import About from './views/About';
 import Contact from './views/Contact';
@@ -21,8 +18,6 @@ import './static/css/main.scss';
 
 ReactDOM.render(
   <Router basename={BASE_PATH}>
-    <ScrollToTop />
-    <Analytics />
     <Switch>
       <Route exact path="/" component={Index} />
       <Route path="/about" component={About} />

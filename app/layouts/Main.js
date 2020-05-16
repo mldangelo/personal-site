@@ -2,18 +2,24 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 
+import Analytics from '../components/Template/Analytics';
 import Header from '../components/Template/Header';
 import Nav from '../components/Template/Nav';
+import ScrollToTop from '../components/Template/ScrollToTop';
 
 const Main = (props) => (
-  <div id="wrapper">
+  <>
+    <Analytics />
+    <ScrollToTop />
     <Helmet titleTemplate="%s | Michael D'Angelo" defaultTitle="Michael D'Angelo" />
-    <Header />
-    <div id="main">
-      {props.children}
+    <div id="wrapper">
+      <Header />
+      <div id="main">
+        {props.children}
+      </div>
+      {props.fullPage ? null : <Nav />}
     </div>
-    {props.fullPage ? null : <Nav />}
-  </div>
+  </>
 );
 
 Main.propTypes = {
