@@ -198,6 +198,10 @@
 		z-index: 3;
 	}
 
+	#header .main .menu {
+		cursor: pointer;
+	}
+
 	#header .main .close-menu {
 		border: 0;
 		z-index: 10000;
