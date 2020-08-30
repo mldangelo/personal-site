@@ -26,9 +26,6 @@ const Certifications = ({ data }) => (
 
 Certifications.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape({
-    link: PropTypes.string.isRequired,
-    platform: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
     date: PropTypes.string.isRequired,
     content: PropTypes.string.isRequired,
   })),
