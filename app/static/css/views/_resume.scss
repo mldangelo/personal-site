@@ -47,6 +47,29 @@
 		}
 	}
 
+	.certifications {
+		.title {
+			text-align: center;
+		}
+		.certification {
+			margin: 1em;
+			p{
+				margin: 0;
+			}
+		}
+	}
+
+	.certification-badges {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: space-around;
+	}
+
+	.certification {
+		text-align: center;
+	}
+
 	.courses {
 		padding-top: 1.6em;
 		.title {
