@@ -20,11 +20,19 @@ import { skills, categories } from '../data/resume/skills';
 const sections = [
   'Education',
   'Experience',
-  'Certifications',
   'Skills',
   'Courses',
   'References',
 ];
+
+const certificationsPresent = typeof certifications !== 'undefined'
+  && certifications != null
+  && certifications.length != null
+  && certifications.length > 0;
+
+if (certificationsPresent) {
+  sections.splice(2, 0, 'Certifications');
+}
 
 const Resume = () => (
   <Main>
@@ -44,7 +52,7 @@ const Resume = () => (
       </header>
       <Education data={degrees} />
       <Experience data={positions} />
-      <Certifications data={certifications} />
+      {certificationsPresent && <Certifications data={certifications} />}
       <Skills skills={skills} categories={categories} />
       <Courses data={courses} />
       <References />

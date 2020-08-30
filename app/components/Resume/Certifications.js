@@ -6,7 +6,7 @@ import Certification from './Certifications/Certification';
 
 const Certifications = ({ data }) => (
   <div className="certifications">
-    <div className="link-to" id="experience" />
+    <div className="link-to" id="certifications" />
     <div className="title">
       <h3>Certifications</h3>
     </div>
