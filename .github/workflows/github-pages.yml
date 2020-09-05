@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: GitHub Pages
 
 on:
   push:
@@ -10,13 +10,17 @@ jobs:
   depoy:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js 14.x
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        persist-credentials: false
+    - name: Use Node 14
       uses: actions/setup-node@v1
       with:
         node-version: 14.x
-    - run: npm ci
-    - name: Deploy to GitHub Pages
+    - name: Install
+      run: npm ci
+    - name: Build and Deploy
       env:
         PORT: 3000
         NODE_ENV: production
