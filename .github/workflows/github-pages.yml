@@ -7,10 +7,8 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
-
+  depoy:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js 14.x
@@ -19,7 +17,10 @@ jobs:
         node-version: 14.x
     - run: npm ci
     - name: Deploy to GitHub Pages
-      run: npm run deploy
+      run: | 
+        git config user.name github-actions
+        git config user.email github-actions@mldangelo.com
+        npm run deploy
       env:
         PORT: 3000
         NODE_ENV: production
