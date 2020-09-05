@@ -31,5 +31,4 @@ Education.defaultProps = {
   data: [],
 };
 
-
 export default Education;

@@ -48,7 +48,7 @@ You can ask me in person for other stories that I'm afraid to share with the int
 - Summer
 - [Books](https://www.goodreads.com/mdangelo)
 - Colored pencils (Faber-Castell Polychromos)
-- Podcasts ([Planet Money](https://www.npr.org/sections/money/), [The Indicator](https://www.npr.org/podcasts/510325/the-indicator-from-planet-money), [99% Invisible](https://99percentinvisible.org/episodes/), [The Economist](http://radio.economist.com/), [Radiolab](https://www.wnycstudios.org/shows/radiolab), [Hidden Brain](https://www.npr.org/series/423302056/hidden-brain), [Inquiring Minds](https://inquiring.show), and others)
+- Podcasts ([The Daily](https://www.nytimes.com/column/the-daily), [Planet Money](https://www.npr.org/sections/money/), [The Indicator](https://www.npr.org/podcasts/510325/the-indicator-from-planet-money), [99% Invisible](https://99percentinvisible.org/episodes/), [The Economist](http://radio.economist.com/), [Radiolab](https://www.wnycstudios.org/shows/radiolab), [Hidden Brain](https://www.npr.org/series/423302056/hidden-brain), [Inquiring Minds](https://inquiring.show), and others)
 - [Good design](/)
 - [Photography](https://instagram.com/dangelosaurus)
 
@@ -65,7 +65,9 @@ Palo Alto, Mountain View, San Francisco, Seattle, and New York.
 
 - In 2018, I visited: Canada, France, Italy, Israel, and the U.K.
 
-- In 2019, I visited: Canada, England, France, and Switzerland. I plan to visit:  Norway.
+- In 2019, I visited: Canada, England, France, and Switzerland.
+
+- In 2020, there was a pandemic and I traveled nowhere.
 
 - I am an Oregon Trail II enthusiast.
 
@@ -83,4 +85,4 @@ Palo Alto, Mountain View, San Francisco, Seattle, and New York.
 - always finding inspiration.
 - enabling a brighter future.
 - doing better.
-- no one checking my commit history for early drafts of this file.
+- no one checking the commit history for earlier drafts of this file.

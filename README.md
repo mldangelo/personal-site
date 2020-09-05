@@ -1,8 +1,10 @@
-# [mldangelo.com](http://mldangelo.com) and simplified [mldangelo.github.io/personal-site](https://mldangelo.github.io/personal-site/)
+# Personal Website
+
+## [mldangelo.com](http://mldangelo.com) and serverless [mldangelo.github.io/personal-site](https://mldangelo.github.io/personal-site/)
 
 My personal website. Easily modifiable, and built using modern javascript with Node.js, React, Express, React-Router, Hot Module Reloading, Webpack and many other technologies.
 
-The master branch of this repository contains a simplified version of my website intended for serverless hosting on github pages. To view the source for the version hosted at [mldangelo.com](http://mldangelo.com), checkout the [server](https://github.com/mldangelo/personal-site/tree/server) branch.
+The master branch of this repository contains a simplified version of my website intended for serverless hosting on github pages. To view the source for the version hosted at [mldangelo.com](https://mldangelo.com), checkout the [server](https://github.com/mldangelo/personal-site/tree/server) branch.
 
 ## A note on adapting this repository to your own personal website
 
@@ -12,22 +14,20 @@ Many people have contacted me about adapting this website. I have tried to make 
 
 Tested with:
 
-* node >= v8, v9, v10, v11, v12
-* Recommend [nvm](https://github.com/creationix/nvm#installation) for managing node versions
+* node >= v12, v14. [nvm](https://github.com/nvm-sh/nvm#installing-and-updating) recommended for managing node versions.
 
 ## Set up
 
-You may wish to fork this repository or remove my remote origin and add your own. Go [here](https://help.github.com/articles/changing-a-remote-s-url/) for more information on changing remotes.  
+You may wish to fork this repository or remove my remote origin and add your own. Go [here](https://help.github.com/articles/changing-a-remote-s-url/) for more information on how to change remotes.
 
 1. To download the repository and install dependencies, run the following commands:
 
     ```bash
     git clone git://github.com/mldangelo/personal-site.git
     cd personal-site
+    nvm install
     npm install
     ```
-
-    If you do not have `yarn` installed, you may run `npm install` instead.
 
 2. Next, you should create a `.env` file. To do this, run:
 
