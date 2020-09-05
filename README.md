@@ -2,7 +2,7 @@
 
 My personal website. Easily modifiable, and built using modern javascript with Node.js, React, Express, React-Router, Hot Module Reloading, Webpack and many other technologies.
 
-The master branch of this repository contains a simplified version of my website intended for serverless hosting on github pages. To view the source for the version hosted at [mldangelo.com](http://mldangelo.com), checkout the [server](https://github.com/mldangelo/personal-site/tree/server) branch.
+The master branch of this repository contains a simplified version of my website intended for serverless hosting on github pages. To view the source for the version hosted at [mldangelo.com](https://mldangelo.com), checkout the [server](https://github.com/mldangelo/personal-site/tree/server) branch.
 
 ## A note on adapting this repository to your own personal website
 
@@ -12,8 +12,8 @@ Many people have contacted me about adapting this website. I have tried to make 
 
 Tested with:
 
-* node >= v8, v9, v10, v11, v12
-* Recommend [nvm](https://github.com/creationix/nvm#installation) for managing node versions
+* node >= v12, v14
+* Recommend [nvm](https://github.com/creationix/nvm#installation) for managing node versions.
 
 ## Set up
 
