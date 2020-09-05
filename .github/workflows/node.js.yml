@@ -32,7 +32,7 @@ jobs:
       env:
         PORT: 3000
         NODE_ENV: development
-        PUBLIC_URL: .
+        BASE_PATH: /personal-site
     - name: Test
       run: npm test
       env:
