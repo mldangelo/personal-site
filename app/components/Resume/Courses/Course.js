@@ -24,5 +24,4 @@ Course.defaultProps = {
   last: false,
 };
 
-
 export default Course;

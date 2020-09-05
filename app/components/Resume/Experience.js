@@ -32,5 +32,4 @@ Experience.defaultProps = {
   data: [],
 };
 
-
 export default Experience;
