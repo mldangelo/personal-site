@@ -7,19 +7,21 @@ on:
     branches: [ master ]
 
 jobs:
-  deploy:
+  build:
+
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-          check-latest: true
-      - run: npm ci
-      - name: Deploy to GitHub Pages
-        run: npm run deploy
-        env:
-          PORT: 3000
-          NODE_ENV: production
-          BASE_PATH: /personal-site
-          GA_ID: UA-68649021-1
+    - uses: actions/checkout@v2
+    - name: Use Node.js 14.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: 14.x
+    - run: npm ci
+    - name: Deploy to GitHub Pages
+      run: npm run deploy
+      env:
+        PORT: 3000
+        NODE_ENV: production
+        BASE_PATH: /personal-site
+        GA_ID: UA-68649021-1
