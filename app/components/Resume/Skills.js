@@ -105,5 +105,4 @@ Skills.defaultProps = {
   categories: [],
 };
 
-
 export default Skills;
