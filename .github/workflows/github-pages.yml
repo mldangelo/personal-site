@@ -23,6 +23,6 @@ jobs:
         BASE_PATH: /personal-site
         GA_ID: UA-68649021-1
       run: | 
-          git config user.name github-actions
-          git config user.email github-actions@github.com
+          git config user.name mldangelo
+          git config user.email michael.l.dangelo@gmail.com
           npm run deploy
