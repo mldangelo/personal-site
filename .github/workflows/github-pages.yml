@@ -3,9 +3,6 @@ name: GitHub Pages
 on:
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
-
 jobs:
   depoy:
     runs-on: ubuntu-latest
