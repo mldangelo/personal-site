@@ -27,6 +27,11 @@ class MyDocument extends Document {
               />
             </>
           )}
+          <link
+            href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Raleway:400,800,900"
+            rel="stylesheet"
+            async
+          />
         </Head>
         <body>
           <div id="wrapper">
