@@ -1,19 +1,20 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
-
-import Main from '../layouts/Main';
+import Link from 'next/link';
+import { NextSeo } from 'next-seo';
 
 import Cell from '../components/Projects/Cell';
 import data from '../data/projects';
 
 const Projects = () => (
-  <Main>
-    <Helmet title="Projects" />
+  <>
+    <NextSeo
+      title="Projects | Michael D'Angelo"
+      description="Learn about all of Michael D'Angelo's old crappy projects."
+    />
     <article className="post" id="projects">
       <header>
         <div className="title">
-          <h2><Link to="/projects">Projects</Link></h2>
+          <h2><Link href="/projects">Projects</Link></h2>
           <p>A selection of projects that I&apos;m not too ashamed of</p>
         </div>
       </header>
@@ -24,7 +25,7 @@ const Projects = () => (
         />
       ))}
     </article>
-  </Main>
+  </>
 );
 
 export default Projects;

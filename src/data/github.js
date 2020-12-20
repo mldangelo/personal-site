@@ -1,4 +1,4 @@
-import dayjs from 'dayjs';
+import moment from 'moment';
 
 /* Keys returned by the github api. The other keys in the array below
  * are mostly jokes. These are the keys the github api query searches for.
@@ -45,7 +45,7 @@ const data = [
   }, {
     label: 'Last updated at',
     key: 'pushed_at',
-    value: dayjs().format('MMMM D, YYYY'),
+    value: moment().format('MMMM D, YYYY'),
     link: 'https://github.com/mldangelo/personal-site/commits',
   },
   { /* find . | grep ".js" | grep -vE ".min.js|node_modules|.git|.json" |
