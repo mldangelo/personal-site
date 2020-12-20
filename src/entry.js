@@ -5,13 +5,13 @@ import {
 } from 'react-router-dom';
 
 // Featured
-import About from './views/About';
-import Contact from './views/Contact';
-import Index from './views/Index';
-import NotFound from './views/NotFound';
-import Projects from './views/Projects';
-import Resume from './views/Resume';
-import Stats from './views/Stats';
+import About from './pages/about';
+import Contact from './pages/contact';
+import Index from './pages';
+import NotFound from './pages/404';
+import Projects from './pages/projects';
+import Resume from './pages/resume';
+import Stats from './pages/stats';
 
 // All of our CSS
 import './static/css/main.scss';
