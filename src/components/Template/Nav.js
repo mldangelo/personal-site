@@ -1,15 +1,18 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
-import { FontAwesomeIcon } from '../../pages/node_modules/@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import data from '../../data/contact';
 
-const Nav = () => (
+const Nav = () => {
+  const router = useRouter();
+  return (
   <section id="sidebar">
     <section id="intro">
-      <Link to="/" className="logo">
-        <img src={`${BASE_PATH}/images/me_icon.jpg`} alt="" />
+      <Link href="/" className="logo">
+        <img src={`/images/me_icon.jpg`} alt="" />
       </Link>
       <header>
         <h2>Michael D&apos;Angelo</h2>
@@ -26,7 +29,7 @@ const Nav = () => (
       </p>
       <ul className="actions">
         <li>
-          {window.location.pathname !== `${BASE_PATH}/resume` ? <Link to="/resume" className="button">Learn More</Link> : <Link to="/about" className="button">About Me</Link>}
+          {router?.asPath !== `/resume` ? <Link href="/resume" className="button">Learn More</Link> : <Link href="/about" className="button">About Me</Link>}
         </li>
       </ul>
     </section>
@@ -41,9 +44,9 @@ const Nav = () => (
           </li>
         ))}
       </ul>
-      <p className="copyright">&copy; Michael D&apos;Angelo <Link to="/">mldangelo.com</Link>.</p>
+      <p className="copyright">&copy; Michael D&apos;Angelo <Link href="/">mldangelo.com</Link>.</p>
     </section>
   </section>
 );
-
+};
 export default Nav;

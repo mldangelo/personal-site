@@ -1,5 +1,7 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 // Adapted from https://github.com/vercel/next.js/blob/canary/examples/with-google-analytics/pages/_document.js
+import Header from '../components/Template/Header';
+import Nav from '../components/Template/Nav';
 
 const { GA_ID } = process.env;
 // import './static/css/main.scss';
@@ -28,7 +30,13 @@ class MyDocument extends Document {
           )}
         </Head>
         <body>
-          <Main />
+          <div id="wrapper">
+            <Header/>
+            <div id="main">
+                <Main />
+            </div>
+            <Nav />
+            </div>
           <NextScript />
         </body>
       </Html>
