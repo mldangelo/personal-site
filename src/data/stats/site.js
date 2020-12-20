@@ -1,18 +1,9 @@
 import moment from 'moment';
 
-/* Keys returned by the github api. The other keys in the array below
- * are mostly jokes. These are the keys the github api query searches for.
+/* Keys match keys returned by the github api. Fields without keys are
+ * mostly jokes. To see everything returned by the github api, run:
+ curl https://api.github.com/repos/mldangelo/personal-site
  */
-export const githubKeys = [
-  'stargazers_count',
-  'watchers_count',
-  'forks',
-  'open_issues_count',
-  'subscribers_count',
-  'pushed_at',
-];
-
-// TODO To be provided by an API
 const data = [
   {
     label: 'Stars this repository has on github',
@@ -38,7 +29,7 @@ const data = [
   },
   {
     label: 'Number of linter warnings',
-    // TODO ammend this with a pre-commit hook
+    // TODO amend this with a pre-commit hook
     // `npm run lint | grep problems | tail -1 | awk '{print $2}'`
     value: '0',
   },

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import Table from './Table';
-import personalData from '../../data/stats';
+import personalData from '../../data/stats/personal';
 
 const PersonalStats = () => {
   const [data, setData] = useState(personalData);
