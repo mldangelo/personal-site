@@ -1,10 +1,13 @@
 import React from 'react';
 import Link from 'next/link';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import faBars from '@fortawesome/free-solid-svg-icons/faBars';
 
-// import Hamburger from './Hamburger';
+import Hamburger from './Hamburger';
 import routes from '../../data/routes';
 
 const Header = () => (
+  <>
   <header id="header">
     <h1 className="index-link">
       {routes
@@ -26,7 +29,14 @@ const Header = () => (
           ))}
       </ul>
     </nav>
+    <nav className="main">
+      <ul>
+        <li className="menu">&#9776;</li>
+      </ul>
+    </nav>
   </header>
+  <Hamburger/>
+  </>
 );
 
 export default Header;
