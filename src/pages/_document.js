@@ -4,7 +4,6 @@ import Header from '../components/Template/Header';
 import Nav from '../components/Template/Nav';
 
 const { GA_ID } = process.env;
-// import './static/css/main.scss';
 
 /* eslint-disable react/no-danger */
 class MyDocument extends Document {
