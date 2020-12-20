@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
+import Link from 'next/link';
+import { NextSeo } from 'next-seo';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
-import Main from '../layouts/Main';
 
 import data from '../data/contact';
 
@@ -78,12 +76,15 @@ const Contact = () => {
   }, isActive ? delay : null);
 
   return (
-    <Main>
-      <Helmet title="Contact" />
+    <>
+      <NextSeo
+        title="Contact | Michael D'Angelo"
+        description="Learn about all of the ways to contact Michael D'Angelo"
+      />
       <article className="post" id="contact">
         <header>
           <div className="title">
-            <h2><Link to="/contact">Contact</Link></h2>
+            <h2><Link href="/contact">Contact</Link></h2>
           </div>
         </header>
         <div className="email-at">
@@ -110,7 +111,7 @@ const Contact = () => {
           ))}
         </ul>
       </article>
-    </Main>
+    </>
   );
 };
 
