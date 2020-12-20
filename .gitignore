@@ -1,3 +1,7 @@
+# next.js
+/.next/
+out
+
 # npm related 
 yarn.lock
 
