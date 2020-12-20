@@ -19,6 +19,11 @@
     "deploy": "gh-pages -t true -d out && rm -rf out/"
   },
   "dependencies": {
+    "@fortawesome/fontawesome": "^1.1.8",
+    "@fortawesome/fontawesome-free-brands": "^5.0.13",
+    "@fortawesome/fontawesome-free-regular": "^5.0.13",
+    "@fortawesome/fontawesome-svg-core": "^1.2.32",
+    "@fortawesome/react-fontawesome": "0.1.13",
     "gh-pages": "^3.1.0",
     "next": "latest",
     "next-seo": "^4.17.0",

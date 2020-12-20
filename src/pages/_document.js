@@ -1,5 +1,4 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
-import Footer from '../components/footer';
 // Adapted from https://github.com/vercel/next.js/blob/canary/examples/with-google-analytics/pages/_document.js
 
 const { GA_ID } = process.env;
@@ -30,7 +29,6 @@ class MyDocument extends Document {
         <body>
           <Main />
           <NextScript />
-          <Footer />
         </body>
       </Html>
     );
