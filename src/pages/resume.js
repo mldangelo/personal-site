@@ -1,8 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
-
-import Main from '../layouts/Main';
+import Link from 'next/link';
+import { NextSeo } from 'next-seo';
 
 import Education from '../components/Resume/Education';
 import Experience from '../components/Resume/Experience';
@@ -24,12 +22,15 @@ const sections = [
 ];
 
 const Resume = () => (
-  <Main>
-    <Helmet title="Resume" />
+  <>
+    <NextSeo
+      title="Resume | Michael D'Angelo"
+      description="Learn about all of the interesting things Michael D'Angelo has done"
+    />
     <article className="post" id="resume">
       <header>
         <div className="title">
-          <h2><Link to="resume">Resume</Link></h2>
+          <h2><Link href="resume">Resume</Link></h2>
           <div className="link-container">
             {sections.map((sec) => (
               <h4 key={sec}>
@@ -46,7 +47,7 @@ const Resume = () => (
       <References />
 
     </article>
-  </Main>
+  </>
 );
 
 export default Resume;
