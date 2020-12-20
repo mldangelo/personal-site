@@ -20,7 +20,9 @@ const PersonalStats = () => {
 
   useEffect(() => {
     const timer = setInterval(() => tick(), 25);
-    return () => { clearInterval(timer); };
+    return () => {
+      clearInterval(timer);
+    };
   }, []);
 
   return (

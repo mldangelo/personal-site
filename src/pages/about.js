@@ -1,4 +1,3 @@
-
 import fs from 'fs';
 import path from 'path';
 
@@ -9,7 +8,7 @@ import ReactMarkdown from 'react-markdown';
 // Make all hrefs react router links
 const LinkRenderer = ({ ...children }) => <Link {...children} />;
 
-const About = ({count, markdown}) => (
+const About = ({ count, markdown }) => (
   <>
     <NextSeo
       title="About | Michael D'Angelo"
@@ -18,7 +17,9 @@ const About = ({count, markdown}) => (
     <article className="post" id="about">
       <header>
         <div className="title">
-          <h2><Link href="/about">About Me</Link></h2>
+          <h2>
+            <Link href="/about">About Me</Link>
+          </h2>
           <p>(in about {count} words)</p>
         </div>
       </header>
@@ -35,12 +36,12 @@ const About = ({count, markdown}) => (
 
 // This also gets called at build time
 export async function getStaticProps() {
-
   const markdown = fs.readFileSync(
-    path.join(process.cwd(), 'src/data/about.md'), 
-    'utf8',
+    path.join(process.cwd(), 'src/data/about.md'),
+    'utf8'
   );
-  const count = markdown.split(/\s+/)
+  const count = markdown
+    .split(/\s+/)
     .map((s) => s.replace(/\W/g, ''))
     .filter((s) => s.length).length;
 
@@ -52,6 +53,5 @@ export async function getStaticProps() {
     revalidate: 1,
   };
 }
-
 
 export default About;

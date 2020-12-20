@@ -8,7 +8,9 @@ const PageNotFound = () => (
       description="Whatever you were looking for isn't here."
     />
     <h1>Page Not Found.</h1>
-    <p>Return to <Link href="/">index</Link>.</p>
+    <p>
+      Return to <Link href="/">index</Link>.
+    </p>
   </div>
 );
 

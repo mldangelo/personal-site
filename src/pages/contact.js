@@ -28,7 +28,7 @@ const messages = [
   'help',
   'admin',
   'or-I-really-like-your-website',
-  'I\'ll-stop-distracting-you-now',
+  "I'll-stop-distracting-you-now",
   'thanks',
 ];
 
@@ -59,21 +59,24 @@ const Contact = () => {
   const [char, updateChar] = useState(messages[idx].length); // points to current char
   const [isActive, setIsActive] = useState(true); // disable when all messages are printed
 
-  useInterval(() => {
-    let newIdx = idx;
-    let newChar = char;
-    if (char - hold >= messages[idx].length) {
-      newIdx += 1;
-      newChar = 0;
-    }
-    if (newIdx === messages.length) {
-      setIsActive(false);
-    } else {
-      updateMessage(messages[newIdx].slice(0, newChar));
-      updateIter(newIdx);
-      updateChar(newChar + 1);
-    }
-  }, isActive ? delay : null);
+  useInterval(
+    () => {
+      let newIdx = idx;
+      let newChar = char;
+      if (char - hold >= messages[idx].length) {
+        newIdx += 1;
+        newChar = 0;
+      }
+      if (newIdx === messages.length) {
+        setIsActive(false);
+      } else {
+        updateMessage(messages[newIdx].slice(0, newChar));
+        updateIter(newIdx);
+        updateChar(newChar + 1);
+      }
+    },
+    isActive ? delay : null
+  );
 
   return (
     <>
@@ -84,7 +87,9 @@ const Contact = () => {
       <article className="post" id="contact">
         <header>
           <div className="title">
-            <h2><Link href="/contact">Contact</Link></h2>
+            <h2>
+              <Link href="/contact">Contact</Link>
+            </h2>
           </div>
         </header>
         <div className="email-at">
@@ -93,9 +98,13 @@ const Contact = () => {
             className="inline-container"
             style={validateText(message) ? {} : { color: 'red' }}
             onMouseEnter={() => setIsActive(false)}
-            onMouseLeave={() => (idx < messages.length) && setIsActive(true)}
+            onMouseLeave={() => idx < messages.length && setIsActive(true)}
           >
-            <a href={validateText(message) ? `mailto:${message}@mldangelo.com` : ''}>
+            <a
+              href={
+                validateText(message) ? `mailto:${message}@mldangelo.com` : ''
+              }
+            >
               <span>{message}</span>
               <span>@mldangelo.com</span>
             </a>

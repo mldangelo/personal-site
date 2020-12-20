@@ -28,6 +28,7 @@
     "moment": "^2.29.1",
     "next": "latest",
     "next-seo": "^4.17.0",
+    "prop-types": "^15.7.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-markdown": "^5.0.3",

@@ -30,12 +30,12 @@ class MyDocument extends Document {
         </Head>
         <body>
           <div id="wrapper">
-            <Header/>
+            <Header />
             <div id="main">
-                <Main />
+              <Main />
             </div>
             <Nav />
-            </div>
+          </div>
           <NextScript />
         </body>
       </Html>
