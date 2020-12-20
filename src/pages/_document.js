@@ -2,6 +2,7 @@ import Document, { Html, Head, Main, NextScript } from 'next/document';
 // Adapted from https://github.com/vercel/next.js/blob/canary/examples/with-google-analytics/pages/_document.js
 
 const { GA_ID } = process.env;
+// import './static/css/main.scss';
 
 /* eslint-disable react/no-danger */
 class MyDocument extends Document {
