@@ -1,4 +1,5 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
+import Hamburger from '../components/Template/Hamburger';
 // Adapted from https://github.com/vercel/next.js/blob/canary/examples/with-google-analytics/pages/_document.js
 import Header from '../components/Template/Header';
 import Nav from '../components/Template/Nav';
@@ -27,11 +28,6 @@ class MyDocument extends Document {
               />
             </>
           )}
-          <link
-            href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Raleway:400,800,900"
-            rel="stylesheet"
-            async
-          />
         </Head>
         <body>
           <div id="wrapper">
@@ -41,6 +37,7 @@ class MyDocument extends Document {
             </div>
             <Nav />
           </div>
+          <Hamburger />
           <NextScript />
         </body>
       </Html>

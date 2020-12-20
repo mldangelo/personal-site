@@ -3,8 +3,7 @@
 @import 'libs/mixins';
 @import 'libs/skel';
 
-// NOTE: This import was moved into index.html template
-// @import url('//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Raleway:400,800,900');
+@import url('//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Raleway:400,800,900');
 
 /*
 	Future Imperfect by HTML5 UP
@@ -45,8 +44,6 @@
 	@import 'components/post';
 	@import 'components/section';
 	@import 'components/table';
-	@import 'components/hamburger';
-
 
 // Layout.
 
@@ -58,9 +55,9 @@
 	@import 'layout/footer';
 	@import 'layout/menu';
 
-	@import 'views/about';
-	@import 'views/contact';
-	@import 'views/notFound';
-	@import 'views/resume';
-	@import 'views/skills';
-	@import 'views/stats';
+	@import 'pages/about';
+	@import 'pages/contact';
+	@import 'pages/notFound';
+	@import 'pages/resume';
+	@import 'pages/skills';
+	@import 'pages/stats';
