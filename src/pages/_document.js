@@ -1,9 +1,9 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import Hamburger from '../components/Template/Hamburger';
-// Adapted from https://github.com/vercel/next.js/blob/canary/examples/with-google-analytics/pages/_document.js
 import Header from '../components/Template/Header';
 import Nav from '../components/Template/Nav';
 
+// Adapted from https://github.com/vercel/next.js/blob/canary/examples/with-google-analytics/pages/_document.js
 const { GA_ID } = process.env;
 
 /* eslint-disable react/no-danger */

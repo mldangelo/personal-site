@@ -9,7 +9,11 @@ const TableRow = ({ label, link, value, format }) => (
 
 TableRow.propTypes = {
   label: PropTypes.string.isRequired,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.element,
+  ]).isRequired,
   link: PropTypes.string,
   format: PropTypes.func,
 };
