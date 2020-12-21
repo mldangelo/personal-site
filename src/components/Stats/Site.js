@@ -4,7 +4,7 @@ import Table from './Table';
 import displayData from '../../data/stats/site';
 
 const Stats = () => {
-  const [data, setResponseData] = useState('');
+  const [data, setResponseData] = useState(displayData);
 
   const fetchData = useCallback(async () => {
     // repository must be authenticated if private
@@ -15,6 +15,7 @@ const Stats = () => {
     setResponseData(
       displayData.map((field) => ({
         ...field,
+        // update value if value was returned by call to github
         value: Object.keys(resData).includes(field.key)
           ? resData[field.key]
           : field.value,
@@ -29,7 +30,7 @@ const Stats = () => {
   return (
     <div>
       <h3>Some stats about this site</h3>
-      {data && <Table data={data} />}
+      <Table data={data} />
     </div>
   );
 };
