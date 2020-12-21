@@ -11,7 +11,9 @@ const Index = () => (
       <header>
         <div className="title">
           <h2>
-            <Link href="/">About this site</Link>
+            <Link href="/">
+              <a>About this site</a>
+            </Link>
           </h2>
           <p>
             A beautiful, responsive,{' '}

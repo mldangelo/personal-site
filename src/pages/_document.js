@@ -1,6 +1,6 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
-import Header from '../components/Template/Header';
-import Nav from '../components/Template/Nav';
+import Header from '../components/Template/Navigation';
+import Nav from '../components/Template/SideBar';
 
 // Adapted from https://github.com/vercel/next.js/blob/canary/examples/with-google-analytics/pages/_document.js
 const { GA_ID } = process.env;

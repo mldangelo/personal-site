@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import faBars from '@fortawesome/free-solid-svg-icons/faBars';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import faBars from '@fortawesome/free-solid-svg-icons/faBars';
 
 import routes from '../../data/routes';
 
@@ -31,11 +31,10 @@ const Header = () => {
           </ul>
         </nav>
         <nav className="main">
-          <ul>
+          <ul className="icons">
             <li className="menu">
-              <a>
-                ASDASDASdADS
-                <FontAwesomeIcon icon={faBars} onClick={() => setOpen(!open)} />
+              <a href="#" onClick={() => setOpen(!open)}>
+                {/* <FontAwesomeIcon icon={faBars} /> */}
               </a>
             </li>
           </ul>

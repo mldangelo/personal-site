@@ -14,7 +14,9 @@ const Stats = () => (
       <header>
         <div className="title">
           <h2>
-            <Link href="/stats">Stats</Link>
+            <Link href="/stats">
+              <a>Stats</a>
+            </Link>
           </h2>
         </div>
       </header>

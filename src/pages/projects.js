@@ -14,7 +14,9 @@ const Projects = () => (
       <header>
         <div className="title">
           <h2>
-            <Link href="/projects">Projects</Link>
+            <Link href="/projects">
+              <a>Projects</a>
+            </Link>
           </h2>
           <p>A selection of projects that I&apos;m not too ashamed of</p>
         </div>

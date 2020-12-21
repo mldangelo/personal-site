@@ -88,7 +88,9 @@ const Contact = () => {
         <header>
           <div className="title">
             <h2>
-              <Link href="/contact">Contact</Link>
+              <Link href="/contact">
+                <a>Contact</a>
+              </Link>
             </h2>
           </div>
         </header>

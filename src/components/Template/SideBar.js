@@ -4,6 +4,19 @@ import { useRouter } from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import data from '../../data/contact';
 
+const faStyle = {
+  listStyle: 'none',
+  font: 'inherit',
+  color: 'inherit',
+  boxSizing: 'inherit',
+  display: 'inline-block',
+  fontSize: 'inherit',
+  height: '1em',
+  verticalAlign: '-0.125em',
+  width: '1em',
+  overflow: 'visible',
+};
+
 const Nav = () => {
   // TODO figure out why this doesn't work
   const { pathname } = useRouter() || {};
@@ -59,7 +72,7 @@ const Nav = () => {
             <li key={s.label}>
               <Link href={s.link}>
                 <a>
-                  <FontAwesomeIcon icon={s.icon} />
+                  <FontAwesomeIcon icon={s.icon} style={faStyle} />
                 </a>
               </Link>
             </li>

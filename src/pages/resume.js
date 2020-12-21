@@ -25,7 +25,9 @@ const Resume = () => (
       <header>
         <div className="title">
           <h2>
-            <Link href="resume">Resume</Link>
+            <Link href="resume">
+              <a>Resume</a>
+            </Link>
           </h2>
           <div className="link-container">
             {sections.map((sec) => (
