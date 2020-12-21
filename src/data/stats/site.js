@@ -42,7 +42,7 @@ const data = [
   {
     label: 'Last updated at',
     key: 'pushed_at',
-    value: moment(),
+    value: Date.now(),
     link: 'https://github.com/mldangelo/personal-site/commits',
     format: (x) => moment(x).format('MMMM D, YYYY'),
   },

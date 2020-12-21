@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const TableRow = ({ label, link, value }) => (
+const TableRow = ({ label, link, value, format }) => (
   <tr>
     <td width="70%">{label}</td>
-    <td>{link.length ? <a href={link}>{value}</a> : value}</td>
+    <td>{link ? <a href={link}>{format(value)}</a> : format(value)}</td>
   </tr>
 );
 
@@ -12,10 +12,11 @@ TableRow.propTypes = {
   label: PropTypes.string.isRequired,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   link: PropTypes.string,
+  format: PropTypes.func,
 };
 
 TableRow.defaultProps = {
-  link: '',
+  format: (x) => x,
 };
 
 export default TableRow;
