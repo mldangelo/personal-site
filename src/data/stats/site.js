@@ -42,8 +42,9 @@ const data = [
   {
     label: 'Last updated at',
     key: 'pushed_at',
-    value: moment().format('MMMM D, YYYY'),
+    value: moment(),
     link: 'https://github.com/mldangelo/personal-site/commits',
+    format: (x) => moment(x).format('MMMM D, YYYY'),
   },
   {
     /* find . | grep ".js" | grep -vE ".min.js|node_modules|.git|.json" |

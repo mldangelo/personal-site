@@ -1,19 +1,19 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 import Table from './Table';
-import displayData from '../../data/stats/site';
+import initialData from '../../data/stats/site';
 
 const Stats = () => {
-  const [data, setResponseData] = useState(displayData);
-
+  const [data, setResponseData] = useState(initialData);
+  // TODO think about persisting this somewhere
   const fetchData = useCallback(async () => {
     // repository must be authenticated if private
     const res = await fetch(
-      `https://api.github.com/repos/mldangelo/personal-site`
+      'https://api.github.com/repos/mldangelo/personal-site'
     );
     const resData = await res.json();
     setResponseData(
-      displayData.map((field) => ({
+      initialData.map((field) => ({
         ...field,
         // update value if value was returned by call to github
         value: Object.keys(resData).includes(field.key)
