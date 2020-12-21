@@ -1,35 +1,11 @@
-import React, { useState, useEffect } from 'react';
-
 import Table from './Table';
-import personalData from '../../data/stats/personal';
+import data from '../../data/stats/personal';
 
-const PersonalStats = () => {
-  const [data, setData] = useState(personalData);
-
-  const tick = () => {
-    const divisor = 1000 * 60 * 60 * 24 * 365.2421897; // ms in an average year
-    const birthTime = new Date('1990-02-05T09:24:00');
-    const x = {
-      label: 'Current age',
-      key: 'age',
-      value: ((Date.now() - birthTime) / divisor).toFixed(11),
-    };
-    setData([x, data[1], data[2]]);
-  };
-
-  useEffect(() => {
-    const timer = setInterval(() => tick(), 25);
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
-
-  return (
-    <>
-      <h3>Some stats about me</h3>
-      <Table data={data} />
-    </>
-  );
-};
+const PersonalStats = () => (
+  <>
+    <h3>Some stats about me</h3>
+    <Table data={data} />
+  </>
+);
 
 export default PersonalStats;
