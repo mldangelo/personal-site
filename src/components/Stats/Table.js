@@ -7,7 +7,13 @@ const Table = ({ data }) => (
   <table>
     <tbody>
       {data.map(({ format, label, link, value, key }) => (
-        <TableRow key={key || label} label={label} value={value} link={link} format={format}/>
+        <TableRow
+          key={key || label}
+          label={label}
+          value={value}
+          link={link}
+          format={format}
+        />
       ))}
     </tbody>
   </table>
