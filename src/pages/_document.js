@@ -1,5 +1,4 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
-import Hamburger from '../components/Template/Hamburger';
 import Header from '../components/Template/Header';
 import Nav from '../components/Template/Nav';
 
@@ -10,7 +9,7 @@ const { GA_ID } = process.env;
 class MyDocument extends Document {
   render() {
     return (
-      <Html>
+      <Html lang="en">
         <Head>
           {/* Global Site Tag (gtag.js) - Google Analytics */}
           {GA_ID && (
@@ -37,7 +36,6 @@ class MyDocument extends Document {
             </div>
             <Nav />
           </div>
-          <Hamburger />
           <NextScript />
         </body>
       </Html>

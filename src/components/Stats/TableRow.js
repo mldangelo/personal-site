@@ -8,14 +8,14 @@ const TableRow = ({ label, link, value, format }) => (
 );
 
 TableRow.propTypes = {
-  label: PropTypes.string.isRequired,
-  value: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-    PropTypes.element,
-  ]).isRequired,
-  link: PropTypes.string,
   format: PropTypes.func,
+  label: PropTypes.string.isRequired,
+  link: PropTypes.string,
+  value: PropTypes.oneOfType([
+    PropTypes.element,
+    PropTypes.number,
+    PropTypes.string,
+  ]).isRequired,
 };
 
 TableRow.defaultProps = {
