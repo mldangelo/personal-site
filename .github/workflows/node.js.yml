@@ -27,12 +27,12 @@ jobs:
     - run: npm ci
     - name: Lint
       run: npm run lint
-    - name: Build
-      run: npm run build --if-present
+    - name: Build and Statically Render
+      run: npm run predeploy
       env:
         PORT: 3000
         NODE_ENV: development
-        BASE_PATH: /personal-site
+        PUBLIC_URL: /personal-site
     - name: Test
       run: npm test
       env:
