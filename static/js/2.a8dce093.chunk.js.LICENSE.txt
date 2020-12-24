@@ -21,8 +21,6 @@ object-assign
  * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
  */
 
-/*! https://mths.be/punycode v1.4.1 by @mathias */
-
 /** @license React v0.20.1
  * scheduler.production.min.js
  *
