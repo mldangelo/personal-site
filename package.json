@@ -13,7 +13,7 @@
     "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "lint": "eslint src",
-    "test": "mocha --exit --require @babel/register ./test/test.js",
+    "test": "react-scripts test",
     "analyze": "source-map-explorer build/static/js/*.chunk.js"
   },
   "dependencies": {
@@ -55,6 +55,9 @@
     "source-map-explorer": "^2.5.1"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.11.6",
+    "@testing-library/react": "^11.2.2",
+    "@testing-library/user-event": "^12.6.0",
     "@babel/core": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
     "babel-eslint": "^10.1.0",
