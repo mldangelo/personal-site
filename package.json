@@ -8,15 +8,12 @@
     "url": "https://github.com/mldangelo/personal-site.git"
   },
   "scripts": {
-    "build": "rimraf ./build && webpack --config ./webpack/webpack.production.config.babel.js --progress --profile --colors",
-    "postbuild": "react-snap",
-    "build-dev": "rimraf ./build && babel-node webpack-cli --config ./webpack/webpack.config.babel.js --progress --profile --colors",
-    "lint": "eslint src",
-    "test": "mocha --exit --require @babel/register ./test/test.js",
-    "dev": "nodemon server/server.js --ignore src/ --ignore test/ --exec babel-node",
-    "predeploy": "npm run build && cp -r public/* build/",
+    "build": "rimraf ./build && react-scripts build",
+    "predeploy": "npm run build && react-snap && cp -r public/* build/",
     "deploy": "gh-pages -d build",
-    "start": "react-scripts start"
+    "start": "react-scripts start",
+    "lint": "eslint src",
+    "test": "mocha --exit --require @babel/register ./test/test.js"
   },
   "dependencies": {
     "@babel/cli": "^7.12.10",
