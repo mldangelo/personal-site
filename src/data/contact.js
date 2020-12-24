@@ -1,3 +1,4 @@
+import faEnvelope from '@fortawesome/fontawesome-free-regular/faEnvelope';
 import {
   faAngellist,
   faGithub,
@@ -6,7 +7,6 @@ import {
   faLinkedinIn,
   faTwitter,
 } from '@fortawesome/fontawesome-free-brands';
-import faEnvelope from '@fortawesome/fontawesome-free-regular/faEnvelope';
 
 const data = [
   {
