@@ -1,13 +1,15 @@
 
-#### Intro
+# Intro
+
 I am a co-founder and the CTO of [Arthena](https://arthena.com) where I work on engineering infrastructure and build tools to price fine art. My primary job functions are as a data scientist and software engineer.
-<br>
+
 I am available to consult on interesting projects. I am particularly interested in social impact, education, inclusivity, and space. I enjoy advising companies and may even be available for pro-bono work depending on the time commitment and the project. If you would like to arrange a meeting, I am based in New York but travel to the San Francisco Bay Area frequently.
-<br><br>
-#### Currently
+
+# Currently
+
 At Arthena I have learned how to build teams and manage people, build relationships with customers, sell enterprise products, and build on-line predictive models for production environments. I've also learned how to build and maintain large web applications (see [arthena.com](https://arthena.com)).
-<br><br>
-#### Some history
+
+# Some history
 
 - My parents put a computer in my bedroom in 1993 when I was 3. It was an old Tandy that ran MS-DOS. My favorite games were Street Rod 2, Wolfenstein 3D, and Tom and Jerry. It had a mechanical keyboard and a turbo button. To this day, I still don't know what pressing the turbo button really did.
 
@@ -33,15 +35,16 @@ At Arthena I have learned how to build teams and manage people, build relationsh
 
 - 14 - 17, I played a lot of video games. My favorites included Counter Strike Source, Command and Conquer 3, Halo 2, and Age of Empires 3.
 
-- At 18, In the summer before college, my friends and I started playing <a href="https://en.wikipedia.org/wiki/Quidditch_(sport)">Muggle Quidditch</a>. We went on to start over 8 teams in the [International Quidditch Association](https://en.wikipedia.org/wiki/International_Quidditch_Association) including the [Buffalo Quidditch Society](https://www.facebook.com/buffaloquidditch/). At our height, we were ranked third in the IQA. Although I don't play anymore, you can still see pictures of me holding a broom while wearing a chess camp t-shirt on facebook.
+- At 18, In the summer before college, my friends and I started playing [Muggle Quidditch](https://en.wikipedia.org/wiki/Quidditch_(sport)). We went on to start over 8 teams in the [International Quidditch Association](https://en.wikipedia.org/wiki/International_Quidditch_Association) including the [Buffalo Quidditch Society](https://www.facebook.com/buffaloquidditch/). At our height, we were ranked third in the IQA. Although I don't play anymore, you can still see pictures of me holding a broom while wearing a chess camp t-shirt on facebook.
 
 - At 19, I took my first graduate course and published my first academic paper.
 
 - At 20, I coauthored a grant to build a satellite and managed a 60+ person team through the end of undergrad. You can read more about that [here](https://ubnl.space/glados/).
 
 You can ask me in person for other stories that I'm afraid to share with the internet.
-<br><br>
-#### I like
+
+# I like
+
 - Skiing
 - Sailing and the sea
 - Space
@@ -52,7 +55,7 @@ You can ask me in person for other stories that I'm afraid to share with the int
 - [Good design](/)
 - [Photography](https://instagram.com/dangelosaurus)
 
-#### Travel / Geography
+# Travel / Geography
 
 - I am from originally from Buffalo, New York. I have since lived in
 Palo Alto, Mountain View, San Francisco, Seattle, and New York.
@@ -67,20 +70,20 @@ Palo Alto, Mountain View, San Francisco, Seattle, and New York.
 
 - In 2019, I visited: Canada, England, France, and Switzerland.
 
-- In 2020, there was a pandemic and I traveled nowhere.
+- In 2020, I stayed in New York.
 
 - I am an Oregon Trail II enthusiast.
 
-#### Fun facts
+# Fun facts
 
 - I have a list of thousands of ideas, like creating matching bow ties for cats and humans.
 - I almost always have a sketchbook with me.
 - I can't locate every country on a map.
 - I operate a [small angel fund](http://skepticalinvestments.biz/) with terrible returns.
-- I break about 30 traffic laws on an [electric skateboard](https://boostedboards.com/vehicles/shortboards/boosted-mini-x), [onewheel](https://onewheel.com/products/xr), or [bicycle](https://www.citibikenyc.com/) every single day.
+- I break about 30 traffic laws on a [skateboard](https://landyachtz.com/boards/cruiser/), [onewheel](https://onewheel.com/products/xr), [bicycle](https://www.citibikenyc.com/), or [electric skateboard](https://boostedusa.com/collections/electric-skateboards/products/boosted-mini-x) every single day.
 - I added this page because so many people complained that my site was just a resume.
 
-#### I dream of
+# I dream of
 
 - always finding inspiration.
 - enabling a brighter future.

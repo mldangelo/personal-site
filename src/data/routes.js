@@ -1,29 +1,29 @@
-const data = [
+const routes = [
   {
-    path: '/',
-    label: 'Michael D\'Angelo',
     index: true,
+    label: "Michael D'Angelo",
+    path: '/',
   },
   {
-    path: '/about',
     label: 'About',
+    path: '/about',
   },
   {
-    path: '/resume',
     label: 'Resume',
+    path: '/resume',
   },
   {
-    path: '/projects',
     label: 'Projects',
+    path: '/projects',
   },
   {
-    path: '/stats',
     label: 'Stats',
+    path: '/stats',
   },
   {
-    path: '/contact',
     label: 'Contact',
+    path: '/contact',
   },
 ];
 
-export default data;
+export default routes;
