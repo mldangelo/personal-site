@@ -13,7 +13,8 @@
     "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "lint": "eslint src",
-    "test": "mocha --exit --require @babel/register ./test/test.js"
+    "test": "mocha --exit --require @babel/register ./test/test.js",
+    "analyze": "source-map-explorer build/static/js/*.chunk.js"
   },
   "dependencies": {
     "@babel/cli": "^7.12.10",
@@ -51,13 +52,12 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.1",
     "rimraf": "^3.0.2",
-    "url": "^0.11.0"
+    "source-map-explorer": "^2.5.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
     "babel-eslint": "^10.1.0",
-    "babel-loader": "^8.2.2",
     "chai": "^4.2.0",
     "eslint": "^7.16.0",
     "eslint-config-airbnb": "^18.2.1",

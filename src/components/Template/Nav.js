@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import url from 'url';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -12,7 +11,7 @@ const Nav = () => (
   <section id="sidebar">
     <section id="intro">
       <Link to="/" className="logo">
-        <img src={url.resolve(PUBLIC_URL, '/images/me_icon.jpg')} alt="" />
+        <img src={`${PUBLIC_URL}/images/me_icon.jpg`} alt="" />
       </Link>
       <header>
         <h2>Michael D&apos;Angelo</h2>
