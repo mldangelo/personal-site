@@ -20,6 +20,7 @@ TableRow.propTypes = {
 
 TableRow.defaultProps = {
   format: (x) => x,
+  link: null,
 };
 
 export default TableRow;

@@ -7,7 +7,7 @@ const Stats = () => {
   const [data, setResponseData] = useState(initialData);
   // TODO think about persisting this somewhere
   const fetchData = useCallback(async () => {
-    // repository must be authenticated if private
+    // request must be authenticated if private
     const res = await fetch(
       'https://api.github.com/repos/mldangelo/personal-site'
     );

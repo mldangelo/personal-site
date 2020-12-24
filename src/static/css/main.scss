@@ -41,6 +41,7 @@
 	@import 'components/post';
 	@import 'components/section';
 	@import 'components/table';
+	@import 'components/markdown';
 
 // Layout.
 
@@ -52,7 +53,6 @@
 	@import 'layout/footer';
 	@import 'layout/menu';
 
-	@import 'pages/about';
 	@import 'pages/contact';
 	@import 'pages/notFound';
 	@import 'pages/resume';

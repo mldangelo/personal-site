@@ -6,13 +6,13 @@ import TableRow from './TableRow';
 const Table = ({ data }) => (
   <table>
     <tbody>
-      {data.map(({ format, label, link, value, key }) => (
+      {data.map((pair) => (
         <TableRow
-          key={key || label}
-          label={label}
-          value={value}
-          link={link}
-          format={format}
+          format={pair.format}
+          key={pair.label}
+          label={pair.label}
+          link={pair.link}
+          value={pair.value}
         />
       ))}
     </tbody>
@@ -22,12 +22,14 @@ const Table = ({ data }) => (
 Table.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
-      label: PropTypes.string.isRequired,
-      value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
-        .isRequired,
-      link: PropTypes.string,
       format: PropTypes.func,
-      key: PropTypes.string,
+      label: PropTypes.string.isRequired,
+      link: PropTypes.string,
+      value: PropTypes.oneOfType([
+        PropTypes.element,
+        PropTypes.number,
+        PropTypes.string,
+      ]).isRequired,
     })
   ).isRequired,
 };

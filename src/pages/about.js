@@ -14,7 +14,7 @@ const About = ({ count, markdown }) => (
       title="About | Michael D'Angelo"
       description="Learn all about Michael D'Angelo."
     />
-    <article className="post" id="about">
+    <article className="post markdown" id="about">
       <header>
         <div className="title">
           <h2>
