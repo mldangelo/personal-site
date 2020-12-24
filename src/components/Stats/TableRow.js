@@ -18,12 +18,13 @@ TableRow.propTypes = {
     PropTypes.element,
     PropTypes.number,
     PropTypes.string,
-  ]).isRequired,
+  ]),
 };
 
 TableRow.defaultProps = {
   format: (x) => x,
   link: null,
+  value: null,
 };
 
 export default TableRow;

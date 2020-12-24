@@ -28,7 +28,7 @@ Table.propTypes = {
       PropTypes.element,
       PropTypes.number,
       PropTypes.string,
-    ]).isRequired,
+    ]),
   })).isRequired,
 };
 
