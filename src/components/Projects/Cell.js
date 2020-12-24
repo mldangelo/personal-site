@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import url from 'url';
 
+const { PUBLIC_URL } = process.env;
+
 const Cell = ({ data }) => (
   <div className="cell-container">
     <article className="mini-post">
@@ -11,7 +13,7 @@ const Cell = ({ data }) => (
         <time className="published">{moment(data.date).format('MMMM, YYYY')}</time>
       </header>
       <a href={data.link} className="image">
-        <img src={url.resolve(BASE_PATH, data.image)} alt={data.title} />
+        <img src={url.resolve(PUBLIC_URL, data.image)} alt={data.title} />
       </a>
       <div className="description">
         <p>{data.desc}</p>

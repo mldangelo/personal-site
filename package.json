@@ -10,7 +10,8 @@
     "test": "mocha --exit --require @babel/register ./test/test.js",
     "dev": "nodemon server/server.js --ignore src/ --ignore test/ --exec babel-node",
     "predeploy": "npm run build && cp -r public/* build/",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "start": "react-scripts start"
   },
   "dependencies": {
     "@babel/cli": "^7.11.6",
@@ -55,6 +56,7 @@
     "react-markdown": "^4.3.1",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
+    "react-scripts": "^4.0.1",
     "rimraf": "^3.0.2",
     "sass-loader": "^10.0.2",
     "script-ext-html-webpack-plugin": "^2.1.4",
@@ -85,5 +87,17 @@
     "puppeteer": "^5.2.1",
     "react-snap": "^1.23.0",
     "webpack-cli": "^3.3.12"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

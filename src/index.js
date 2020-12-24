@@ -16,8 +16,10 @@ import Stats from './pages/Stats';
 // All of our CSS
 import './static/css/main.scss';
 
+const { PUBLIC_URL } = process.env;
+
 ReactDOM.render(
-  <Router basename={BASE_PATH}>
+  <Router basename={PUBLIC_URL}>
     <Switch>
       <Route exact path="/" component={Index} />
       <Route path="/about" component={About} />
