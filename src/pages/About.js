@@ -2,10 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import ReactMarkdown from 'react-markdown';
+import raw from 'raw.macro';
 
 import Main from '../layouts/Main';
 
-import markdown from '../data/about.md';
+const markdown = raw('../data/about.md');
 
 const count = markdown.split(/\s+/)
   .map((s) => s.replace(/\W/g, ''))
