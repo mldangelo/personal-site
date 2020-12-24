@@ -11,7 +11,7 @@ export default {
   mode: 'development',
   entry: [
     'webpack-hot-middleware/client?path=//localhost:7999/__webpack_hmr&reload=true',
-    path.join(__dirname, '../app/entry.js'),
+    path.join(__dirname, '../src/entry.js'),
   ],
   output: {
     path: path.join(__dirname, '../build/'),

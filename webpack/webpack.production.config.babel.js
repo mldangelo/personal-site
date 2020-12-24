@@ -10,7 +10,7 @@ const basePath = process.env.BASE_PATH || '';
 
 export default {
   entry: [
-    path.join(__dirname, '../app/entry.js'),
+    path.join(__dirname, '../src/entry.js'),
   ],
   mode: 'production',
   output: {
