@@ -1,8 +1,8 @@
 # Personal Website
 
-## [mldangelo.github.io/personal-site](https://mldangelo.github.io/personal-site/) and JAMStack [mldangelo.com](http://mldangelo.com)
+## [mldangelo.github.io/personal-site](https://mldangelo.github.io/personal-site/) and express-powered [mldangelo.com](http://mldangelo.com)
 
-My personal website. A simple, easily modifiable, statically-exportable [React](https://reactjs.org/) application that deploys automatically for free using [github pages](https://pages.github.com/). Built using modern javascript and based on [create-react-app](https://github.com/facebook/create-react-app) with React-Router, SCSS, and many other useful libraries.
+My personal website. A simple, easily modifiable, statically-exportable [React](https://reactjs.org/) application that deploys automatically for free using [github pages](https://pages.github.com/). Built using modern javascript, based on [create-react-app](https://github.com/facebook/create-react-app) with React-Router, SCSS, [github actions](https://github.com/features/actions), and many other useful libraries.
 
 The `main` branch of this repository contains a statically-exportable simplified version of my website intended for serverless hosting on github pages. To view the source for the version hosted at [mldangelo.com](https://mldangelo.com), checkout the [server](https://github.com/mldangelo/personal-site/tree/server) branch.
 
@@ -25,19 +25,11 @@ You may wish to fork this repository or remove my remote origin and add your own
     ```bash
     git clone git://github.com/mldangelo/personal-site.git
     cd personal-site
-    nvm install
+    nvm install # this is optional - make sure you're running >= node 12 with `node --version`
     npm install
     ```
 
-2. Next, you should create a `.env` file. To do this, run:
-
-    ```bash
-    cp sample.env .env
-    ```
-
-    and set values as appropriate. Most people will only need to change the base path when deploying.
-
-3. Run the following command to build the react application and serve it with hot module reloading:
+2. Run the following command to build the react application and serve it with hot module reloading:
 
     ```bash
     npm start
@@ -45,29 +37,43 @@ You may wish to fork this repository or remove my remote origin and add your own
 
     Navigate to `<ip>:<port>` default: [http://localhost:3000](http://localhost:3000) to view my website.
 
-    This completes set up instructions. Please continue reading to learn how to modify this site to make it your own.
+This completes set up instructions. Please continue reading to learn how to modify this site to make it your own.
 
 ## Checklist
 
-1. Start by changing text in the sidebar. This file is located at `src/components/Template/Nav.js`.
-2. Add an image of yourself in `public/images/me_icon.jpg`. If you decide to change the filename, be sure to go back to the sidebar and change the image path there as well.
-3. Modify the text in `src/pages/Index.js`
-4. Modify the files in `src/data/resume/` next. When you're finished, go back and modify all of the other files in the `src/data/` directory.
-5. You've finished modifying >95% of the pages. Search through the rest of the files for references to `Michael` or `Angelo` and change values to your name.
-6. Change the description in `public/index.html`. You may also wish to add a new favicon or remove it. [This](https://realfavicongenerator.net/) website may be helpful.
-7. Decide how and where you are going to host this project. I recommend purchasing your own domain name from [Google Domains](https://domains.google). If you would like to host on github pages, run `npm run deploy`. This will generate a new branch called `gh-pages`. Then go to `https://github.com/[your github username]/personal-site/settings` and configure accordingly:
+1. Create a `.env` file. To do this, run:
 
-    <center><img src="docs/gh-pages.png" width="60%"></center>
+    ```bash
+    cp sample.env .env
+    ```
 
-8. Configure your domains DNS record. See [here]( https://help.github.com/articles/using-a-custom-domain-with-github-pages/) for more information.
-9. Change `homepage` in `package.json` to reflect where you plan to host the site. This is important for react-snap. If using a custom url, create `public/CNAME` and enter your URL. You can run `echo "YOUR_URL[.com]" > public/CNAME` as a shortcut. If you plan to deploy to a /[path]
-(e.g. [https://mldangelo.github.io/personal-site/](https://mldangelo.github.io/personal-site/)), you should modify `PUBLIC_URL` in your `.env` and `sample.env` files and restart the application. Note that you will now have to navigate to `localhost:[port]/[BASE_PATH]` when developing.
+    and set values as appropriate. Most people will only need to change the base path.
+
+2. Start by changing text in the sidebar. This file is located at `src/components/Template/Nav.js`.
+3. Add an image of yourself in `public/images/me_icon.jpg`. If you decide to change the filename, be sure to go back to the sidebar and change the image path there as well.
+4. Modify the text in `src/pages/Index.js`
+5. Modify the files in `src/data/resume/` next. When you're finished, go back and modify all of the other files in the `src/data/` directory.
+6. You've finished modifying >95% of the pages. Search through the rest of the files for references to `Michael` or `Angelo` and change values to your name.
+7. Change the description in `public/index.html`. You may also wish to add a new favicon or remove it. [This](https://realfavicongenerator.net/) website may be helpful.
+8. Decide how and where you are going to host this project. I recommend purchasing your own domain name from [Google Domains](https://domains.google). If you would like to host on github pages, run `npm run deploy`. This will generate a new branch called `gh-pages`. Then go to `https://github.com/[your github username]/personal-site/settings` and configure accordingly:
+
+    <center><img src="docs/gh-pages.png"></center>
+
+9. Configure your domains DNS record. See [here]( https://help.github.com/articles/using-a-custom-domain-with-github-pages/) for more information.
+10. Change `homepage` in `package.json` to reflect where you plan to host the site. This is important for react-snap. If using a custom url, create `public/CNAME` and enter your URL. You can run:
+
+    ```bash
+    echo "YOUR_URL[.com]" > public/CNAME
+    ```
+
+as a shortcut. If you plan to deploy to a /[path]
+(e.g. [https://mldangelo.github.io/personal-site/](https://mldangelo.github.io/personal-site/)), you should modify `PUBLIC_URL` in your `.env` file and restart the application. Note that you will now have to navigate to `localhost:[port]/[PUBLIC_URL]` when developing.
 
 ## Deploying to Github Pages
 
 Modify the enviromental variables and git remote url in [.github/workflows/github-pages.yml](.github/workflows/github-pages.yml)
 
-Push your changes to main. That's it.
+Make a commit and push your changes to main. That's it.
 
 If you would like to deploy manually, you can: 
 
