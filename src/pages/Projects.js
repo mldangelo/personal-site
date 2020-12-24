@@ -9,7 +9,9 @@ import data from '../data/projects';
 
 const Projects = () => (
   <Main>
-    <Helmet title="Projects" />
+    <Helmet title="Projects">
+      <meta name="description" content="Learn about Michael D'Angelo's projects." />
+    </Helmet>
     <article className="post" id="projects">
       <header>
         <div className="title">

@@ -17,7 +17,9 @@ const LinkRenderer = ({ ...children }) => <Link {...children} />;
 
 const About = () => (
   <Main>
-    <Helmet title="About" />
+    <Helmet title="About">
+      <meta name="description" content="Learn about Michael D'Angelo" />
+    </Helmet>
     <article className="post markdown" id="about">
       <header>
         <div className="title">

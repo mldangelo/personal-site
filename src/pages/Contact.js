@@ -79,7 +79,9 @@ const Contact = () => {
 
   return (
     <Main>
-      <Helmet title="Contact" />
+      <Helmet title="Contact">
+        <meta name="description" content="Contact Michael D'Angelo via email @ michael.l.dangelo@gmail.com" />
+      </Helmet>
       <article className="post" id="contact">
         <header>
           <div className="title">
