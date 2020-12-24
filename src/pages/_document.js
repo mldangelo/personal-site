@@ -4,7 +4,7 @@ import Nav from '../components/Template/SideBar';
 
 // Adapted from https://github.com/vercel/next.js/blob/canary/examples/with-google-analytics/pages/_document.js
 const { GA_ID } = process.env;
-
+// TODO https://evilmartians.com/chronicles/how-to-favicon-in-2021-six-files-that-fit-most-needs
 /* eslint-disable react/no-danger */
 class MyDocument extends Document {
   render() {
