@@ -1,7 +1,12 @@
 {
   "name": "personal-site",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "homepage": "https://mldangelo.github.io/personal-site/",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mldangelo/personal-site.git"
+  },
   "scripts": {
     "build": "rimraf ./build && webpack --config ./webpack/webpack.production.config.babel.js --progress --profile --colors",
     "postbuild": "react-snap",
@@ -31,8 +36,6 @@
     "@fortawesome/fontawesome-free-regular": "^5.0.13",
     "@fortawesome/fontawesome-svg-core": "^1.2.30",
     "@fortawesome/react-fontawesome": "0.1.11",
-    "body-parser": "^1.19.0",
-    "compression": "^1.7.4",
     "css-loader": "^4.2.2",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
@@ -42,7 +45,6 @@
     "html-webpack-plugin": "^4.4.1",
     "mini-css-extract-plugin": "^0.11.0",
     "moment": "^2.29.1",
-    "morgan": "^1.10.0",
     "node-sass": "^4.14.1",
     "nodemon": "^2.0.4",
     "normalize.css": "^8.0.1",
