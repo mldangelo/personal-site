@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { hydrate, render } from 'react-dom';
 import {
   BrowserRouter as Router, Switch, Route,
 } from 'react-router-dom';
@@ -18,7 +18,9 @@ import './static/css/main.scss';
 
 const { PUBLIC_URL } = process.env;
 
-ReactDOM.render(
+const rootElement = document.getElementById('root');
+
+const App = () => (
   <Router basename={PUBLIC_URL}>
     <Switch>
       <Route exact path="/" component={Index} />
@@ -30,6 +32,11 @@ ReactDOM.render(
       {/* Only useful in development mode */}
       <Route component={NotFound} status={404} />
     </Switch>
-  </Router>,
-  document.getElementById('root'),
+  </Router>
 );
+
+if (rootElement.hasChildNodes()) {
+  hydrate(<App />, rootElement);
+} else {
+  render(<App />, rootElement);
+}
