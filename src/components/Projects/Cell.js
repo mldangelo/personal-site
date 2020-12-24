@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import dayjs from 'dayjs';
+import moment from 'moment';
 import url from 'url';
 
 const Cell = ({ data }) => (
@@ -8,7 +8,7 @@ const Cell = ({ data }) => (
     <article className="mini-post">
       <header>
         <h3><a href={data.link}>{data.title}</a></h3>
-        <time className="published">{dayjs(data.date).format('MMMM, YYYY')}</time>
+        <time className="published">{moment(data.date).format('MMMM, YYYY')}</time>
       </header>
       <a href={data.link} className="image">
         <img src={url.resolve(BASE_PATH, data.image)} alt={data.title} />
