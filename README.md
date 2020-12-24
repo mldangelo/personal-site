@@ -4,7 +4,7 @@
 
 My personal website. Easily modifiable, and built using modern javascript with Node.js, React, Express, React-Router, Hot Module Reloading, Webpack and many other technologies.
 
-The master branch of this repository contains a simplified version of my website intended for serverless hosting on github pages. To view the source for the version hosted at [mldangelo.com](https://mldangelo.com), checkout the [server](https://github.com/mldangelo/personal-site/tree/server) branch.
+The `main` branch of this repository contains a simplified version of my website intended for serverless hosting on github pages. To view the source for the version hosted at [mldangelo.com](https://mldangelo.com), checkout the [server](https://github.com/mldangelo/personal-site/tree/server) branch.
 
 ## A note on adapting this repository to your own personal website
 
@@ -85,4 +85,4 @@ Please feel free to reach out to me by filing an issue or at [help@mldangelo.com
 
 ## License
 
-[MIT](https://github.com/mldangelo/personal-site/blob/master/LICENSE)
+[MIT](https://github.com/mldangelo/personal-site/blob/main/LICENSE)
