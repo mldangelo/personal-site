@@ -35,7 +35,7 @@ You may wish to fork this repository or remove my remote origin and add your own
     npm start
     ```
 
-    Navigate to `<ip>:<port>` default: [http://localhost:3000](http://localhost:3000) to view my website.
+    Your web browser should automatically open to `<ip>:<port>:<path>` default: [http://localhost:3000/personal-site](http://localhost:3000/personal-site). Continue reading to learn how to set these variables.
 
 This completes set up instructions. Please continue reading to learn how to modify this site to make it your own.
 
@@ -47,7 +47,7 @@ This completes set up instructions. Please continue reading to learn how to modi
     cp sample.env .env
     ```
 
-    and set values as appropriate. Most people will only need to change the base path.
+    and set values as appropriate. Most people will not need to modify this file.
 
 2. Start by changing text in the sidebar. This file is located at `src/components/Template/Nav.js`.
 3. Add an image of yourself in `public/images/me_icon.jpg`. If you decide to change the filename, be sure to go back to the sidebar and change the image path there as well.
@@ -55,27 +55,27 @@ This completes set up instructions. Please continue reading to learn how to modi
 5. Modify the files in `src/data/resume/` next. When you're finished, go back and modify all of the other files in the `src/data/` directory.
 6. You've finished modifying >95% of the pages. Search through the rest of the files for references to `Michael` or `Angelo` and change values to your name.
 7. Change the description in `public/index.html`. You may also wish to add a new favicon or remove it. [This](https://realfavicongenerator.net/) website may be helpful.
-8. Decide how and where you are going to host this project. I recommend purchasing your own domain name from [Google Domains](https://domains.google). If you would like to host on github pages, run `npm run deploy`. This will generate a new branch called `gh-pages`. Then go to `https://github.com/[your github username]/personal-site/settings` and configure accordingly:
-
-    <center><img src="docs/gh-pages.png"></center>
-
-9. Configure your domains DNS record. See [here]( https://help.github.com/articles/using-a-custom-domain-with-github-pages/) for more information.
-10. Change `homepage` in `package.json` to reflect where you plan to host the site. This is important for react-snap. If using a custom url, create `public/CNAME` and enter your URL. You can run:
+8. Change `homepage` in `package.json` to reflect where you plan to host the site. This is important for static exporting via react-snap. If you plan to use a custom url, create `public/CNAME` and enter your URL. You can run:
 
     ```bash
     echo "YOUR_URL[.com]" > public/CNAME
     ```
 
-as a shortcut. If you plan to deploy to a /[path]
-(e.g. [https://mldangelo.github.io/personal-site/](https://mldangelo.github.io/personal-site/)), you should modify `PUBLIC_URL` in your `.env` file and restart the application. Note that you will now have to navigate to `localhost:[port]/[PUBLIC_URL]` when developing.
+    as a shortcut.
+
+    I recommend purchasing your own domain name from [Google Domains](https://domains.google). If you would like to host on github pages, run `npm run deploy`. This will generate a new branch called `gh-pages`. Then go to `https://github.com/[your github username]/[your repository name]/settings` and configure accordingly:
+
+    <center><img src="docs/gh-pages.png"></center>
+
+9. Optionally, configure your domains DNS record. See [here]( https://help.github.com/articles/using-a-custom-domain-with-github-pages/) for more information.
 
 ## Deploying to Github Pages
 
-Modify the enviromental variables and git remote url in [.github/workflows/github-pages.yml](.github/workflows/github-pages.yml)
+Modify the environmental variables and git remote url in [.github/workflows/github-pages.yml](.github/workflows/github-pages.yml)
 
 Make a commit and push your changes to main. That's it.
 
-If you would like to deploy manually, you can: 
+If you would like to deploy manually, you can:
 
 1. Change `NODE_ENV` to `production` in `.env`
 2. Run `npm run deploy`
