@@ -79,11 +79,13 @@ const Contact = () => {
 
   return (
     <Main>
-      <Helmet title="Contact" />
+      <Helmet title="Contact">
+        <meta name="description" content="Contact Michael D'Angelo via email @ michael.l.dangelo@gmail.com" />
+      </Helmet>
       <article className="post" id="contact">
         <header>
           <div className="title">
-            <h2><Link to="/contact">Contact</Link></h2>
+            <h2 data-testid="heading"><Link to="/contact">Contact</Link></h2>
           </div>
         </header>
         <div className="email-at">

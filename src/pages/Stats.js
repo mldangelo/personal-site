@@ -9,11 +9,13 @@ import Site from '../components/Stats/Site';
 
 const Stats = () => (
   <Main>
-    <Helmet title="Stats" />
+    <Helmet title="Stats">
+      <meta name="description" content="Some statistics about Michael D'Abngelo and mldangelo.com" />
+    </Helmet>
     <article className="post" id="stats">
       <header>
         <div className="title">
-          <h2><Link to="/stats">Stats</Link></h2>
+          <h2 data-testid="heading"><Link to="/stats">Stats</Link></h2>
         </div>
       </header>
       <Personal />
