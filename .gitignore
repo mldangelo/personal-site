@@ -1,5 +1,8 @@
-# npm related 
-package-lock.json
+# prefer npm over yarn 
+yarn.lock
+
+# eslint
+.eslintcache
 
 # Logs
 logs
@@ -37,6 +40,7 @@ node_modules
 public/dist/
 dist/
 tmp/
+build/
 
 # OSX
 .DS_Store

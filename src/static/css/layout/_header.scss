@@ -1,0 +1,235 @@
+///
+/// Future Imperfect by HTML5 UP
+/// html5up.net | @ajlkn
+/// Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+///
+
+/* Header */
+
+	body {
+		padding-top: 3.5em;
+	}
+
+	#header {
+		@include vendor('display', 'flex');
+		@include vendor('justify-content', 'space-between');
+		background-color: _palette(bg);
+		border-bottom: solid 1px _palette(border);
+		height: 3.5em;
+		left: 0;
+		line-height: 3.5em;
+		position: fixed;
+		top: 0;
+		width: 100%;
+		z-index: _misc(z-index-base);
+
+		a {
+			color: inherit;
+			text-decoration: none;
+		}
+
+		ul {
+			list-style: none;
+			margin: 0;
+			padding-left: 0;
+
+			li {
+				display: inline-block;
+				padding-left: 0;
+			}
+		}
+
+		h1 {
+			height: inherit;
+			line-height: inherit;
+			padding: 0 0 0 1.5em;
+			white-space: nowrap;
+
+			a {
+				font-size: 0.7em;
+			}
+		}
+
+		.links {
+			@include vendor('flex', '1');
+			border-left: solid 1px _palette(border);
+			height: inherit;
+			line-height: inherit;
+			margin-left: 1.5em;
+			overflow: hidden;
+			padding-left: 1.5em;
+
+			ul {
+				li {
+					border-left: solid 1px _palette(border);
+					line-height: 1;
+					margin-left: 1em;
+					padding-left: 1em;
+
+					&:first-child {
+						border-left: 0;
+						margin-left: 0;
+						padding-left: 0;
+					}
+
+					a {
+						border-bottom: 0;
+						font-family: _font(family-heading);
+						font-size: 0.7em;
+						font-weight: _font(weight-heading);
+						letter-spacing: _font(kerning-heading);
+						text-transform: uppercase;
+					}
+				}
+			}
+		}
+
+		.main {
+			height: inherit;
+			line-height: inherit;
+			text-align: right;
+
+			ul {
+				height: inherit;
+				line-height: inherit;
+
+				li {
+					border-left: solid 1px _palette(border);
+					height: inherit;
+					line-height: inherit;
+					white-space: nowrap;
+
+					> i {
+					    text-decoration: none;
+					    border-bottom: 0;
+					    overflow: hidden;
+					    position: relative;
+					    text-indent: 4em;
+							margin-right: 1.5em;
+					}
+
+					> * {
+						display: block;
+						float: left;
+					}
+
+					> a {
+						@include icon;
+						border-bottom: 0;
+						color: _palette(fg-light);
+						overflow: hidden;
+						position: relative;
+						text-indent: 4em;
+						width: 4em;
+
+						&:before {
+							display: block;
+							height: inherit;
+							left: 0;
+							line-height: inherit;
+							position: absolute;
+							text-align: center;
+							text-indent: 0;
+							top: 0;
+							width: inherit;
+						}
+					}
+				}
+			}
+		}
+
+		@include breakpoint(medium) {
+			.links {
+				display: none;
+			}
+		}
+
+		@include breakpoint(small) {
+			height: 2.75em;
+			line-height: 2.75em;
+
+			h1 {
+				padding: 0 0 0 1em;
+			}
+
+			.main {
+				.search {
+					display: none;
+				}
+			}
+		}
+	}
+
+	/* Position and sizing of burger button */
+	.bm-burger-button {
+		display: none;
+	}
+
+	/* Color/shape of burger icon bars */
+	.bm-burger-bars {
+		display: none;
+	}
+
+	/* Position and sizing of clickable cross button */
+	.bm-cross-button {
+		display: none;
+	}
+
+	/* Color/shape of close button cross */
+	.bm-cross {
+		display: none;
+	}
+
+	/* General sidebar styles */
+	.bm-menu {
+	  background: _palette(bg);
+	  padding: 2.5em 1.5em 0;
+	  font-size: 1.15em;
+	}
+
+	/* Wrapper for item list */
+	.bm-item-list {
+	  color: _palette(fg-bold);
+	  padding: 0.8em;
+		font-family: "Raleway", Helvetica, sans-serif;
+	}
+
+	#header .index-link {
+		z-index: 3;
+	}
+
+	#header .main .menu {
+		cursor: pointer;
+	}
+
+	#header .main .close-menu {
+		border: 0;
+		z-index: 10000;
+	}
+
+	#header .main .open-menu {
+		border: 0;
+	}
+
+.open-menu{
+	position: fixed;
+	right: 0;
+	border: none;
+}
+
+.close-menu{
+	position: fixed;
+	right: 0;
+	z-index: 3;
+	border-left: 0;
+}
+
+.hamburger-container  {
+	display: none;
+}
+
+@include breakpoint(medium) {
+	.hamburger-container  {
+		display: initial;
+	}
+}
