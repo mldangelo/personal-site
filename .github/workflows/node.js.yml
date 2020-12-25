@@ -30,11 +30,8 @@ jobs:
     - name: Build and Statically Render
       run: npm run predeploy
       env:
-        PORT: 3000
         NODE_ENV: development
-        PUBLIC_URL: /personal-site
     - name: Test
       run: npm test
       env:
-        PORT: 3000
         NODE_ENV: development
