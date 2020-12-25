@@ -49,8 +49,8 @@ const pages = [
   },
 ];
 
-// Adds router to Page context and allows us to navigate to the 
-// correct page. See: 
+// Adds router to Page context and allows us to navigate to the
+// correct page. See:
 // https://testing-library.com/docs/example-react-router/#reducing-boilerplate
 const renderWithRouter = (ui, { route = '/' } = {}) => {
   window.history.pushState({}, 'Test page', route);
