@@ -2,14 +2,12 @@
   "basics": {
     "name": "Michael D'Angelo",
     "label": "Software Engineer & Data Scientist",
-    "picture": "",
+    "picture": "https://mldangelo.com/images/me.jpg",
     "email": "michael.l.dangelo@gmail.com",
-    "phone": "+1 (716) 830-2024",
     "website": "https://mldangelo.com",
     "summary": "Michael is a co-founder and the CTO of Arthena where he works on building the most accurate models for pricing fine art. His primary job functions are as a data scientist and software engineer. He is available to consult on interesting projects and is particularly interested in social impact, education, inclusively, space.",
     "location": {
-      "address": "675 Hudson, Floor 2",
-      "postalCode": "10014",
+      "postalCode": "10002",
       "city": "New York",
       "countryCode": "US",
       "region": "New York"
@@ -22,7 +20,7 @@
       },
       {
         "network": "Instagram",
-        "username": "dangelosaurus ",
+        "username": "dangelosaurus",
         "url": "https://instagram.com/dangelosaurus/"
       },
       {
@@ -140,15 +138,14 @@
     },
     {
       "company": "UB Nanosatellite Program",
-      "position": "Cofounder, Program Manager",
+      "position": "Co-founder, Program Manager",
       "website": "https://ubnl.space/",
       "startDate": "2010-10",
       "endDate": "2012-06",
       "summary": "",
       "highlights": [
-        "Coauthored grant to build a multispectral imaging satellite as part of the AFRL University Nanosatellite Program.",
-        "Lead a team of 60 students through satellite development life cycle. Served as a technical expert, acquired intimate working knowledge of satellite subsystems.  Solicited funding through NASA, AFOSR, and several corporate sponsors.",
-
+        "Coauthored grant to build a multi-spectral imaging satellite as part of the AFRL University Nanosatellite Program.",
+        "Lead a team of 60 students through satellite development life cycle. Served as a technical expert, acquired intimate working knowledge of satellite subsystems.  Solicited funding through NASA, AFOSR, and several corporate sponsors."
       ]
     }
   ],
@@ -173,7 +170,6 @@
       "studyType": "Master of Science",
       "startDate": "2012",
       "endDate": "2016",
-      "gpa": "",
       "courses": [
         "AA 236A: Spacecraft Design",
         "CME 212: Advanced Programming",
@@ -196,10 +192,9 @@
     {
       "institution": "University at Buffalo",
       "area": "Electrical Engineering, Computer Engineering",
-      "studyType": "Batchelor of Science",
+      "studyType": "Bachelor of Science",
       "startDate": "2009",
       "endDate": "2012",
-      "gpa": "4.0",
       "courses": [
         "CSE 250: Data Structures",
         "CSE 321: Realtime Embedded Systems",
@@ -208,9 +203,9 @@
         "CSE 573: Computer Vision and Image Processing",
         "CSE 590: Computer Architecture",
         "EAS 305: Applied Probability and Statistical Inference",
-        "EE 516: Introduction to Digital Signal Processing",
         "EE 324: Electromagnetic Theory",
-        "EE 478: Digital Design"
+        "EE 478: Digital Design",
+        "EE 516: Introduction to Digital Signal Processing"
       ]
     }
   ],
@@ -219,12 +214,12 @@
       "title": "Digital Compression Pioneer Award",
       "date": "2015-09-01",
       "awarder": "Techcrunch DisruptSF Hackathon",
-      "summary": "Placed 3rd in the 2015 DisruptSF Hackathon for Harvest, a low cost airal platform for preventable water stress."
+      "summary": "Placed 3rd in the 2015 DisruptSF Hackathon for Harvest, a low cost aerial platform for preventable water stress."
     }
   ],
   "publications": [
     {
-      "name": "Space Potato: A Jorney of Excellence",
+      "name": "Space Potato: A Journey of Excellence",
       "publisher": "Hooli",
       "releaseDate": "2014-10-01",
       "website": "https://en.wikipedia.org/wiki/Silicon_Valley_(TV_series)",
@@ -281,7 +276,7 @@
     },
     {
       "language": "German",
-      "fluency": "Limited working proficiency"
+      "fluency": "Limited proficiency"
     }
   ],
   "interests": [
@@ -296,10 +291,12 @@
   "references": [
     {
       "name": "Ian Webster",
+      "date": 2015,
       "reference": "Michael is one of the most talented and hard working people I know. I've known him throughout the years to be an excellent programmer and hacker, someone who can architect and execute a project from idea to polished completion way quicker than you'd expect. Michael has an excellent work ethic and will go to extraordinary lengths to make a project succeed. He's also really great at coming up with novel approaches, learning and applying new technologies. He cares about the office and the people in it. Overall a very good person to have around!"
     },
     {
       "name": "Johanna Flato",
+      "date": 2014,
       "reference": "Michael is not only a highly capable developer, but he is also an incredibly thoughtful and committed team player. He is entrepreneurial, creative, resourceful, and a problem-solver. Invaluable traits for a small company. A pleasure to work with, and I hope to again in the future!"
     }
 
