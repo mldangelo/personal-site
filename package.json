@@ -61,7 +61,6 @@
     "@babel/core": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
     "babel-eslint": "^10.1.0",
-    "chai": "^4.2.0",
     "eslint": "^7.16.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-plugin-import": "^2.22.1",
@@ -69,8 +68,6 @@
     "eslint-plugin-mocha": "^8.0.0",
     "eslint-plugin-react": "^7.21.5",
     "eslint-plugin-react-hooks": "^4.2.0",
-    "mocha": "^8.2.1",
-    "puppeteer": "^5.5.0",
     "react-snap": "^1.23.0"
   },
   "browserslist": {
