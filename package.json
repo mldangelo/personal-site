@@ -13,7 +13,7 @@
     "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "lint": "eslint src",
-    "test": "react-scripts test",
+    "test": "react-scripts test --watchAll=false",
     "analyze": "npm run build && source-map-explorer build/static/js/*.chunk.js"
   },
   "dependencies": {
@@ -29,14 +29,12 @@
     "@babel/preset-react": "^7.12.10",
     "@babel/register": "^7.12.10",
     "@babel/runtime": "^7.12.5",
-    "@fortawesome/fontawesome": "^1.1.8",
     "@fortawesome/fontawesome-free-brands": "^5.0.13",
     "@fortawesome/fontawesome-free-regular": "^5.0.13",
     "@fortawesome/fontawesome-svg-core": "^1.2.32",
     "@fortawesome/react-fontawesome": "0.1.14",
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.2",
-    "@testing-library/user-event": "^12.6.0",
     "dayjs": "^1.9.7",
     "dotenv": "^8.2.0",
     "gh-pages": "^3.1.0",
@@ -65,7 +63,6 @@
     "eslint-config-airbnb": "^18.2.1",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jsx-a11y": "6.4.1",
-    "eslint-plugin-mocha": "^8.0.0",
     "eslint-plugin-react": "^7.21.5",
     "eslint-plugin-react-hooks": "^4.2.0",
     "react-snap": "^1.23.0"

@@ -1,11 +1,10 @@
 import React from 'react';
 import { hydrate, render } from 'react-dom';
 import App from './App';
-// All of our CSS
-import './static/css/main.scss';
 
 const rootElement = document.getElementById('root');
 
+// hydrate is required by react-snap.
 if (rootElement.hasChildNodes()) {
   hydrate(<App />, rootElement);
 } else {
