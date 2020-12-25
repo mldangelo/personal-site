@@ -14,7 +14,7 @@
     "start": "react-scripts start",
     "lint": "eslint src",
     "test": "react-scripts test",
-    "analyze": "source-map-explorer build/static/js/*.chunk.js"
+    "analyze": "npm run build && source-map-explorer build/static/js/*.chunk.js"
   },
   "dependencies": {
     "@babel/cli": "^7.12.10",
@@ -34,9 +34,12 @@
     "@fortawesome/fontawesome-free-regular": "^5.0.13",
     "@fortawesome/fontawesome-svg-core": "^1.2.32",
     "@fortawesome/react-fontawesome": "0.1.14",
+    "@testing-library/jest-dom": "^5.11.6",
+    "@testing-library/react": "^11.2.2",
+    "@testing-library/user-event": "^12.6.0",
+    "dayjs": "^1.9.7",
     "dotenv": "^8.2.0",
     "gh-pages": "^3.1.0",
-    "moment": "^2.29.1",
     "node-sass": "^4.0.0",
     "normalize.css": "^8.0.1",
     "prop-types": "^15.7.2",
@@ -55,9 +58,6 @@
     "source-map-explorer": "^2.5.1"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^5.11.6",
-    "@testing-library/react": "^11.2.2",
-    "@testing-library/user-event": "^12.6.0",
     "@babel/core": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
     "babel-eslint": "^10.1.0",
