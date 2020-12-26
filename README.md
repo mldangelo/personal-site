@@ -29,7 +29,7 @@ You may wish to fork this repository or remove my remote origin and add your own
     npm install
     ```
 
-2. Run the following command to build the react application and serve it with hot module reloading:
+2. Run the following command to build the react application and serve it with fast refresh (hot module reloading):
 
     ```bash
     npm start
