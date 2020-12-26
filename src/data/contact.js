@@ -1,10 +1,12 @@
-import faGithub from '@fortawesome/fontawesome-free-brands/faGithub';
-import faFacebook from '@fortawesome/fontawesome-free-brands/faFacebookF';
-import faInstagram from '@fortawesome/fontawesome-free-brands/faInstagram';
-import faLinkedinIn from '@fortawesome/fontawesome-free-brands/faLinkedinIn';
-import faAngellist from '@fortawesome/fontawesome-free-brands/faAngellist';
-import faTwitter from '@fortawesome/fontawesome-free-brands/faTwitter';
-import faEnvelope from '@fortawesome/fontawesome-free-regular/faEnvelope';
+import { faGithub } from '@fortawesome/free-brands-svg-icons/faGithub';
+import { faFacebookF } from '@fortawesome/free-brands-svg-icons/faFacebookF';
+import { faInstagram } from '@fortawesome/free-brands-svg-icons/faInstagram';
+import { faLinkedinIn } from '@fortawesome/free-brands-svg-icons/faLinkedinIn';
+import { faAngellist } from '@fortawesome/free-brands-svg-icons/faAngellist';
+import { faTwitter } from '@fortawesome/free-brands-svg-icons/faTwitter';
+import { faEnvelope } from '@fortawesome/free-regular-svg-icons/faEnvelope';
+// See https://fontawesome.com/icons?d=gallery&s=brands,regular&m=free
+// to add other icons.
 
 const data = [
   {
@@ -15,7 +17,7 @@ const data = [
   {
     link: 'https://facebook.com/d',
     label: 'Facebook',
-    icon: faFacebook,
+    icon: faFacebookF,
   },
   {
     link: 'https://www.instagram.com/dangelosaurus/',
