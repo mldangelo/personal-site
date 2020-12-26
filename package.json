@@ -17,12 +17,10 @@
     "analyze": "npm run build && source-map-explorer build/static/js/*.chunk.js"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.32",
     "@fortawesome/free-brands-svg-icons": "^5.15.1",
     "@fortawesome/free-regular-svg-icons": "^5.15.1",
-    "@fortawesome/fontawesome-svg-core": "^1.2.32",
     "@fortawesome/react-fontawesome": "0.1.14",
-    "@testing-library/jest-dom": "^5.11.6",
-    "@testing-library/react": "^11.2.2",
     "dayjs": "^1.9.7",
     "gh-pages": "^3.1.0",
     "node-sass": "^4.0.0",
@@ -36,16 +34,18 @@
     "react-markdown": "^5.0.3",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.1",
-    "rimraf": "^3.0.2",
-    "source-map-explorer": "^2.5.1"
+    "react-snap": "^1.23.0",
+    "rimraf": "^3.0.2"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.11.6",
+    "@testing-library/react": "^11.2.2",
     "eslint": "^7.16.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jsx-a11y": "6.4.1",
     "eslint-plugin-react": "^7.21.5",
-    "react-snap": "^1.23.0"
+    "source-map-explorer": "^2.5.1"
   },
   "browserslist": {
     "production": [
