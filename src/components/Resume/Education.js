@@ -5,7 +5,7 @@ import Degree from './Education/Degree';
 
 const Education = ({ data }) => (
   <div className="education">
-    <div className="link-to" id="education" />
+    <div className="link-to" id="education" /> {/* for in-page navigation */}
     <div className="title">
       <h3>Education</h3>
     </div>
@@ -39,11 +39,3 @@ Education.defaultProps = {
 };
 
 export default Education;
-/*
-  "institution": "Stanford University",
-  "area": "Computational and Mathematical Engineering",
-  "studyType": "Master of Science",
-  "startDate": "2012",
-  "endDate": "2016",
-  "url"
-*/
