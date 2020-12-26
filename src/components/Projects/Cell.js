@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 const Cell = ({ data }) => (
   <div className="cell-container">
@@ -10,11 +10,11 @@ const Cell = ({ data }) => (
           <a href={data.link}>{data.title}</a>
         </h3>
         <time className="published">
-          {moment(data.date).format('MMMM, YYYY')}
+          {dayjs(data.date).format('MMMM, YYYY')}
         </time>
       </header>
       <a href={data.link} className="image">
-        <img src={data.image} alt={data.title} />
+        <img src={`${process.env.PUBLIC_URL}${data.image}`} alt={data.title} />
       </a>
       <div className="description">
         <p>{data.desc}</p>

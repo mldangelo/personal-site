@@ -1,9 +1,11 @@
 # next.js
 /.next/
-out
 
-# npm related 
+# prefer npm over yarn 
 yarn.lock
+
+# eslint
+.eslintcache
 
 # Logs
 logs
@@ -42,6 +44,7 @@ public/dist/
 dist/
 tmp/
 build/
+out/
 
 # OSX
 .DS_Store

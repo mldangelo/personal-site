@@ -19,15 +19,13 @@
     "deploy": "gh-pages -t true -d out && rm -rf out/"
   },
   "dependencies": {
-    "@fortawesome/fontawesome": "^1.1.8",
     "@fortawesome/fontawesome-free-brands": "^5.0.13",
     "@fortawesome/fontawesome-free-regular": "^5.0.13",
     "@fortawesome/fontawesome-svg-core": "^1.2.32",
-    "@fortawesome/free-solid-svg-icons": "^5.15.1",
-    "@fortawesome/react-fontawesome": "0.1.13",
+    "@fortawesome/react-fontawesome": "0.1.14",
     "@types/react": "^17.0.0",
+    "dayjs": "^1.9.7",
     "gh-pages": "^3.1.0",
-    "moment": "^2.29.1",
     "next": "latest",
     "next-seo": "^4.17.0",
     "prop-types": "^15.7.2",
@@ -60,5 +58,17 @@
     "hooks": {
       "pre-commit": "npm run lint"
     }
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

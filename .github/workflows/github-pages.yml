@@ -19,10 +19,8 @@ jobs:
       run: npm ci
     - name: Build and Deploy
       env:
-        PORT: 3000
         NODE_ENV: production
-        BASE_PATH: /personal-site
-        GA_ID: UA-68649021-1
+        REACT_APP_GA_TRACKING_ID: UA-68649021-1
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: | 
           git config user.name mldangelo
