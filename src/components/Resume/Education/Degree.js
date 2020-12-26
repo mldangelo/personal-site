@@ -4,18 +4,25 @@ import PropTypes from 'prop-types';
 const Degree = ({ data }) => (
   <article className="degree-container">
     <header>
-      <h4 className="degree">{data.degree}</h4>
-      <p className="school"><a href={data.link}>{data.school}</a>, {data.year}</p>
+      <h4 className="degree">{data.studyType} {data.area}</h4>
+      <p className="school"><a href={data.url}>{data.institution}</a>, {data.endDate}</p>
     </header>
   </article>
 );
 
+// TODO Consider generating types from:
+// https://github.com/jsonresume/resume-schema/blob/master/schema.json
+// using https://www.npmjs.com/package/json-schema-to-typescript
+
 Degree.propTypes = {
   data: PropTypes.shape({
-    degree: PropTypes.string.isRequired,
-    link: PropTypes.string.isRequired,
-    school: PropTypes.string.isRequired,
-    year: PropTypes.number.isRequired,
+    institution: PropTypes.string,
+    url: PropTypes.string,
+    area: PropTypes.string,
+    studyType: PropTypes.string,
+    startDate: PropTypes.string, // ex 2016-08-01 TODO enforce ISO 8601
+    endDate: PropTypes.string,
+    score: PropTypes.string, // GPA
   }).isRequired,
 };
 

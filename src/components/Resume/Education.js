@@ -12,18 +12,25 @@ const Education = ({ data }) => (
     {data.map((degree) => (
       <Degree
         data={degree}
-        key={degree.school}
+        key={`${degree.institution}${degree.area}`}
       />
     ))}
   </div>
 );
 
+// TODO Consider generating types from:
+// https://github.com/jsonresume/resume-schema/blob/master/schema.json
+// using https://www.npmjs.com/package/json-schema-to-typescript
+
 Education.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape({
-    school: PropTypes.string,
-    degree: PropTypes.string,
-    link: PropTypes.string,
-    year: PropTypes.number,
+    institution: PropTypes.string,
+    url: PropTypes.string,
+    area: PropTypes.string,
+    studyType: PropTypes.string,
+    startDate: PropTypes.string, // ex 2016-08-01 TODO enforce ISO 8601
+    endDate: PropTypes.string,
+    score: PropTypes.string, // GPA
   })),
 };
 
@@ -32,3 +39,11 @@ Education.defaultProps = {
 };
 
 export default Education;
+/*
+  "institution": "Stanford University",
+  "area": "Computational and Mathematical Engineering",
+  "studyType": "Master of Science",
+  "startDate": "2012",
+  "endDate": "2016",
+  "url"
+*/

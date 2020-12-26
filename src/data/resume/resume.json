@@ -167,7 +167,8 @@
     {
       "institution": "Stanford University",
       "area": "Computational and Mathematical Engineering",
-      "studyType": "Master of Science",
+      "url": "https://stanford.edu",
+      "studyType": "M.S.",
       "startDate": "2012",
       "endDate": "2016",
       "courses": [
@@ -192,7 +193,8 @@
     {
       "institution": "University at Buffalo",
       "area": "Electrical Engineering, Computer Engineering",
-      "studyType": "Bachelor of Science",
+      "url": "https://buffalo.edu",
+      "studyType": "B.S.",
       "startDate": "2009",
       "endDate": "2012",
       "courses": [
