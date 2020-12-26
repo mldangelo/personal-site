@@ -3,14 +3,14 @@ import { Link } from 'react-router-dom';
 import Helmet from 'react-helmet';
 import dayjs from 'dayjs';
 
-import axios from 'axios';
 import Main from '../layouts/Main';
 
 const Admin = () => {
   const [users, setData] = useState([]);
 
   const fetchData = async () => {
-    const { data } = await axios('/api/admin');
+    const response = await fetch('/api/admin');
+    const { data } = await response.json();
     setData(data.users);
   };
 

@@ -17,14 +17,15 @@
     "analyze": "npm run build && source-map-explorer build/static/js/*.chunk.js"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.32",
     "@fortawesome/free-brands-svg-icons": "^5.15.1",
     "@fortawesome/free-regular-svg-icons": "^5.15.1",
-    "@fortawesome/fontawesome-svg-core": "^1.2.32",
     "@fortawesome/react-fontawesome": "0.1.14",
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.2",
     "dayjs": "^1.9.7",
     "gh-pages": "^3.1.0",
+    "js-cookie": "^2.2.1",
     "node-sass": "^4.0.0",
     "prop-types": "^15.7.2",
     "raw.macro": "^0.4.2",

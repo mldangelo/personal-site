@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Helmet from 'react-helmet';
 
-import axios from 'axios';
 import Main from '../layouts/Main';
 
 const Music = () => {
   const [bands, setData] = useState([]);
 
   const fetchData = async () => {
-    const { data } = await axios('/api/lastfm');
+    const response = await fetch('/api/lastfm');
+    const { data } = await response.json();
     setData(data);
   };
 
