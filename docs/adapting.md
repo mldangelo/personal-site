@@ -6,7 +6,8 @@ You may wish to fork this repository or remove my remote origin and add your own
 
 ## Before you start
 
-Make sure you have a good text editor. I recommend [Visual Studio Code](https://code.visualstudio.com/).
+1. Make sure you have a good text editor. I recommend [Visual Studio Code](https://code.visualstudio.com/).
+1. Review `src/App.js`. This file contains all of our route definitions. If you wish to add or remove a page, you should do so here.
 
 ## Checklist
 
@@ -24,10 +25,13 @@ Make sure you have a good text editor. I recommend [Visual Studio Code](https://
 
 ### Adapt Content
 
+I recommend keeping the project running as you go (with `npm start`) to help correct mistakes quickly.
+
 1. Start by changing text in the sidebar. This file is located at `src/components/Template/SideBar.js`.
-1. Add an image of yourself in `public/images/me.jpg`. If you decide to change the filename, be sure to go back to the sidebar and change the image path there as well. The site of your image should be approximately 256 x 256 pixels. Larger or smaller is ok, but avoid very large images to save bandwidth.
+1. Add an image of yourself in `public/images/me.jpg`. Your image should be approximately 256 x 256 pixels. Larger and smaller is ok, but avoid very large images to save bandwidth. If you need help resizing your image, Adobe makes a great online tool [here](https://www.adobe.com/photoshop/online/resize-image.html).
 1. Modify the text on the homepage. This file is located at `src/pages/Index.js`.
-1. Modify the files in `src/data/resume/` next. When you're finished, go back and modify all of the other files in the `src/data/` directory.
+1. Modify the files in `src/data/resume/` next.
+1. Modify all of the other files in the `src/data/` directory.
 1. You've finished modifying >95% of the pages. Search through the rest of the files for references to `Michael` or `Angelo` and change values to your name.
 1. Change or remove the favicon in `public/index.html`. [This](https://realfavicongenerator.net/) website may be helpful.
 
