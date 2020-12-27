@@ -25,6 +25,8 @@ const sections = [
   'References',
 ];
 
+const reducedCourses = json.education.map((school) => school.courses).flat();
+
 const Resume = () => (
   <Main
     title="Resume"
@@ -51,7 +53,7 @@ const Resume = () => (
       <Education data={json.education} />
       <Experience data={json.work} />
       <Skills skills={json.skills} />
-      <ReducedCourses data={json.education} />
+      <ReducedCourses data={reducedCourses} />
       <Courses data={courses} />
       <References />
 
