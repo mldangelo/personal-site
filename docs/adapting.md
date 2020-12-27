@@ -6,33 +6,14 @@ You may wish to fork this repository or remove my remote origin and add your own
 
 ## Before you start
 
-1. Run the project as is by following the set up and running instructions in the main [README.md](/README.md).
-1. Make sure you have a good text editor. I recommend [Visual Studio Code](https://code.visualstudio.com/).
+Make sure you have a good text editor. I recommend [Visual Studio Code](https://code.visualstudio.com/).
 
 ## Checklist
 
+### Setup
+
+1. Run the project as is by following the set up and running instructions in the main [README.md](https://github.com/mldangelo/personal-site#set-up).
 1. Change `homepage` in `package.json` to reflect where you plan to host the site. This is important for static exporting via react-snap. This also changes your path when developing locally. For example, a homepage of `mldangelo.com` places the site at `localhost:3000` and a homepage of `https://mldangelo.github.io/personal-site/` places the site at `localhost:3000/personal-site/`. If you plan to host at on a path such as `https://[your-github-username].github.io/[your-repo-name]`, you should set this now so that your development environment mirrors your production environment.
-1. Start by changing text in the sidebar. This file is located at `src/components/Template/SideBar.js`.
-1. Add an image of yourself in `public/images/me.jpg`. If you decide to change the filename, be sure to go back to the sidebar and change the image path there as well. The site of your image should be approximately 256 x 256 pixels. Larger or smaller is ok, but avoid very large images to save bandwidth.
-1. Modify the text in `src/pages/Index.js`
-1. Modify the files in `src/data/resume/` next. When you're finished, go back and modify all of the other files in the `src/data/` directory.
-1. You've finished modifying >95% of the pages. Search through the rest of the files for references to `Michael` or `Angelo` and change values to your name.
-1. Change the description in `public/index.html`. You may also wish to add a new favicon or remove it. [This](https://realfavicongenerator.net/) website may be helpful.
-1. If you plan to use a custom url, create `public/CNAME` and enter your URL. You can run:
-
-    ```bash
-    echo "YOUR_URL[.com]" > public/CNAME
-    ```
-
-    as a shortcut.
-
-    I recommend purchasing your own domain name from [Google Domains](https://domains.google). If you would like to host on github pages, run `npm run deploy`. This will generate a new branch called `gh-pages`. Then go to `https://github.com/[your-github-username]/[your-repo-name]/settings` and configure accordingly:
-
-    <center><img src="images/gh-pages.png"></center>
-
-1. Optionally, configure your domains DNS record. See [here]( https://help.github.com/articles/using-a-custom-domain-with-github-pages/) for more information.
-
-
 1. Create a `.env` file. To do this, run:
 
     ```bash
@@ -41,11 +22,27 @@ You may wish to fork this repository or remove my remote origin and add your own
 
     and set values as appropriate. Most people will not need to modify this file.
 
+### Adapt Content
 
-TODO turn off linter 
+1. Start by changing text in the sidebar. This file is located at `src/components/Template/SideBar.js`.
+1. Add an image of yourself in `public/images/me.jpg`. If you decide to change the filename, be sure to go back to the sidebar and change the image path there as well. The site of your image should be approximately 256 x 256 pixels. Larger or smaller is ok, but avoid very large images to save bandwidth.
+1. Modify the text on the homepage. This file is located at `src/pages/Index.js`.
+1. Modify the files in `src/data/resume/` next. When you're finished, go back and modify all of the other files in the `src/data/` directory.
+1. You've finished modifying >95% of the pages. Search through the rest of the files for references to `Michael` or `Angelo` and change values to your name.
+1. Change or remove the favicon in `public/index.html`. [This](https://realfavicongenerator.net/) website may be helpful.
 
+### Deploy
 
-If you would like to deploy manually, you can:
+See deployment instructions [here](https://github.com/mldangelo/personal-site#deploying-to-github-pages). If you plan to use a custom url, create `public/CNAME` and enter your URL. You can run:
 
-1. Change `NODE_ENV` to `production` in `.env`
-2. Run `npm run deploy`
+```bash
+echo "YOUR_URL[.com]" > public/CNAME
+```
+
+as a shortcut.
+
+I recommend purchasing your own domain name from [Google Domains](https://domains.google). If you would like to host on github pages, run `npm run deploy`. This generates a new branch called `gh-pages`. Then go to `https://github.com/[your-github-username]/[your-repo-name]/settings` and configure accordingly:
+
+<center><img src="images/gh-pages.png"></center>
+
+Next, configure your domains DNS record. See [here](https://help.github.com/articles/using-a-custom-domain-with-github-pages/) for more information.

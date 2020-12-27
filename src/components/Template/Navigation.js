@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 import Hamburger from './Hamburger';
 import routes from '../../data/routes';
 
-const Header = () => (
+// Websites Navbar, displays routes defined in 'src/data/routes'
+const Navigation = () => (
   <header id="header">
     <h1 className="index-link">
       {routes.filter((l) => l.index).map((l) => (
@@ -24,4 +25,4 @@ const Header = () => (
   </header>
 );
 
-export default Header;
+export default Navigation;
