@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
 
 import Main from '../layouts/Main';
 
@@ -24,10 +23,10 @@ const sections = [
 ];
 
 const Resume = () => (
-  <Main>
-    <Helmet title="Resume">
-      <meta name="description" content="Michael D'Angelo's Resume. Arthena, Matroid, YC, Skeptical Investments, Stanford ICME, Planet Labs, Facebook" />
-    </Helmet>
+  <Main
+    title="Resume"
+    description="Michael D'Angelo's Resume. Arthena, Matroid, YC, Skeptical Investments, Stanford ICME, Planet Labs, and Facebook."
+  >
     <article className="post" id="resume">
       <header>
         <div className="title">

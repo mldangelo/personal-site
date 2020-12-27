@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import Main from '../layouts/Main';
@@ -8,10 +7,10 @@ import EmailLink from '../components/Contact/EmailLink';
 import data from '../data/contact';
 
 const Contact = () => (
-  <Main>
-    <Helmet title="Contact">
-      <meta name="description" content="Contact Michael D'Angelo via email @ michael.l.dangelo@gmail.com" />
-    </Helmet>
+  <Main
+    title="Contact"
+    description="Contact Michael D'Angelo via email @ michael.l.dangelo@gmail.com"
+  >
     <article className="post" id="contact">
       <header>
         <div className="title">
