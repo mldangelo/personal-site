@@ -24,12 +24,11 @@ const Work = ({ data }) => (
 
 Work.propTypes = {
   data: PropTypes.shape({
-    name: PropTypes.string.isRequired, // Company Name
+    name: PropTypes.string, // Company Name
     location: PropTypes.string,
     description: PropTypes.string, // Company description
-    position: PropTypes.string.isRequired,
+    position: PropTypes.string,
     url: PropTypes.string,
-
     startDate: PropTypes.string, // Iso8601
     endDate: PropTypes.string, // Iso8601
     summary: PropTypes.string, // Overview of your responsibilities at the company

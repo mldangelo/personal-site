@@ -49,21 +49,21 @@
     {
       "name": "Arthena",
       "position": "Co-founder, CTO",
-      "website": "https://arthena.com",
+      "url": "https://arthena.com",
       "startDate": "2014-01-01",
       "endDate": "present",
       "summary": "At Arthena I have learned how to build teams and manage people, build relationships with customers, sell enterprise products, and build on-line predictive models for production environments. I've also learned how to build and maintain large web applications.",
       "highlights": [
-        "Created a new financial product for private equity investing. Deployed models to predict the valuation of art at auction.",
-        "Lead development team, set development lifecycle, and managed analytics and web products.",
-        "Developed comprehensive simulations using MCMC, Modern Portfolio Theory, GLM, etc. using Scikit, PyMC3, and Jupyter.",
-        "YC Alumnus. Worked on everything. Built a 16-person team."
+        "Deployed quantitative strategies to predict the value of fine art in various pricing contexts.",
+        "Built production, on-line, end-to-end optimized machine learning pipelines with Pandas, Numpy, Scikit, Tensorflow, Dagster, Postgres, etc. on GCP with Kubernetes.",
+        "Designed micro-service architecture around: data collection, data integrity, feature engineering, research, strategy, backtesting, deployment, and reporting.",
+        "YC Alumnus. Worked on everything. Built a 16-person team. Operated company for 6+ years."
       ]
     },
     {
       "name": "Skeptical Investments",
       "position": "Co-founder",
-      "website": "https://skepticalinvestments.biz",
+      "url": "https://skepticalinvestments.biz",
       "startDate": "2017-03-01",
       "endDate": "present",
       "highlights": [
@@ -74,7 +74,7 @@
     {
       "name": "Enveritas",
       "position": "Consultant",
-      "website": "https://enveritas.org",
+      "url": "https://enveritas.org",
       "startDate": "2016-09-01",
       "endDate": "2018-01-01",
       "highlights": [
@@ -86,7 +86,7 @@
     {
       "name": "Zenysis",
       "position": "Consultant",
-      "website": "https://zenysis.com/",
+      "url": "https://zenysis.com/",
       "startDate": "2016-02",
       "endDate": "2016-03",
       "highlights": [
@@ -97,7 +97,7 @@
     {
       "name": "Matroid",
       "position": "Co-founder",
-      "website": "https://matroid.com",
+      "url": "https://matroid.com",
       "startDate": "2015-07",
       "endDate": "2016-01",
       "highlights": [
@@ -108,7 +108,7 @@
     {
       "name": "Planet",
       "position": "Missions Intern",
-      "website": "https://planet.com",
+      "url": "https://planet.com",
       "startDate": "2014-06",
       "endDate": "2015-01",
       "highlights": [
@@ -120,7 +120,7 @@
     {
       "name": "Planetary Resources",
       "position": "Avionics Intern",
-      "website": "https://www.planetaryresources.com/",
+      "url": "https://www.planetaryresources.com/",
       "startDate": "2014-01",
       "endDate": "2014-05",
       "highlights": [
@@ -132,7 +132,7 @@
     {
       "name": "Facebook",
       "position": "Intern",
-      "website": "https://facebook.com",
+      "url": "https://facebook.com",
       "startDate": "2013-06",
       "endDate": "2013-09",
       "highlights": [
@@ -144,7 +144,7 @@
     {
       "name": "UB Nanosatellite Program",
       "position": "Co-founder, Program Manager",
-      "website": "https://ubnl.space/",
+      "url": "https://ubnl.space/",
       "startDate": "2010-10",
       "endDate": "2012-06",
       "highlights": [
@@ -157,7 +157,7 @@
     {
       "organization": "SEDS-USA",
       "position": "Board Member",
-      "website": "https://seds.org",
+      "url": "https://seds.org",
       "startDate": "2013-10",
       "endDate": "2014-10",
       "summary": "Global movement of free coding clubs for young people.",

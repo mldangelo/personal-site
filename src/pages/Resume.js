@@ -10,8 +10,6 @@ import Courses from '../components/Resume/Courses';
 import References from '../components/Resume/References';
 
 import courses from '../data/resume/courses';
-// import degrees from '../data/resume/degrees';
-// import positions from '../data/resume/positions';
 import { skills, categories } from '../data/resume/skills';
 
 import json from '../data/resume/resume.json';
