@@ -47,26 +47,36 @@
   },
   "work": [
     {
-      "company": "Arthena",
+      "name": "Arthena",
       "position": "Co-founder, CTO",
       "website": "https://arthena.com",
       "startDate": "2014-01-01",
-      "endDate": "current",
+      "endDate": "present",
       "summary": "At Arthena I have learned how to build teams and manage people, build relationships with customers, sell enterprise products, and build on-line predictive models for production environments. I've also learned how to build and maintain large web applications.",
       "highlights": [
         "Created a new financial product for private equity investing. Deployed models to predict the valuation of art at auction.",
         "Lead development team, set development lifecycle, and managed analytics and web products.",
         "Developed comprehensive simulations using MCMC, Modern Portfolio Theory, GLM, etc. using Scikit, PyMC3, and Jupyter.",
-        "YC Alumn. Worked on everything. Built a 16-person team."
+        "YC Alumnus. Worked on everything. Built a 16-person team."
       ]
     },
     {
-      "company": "Enveritas",
+      "name": "Skeptical Investments",
+      "position": "Co-founder",
+      "website": "https://skepticalinvestments.biz",
+      "startDate": "2017-03-01",
+      "endDate": "present",
+      "highlights": [
+        "Founded a micro-vc fund to throw token amounts of money at problems I find interesting.",
+        "Created the InstaSafe. Fast, automated investment docs for YC companies."
+      ]
+    },
+    {
+      "name": "Enveritas",
       "position": "Consultant",
       "website": "https://enveritas.org",
       "startDate": "2016-09-01",
-      "endDate": "current",
-      "summary": "",
+      "endDate": "2018-01-01",
       "highlights": [
         "Trained a model for the Brazilian Coffee Scenes Dataset with better than state of the art accuracy.",
         "Collected training sets on the ground in Uganda. Built dashboards to visualize work of surveyors using Flask, React, and D3.",
@@ -74,36 +84,33 @@
       ]
     },
     {
-      "company": "Zenysis",
+      "name": "Zenysis",
       "position": "Consultant",
       "website": "https://zenysis.com/",
       "startDate": "2016-02",
       "endDate": "2016-03",
-      "summary": "",
       "highlights": [
         "Worked in Addis Ababa for the Ethiopian Ministry of Health and built data visualization tools in React and Flask.",
         "Ingested multiple databases with different alphabets, calendars, and without official spellings of geographic locations."
       ]
     },
     {
-      "company": "Matroid",
+      "name": "Matroid",
       "position": "Co-founder",
       "website": "https://matroid.com",
       "startDate": "2015-07",
       "endDate": "2016-01",
-      "summary": "",
       "highlights": [
         "Developed end to end machine learning pipeline to train visual classifiers from keywords using Node.JS, Express, Keystone, MongoDB, AWS, S3, Caffe, and other technologies.",
         " Received Series A term sheets for 20M+ valuations."
       ]
     },
     {
-      "company": "Planet",
+      "name": "Planet",
       "position": "Missions Intern",
       "website": "https://planet.com",
       "startDate": "2014-06",
       "endDate": "2015-01",
-      "summary": "",
       "highlights": [
         "Built models to improve image quality, signal to noise ratio, and dynamic range.",
         "Performed statistical analysis of image quality in Matlab and Python. Developed flight software in C++.",
@@ -111,12 +118,11 @@
       ]
     },
     {
-      "company": "Planetary Resources",
+      "name": "Planetary Resources",
       "position": "Avionics Intern",
       "website": "https://www.planetaryresources.com/",
       "startDate": "2014-01",
       "endDate": "2014-05",
-      "summary": "",
       "highlights": [
         "Developed simulations in Matlab for Attitude Determination and Control Subsystem.",
         "Developed processes for in lab testing and characterization of various subsystems.",
@@ -124,12 +130,11 @@
       ]
     },
     {
-      "company": "Facebook",
+      "name": "Facebook",
       "position": "Intern",
       "website": "https://facebook.com",
       "startDate": "2013-06",
       "endDate": "2013-09",
-      "summary": "",
       "highlights": [
         "Developed software in python for automated testing of servers.",
         "Performed statistical analysis with R, HIVE to assist in triage of malfunctioning servers.",
@@ -137,12 +142,11 @@
       ]
     },
     {
-      "company": "UB Nanosatellite Program",
+      "name": "UB Nanosatellite Program",
       "position": "Co-founder, Program Manager",
       "website": "https://ubnl.space/",
       "startDate": "2010-10",
       "endDate": "2012-06",
-      "summary": "",
       "highlights": [
         "Coauthored grant to build a multi-spectral imaging satellite as part of the AFRL University Nanosatellite Program.",
         "Lead a team of 60 students through satellite development life cycle. Served as a technical expert, acquired intimate working knowledge of satellite subsystems.  Solicited funding through NASA, AFOSR, and several corporate sponsors."

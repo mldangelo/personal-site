@@ -1,5 +1,11 @@
 const fs = require('fs');
+const path = require('path');
 const resumeSchema = require('resume-schema');
+const { compile } = require('json-schema-to-typescript');
 
-const resumeObject = JSON.parse(fs.readFileSync('./resume.json', 'utf8'));
-resumeSchema.validate(resumeObject, () => {});
+(async () => {
+    const resumeObject = JSON.parse(fs.readFileSync(path.join(__dirname, 'resume.json'), 'utf8'));
+    resumeSchema.validate(resumeObject, () => {});
+    const interface = await compile(resumeSchema.schema, 'resume-schema');
+    fs.writeFileSync(path.join(__dirname, 'resume.d.ts'), interface);
+})();
