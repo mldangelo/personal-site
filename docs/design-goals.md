@@ -1,8 +1,11 @@
 # Design Goals
 
+This projects attempts to follow these design principles. Feedback and discussion around these are encouraged. Please feel free to submit an issue or get in touch.
+
 ## Simple
 
 1. Someone learning web development should be able to clone this repo and start making it their own within a few minutes.
+2. Does not require reading a large amount of documentation.
 
 ## Fast
 
@@ -24,7 +27,7 @@
     - New features that affect the entire project should be carefully considered.
     - Buy, don't build. Don't reinvent the wheel. Use popular npm libraries when possible.
 1. Limited horizontal fragmentation
-    - Linter to prevent easy nits & to prevent developers from wasting time thinking about code style.
+    - Linter to prevent easy PR nits & to prevent developers from wasting time thinking about code style.
     - Preferred React Style - ie (functional components & proptypes).
     - Consistent file structure based on current best practices.
     - Similar features are built similarly. Code reads like an assembly line, not a layer cake.
@@ -34,7 +37,7 @@
 1. *Boring* technologies
     - Javascript over reason or typescript. Limited ecmascript experimental features.
     - Prefer popular and well maintained npm packages.
-1. Good tests
+1. Good tests.
 1. Maintainable
     - Easy setup.
     - It should be easy to deploy any version of this site.
