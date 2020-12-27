@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
 
 import Main from '../layouts/Main';
 
@@ -8,10 +7,10 @@ import Personal from '../components/Stats/Personal';
 import Site from '../components/Stats/Site';
 
 const Stats = () => (
-  <Main>
-    <Helmet title="Stats">
-      <meta name="description" content="Some statistics about Michael D'Abngelo and mldangelo.com" />
-    </Helmet>
+  <Main
+    title="Stats"
+    description="Some statistics about Michael D'Angelo and mldangelo.com"
+  >
     <article className="post" id="stats">
       <header>
         <div className="title">

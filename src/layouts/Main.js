@@ -11,7 +11,10 @@ const Main = (props) => (
   <>
     <Analytics />
     <ScrollToTop />
-    <Helmet titleTemplate="%s | Michael D'Angelo" defaultTitle="Michael D'Angelo" />
+    <Helmet titleTemplate="%s | Michael D'Angelo" defaultTitle="Michael D'Angelo">
+      {props.title && <title>{props.title}</title>}
+      <meta name="description" content={props.description} />
+    </Helmet>
     <div id="wrapper">
       <Header />
       <div id="main">
@@ -28,11 +31,15 @@ Main.propTypes = {
     PropTypes.node,
   ]),
   fullPage: PropTypes.bool,
+  title: PropTypes.string,
+  description: PropTypes.string,
 };
 
 Main.defaultProps = {
   children: null,
   fullPage: false,
+  title: null,
+  description: "Michael D'Angelo's personal website.",
 };
 
 export default Main;

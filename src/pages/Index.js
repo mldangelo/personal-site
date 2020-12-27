@@ -1,14 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
 
 import Main from '../layouts/Main';
 
 const Index = () => (
-  <Main>
-    <Helmet>
-      <meta name="description" content="Michael D'Angelo's personal website. New York based Stanford ICME graduate, co-founder and CTO of Arthena, and YC Alumni." />
-    </Helmet>
+  <Main
+    description={"Michael D'Angelo's personal website. New York based Stanford ICME graduate, "
+    + 'co-founder and CTO of Arthena, and YC Alumni.'}
+  >
     <article className="post" id="index">
       <header>
         <div className="title">
