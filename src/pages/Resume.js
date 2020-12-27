@@ -11,7 +11,7 @@ import Courses from '../components/Resume/Courses';
 import References from '../components/Resume/References';
 
 import courses from '../data/resume/courses';
-import { skills, categories } from '../data/resume/skills';
+// import skills from '../data/resume/skills';
 
 import json from '../data/resume/resume.json';
 
@@ -48,7 +48,7 @@ const Resume = () => (
       </header>
       <Education data={json.education} />
       <Experience data={json.work} />
-      <Skills skills={skills} categories={categories} />
+      <Skills skills={json.skills} />
       <Courses data={courses} />
       <References />
 

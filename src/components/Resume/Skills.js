@@ -4,17 +4,48 @@ import PropTypes from 'prop-types';
 import CategoryButton from './Skills/CategoryButton';
 import SkillBar from './Skills/SkillBar';
 
-const handleProps = ({ categories }) => ({
-  buttons: categories.map((cat) => cat.name).reduce((obj, key) => ({
+const makeCategories = (skills) => {
+  // this is a list of colors that I like. The length should be == to the
+  // number of categories. Re-arrange this list until you find a pattern you like.
+  const colors = [
+    '#6968b3',
+    '#37b1f5',
+    '#40494e',
+    '#515dd4',
+    '#e47272',
+    '#cc7b94',
+    '#3896e2',
+    '#c3423f',
+    '#d75858',
+    '#747fff',
+    '#64cb7b',
+  ];
+  return [
+    ...new Set(skills.reduce((acc, { keywords }) => acc.concat(keywords), [])),
+  ]
+    .sort()
+    .map((keywords, index) => ({
+      name: keywords,
+      color: colors[index],
+    }));
+};
+
+const handleProps = ({ skills }) => ({
+  buttons: makeCategories(skills).map((cat) => cat.name).reduce((obj, key) => ({
     ...obj,
     [key]: false,
   }), { All: true }),
 });
+// TODO: Add Athletic Skills, Office Skills,
+// Data Engineering, Data Science, ML Engineering, ... ?
 
 class Skills extends Component {
   constructor(props) {
     super(props);
-    this.state = handleProps({ categories: props.categories, skills: props.skills });
+    this.state = {
+      ...handleProps({ skills: props.skills }),
+      categories: makeCategories(props.skills),
+    };
   }
 
   getRows() {
@@ -25,25 +56,24 @@ class Skills extends Component {
 
     return this.props.skills.sort((a, b) => {
       let ret = 0;
-      if (a.competency > b.competency) ret = -1;
-      else if (a.competency < b.competency) ret = 1;
-      else if (a.category[0] > b.category[0]) ret = -1;
-      else if (a.category[0] < b.category[0]) ret = 1;
-      else if (a.title > b.title) ret = 1;
-      else if (a.title < b.title) ret = -1;
+      if (a.level > b.level) ret = -1;
+      else if (a.level < b.level) ret = 1;
+      else if (a.keywords[0] > b.keywords[0]) ret = -1;
+      else if (a.keywords[0] < b.keywords[0]) ret = 1;
+      else if (a.name > b.name) ret = 1;
+      else if (a.name < b.name) ret = -1;
       return ret;
-    }).filter((skill) => (actCat === 'All' || skill.category.includes(actCat)))
+    }).filter((skill) => (actCat === 'All' || skill.keywords.includes(actCat)))
       .map((skill) => (
         <SkillBar
-          categories={this.props.categories}
+          categories={this.state.categories}
           data={skill}
-          key={skill.title}
+          key={skill.name}
         />
       ));
   }
 
   getButtons() {
-    console.info(this.state);
     return Object.keys(this.state.buttons).map((key) => (
       <CategoryButton
         label={key}
@@ -90,19 +120,14 @@ class Skills extends Component {
 
 Skills.propTypes = {
   skills: PropTypes.arrayOf(PropTypes.shape({
-    title: PropTypes.string,
-    competency: PropTypes.number,
-    category: PropTypes.arrayOf(PropTypes.string),
-  })),
-  categories: PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.string,
-    color: PropTypes.string,
+    level: PropTypes.number,
+    keywords: PropTypes.arrayOf(PropTypes.string),
   })),
 };
 
 Skills.defaultProps = {
   skills: [],
-  categories: [],
 };
 
 export default Skills;
