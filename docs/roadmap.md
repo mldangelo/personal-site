@@ -13,6 +13,7 @@ This site has been a work in progress since 2014. I have tried to make updates t
 - Make code splitting better - some bundles are under 1KB.
 - Make styles more modular.
 - Make FA integration less terrible (consider building FA library).
+- Simplify Favicon. See: https://news.ycombinator.com/item?id=25520655
 - Better tests
   - one test per component.
   - test using puppeteer again.
