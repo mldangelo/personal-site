@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
 import ReactMarkdown from 'react-markdown';
 import raw from 'raw.macro';
 
@@ -17,10 +16,10 @@ const count = markdown.split(/\s+/)
 const LinkRenderer = ({ ...children }) => <Link {...children} />;
 
 const About = () => (
-  <Main>
-    <Helmet title="About">
-      <meta name="description" content="Learn about Michael D'Angelo" />
-    </Helmet>
+  <Main
+    title="About"
+    description="Learn about Michael D'Angelo"
+  >
     <article className="post markdown" id="about">
       <header>
         <div className="title">
