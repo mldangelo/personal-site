@@ -255,23 +255,308 @@
   ],
   "skills": [
     {
-      "name": "Web Development",
-      "level": "Master",
+      "name": "Javascript",
+      "level": 4,
       "keywords": [
-        "HTML",
-        "CSS",
+        "Javascript",
+        "Languages",
+        "Web Development"
+      ]
+    },
+    {
+      "name": "Node.JS",
+      "level": 3,
+      "keywords": [
+        "Javascript",
+        "Web Development"
+      ]
+    },
+    {
+      "name": "React",
+      "level": 3,
+      "keywords": [
+        "Javascript",
+        "Web Development"
+      ]
+    },
+    {
+      "name": "Bash",
+      "level": 2,
+      "keywords": [
+        "Languages",
+        "Tools"
+      ]
+    },
+    {
+      "name": "Amazon Web Services",
+      "level": 4,
+      "keywords": [
+        "Tools",
+        "Web Development"
+      ]
+    },
+    {
+      "name": "Heroku",
+      "level": 2,
+      "keywords": [
+        "Tools",
+        "Web Development"
+      ]
+    },
+    {
+      "name": "MongoDB",
+      "level": 3,
+      "keywords": [
+        "Databases",
+        "Web Development"
+      ]
+    },
+    {
+      "name": "ElasticSearch",
+      "level": 2,
+      "keywords": [
+        "Databases",
+        "Web Development"
+      ]
+    },
+    {
+      "name": "PostgreSQL/SQLite3/SQL",
+      "level": 4,
+      "keywords": [
+        "Databases",
+        "Languages",
+        "Web Development"
+      ]
+    },
+    {
+      "name": "Redis",
+      "level": 3,
+      "keywords": [
+        "Databases",
+        "Web Development"
+      ]
+    },
+    {
+      "name": "Data Mining",
+      "level": 3,
+      "keywords": [
+        "Data Science"
+      ]
+    },
+    {
+      "name": "Express.JS",
+      "level": 2,
+      "keywords": [
+        "Javascript",
+        "Web Development"
+      ]
+    },
+    {
+      "name": "D3",
+      "level": 2,
+      "keywords": [
+        "Javascript",
+        "Web Development"
+      ]
+    },
+    {
+      "name": "Flask",
+      "level": 2,
+      "keywords": [
+        "Python",
+        "Web Development"
+      ]
+    },
+    {
+      "name": "Git/Mercurial",
+      "level": 3,
+      "keywords": [
+        "Tools"
+      ]
+    },
+    {
+      "name": "Kubernetes",
+      "level": 2,
+      "keywords": [
+        "Data Engineering",
+        "Tools"
+      ]
+    },
+    {
+      "name": "Google Cloud Compute",
+      "level": 2,
+      "keywords": [
+        "Tools",
+        "Web Development"
+      ]
+    },
+    {
+      "name": "Numpy",
+      "level": 3,
+      "keywords": [
+        "Data Engineering",
+        "Data Science",
+        "Python"
+      ]
+    },
+    {
+      "name": "Numba",
+      "level": 2,
+      "keywords": [
+        "Data Engineering",
+        "Data Science",
+        "Python"
+      ]
+    },
+    {
+      "name": "Tensorflow + Keras",
+      "level": 3,
+      "keywords": [
+        "Data Science",
+        "Python"
+      ]
+    },
+    {
+      "name": "Jupyter",
+      "level": 3,
+      "keywords": [
+        "Data Science",
+        "Python"
+      ]
+    },
+    {
+      "name": "Typescript",
+      "level": 2,
+      "keywords": [
+        "Javascript",
+        "Languages",
+        "Web Development"
+      ]
+    },
+    {
+      "name": "HTML + SASS/SCSS/CSS",
+      "level": 3,
+      "keywords": [
+        "Languages",
+        "Web Development"
+      ]
+    },
+    {
+      "name": "Python",
+      "level": 5,
+      "keywords": [
+        "Languages",
+        "Python"
+      ]
+    },
+    {
+      "name": "C++",
+      "level": 2,
+      "keywords": [
+        "Languages"
+      ]
+    },
+    {
+      "name": "Julia",
+      "level": 2,
+      "keywords": [
+        "Languages"
+      ]
+    },
+    {
+      "name": "MATLAB",
+      "level": 2,
+      "keywords": [
+        "Languages"
+      ]
+    },
+    {
+      "name": "R",
+      "level": 2,
+      "keywords": [
+        "Languages"
+      ]
+    },
+    {
+      "name": "Data Visualization",
+      "level": 3,
+      "keywords": [
+        "Data Science",
         "Javascript"
       ]
     },
     {
-      "name": "Data Science",
-      "level": "Master",
+      "name": "GraphQL",
+      "level": 2,
       "keywords": [
-        "Kubernetes",
-        "Docker",
-        "Pandas",
-        "Scikit-learn",
-        "Tensorflow"
+        "Databases",
+        "Web Development"
+      ]
+    },
+    {
+      "name": "Pandas",
+      "level": 5,
+      "keywords": [
+        "Data Engineering",
+        "Data Science",
+        "Python"
+      ]
+    },
+    {
+      "name": "Matplotlib",
+      "level": 3,
+      "keywords": [
+        "Data Engineering",
+        "Data Science",
+        "Python"
+      ]
+    },
+    {
+      "name": "Scikit-Learn",
+      "level": 4,
+      "keywords": [
+        "Data Engineering",
+        "Data Science",
+        "Python"
+      ]
+    },
+    {
+      "name": "Hadoop",
+      "level": 2,
+      "keywords": [
+        "Data Engineering",
+        "Data Science"
+      ]
+    },
+    {
+      "name": "Spark",
+      "level": 2,
+      "keywords": [
+        "Data Engineering",
+        "Data Science"
+      ]
+    },
+    {
+      "name": "Dagster",
+      "level": 2,
+      "keywords": [
+        "Data Engineering",
+        "Python"
+      ]
+    },
+    {
+      "name": "Mypy",
+      "level": 3,
+      "keywords": [
+        "Python"
+      ]
+    },
+    {
+      "name": "Pylint",
+      "level": 4,
+      "keywords": [
+        "Data Engineering",
+        "Python"
       ]
     }
   ],
@@ -305,6 +590,5 @@
       "date": 2014,
       "reference": "Michael is not only a highly capable developer, but he is also an incredibly thoughtful and committed team player. He is entrepreneurial, creative, resourceful, and a problem-solver. Invaluable traits for a small company. A pleasure to work with, and I hope to again in the future!"
     }
-
   ]
 }

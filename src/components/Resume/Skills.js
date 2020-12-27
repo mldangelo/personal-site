@@ -4,12 +4,11 @@ import PropTypes from 'prop-types';
 import CategoryButton from './Skills/CategoryButton';
 import SkillBar from './Skills/SkillBar';
 
-const handleProps = ({ categories, skills }) => ({
+const handleProps = ({ categories }) => ({
   buttons: categories.map((cat) => cat.name).reduce((obj, key) => ({
     ...obj,
     [key]: false,
   }), { All: true }),
-  skills,
 });
 
 class Skills extends Component {
@@ -24,7 +23,7 @@ class Skills extends Component {
       this.state.buttons[key] ? key : cat
     ), 'All');
 
-    return this.state.skills.sort((a, b) => {
+    return this.props.skills.sort((a, b) => {
       let ret = 0;
       if (a.competency > b.competency) ret = -1;
       else if (a.competency < b.competency) ret = 1;
@@ -44,6 +43,7 @@ class Skills extends Component {
   }
 
   getButtons() {
+    console.info(this.state);
     return Object.keys(this.state.buttons).map((key) => (
       <CategoryButton
         label={key}
