@@ -1,17 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
-import data from '../../data/contact';
+import ContactIcons from '../Contact/ContactIcons';
 
 const { PUBLIC_URL } = process.env;
 
-const Nav = () => (
+const SideBar = () => (
   <section id="sidebar">
     <section id="intro">
       <Link to="/" className="logo">
-        <img src={`${PUBLIC_URL}/images/me_icon.jpg`} alt="" />
+        <img src={`${PUBLIC_URL}/images/me.jpg`} alt="" />
       </Link>
       <header>
         <h2>Michael D&apos;Angelo</h2>
@@ -34,18 +32,10 @@ const Nav = () => (
     </section>
 
     <section id="footer">
-      <ul className="icons">
-        {data.map((s) => (
-          <li key={s.label}>
-            <a href={s.link}>
-              <FontAwesomeIcon icon={s.icon} />
-            </a>
-          </li>
-        ))}
-      </ul>
+      <ContactIcons />
       <p className="copyright">&copy; Michael D&apos;Angelo <Link to="/">mldangelo.com</Link>.</p>
     </section>
   </section>
 );
 
-export default Nav;
+export default SideBar;

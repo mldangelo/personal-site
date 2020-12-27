@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet';
 
 import Analytics from '../components/Template/Analytics';
 import Header from '../components/Template/Header';
-import Nav from '../components/Template/Nav';
+import SideBar from '../components/Template/SideBar';
 import ScrollToTop from '../components/Template/ScrollToTop';
 
 const Main = (props) => (
@@ -20,7 +20,7 @@ const Main = (props) => (
       <div id="main">
         {props.children}
       </div>
-      {props.fullPage ? null : <Nav />}
+      {props.fullPage ? null : <SideBar />}
     </div>
   </>
 );
