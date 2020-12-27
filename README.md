@@ -1,18 +1,18 @@
 # Personal Website
 
-## [mldangelo.github.io/personal-site](https://mldangelo.github.io/personal-site/) and express-powered [mldangelo.com](http://mldangelo.com)
+See: serverless [mldangelo.github.io/personal-site](https://mldangelo.github.io/personal-site/) and express-powered [mldangelo.com](http://mldangelo.com).
 
-My personal website. An [MIT](https://github.com/mldangelo/personal-site/blob/main/docs/LICENSE) licensed, simple, easily modifiable, statically-exportable [React](https://reactjs.org/) application that deploys automatically for free using [github pages](https://pages.github.com/). Built using modern javascript, based on [create-react-app](https://github.com/facebook/create-react-app) with [React-Router](https://reactrouter.com/), SCSS, [github actions](https://github.com/features/actions), and many other useful libraries.
+My personal website. An [MIT](https://github.com/mldangelo/personal-site/blob/main/docs/LICENSE) licensed, simple, easily modifiable, statically-exportable [React](https://reactjs.org/), [Jamstack](https://jamstack.org/) application that deploys automatically for free using [github pages](https://pages.github.com/). Built using modern javascript, based on [create-react-app](https://github.com/facebook/create-react-app) with [React-Router](https://reactrouter.com/), SCSS, [github actions](https://github.com/features/actions), and many other useful technologies.
 
-Note: The [`main`](https://github.com/mldangelo/personal-site/tree/main) branch of this repository contains a statically-exportable version of my website intended for serverless hosting on github pages. If you're starting out, I recommend you start from `main`. The [`server`](https://github.com/mldangelo/personal-site/tree/server) branch hosted at [mldangelo.com](https://mldangelo.com) includes protected routes, google oauth, an admin dashboard, a database, and backend API calls to other third party services.
+**Note**: The [`main`](https://github.com/mldangelo/personal-site/tree/main) branch of this repository contains a statically-exportable version of my website intended for serverless hosting on github pages. If you're starting out, I recommend you start from `main`. The [`server`](https://github.com/mldangelo/personal-site/tree/server) branch hosted at [mldangelo.com](https://mldangelo.com) includes protected routes, google oauth, an admin dashboard, a database, and backend API calls to other third party services.
 
 ## Adapting this Project
 
-Follow the setup instructions below. Then review detailed notes and a checklist on adapting this project ([here](./docs/adapting.md)). Please feel free to reach out to me by filing an issue or emailing me at [help@mldangelo.com](mailto:help@mldangelo.com) for help configuring your project.
+Follow the setup instructions below and review detailed notes and a checklist on adapting this project [here](./docs/adapting.md). Please feel free to reach out to me by filing an issue or emailing me at [help@mldangelo.com](mailto:help@mldangelo.com) for help configuring your project.
 
 ## Contributing
 
-Contributions are actively encouraged. Please review the [design goals](./docs/design-goals.md), [roadmap](./docs/roadmap.md), and [contributing guidelines](./docs/contributing.md).If you find a bug, please email me, submit a pull request (I'll buy you a coffee as a thank you), or submit an issue.
+Contributions are actively encouraged. Please review the [design goals](./docs/design-goals.md), [roadmap](./docs/roadmap.md), and [contributing guidelines](./docs/contributing.md). If you find a bug, please email me, submit a pull request (I'll buy you a coffee as a thank you), or submit an issue.
 
 ## Dependencies
 
