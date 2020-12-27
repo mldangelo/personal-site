@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import resumeSchema from 'resume-schema';
 
 import Main from '../layouts/Main';
 
@@ -37,7 +38,12 @@ const Resume = () => (
                 <a href={`#${sec.toLowerCase()}`}>{sec}</a>
               </h4>))}
           </div>
-
+          <div className="link-container">
+            {Object.keys(resumeSchema.schema.properties).map((sec) => (
+              <h4 key={sec}>
+                <a href={`#${sec.toLowerCase()}`}>{sec}</a>
+              </h4>))}
+          </div>
         </div>
       </header>
       <Education data={json.education} />
