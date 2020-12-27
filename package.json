@@ -37,8 +37,7 @@
     "react-scripts": "^4.0.1",
     "react-snap": "^1.23.0",
     "resume-schema": "^1.0.0",
-    "rimraf": "^3.0.2",
-    "typescript-proptypes-generator": "0.0.6"
+    "rimraf": "^3.0.2"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.11.6",
