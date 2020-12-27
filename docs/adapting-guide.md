@@ -13,7 +13,7 @@ You may wish to fork this repository or remove my remote origin and add your own
 
 ### Setup
 
-1. Run the project as is by following the set up and running instructions in the main [README.md](https://github.com/mldangelo/personal-site#set-up).
+1. Run the project before making any modifications by following the set up and running instructions in the main [README.md](https://github.com/mldangelo/personal-site#set-up).
 1. Change `homepage` in `package.json` to reflect where you plan to host the site. This is important for static exporting via react-snap. This also changes your path when developing locally. For example, a homepage of `mldangelo.com` places the site at `localhost:3000` and a homepage of `https://mldangelo.github.io/personal-site/` places the site at `localhost:3000/personal-site/`. If you plan to host at on a path such as `https://[your-github-username].github.io/[your-repo-name]`, you should set this now so that your development environment mirrors your production environment.
 1. Create a `.env` file. To do this, run:
 
@@ -40,7 +40,7 @@ I recommend keeping the project running as you go (with `npm start`) to help cor
 See deployment instructions [here](https://github.com/mldangelo/personal-site#deploying-to-github-pages). If you plan to use a custom url, create `public/CNAME` and enter your URL. You can run:
 
 ```bash
-echo "YOUR_URL[.com]" > public/CNAME
+echo "[your-custom-domain][.com]" > public/CNAME
 ```
 
 as a shortcut.
@@ -49,4 +49,6 @@ I recommend purchasing your own domain name from [Google Domains](https://domain
 
 <center><img src="images/gh-pages.png"></center>
 
-Next, configure your domains DNS record. See [here](https://help.github.com/articles/using-a-custom-domain-with-github-pages/) for more information.
+Next, configure your domains DNS record. See [here](https://help.github.com/articles/using-a-custom-domain-with-github-pages/) for more information. After a few minutes, your website should be live on your domain.
+
+That's it. Thank you for reading. If you go through this guide and run into issues or areas you find unclear, please consider submitting a PR to help others like you.
