@@ -1,10 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import Main from '../layouts/Main';
 import EmailLink from '../components/Contact/EmailLink';
-import data from '../data/contact';
+import ContactIcons from '../components/Contact/ContactIcons';
 
 const Contact = () => (
   <Main
@@ -21,15 +20,7 @@ const Contact = () => (
         <p>Feel free to get in touch. You can email me at: </p>
         <EmailLink />
       </div>
-      <ul className="icons">
-        {data.map((s) => (
-          <li key={s.label}>
-            <a href={s.link}>
-              <FontAwesomeIcon icon={s.icon} />
-            </a>
-          </li>
-        ))}
-      </ul>
+      <ContactIcons />
     </article>
   </Main>
 );
