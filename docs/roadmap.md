@@ -6,35 +6,35 @@ This site has been a work in progress since 2014. I have tried to make updates t
 
 ### Improvements
 
-- use JSON resume instead of reinventing the wheel (perform literature search for wiki data resume standard)
-- Fix navbar (use nav provided by template) -> Reduce Bundle size
+- use JSON resume instead of reinventing the wheel (perform literature search for wiki data resume standard).
+- Fix navbar (use nav provided by template) -> Reduce Bundle size.
 - Separate concerns better in src/data. Some files are data, others are template variables.
 - Get better at redefining duplicate types. They are especially prevalent in resume components.
 - Make code splitting better - some bundles are under 1KB.
-- Make styles more modular
-- Make FA integration less terrible (consider building FA library)
+- Make styles more modular.
+- Make FA integration less terrible (consider building FA library).
 - Better tests
-  - one test per component
-  - test using puppeteer again
-  - test cross brower compatibility
-  - Use google lighthouse
-- Introduce a spell checker
+  - one test per component.
+  - test using puppeteer again.
+  - test cross browser compatibility.
+  - Use google lighthouse.
+- Introduce a spell checker.
 
 ### New Features
 
 - Completely gut and redo server integration, use JWT
-  - auto deploy backend, keep frontend on CDN
+  - auto deploy backend, keep frontend on CDN.
 - revisit posts/blog
-  - put one or two examples up from my knowledge base
+  - put one or two examples up from my knowledge base.
 
 ### Repository Cleanup
 
-- Don't allow pushes to main
+- Don't allow pushes to main.
 - Generate releases using github action (increment version in package.json too) using semantic versioning.
-- Add contributing guidelines
-- encourage more PRs that support this roadmap / pay bug bounties
+- Add contributing guidelines.
+- encourage more PRs that support this roadmap / pay bug bounties.
 - Build something that allows people to propose changes.
-- Make main / server distinction cleaner -> make sure PRs to main also land in server
+- Make main / server distinction cleaner -> make sure PRs to main also land in server.
 
 - Implement better analytics
 - Capture information about the community of people that have cloned this site.

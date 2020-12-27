@@ -34,15 +34,19 @@ This projects attempts to follow these design principles. Feedback and discussio
 
 ## Stable
 
-1. *Boring* technologies
+1. Use *Boring* technologies
     - Javascript over reason or typescript. Limited ecmascript experimental features.
     - Prefer popular and well maintained npm packages.
-1. Good tests.
 1. Maintainable
     - Easy setup.
     - It should be easy to deploy any version of this site.
     - Limited external dependencies (ie no missing headers for external libraries).
     - Dependencies are kept up to date (currently uses dependabot).
+1. Good tests.
 1. Stable API - This project has been forked > 100 times. It should be easy for those forks adopt changes in main.
 
-For further reading, please review React's [Design Principles](https://reactjs.org/docs/design-principles.html).
+## References
+
+For further reading, please review
+
+- React's [Design Principles](https://reactjs.org/docs/design-principles.html).
