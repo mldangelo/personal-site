@@ -65,7 +65,7 @@ This completes set up instructions. Please continue reading to learn how to modi
 
     I recommend purchasing your own domain name from [Google Domains](https://domains.google). If you would like to host on github pages, run `npm run deploy`. This will generate a new branch called `gh-pages`. Then go to `https://github.com/[your github username]/[your repository name]/settings` and configure accordingly:
 
-    <center><img src="docs/gh-pages.png"></center>
+    <center><img src="docs/images/gh-pages.png"></center>
 
 9. Optionally, configure your domains DNS record. See [here]( https://help.github.com/articles/using-a-custom-domain-with-github-pages/) for more information.
 
@@ -82,17 +82,16 @@ If you would like to deploy manually, you can:
 
 Please feel free to reach out to me by filing an issue or at [help@mldangelo.com](mailto:help@mldangelo.com) for help configuring your project.
 
-## Contributors
+## Contributing
 
-* [@mldangelo](https://github.com/mldangelo)
-* [@typpo](https://github.com/typpo)
-* [@notrueblood](https://github.com/notrueblood)
+Contributions are actively encouraged. Please review the [design goals](./docs/design-goals.md), [roadmap](./docs/roadmap.md), and [contributing guidelines](./docs/contributing.md).
 
 ## Acknowledgements
 
-* Special thanks to [@typpo](https://github.com/typpo) for tirelessly answering all of my node.js and react questions.
 * Template based on [Future Imperfect](https://html5up.net/future-imperfect) by [@ajlkn](https://github.com/ajlkn) for [HTML5 UP](html5up.net).
+* Special thanks to [@typpo](https://github.com/typpo) for tirelessly answering all of my node.js and react questions.
+* [@notrueblood](https://github.com/notrueblood)[<sup>[1]</sup>](https://github.com/mldangelo/personal-site/pull/218) and [@sjhsieh](https://github.com/sjhsieh)[<sup>[2]</sup>](https://github.com/mldangelo/personal-site/issues/168) for keeping my ego in check.
 
 ## License
 
-[MIT](https://github.com/mldangelo/personal-site/blob/main/LICENSE)
+[MIT](https://github.com/mldangelo/personal-site/blob/main/docs/LICENSE)
