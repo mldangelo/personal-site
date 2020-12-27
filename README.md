@@ -65,7 +65,7 @@ This completes set up instructions. Please continue reading to learn how to modi
 
     I recommend purchasing your own domain name from [Google Domains](https://domains.google). If you would like to host on github pages, run `npm run deploy`. This will generate a new branch called `gh-pages`. Then go to `https://github.com/[your github username]/[your repository name]/settings` and configure accordingly:
 
-    <center><img src="docs/gh-pages.png"></center>
+    <center><img src="docs/images/gh-pages.png"></center>
 
 9. Optionally, configure your domains DNS record. See [here]( https://help.github.com/articles/using-a-custom-domain-with-github-pages/) for more information.
 
