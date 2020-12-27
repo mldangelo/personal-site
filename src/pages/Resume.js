@@ -7,7 +7,9 @@ import Main from '../layouts/Main';
 import Education from '../components/Resume/Education';
 import Experience from '../components/Resume/Experience';
 import Skills from '../components/Resume/Skills';
+import ReducedCourses from '../components/Resume/ReducedCourses';
 import Courses from '../components/Resume/Courses';
+
 import References from '../components/Resume/References';
 
 import courses from '../data/resume/courses';
@@ -49,6 +51,7 @@ const Resume = () => (
       <Education data={json.education} />
       <Experience data={json.work} />
       <Skills skills={json.skills} />
+      <ReducedCourses data={json.education} />
       <Courses data={courses} />
       <References />
 
