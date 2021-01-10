@@ -32,7 +32,6 @@
     "react-dom": "^17.0.1",
     "react-ga": "^3.3.0",
     "react-helmet": "^6.1.0",
-    "react-markdown": "^5.0.3",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.1",
     "react-snap": "^1.23.0",

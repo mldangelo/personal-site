@@ -1,7 +1,7 @@
 
 # Intro
 
-I am a co-founder and the CTO of [Arthena](https://arthena.com) where I build tools to price fine art. I also investment in ideas and people I believe in through a [small venture fund](https://skepticalinvestments.biz) and I enjoy advising startups[todo add link]. I may even be available for pro-bono work depending on time commitment and market sector. I am particularly interested in projects that touch social impact, health and safety, and outer space. If you think I can be helpful, or would like to arrange a meeting with me, please feel free to get in touch.
+I am a co-founder and the CTO of [Arthena](https://arthena.com) where I build tools to price fine art and to help experts price fine art quickly, accurately, and at scale. I also investment in ideas and people I believe in through a [small venture fund](https://skepticalinvestments.biz) and I enjoy advising startups[todo add link]. I may even be available for pro-bono work depending on time commitment and market sector. I am particularly interested in projects that touch social impact, health and safety, and outer space. If you think I can be helpful to you or would like to arrange a meeting with me, please feel free to get in touch.
 
 # Currently
 
@@ -81,7 +81,7 @@ Ask me in person for other stories that I'm afraid to share with the internet.
 - I have a list of thousands of ideas, like creating matching bow ties for cats and humans.
 - I almost always have a sketchbook with me and a [01 Sakura Pigma Micron Pen](https://www.sakuraofamerica.com/product/pigma-micron/).
 - I can't locate every country on a map.
-- I operate a [small angel fund](http://skepticalinvestments.biz/) with no expectations for returns.
+- I operate a [small angel fund](http://skepticalinvestments.biz/) with no expectations for returns (returns are trrible).
 - I break about 30 traffic laws on a [skateboard](https://landyachtz.com/boards/cruiser/), [onewheel](https://onewheel.com/products/xr), [bicycle](https://www.citibikenyc.com/), or [electric skateboard](https://boostedusa.com/collections/electric-skateboards/products/boosted-mini-x) every single day.
 - I added this page because so many people complained that my site was just my resume.
 

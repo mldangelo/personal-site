@@ -52,3 +52,18 @@ I recommend purchasing your own domain name from [Google Domains](https://domain
 Next, configure your domains DNS record. See [here](https://help.github.com/articles/using-a-custom-domain-with-github-pages/) for more information. After a few minutes, your website should be live on your domain.
 
 That's it. Thank you for reading. If you go through this guide and run into issues or areas you find unclear, please consider submitting a PR to help others like you.
+
+## Common Pitfalls
+
+Here are answers to questions I've been asked at least twice. I've attempted to improve documentation in other places to address them. 
+
+1. homepage path
+1. LF / CRLF 
+2. master / main
+3. Google Analytics
+4. DNS - site points to somewhere else
+5. Configure git 
+6. Text editor
+7. CNAME
+8. Can I host at [username.github.io]? Sure, see https://pages.github.com/ You need to change branches. Create a new branch off of main, and configure `gh-pages` to write to main instead of a `gh-pages` branch. Example ? 
+9. Disable eslint: `echo "*\n" > .eslintignore` Although I really don't recommend it. Linters are good. They help prevent errors, enforce uniform style so that you can spend less time thinking about formatting and more time reading code, and eliminate easy nits for code reviews. If the rules aren't working for you, you should change them. https://eslint.org/docs/about/
