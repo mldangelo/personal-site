@@ -1,13 +1,21 @@
 
 # Intro
 
-I am a co-founder and the CTO of [Arthena](https://arthena.com) where I work on engineering infrastructure and build tools to price fine art. I primary work as a data engineer.
-
-I am available to consult on interesting projects. I am particularly interested in projects that touch social impact, education, and outer space. I enjoy advising companies and may even be available for pro-bono work depending on the time commitment. If you would like to arrange a meeting. please feel free to get in touch.
+I am a co-founder and the CTO of [Arthena](https://arthena.com) where I build tools to price fine art. I also investment in ideas and people I believe in through a [small venture fund](https://skepticalinvestments.biz) and I enjoy advising startups[todo add link]. I may even be available for pro-bono work depending on time commitment and market sector. I am particularly interested in projects that touch social impact, health and safety, and outer space. If you think I can be helpful, or would like to arrange a meeting with me, please feel free to get in touch.
 
 # Currently
 
-At Arthena I have learned how to build teams and manage people, build relationships with customers, sell enterprise products, and build on-line predictive models for production environments.
+At Arthena, I have learned how to make culture, build teams, manage people, build relationships with customers, sell enterprise products, and build on-line predictive models with technologies like [Dask](https://dask.org/), [Dagster](https://dagster.io/), [TensorFlow](https://www.tensorflow.org/), and [spaCy](https://spacy.io/). 
+
+Arthena's domain is challenging because art market data is often poorly structured (requires domain-specific knowledge to extract information from natural language), transactions occur infrequently, and every work of art is unique. Arthena borrows concepts from quantitative finance and machine learning research topics like Graph Neural Networks. Over the last seven years, my company has built a comprehensive transactional database. 
+
+Most art is appraised by human experts near in time to a point of sale. Human appraisals are expensive, take time, and exhibit bias. They are generally based on a) the intuition of the appraiser, and b) the performance of similar works of art found in price databases like [Artnet](https://www.artnet.com/price-database/). With automated valuation models, the values of millions of works of art can be recomputed daily with strict uncertainty bounds. 
+
+Tools are used in a variety of different business contexts.
+
+I primary work as a data engineer and on engineering infrastructure.
+
+Arthena’s feature engineering tasks often have ambiguous solutions and require thorough research and nuanced understanding of art lexicon and the semantic structure of language. 
 
 # Some history
 
@@ -41,47 +49,41 @@ At Arthena I have learned how to build teams and manage people, build relationsh
 
 - At 20, I coauthored a grant to build a satellite and managed a 60+ person team through the end of undergrad. You can read more about that [here](https://ubnl.space/glados/).
 
-You can ask me in person for other stories that I'm afraid to share with the internet.
+Ask me in person for other stories that I'm afraid to share with the internet.
 
 # I like
 
+- Running
 - Skiing
 - Sailing and the sea
 - Space
 - Summer
 - [Books](https://www.goodreads.com/mdangelo)
-- Colored pencils (Faber-Castell Polychromos)
+- Colored pencils ([Faber-Castell Polychromos](https://www.faber-castell.com/products/art-and-graphic/polychromos))
 - Podcasts ([The Daily](https://www.nytimes.com/column/the-daily), [Planet Money](https://www.npr.org/sections/money/), [The Indicator](https://www.npr.org/podcasts/510325/the-indicator-from-planet-money), [99% Invisible](https://99percentinvisible.org/episodes/), [The Economist](http://radio.economist.com/), [Radiolab](https://www.wnycstudios.org/shows/radiolab), [Hidden Brain](https://www.npr.org/series/423302056/hidden-brain), [Inquiring Minds](https://inquiring.show), and others)
 - [Good design](/)
 - [Photography](https://instagram.com/dangelosaurus)
 
 # Travel / Geography
 
-- I am from originally from Buffalo, New York. I have since lived in
-Palo Alto, Mountain View, San Francisco, Seattle, and New York.
-
+- I am from originally from Buffalo, New York. I have since lived in Palo Alto, Mountain View, San Francisco, Seattle, and New York.
 - I've been to ~ 50 countries, some of which I have forgotten, and many of which I would like to revisit.
-
 - In 2016, I visited: Canada, Ethiopia, Austria, Germany, Belgium, Ireland, Northern Ireland, Italy, Romania, Sweden, Norway, Svalbard, Panama, Costa Rica, Uganda, Japan, and the UAE, mostly in that order.
-
 - In 2017, I visited: Canada, Japan, Denmark, Germany, Sweden, Estonia, Russia, the Netherlands, Belgium, the U.K., Spain, Iceland, France, Switzerland, Ethiopia, and Luxembourg.
-
 - In 2018, I visited: Canada, France, Italy, Israel, and the U.K.
-
 - In 2019, I visited: Canada, England, France, and Switzerland.
-
-- In 2020, I stayed in New York.
-
+- In 2020, I barely traveled 20 blocks. I stayed in New York throughout the entire pandemic.
+- In 2021, I hope to start traveling again.
 - I am an Oregon Trail II enthusiast.
 
 # Fun facts
 
 - I have a list of thousands of ideas, like creating matching bow ties for cats and humans.
-- I almost always have a sketchbook with me.
+- I almost always have a sketchbook with me and a [01 Sakura Pigma Micron Pen](https://www.sakuraofamerica.com/product/pigma-micron/).
 - I can't locate every country on a map.
-- I operate a [small angel fund](http://skepticalinvestments.biz/) with terrible returns.
+- I operate a [small angel fund](http://skepticalinvestments.biz/) with no expectations for returns.
 - I break about 30 traffic laws on a [skateboard](https://landyachtz.com/boards/cruiser/), [onewheel](https://onewheel.com/products/xr), [bicycle](https://www.citibikenyc.com/), or [electric skateboard](https://boostedusa.com/collections/electric-skateboards/products/boosted-mini-x) every single day.
-- I added this page because so many people complained that my site was just a resume.
+- I added this page because so many people complained that my site was just my resume.
 
 # I dream of
 
