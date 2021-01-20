@@ -51,7 +51,7 @@ const EmailLink = () => {
 
   const [idx, updateIter] = useState(0); // points to current message
   const [message, updateMessage] = useState(messages[idx]);
-  const [char, updateChar] = useState(messages[idx].length); // points to current char
+  const [char, updateChar] = useState(0); // points to current char
   const [isActive, setIsActive] = useState(true); // disable when all messages are printed
 
   useInterval(() => {
@@ -62,7 +62,8 @@ const EmailLink = () => {
       newChar = 0;
     }
     if (newIdx === messages.length) {
-      setIsActive(false);
+      updateIter(0);
+      updateChar(0);
     } else {
       updateMessage(messages[newIdx].slice(0, newChar));
       updateIter(newIdx);
