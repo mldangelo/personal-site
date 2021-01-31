@@ -55,15 +55,36 @@ That's it. Thank you for reading. If you go through this guide and run into issu
 
 ## Common Pitfalls
 
-Here are answers to questions I've been asked at least twice. I've attempted to improve documentation in other places to address them. 
+Here are answers to questions I've been asked at least twice. I've attempted to improve documentation in other places to address them.
 
-1. homepage path
-1. LF / CRLF 
-2. master / main
-3. Google Analytics
-4. DNS - site points to somewhere else
-5. Configure git 
-6. Text editor
-7. CNAME
-8. Can I host at [username.github.io]? Sure, see https://pages.github.com/ You need to change branches. Create a new branch off of main, and configure `gh-pages` to write to main instead of a `gh-pages` branch. Example ? 
-9. Disable eslint: `echo "*\n" > .eslintignore` Although I really don't recommend it. Linters are good. They help prevent errors, enforce uniform style so that you can spend less time thinking about formatting and more time reading code, and eliminate easy nits for code reviews. If the rules aren't working for you, you should change them. https://eslint.org/docs/about/
+1. My CSS isn't rendering, or I see a 404 instead of my site:
+
+    Make sure the `homepage` field of `package.json` points to where you plan to host your site index. Also, double check that you created a `CNAME` file (see deployment instructions above). If neither of these work, please open an issue or send me an email.
+
+2. LF / CRLF issues with eslint.
+
+    This is a common windows development pitfall. See @[FrozenFury](https://github.com/FrozenFury)'s [comment](https://github.com/mldangelo/personal-site/issues/263#issuecomment-759216299) for how to update your eslint config to resolve this issue.
+
+3. master / main
+
+    Github decided to rename the default branch of all of their repositories from master to main, and so did I. See their reasoning [here](https://github.com/github/renaming). If you're trying to pull in recent changes, consider renaming your own branch, or just create a merge commit from my main.
+
+4. Google Analytics Warnings when exporting.
+
+    Either set up Google Analytics or disable the `Analytics.js` component. Read more about [react-ga](https://github.com/react-ga/react-ga).
+
+5. How do I configure git? What is nano?
+
+    Read through [git-scm](https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup)'s excellent documentation. I recommend setting your default text editor to something you're comfortable with.I like to use vim for writing commit messages.
+
+6. Can I host at [username.github.io]?
+
+    Sure, see github's documentation [here](https://pages.github.com/). You will need to change branches. Create a new branch off of main, and configure `gh-pages` to write to main instead of a `gh-pages` branch.
+
+7. How do I disable eslint?
+
+    `echo "*\n" > .eslintignore` Although I really don't recommend it. Linters are good. They help prevent errors, enforce uniform style so that you can spend less time thinking about formatting and more time reading code, and eliminate easy nits for code reviews. If the rules aren't working for you, you should change them. See eslint's documentation [here](https://eslint.org/docs/about/) for more information.
+
+8. Why is my website rendering the readme file?
+
+    See 1. above and make sure that `.nojekyll` still exists in `public`. This file directs github to not attempt to render the website with Jekyll.
