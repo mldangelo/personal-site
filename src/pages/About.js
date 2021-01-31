@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import marked from 'marked';
+import ReactMarkdown from 'react-markdown';
 import raw from 'raw.macro';
 
 import Main from '../layouts/Main';
@@ -11,6 +11,9 @@ const markdown = raw('../data/about.md');
 const count = markdown.split(/\s+/)
   .map((s) => s.replace(/\W/g, ''))
   .filter((s) => s.length).length;
+
+// Make all hrefs react router links
+const LinkRenderer = ({ ...children }) => <Link {...children} />;
 
 const About = () => (
   <Main
@@ -24,8 +27,13 @@ const About = () => (
           <p>(in about {count} words)</p>
         </div>
       </header>
-      {/* eslint-disable-next-line react/no-danger */}
-      <div dangerouslySetInnerHTML={{ __html: marked(markdown) }} />
+      <ReactMarkdown
+        source={markdown}
+        renderers={{
+          Link: LinkRenderer,
+        }}
+        escapeHtml={false}
+      />
     </article>
   </Main>
 );

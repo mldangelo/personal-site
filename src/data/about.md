@@ -72,7 +72,7 @@ Ask me in person for other stories that I'm afraid to share with the internet.
 - In 2017, I visited: Canada, Japan, Denmark, Germany, Sweden, Estonia, Russia, the Netherlands, Belgium, the U.K., Spain, Iceland, France, Switzerland, Ethiopia, and Luxembourg.
 - In 2018, I visited: Canada, France, Italy, Israel, and the U.K.
 - In 2019, I visited: Canada, England, France, and Switzerland.
-- In 2020, I barely traveled 20 blocks. I stayed in New York throughout the entire pandemic and remodeled an apartment.
+- In 2020, I barely traveled 20 blocks. I stayed in New York and remodeled an apartment.
 - In 2021, I hope to start traveling again.
 - I am an Oregon Trail II enthusiast.
 
@@ -101,6 +101,7 @@ Ask me in person for other stories that I'm afraid to share with the internet.
 - [Hawley Moore](http://hawleymoore.com/)
 - [Holman Gao](https://golmansax.com/)
 - [Ian Webster](http://ianww.com/)
+- [Johanna Flato](https://www.johannaflato.com/)
 - [Judy Mou](http://www.judymou.com/)
 - [Noah Trueblood](http://notrueblood.com/)
 - [Ruoxi Wang](http://ruoxiw.com/)
