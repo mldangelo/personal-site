@@ -55,15 +55,15 @@ That's it. Thank you for reading. If you go through this guide and run into issu
 
 ## Common Pitfalls
 
-Here are answers to questions I've been asked at least twice. I've attempted to improve documentation in other places to address them.
+Here are answers to questions I've been asked at least twice. I've attempted to simplify development and improve documentation throughout the project to address them. This section is updated frequently.
 
 1. My CSS isn't rendering, or I see a 404 instead of my site:
 
-    Make sure the `homepage` field of `package.json` points to where you plan to host your site index. Also, double check that you created a `CNAME` file (see deployment instructions above). If neither of these work, please open an issue or send me an email.
+    Make sure the `homepage` field of `package.json` points to where you plan to host your site index. Also, double check that you created a `CNAME` file (see deployment instructions above). If neither of these work, please open an issue or send me an [email](mailto:help@mldangelo.com).
 
 2. LF / CRLF issues with eslint.
 
-    This is a common windows development pitfall. See @[FrozenFury](https://github.com/FrozenFury)'s [comment](https://github.com/mldangelo/personal-site/issues/263#issuecomment-759216299) for how to update your eslint config to resolve this issue.
+    This is a common Windows development pitfall. See @[FrozenFury](https://github.com/FrozenFury)'s [comment](https://github.com/mldangelo/personal-site/issues/263#issuecomment-759216299) for how to update your eslint config to resolve this issue.
 
 3. master / main
 
