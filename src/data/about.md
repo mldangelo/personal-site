@@ -72,7 +72,7 @@ Ask me in person for other stories that I'm afraid to share with the internet.
 - In 2017, I visited: Canada, Japan, Denmark, Germany, Sweden, Estonia, Russia, the Netherlands, Belgium, the U.K., Spain, Iceland, France, Switzerland, Ethiopia, and Luxembourg.
 - In 2018, I visited: Canada, France, Italy, Israel, and the U.K.
 - In 2019, I visited: Canada, England, France, and Switzerland.
-- In 2020, I barely traveled 20 blocks. I stayed in New York throughout the entire pandemic.
+- In 2020, I barely traveled 20 blocks. I stayed in New York throughout the entire pandemic and remodeled an apartment.
 - In 2021, I hope to start traveling again.
 - I am an Oregon Trail II enthusiast.
 
@@ -81,8 +81,8 @@ Ask me in person for other stories that I'm afraid to share with the internet.
 - I have a list of thousands of ideas, like creating matching bow ties for cats and humans.
 - I almost always have a sketchbook with me and a [01 Sakura Pigma Micron Pen](https://www.sakuraofamerica.com/product/pigma-micron/).
 - I can't locate every country on a map.
-- I operate a [small angel fund](http://skepticalinvestments.biz/) with no expectations for returns (returns are trrible).
-- I break about 30 traffic laws on a [skateboard](https://landyachtz.com/boards/cruiser/), [onewheel](https://onewheel.com/products/xr), [bicycle](https://www.citibikenyc.com/), or [electric skateboard](https://boostedusa.com/collections/electric-skateboards/products/boosted-mini-x) every single day.
+- I operate a [small angel fund](http://skepticalinvestments.biz/) with terrible returns.
+- I break about 30 traffic laws on a [cruiser skateboard](https://landyachtz.com/boards/cruiser/), [onewheel](https://onewheel.com/products/xr), [bicycle](https://www.citibikenyc.com/), or [electric skateboard](https://boostedusa.com/collections/electric-skateboards/products/boosted-mini-x) every single day.
 - I added this page because so many people complained that my site was just my resume.
 
 # I dream of
@@ -91,3 +91,19 @@ Ask me in person for other stories that I'm afraid to share with the internet.
 - enabling a brighter future.
 - doing better.
 - no one checking the commit history for earlier drafts of this file.
+
+# Websites from people I admire
+
+- [Alex Peysakhovich](http://alexpeys.github.io/)
+- [Chris Lengerich](http://www.chrislengerich.com/)
+- [Chris Saad](https://www.chrissaad.com/)
+- [Duncan Tomlin](http://duncantomlin.com/)
+- [Hawley Moore](http://hawleymoore.com/)
+- [Holman Gao](https://golmansax.com/)
+- [Ian Webster](http://ianww.com/)
+- [Judy Mou](http://www.judymou.com/)
+- [Noah Trueblood](http://notrueblood.com/)
+- [Ruoxi Wang](http://ruoxiw.com/)
+- [Tom Sachs](https://www.tomsachs.org/)
+
+If you feel like you belong on this list and I forgot about you, you're probably right. Pester me and I'll add you.
