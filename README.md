@@ -1,10 +1,8 @@
 # Personal Website
 
-See: serverless [mldangelo.github.io/personal-site](https://mldangelo.github.io/personal-site/) and express-powered [mldangelo.com](http://mldangelo.com).
+See: [mldangelo.com](https://mldangelo.com).
 
 My personal website. An [MIT](https://github.com/mldangelo/personal-site/blob/main/LICENSE) licensed, simple, easily modifiable, statically-exportable [React](https://reactjs.org/), [Jamstack](https://jamstack.org/) application that deploys automatically for free using [github pages](https://pages.github.com/). Built using modern javascript, based on [create-react-app](https://github.com/facebook/create-react-app) with [React-Router](https://reactrouter.com/), SCSS, [github actions](https://github.com/features/actions), and many other useful technologies.
-
-**Note**: The [`main`](https://github.com/mldangelo/personal-site/tree/main) branch of this repository contains a statically-exportable version of my website intended for serverless hosting on github pages. If you're starting out, I recommend you start from `main`. The [`server`](https://github.com/mldangelo/personal-site/tree/server) branch hosted at [mldangelo.com](https://mldangelo.com) includes protected routes, google oauth, an admin dashboard, a database, and backend API calls to other third party services.
 
 ## Adapting this Project
 
@@ -37,13 +35,15 @@ Run the following command to build the react application and serve it with fast 
 npm start
 ```
 
-Your web browser should automatically open to `<ip>:<port>:<path>` default: [http://localhost:3000/personal-site](http://localhost:3000/personal-site).
+Your web browser should automatically open to `<ip>:<port>:<path>` default: [http://localhost:3000/](http://localhost:3000/).
 
 ## Deploying
 
 ### Deploying to Github Pages
 
-Modify the environmental variables and git remote url in [`.github/workflows/github-pages.yml`](.github/workflows/github-pages.yml).
+1. Modify the environmental variables and git remote url in [`.github/workflows/github-pages.yml`](.github/workflows/github-pages.yml).
+2. Modify `homepage` in `package.json` to point to where you plan to host your site. If you do not plan on using a custom domain name, it should look like `https://[your-gh-username].github.io/[repository-name - default:personal-site]/`
+3. If you plan on using a custom domain, modify `public/CNAME`. If you don't, delete `public/CNAME`.
 
 Make a commit to `main` and push your changes. That's it.
 
