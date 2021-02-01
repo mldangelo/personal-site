@@ -37,7 +37,7 @@ I recommend keeping the project running as you go (with `npm start`) to help cor
 
 ### Deploy
 
-See deployment instructions [here](https://github.com/mldangelo/personal-site#deploying-to-github-pages). If you plan to use a custom url, create `public/CNAME` and enter your URL. You can run:
+See deployment instructions [here](https://github.com/mldangelo/personal-site#deploying-to-github-pages). If you plan to use a custom url, modify `public/CNAME` and enter your URL. You can run:
 
 ```bash
 echo "[your-custom-domain][.com]" > public/CNAME
