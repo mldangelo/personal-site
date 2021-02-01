@@ -1,6 +1,6 @@
 {
   "name": "personal-site",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "homepage": "https://mldangelo.github.io/personal-site/",
   "license": "MIT",
   "repository": {
@@ -17,20 +17,20 @@
     "analyze": "npm run build && source-map-explorer build/static/js/*.chunk.js"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.32",
-    "@fortawesome/free-brands-svg-icons": "^5.15.1",
-    "@fortawesome/free-regular-svg-icons": "^5.15.1",
+    "@fortawesome/fontawesome-svg-core": "^1.2.34",
+    "@fortawesome/free-brands-svg-icons": "^5.15.2",
+    "@fortawesome/free-regular-svg-icons": "^5.15.2",
     "@fortawesome/react-fontawesome": "0.1.14",
-    "dayjs": "^1.9.7",
+    "dayjs": "^1.10.4",
     "gh-pages": "^3.1.0",
-    "node-sass": "^4.0.0",
+    "node-sass": "^4.14.1",
     "prop-types": "^15.7.2",
     "raw.macro": "^0.4.2",
     "react": "^17.0.1",
-    "react-burger-menu": "^3.0.2",
+    "react-burger-menu": "^3.0.3",
     "react-dom": "^17.0.1",
     "react-ga": "^3.3.0",
-    "react-helmet": "^6.1.0",
+    "react-helmet-async": "^1.0.7",
     "react-markdown": "^5.0.3",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.1",
@@ -38,14 +38,14 @@
     "rimraf": "^3.0.2"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^5.11.6",
-    "@testing-library/react": "^11.2.2",
-    "eslint": "^7.16.0",
+    "@testing-library/jest-dom": "^5.11.9",
+    "@testing-library/react": "^11.2.3",
+    "eslint": "^7.19.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jsx-a11y": "6.4.1",
-    "eslint-plugin-react": "^7.21.5",
-    "source-map-explorer": "^2.5.1"
+    "eslint-plugin-react": "^7.22.0",
+    "source-map-explorer": "^2.5.2"
   },
   "browserslist": {
     "production": [

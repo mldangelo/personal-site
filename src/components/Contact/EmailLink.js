@@ -23,7 +23,6 @@ const messages = [
   'help',
   'admin',
   'or-I-really-like-your-website',
-  'I\'ll-stop-distracting-you-now',
   'thanks',
 ];
 
