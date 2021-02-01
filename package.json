@@ -22,6 +22,8 @@
     "@fortawesome/fontawesome-free-brands": "^5.0.13",
     "@fortawesome/fontawesome-free-regular": "^5.0.13",
     "@fortawesome/fontawesome-svg-core": "^1.2.32",
+    "@fortawesome/free-brands-svg-icons": "^5.15.2",
+    "@fortawesome/free-regular-svg-icons": "^5.15.2",
     "@fortawesome/react-fontawesome": "0.1.14",
     "@types/react": "^17.0.0",
     "dayjs": "^1.9.7",
@@ -30,8 +32,10 @@
     "next-seo": "^4.17.0",
     "prop-types": "^15.7.2",
     "react": "^17.0.1",
+    "react-burger-menu": "^3.0.3",
     "react-dom": "^17.0.1",
     "react-markdown": "^5.0.3",
+    "react-router-dom": "^5.2.0",
     "sass": "^1.30.0"
   },
   "devDependencies": {

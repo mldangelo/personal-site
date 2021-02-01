@@ -5,7 +5,7 @@ const PageNotFound = () => (
   <div className="not-found">
     <NextSeo
       title="Not Found | Michael D'Angelo"
-      description="Whatever you were looking for isn't here."
+      description="The content you are looking for cannot be found."
     />
     <h1>Page Not Found</h1>
     <p>

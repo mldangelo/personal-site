@@ -3,7 +3,6 @@ const data = [
   {
     title: 'Nearest Dollar',
     subtitle: '2015 BVP Hackathon',
-    link: '/projects/nearestdollar/',
     image: '/images/projects/nearestdollar.jpg',
     date: '2015-11-20',
     desc:
@@ -37,7 +36,6 @@ const data = [
   {
     title: 'Cat Detector',
     subtitle: 'A convolutional neural network to classify cats! (and dogs)',
-    link: '/project/catdetector/',
     image: '/images/projects/catdetector.jpg',
     date: '2015-05-15',
     desc:

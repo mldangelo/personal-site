@@ -8,7 +8,7 @@ const Projects = () => (
   <>
     <NextSeo
       title="Projects | Michael D'Angelo"
-      description="Learn about all of Michael D'Angelo's old crappy projects."
+      description="Learn about Michael D'Angelo's projects."
     />
     <article className="post" id="projects">
       <header>
