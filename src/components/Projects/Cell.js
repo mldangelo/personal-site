@@ -22,7 +22,7 @@ const Cell = ({ data }) => (
 Cell.propTypes = {
   data: PropTypes.shape({
     title: PropTypes.string.isRequired,
-    link: PropTypes.string.isRequired,
+    link: PropTypes.string,
     image: PropTypes.string.isRequired,
     date: PropTypes.string.isRequired,
     desc: PropTypes.string.isRequired,
