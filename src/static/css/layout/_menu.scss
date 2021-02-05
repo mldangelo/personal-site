@@ -84,7 +84,7 @@
 			}
 		}
 
-		.is-menu-visible & {
+		body.is-menu-visible & {
 			@include vendor('transform', 'translateX(0)');
 			visibility: visible;
 		}

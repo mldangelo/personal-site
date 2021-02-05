@@ -16,6 +16,10 @@
 		padding: (_size(section-spacing) * 1.5);
 		width: 90em;
 
+		body.is-menu-visible & {
+			opacity: 0.15;
+		}
+
 		@include breakpoint(xlarge) {
 			padding: _size(section-spacing);
 		}
