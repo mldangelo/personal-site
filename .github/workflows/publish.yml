@@ -41,7 +41,4 @@ jobs:
           push: true
           file: ./package/Dockerfile
           context: .
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
           tags: ghcr.io/${{ github.repository_owner }}/personal-site:latest
