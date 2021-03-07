@@ -1,9 +1,8 @@
 name: publish
 
 # Is activate manually
-#  workflow_dispatch:
 on:
-  push:
+  workflow_dispatch:
     branches: [ main ]
 
 jobs:
