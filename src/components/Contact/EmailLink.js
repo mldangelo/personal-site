@@ -45,7 +45,7 @@ const useInterval = (callback, delay) => {
   }, [delay]);
 };
 
-const EmailLink = () => {
+const EmailLink = (props) => {
   const hold = 50; // ticks to wait after message is complete before rendering next message
   const delay = 50; // tick length in mS
 
@@ -62,8 +62,12 @@ const EmailLink = () => {
       newChar = 0;
     }
     if (newIdx === messages.length) {
-      updateIter(0);
-      updateChar(0);
+      if (props.loopMessage) {
+        updateIter(0);
+        updateChar(0);
+      } else {
+        setIsActive(false);
+      }
     } else {
       updateMessage(messages[newIdx].slice(0, newChar));
       updateIter(newIdx);
@@ -84,6 +88,13 @@ const EmailLink = () => {
       </a>
     </div>
   );
+};
+
+EmailLink.defaultProps = {
+  loopMessage: Boolean,
+};
+EmailLink.propTypes = {
+  loopMessage: Boolean,
 };
 
 export default EmailLink;
