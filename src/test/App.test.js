@@ -70,6 +70,6 @@ test('Renders 404 Page Component', () => {
 //     const linkElement = screen.getByTestId('heading');
 //     expect(linkElement).toHaveTextContent(page.heading);
 //   });
-};
+// };
 
 pages.forEach((page) => checkPageComponent(page));
