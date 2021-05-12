@@ -5,13 +5,13 @@ import Main from '../layouts/Main';
 
 const Index = () => (
   <Main
-    description={"Dhruv Doshi's personal website. Dalhousie University Studnet, "
-    + 'founder of DCS-BBN, and GTU Alumni.'}
+    description={"Michael D'Angelo's personal website. New York based Stanford ICME graduate, "
+    + 'co-founder and CTO of Arthena, and YC Alumni.'}
   >
     <article className="post" id="index">
       <header>
         <div className="title">
-          <h2 data-testid="heading"><Link to="/">What are you looking for</Link></h2>
+          <h2 data-testid="heading"><Link to="/">About this site</Link></h2>
           <p>
             A beautiful, responsive, statically-generated,
             react application written with modern Javascript.
