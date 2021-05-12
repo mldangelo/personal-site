@@ -72,4 +72,4 @@ test('Renders 404 Page Component', () => {
 //   });
 // };
 
-pages.forEach((page) => checkPageComponent(page));
+// pages.forEach((page) => checkPageComponent(page));
