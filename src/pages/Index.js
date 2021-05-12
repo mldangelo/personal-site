@@ -23,7 +23,7 @@ const Index = () => (
         </div>
       </header>
       <div className="title">
-        <h2 data-testid="heading"><Link to="/">Latest Updates!</Link></h2>
+        <h2>Latest Updates!</h2>
       </div>
       <p>
         Check out the blog page for new blogs {' '} <Link to="/resume"> here</Link> .
