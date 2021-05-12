@@ -21,6 +21,10 @@ const routes = [
     path: '/stats',
   },
   {
+    label: 'Blogs',
+    path: '/blogs',
+  },
+  {
     label: 'Contact',
     path: '/contact',
   },
