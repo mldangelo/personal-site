@@ -16,14 +16,15 @@ const Index = () => (
             or you can check out my {' '}
             <Link to="/resume">resume</Link>, {' '}
             <Link to="/projects">projects</Link>, {' '}
-            view <Link to="/stats">site statistics</Link>, {' '}
+            <Link to="/research">research work</Link>, {' '}
+            view <Link to="/blogs">blogs</Link>, {' '}
             or <Link to="/contact">contact</Link> me.
           </p>
-          <p> Source available <a href="https://github.com/dhruvdoshi/dhruvdoshi.github.io/">here</a>.</p>
+          {/* <p> Source available <a href="https://github.com/dhruvdoshi/dhruvdoshi.github.io/">here</a>.</p> */}
         </div>
       </header>
       <h2>Latest Updates!!</h2>
-      <p> Please find the lastest blogs <Link to="/resume">here</Link> .</p>
+      <p> Please find the lastest blogs <Link to="/blogs">here</Link> .</p>
     </article>
   </Main>
 );

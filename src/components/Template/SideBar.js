@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-// import ContactIcons from '../Contact/ContactIcons';
+import ContactIcons from '../Contact/ContactIcons';
 
 const { PUBLIC_URL } = process.env; // set automatically from package.json:homepage
 
@@ -14,7 +14,7 @@ const SideBar = () => (
       <header>
         <h2>Dhruv Doshi</h2>
         <p><a href="mailto:dhruvdoshi25071999@gmail.com">dhruvdoshi25071999@gmail.com</a></p>
-        {/* <ContactIcons /> */}
+        <ContactIcons />
       </header>
     </section>
 
