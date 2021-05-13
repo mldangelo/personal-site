@@ -6,7 +6,8 @@ const Cell = ({ data }) => (
   <div className="cell-container">
     <article className="mini-post">
       <header>
-        <time>{dayjs(data.date).format('MMMM, YYYY')}</time>
+        <h3>{data.title}</h3>
+        <time>{dayjs(data.date).format('MMMM DD, YYYY')}</time>
       </header>
       <a href={data.link} className="image">
         <img src={`${process.env.PUBLIC_URL}${data.image}`} alt={data.title} />
