@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const Certidegree = ({ data }) => (
-  <article>
+  <article className="certidegree-container">
     {/* <ul className="points">
       {data.points.map((point) => (
         <li key={point}>{point}</li>
