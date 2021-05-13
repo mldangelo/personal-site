@@ -1,47 +1,82 @@
 // TODO Add a couple lines about each project
 const data = [
   {
-    title: 'Nearest Dollar',
-    subtitle: '2015 BVP Hackathon',
-    image: '/images/projects/nearestdollar.jpg',
-    date: '2015-11-20',
+    title: 'DCS-BBN - Blockchain Cloud Storage ',
+    subtitle: 'DCS-BBN is a Decentralized Cloud System based on Blockchian Networking. This is Pyhton developed code for the system.',
+    image: '/images/projects/DCS1.gif',
+    date: '2020-01-21',
+    code_link: 'https://github.com/DhruvDoshi/DCS-BBN',
+    link: 'https://dhruv25071999.wixsite.com/dcs-bbn',
     desc:
-      'Built for a social impact hackathon. '
-      + 'NearestDollar connected to your bank accounts, credit cards, '
-      + 'or debit cards and rounded up your purchases to donate the balance to '
-      + 'the charity of your choice.',
+      'DCS-BBN is a Decentralized Cloud System based on Blockchian Networking. This is Pyhton developed code for the system.'
+      + 'Completely Decentralized system gives no single point of failure. '
+      + 'Allows connectivity and chance to convert DCScoin with any big blockchian coins like Bitcoin, Ethereum and Ripple. '
+      + 'Find the code link ',
   },
   {
-    title: 'Harvest',
-    subtitle: 'Won 3rd. place in 2015 Techcrunch Disrupt SF Hackathon',
-    link: 'https://devpost.com/software/harvest',
-    image: '/images/projects/harvest.jpg',
-    date: '2015-09-20',
+    title: 'Chat App',
+    subtitle: 'With the help of this platform multiple users could have a video chat. This platform does not saves any single bit of data on the servers. We only present the video and completely delete it',
+    image: '/images/projects/chat-app.gif',
+    date: '2020-05-09',
+    code_link: 'https://github.com/DhruvDoshi/multichat-dhruv',
+    link: 'https://chat-with-dhruv.herokuapp.com/',
     desc:
-      'Won ~ $7000 in prizes for an advanced, low cost monitoring solution '
-      + 'for crops. Harvest was designed to catch irrigation leaks, overwatering, '
-      + 'and nutrient deficiencies at an affordable price for the developing world.',
+      'The platform extracts the data with Webrtc Api and the it connects the users throught that api, continuing with that we are adding multiple modes and filters for the users. '
+      + 'The app is designed to take only 2 users as the time and others will wait their way in the waiting room until the conversation is over. '
+      + 'The application is hosted in Heroku.'
+      + 'Find the code link ',
   },
   {
-    title: 'Space Potato',
-    subtitle: 'A kickstarter funded potato powered weather balloon.',
-    link: 'http://www.spacepotato.org',
-    image: '/images/projects/spacepotato.jpg',
-    date: '2015-06-28',
+    title: 'Earth Wind',
+    subtitle: 'This is the model of Earth which shows the speed of the winds!!',
+    image: '/images/projects/Earth-wind.gif',
+    date: '2020-04-29',
+    code_link: 'https://github.com/DhruvDoshi/earth',
+    link: 'https://dhruv-earth-wind.now.sh/',
     desc:
-      'Launched a potato battery powered weather balloon with two cameras '
-      + 'and gps transponder. Resulting photos were published in a coffee table book. '
-      + 'You can email me for a copy.',
+      'This is the model of Earth which shows the speed of the winds!! '
+      + 'The app is designed to take live information from the server and pin point speed representation of any pirticular lattitude and longitude of the earth. '
+      + 'The application is hosted in Versal.'
+      + 'Find the code link ',
   },
   {
-    title: 'Cat Detector',
-    subtitle: 'A convolutional neural network to classify cats! (and dogs)',
-    image: '/images/projects/catdetector.jpg',
-    date: '2015-05-15',
+    title: 'Gif Finder',
+    subtitle: 'Find any Gif on the internet',
+    image: '/images/projects/link_gif.gif',
+    date: '2020-04-28',
+    link: 'https://gif-finder.vercel.app/',
+    code_link: 'https://github.com/DhruvDoshi/gif_finder',
     desc:
-      'Trained a convolutional neural network to classify between ~ 80 cats breeds. '
-      + 'Over 60,000 cats were classified before server bills made the project too expensive '
-      + 'to continue hosting.',
+      'Find any GIF from the internet in one shot. '
+      + 'Built with Javascript, HTML, CSS. '
+      + 'Hosted at versal with global hosting services. '
+      + 'Find the code link ',
+  },
+  {
+    title: 'Message Me',
+    subtitle: 'Message me from anywhere in the world',
+    link: 'https://dhruv-talk-map.vercel.app/',
+    image: '/images/projects/message.gif',
+    code_link: 'https://github.com/DhruvDoshi/map-message',
+    date: '2020-04-30',
+    desc:
+    'This is the map where we could put the public message to our friends. '
+    + 'App detects users location (from browser or IP), Guests of the website can leave a message. '
+    + 'A pin will be added to the map with the users location and message. '
+    + 'Find the code link ',
+  },
+  {
+    title: 'Redirector',
+    subtitle: 'A redirector page to go and find everything',
+    link: 'https://dhruvdoshi.github.io/redirector/',
+    image: '/images/projects/redirector.png',
+    code_link: 'https://github.com/DhruvDoshi/redirector/',
+    date: '2020-03-12',
+    desc:
+      'Get redirector to every page you need to visit . '
+      + 'Built with Javascript, HTML, CSS. '
+      + 'Hosted at github pages for optimum search speed. '
+      + 'Find the code link ',
   },
 ];
 

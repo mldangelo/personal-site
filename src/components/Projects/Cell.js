@@ -13,7 +13,7 @@ const Cell = ({ data }) => (
         <img src={`${process.env.PUBLIC_URL}${data.image}`} alt={data.title} />
       </a>
       <div className="description">
-        <p>{data.desc}</p>
+        <p>{data.desc}<a style={{ color: 'red' }} href={data.code_link}> here .</a></p>
       </div>
     </article>
   </div>
@@ -26,6 +26,7 @@ Cell.propTypes = {
     image: PropTypes.string.isRequired,
     date: PropTypes.string.isRequired,
     desc: PropTypes.string.isRequired,
+    code_link: PropTypes.string,
   }).isRequired,
 };
 
