@@ -2,20 +2,23 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const Certidegree = ({ data }) => (
-  <article className="degree-container">
-    <header>
-      <h4 className="degree">{data.certidegree}</h4>
-      <p className="school"><a href={data.link}>{data.school}</a>, {data.year}</p>
-    </header>
+  <article>
+    {/* <ul className="points">
+      {data.points.map((point) => (
+        <li key={point}>{point}</li>
+      ))}
+    </ul> */}
+    <li style={{ listStyleType: 'square' }}>
+      <a href={data.link}>{data.certidegree} </a>by {data.university}
+    </li>
   </article>
 );
 
 Certidegree.propTypes = {
   data: PropTypes.shape({
-    certidegree: PropTypes.string.isRequired,
-    link: PropTypes.string.isRequired,
-    school: PropTypes.string.isRequired,
-    year: PropTypes.number.isRequired,
+    certidegree: PropTypes.string,
+    link: PropTypes.string,
+    university: PropTypes.string,
   }).isRequired,
 };
 

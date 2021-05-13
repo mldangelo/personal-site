@@ -7,7 +7,7 @@ const Cerification = ({ data }) => (
   <div className="education">
     <div className="link-to" id="education" />
     <div className="title">
-      <h3>Education</h3>
+      <h3>Certifications</h3>
     </div>
     {data.map((certidegree) => (
       <Certidegree
@@ -24,6 +24,7 @@ Cerification.propTypes = {
     certidegree: PropTypes.string,
     link: PropTypes.string,
     year: PropTypes.number,
+    points: PropTypes.arrayOf(PropTypes.string).isRequired,
   })),
 };
 
