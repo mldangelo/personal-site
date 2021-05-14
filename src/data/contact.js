@@ -7,6 +7,8 @@ import { faTwitter } from '@fortawesome/free-brands-svg-icons/faTwitter';
 import { faEnvelope } from '@fortawesome/free-regular-svg-icons/faEnvelope';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons/faGoogle';
 import { faResearchgate } from '@fortawesome/free-brands-svg-icons/faResearchgate';
+import { faQuora, faTelegram } from '@fortawesome/free-brands-svg-icons';
+import { faCalendar } from '@fortawesome/free-regular-svg-icons';
 
 // See https://fontawesome.com/icons?d=gallery&s=brands,regular&m=free
 // to add other icons.
@@ -43,6 +45,11 @@ const data = [
     icon: faTwitter,
   },
   {
+    link: 'https://www.quora.com/profile/Dhruv-Doshi-18',
+    label: 'Quora',
+    icon: faQuora,
+  },
+  {
     link: 'https://scholar.google.com/citations?user=Ri3ZDcIAAAAJ&hl=en',
     label: 'Google Scholar',
     icon: faGoogle,
@@ -51,6 +58,16 @@ const data = [
     link: 'https://www.researchgate.net/profile/Dhruv-Doshi-4',
     label: 'Research Gate',
     icon: faResearchgate,
+  },
+  {
+    link: 'https://calendly.com/dhruvdoshi25071999/15min',
+    label: 'Calendar',
+    icon: faCalendar,
+  },
+  {
+    link: 'https://telegram.me/DoshiDhruv',
+    label: '',
+    icon: faTelegram,
   },
   {
     link: 'mailto:dhruvdoshi25071999@gmail.com',
