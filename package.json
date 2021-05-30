@@ -1,11 +1,11 @@
 {
   "name": "personal-site",
   "version": "3.0.1",
-  "homepage": "https://notrueblood.github.io/personal-site/",
+  "homepage": "https://mldangelo.com/",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/notrueblood/personal-site.git"
+    "url": "https://github.com/mldangelo/personal-site.git"
   },
   "scripts": {
     "build": "rimraf ./build && react-scripts build",
