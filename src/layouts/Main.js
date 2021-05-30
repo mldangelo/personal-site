@@ -7,6 +7,8 @@ import Navigation from '../components/Template/Navigation';
 import SideBar from '../components/Template/SideBar';
 import ScrollToTop from '../components/Template/ScrollToTop';
 
+Helmet.defaultProps.defer = false;
+
 const Main = (props) => (
   <HelmetProvider>
     <Analytics />
