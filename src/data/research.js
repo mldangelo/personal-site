@@ -3,7 +3,7 @@ const data = [
   {
     title: 'Decentralized Cloud Storage Based on Blockchian Networking',
     subtitle: 'Blockchian based cloud',
-    link: 'http://www.spacepotato.org',
+    link: 'https://www.springer.com/gp/book/9783030497941',
     journal: 'International Conference on Mobile Computing and Sustainable Informatics',
     journallink: 'https://www.springer.com/gp/book/9783030497941',
     journaleditor: 'Springer Nature - ICMCSI',
