@@ -10,7 +10,7 @@ const data = [
       + 'it on github pages after 4 days of work! At the end I went outdoor for a walk '
       + 'and that dissolved the stress out of my life!',
   },
-    {
+  {
     title: 'First Day in Canada!',
     subtitle: '',
     image: '/images/blogs/IMG-20210727-WA0002.jpg',
