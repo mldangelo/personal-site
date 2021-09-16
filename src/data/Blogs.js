@@ -3,7 +3,7 @@ const data = [
   {
     title: 'Computer Science Building - Dalhousie University',
     subtitle: '',
-    image: 'public/images/blogs/Dal_Goldberg_Building.jpg',
+    image: 'images/blogs/Dal_Goldberg_Building.jpg',
     date: '2021-09-07',
     desc:
       'The day for which I was waiting for! To attend the In-person class in the times '
@@ -12,7 +12,7 @@ const data = [
   {
     title: 'First Day in Canada!',
     subtitle: '',
-    image: 'public/images/blogs/First day canada.jpg',
+    image: 'images/blogs/First day canada.jpg',
     date: '2021-07-12',
     desc:
       'Today, I amd my friend landed in Canada, it is our first day out of India! ',
@@ -20,7 +20,7 @@ const data = [
   {
     title: 'A day ended with walk!',
     subtitle: '',
-    image: 'public/images/blogs/sunset.jpg',
+    image: 'images/blogs/sunset.jpg',
     date: '2021-05-12',
     desc:
       'Today, I worked on the personal portfolio website and sucessfully hosted '
