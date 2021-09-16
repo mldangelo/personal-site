@@ -7,7 +7,7 @@ const data = [
     date: '2021-09-07',
     desc:
       'The day for which I was waiting for! To attend the In-person class in the times '
-      +'of coronavirus outbreak. Back to class after a year!',
+      + 'of coronavirus outbreak. Back to class after a year!',
   },
   {
     title: 'First Day in Canada!',
