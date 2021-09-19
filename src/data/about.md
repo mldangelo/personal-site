@@ -44,24 +44,12 @@ Ask me in person for other movies or series recomendation!
 
 - At age of 17, I got into [SilverOak College](https://www.silveroakuni.ac.in/) for my B.E. in Computer Engineering.
 
+- After getting in the university I was just chilling and started watching series and did nothing for next 2 year!😅 Continuing that i started visiting events and eventually loved computer science field and security domain especially.
+
+- Currently I'm working to make world more secure and safeguard the data of users.
+
 
 
 Ask me in person for other stories that I'm afraid to share with the internet.
-
-
-
-<!-- 
-# Travel / Geography
-
-- I am from originally from Buffalo, New York. I have since lived in Palo Alto, Mountain View, San Francisco, Seattle, and New York.
-- I've been to ~ 50 countries, some of which I have forgotten, and many of which I would like to revisit.
-- In 2016, I visited: Canada, Ethiopia, Austria, Germany, Belgium, Ireland, Northern Ireland, Italy, Romania, Sweden, Norway, Svalbard, Panama, Costa Rica, Uganda, Japan, and the UAE, mostly in that order.
-- In 2017, I visited: Canada, Japan, Denmark, Germany, Sweden, Estonia, Russia, the Netherlands, Belgium, the U.K., Spain, Iceland, France, Switzerland, Ethiopia, and Luxembourg.
-- In 2018, I visited: Canada, France, Italy, Israel, and the U.K.
-- In 2019, I visited: Canada, England, France, and Switzerland.
-- In 2020, I barely traveled 20 blocks. I stayed in New York and remodeled an apartment.
-- In 2021, I hope to start traveling again.
-- I am an Oregon Trail II enthusiast. -->
-
 
 
