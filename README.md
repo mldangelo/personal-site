@@ -2,9 +2,9 @@
 [![GitHub Pages](https://github.com/DhruvDoshi/dhruvdoshi.github.io/actions/workflows/github-pages.yml/badge.svg)](https://github.com/DhruvDoshi/dhruvdoshi.github.io/actions/workflows/github-pages.yml)
 [![Node.js CI](https://github.com/DhruvDoshi/dhruvdoshi.github.io/actions/workflows/node.js.yml/badge.svg)](https://github.com/DhruvDoshi/dhruvdoshi.github.io/actions/workflows/node.js.yml)
 [![CodeQL](https://github.com/DhruvDoshi/dhruvdoshi.github.io/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/DhruvDoshi/dhruvdoshi.github.io/actions/workflows/codeql-analysis.yml)
-[![Website-Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fdhruvdoshi.github.io)](https://dhruvdoshi.github.io/redirector/)
+[![Website-Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fdhruvdoshi.github.io)](https://dhruvdoshi.github.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=popout-square)](https://opensource.org/licenses/MIT)
-[![Website shields.io](https://img.shields.io/website-up-down-orange-red/http/shields.io.svg)](https://dhruvdoshi.github.io/redirector/)
+[![Website shields.io](https://img.shields.io/website-up-down-orange-red/http/shields.io.svg)](https://dhruvdoshi.github.io/)
 
 
 See: [dhruvdoshi.io](https://dhruvdoshi.github.io).
