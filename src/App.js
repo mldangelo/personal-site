@@ -29,7 +29,7 @@ const App = () => (
         <Route path="/contact" component={Contact} />
         <Route path="/resume" component={Resume} />
         <Route path="/research" component={Research} />
-        <Route path="/blogs" component={Blogs} />
+        <Route path="/blogs/" component={Blogs} />
         <Route component={NotFound} status={404} />
       </Switch>
     </Suspense>
