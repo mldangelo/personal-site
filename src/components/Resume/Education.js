@@ -22,8 +22,8 @@ Education.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape({
     school: PropTypes.string,
     degree: PropTypes.string,
+    secondMajor: PropTypes.string,
     link: PropTypes.string,
-    year: PropTypes.number,
   })),
 };
 

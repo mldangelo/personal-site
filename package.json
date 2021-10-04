@@ -1,12 +1,8 @@
 {
   "name": "personal-site",
   "version": "3.0.1",
-  "homepage": "https://mldangelo.com/",
+  "homepage": "https://maxdignan.com/",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/mldangelo/personal-site.git"
-  },
   "scripts": {
     "build": "rimraf ./build && react-scripts build",
     "predeploy": "npm run build && react-snap",
