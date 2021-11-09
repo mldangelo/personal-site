@@ -16,16 +16,8 @@
     "test": "react-scripts test --watchAll=false",
     "analyze": "npm run build && source-map-explorer build/static/js/*.chunk.js"
   },
-  "scripts": {
-    "build": "rimraf ./build && react-scripts build",
-    "predeploy": "npm run build && react-snap",
-    "deploy": "gh-pages -d build",
-    "start": "react-scripts start",
-    "lint": "eslint src",
-    "test": "react-scripts test --watchAll=false",
-    "analyze": "npm run build && source-map-explorer build/static/js/*.chunk.js"
-  },
   "dependencies": {
+    "@angular/cli": "^12.2.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.34",
     "@fortawesome/free-brands-svg-icons": "^5.15.2",
     "@fortawesome/free-regular-svg-icons": "^5.15.2",
