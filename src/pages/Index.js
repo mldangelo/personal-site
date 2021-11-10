@@ -16,7 +16,7 @@ const Index = () => (
             <Link to="/resume">resume</Link>, {' '}
             <Link to="/projects">projects</Link>, {' '}
             <Link to="/research">research work</Link>, {' '}
-            view <Link to="/blogs">blogs</Link>, {' '}
+            view <a href="https://dhruvdoshi.github.io/blog">blogs</a>, {' '}
             or <Link to="/contact">contact</Link> me.
           </p>
           {/* <p> Source available <a href="https://github.com/dhruvdoshi/dhruvdoshi.github.io/">here</a>.</p> */}
