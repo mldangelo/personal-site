@@ -1,4 +1,4 @@
-# Personal Website
+# Know about Dhruv Doshi
 [![GitHub Pages](https://github.com/DhruvDoshi/dhruvdoshi.github.io/actions/workflows/github-pages.yml/badge.svg)](https://github.com/DhruvDoshi/dhruvdoshi.github.io/actions/workflows/github-pages.yml)
 [![Node.js CI](https://github.com/DhruvDoshi/dhruvdoshi.github.io/actions/workflows/node.js.yml/badge.svg)](https://github.com/DhruvDoshi/dhruvdoshi.github.io/actions/workflows/node.js.yml)
 [![CodeQL](https://github.com/DhruvDoshi/dhruvdoshi.github.io/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/DhruvDoshi/dhruvdoshi.github.io/actions/workflows/codeql-analysis.yml)
