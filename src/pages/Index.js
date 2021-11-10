@@ -23,7 +23,7 @@ const Index = () => (
         </div>
       </header>
       <h2>Latest Updates!!</h2>
-      <p> Please find the lastest blogs <Link to="/blogs">here</Link> .</p>
+      <p> Please find the lastest blogs <a href="https://dhruvdoshi.github.io/blog">here</a> .</p>
     </article>
   </Main>
 );
