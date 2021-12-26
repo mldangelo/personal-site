@@ -1,10 +1,10 @@
 # Design Goals
 
-This projects attempts to follow these design principles. Feedback and discussion around these are encouraged. Please feel free to submit an issue or get in touch.
+This projects attempts to follow the design principles outlined below. Feedback and discussion is encouraged. Please feel free to submit an issue or get in touch.
 
 ## Simple
 
-1. Someone learning web development should be able to clone this repo and start making it their own within a few minutes.
+1. Students and new web developers should be able to fork or clone this repo and start making it their own within a few minutes.
 2. Does not require reading a large amount of documentation.
 
 ## Fast

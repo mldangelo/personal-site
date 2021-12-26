@@ -12,7 +12,7 @@ This site has been a work in progress since 2014. I have tried to make updates t
 4. Types
 5. Tailwind ?
 6. JSON resume
-7. add summary on CV - update rest of CV
+7. add summary on CV - update rest of CV, change arthena experience
 8. Update about page, change summary, add more about who I currently am, consider scaling back the history section.
    1. news sources
    2. podcasts
