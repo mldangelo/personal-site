@@ -4,6 +4,26 @@ This site has been a work in progress since 2014. I have tried to make updates t
 
 ## Future Direction
 
+### Upgrade Path
+
+1. Dependencies
+2. Node Version
+3. Next
+4. Types
+5. Tailwind ?
+6. JSON resume
+7. add summary on CV - update rest of CV
+8. Update about page, change summary, add more about who I currently am, consider scaling back the history section.
+   1. news sources
+   2. podcasts
+   3. interests
+   4. new york
+9. Add a couple of blog posts - how to run standups, how to use slack, don't reinvent the wheel.
+10. re-add music page
+11. look over react change log, review best practices for libraries like router
+12. Close tickets
+13. consider using rescript or spinning up a side project with rescript
+
 ### Improvements
 
 - use JSON resume instead of reinventing the wheel (perform literature search for wiki data resume standard).
