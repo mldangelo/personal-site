@@ -1,6 +1,6 @@
 # Design Goals
 
-This projects attempts to follow the design principles outlined below. Feedback and discussion is encouraged. Please feel free to submit an issue or get in touch.
+This projects attempts to follow the design principles outlined below. Feedback and discussion are encouraged. Please feel free to submit an issue or get in touch.
 
 ## Simple
 
