@@ -20,7 +20,7 @@ const positions = [
     points: [
       'Worked on Project which develops tracing tables for given system of code',
       'Added dunctionality to graphically enable to flow of an algorithm',
-      'Developed parser to take in draw.io images and get the relevant tracing table'
+      'Developed parser to take in draw.io images and get the relevant tracing table',
     ],
   },
   {
