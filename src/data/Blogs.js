@@ -1,31 +1,16 @@
 // TODO Add a couple lines about each project
 const data = [
   {
-    title: 'Computer Science Building - Dalhousie University',
-    subtitle: '',
-    image: 'images/blogs/Dal_Goldberg_Building.jpg',
-    date: '2021-09-07',
-    desc:
-      'The day for which I was waiting for! To attend the In-person class in the times '
-      + 'of coronavirus outbreak. Back to class after a year!',
+    title: 'What is Cloud Computing?',
+    link: 'https://dhruvdoshi.github.io/blog/2021/02/25/what-is-cloud-computing',
   },
   {
-    title: 'First Day in Canada!',
-    subtitle: '',
-    image: 'images/blogs/First day canada.jpg',
-    date: '2021-07-12',
-    desc:
-      'Today, I amd my friend landed in Canada, it is our first day out of India! ',
+    title: 'What is cryptocurrency?',
+    link: 'https://dhruvdoshi.github.io/blog/2021/01/31/what-is-cryptocurrency',
   },
   {
-    title: 'A day ended with walk!',
-    subtitle: '',
-    image: 'images/blogs/sunset.jpg',
-    date: '2021-05-12',
-    desc:
-      'Today, I worked on the personal portfolio website and sucessfully hosted '
-      + 'it on github pages after 4 days of work! At the end I went outdoor for a walk '
-      + 'and that dissolved the stress out of my life!',
+    title: 'How Banks could retaliate to the blockchain industry',
+    link: 'https://dhruvdoshi.github.io/blog/2020/12/31/how-banks-could-retaliate',
   },
 ];
 
