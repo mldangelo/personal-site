@@ -4,10 +4,12 @@ import dayjs from 'dayjs';
 
 const Cell = ({ data }) => (
   <div>
-    <h6>
-      <a style={{ float: 'left' }} href={data.link}>{data.title}</a><br />
-      <time style={{ float: 'right' }} className="published">{dayjs(data.date).format('MMMM, YYYY')}</time>
-    </h6>
+    <ul>
+      <h6>
+        <li style={{ float: 'left' }}><a href={data.link}>{data.title}</a><br /></li>
+        <li style={{ float: 'right' }}><time className="published">{dayjs(data.date).format('MMMM, YYYY')}</time></li>
+      </h6>
+    </ul>
   </div>
 );
 
