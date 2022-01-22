@@ -5,12 +5,8 @@ import dayjs from 'dayjs';
 const Cell = ({ data }) => (
   <div>
     <h6>
-      <span style={{ float: 'left' }}>
-        <a href={data.link}>{data.title}</a><br />
-      </span>
-      <span style={{ float: 'right' }}>
-        <time className="published">{dayjs(data.date).format('MMMM, YYYY')}</time>
-      </span>
+      <a style={{ float: 'left' }} href={data.link}>{data.title}</a><br />
+      <time style={{ float: 'right' }} className="published">{dayjs(data.date).format('MMMM, YYYY')}</time>
     </h6>
   </div>
 );
