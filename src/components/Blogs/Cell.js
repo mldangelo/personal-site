@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import dayjs from 'dayjs';
+// import dayjs from 'dayjs';
 
 const Cell = ({ data }) => (
   <div>
     <h5><a href={data.link}>{data.title}</a></h5>
-    <time className="published">{dayjs(data.date).format('MMMM, YYYY')}</time>
+    {/* <time className="published">{dayjs(data.date).format('MMMM, YYYY')}</time> */}
   </div>
 );
 
