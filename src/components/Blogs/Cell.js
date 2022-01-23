@@ -5,9 +5,7 @@ import PropTypes from 'prop-types';
 const Cell = ({ data }) => (
   <div>
     {/* <h3>Search Keyword <a href="https://dhruvdoshi.github.io/blog"> here </a></h3> */}
-    <ol>
-      <li><p><a href={data.link}>{data.title}</a></p></li>
-    </ol>
+    <p><a href={data.link}>{data.title}</a></p>
     {/* <time className="published">{dayjs(data.date).format('MMMM, YYYY')}</time> */}
   </div>
 );
@@ -17,7 +15,7 @@ Cell.propTypes = {
     title: PropTypes.string.isRequired,
     link: PropTypes.string.isRequired,
     // image: PropTypes.string.isRequired,
-    date: PropTypes.string.isRequired,
+    // date: PropTypes.string.isRequired,
     // desc: PropTypes.string.isRequired,
   }).isRequired,
 };
