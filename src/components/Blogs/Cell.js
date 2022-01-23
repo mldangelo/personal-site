@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 const Cell = ({ data }) => (
   <div>
-    <h3>Search Keyword <a href="https://dhruvdoshi.github.io/blog"> here </a></h3>
+    {/* <h3>Search Keyword <a href="https://dhruvdoshi.github.io/blog"> here </a></h3> */}
     <ol>
       <li><p><a href={data.link}>{data.title}</a></p></li>
     </ol>
