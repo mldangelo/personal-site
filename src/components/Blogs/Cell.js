@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 
 const Cell = ({ data }) => (
   <div>
-    <p>
+    <h6>
       <a href={data.link}>{data.title}</a>
-    </p>
+    </h6>
   </div>
 );
 
