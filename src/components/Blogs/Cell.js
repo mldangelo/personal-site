@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 // import dayjs from 'dayjs';
 
 const Cell = ({ data }) => (
-  <div>
-    {/* <h3>Search Keyword <a href="https://dhruvdoshi.github.io/blog"> here </a></h3> */}
-    <p><a href={data.link}>{data.title}</a></p>
-    {/* <time className="published">{dayjs(data.date).format('MMMM, YYYY')}</time> */}
-  </div>
+
+  <p>
+    <a href={data.link}>{data.title}</a>
+  </p>
+
 );
 
 Cell.propTypes = {
