@@ -16,13 +16,13 @@ const Blog = () => (
           <p>Click <a href="https://dhruvdoshi.github.io/blog">blog</a> to search blog for specific keyword</p>
         </div>
       </header>
-      {data.map((blog) => (
-        <Cell
-          data={blog}
-          key={blog.title}
-        />
-      ))}
     </article>
+    {data.map((blog) => (
+      <Cell
+        data={blog}
+        key={blog.title}
+      />
+    ))}
   </Main>
 );
 
