@@ -13,7 +13,7 @@ const Blog = () => (
       <header>
         <div className="title">
           <h2 data-testid="heading"><a href="https://dhruvdoshi.github.io/blog/">Blogs</a></h2>
-          <p>Click <a style={{ color: 'purple' }} href="https://dhruvdoshi.github.io/blog/">blogs</a> for searchable page</p>
+          <p>Click <a style={{ color: 'purple' }} href="https://dhruvdoshi.github.io/blog/" target="_blank">blogs</a> for searchable page</p>
         </div>
       </header>
       {data.map((blog) => (
