@@ -10,12 +10,12 @@ const Blog = () => (
     description="Blogs Writteb by Dhruv Doshi"
   >
     <article className="post" id="stats">
-    <header>
-      <div className="title">
-        <h2 data-testid="heading"><a href="https://dhruvdoshi.github.io/blogs">Search</a></h2>
-        <p>Click <a href="https://dhruvdoshi.github.io/blogs">blog</a> to search blog for specific keyword</p>
-      </div>
-    </header>
+      <header>
+        <div className="title">
+          <h2 data-testid="heading"><a href="https://dhruvdoshi.github.io/blogs">Search</a></h2>
+          <p>Click <a href="https://dhruvdoshi.github.io/blogs">blog</a> to search blog for specific keyword</p>
+        </div>
+      </header>
       {data.map((blog) => (
         <Cell
           data={blog}
