@@ -36,7 +36,7 @@ const data = [
     title: 'Downtime with Cloud Computing',
     link: 'https://dhruvdoshi.github.io/blog/2021/02/16/downtime-in-cloud-computing',
   },
-  { 
+  {
     title: 'What is the weakness of Blockchain?? (Everything is not perfect!!)',
     link: 'https://dhruvdoshi.github.io/blog/2019/12/01/what-are-weaknes-of-blockchain',
   },
