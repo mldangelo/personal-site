@@ -12,7 +12,7 @@ const Blog = () => (
     <article className="post" id="stats">
       <header>
         <div className="title">
-          <h2 data-testid="heading"><Link to="/contact">Blogs</Link></h2>
+          <h2 data-testid="heading"><a href="https://dhruvdoshi.github.io/blog/">Blogs</a></h2>
         </div>
       </header>
       {data.map((blog) => (
