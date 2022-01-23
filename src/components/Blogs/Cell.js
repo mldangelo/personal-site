@@ -4,7 +4,10 @@ import PropTypes from 'prop-types';
 
 const Cell = ({ data }) => (
   <div>
-    <h5><a href={data.link}>{data.title}</a></h5>
+    <h3>Search Keyword <a href="https://dhruvdoshi.github.io/blog"> here </a></h3>
+    <ol>
+      <li><p><a href={data.link}>{data.title}</a></p></li>
+    </ol>
     {/* <time className="published">{dayjs(data.date).format('MMMM, YYYY')}</time> */}
   </div>
 );
