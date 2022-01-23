@@ -10,6 +10,11 @@ const Blog = () => (
     description="Blog work by Dhruv Doshi"
   >
     <article className="post" id="stats">
+      <header>
+        <div className="title">
+          <h2 data-testid="heading"><Link to="/contact">Blogs</Link></h2>
+        </div>
+      </header>
       {data.map((blog) => (
         <Cell
           data={blog}
