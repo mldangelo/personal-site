@@ -1,8 +1,8 @@
 name: GitHub Pages Workflow
 
-on:
-  push:
-    branches: [ main ]
+on: [push]
+#   push:
+#     branches: [ main ]
 jobs:
   depoy:
     runs-on: ubuntu-latest
