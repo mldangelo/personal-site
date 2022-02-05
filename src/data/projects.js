@@ -14,6 +14,20 @@ const data = [
       + 'Find the code link ',
   },
   {
+    title: 'Relational Database System ',
+    subtitle: 'Developed a Relational Database which could take SQL queries and execuite them; developed parsers which could read and interpret the SQL.',
+    image: '/images/projects/Relational-database.gif',
+    date: '2021-07-21',
+    code_link: 'https://github.com/DhruvDoshi/RELATIONAL_DATABASE_SYSTEM',
+    link: 'https://github.com/DhruvDoshi/RELATIONAL_DATABASE_SYSTEM',
+    desc:
+      'Developed replica of MySQL with JAVA from crash. Can Execuite all the queries like normal traditional database.'
+      + 'Saves the table and information in TXT file with in-system parser. '
+      + 'Generate SQL Dump file at the end of execution and export all the data from the system.'
+      + 'Reverse Enginner and develop ERD Diagram with all the relationships between tables'
+      + 'Find the code link ',
+  },
+  {
     title: 'Chat App',
     subtitle: 'With the help of this platform multiple users could have a video chat. This platform does not saves any single bit of data on the servers. We only present the video and completely delete it',
     image: '/images/projects/chat-app.gif',
