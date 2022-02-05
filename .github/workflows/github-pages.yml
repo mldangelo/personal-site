@@ -1,4 +1,4 @@
-name: GitHub Pages
+name: GitHub Pages Workflow
 
 on:
   push:
