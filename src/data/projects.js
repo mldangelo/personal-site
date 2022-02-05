@@ -2,13 +2,13 @@
 const data = [
   {
     title: 'DCS-BBN - Blockchain Cloud Storage ',
-    subtitle: 'DCS-BBN is a Decentralized Cloud System based on Blockchian Networking. This is Pyhton developed code for the system.',
+    subtitle: 'DCS-BBN is a Decentralized Cloud System based on Blockchian Networking. This is Python developed code for the system.',
     image: '/images/projects/DCS1.gif',
     date: '2020-01-21',
     code_link: 'https://github.com/DhruvDoshi/DCS-BBN',
     link: 'https://dhruv25071999.wixsite.com/dcs-bbn',
     desc:
-      'DCS-BBN is a Decentralized Cloud System based on Blockchian Networking. This is Pyhton developed code for the system.'
+      'DCS-BBN is a Decentralized Cloud System based on Blockchian Networking. This is Python developed code for the system.'
       + 'Completely Decentralized system gives no single point of failure. '
       + 'Allows connectivity and chance to convert DCScoin with any big blockchian coins like Bitcoin, Ethereum and Ripple. '
       + 'Find the code link ',
