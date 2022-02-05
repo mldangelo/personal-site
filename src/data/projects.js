@@ -25,7 +25,7 @@ const data = [
       + 'Saves the table and information in TXT file with in-system parser. '
       + 'Generate SQL Dump file at the end of execution and export all the data from the system.'
       + 'Reverse Enginner and develop ERD Diagram with all the relationships between tables'
-      + 'Find the code link ',
+      + 'Visit the code link ',
   },
   {
     title: 'Chat App',
