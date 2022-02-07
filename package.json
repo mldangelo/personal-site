@@ -20,11 +20,11 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@fortawesome/free-brands-svg-icons": "^5.15.4",
     "@fortawesome/free-regular-svg-icons": "^5.15.4",
-    "@fortawesome/react-fontawesome": "0.1.16",
+    "@fortawesome/react-fontawesome": "0.1.17",
     "dayjs": "^1.10.7",
     "gh-pages": "^3.2.3",
     "node-sass": "^7.0.1",
-    "prop-types": "^15.8.0",
+    "prop-types": "^15.8.1",
     "raw.macro": "^0.4.2",
     "react": "^17.0.2",
     "react-burger-menu": "^3.0.6",
@@ -38,12 +38,12 @@
     "rimraf": "^3.0.2"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^5.16.1",
+    "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.2",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.19.0",
     "eslint-config-airbnb": "^18.2.1",
-    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-jsx-a11y": "6.5.1",
     "eslint-plugin-react": "^7.28.0",
     "source-map-explorer": "^2.5.2"
