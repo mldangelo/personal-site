@@ -23,7 +23,7 @@
     "@fortawesome/react-fontawesome": "0.1.14",
     "dayjs": "^1.10.4",
     "gh-pages": "^3.1.0",
-    "node-sass": "^4.14.1",
+    "node-sass": "^7.0.0",
     "prop-types": "^15.7.2",
     "raw.macro": "^0.4.2",
     "react": "^17.0.1",
