@@ -97,5 +97,6 @@ Ask me in person for other stories that I'm afraid to share with the internet.
 - [Noah Trueblood](http://notrueblood.com/)
 - [Ruoxi Wang](http://ruoxiw.com/)
 - [Tom Sachs](https://www.tomsachs.org/)
+- [Will Holley](https://willholley.com)
 
 If we are friends and you feel like you belong on this list, you're probably right. I'm sorry I forgot about you. Pester me and I'll add you.
