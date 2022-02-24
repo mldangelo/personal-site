@@ -1,4 +1,4 @@
-# prefer npm over yarn 
+# prefer npm over yarn
 yarn.lock
 
 # eslint
@@ -47,3 +47,5 @@ build/
 
 # Nohup
 nohup.out
+
+# semper ubi sub ubi ^_^
