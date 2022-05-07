@@ -1,6 +1,6 @@
 name: Deploy to Netlify on commits to master
 on:
-  push:
+  commit:
     branches: [master]
 jobs:
   build:
