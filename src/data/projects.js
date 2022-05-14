@@ -27,7 +27,7 @@ const data = [
     title: 'Planatary Impact Simulation',
     subtitle: 'CS205: High Performance Computing final project',
     link: '/resources/projects/Harvard-CS205-final-paper.pdf',
-    image: '/images/projects/spacepotato.jpg',
+    image: '/images/projects/MIT-CSM-final-paper.png',
     date: '2015-06-28',
     desc:
       'Developed a Smoothed Particle Hydrodynamics (SPH) simulator supporting 10M+ particles, optimized with OpenMP, OpenMPI, Eigen. Rendered with raw OpenGL.',
@@ -36,17 +36,17 @@ const data = [
     title: 'Alpha Holdem',
     subtitle: 'Building an Efficient Poker Agent Using RL',
     link: '/resources/projects/MIT-CSM-final-paper.pdf',
-    image: '/images/projects/catdetector.jpg',
+    image: '/images/projects/MIT-CSM-final-paper.png',
     date: '2015-05-15',
     desc:
-      'In this paper we apply three variations of Deep Q-learning (DQN) and'
+      'In this paper we apply three variations of Deep Q-learning (DQN) and '
       + 'Proximal Policy Optimization (PPO) to '
       + 'learn the game of heads-up no-limit Texas Hold’em.',
   },
   {
     title: 'Visual-Inertial Odometry on the MIT Racecars',
     subtitle: '',
-    image: '/images/projects/catdetector.jpg',
+    image: '/images/projects/MIT-CSM-final-paper.png',
     link: '/resources/projects/MIT-VNAV-final-paper.pdf',
     date: '2015-05-15',
     desc:
@@ -55,6 +55,16 @@ const data = [
       + 'MIT Racecar mobile platform, using a Jetson TX2 Developer'
       + 'kit and a RealSense D455 stereo camera with an inertial'
       + 'measurement unit.',
+  },
+  {
+    title: 'Galexy simulator',
+    subtitle: '',
+    image: '/images/projects/MIT-CSM-final-paper.png',
+    link: '/resources/projects/MIT-VNAV-final-paper.pdf',
+    date: '2015-05-15',
+    desc:
+      'In this work, we use the oct-tree-based Barnes-Hut algorithm to simulate '
+      + '50k particles colliding in a galaxy simulation',
   },
   {
     title: 'Flying Courier: Cheap Indoor Drone Localization',

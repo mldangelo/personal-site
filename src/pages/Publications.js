@@ -1,31 +1,31 @@
-// import React from 'react';
-// import { Link } from 'react-router-dom';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-// import Main from '../layouts/Main';
+import Main from '../layouts/Main';
 
-// import Cell from '../components/Projects/Cell';
-// import data from '../data/projects';
+import Cell from '../components/Projects/Cell';
+import data from '../data/publications';
 
-// const Projects = () => (
-//   <Main
-//     title="Projects"
-//     description="Learn about Alex Kashi's projects."
-//   >
-//     <article className="post" id="projects">
-//       <header>
-//         <div className="title">
-//           <h2 data-testid="heading"><Link to="/projects">Projects</Link></h2>
-//           <p>A selection of projects that I&apos;m not too ashamed of</p>
-//         </div>
-//       </header>
-//       {data.map((project) => (
-//         <Cell
-//           data={project}
-//           key={project.title}
-//         />
-//       ))}
-//     </article>
-//   </Main>
-// );
+const Publications = () => (
+  <Main
+    title="Publications"
+    description="Learn about Alex Kashi's Publications."
+  >
+    <article className="post" id="publications">
+      <header>
+        <div className="title">
+          <h2 data-testid="heading"><Link to="/publications">Publications</Link></h2>
+          <p>My recent publications </p>
+        </div>
+      </header>
+      {data.map((project) => (
+        <Cell
+          data={project}
+          key={project.title}
+        />
+      ))}
+    </article>
+  </Main>
+);
 
-// export default Projects;
+export default Publications;

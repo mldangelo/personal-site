@@ -4,7 +4,11 @@ I am a [Harvard Computational Science and Engineering](https://www.seas.harvard.
 
 # Currently
 At Spur, I have learned how to build teams, manage people, shape culture, develop relationships with customers, and build product to solve their problems. I work primarly as a fullstack engineer, primarally Kotlin and Swift for the frontend and dynamodb + Elasticsearch for the backend, hosted on AWS.
+
 <!-- # Some history -->
+<!-- I grew up in Sunnyvale, CA -->
+
+
 # I like
 
 - Daily weight lifting
