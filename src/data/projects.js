@@ -24,23 +24,47 @@ const data = [
     + 'image or text based inputs powered by CLIP',
   },
   {
-    title: 'Smoothed Particle Hydrodynamics (SPH) Planatary Impact Simulation',
+    title: 'Planatary Impact Simulation',
     subtitle: 'CS205: High Performance Computing final project',
-    link: 'http://www.spacepotato.org',
+    link: '/resources/projects/Harvard-CS205-final-paper.pdf',
     image: '/images/projects/spacepotato.jpg',
     date: '2015-06-28',
     desc:
-      'Developed a SPH simulator supporting 10M+ particles, optimized with OpenMP, OpenMPI, Eigen. Rendered with raw OpenGL.',
+      'Developed a Smoothed Particle Hydrodynamics (SPH) simulator supporting 10M+ particles, optimized with OpenMP, OpenMPI, Eigen. Rendered with raw OpenGL.',
   },
   {
-    title: 'Cat Detector',
-    subtitle: 'A convolutional neural network to classify cats! (and dogs)',
+    title: 'Alpha Holdem',
+    subtitle: 'Building an Efficient Poker Agent Using RL',
+    link: '/resources/projects/MIT-CSM-final-paper.pdf',
     image: '/images/projects/catdetector.jpg',
     date: '2015-05-15',
     desc:
-      'Trained a convolutional neural network to classify between ~ 80 cats breeds. '
-      + 'Over 60,000 cats were classified before server bills made the project too expensive '
-      + 'to continue hosting.',
+      'In this paper we apply three variations of Deep Q-learning (DQN) and'
+      + 'Proximal Policy Optimization (PPO) to '
+      + 'learn the game of heads-up no-limit Texas Hold’em.',
+  },
+  {
+    title: 'Visual-Inertial Odometry on the MIT Racecars',
+    subtitle: '',
+    image: '/images/projects/catdetector.jpg',
+    link: '/resources/projects/MIT-VNAV-final-paper.pdf',
+    date: '2015-05-15',
+    desc:
+      'In this work, we document considerations and results of installing'
+      + 'VINS-Fusion, an open-source implementation of VIO, onto the'
+      + 'MIT Racecar mobile platform, using a Jetson TX2 Developer'
+      + 'kit and a RealSense D455 stereo camera with an inertial'
+      + 'measurement unit.',
+  },
+  {
+    title: 'Flying Courier: Cheap Indoor Drone Localization',
+    subtitle: '',
+    image: '/images/projects/Berkeley-EECS149-drone.jpg',
+    link: '/resources/projects/Berkeley-EECS149-final-paper.pdf',
+    date: '2015-05-15',
+    desc:
+      'We propose a robust, redundant, and reliable, indoor localization scheme for drones'
+      + 'only requiring readily accessible materials: an HD webcam an a regular Inkjet printer.',
   },
 ];
 
