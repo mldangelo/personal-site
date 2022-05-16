@@ -9,7 +9,7 @@ const validateText = (text) => {
 };
 
 const messages = [
-  'akashi',
+  'alexkashi',
 ];
 
 // const messages = [
@@ -80,9 +80,9 @@ const EmailLink = () => {
       onMouseEnter={() => setIsActive(false)}
       onMouseLeave={() => (idx < messages.length) && setIsActive(true)}
     >
-      <a href={validateText(message) ? `mailto:${message}@berkeley.edu` : ''}>
+      <a href={validateText(message) ? `mailto:${message}@g.harvard.edu` : ''}>
         <span>{message}</span>
-        <span>@berkeley.edu</span>
+        <span>@g.harvard.edu</span>
       </a>
     </div>
   );

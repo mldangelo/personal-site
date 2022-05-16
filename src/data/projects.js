@@ -18,16 +18,16 @@ const data = [
     image: '/images/projects/dogeGAN-placeholder.png',
     date: '2022-05-10',
     desc:
-    'We propose an end-to-end solution to generating digital artwork'
-    + 'using Generative Adversarial Networks (GANs) to mimic'
-    + 'popular collections of NFTs. The generation of artwork, can be guided by'
+    'We propose an end-to-end solution to generating digital artwork '
+    + 'using Generative Adversarial Networks (GANs) to mimic '
+    + 'popular collections of NFTs. The generation of artwork, can be guided by '
     + 'image or text based inputs powered by CLIP',
   },
   {
     title: 'Planatary Impact Simulation',
     subtitle: 'CS205: High Performance Computing final project',
     link: '/resources/projects/Harvard-CS205-final-paper.pdf',
-    image: '/images/projects/MIT-CSM-final-paper.png',
+    video: '/videos/projects/Harvard-CS205-demo.mp4',
     date: '2015-06-28',
     desc:
       'Developed a Smoothed Particle Hydrodynamics (SPH) simulator supporting 10M+ particles, optimized with OpenMP, OpenMPI, Eigen. Rendered with raw OpenGL.',
@@ -46,25 +46,25 @@ const data = [
   {
     title: 'Visual-Inertial Odometry on the MIT Racecars',
     subtitle: '',
-    image: '/images/projects/MIT-CSM-final-paper.png',
+    video: '/videos/projects/MIT-VNAV-demo.mp4',
     link: '/resources/projects/MIT-VNAV-final-paper.pdf',
     date: '2015-05-15',
     desc:
-      'In this work, we document considerations and results of installing'
-      + 'VINS-Fusion, an open-source implementation of VIO, onto the'
-      + 'MIT Racecar mobile platform, using a Jetson TX2 Developer'
-      + 'kit and a RealSense D455 stereo camera with an inertial'
+      'In this work, we document considerations and results of VINS-Fusion, '
+      + 'an open-source implementation of VIO, onto the '
+      + 'MIT Racecar mobile platform, using a Jetson TX2 Developer '
+      + 'kit and a RealSense D455 stereo camera with an inertial '
       + 'measurement unit.',
   },
   {
-    title: 'Galexy simulator',
-    subtitle: '',
-    image: '/images/projects/MIT-CSM-final-paper.png',
+    title: 'Galexy Simulator',
+    subtitle: 'AM05: Final Project',
+    video: '/videos/projects/Harvard-AM205-demo.mp4',
     link: '/resources/projects/MIT-VNAV-final-paper.pdf',
     date: '2015-05-15',
     desc:
       'In this work, we use the oct-tree-based Barnes-Hut algorithm to simulate '
-      + '50k particles colliding in a galaxy simulation',
+      + '60k particles colliding in a galaxy simulation',
   },
   {
     title: 'Flying Courier: Cheap Indoor Drone Localization',
@@ -73,7 +73,7 @@ const data = [
     link: '/resources/projects/Berkeley-EECS149-final-paper.pdf',
     date: '2015-05-15',
     desc:
-      'We propose a robust, redundant, and reliable, indoor localization scheme for drones'
+      'We propose a robust, redundant, and reliable, indoor localization scheme for drones '
       + 'only requiring readily accessible materials: an HD webcam an a regular Inkjet printer.',
   },
 ];

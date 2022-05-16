@@ -1,3 +1,4 @@
+import { faTiktok } from '@fortawesome/free-brands-svg-icons';
 import { faGithub } from '@fortawesome/free-brands-svg-icons/faGithub';
 // import { faFacebookF } from '@fortawesome/free-brands-svg-icons/faFacebookF';
 import { faInstagram } from '@fortawesome/free-brands-svg-icons/faInstagram';
@@ -30,7 +31,12 @@ const data = [
     icon: faTwitter,
   },
   {
-    link: 'mailto:akashi@berkeley.edu',
+    link: 'https://tiktok.com/@itsalexkashi',
+    label: 'Tiktok',
+    icon: faTiktok,
+  },
+  {
+    link: 'mailto:alexkashi@g.harvard.edu',
     label: 'Email',
     icon: faEnvelope,
   },

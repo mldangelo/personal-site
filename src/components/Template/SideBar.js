@@ -13,7 +13,7 @@ const SideBar = () => (
       </Link>
       <header>
         <h2>Alex Kashi</h2>
-        <p><a href="mailto:akashi@berkeley.edu">akashi@berkeley.edu</a></p>
+        <p><a href="mailto:alexkashi@g.harvard.edu">alexkashi@g.harvard.edu</a></p>
       </header>
     </section>
 
