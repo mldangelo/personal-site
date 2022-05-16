@@ -46,7 +46,7 @@ const data = [
   {
     title: 'Visual-Inertial Odometry on the MIT Racecars',
     subtitle: '',
-    video: '/videos/projects/MIT-VNAV-demo.mp4',
+    video: '/images/projects/MIT-VNAV-demo.mp4',
     link: '/resources/projects/MIT-VNAV-final-paper.pdf',
     date: '2015-05-15',
     desc:
@@ -59,7 +59,7 @@ const data = [
   {
     title: 'Galexy Simulator',
     subtitle: 'AM05: Final Project',
-    video: '/videos/projects/Harvard-AM205-demo.mp4',
+    video: '/images/projects/Harvard-AM205-demo.mp4',
     link: '/resources/projects/MIT-VNAV-final-paper.pdf',
     date: '2015-05-15',
     desc:
