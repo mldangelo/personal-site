@@ -27,7 +27,7 @@ const data = [
     title: 'Planatary Impact Simulation',
     subtitle: 'CS205: High Performance Computing final project',
     link: '/resources/projects/Harvard-CS205-final-paper.pdf',
-    video: '/videos/projects/Harvard-CS205-demo.mp4',
+    video: '/images/projects/Harvard-CS205-demo.mp4',
     date: '2015-06-28',
     desc:
       'Developed a Smoothed Particle Hydrodynamics (SPH) simulator supporting 10M+ particles, optimized with OpenMP, OpenMPI, Eigen. Rendered with raw OpenGL.',
