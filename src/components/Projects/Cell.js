@@ -15,7 +15,7 @@ const Cell = ({ data }) => (
       </header>
       <a href={data.link} className="image">
         {data.video ? (
-          <video width="100%" autoPlay="autoplay" muted="true" loop="true">
+          <video width="100%" playsinline="true" autoPlay="autoplay" muted="true" loop="true">
             <source
               src={`${process.env.PUBLIC_URL}${data.video}`}
               type="video/mp4"
