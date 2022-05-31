@@ -70,7 +70,7 @@ const data = [
     icon: faTelegram,
   },
   {
-    link: 'mailto:dhruvdoshi25071999@gmail.com',
+    link: 'mailto:doshi.dhruv@outlook.com',
     label: 'Email',
     icon: faEnvelope,
   },

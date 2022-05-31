@@ -12,8 +12,8 @@ const Blog = () => (
     <article className="post" id="stats">
       <header>
         <div className="title">
-          <h2 data-testid="heading"><a href="https://dhruvdoshi.github.io/blog/">Blogs</a></h2>
-          <p>Click <a style={{ color: 'purple' }} href="https://dhruvdoshi.github.io/blog/" target="_blank" rel="noopener noreferrer">blogs</a> for searchable page</p>
+          <h2 data-testid="heading"><a href="https://blog.doshidhruv.com">Blogs</a></h2>
+          <p>Click <a style={{ color: 'purple' }} href="https://blog.doshidhruv.com" target="_blank" rel="noopener noreferrer">blogs</a> for searchable page</p>
         </div>
       </header>
       {data.map((blog) => (
