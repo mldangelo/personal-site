@@ -17,7 +17,7 @@ const Index = () => (
         </div>
       </header>
       <p> Welcome to my website. It still under construction.
-         { /* Please feel free to read more <Link to="/about">about me</Link>,
+        { /* Please feel free to read more <Link to="/about">about me</Link>,
         or you can check out my {' '}
         <Link to="/resume">resume</Link>, {' '}
         <Link to="/projects">projects</Link>, {' '}
