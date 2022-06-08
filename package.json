@@ -1,11 +1,14 @@
 {
   "name": "personal-site",
-  "version": "3.0.1",
+  "version": "4.0.0",
   "homepage": "https://mldangelo.com/",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/mldangelo/personal-site.git"
+  },
+  "engines": {
+    "node": ">=14.x"
   },
   "scripts": {
     "build": "rimraf ./build && react-scripts build",
@@ -23,7 +26,6 @@
     "@fortawesome/react-fontawesome": "0.1.14",
     "dayjs": "^1.10.4",
     "gh-pages": "^3.1.0",
-    "node-sass": "^4.14.1",
     "prop-types": "^15.7.2",
     "raw.macro": "^0.4.2",
     "react": "^17.0.1",
@@ -33,18 +35,20 @@
     "react-helmet-async": "^1.0.7",
     "react-markdown": "^5.0.3",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "^4.0.1",
+    "react-scripts": "^5.0.1",
     "react-snap": "^1.23.0",
     "rimraf": "^3.0.2"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.3",
+    "babel-eslint": "^10.1.0",
     "eslint": "^7.19.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jsx-a11y": "6.4.1",
     "eslint-plugin-react": "^7.22.0",
+    "sass": "^1.52.2",
     "source-map-explorer": "^2.5.2"
   },
   "browserslist": {
