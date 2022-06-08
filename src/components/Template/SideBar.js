@@ -16,7 +16,6 @@ const SideBar = () => (
         <p><a href="mailto:ipqtr@hotmail.com">ipqtr@hotmail.com</a></p>
       </header>
     </section>
-
     <section className="blurb">
       <h2>About</h2>
       <p>Hi, I&apos;m Mohammed. I like building mobile apps then keep worrying about
