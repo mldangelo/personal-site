@@ -20,7 +20,7 @@ const SideBar = () => (
     <section className="blurb">
       <h2>About</h2>
       <p>Hi, I&apos;m Mohammed. I like building mobile apps then keep worrying about their security.
-        I am a <a href="https://hbku.edu.qa/">HBKU</a>, <a href="https://boorkes.ac.uk/">Oxford Brookes</a>,
+        I am a <a href="https://hbku.edu.qa/">HBKU</a>, <a href="https://www.boorkes.ac.uk/">Oxford Brookes</a>,
         and <a href="https://just.edu.jo/">JUST</a> graduate.
       </p>
       <ul className="actions">
@@ -32,7 +32,7 @@ const SideBar = () => (
 
     <section id="footer">
       <ContactIcons />
-      <p className="copyright">&copy; Michael D&apos;Angelo <Link to="/">mldangelo.com</Link>.</p>
+      <p className="copyright">&copy; MOHAMMED D&apos;AL-SADI <Link to="/">al-sadi.com</Link>.</p>
     </section>
   </section>
 );
