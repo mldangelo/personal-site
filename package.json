@@ -1,11 +1,14 @@
 {
   "name": "personal-site",
-  "version": "3.0.1",
+  "version": "4.0.0",
   "homepage": "https://mldangelo.com/",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/mldangelo/personal-site.git"
+  },
+  "engines": {
+    "node": ">=14.x"
   },
   "scripts": {
     "build": "rimraf ./build && react-scripts build",
