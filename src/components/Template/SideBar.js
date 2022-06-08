@@ -33,7 +33,7 @@ const SideBar = () => (
 
     <section id="footer">
       <ContactIcons />
-      <p className="copyright">&copy; MOHAMMED AL-SADI <Link to="/">al-sadi.com</Link>. Last updated June 8th, 2022 {'\n'} Template by <a href="https://github.com/mldangelo/personal-site">Michael</a></p>
+      <p className="copyright">&copy; MOHAMMED AL-SADI <Link to="/">al-sadi.com</Link>. {'\n'} Last updated June 8th, 2022 {'\n'} Template by <a href="https://github.com/mldangelo/personal-site">Michael</a></p>
     </section>
   </section>
 );
