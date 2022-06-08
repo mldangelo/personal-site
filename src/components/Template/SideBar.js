@@ -12,17 +12,15 @@ const SideBar = () => (
         <img src={`${PUBLIC_URL}/images/me.jpg`} alt="" />
       </Link>
       <header>
-        <h2>Michael D&apos;Angelo</h2>
-        <p><a href="mailto:michael.l.dangelo@gmail.com">michael.l.dangelo@gmail.com</a></p>
+        <h2>MOHAMMED AL-SADI</h2>
+        <p><a href="mailto:ipqtr@hotmail.com">ipqtr@hotmail.com</a></p>
       </header>
     </section>
 
     <section className="blurb">
       <h2>About</h2>
-      <p>Hi, I&apos;m Michael. I like building things.
-        I am a <a href="https://icme.stanford.edu/">Stanford ICME</a> graduate, YC Alumni, and
-        the co-founder and CTO of <a href="https://arthena.com">Arthena</a>. Before Arthena I was
-        at <a href="https://matroid.com">Matroid</a>
+      <p>Hi, I&apos;m Mohammed. I like building mobile apps and backend then keep worrying about their security.
+        I am a <a href="https://hbku.edu.qa/">HBKU</a>, <a href="https://boorkes.ac.uk/">Oxford Brookes</a>, and <a href="https://just.edu.jo/">JUST</a> graduate. 
         , <a href="https://planet.com">Planet</a>
         , <a href="https://planetaryresources.com">Planetary Resources</a>
         , <a href="https://facebook.com">Facebook</a>
