@@ -35,13 +35,14 @@
     "react-helmet-async": "^1.0.7",
     "react-markdown": "^5.0.3",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "^4.0.1",
+    "react-scripts": "^5.0.1",
     "react-snap": "^1.23.0",
     "rimraf": "^3.0.2"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.3",
+    "babel-eslint": "^10.1.0",
     "eslint": "^7.19.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-plugin-import": "^2.22.1",
