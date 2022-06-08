@@ -20,9 +20,8 @@ const SideBar = () => (
     <section className="blurb">
       <h2>About</h2>
       <p>Hi, I&apos;m Mohammed. I like building mobile apps and backend then keep worrying about their security.
-        I am a <a href="https://hbku.edu.qa/">HBKU</a>, <a href="https://boorkes.ac.uk/">Oxford Brookes</a>, and <a href="https://just.edu.jo/">JUST</a> graduate. 
-
-        , and <a href="https://seds.org">SEDS</a>.
+        I am a <a href="https://hbku.edu.qa/">HBKU</a>, <a href="https://boorkes.ac.uk/">Oxford Brookes</a>,
+        and <a href="https://just.edu.jo/">JUST</a> graduate.
       </p>
       <ul className="actions">
         <li>
