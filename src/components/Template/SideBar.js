@@ -21,7 +21,7 @@ const SideBar = () => (
       <h2>About</h2>
       <p>Hi, I&apos;m Mohammed. I like building mobile apps then keep worrying about
         their security & scalability.
-        I am a <a href="https://hbku.edu.qa/">HBKU</a>, <a href="https://www.boorkes.ac.uk/">Oxford Brookes</a>,
+        I am <a href="https://hbku.edu.qa/">HBKU</a>, <a href="https://www.boorkes.ac.uk/">Oxford Brookes</a>,
         and <a href="https://just.edu.jo/">JUST</a> graduate.
       </p>
       <ul className="actions">
@@ -33,7 +33,9 @@ const SideBar = () => (
 
     <section id="footer">
       <ContactIcons />
-      <p className="copyright">&copy; MOHAMMED AL-SADI <Link to="/">al-sadi.com</Link>. The template by <a href="https://github.com/mldangelo/personal-site">Michael</a></p>
+      <p className="copyright">&copy; MOHAMMED AL-SADI <Link to="/">al-sadi.com</Link>. Last updated June 8th, 2022 <br/>
+      Template by <a href="https://github.com/mldangelo/personal-site">Michael</a>
+      </p>
     </section>
   </section>
 );
