@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
 
 // Validates the first half of an email address.
 const validateText = (text) => {
@@ -94,7 +95,7 @@ EmailLink.defaultProps = {
 };
 
 EmailLink.propTypes = {
-  loopMessage: Boolean,
+  loopMessage: PropTypes.bool,
 };
 
 export default EmailLink;

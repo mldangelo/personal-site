@@ -20,12 +20,12 @@
     "analyze": "npm run build && source-map-explorer build/static/js/*.chunk.js"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.34",
-    "@fortawesome/free-brands-svg-icons": "^5.15.2",
-    "@fortawesome/free-regular-svg-icons": "^5.15.2",
-    "@fortawesome/react-fontawesome": "0.1.14",
+    "@fortawesome/fontawesome-svg-core": "^6.1.1",
+    "@fortawesome/free-brands-svg-icons": "^6.1.1",
+    "@fortawesome/free-regular-svg-icons": "^6.1.1",
+    "@fortawesome/react-fontawesome": "0.1.18",
     "dayjs": "^1.11.3",
-    "gh-pages": "^3.1.0",
+    "gh-pages": "^4.0.0",
     "prop-types": "^15.8.1",
     "raw.macro": "^0.4.2",
     "react": "^17.0.1",
