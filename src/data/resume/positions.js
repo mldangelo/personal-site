@@ -1,5 +1,22 @@
 const positions = [
   {
+    company: 'Lucid Motors',
+    position: 'Senior Software Engineer',
+    link: 'https://www.lucidmotors.com/',
+    daterange: 'May 2022 - Present',
+    points: [
+      'Provided with the complete creative freedom to develop the next-generation mobile app for Lucid Motors in iOS. Delivered ahead of schedule, with superior quality than anticipated.',
+      'Integrated with Scene Kit to support interactive 3D models',
+      'Designed a robust solution to keyless entry for Lucid Vehicles using low-level Bluetooth and location APIs.',
+      'Engineered a native Apple Maps solution to electric vehicle routing, including map annotations.',
+      'Communicated with cloud server using gRPC and Google Protocol Buffers',
+      'Integrated with third-party APIs using raw HTTPS requests',
+      'Report directly to Senior VP of Digital, Mike Bell, formerly CTO at Rivian',
+      'Worked cross-functionally between Directors of QA and Ciber Seciruty, and VPs software, marketing, and design.',
+      'Presented prototype to senior executive team, including CEO Peter Rawlinson',
+    ],
+  },
+  {
     company: 'Spur',
     position: 'Founder, CEO',
     link: 'https://spurdating.com',
