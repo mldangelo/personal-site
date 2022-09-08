@@ -28,7 +28,7 @@ const data = [
     subtitle: 'CS205: High Performance Computing final project',
     link: '/resources/projects/Harvard-CS205-final-paper.pdf',
     video: '/images/projects/Harvard-CS205-demo.mp4',
-    date: '2015-06-28',
+    date: '2015-05-05',
     desc:
       'Developed a Smoothed Particle Hydrodynamics (SPH) simulator supporting 10M+ particles, optimized with OpenMP, OpenMPI, Eigen. Rendered with raw OpenGL.',
   },
@@ -37,7 +37,7 @@ const data = [
     subtitle: 'Building an Efficient Poker Agent Using RL',
     link: '/resources/projects/MIT-CSM-final-paper.pdf',
     image: '/images/projects/MIT-CSM-final-paper.png',
-    date: '2015-05-15',
+    date: '2022-05-10',
     desc:
       'In this paper we apply three variations of Deep Q-learning (DQN) and '
       + 'Proximal Policy Optimization (PPO) to '
@@ -48,7 +48,7 @@ const data = [
     subtitle: '',
     video: '/images/projects/MIT-VNAV-demo.mp4',
     link: '/resources/projects/MIT-VNAV-final-paper.pdf',
-    date: '2015-05-15',
+    date: '2021-12-16',
     desc:
       'In this work, we document considerations and results of VINS-Fusion, '
       + 'an open-source implementation of VIO, onto the '
@@ -61,7 +61,7 @@ const data = [
     subtitle: 'AM05: Final Project',
     video: '/images/projects/Harvard-AM205-demo.mp4',
     link: '/resources/projects/MIT-VNAV-final-paper.pdf',
-    date: '2015-05-15',
+    date: '2021-12-17',
     desc:
       'In this work, we use the oct-tree-based Barnes-Hut algorithm to simulate '
       + '60k particles colliding in a galaxy simulation',
