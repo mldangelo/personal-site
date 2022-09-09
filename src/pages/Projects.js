@@ -6,6 +6,8 @@ import Main from "../layouts/Main";
 import Cell from "../components/Projects/Cell";
 import data from "../data/projects";
 
+import Request from "../components/Projects/Request";
+
 const Projects = () => (
   <Main title="Projects" description="Learn about Himanshu Arora's projects.">
     <article className="post" id="projects">
@@ -20,6 +22,7 @@ const Projects = () => (
       {data.map((project) => (
         <Cell data={project} key={project.title} />
       ))}
+      <Request />
     </article>
   </Main>
 );
