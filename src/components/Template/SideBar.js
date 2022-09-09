@@ -20,8 +20,8 @@ const SideBar = () => (
 
     <section className="blurb">
       <h2>About</h2>
-      <p>Hi, I&apos;m Himanshu Arora. I craft groundbreaking experiences through web development.
-        I am a full stack web developer as a Top Rated Seller(highest status) on <a href="https://www.fiverr.com/himanshu_arora1">fiverr</a>. 
+      <p>Hi, I&apos;m Himanshu Arora, I craft groundbreaking experiences through Web Development.
+        I am a <b>Fullstack Web Developer</b> on <a href="https://www.fiverr.com/himanshu_arora1">Fiverr</a> as a Top Rated Seller (highest status). 
       </p>
       <ul className="actions">
         <li>
