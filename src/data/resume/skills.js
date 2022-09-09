@@ -79,7 +79,7 @@ const skills = [
   },
   {
     title: "Git & Github",
-    competency: 70,
+    competency: 80,
     category: ["Tools"],
   },
   {
@@ -89,12 +89,17 @@ const skills = [
   },
   {
     title: "Heroku",
-    competency: 70,
+    competency: 80,
     category: ["Tools"],
   },
   {
     title: "Docker & Kubernetes",
     competency: 30,
+    category: ["Tools"],
+  },
+  {
+    title: "Vercel",
+    competency: 80,
     category: ["Tools"],
   },
 ].map((skill) => ({ ...skill, category: skill.category.sort() }));
