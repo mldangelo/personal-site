@@ -2,6 +2,8 @@ import { faGithub } from '@fortawesome/free-brands-svg-icons/faGithub';
 import { faLinkedinIn } from '@fortawesome/free-brands-svg-icons/faLinkedinIn';
 import { faAngellist } from '@fortawesome/free-brands-svg-icons/faAngellist';
 import { faEnvelope } from '@fortawesome/free-regular-svg-icons/faEnvelope';
+import { faFonticonsFi } from '@fortawesome/free-brands-svg-icons/faFonticonsFi';
+
 // See https://fontawesome.com/icons?d=gallery&s=brands,regular&m=free
 // to add other icons.
 
@@ -15,6 +17,11 @@ const data = [
     link: 'https://angel.co/u/himanshu-arora1',
     label: 'Angel List',
     icon: faAngellist,
+  },
+  {
+    link: 'https://www.fiverr.com/himanshu_arora1',
+    label: 'Fiverr',
+    icon: faFonticonsFi,
   },
   {
     link: 'https://github.com/himanshu-fullstackdev',

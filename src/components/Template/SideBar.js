@@ -14,7 +14,7 @@ const SideBar = () => (
       <header>
         <h2>Himanshu Arora</h2>
         <p><a href="mailto:himanshu73188@gmail.com">himanshu73188@gmail.com</a></p>
-        <p><a href="tell:h+919541225322">+91 9541-225322</a></p>
+        <p><a href="tel:h+919541225322">+91 9541-225322</a></p>
       </header>
     </section>
 
