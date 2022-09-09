@@ -1,24 +1,24 @@
 const routes = [
   {
     index: true,
-    label: 'Himanshu Arora',
-    path: '/',
+    label: "Himanshu Arora",
+    path: "/",
   },
   {
-    label: 'About',
-    path: '/about',
+    label: "About Me",
+    path: "/about",
   },
   {
-    label: 'Resume',
-    path: '/resume',
+    label: "Resume",
+    path: "/resume",
   },
   {
-    label: 'Projects',
-    path: '/projects',
+    label: "Projects",
+    path: "/projects",
   },
   {
-    label: 'Contact',
-    path: '/contact',
+    label: "Contact",
+    path: "/contact",
   },
 ];
 
