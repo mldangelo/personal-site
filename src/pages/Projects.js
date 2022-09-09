@@ -6,8 +6,6 @@ import Main from "../layouts/Main";
 import Cell from "../components/Projects/Cell";
 import data from "../data/projects";
 
-import References from "../components/Resume/References";
-
 const Projects = () => (
   <Main title="Projects" description="Learn about Himanshu Arora's projects.">
     <article className="post" id="projects">
@@ -22,7 +20,6 @@ const Projects = () => (
       {data.map((project) => (
         <Cell data={project} key={project.title} />
       ))}
-      <References />
     </article>
   </Main>
 );
