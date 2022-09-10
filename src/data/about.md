@@ -29,10 +29,9 @@ Please have a look at my reviews on **[Fiverr](https://www.fiverr.com/himanshu_a
 - Python Django - The Practical Guide
 - SQL - The Complete Developer's Guide (MySQL, PostgreSQL)
 - JavaScript - The Complete Guide (Beginner + Advanced)
-- Flutter & Dart - The Complete Guide [2022 Edition]
-- Clean Code
 - Understanding TypeScript - 2022 Edition
-
+- Clean Code
+- Flutter & Dart - The Complete Guide [2022 Edition]
 <!---
 - Master the Coding Interview: Data Structures + Algorithms
 - JavaScript Unit Testing - The Practical Guide
