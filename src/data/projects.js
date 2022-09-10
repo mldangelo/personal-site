@@ -14,6 +14,13 @@ const data = [
     image: "/images/projects/unqueue.png",
     desc: "Unqueue brings the convenience of curbside, in-store, and delivery orders into one platform so you spend a lot less time waiting in line.",
   },
+  {
+    title: "Unqueue BLog",
+    subtitle: "GatsbyJS | Wordpress | GraphQL",
+    link: "https://unqueue.blog/",
+    image: "/images/projects/unqueue-blog.png",
+    desc: "The brains behind Unqueue for Work pen down their journey of launching Corporate Plans.",
+  },
 ];
 
 export default data;
