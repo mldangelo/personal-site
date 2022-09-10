@@ -23,14 +23,14 @@ const data = [
   },
   {
     title: "Insights Feed App",
-    subtitle: "Angular | NojeJS | MySQL",
+    subtitle: "Angular | NodeJS | MySQL",
     link: "https://insightsfeed.app/",
     image: "/images/projects/insights.png",
     desc: "Insights is a library of micro-survey tools to help youth leaders measure the effectiveness of their youth ministry and the spiritual health of their youth.",
   },
   {
     title: "Purple Panda App",
-    subtitle: "ReactJS | NojeJS | MySQL",
+    subtitle: "ReactJS | NodeJS | MySQL",
     link: "https://app.purplepanda.life/",
     image: "/images/projects/purplepanda.png",
     desc: "Our central place for managing your spending, tracking your investments, sorting your tax and smashing goals. Here is where you learn, grow, and connect.",
