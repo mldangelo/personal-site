@@ -34,7 +34,7 @@ const data = [
     icon: faEnvelope,
   },
   {
-    link: 'href="https://wa.me/919541225322',
+    link: "https://wa.me/919541225322",
     label: "Whatsapp",
     icon: faWhatsapp,
   },
