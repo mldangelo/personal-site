@@ -24,6 +24,7 @@ Please have a look at my reviews on **[Fiverr](https://www.fiverr.com/himanshu_a
 - Angular - The Complete Guide
 - MongoDB - The Complete Developer's Guide
 - Git & GitHub - The Practical Guide
+- Data Structures & Algorithms
 - Docker & Kubernetes: The Practical Guide [2022 Edition]
 - Python - The Practical Guide [2022 Edition]
 - Python Django - The Practical Guide

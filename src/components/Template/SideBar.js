@@ -20,7 +20,7 @@ const SideBar = () => (
           }}
         >
           Top Rated Seller on Fiverr | ReactJS | NextJS | GatsbyJS | Angular |
-          NodeJS | Wordpress
+          NodeJS | Wordpress | DSA
         </p>
         {/* <p><a href="mailto:himanshu73188@gmail.com">himanshu73188@gmail.com</a></p>
         <p><a href="tel:h+919541225322">+91 9541-225322</a></p> */}
