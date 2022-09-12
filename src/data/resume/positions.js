@@ -1,10 +1,9 @@
 const positions = [
   {
     company: "Fiverr",
-    position: "Fullstack Web Developer",
+    position: "Fullstack Web Developer (Top Rated Seller)",
     link: "https://www.fiverr.com/himanshu_arora1",
-    daterange:
-      "August 2021 - Present (Full time Freelancer - Top Rated Seller)",
+    daterange: "August 2021 - Present (Full Time - Remote)",
     points: [
       "Work across diverse teams & founders.",
       "Plan, write, and debug web applications.",
@@ -17,7 +16,7 @@ const positions = [
     company: "Studio137 Digital Media Solutions",
     position: "Fullstack Web Developer",
     link: "https://studio137.co.za/",
-    daterange: "March 2019 - July 2021 (Full time - Remote)",
+    daterange: "March 2019 - July 2021 (Full Time - Remote)",
     points: [
       "Work on large, complex design projects for cooperate clients.",
       "Design web applications & websites according to client briefs & modify design to meet changes in client specifications.",
