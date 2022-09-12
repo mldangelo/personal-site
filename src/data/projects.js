@@ -42,6 +42,13 @@ const data = [
     image: "/images/projects/138marine.png",
     desc: "138 Marine is a National Award-winning, upmarket guest house with spectacular sea views.",
   },
+  {
+    title: "Open Source Wordpress Plugins",
+    subtitle: "Wordpress | PHP",
+    link: "https://profiles.wordpress.org/himanshu73188/#content-plugins",
+    image: "/images/projects/wp-plugins.png",
+    desc: "Contributed to opensource wordpress plugin development.",
+  },
 ];
 
 export default data;
