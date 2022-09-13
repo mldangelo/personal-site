@@ -28,7 +28,7 @@ const data = [
     subtitle: 'CS205: High Performance Computing final project',
     link: '/resources/projects/Harvard-CS205-final-paper.pdf',
     video: '/images/projects/Harvard-CS205-demo.mp4',
-    date: '2015-05-05',
+    date: '2022-05-05',
     desc:
       'Developed a Smoothed Particle Hydrodynamics (SPH) simulator supporting 10M+ particles, optimized with OpenMP, OpenMPI, Eigen. Rendered with raw OpenGL.',
   },
@@ -57,7 +57,7 @@ const data = [
       + 'measurement unit.',
   },
   {
-    title: 'Galexy Simulator',
+    title: 'Galaxy Simulator',
     subtitle: 'AM05: Final Project',
     video: '/images/projects/Harvard-AM205-demo.mp4',
     link: '/resources/projects/MIT-VNAV-final-paper.pdf',
