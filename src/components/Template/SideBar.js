@@ -21,7 +21,7 @@ const SideBar = () => (
         >
           Top Rated Seller on{" "}
           <a href="https://www.fiverr.com/himanshu_arora1">Fiverr</a> | ReactJS
-          | NextJS | GatsbyJS | Angular | NodeJS | Wordpress | DSA
+          | NextJS | GatsbyJS | Angular | NodeJS | Wordpress
         </p>
         {/* <p><a href="mailto:himanshu73188@gmail.com">himanshu73188@gmail.com</a></p>
         <p><a href="tel:h+919541225322">+91 9541-225322</a></p> */}
