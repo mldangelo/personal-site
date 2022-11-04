@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Certidegree from './Certification/Certidegree';
 
 const Cerification = ({ data }) => (
-  <div className="certification">
+  <div className="education">
     <div className="link-to" id="certification" />
     <div className="title">
       <h3>Certifications</h3>

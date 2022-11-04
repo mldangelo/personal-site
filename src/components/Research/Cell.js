@@ -7,7 +7,7 @@ const Cell = ({ data }) => (
     <h3>
       <a href={data.link}>{data.title}</a><br />
     </h3>
-    <h4> <a href={data.journallink}>{data.journal}</a><br /> Author: {data.author} <br /><a href={data.journaleditorlink}>{data.journaleditor}</a><br /> ISBN: {data.ISBN} <br /><time>{dayjs(data.date).format('MMMM, YY')}</time> </h4>
+    <h4 style={{ color: '#aaaaaa' }}> <a href={data.journallink}>{data.journal}</a><br /> Author: {data.author} <br /><a href={data.journaleditorlink}>{data.journaleditor}</a><br /> ISBN: {data.ISBN} <br /><time>{dayjs(data.date).format('MMMM, YY')}</time> </h4>
     <br />
     <div>
       <h6> Abstract </h6>
