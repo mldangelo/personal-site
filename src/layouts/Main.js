@@ -11,7 +11,7 @@ const Main = (props) => (
   <HelmetProvider>
     <Analytics />
     <ScrollToTop />
-    <Helmet titleTemplate="%s | Dhruv Doshi" defaultTitle="Dhruv Doshi">
+    <Helmet titleTemplate="%s | Dhruv Doshi" defaultTitle="Dhruv Doshi" defer={false}>
       {props.title && <title>{props.title}</title>}
       <meta name="description" content={props.description} />
     </Helmet>

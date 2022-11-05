@@ -52,4 +52,18 @@ Ask me in person for other movies or series recomendation!
 
 Ask me in person for other stories that I'm afraid to share with the internet.
 
+- [Alex Peysakhovich](http://alexpeys.github.io/)
+- [Chris Lengerich](http://www.chrislengerich.com/)
+- [Chris Saad](https://www.chrissaad.com/)
+- [Duncan Tomlin](http://duncantomlin.com/)
+- [Hawley Moore](http://hawleymoore.com/)
+- [Holman Gao](https://golmansax.com/)
+- [Ian Webster](http://ianww.com/)
+- [Johanna Flato](https://www.johannaflato.com/)
+- [Judy Mou](http://www.judymou.com/)
+- [Kristina Monakhova](https://kristinamonakhova.com/)
+- [Noah Trueblood](http://notrueblood.com/)
+- [Ruoxi Wang](http://ruoxiw.com/)
+- [Tom Sachs](https://www.tomsachs.org/)
+- [Will Holley](https://willholley.com)
 
