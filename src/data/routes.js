@@ -20,16 +20,10 @@ const routes = [
     label: 'Research',
     path: '/research',
   },
-  /*
-  {
-    label: 'Stats',
-    path: '/stats',
-  },
-  */
-  {
-    label: 'Blogs',
-    path: '/blogs',
-  },
+  // {
+  //   label: 'Blogs',
+  //   path: '/blogs',
+  // },
   {
     label: 'Contact',
     path: '/contact',

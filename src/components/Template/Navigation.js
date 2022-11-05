@@ -19,6 +19,7 @@ const Navigation = () => (
             <Link to={l.path}>{l.label}</Link>
           </li>
         ))}
+        <li> <a href="https://blog.doshidhruv.com" rel="noreferrer" target="_blank">BLOGS </a> </li>
       </ul>
     </nav>
     <Hamburger />
