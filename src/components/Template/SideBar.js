@@ -9,7 +9,7 @@ const SideBar = () => (
   <section id="sidebar">
     <section id="intro">
       <Link to="/" className="logo">
-        <img src={`${PUBLIC_URL}/images/me.jpg`} alt="" />
+        <img src={`${PUBLIC_URL}/images/me.png`} alt="" />
       </Link>
       <header>
         <h2>Dhruv Doshi</h2>
@@ -21,7 +21,7 @@ const SideBar = () => (
     <section className="blurb">
       <h2>About</h2>
       <p>Hi, I Dhruv. I like building things.
-        I am pursing masters from <a href="https://www.dal.ca/">Dalhousie University</a> ,
+        I completed masters from <a href="https://www.dal.ca/">Dalhousie University</a> ,
         <a href="https://www.gtu.ac.in/"> Gujarat Tech University</a> Alumni, and
         the founder of <a href="https://dhruv25071999.wixsite.com/dcs-bbn">DCS-BBN</a>.
       </p>
