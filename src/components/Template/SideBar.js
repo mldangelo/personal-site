@@ -19,9 +19,9 @@ const SideBar = () => (
             letterSpacing: "normal",
           }}
         >
-          Top Rated Seller on{" "}
-          <a href="https://www.fiverr.com/himanshu_arora1">Fiverr</a> | ReactJS
-          | NextJS | GatsbyJS | Angular | NodeJS | Wordpress
+          {/* Top Rated Seller on{" "}
+          <a href="https://www.fiverr.com/himanshu_arora1">Fiverr</a> |  */}
+          ReactJS | NextJS | GatsbyJS | Angular | NodeJS | Wordpress
         </p>
         {/* <p><a href="mailto:himanshu73188@gmail.com">himanshu73188@gmail.com</a></p>
         <p><a href="tel:h+919541225322">+91 9541-225322</a></p> */}
@@ -32,13 +32,14 @@ const SideBar = () => (
       <h2>About</h2>
       <p>
         Hi, I&apos;m Himanshu Arora, I craft groundbreaking experiences through
-        Web Development. I am a <b>Fullstack Web Developer</b> on{" "}
-        <a href="https://www.fiverr.com/himanshu_arora1">Fiverr</a> as a{" "}
+        Web Development. I am a <b>Senior Fullstack Web Developer.</b>
+        {/* at{" "}
+        <a href="https://www.fiverr.com/himanshu_arora1">Fiverr International Ltd</a> as a{" "}
         <strong>
           Top Rated Seller (highest status on{" "}
           <a href="https://www.fiverr.com/himanshu_arora1">Fiverr</a>)
         </strong>
-        .
+        . */}
       </p>
       <ul className="actions">
         <li>
