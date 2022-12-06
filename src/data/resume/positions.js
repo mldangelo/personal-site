@@ -4,6 +4,7 @@ const positions = [
     position: 'Co-founder, C.T.O.',
     link: 'https://arthena.com',
     daterange: 'January 2014 - Present',
+    description: 'Add a description here',
     points: [
       'Deployed quantitative strategies to predict the value of fine art in various pricing contexts.',
       'Built production, on-line, end-to-end optimized machine learning pipelines with Pandas, Numpy, Scikit, Tensorflow, Dagster, Postgres, etc. on GCP with Kubernetes.',
@@ -16,6 +17,7 @@ const positions = [
     position: 'Co-founder',
     link: 'http://skepticalinvestments.biz',
     daterange: 'April 2017 - Present',
+    description: 'Add a description here',
     points: [
       'Founded a micro-vc fund to throw token amounts of money at problems I find interesting.',
       'Created the InstaSafe. Fast, automated investment docs for YC companies.',
@@ -26,6 +28,7 @@ const positions = [
     position: 'Consultant',
     link: 'http://enveritas.org',
     daterange: 'September 2016 - 2018',
+    description: 'Add a description here',
     points: [
       'Trained a model for the Brazilian Coffee Scenes Dataset with better than state of the art accuracy.',
       'Collected training sets on the ground in Uganda. Built dashboards to visualize work of surveyors using Flask, React, and D3.',
@@ -37,6 +40,7 @@ const positions = [
     position: 'Consultant',
     link: 'https://zenysis.com',
     daterange: 'February 2016 - March 2016',
+    description: 'Add a description here',
     points: [
       'Worked in Addis Ababa for the Ethiopian Ministry of Health and built data visualization tools in React and Flask.',
       'Ingested multiple databases with different alphabets, calendars, and without official spellings of geographic locations.',
@@ -47,6 +51,7 @@ const positions = [
     position: 'Co-founder',
     link: 'https://matroid.com',
     daterange: 'July 2015 - January 2016',
+    description: 'Add a description here',
     points: [
       'Developed end to end machine learning pipeline to train visual classifiers from keywords using Node.JS, Express, Keystone, MongoDB, AWS, S3, Caffe, and other technologies.',
       'Received Series A term sheets for 20M+ valuations.',
@@ -57,6 +62,7 @@ const positions = [
     position: 'Missions Intern',
     link: 'https://planet.com',
     daterange: 'June 2014 - January 2015',
+    description: 'Add a description here',
     points: [
       'Built models to improve image quality, signal to noise ratio, and dynamic range.',
       'Performed statistical analysis of image quality in Matlab and Python.  Developed flight software in C++.',
@@ -68,6 +74,7 @@ const positions = [
     position: 'Avionics Intern',
     link: 'http://planetaryresources.com',
     daterange: 'January 2014 - May 2014',
+    description: 'Add a description here',
     points: [
       'Developed simulations in Matlab for Attitude Determination and Control Subsystem.',
       'Developed processes for in lab testing and characterization of various subsystems.',
@@ -79,6 +86,7 @@ const positions = [
     position: 'Intern',
     link: 'https://facebook.com',
     daterange: 'June 2013 - September 2013',
+    description: 'Add a description here',
     points: [
       'Developed software in python for automated testing of servers.',
       'Performed statistical analysis with R, HIVE to assist in triage of malfunctioning servers.',
@@ -90,6 +98,7 @@ const positions = [
     position: 'At Large Board Member',
     link: 'http://seds.org',
     daterange: 'October 2013 - October 2014',
+    description: 'Add a description here',
     points: [
       'Elected to Board of Directors of the USA’s largest student space advocacy group based on 5+ years of work with SEDS.',
       'Responsibilities included: organizational strategy, conference presentations, fundraising, special projects, promoting SEDS nationally and internationally, and photographing conferences.',
@@ -100,6 +109,7 @@ const positions = [
     position: 'Co-founder, Program Manager',
     link: 'https://ubnl.space/',
     daterange: 'October 2010 – June 2012',
+    description: 'Add a description here',
     points: [
       'Coauthored grant to build a multi-spectral imaging satellite as part of the AFRL University Nanosatellite Program.',
       'Lead a team of 60 students through satellite development life cycle. Served as a technical expert, acquired intimate working knowledge of satellite subsystems.  Solicited funding through NASA, AFOSR, and several corporate sponsors.',
