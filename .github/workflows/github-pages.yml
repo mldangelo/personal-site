@@ -2,7 +2,7 @@ name: GitHub Pages
 
 on:
   push:
-    branches: [ dev ]
+    branches: [ main ]
 jobs:
   deployment:
     runs-on: ubuntu-latest
