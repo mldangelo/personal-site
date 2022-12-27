@@ -16,6 +16,7 @@ const Index = () => (
             <Link to="/resume">resume</Link>, {' '}
             <Link to="/projects">projects</Link>, {' '}
             <Link to="/research">research work</Link>, {' '}
+            <Link to="/pictures">pictures</Link>, {' '}
             view <a href="https://blog.doshidhruv.com" target="_blank" rel="noreferrer">blogs</a>, {' '}
             or <Link to="/contact">contact</Link> me.
           </p>
