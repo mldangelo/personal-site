@@ -34,7 +34,7 @@ const SideBar = () => (
         Hi, I&apos;m Himanshu Arora, I craft groundbreaking experiences through
         Web Development. I am a <b>Senior Fullstack Web Developer.</b>
         {/* at{" "}
-        <a href="https://www.fiverr.com/himanshu_arora1">Fiverr International Ltd</a> as a{" "}
+        <a href="https://www.fiverr.com/himanshu_arora1">Fiverr International Limited</a> as a{" "}
         <strong>
           Top Rated Seller (highest status on{" "}
           <a href="https://www.fiverr.com/himanshu_arora1">Fiverr</a>)

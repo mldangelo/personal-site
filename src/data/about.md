@@ -7,7 +7,7 @@ My name is Himanshu Arora. I am based in **Haryana, India** and obtained my **B.
 I started looking for a job in my last year of college and landed in [Futuristic Simplified Computing Pvt. Ltd](https://www.fsc.co.in/) as a web developer for 1 year & 9 months. In 2019 I joined [Studio137 Digital Media Solutions](https://studio137.co.za/) based in South Africa as a Fullstack Web Developer for 2 years & 5 months.
 \
 \
-Recently, I worked as a **Senior Fullstack Web Developer** at [**Fiverr International Ltd**](https://www.fiverr.com/himanshu_arora1) for 1 year 3 months where I help my clients to solve their challenges with gratifying and meaningful Fullstack Development. 
+Recently, I worked as a **Senior Fullstack Web Developer** at [**Fiverr International Limited**](https://www.fiverr.com/himanshu_arora1) for 1 year 5 months where I help my clients to solve their challenges with gratifying and meaningful Fullstack Development. 
 \
 \
 I have **more than 5 years of experience** in this field. Throughout my career, I strengthen my skills in Web Development while working for several companies in different industries. I have learned how to work across diverse teams, build relationships with clients. Over the years I have worked hard to get to the position I am today. I am positive, loyal, hard worker, trust worthy & self learner person. If you hire me I can assure you will see a positive return on your investment. **If you think I am a good candidate, please feel free to get in touch.**

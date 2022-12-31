@@ -20,7 +20,7 @@ const data = [
   },
   {
     link: "https://www.fiverr.com/himanshu_arora1",
-    label: "Fiverr International Ltd",
+    label: "Fiverr International Limited",
     icon: faFonticonsFi,
   },
   {
