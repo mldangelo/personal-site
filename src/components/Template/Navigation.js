@@ -20,6 +20,7 @@ const Navigation = () => (
           </li>
         ))}
         <li> <a href="https://blog.doshidhruv.com" rel="noreferrer" target="_blank">BLOGS </a> </li>
+        <li> <Link to="/contact">CONTACT</Link> </li>
       </ul>
     </nav>
     <Hamburger />

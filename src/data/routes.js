@@ -20,18 +20,14 @@ const routes = [
     label: 'Research',
     path: '/research',
   },
-  // {
-  //   label: 'Blogs',
-  //   path: '/blogs',
-  // },
-  {
-    label: 'Contact',
-    path: '/contact',
-  },
   {
     label: 'Pictures',
     path: '/pictures',
   },
+  // {
+  //   label: 'Contact',
+  //   path: '/contact',
+  // },
 ];
 
 export default routes;
