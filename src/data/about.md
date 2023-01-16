@@ -1,7 +1,7 @@
 
 <!-- # Intro -->
 
-I'm Dhruv, lifetime student always learning ew skills and geek by nature. I also manage my research prject [DCS-BBN](https://dhruv25071999.wixsite.com/dcs-bbn) in my extra time. I am particularly interested in projects that touch health and safety, imaging, social impact, and Blockchain.  If you think I can be helpful to you or would like to meet me, please feel free to get in touch.
+I'm Dhruv, lifetime student always learning new skills and geek by nature. I also manage my research prject [DCS-BBN](https://dhruv25071999.wixsite.com/dcs-bbn) in my extra time. I am particularly interested in projects that touch health and safety, imaging, social impact, and Blockchain.  If you think I can be helpful to you or would like to meet me, please feel free to get in touch.
 
 # Current
 Working as Lead Full Stack Developer with Enterprise Architecture team within RBC. Learning Quantum Computing and trying to learn to swim(hobby - 2023)
