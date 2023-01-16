@@ -1,11 +1,10 @@
 
-# Intro
+<!-- # Intro -->
 
-I am student at [Dalhousie University](https://www.dal.ca/) , I study Masters of Applied Computer Science. I also manage my research prject [DCS-BBN](https://dhruv25071999.wixsite.com/dcs-bbn) in my extra time. I am particularly interested in projects that touch health and safety, imaging, social impact, and Blockchain.  If you think I can be helpful to you or would like to meet me, please feel free to get in touch.
+I'm Dhruv, lifetime student always learning ew skills and geek by nature. I also manage my research prject [DCS-BBN](https://dhruv25071999.wixsite.com/dcs-bbn) in my extra time. I am particularly interested in projects that touch health and safety, imaging, social impact, and Blockchain.  If you think I can be helpful to you or would like to meet me, please feel free to get in touch.
 
-# Currently
-
-At Dalhousie Univeristy, I am focusing on my core skills like Object Oriented Programming, Database Development alongside Cloud Computing and Serverless Cloud Systems.
+# Current
+Working as Lead Full Stack Developer with Enterprise Architecture team within RBC. Learning Quantum Computing and trying to learn to swim(hobby - 2023)
 
 # Fun facts
 
@@ -19,14 +18,14 @@ At Dalhousie Univeristy, I am focusing on my core skills like Object Oriented Pr
 
 # I dream of
 
-- being a millionare.
+- being a billionare.
 - make something ming blowing.
 - doing better.
 - you not checking the commit history for earlier drafts of this file.
 
 # I like
-
 - [Chess](https://www.chess.com/member/chess_dhruv)
+- [Writing](https://blog.doshidhruv.com/)
 - Cricket
 - Collecting Coins
 - Series ([Suits](https://en.wikipedia.org/wiki/Suits_(American_TV_series)), [Breaking Bad](https://en.wikipedia.org/wiki/Breaking_Bad), [Narcos](https://en.wikipedia.org/wiki/Narcos), [Chernobl](https://en.wikipedia.org/wiki/Chernobyl_(miniseries)))
@@ -44,26 +43,16 @@ Ask me in person for other movies or series recomendation!
 
 - At age of 17, I got into [SilverOak College](https://www.silveroakuni.ac.in/) for my B.E. in Computer Engineering.
 
-- After getting in the university I was just chilling and started watching series and did nothing for next 2 year!😅 Continuing that i started visiting events and eventually loved computer science field and security domain especially.
+- After getting in the university I was just chilling and started watching series and did nothing for next 2 year!😅 Continuing that i started visiting events and eventually loved computer science field and security domain especially. leading me into Blockchian and Artificial Intelligence.
+
+- In this period I made three products and pitched them for investment and sucessfully got into the first round but due to chnage of plans I was not able to continue with it. This is the peak COVID-19 time!
+
+- I started my masters with Dalhousie Univeristy and moved to canada for the further studies and man o man, this was difficult!
+
+- Will write further story soon 😅
 
 - Currently I'm working to make world more secure and safeguard the data of users.
 
 
-
 Ask me in person for other stories that I'm afraid to share with the internet.
-
-- [Alex Peysakhovich](http://alexpeys.github.io/)
-- [Chris Lengerich](http://www.chrislengerich.com/)
-- [Chris Saad](https://www.chrissaad.com/)
-- [Duncan Tomlin](http://duncantomlin.com/)
-- [Hawley Moore](http://hawleymoore.com/)
-- [Holman Gao](https://golmansax.com/)
-- [Ian Webster](http://ianww.com/)
-- [Johanna Flato](https://www.johannaflato.com/)
-- [Judy Mou](http://www.judymou.com/)
-- [Kristina Monakhova](https://kristinamonakhova.com/)
-- [Noah Trueblood](http://notrueblood.com/)
-- [Ruoxi Wang](http://ruoxiw.com/)
-- [Tom Sachs](https://www.tomsachs.org/)
-- [Will Holley](https://willholley.com)
 
