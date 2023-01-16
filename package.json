@@ -11,7 +11,7 @@
     "node": ">=14.x"
   },
   "scripts": {
-    "build": "rimraf ./build && react-scripts build",
+    "build": "rimraf ./build && react-scripts build && echo '/* /index.html 200' | cat >build/_redirects ",
     "predeploy": "npm run build && react-snap",
     "deploy": "gh-pages -d build",
     "start": "react-scripts start",
