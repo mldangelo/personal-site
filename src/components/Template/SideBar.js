@@ -20,21 +20,19 @@ const SideBar = () => (
 
     <section className="blurb">
       <h2>About</h2>
-      <p>Hi, I Dhruv. I like building things.
-        I am pursing masters from <a href="https://www.dal.ca/">Dalhousie University</a> ,
-        <a href="https://www.gtu.ac.in/"> Gujarat Tech University</a> Alumni, and
+      <p>I like learning and building stuff. Currently working as Lead Software Devloper with <a href="https://www.rbcroyalbank.com/personal.html">Royal Bank of Canada</a>. <a href="https://www.dal.ca/">Dalhousie University</a> and <a href="https://www.gtu.ac.in/"> Gujarat Tech University</a> Alumni, and
         the founder of <a href="https://dhruv25071999.wixsite.com/dcs-bbn">DCS-BBN</a>.
       </p>
       <ul className="actions">
         <li>
-          {!window.location.pathname.includes('/resume') ? <Link to="/resume" className="button">Learn More</Link> : <Link to="/about" className="button">About Me</Link>}
+          {!window.location.pathname.includes('/about') ? <Link to="/about" className="button">Learn More</Link> : <Link to="/about" className="button">Learn More</Link>}
         </li>
       </ul>
     </section>
 
     <section id="footer">
       {/* <ContactIcons /> */}
-      <p className="copyright">&copy; Dhruv Doshi <Link to="/">dhruvdoshi.github.io</Link>.</p>
+      <p className="copyright">&copy; Dhruv Doshi <Link to="/">doshidhruv.com</Link>.</p>
     </section>
   </section>
 );
