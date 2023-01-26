@@ -13,11 +13,11 @@ const data = [
     label: "LinkedIn",
     icon: faLinkedinIn,
   },
-  {
-    link: "https://angel.co/u/himanshu-arora1",
-    label: "Angel List",
-    icon: faAngellist,
-  },
+  // {
+  //   link: "https://angel.co/u/himanshu-arora1",
+  //   label: "Angel List",
+  //   icon: faAngellist,
+  // },
   {
     link: "https://www.fiverr.com/himanshu_arora1",
     label: "Fiverr International Limited",
