@@ -1,5 +1,14 @@
 const positions = [
   {
+    company: 'Royal Bank of Canada',
+    position: 'Lead Full Stack Developer - Enterprise Architecture',
+    link: 'https://www.rbcroyalbank.com/personal.html',
+    daterange: 'Nov 2022 - Present',
+    points: [
+      ' Logging as a Service (LaaS): Extensive work on platform portability and decoupling from third-party vendors. Leveraging Open Telemetry to implement open standards for Logging across the institution for better management and functioning.',
+    ],
+  },
+  {
     company: 'Canada Revenue Agency',
     position: 'IT Developer',
     link: 'https://www.canada.ca/en/revenue-agency.html',
@@ -21,21 +30,12 @@ const positions = [
   },
   {
     company: 'Dalhousie University',
-    position: 'Teaching Assistant',
+    position: '',
     link: 'https://www.dal.ca',
-    daterange: 'September 2021 - Present',
+    daterange: 'September 2021 - December 2022',
     points: [
-      'Solved Student Queries and took Lab sessoins with more than 60 students in each lab',
-      'CSCI-5409 Advance Cloud Computing | CSCI 2134 Software Development | CSCI 1109 Data Science',
-    ],
-  },
-  {
-    company: 'Dalhousie University',
-    position: 'Research Assistant',
-    link: 'https://www.dal.ca',
-    daterange: 'September 2021 - December 2021',
-    points: [
-      'Worked on Project which develops tracing tables for given system of code. Added dunctionality to graphically enable to flow of an algorithm. Developed parser to take in draw.io images and get the relevant tracing table',
+      'Advance Topics in Cloud Computing: Delivered lab for grad students and guided and evaluated the projects',
+      'RESEARCH: Worked on Algorithm and code for tracing table generation of given code. The projects objective is to help new students in computer science to visualize the flow of the code. Developed using Python and HTML',
     ],
   },
   {
