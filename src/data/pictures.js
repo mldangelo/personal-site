@@ -64,6 +64,46 @@ const data = [
     desc:
       'Celebration of festival of colors with Indian society of Dalhousie University',
   },
+  {
+    title: 'Family Gathering',
+    image: '/images/pictures/dada_birthday.gif',
+    date: '2017-07-19',
+    link: 'https://en.wikipedia.org/wiki/Ahmedabad',
+    desc:
+      'Grandfathers 75th Birthday Celebration',
+  },
+  {
+    title: 'Random Cycling - Ahmedabad',
+    image: '/images/pictures/dhruv_random_cycle.jpg',
+    date: '2017-07-19',
+    link: 'https://en.wikipedia.org/wiki/Ahmedabad',
+    desc:
+      'A random evening cycling with friends!',
+  },
+  {
+    title: 'Random dam near Ahmedabad',
+    image: '/images/pictures/dhruv_skinny_fun.jpg',
+    date: '2017-05-19',
+    link: 'https://en.wikipedia.org/wiki/Ahmedabad',
+    desc:
+      'Disadvantages of being the skinny one in the group !!',
+  },
+  {
+    title: 'Group Day 2017 - SilverOak',
+    image: '/images/pictures/dhruv_group_day_2017.jpg',
+    date: '2017-02-19',
+    link: 'http://socet.edu.in/socet/',
+    desc:
+      'Group Day with Friends at first Tech Fest in SilverOak College',
+  },
+  {
+    title: 'Laser Games - SilverOak',
+    image: '/images/pictures/dhruv_laser_games.jpg',
+    date: '2017-02-13',
+    link: 'http://socet.edu.in/socet/',
+    desc:
+      'Laser Games with Friends at first Tech Fest in SilverOak College',
+  },
 ];
 
 export default data;
