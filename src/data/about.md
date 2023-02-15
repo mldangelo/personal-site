@@ -8,29 +8,57 @@ At Spur, I have learned how to build teams, manage people, shape culture, develo
 <!-- # Some history -->
 <!-- I grew up in Sunnyvale, CA -->
 
+# Three words that describe me
+Resorcefull, tenacious, innovative
 
-# I like
-
-- Daily weight lifting
-- Running (Training for a half marathon)
-- Water polo (Harvard Club Water Polo team)
-- Swimming (training for triathlon)
-- Spinning
-- Skiing
-- Space ([James Webb Space Telescope](https://www.jwst.nasa.gov/))
-- Summer
-- Optimization
-- [Good design](/)
+# Hobbies
+- Fitness
+    - Weight training
+    - Running
+    - Spinning
+- Sports 
+    - Water polo 
+    - Swimming
+- Travel
+- Photography
+- Computational photography
+- Photo & video editing
+- Design
 - Investing
+- DJing
+- Skiing
+- Mixology 
+# Passions
+- Kaizen - continuous improvement
+- Robotics and AI
+- Wanderlust
+- Live Music
+- [Good design](/)
+- Space ([James Webb Space Telescope](https://www.jwst.nasa.gov/))
+- Optimization
 - Llamas
-<!-- # Travel / Geography -->
+- Cats
 
-<!-- # Fun facts -->
+# Travel / Geography
+- USA 🇺🇸
+- Mexico 🇲🇽
+- Costa Rica 🇨🇷
+- Spain 🇪🇸
+- Germany 🇩🇪
+- Hungary 🇭🇺
+- Puerto Rico 🇵🇷
+- France 🇫🇷
+- Serbia 🇷🇸
+- Netherlands 🇳🇱
+
+# Fun facts
+- Highly flexible
+- Southpaw
+- High school valedictorian
+- Was in Spain when they won the Euro cup in 2012, and in France when they won the world cup in 2018
 
 # I dream of
-
-- Becoming fearless.
-- Putting my best foot forward.
-- Always improving.
-- Being the change you want to see in the world.
-
+- Becoming fearless
+- Taking more risks without hesitation
+- Doing exactly what needs to be done in any situation regardless of the circumstance
+- Envisioning the next generation of technology, and willing it into existence

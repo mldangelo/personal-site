@@ -13,7 +13,7 @@ const Cell = ({ data }) => (
           {dayjs(data.date).format('MMMM, YYYY')}
         </time>
       </header>
-      <a href={data.link} className="image">
+      <a href={data.video ? (data.video) : (data.image)} className="image" target="_blank" rel="noreferrer">
         {data.video ? (
           <video width="100%" playsinline="true" autoPlay="autoplay" muted="true" loop="true">
             <source
@@ -25,9 +25,9 @@ const Cell = ({ data }) => (
           <img src={`${process.env.PUBLIC_URL}${data.image}`} alt={data.title} />
         )}
       </a>
-      <div className="description">
-        <p>{data.desc}</p>
-      </div>
+      <a href={data.link} className="description" target="_blank" rel="noreferrer">
+        <p>{data.desc} Read more...</p>
+      </a>
     </article>
   </div>
 );

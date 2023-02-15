@@ -1,5 +1,29 @@
 const courses = [
   {
+    title: 'CSE Capstone Project',
+    number: 'APCS 297R',
+    link: 'https://kenyacharts.github/',
+    university: 'Harvard',
+  },
+  {
+    title: 'Computing at Scale',
+    number: 'CS 242',
+    link: 'https://www.eecs.harvard.edu/htk/courses/',
+    university: 'Harvard',
+  },
+  {
+    title: 'Quantatative Methods for Natural Language Processing',
+    number: 'MIT 6.8610',
+    link: 'https://mit-6861.github.io/',
+    university: 'MIT',
+  },
+  {
+    title: 'Robotic Manipulation',
+    number: 'MIT 6.4212',
+    link: 'https://manipulation.csail.mit.edu/Fall2022/',
+    university: 'MIT',
+  },
+  {
     title: 'Advanced Scientific Computing: Numerical Methods',
     number: 'AM 205',
     link: 'https://courses.seas.harvard.edu/courses/am205/',
@@ -55,13 +79,13 @@ const courses = [
   },
   {
     title: 'Field Course: Field X',
-    number: '6333',
+    number: 'HBS 6333',
     link: 'https://www.hbs.edu/coursecatalog/6333.html',
     university: 'Harvard Buisness School',
   },
   {
     title: 'Scaling Technology Ventures',
-    number: '1788',
+    number: 'HBS 1788',
     link: 'https://www.hbs.edu/coursecatalog/1788.html',
     university: 'Harvard Buisness School',
   },

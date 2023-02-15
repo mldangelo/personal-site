@@ -1,6 +1,54 @@
 // TODO Add a couple lines about each project
 const data = [
   {
+    title: 'Compressing and Accelerating Stable Diffusion',
+    subtitle: 'Harvard CS242: Computing as Scale Final Project',
+    link: '/resources/projects/CS_242_Final_Project.pdf',
+    image: '/images/projects/Harvard-CS242-results.png',
+    date: '2022-12-10',
+    desc:
+      'We explore methods for compressing and accelerating Stable Diffusion, '
+      + 'resulting in a final compressed model with 80% memory size reduction '
+      + 'and a generation speed that is ∼4x faster, while maintaining text-to-image quality.',
+  },
+  {
+    title: 'Harvard X Microsoft: Socioeconomic Future of Kenya',
+    subtitle: 'Harvard APCOMP 297R: CSE Capstone Project',
+    link: 'https://capstone2022-kenya-socioeconomic.shinyapps.io/capstone_kenya/',
+    image: '/images/projects/Harvard-APCOMP297R-results.png',
+    date: '2022-12-10',
+    desc:
+      'We developed custom models to understand the historical trends of key economic indicators in Kenya such as Gross County Product (GCP), '
+      + 'sector-level GCP, education Level, and population, all on a county level. We presented the results in an interactive model '
+      + 'to drive actionable insights.',
+  },
+  {
+    title: 'Uncertainty Quantification in Question-Answering Models',
+    subtitle: 'MIT 6.8610: Quantitative Methods for Natural Language Processing Final Project',
+    link: '/resources/projects/NLP_Project_Final_Report.pdf',
+    image: '/images/projects/MIT-NLP-results.png',
+    date: '2022-12-10',
+    desc:
+      'We examine the uncertainty quantification of BERTbased Span-Extractive QA models, '
+      + 'one of the most commonly used and foundational models in '
+      + 'QA. We compare the uncertainty characteristics of MC-Dropout, '
+      + 'Deep Ensembles, and SNGP applied to ALBERT and DistilBERT base models '
+      + 'via Entropy, Probability Variance, and Bayesian Active Learning by Disagreement.',
+  },
+  {
+    title: 'Design Choices for Dual-arm Robotic Manipulation',
+    subtitle: 'MIT 6.4212: Robotic Manipulation Final Project',
+    link: '/resources/projects/Robotic_Manipulation_Project.pdf',
+    video: '/videos/projects/MIT-Robotic-Manipulation-Final-Project.mp4',
+    date: '2022-12-10',
+    desc:
+      'We propose three different controllers for a dual-armed robot system: '
+      + '1) separate controllers for each arm with assumptions on the workspace, '
+      + '2) separate controllers with a communication channel between them, and '
+      + '3) single controller for both arms. We constructed a series of manipulation tasks '
+      + 'to determine the advantages and disadvantages of each approach.',
+  },
+  {
     title: 'Evaluation of Optimal Decision Making with Dead-ends in High-Risk Environments',
     subtitle: 'Stats 234: Sequential Decision Making Final Project',
     link: '/resources/projects/Harvard-STATS-234-final-paper.pdf',
@@ -9,7 +57,7 @@ const data = [
     desc:
       'We investigate the effectivness of multiple offline reinfocment learning algorithms '
       + 'and their abilitiies to detect dead-ends. Dead-ends are states that eventually lead to '
-      + 'a negitive reward',
+      + 'a negitive reward.',
   },
   {
     title: 'DogeGAN',
@@ -21,7 +69,7 @@ const data = [
     'We propose an end-to-end solution to generating digital artwork '
     + 'using Generative Adversarial Networks (GANs) to mimic '
     + 'popular collections of NFTs. The generation of artwork, can be guided by '
-    + 'image or text based inputs powered by CLIP',
+    + 'image or text based inputs powered by CLIP.',
   },
   {
     title: 'Planatary Impact Simulation',
@@ -64,7 +112,7 @@ const data = [
     date: '2021-12-17',
     desc:
       'In this work, we use the oct-tree-based Barnes-Hut algorithm to simulate '
-      + '60k particles colliding in a galaxy simulation',
+      + '60k particles colliding in a galaxy simulation.',
   },
   {
     title: 'Flying Courier: Cheap Indoor Drone Localization',

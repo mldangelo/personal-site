@@ -1,7 +1,7 @@
 const positions = [
   {
     company: 'Lucid Motors',
-    position: 'Senior Software Engineer',
+    position: 'Staff Software Engineer',
     link: 'https://www.lucidmotors.com/',
     daterange: 'May 2022 - Present',
     points: [
