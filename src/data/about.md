@@ -59,7 +59,7 @@ With my extensive skills and experience in software engineering, team management
 - Highly flexible
 - Southpaw
 - High school valedictorian
-- Was in Spain when they won the Euro cup in 2012, and in France when they won the world cup in 2018
+- Was in Spain when they won the Euro Cup in 2012, and in France when they won the World Cup in 2018
 
 # I dream of
 - Becoming fearless

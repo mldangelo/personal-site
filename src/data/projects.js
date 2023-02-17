@@ -55,9 +55,9 @@ const data = [
     image: '/images/projects/Harvard-STATS-234-Poster.jpg',
     date: '2022-05-10',
     desc:
-      'We investigate the effectivness of multiple offline reinfocment learning algorithms '
+      'We investigate the effectiveness of multiple offline reinforcement learning algorithms '
       + 'and their abilitiies to detect dead-ends. Dead-ends are states that eventually lead to '
-      + 'a negitive reward.',
+      + 'a negative reward.',
   },
   {
     title: 'DogeGAN',
@@ -68,8 +68,8 @@ const data = [
     desc:
     'We propose an end-to-end solution to generating digital artwork '
     + 'using Generative Adversarial Networks (GANs) to mimic '
-    + 'popular collections of NFTs. The generation of artwork, can be guided by '
-    + 'image or text based inputs powered by CLIP.',
+    + 'popular collections of NFTs. The generation of artwork can be guided by '
+    + 'image or text-based inputs powered by CLIP.',
   },
   {
     title: 'Planatary Impact Simulation',
@@ -78,7 +78,7 @@ const data = [
     video: '/resources/projects/videos/Harvard-CS205-demo.mp4',
     date: '2022-05-05',
     desc:
-      'Developed a Smoothed Particle Hydrodynamics (SPH) simulator supporting 10M+ particles, optimized with OpenMP, OpenMPI, Eigen. Rendered with raw OpenGL.',
+      'We developed a Smoothed Particle Hydrodynamics (SPH) simulator supporting 10M+ particles, optimized with OpenMP, OpenMPI, and Eigen, and rendered with raw OpenGL.',
   },
   {
     title: 'Alpha Holdem',
@@ -87,7 +87,7 @@ const data = [
     image: '/images/projects/MIT-CSM-final-paper.png',
     date: '2022-05-10',
     desc:
-      'In this paper we apply three variations of Deep Q-learning (DQN) and '
+      'In this paper, we apply three variations of Deep Q-learning (DQN) and '
       + 'Proximal Policy Optimization (PPO) to '
       + 'learn the game of heads-up no-limit Texas Hold’em.',
   },
@@ -122,7 +122,7 @@ const data = [
     date: '2015-05-15',
     desc:
       'We propose a robust, redundant, and reliable, indoor localization scheme for drones '
-      + 'only requiring readily accessible materials: an HD webcam an a regular Inkjet printer.',
+      + 'only requiring readily accessible materials: an HD webcam a regular Inkjet printer.',
   },
 ];
 
