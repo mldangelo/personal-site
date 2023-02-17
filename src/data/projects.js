@@ -15,7 +15,7 @@ const data = [
     title: 'Harvard X Microsoft: Socioeconomic Future of Kenya',
     subtitle: 'Harvard APCOMP 297R: CSE Capstone Project',
     link: 'https://capstone2022-kenya-socioeconomic.shinyapps.io/capstone_kenya/',
-    image: '/images/projects/Harvard-APCOMP297R-results.png',
+    image: '/images/projects/AC_297R__Microsoft_Capstone_Project_Poster.png',
     date: '2022-12-10',
     desc:
       'We developed custom models to understand the historical trends of key economic indicators in Kenya such as Gross County Product (GCP), '
