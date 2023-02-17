@@ -20,8 +20,8 @@ const SideBar = () => (
     <section className="blurb">
       <h2>About</h2>
       <p>Hi, I&apos;m Alex. I like building things.
-        I am a <a href="https://www.seas.harvard.edu/applied-computation/graduate-programs/masters-computational-science-and-engineering">Harvard CSE</a> student, <a href="https://eecs.berkeley.edu/">UC Berkeley EECS</a> alumni,
-        and the founder and CEO of <a href="https://spurdating.com">Spur</a>. Before Spur I was
+        I am a Staff Software Engineer at Lucid Motors, a <a href="https://www.seas.harvard.edu/applied-computation/graduate-programs/masters-computational-science-and-engineering">Harvard CSE</a> student
+        , and a <a href="https://eecs.berkeley.edu/">UC Berkeley EECS</a> alumni. I am also the founder and CEO of <a href="https://spurdating.com">Spur</a>. Previously, I was
         at <a href="https://www.stanford.edu/research/">Stanford Research</a>
         , <a href="https://intel.com">Intel</a>
         , and <a href="https://zspace.com">zSpace</a>

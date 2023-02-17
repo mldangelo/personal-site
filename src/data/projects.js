@@ -63,7 +63,7 @@ const data = [
     title: 'DogeGAN',
     subtitle: 'End-to-end platform for creation of NFT artwork',
     link: '/resources/projects/MIT-CV-DogeGAN-final-paper.pdf',
-    image: '/images/projects/dogeGAN-placeholder.png',
+    video: '/videos/projects/MIT-CV-Final-Project.mp4',
     date: '2022-05-10',
     desc:
     'We propose an end-to-end solution to generating digital artwork '
@@ -75,7 +75,7 @@ const data = [
     title: 'Planatary Impact Simulation',
     subtitle: 'CS205: High Performance Computing final project',
     link: '/resources/projects/Harvard-CS205-final-paper.pdf',
-    video: '/images/projects/Harvard-CS205-demo.mp4',
+    video: '/videos/projects/Harvard-CS205-demo.mp4',
     date: '2022-05-05',
     desc:
       'Developed a Smoothed Particle Hydrodynamics (SPH) simulator supporting 10M+ particles, optimized with OpenMP, OpenMPI, Eigen. Rendered with raw OpenGL.',
@@ -94,7 +94,7 @@ const data = [
   {
     title: 'Visual-Inertial Odometry on the MIT Racecars',
     subtitle: '',
-    video: '/images/projects/MIT-VNAV-demo.mp4',
+    video: '/videos/projects/MIT-VNAV-demo.mp4',
     link: '/resources/projects/MIT-VNAV-final-paper.pdf',
     date: '2021-12-16',
     desc:

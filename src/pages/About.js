@@ -23,8 +23,9 @@ const About = () => (
     <article className="post markdown" id="about">
       <header>
         <div className="title">
-          <h2 data-testid="heading"><Link to="/about">About Me</Link></h2>
-          <p>(in about {count} words)</p>
+          <h2 data-testid="heading" style={{ 'line-height': 1, marginBottom: 15 }}><Link to="/about">About Alex</Link></h2>
+          <p>in {count + 3} words</p>
+          <h3 style={{ 'line-height': 40 }}> Resorcefull ○ tenacious ○ innovative</h3>
         </div>
       </header>
       <ReactMarkdown

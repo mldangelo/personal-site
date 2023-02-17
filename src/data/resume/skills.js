@@ -13,6 +13,11 @@ const skills = [
     category: ['Web Development', 'Javascript'],
   },
   {
+    title: 'Leadership',
+    competency: 5,
+    category: ['Concepts'],
+  },
+  {
     title: 'React',
     competency: 2,
     category: ['Web Development', 'Javascript'],
@@ -26,6 +31,11 @@ const skills = [
     title: 'Amazon Web Services',
     competency: 4,
     category: ['Web Development', 'Tools'],
+  },
+  {
+    title: 'Natural Language Processing',
+    competency: 4,
+    category: ['Concepts'],
   },
   {
     title: 'DynamodDB',
