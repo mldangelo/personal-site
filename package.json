@@ -28,10 +28,10 @@
     "gh-pages": "^4.0.0",
     "prop-types": "^15.8.1",
     "raw.macro": "^0.4.2",
-    "react": "^17.0.1",
-    "react-burger-menu": "^3.0.8",
-    "react-dom": "^17.0.1",
-    "react-ga": "^3.3.0",
+    "react": "^18.2.0",
+    "react-burger-menu": "^3.0.9",
+    "react-dom": "^18.2.0",
+    "react-ga": "^3.3.1",
     "react-helmet-async": "^1.3.0",
     "react-markdown": "^5.0.3",
     "react-router-dom": "^5.2.0",
@@ -49,7 +49,7 @@
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-jsx-a11y": "6.7.1",
     "eslint-plugin-react": "^7.32.2",
-    "sass": "^1.52.3",
+    "sass": "^1.58.3",
     "source-map-explorer": "^2.5.3"
   },
   "browserslist": {
