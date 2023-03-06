@@ -37,19 +37,20 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "^5.0.1",
     "react-snap": "^1.23.0",
-    "rimraf": "^3.0.2"
+    "rimraf": "^4.3.1"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.19.1",
+    "@babel/preset-react": "^7.18.6",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^11.2.3",
-    "babel-eslint": "^10.1.0",
-    "eslint": "^7.19.0",
+    "eslint": "^8.35.0",
     "eslint-config-airbnb": "^19.0.4",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-jsx-a11y": "6.5.1",
-    "eslint-plugin-react": "^7.30.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jsx-a11y": "6.7.1",
+    "eslint-plugin-react": "^7.32.2",
     "sass": "^1.52.3",
-    "source-map-explorer": "^2.5.2"
+    "source-map-explorer": "^2.5.3"
   },
   "browserslist": {
     "production": [
