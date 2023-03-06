@@ -3,6 +3,7 @@ name: GitHub Pages
 on:
   push:
     branches: [ main ]
+  workflow_dispatch:
 jobs:
   deployment:
     runs-on: ubuntu-20.04
