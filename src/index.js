@@ -1,5 +1,6 @@
 import React from 'react';
-import { hydrate, render } from 'react-dom';
+import { hydrate } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import App from './App';
 
 // See https://reactjs.org/docs/strict-mode.html
@@ -15,5 +16,6 @@ const rootElement = document.getElementById('root');
 if (rootElement.hasChildNodes()) {
   hydrate(<StrictApp />, rootElement);
 } else {
-  render(<StrictApp />, rootElement);
+  const root = createRoot(rootElement);
+  root.render(<StrictApp />);
 }
