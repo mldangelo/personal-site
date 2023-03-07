@@ -13,7 +13,7 @@ const Contact = () => (
     <article className="post" id="contact">
       <header>
         <div className="title">
-          <h2 data-testid="heading"><Link to="/contact">Contact</Link></h2>
+          <h2><Link to="/contact">Contact</Link></h2>
         </div>
       </header>
       <div className="email-at">
