@@ -11,8 +11,11 @@ import App from '../App';
 
 describe('renders the app', () => {
   // mocks the fetch API used on the stats page.
+  const jsonMock = jest.fn(() => Promise.resolve({}));
+  const textMock = jest.fn(() => Promise.resolve(''));
   global.fetch = jest.fn(() => Promise.resolve({
-    json: () => Promise.resolve({}),
+    json: jsonMock,
+    text: textMock,
   }));
   // mocks the scrollTo API used when navigating to a new page.
   window.scrollTo = jest.fn();
@@ -30,6 +33,7 @@ describe('renders the app', () => {
   afterEach(() => {
     document.body.removeChild(container);
     container = null;
+    jest.clearAllMocks();
   });
 
   it('should render the app', async () => {
@@ -49,6 +53,9 @@ describe('renders the app', () => {
     expect(document.title).toContain('About |');
     expect(window.location.pathname).toBe('/about');
     expect(window.scrollTo).toHaveBeenNthCalledWith(1, 0, 0);
+    expect(global.fetch).toHaveBeenCalledTimes(1);
+    expect(jsonMock).toHaveBeenCalledTimes(0);
+    expect(textMock).toHaveBeenCalledTimes(1);
   });
 
   it('can navigate to /resume', async () => {
@@ -80,6 +87,7 @@ describe('renders the app', () => {
     expect(document.title).toContain('Stats |');
     expect(window.location.pathname).toBe('/stats');
     expect(global.fetch).toHaveBeenCalledTimes(1);
+    expect(jsonMock).toHaveBeenCalledTimes(1);
   });
 
   it('can navigate to /contact', async () => {
