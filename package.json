@@ -15,7 +15,7 @@
     "predeploy": "npm run build && react-snap",
     "deploy": "gh-pages -d build",
     "start": "react-scripts start",
-    "lint": "eslint $(git ls-files '*.js')",
+    "lint": "eslint **/*.js",
     "test": "npx jest",
     "analyze": "npm run build && source-map-explorer build/static/js/*.chunk.js"
   },

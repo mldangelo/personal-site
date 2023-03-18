@@ -1,3 +1,5 @@
+/* eslint no-use-before-define: 2 */ // --> ON
+
 import React, { useState, useCallback, useEffect } from 'react';
 
 import Table from './Table';
@@ -8,9 +10,7 @@ const Stats = () => {
   // TODO think about persisting this somewhere
   const fetchData = useCallback(async () => {
     // request must be authenticated if private
-    const res = await fetch(
-      'https://api.github.com/repos/mldangelo/personal-site',
-    );
+    const res = await fetch('https://github.com/daredavil01/personal-site');
     const resData = await res.json();
     setResponseData(
       initialData.map((field) => ({

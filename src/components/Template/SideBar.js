@@ -12,32 +12,48 @@ const SideBar = () => (
         <img src={`${PUBLIC_URL}/images/me.jpg`} alt="" />
       </Link>
       <header>
-        <h2>Michael D&apos;Angelo</h2>
-        <p><a href="mailto:michael.l.dangelo@gmail.com">michael.l.dangelo@gmail.com</a></p>
+        <h2>Sanket Tambare</h2>
+        <p>
+          <a href="mailto:sanket.tambare01@gmail.com">
+            sanket.tambare01@gmail.com
+          </a>
+        </p>
       </header>
     </section>
 
     <section className="blurb">
       <h2>About</h2>
-      <p>Hi, I&apos;m Michael. I like building things.
-        I am a <a href="https://icme.stanford.edu/">Stanford ICME</a> graduate, YC Alumni, and
-        the co-founder and CTO of <a href="https://arthena.com">Arthena</a>. Before Arthena I was
-        at <a href="https://matroid.com">Matroid</a>
-        , <a href="https://planet.com">Planet</a>
-        , <a href="https://planetaryresources.com">Planetary Resources</a>
-        , <a href="https://facebook.com">Facebook</a>
-        , and <a href="https://seds.org">SEDS</a>.
+      <p>
+        Hi, I&apos;m Sanket. I like to build things. I am a softwware developer
+        specialized in full stack development and data analysis. Currently I am
+        working as software developer at{' '}
+        <a href="https://www.linkedin.com/company/emtec-inc/mycompany/verification/">
+          Emtec Inc
+        </a>
+        . Besides these I am interested in blogging, designing, video editing
+        and digital wellbeing. Checkout my{' '}
+        <a href="https://linktr.ee/daredavil">portfolio links</a>. Thank you!
       </p>
       <ul className="actions">
         <li>
-          {!window.location.pathname.includes('/resume') ? <Link to="/resume" className="button">Learn More</Link> : <Link to="/about" className="button">About Me</Link>}
+          {!window.location.pathname.includes('/resume') ? (
+            <Link to="/resume" className="button">
+              Learn More
+            </Link>
+          ) : (
+            <Link to="/about" className="button">
+              About Me
+            </Link>
+          )}
         </li>
       </ul>
     </section>
 
     <section id="footer">
       <ContactIcons />
-      <p className="copyright">&copy; Michael D&apos;Angelo <Link to="/">mldangelo.com</Link>.</p>
+      <p className="copyright">
+        &copy; Michael D&apos;Angelo <Link to="/">mldangelo.com</Link>.
+      </p>
     </section>
   </section>
 );
