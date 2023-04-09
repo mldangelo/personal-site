@@ -1,16 +1,16 @@
 const positions = [
-  {
-    company: "Fiverr International Limited",
-    position: "Fullstack Web Developer",
-    link: "https://www.fiverr.com/himanshu_arora1",
-    daterange: "February 2019 - Present(Freelance - Remote)",
-    points: [],
-  },
+  // {
+  //   company: "Fiverr International Limited",
+  //   position: "Fullstack Web Developer",
+  //   link: "https://www.fiverr.com/himanshu_arora1",
+  //   daterange: "February 2019 - Present(Freelance - Remote)",
+  //   points: [],
+  // },
   {
     company: "Fiverr International Limited",
     position: "Senior Fullstack Web Developer",
     link: "https://www.fiverr.com/himanshu_arora1",
-    daterange: "August 2021 - November 2022 (1 yr 4 mos, Full Time - Remote)",
+    daterange: "August 2021 - April 2023 (1 yr 9 mos, Full Time - Remote)",
     points: [
       "Worked across diverse teams & founders.",
       "Planned, wrote, and debugged web applications.",

@@ -1,6 +1,13 @@
 // TODO Add a couple lines about each project
 const data = [
   {
+    title: "Wordwell AI",
+    subtitle: "REACTJS | NodeJS | MongoDB | OpenAI",
+    link: "https://app.wordwell.ai/",
+    image: "/images/projects/wordwell.jpg",
+    desc: "Wordwell AI provides the AI-powered speech writing services.",
+  },
+  {
     title: "La Criptoteca App",
     subtitle: "NextJS | NodeJS | MongoDB | HighchartsJS",
     link: "https://www.lacriptoteca.app/",
