@@ -1,4 +1,12 @@
 {
-  "extends": "airbnb",
-  "plugins": ["react"]
+  "rules": {
+    "jsx-a11y/anchor-is-valid": [ "error", {
+      "components": [ "Link" ],
+      "specialLink": [ "to" ]
+    }]
+  },
+  "parserOptions": {
+      "sourceType": "module",
+      "ecmaVersion": 2015
+  }
 }
