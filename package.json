@@ -15,7 +15,6 @@
     "predeploy": "npm run build && react-snap",
     "deploy": "gh-pages -d build",
     "start": "react-scripts start",
-    "lint": "eslint $(git ls-files '*.js')",
     "test": "react-scripts test --watchAll=false",
     "analyze": "npm run build && source-map-explorer build/static/js/*.chunk.js"
   },
@@ -42,12 +41,6 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^11.2.3",
-    "babel-eslint": "^10.1.0",
-    "eslint": "^7.19.0",
-    "eslint-config-airbnb": "^19.0.4",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-jsx-a11y": "6.5.1",
-    "eslint-plugin-react": "^7.30.0",
     "sass": "^1.52.3",
     "source-map-explorer": "^2.5.2"
   },
@@ -64,17 +57,9 @@
     ]
   },
   "eslintConfig": {
-    "extends": ["react-app"],
-    "rules": {
-      "no-unused-vars": "warn"
-    },
-    "overrides": [
-      {
-        "files": ["**/*.ts?(x)"],
-        "rules": {
-          "max-len": "warn"
-        }
-      }
+    "extends": [
+      "react-app",
+      "react-app/jest"
     ]
   }
 }
