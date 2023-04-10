@@ -38,7 +38,7 @@
   },
   "devDependencies": {
     "react-snap": "^1.23.0",
-    "rimraf": "^4.4.1",
+    "rimraf": "^5.0.0",
     "babel-jest": "^29.5.0",
     "@babel/eslint-parser": "^7.21.3",
     "@babel/preset-env": "^7.21.4",
