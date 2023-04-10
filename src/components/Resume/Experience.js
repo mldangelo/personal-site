@@ -21,9 +21,11 @@ const Experience = ({ data }) => (
 Experience.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape({
     company: PropTypes.string,
-    position: PropTypes.string,
     link: PropTypes.string,
-    daterange: PropTypes.string,
+    positions: PropTypes.arrayOf(PropTypes.shape({
+      title: PropTypes.string,
+      date: PropTypes.string,
+    })),
     points: PropTypes.arrayOf(PropTypes.string),
   })),
 };
