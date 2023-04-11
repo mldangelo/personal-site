@@ -13,19 +13,21 @@
  */
 const work = [
   {
-    name: 'Arthena',
-    position: 'Co-founder, C.T.O.',
-    url: 'https://arthena.com',
-    startDate: '2014-01-01',
-    endDate: '2022-01-01',
-    summary: `YC W17. Series A Company funded by <a href="https://www.anthemis.com/">Athemis</a> and 
-    acquired by <a href="https://www.masterworks.com/">Masterworks</a> in 2023. 
-    `,
+    name: 'Smile Identity',
+    position: 'VP Engineering & Head of AI',
+    url: 'https://smileidentity.com',
+    startDate: '2022-01-01',
+    summary: `Smile integrates with government ID systems to verify identities. We build ML powered APIs
+    to compare user provided selfies to ID documents. I was promoted from Director of Engineering to VP
+    Engineering in April 2022, and then to Head of AI in November 2022. I am a hands-on technical leader.
+    I lead a 20+ person product-driven engineering org. I directly manage ~8 engineers and spend >50% of
+    my time coding.`,
     highlights: [
-      'Deployed quantitative strategies to predict the value of fine art in various pricing contexts.',
-      'Built production, on-line, end-to-end optimized machine learning pipelines with Pandas, Numpy, Scikit, Tensorflow, Dagster, Postgres, etc. on GCP with Kubernetes.',
-      'Designed micro-service architecture around: data collection, data integrity, feature engineering, research, strategy, backtesting, deployment, and reporting.',
-      'YC Alumni. Worked on everything. Built a 16-person team. Operated company for 7+ years.',
+      'Established good engineering practices, including: re-factoring stand-ups and engineering meetings, bug tracking, improved culture for code reviews, blameless post-mortems, and retrospectives.',
+      'Re-architected engineering hiring and onboarding processes. Recruited several strong engineers.',
+      'Reorged engineering teams to focus on product delivery. Created a new team to focus on ML infrastructure.',
+      'Lead re-design of internal APIs for inference. Built new computer vision pipelines for NIST/iBeta liveness certifications.',
+      'Pitched -> launched a fraud detection product based on 1-N facial recognition using embeddings and vector search.',
     ],
   },
   {
@@ -33,9 +35,28 @@ const work = [
     position: 'Co-founder',
     url: 'http://skepticalinvestments.biz',
     startDate: '2017-04-01',
+    summary: `Skeptical Investments is a micro-vc fund. We invest in people and and problems we find interesting.
+    We are primarily focused on Angel, Seed, and Series-A YC companies.`,
     highlights: [
-      'Founded a micro-vc fund to throw token amounts of money at problems I find interesting.',
       'Created the InstaSafe. Fast, automated investment docs for YC companies.',
+      'Advise several startups in the fund.',
+    ],
+  },
+  {
+    name: 'Arthena',
+    position: 'Co-founder, C.T.O.',
+    url: 'https://arthena.com',
+    startDate: '2014-01-01',
+    endDate: '2022-01-01',
+    summary: `Arthena is a post-series A Company funded by <a href="https://www.anthemis.com/">Athemis</a>, 
+    <a href="https://foundationcapital.com/>Foundation Capital</a>, and <a href="https://ycombinator.com/">YC</a>.
+    We were acquired by <a href="https://www.masterworks.com/">Masterworks</a> in 2023. I ran the product and
+    engineering orgs for 8 years.`,
+    highlights: [
+      'Deployed quantitative strategies to predict the value of fine art in various pricing contexts.',
+      'Built production, on-line, end-to-end optimized machine learning pipelines with Pandas, Numpy, Scikit, Tensorflow, Dagster, Postgres, etc. on GCP with Kubernetes.',
+      'Designed micro-service architecture around: data collection, data integrity, feature engineering, research, strategy, backtesting, deployment, and reporting.',
+      'YC Alumni. Worked on everything. Built a 20-person team. Operated company for 8+ years.',
     ],
   },
   {
