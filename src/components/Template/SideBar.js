@@ -22,7 +22,7 @@ const SideBar = () => (
       <p>Hi, I&apos;m Michael. I am a <a href="https://icme.stanford.edu/">Stanford ICME</a> graduate, YC Alumni,
         and the VP of Engineering at <a href="https://smileidentity.com">Smile Identity</a>. Previously,
         I was the co-founder and CTO of <a href="https://arthena.com">Arthena</a>
-        , co-founder of <a href="https://matroid.com">Matroid</a>, and I worked at
+        , co-founder of <a href="https://matroid.com">Matroid</a>, and worked at
         {' '}<a href="https://planet.com">Planet</a> and <a href="https://facebook.com">Facebook</a>.
       </p>
       <ul className="actions">

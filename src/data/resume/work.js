@@ -17,17 +17,18 @@ const work = [
     position: 'VP Engineering & Head of AI',
     url: 'https://smileidentity.com',
     startDate: '2022-01-01',
-    summary: `Smile builds ML powered APIs to compare user provided selfies to ID documents. I provide
-    technical leadership on high-impact projects, influence and coach a distributed team of engineers,
+    summary: `Smile builds machine learning APIs to compare user submitted photos to ID documents. Our APIs are
+    used by hundreds of thousands of people every day to access financial services. As VP of Engineering,
+    I provide technical leadership on high-impact projects, influence and coach a distributed team of engineers,
     and facilitate alignment and clarity across teams on goals, outcomes, and timelines. I was promoted
     from Director of Engineering to VP of Engineering in April 2022, and then to VP of Engineering and Head
     of AI in November 2022. I lead a 20+ person engineering org. I directly manage ~8 engineers and spend
     >50% of my time writing code.`,
     highlights: [
-      'Redesigned engineering processes for stand-ups and engineering meetings, bug tracking, improved culture for code reviews, blameless post-mortems, and retrospectives.',
+      'Redesigned engineering processes for bug tracking, meetings, and standups. Improved culture for code reviews, blameless post-mortems, and retrospectives.',
       'Re-architected engineering hiring and onboarding processes. Recruited several strong engineers.',
       'Reorged engineering teams to focus on product delivery. Created a new team to focus on ML infrastructure.',
-      'Lead re-design of internal APIs for inference. Built new computer vision pipelines for NIST/iBeta liveness certifications.',
+      'Lead re-design of internal APIs for inference. Built new computer vision pipelines for industry leading certifications (NIST/iBeta liveness).',
       'Pitched, designed, developed, deployed, and maintain a fraud detection product based on 1-N facial recognition using embeddings and vector search.',
     ],
   },
