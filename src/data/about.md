@@ -63,7 +63,8 @@ Ask me in person for other stories that I'm afraid to share with the internet.
 - In 2018, I visited: Canada, France, Italy, Israel, and the U.K.
 - In 2019, I visited: Canada, England, France, and Switzerland.
 - In 2020, I barely traveled 20 blocks. I stayed in New York and remodeled an apartment.
-- In 2021, I hope to start traveling again.
+- In 2021, I continued remodeling an apartment.
+- In 2022, I switched jobs and visited the UK, France, Greece, Belgium, Luxembourg, Germany, and Kenya.
 - I am an Oregon Trail II enthusiast.
 
 # Fun facts
@@ -99,4 +100,4 @@ Ask me in person for other stories that I'm afraid to share with the internet.
 - [Tom Sachs](https://www.tomsachs.org/)
 - [Will Holley](https://willholley.com)
 
-If we are friends and you feel like you belong on this list, you're probably right. I'm sorry I forgot about you. Pester me and I'll add you.
+If we are friends and you feel like you belong on this list, you're probably right. Submit a PR, or ask me and I'll add you.
