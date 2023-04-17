@@ -13,7 +13,7 @@ const About = () => {
         fetch(res.default)
           .then((r) => r.text())
           .then(setMarkdown);
-      }).catch(console.error);
+      });
   });
 
   const count = markdown.split(/\s+/)
