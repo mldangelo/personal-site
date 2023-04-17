@@ -1,27 +1,52 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import dayjs from 'dayjs';
+import Markdown from 'markdown-to-jsx';
 
-const Job = ({ data }) => (
+const Job = ({
+  data: {
+    name, position, url, startDate, endDate, summary, highlights,
+  },
+}) => (
   <article className="jobs-container">
     <header>
-      <h4><a href={data.link}>{data.company}</a> - {data.position}</h4>
-      <p className="daterange"> {data.daterange}</p>
+      <h4><a href={url}>{name}</a> - {position}</h4>
+      <p className="daterange"> {dayjs(startDate).format('MMMM YYYY')} - {endDate ? dayjs(endDate).format('MMMM YYYY') : 'PRESENT'}</p>
     </header>
-    <ul className="points">
-      {data.points.map((point) => (
-        <li key={point}>{point}</li>
-      ))}
-    </ul>
+    {summary ? (
+      <Markdown
+        options={{
+          overrides: {
+            p: {
+              props: {
+                className: 'summary',
+              },
+            },
+          },
+        }}
+      >
+        {summary}
+      </Markdown>
+    ) : null}
+    {highlights ? (
+      <ul className="points">
+        {highlights.map((highlight) => (
+          <li key={highlight}>{highlight}</li>
+        ))}
+      </ul>
+    ) : null}
   </article>
 );
 
 Job.propTypes = {
   data: PropTypes.shape({
-    link: PropTypes.string.isRequired,
-    company: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
     position: PropTypes.string.isRequired,
-    daterange: PropTypes.string.isRequired,
-    points: PropTypes.arrayOf(PropTypes.string).isRequired,
+    url: PropTypes.string.isRequired,
+    startDate: PropTypes.string.isRequired,
+    endDate: PropTypes.string,
+    summary: PropTypes.string,
+    highlights: PropTypes.arrayOf(PropTypes.string.isRequired),
   }).isRequired,
 };
 
