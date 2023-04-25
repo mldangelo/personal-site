@@ -6,22 +6,46 @@ I'm Dhruv, a lifetime student who is always learning new skills and a natural ge
 # Current
 Working as Lead Full Stack Developer with Enterprise Architecture team within RBC. Learning Quantum Computing and trying to learn to swim(hobby - 2023)
 
-# Fun facts
+# Travel
+- <a style="color=#7157fa">Total Miles Flew **29063.3956** in **14** flights!</a>
+- <a style="color=#8f1157">Total Miles Travelled **4673** in **8** trains</a>
 
-- I don't have Facebook or Instagram account!
-- I have a list of hundreds of ideas, like creating a gif-finding engine, [Gif-Finder](https://gif-finder.vercel.app/).
-- I almost always have a laptop with me.
-- I can talk about politics for hours.
-- I like to go for a drive in the rain.
-- I tried a healthy diet, but the highest streak was 5 days!
-- I added this page because many complained that [my site](https://dhruvdoshi.github.io/redirector/) was just a redirector.
 
-# I dream of
+![Total Travel](/public/images/travelmap.png)
 
-- being a billionaire.
-- make something mind blowing.
-- doing better.
-- you not checking the commit history for earlier drafts of this file.
+
+
+<!-- 
+
+Map From: https://www.travellerspoint.com/map/#/export/
+Username: 160770107043@gmail.com
+Paas: abc@12345
+
+
+
+Flights:
+- TOTAL - 29063.3956 and 14 flights
+- ADD NEW HERE
+- YUL -> YYZ - 315.657
+- IST -> YUL - 4805.685
+- BOM -> IST - 2996.873
+- PAT -> AHM - 804.0543
+- AHM -> PAT - 804.0543
+- IST -> BOM - 2996.873
+- YYZ -> IST - 5107.671
+- YHZ -> YYZ - 802.8116
+- YYZ -> YHZ - 802.8116
+- FRA -> YYZ - 3953.164
+- BEG -> FRA - 656.7894
+- FRA -> BEG - 656.7894
+- BOM -> FRA - 4085.516
+- AMD -> BOM - 274.646
+
+
+
+TRAINS
+
+ -->
 
 # I like
 - [Chess](https://www.chess.com/member/chess_dhruv)
