@@ -59,7 +59,7 @@ Here are answers to questions I've been asked at least twice. I've attempted to 
 
 1. My CSS isn't rendering, or I see a 404 instead of my site:
 
-    Make sure the `homepage` field of `package.json` points to where you plan to host your site index. Also, double check that you created a `CNAME` file (see deployment instructions above). If neither of these work, please open an issue or send me an [email](mailto:help@mldangelo.com).
+    Make sure the `homepage` field of `package.json` points to where you plan to host your site index. Also, double check that you created a `CNAME` file (see deployment instructions above). If neither of these work, please open an issue or send me an [email](mailto:info@doshidhruv.com).
 
 2. LF / CRLF issues with eslint.
 
