@@ -24,7 +24,7 @@
     "@fortawesome/free-brands-svg-icons": "^6.4.0",
     "@fortawesome/free-regular-svg-icons": "^6.4.0",
     "@fortawesome/react-fontawesome": "0.2.0",
-    "dayjs": "^1.11.8",
+    "dayjs": "^1.11.9",
     "gh-pages": "^5.0.0",
     "markdown-to-jsx": "^7.2.1",
     "prop-types": "^15.8.1",
