@@ -41,7 +41,7 @@
     "rimraf": "^5.0.1",
     "babel-jest": "^29.5.0",
     "@babel/eslint-parser": "^7.22.5",
-    "@babel/preset-env": "^7.22.5",
+    "@babel/preset-env": "^7.22.7",
     "@babel/preset-react": "^7.22.5",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
