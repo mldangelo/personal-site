@@ -10,9 +10,9 @@ const Index = () => (
     <article className="post" id="index">
       <header>
         <div className="title">
-          <h2 data-testid="heading"><Link to="/">About this site</Link></h2>
+          <h2 data-testid="heading"><Link to="/">About MOHAMMED AL-SADI</Link></h2>
           <p>
-            This site is still under construction!
+            I am currently a Teaching Assistant in the Information Systems Program at <a href="https://www.qatar.cmu.edu/directory/mohammed-al-sadi/">CMUQ</a> and Lean Startup Coach at <a href="https://qbic.qa//">Qatar Business Incubation Center (QBIC)</a>.
           </p>
         </div>
       </header>
