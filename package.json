@@ -26,7 +26,7 @@
     "@fortawesome/react-fontawesome": "0.2.0",
     "dayjs": "^1.11.9",
     "gh-pages": "^5.0.0",
-    "markdown-to-jsx": "^7.2.1",
+    "markdown-to-jsx": "^7.3.2",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-burger-menu": "^3.0.9",
