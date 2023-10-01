@@ -11,15 +11,25 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  lint:
+    runs-on: ubuntu-20.04
+    timeout-minutes: 5
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v3
+      with:
+        node-version-file: '.nvmrc'
+        cache: 'npm'
+    - run: npm ci
+    - name: Lint
+      run: npm run lint
 
+  build:
     runs-on: ubuntu-20.04
     timeout-minutes: 10
-
     strategy:
       matrix:
         node-version: [16.x, 18.x, 20.x]
-
     steps:
     - uses: actions/checkout@v4
     - name: Use Node.js ${{ matrix.node-version }}
@@ -28,8 +38,6 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm ci
-    - name: Lint
-      run: npm run lint
     - name: Build and Statically Render
       run: npm run predeploy
       env:
