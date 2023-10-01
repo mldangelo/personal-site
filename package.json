@@ -11,13 +11,12 @@
     "node": ">=16.x"
   },
   "scripts": {
+    "analyze": "npm run build && source-map-explorer build/static/js/*.chunk.js",
     "build": "rimraf ./build && react-scripts build",
-    "predeploy": "npm run build && react-snap",
-    "deploy": "gh-pages -d build",
-    "start": "react-scripts start",
     "lint": "eslint $(git ls-files '*.js')",
-    "test": "npx jest",
-    "analyze": "npm run build && source-map-explorer build/static/js/*.chunk.js"
+    "predeploy": "npm run build && react-snap",
+    "start": "react-scripts start",
+    "test": "npx jest"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.4.2",
@@ -25,7 +24,6 @@
     "@fortawesome/free-regular-svg-icons": "^6.4.2",
     "@fortawesome/react-fontawesome": "0.2.0",
     "dayjs": "^1.11.10",
-    "gh-pages": "^6.0.0",
     "markdown-to-jsx": "^7.3.2",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
@@ -37,20 +35,20 @@
     "react-scripts": "^5.0.1"
   },
   "devDependencies": {
-    "react-snap": "^1.23.0",
-    "rimraf": "^5.0.1",
-    "babel-jest": "^29.7.0",
     "@babel/eslint-parser": "^7.22.15",
     "@babel/preset-env": "^7.22.20",
     "@babel/preset-react": "^7.22.15",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.5.1",
+    "babel-jest": "^29.7.0",
     "eslint": "^8.49.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-plugin-import": "^2.28.1",
     "eslint-plugin-jsx-a11y": "6.7.1",
     "eslint-plugin-react": "^7.33.2",
+    "react-snap": "^1.23.0",
+    "rimraf": "^5.0.1",
     "sass": "^1.67.0",
     "source-map-explorer": "^2.5.3"
   },

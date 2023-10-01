@@ -45,7 +45,7 @@ echo "[your-custom-domain][.com]" > public/CNAME
 
 as a shortcut.
 
-I recommend purchasing your own domain name from [Google Domains](https://domains.google). If you would like to host on github pages, run `npm run deploy`. This generates a new branch called `gh-pages`. Then go to `https://github.com/[your-github-username]/[your-repo-name]/settings` and configure accordingly:
+I recommend purchasing your own domain name from [Google Domains](https://domains.google). The project is pre-configured to automatically deploy to github pages via the deploy github action. Go to `https://github.com/[your-github-username]/[your-repo-name]/settings` and configure accordingly:
 
 <center><img src="images/gh-pages.png"></center>
 
@@ -79,7 +79,7 @@ Here are answers to questions I've been asked at least twice. I've attempted to 
 
 6. Can I host at [username.github.io]?
 
-    Sure, see github's documentation [here](https://pages.github.com/). You will need to change branches. Create a new branch off of main, and configure `gh-pages` to write to main instead of a `gh-pages` branch.
+    Sure, see github's documentation [here](https://pages.github.com/).
 
 7. How do I disable eslint?
 
