@@ -47,3 +47,6 @@ build/
 
 # Nohup
 nohup.out
+/test-results/
+/playwright-report/
+/playwright/.cache/

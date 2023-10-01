@@ -19,6 +19,7 @@
     "test": "npx jest"
   },
   "dependencies": {
+    "@playwright/test": "^1.38.1",
     "@fortawesome/fontawesome-svg-core": "^6.4.2",
     "@fortawesome/free-brands-svg-icons": "^6.4.2",
     "@fortawesome/free-regular-svg-icons": "^6.4.2",
@@ -36,11 +37,14 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.22.15",
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@babel/plugin-transform-private-property-in-object": "^7.22.11",
     "@babel/preset-env": "^7.22.20",
     "@babel/preset-react": "^7.22.15",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.5.1",
+    "@types/node": "^20.8.0",
     "babel-jest": "^29.7.0",
     "eslint": "^8.49.0",
     "eslint-config-airbnb": "^19.0.4",
