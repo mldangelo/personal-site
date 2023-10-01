@@ -1,5 +1,3 @@
-const os = require('os');
-
 module.exports = {
   env: {
     browser: true,
@@ -18,7 +16,6 @@ module.exports = {
     'jsx-a11y/click-events-have-key-events': 0,
     'jsx-a11y/href-no-hash': 'off',
     'jsx-a11y/no-static-element-interactions': 0,
-    'linebreak-style': ['error', os.EOL === '\r\n' ? 'windows' : 'unix'],
     'no-console': ['error', {
       allow: ['warn', 'error', 'info'],
     }],
