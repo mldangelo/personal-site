@@ -28,11 +28,12 @@ jobs:
       run: npm run lint
 
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 10
     strategy:
       matrix:
         node-version: [16.x, 18.x, 20.x]
+        os: [ubuntu-20.04, windows-latest, macos-latest]
     steps:
     - uses: actions/checkout@v4
     - name: Use Node.js ${{ matrix.node-version }}
