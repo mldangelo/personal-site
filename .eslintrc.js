@@ -1,16 +1,17 @@
 module.exports = {
-  extends: 'airbnb',
-  parser: '@babel/eslint-parser',
   env: {
     browser: true,
-    node: true,
     jest: true,
+    node: true,
   },
+  extends: 'airbnb',
+  parser: '@babel/eslint-parser',
+  plugins: ['react'],
   rules: {
     'jsx-a11y/anchor-is-valid': ['error', {
+      aspects: ['noHref', 'invalidHref', 'preferButton'],
       components: ['Link'],
       specialLink: ['to', 'hrefLeft', 'hrefRight'],
-      aspects: ['noHref', 'invalidHref', 'preferButton'],
     }],
     'jsx-a11y/click-events-have-key-events': 0,
     'jsx-a11y/href-no-hash': 'off',
@@ -28,12 +29,9 @@ module.exports = {
     'react/jsx-one-expression-per-line': 0,
     'react/jsx-props-no-spreading': 0,
     'react/jsx-wrap-multilines': [1, {
-      declaration: true,
       assignment: true,
+      declaration: true,
       return: true,
     }],
   },
-  plugins: [
-    'react',
-  ],
 };
