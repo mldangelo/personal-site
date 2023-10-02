@@ -19,11 +19,11 @@
     "test": "npx jest"
   },
   "dependencies": {
-    "@playwright/test": "^1.38.1",
     "@fortawesome/fontawesome-svg-core": "^6.4.2",
     "@fortawesome/free-brands-svg-icons": "^6.4.2",
     "@fortawesome/free-regular-svg-icons": "^6.4.2",
     "@fortawesome/react-fontawesome": "0.2.0",
+    "@playwright/test": "^1.38.1",
     "dayjs": "^1.11.10",
     "markdown-to-jsx": "^7.3.2",
     "prop-types": "^15.8.1",
@@ -46,6 +46,7 @@
     "eslint-config-airbnb": "^19.0.4",
     "eslint-plugin-import": "^2.28.1",
     "eslint-plugin-jsx-a11y": "6.7.1",
+    "eslint-plugin-playwright": "^0.16.0",
     "eslint-plugin-react": "^7.33.2",
     "react-snap": "^1.23.0",
     "rimraf": "^5.0.1",

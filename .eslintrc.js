@@ -5,7 +5,7 @@ module.exports = {
     browser: true,
     node: true,
   },
-  extends: 'airbnb',
+  extends: ['airbnb', 'plugin:playwright/recommended'],
   ignorePatterns: [
     'node_modules/',
     'build/',

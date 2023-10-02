@@ -13,7 +13,7 @@ test.describe('App navigation', () => {
   });
 
   test('should render the app', async () => {
-    expect(await page.isVisible('body')).toBeTruthy();
+    await expect(page).toBeVisible('body');
   });
 
   test('should render the title', async () => {
