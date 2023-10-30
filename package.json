@@ -16,7 +16,8 @@
     "lint": "eslint \"**/*.js\"",
     "predeploy": "npm run build && react-snap",
     "start": "react-scripts start",
-    "test": "npx jest"
+    "dev:test": "concurrently --kill-others \"npm start\" \"npm test\"",
+    "test": "jest --config=jest.playwright.config.js"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.4.2",
@@ -36,24 +37,29 @@
     "react-scripts": "^5.0.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.23.2",
     "@babel/eslint-parser": "^7.22.15",
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@babel/preset-env": "^7.23.2",
     "@babel/preset-react": "^7.22.15",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.5.1",
     "babel-jest": "^29.7.0",
+    "concurrently": "^8.2.2",
     "eslint": "^8.52.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-plugin-import": "^2.28.1",
     "eslint-plugin-jsx-a11y": "6.7.1",
     "eslint-plugin-playwright": "^0.16.0",
     "eslint-plugin-react": "^7.33.2",
+    "jest-playwright-preset": "^3.0.1",
     "playwright": "^1.39.0",
     "react-snap": "^1.23.0",
     "rimraf": "^5.0.5",
     "sass": "^1.69.5",
-    "source-map-explorer": "^2.5.3"
+    "source-map-explorer": "^2.5.3",
+    "ts-jest": "^29.1.1"
   },
   "browserslist": {
     "production": [

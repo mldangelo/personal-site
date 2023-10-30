@@ -1,54 +1,66 @@
-const { test, expect } = require('@playwright/test');
+import { chromium } from 'playwright';
 
-test.describe('App navigation', () => {
+describe('App rendering and navigation', () => {
+  let browser;
   let page;
 
-  test.beforeEach(async ({ browser }) => {
-    page = await browser.newPage();
-    await page.goto('http://localhost:3000');
+  beforeAll(async () => {
+    // Start the browser
+    browser = await chromium.launch();
   });
 
-  test.afterEach(async () => {
+  afterAll(async () => {
+    // Close the browser
+    await browser.close();
+  });
+
+  beforeEach(async () => {
+    // Start a new page
+    page = await browser.newPage();
+
+    // Navigate to your app
+    await page.goto('http://localhost:3000'); // Adjust this URL to your app's URL
+  });
+
+  afterEach(async () => {
     await page.close();
   });
 
-  test('should render the app', async () => {
-    await expect(page).toBeVisible('body');
+  it('should render the app', async () => {
+    const isVisible = await page.isVisible('body');
+    expect(isVisible).toBeTruthy();
   });
 
-  test('should render the title', async () => {
-    expect(await page.title()).toBe("Michael D'Angelo");
+  it('should render the title', async () => {
+    const title = await page.title();
+    expect(title).toBe("Michael D'Angelo");
   });
 
-  test('can navigate to /about', async () => {
-    await page.click('#header > nav > ul > li:nth-child(1) > a');
-    expect(await page.title()).toContain('About |');
-    expect(page.url()).toContain('/about');
-    // Further assertions based on network calls or other interactions
+  const testNavigation = async (linkIndex, expectedTitle, expectedPath) => {
+    const linkSelector = `#header > nav > ul > li:nth-child(${linkIndex}) > a`;
+    await page.click(linkSelector);
+    await page.waitForSelector('header > div > h2 > a');
+    expect(await page.title()).toContain(expectedTitle);
+    expect(page.url()).toBe(`http://localhost:3000${expectedPath}`);
+  };
+
+  it('can navigate to /about', async () => {
+    await testNavigation(1, 'About |', '/about');
   });
 
-  test('can navigate to /resume', async () => {
-    await page.click('#header > nav > ul > li:nth-child(2) > a');
-    expect(await page.title()).toContain('Resume |');
-    expect(page.url()).toContain('/resume');
+  it('can navigate to /resume', async () => {
+    await testNavigation(2, 'Resume |', '/resume');
   });
 
-  test('can navigate to /projects', async () => {
-    await page.click('#header > nav > ul > li:nth-child(3) > a');
-    expect(await page.title()).toContain('Projects |');
-    expect(page.url()).toContain('/projects');
+  it('can navigate to /projects', async () => {
+    await testNavigation(3, 'Projects |', '/projects');
   });
 
-  test('can navigate to /stats', async () => {
-    await page.click('#header > nav > ul > li:nth-child(4) > a');
-    expect(await page.title()).toContain('Stats |');
-    expect(page.url()).toContain('/stats');
-    // Further assertions based on network calls or other interactions
+  it('can navigate to /stats', async () => {
+    await testNavigation(4, 'Stats |', '/stats');
   });
 
-  test('can navigate to /contact', async () => {
-    await page.click('#header > nav > ul > li:nth-child(5) > a');
-    expect(await page.title()).toContain('Contact |');
-    expect(page.url()).toContain('/contact');
+  it('can navigate to /contact', async () => {
+    await testNavigation(5, 'Contact |', '/contact');
   });
 });
