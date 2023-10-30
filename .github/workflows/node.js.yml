@@ -5,9 +5,9 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
@@ -18,14 +18,14 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v3
-      with:
-        node-version-file: '.nvmrc'
-        cache: 'npm'
-    - run: npm ci
-    - name: Lint
-      run: npm run lint
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: ".nvmrc"
+          cache: "npm"
+      - run: npm ci
+      - name: Lint
+        run: npm run lint
 
   build:
     runs-on: ${{ matrix.os }}
@@ -44,18 +44,18 @@ jobs:
           - os: macos-latest
             node-version: 18.x
     steps:
-    - uses: actions/checkout@v4
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - name: Build and Statically Render
-      run: npm run predeploy
-      env:
-        NODE_ENV: development
-    - name: Test
-      run: npm test
-      env:
-        NODE_ENV: development
+      - uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+      - run: npm ci
+      - name: Build and Statically Render
+        run: npm run predeploy
+        env:
+          NODE_ENV: development
+      - name: Test
+        run: npm test
+        env:
+          NODE_ENV: development
