@@ -17,7 +17,7 @@
     "predeploy": "npm run build && react-snap",
     "start": "react-scripts start",
     "dev:test": "concurrently --kill-others \"npm start\" \"npm test\"",
-    "test": "jest --config=jest.playwright.config.js"
+    "test": "jest"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.4.2",
