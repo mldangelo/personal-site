@@ -60,6 +60,7 @@ Ask me in person for other stories that I'm afraid to share with the internet.
 - In 2020, I traveled barely 20 blocks. I stayed in New York and remodeled an apartment.
 - In 2021, I continued remodeling an apartment.
 - In 2022, I switched jobs and visited the UK, France, Greece, Belgium, Luxembourg, Germany, and Kenya.
+- In 2023, I visited France, the UK, Ireland, and Rwanda.
 - I am an Oregon Trail II enthusiast.
 
 # Fun facts
