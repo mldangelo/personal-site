@@ -74,10 +74,12 @@ Ask me in person for other stories that I'm afraid to share with the internet.
 
 # I dream of
 
-- always finding inspiration.
-- enabling a brighter future.
-- doing better.
-- you not checking the commit history for earlier drafts of this file.
+- Inspiring and feeling inspired.
+- Enabling a brighter future for everyone, regardless of political or socioeconomic status.
+- Treating every individual with genuine kindness and respect.
+- Staying curious.
+- Continually improving.
+- You not checking the commit history for earlier drafts of this file.
 
 # Websites from people I admire
 
