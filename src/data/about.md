@@ -51,7 +51,7 @@ Ask me in person for other stories that I'm afraid to share with the internet.
 
 # Travel / Geography
 
-- I am originally from Buffalo, New York. I have since lived in Palo Alto, Mountain View, San Francisco, Seattle, and New York.
+- I am originally from Buffalo, New York. I have since lived in Palo Alto, Mountain View, San Francisco, Seattle, and New York City.
 - I've been to approximately 50 countries, some of which I have forgotten, many of which I would like to revisit.
 - In 2016, I visited Canada, Ethiopia, Austria, Germany, Belgium, Ireland, Northern Ireland, Italy, Romania, Sweden, Norway, Svalbard, Panama, Costa Rica, Uganda, Japan, and the UAE, mostly in that order.
 - In 2017, I visited Canada, Japan, Denmark, Germany, Sweden, Estonia, Russia, the Netherlands, Belgium, the U.K., Spain, Iceland, France, Switzerland, Ethiopia, and Luxembourg.
@@ -69,7 +69,8 @@ Ask me in person for other stories that I'm afraid to share with the internet.
 - I almost always have a sketchbook with me and a [01 Sakura Pigma Micron Pen](https://www.sakuraofamerica.com/product/pigma-micron/).
 - I can't locate every country on a map.
 - I operate a [small angel fund](http://skepticalinvestments.biz/) with terrible returns.
-- I break about 30 traffic laws on a [cruiser](https://landyachtz.com/boards/cruiser/), [onewheel](https://onewheel.com/products/xr), [bicycle](https://www.citibikenyc.com/), or [electric skateboard](https://boostedusa.com/collections/electric-skateboards/products/boosted-mini-x) every single day.
+- I break about 30 traffic laws on a skateboard or [bicycle](https://www.citibikenyc.com/)every single day.
+- I stack-rank coffee shops, restaurants, and every dog I see in New York.
 - I added this page because many people complained that my site was just my resume.
 
 # I dream of
