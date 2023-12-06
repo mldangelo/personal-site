@@ -5,7 +5,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mldangelo/personal-site.git"
+    "url": "https://github.com/nmrenyi/plain-personal-site.git"
   },
   "engines": {
     "node": ">=16.x"
