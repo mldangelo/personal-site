@@ -1,5 +1,12 @@
 # Intro
 
+I am a PhD student in Tsinghua University. I got my bachlor's degree from Department of Computer Science and Technology in Tsinghua University in 2022. Back in 2018, I was admitted into [Tsinghua University](https://www.tsinghua.edu.cn/en/) with the highest score in Hohhot, the capital city of Inner Mongolia. I was admitted into Tsinghua University in 2018, so I am a member of the "eight number student", 八字班 in a Chinese, which is a traditional way to tell which year students were admitted among Tsinghua students.
+
+Actually I was born in Tumote Youqi (土默特右旗), Baotou, Inner Mongolia, China. It's a small town when I was born, and now 2023 still. There aren't good education resources, compared to large cities. Owing to work reasons, my parents moved to Hohhot, Inner Mongolia, China in 2003 when I was 4 years old. Of course I moved to Hohhot with my parents. I'm really grateful to my parents for making this decision to move to the capital city of Inner Mongolia, where the education resource is much better than the small town I was born in. If it's not for their endeavour, I would never got a broad knowledge about the world. I owe my parents a lot. They're always the strongest supporter of mine.
+
+
+
+
 I am the VP of Engineering at Smile Identity, where I work on tools that have helped over 90 million people in Africa gain access to financial services. Before Smile, I was the co-founder & CTO of [Arthena](https://arthena.com) and a co-founder of [Matroid](https://matroid.com). In my spare time, I enjoy investing in people and ideas through a [small venture fund](https://skepticalinvestments.biz). I am particularly interested in projects with high social impact. If you think I can be helpful to you or your cause and would like to meet, please feel free to get in touch.
 
 # Some history
