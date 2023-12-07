@@ -4,6 +4,8 @@ I am a PhD student in Tsinghua University. I got my bachlor's degree from Depart
 
 Actually I was born in Tumote Youqi (土默特右旗), Baotou, Inner Mongolia, China. It's a small town when I was born, and now 2023 still. There aren't good education resources, compared to large cities. Owing to work reasons, my parents moved to Hohhot, Inner Mongolia, China in 2003 when I was 4 years old. Of course I moved to Hohhot with my parents. I'm really grateful to my parents for making this decision to move to the capital city of Inner Mongolia, where the education resource is much better than the small town I was born in. If it's not for their endeavour, I would never got a broad knowledge about the world. I owe my parents a lot. They're always the strongest supporter of mine.
 
+Back to myself. I had my happy days growing up in Hohhot, where the skies are blue and the fields are green. From 2006 to 2012, I had my primary school in Qingshan Primary School (青山小学). I had several class headmasters during these 6 years, one of whom, named Kai Wang (王恺) influenced me the most. He taught dedication, discipline and passion not only with words, but also with his action. I'm really grateful to him for giving me an unforgettable experience in my primary school.
+
 
 
 
