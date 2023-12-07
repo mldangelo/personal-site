@@ -23,6 +23,10 @@ const SideBar = () => (
         Now I&apos;m somewhere deciding my future,
         whether it&apos;s about continuing my research into recommendation system
         or switching to a more challenging and theoretical direction, quantum computing.
+        Or I could give up being a researcher and do something else,
+        like a diplomat or an investor maybe?
+        If you have any advice for me, I&apos;m always willing to hear.
+        Please contact me by <a href="mailto:renyi1006@gmail.com">email</a>!
       </p>
       <ul className="actions">
         <li>
