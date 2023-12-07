@@ -24,7 +24,7 @@ At last I want to express the most sincere gratitude to my parents, Cuiying Zhan
 
 
 
-
+<!-- 
 # Some history
 
 - My parents put a computer in my bedroom in 1993 when I was 3. It was an old Tandy that ran MS-DOS. My favorite games were Street Rod 2, Wolfenstein 3D, and Tom and Jerry. It had a mechanical keyboard and a turbo button. To this day, I still don't know what pressing the turbo button really did.
@@ -57,7 +57,7 @@ At last I want to express the most sincere gratitude to my parents, Cuiying Zhan
 
 - At 20, I co-authored a grant to build a satellite and managed a 60+ person team for the next two years. You can read more about that [here](https://ubnl.space/glados/).
 
-Ask me in person for other stories that I'm afraid to share with the internet.
+Ask me in person for other stories that I'm afraid to share with the internet. -->
 
 # I like
 
@@ -84,7 +84,7 @@ Ask me in person for other stories that I'm afraid to share with the internet.
 - [Good design](/)
 - [Photography](https://instagram.com/dangelosaurus) -->
 
-# Travel / Geography
+<!-- # Travel / Geography
 
 - I am originally from Buffalo, New York. I have since lived in Palo Alto, Mountain View, San Francisco, Seattle, and New York City.
 - I've been to approximately 50 countries, some of which I have forgotten, many of which I would like to revisit.
@@ -134,4 +134,4 @@ Ask me in person for other stories that I'm afraid to share with the internet.
 - [Tom Sachs](https://www.tomsachs.org/)
 - [Will Holley](https://willholley.com)
 
-If we are friends and you feel like you belong on this list, you're probably right. Submit a PR, or ask me and I'll add you.
+If we are friends and you feel like you belong on this list, you're probably right. Submit a PR, or ask me and I'll add you. -->
