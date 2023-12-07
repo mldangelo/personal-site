@@ -61,16 +61,28 @@ Ask me in person for other stories that I'm afraid to share with the internet.
 
 # I like
 
-- Running
-- Skiing
-- Sailing and the sea
+- Freedom
+- Love
+- Life
 - Space
-- Summer
-- [Books](https://www.goodreads.com/mdangelo)
+- Sunshine
+- Blue Sky
+- Clean Water
+- Green Grassland
+- Spring, Summer, Fall, Winter
+- Books (colourful, hardcover books particularly)
+- Classical Music (particularly Swan Lake Suite, Op. 20a, Scène (Act II No. 10))
+- Mutton (Traditional Mongolian Hotpot)
+- Shining Jeweries (Swarovski, Tiffany, etc.)
+- Photography
+- Running (3-10km)
+- Cycling
+
+<!-- - [Books](https://www.goodreads.com/mdangelo)
 - Colored pencils ([Faber-Castell Polychromos](https://www.faber-castell.com/products/art-and-graphic/polychromos))
 - Podcasts ([The Daily](https://www.nytimes.com/column/the-daily), [The Ezra Klein Show](https://www.nytimes.com/column/ezra-klein-podcast), [Planet Money](https://www.npr.org/sections/money/), [The Indicator](https://www.npr.org/podcasts/510325/the-indicator-from-planet-money), [This American Life](https://www.thisamericanlife.org/), [99% Invisible](https://99percentinvisible.org/episodes/), [The Economist](http://radio.economist.com/), [Radiolab](https://www.wnycstudios.org/shows/radiolab), [Hidden Brain](https://www.npr.org/series/423302056/hidden-brain), [Inquiring Minds](https://inquiring.show), and others)
 - [Good design](/)
-- [Photography](https://instagram.com/dangelosaurus)
+- [Photography](https://instagram.com/dangelosaurus) -->
 
 # Travel / Geography
 
