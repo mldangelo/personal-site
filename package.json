@@ -30,7 +30,7 @@
     "react-burger-menu": "^3.0.9",
     "react-dom": "^18.2.0",
     "react-ga": "^3.3.1",
-    "react-helmet-async": "^2.0.1",
+    "react-helmet-async": "^2.0.3",
     "react-router-dom": "^6.20.1",
     "react-scripts": "^5.0.1"
   },
