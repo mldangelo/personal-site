@@ -4,6 +4,8 @@ import Markdown from 'markdown-to-jsx';
 
 import Main from '../layouts/Main';
 
+const { PUBLIC_URL } = process.env;
+
 const About = () => {
   const [markdown, setMarkdown] = useState('');
 
@@ -23,7 +25,7 @@ const About = () => {
   return (
     <Main
       title="About"
-      description="Learn about Michael D'Angelo"
+      description="Learn about Jason Lee"
     >
       <article className="post markdown" id="about">
         <header>
@@ -35,6 +37,12 @@ const About = () => {
         <Markdown>
           {markdown}
         </Markdown>
+        <div className="image-container">
+          {/* <div className="caption">
+            <h4>Here&apos;s 70% of my personality in one picture</h4>
+          </div> */}
+          <img src={`${PUBLIC_URL}/images/hockey_laptop.jpeg`} alt="Me in my hockey gear programming on my laptop" />
+        </div>
       </article>
     </Main>
   );

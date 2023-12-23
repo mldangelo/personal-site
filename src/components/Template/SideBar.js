@@ -12,18 +12,15 @@ const SideBar = () => (
         <img src={`${PUBLIC_URL}/images/me.jpg`} alt="" />
       </Link>
       <header>
-        <h2>Michael D&apos;Angelo</h2>
-        <p><a href="mailto:michael@mldangelo.com">michael@mldangelo.com</a></p>
+        <h2>Jason Lee</h2>
+        <p><a href="mailto:jason@leejson.com">jason@leejson.com</a></p>
       </header>
     </section>
 
     <section className="blurb">
       <h2>About</h2>
-      <p>Hi, I&apos;m Michael. I am a <a href="https://icme.stanford.edu/">Stanford ICME</a> graduate, YC Alumni,
-        and the VP of Engineering at <a href="https://smileidentity.com">Smile Identity</a>. Previously,
-        I was the co-founder and CTO of <a href="https://arthena.com">Arthena</a>
-        , co-founder of <a href="https://matroid.com">Matroid</a>, and worked at
-        {' '}<a href="https://planet.com">Planet</a> and <a href="https://facebook.com">Facebook</a>.
+      <p>Hi, I&apos;m Jason. I am an undergraduate engineering student at <a href="https://berkeley.edu/">UC Berkeley</a> studying <a href="https://eecs.berkeley.edu/">EECS</a> and undergraduate AI researcher at <a href="https://bair.berkeley.edu/">Berkeley AI Lab</a>.
+        Previously, I have worked at <a href="https://www.avetasystem.com/">Meditrina Inc.</a> as a software engineering intern/consultant.
       </p>
       <ul className="actions">
         <li>
@@ -34,7 +31,7 @@ const SideBar = () => (
 
     <section id="footer">
       <ContactIcons />
-      <p className="copyright">&copy; Michael D&apos;Angelo <Link to="/">mldangelo.com</Link>.</p>
+      <p className="copyright">&copy; Jason Lee <Link to="/">leejson.com</Link>.</p>
     </section>
   </section>
 );

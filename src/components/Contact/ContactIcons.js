@@ -9,7 +9,7 @@ const ContactIcons = () => (
     {data.map((s) => (
       <li key={s.label}>
         <a href={s.link} aria-label={s.label}>
-          <FontAwesomeIcon icon={s.icon} />
+          <FontAwesomeIcon icon={s.icon} size="2x" />
         </a>
       </li>
     ))}

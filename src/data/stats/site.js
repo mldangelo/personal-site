@@ -18,7 +18,7 @@ const data = [
   {
     label: 'Number of forks',
     key: 'forks',
-    link: 'https://github.com/mldangelo/personal-site/network',
+    link: 'https://github.com/Jason-Lee08/personal-site/commits',
   },
   {
     label: 'Number of spoons',
@@ -31,12 +31,12 @@ const data = [
   {
     label: 'Open github issues',
     key: 'open_issues_count',
-    link: 'https://github.com/mldangelo/personal-site/issues',
+    link: 'https://github.com/Jason-Lee08/personal-site/issues',
   },
   {
     label: 'Last updated at',
     key: 'pushed_at',
-    link: 'https://github.com/mldangelo/personal-site/commits',
+    link: 'https://github.com/Jason-Lee08/personal-site/commits',
     format: (x) => dayjs(x).format('MMMM DD, YYYY'),
   },
   {

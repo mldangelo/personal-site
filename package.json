@@ -1,11 +1,11 @@
 {
   "name": "personal-site",
   "version": "4.0.0",
-  "homepage": "https://jason-lee08.github.io/website/",
+  "homepage": "https://leejson.com",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Jason-Lee08/website.git"
+    "url": "https://github.com/Jason-Lee08/personal-site.git"
   },
   "engines": {
     "node": ">=16.x"

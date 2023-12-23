@@ -101,17 +101,21 @@
 	}
 
 	.school {
+		color: inherit;
 		text-transform: none;
 		padding-top: 0.3em;
 		margin-bottom: 1em;
+		font-size: .8em;
 	}
 }
 
 .courses .course-number {
 	display: inline;
+	color: inherit;
 }
 .courses .course-name {
 	display: inline;
+	color: inherit;
 	font-family: "Raleway", Helvetica, sans-serif;
 	font-size: 0.7em;
   font-weight: 400;
