@@ -1,11 +1,11 @@
 {
   "name": "personal-site",
   "version": "4.0.0",
-  "homepage": "https://mldangelo.com/",
+  "homepage": "http://kylemcmaster.ca/",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mldangelo/personal-site.git"
+    "url": "https://github.com/KyleJMcMaster/KyleJMcMaster.github.io.git"
   },
   "engines": {
     "node": ">=16.x"
