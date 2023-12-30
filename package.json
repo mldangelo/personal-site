@@ -1,11 +1,11 @@
 {
-  "name": "personal-site",
+  "name": "mgroling.github.io",
   "version": "4.0.0",
   "homepage": "https://mgroling.github.io/",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mldangelo/personal-site.git"
+    "url": "https://github.com/mgroling/mgroling.github.io.git"
   },
   "engines": {
     "node": ">=16.x"
