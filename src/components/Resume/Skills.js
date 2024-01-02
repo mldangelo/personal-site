@@ -61,8 +61,9 @@ const Skills = ({ skills, categories }) => {
       <div className="link-to" id="skills" />
       <div className="title">
         <h3>Skills</h3>
-        <p>Note: I think these sections are silly, but everyone seems to have one.
-          Here is a *mostly* honest overview of my skills.
+        <p>Not sure if it is different in other countries, but in Germany when they give
+          the lottery numbers on television, they always say something like &quot;As always, all
+          information without guarantees.&quot; (&quot;Alle Angaben wie immer ohne Gewähr&quot;).
         </p>
       </div>
       <div className="skill-button-container">

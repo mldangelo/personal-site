@@ -1,13 +1,13 @@
 const routes = [
   {
     index: true,
-    label: "Michael D'Angelo",
+    label: 'Marc Gröling',
     path: '/',
   },
-  {
-    label: 'About',
-    path: '/about',
-  },
+  // {
+  //   label: 'About',
+  //   path: '/about',
+  // },
   {
     label: 'Resume',
     path: '/resume',

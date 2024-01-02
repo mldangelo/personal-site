@@ -1,15 +1,24 @@
 const degrees = [
   {
-    school: 'Stanford University',
-    degree: 'M.S. Computational and Mathematical Engineering',
-    link: 'https://stanford.edu',
-    year: 2016,
+    school: 'KTH Royal Institute of Technology',
+    degree: 'MSc. Computer Science',
+    dlink: 'https://www.kth.se/en/studies/master/computer-science/msc-computer-science-1.419974',
+    link: 'https://www.kth.se/en',
+    year: 2025,
   },
   {
-    school: 'University at Buffalo',
-    degree: 'B.S. Electrical Engineering, Computer Engineering',
-    link: 'https://buffalo.edu',
-    year: 2012,
+    school: 'Norwegian University of Science and Technology',
+    degree: 'MSc. Simulation and Visualization',
+    dlink: 'https://www.ntnu.edu/studies/880mvs',
+    link: 'https://www.ntnu.edu/',
+    year: 2023,
+  },
+  {
+    school: 'Free University of Berlin',
+    degree: 'BSc. Computer Science',
+    dlink: 'https://www.mi.fu-berlin.de/en/inf/stud/bachelor/bachelor.html',
+    link: 'https://www.fu-berlin.de/',
+    year: 2021,
   },
 ];
 
