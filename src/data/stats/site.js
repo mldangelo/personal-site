@@ -16,7 +16,7 @@ const data = [
     /* find . | grep ".js" | grep -vE ".min.js|node_modules|.git|.json" |
     xargs -I file cat file | wc -l */
     label: 'Lines of Javascript powering this website',
-    value: '1949',
+    value: '1966',
     link: 'https://github.com/mgroling/mgroling.github.io/graphs/contributors',
   },
 ];

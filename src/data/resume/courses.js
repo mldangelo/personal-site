@@ -1,11 +1,35 @@
 const courses = [
+  // KTH
   {
     title: '',
     number: '',
     link: '',
     university: '',
   },
-  // KTH
+  {
+    title: 'Swedish B1 for Engineers',
+    number: 'LS1522',
+    link: 'https://www.kth.se/student/kurser/kurs/LS1522?l=en',
+    university: 'KTH',
+  },
+  {
+    title: 'Automata and Languages',
+    number: 'DD2373',
+    link: 'https://www.kth.se/student/kurser/kurs/DD2373?l=en',
+    university: 'KTH',
+  },
+  {
+    title: 'Game Theory',
+    number: 'SF2972',
+    link: 'https://www.kth.se/student/kurser/kurs/SF2972?l=en',
+    university: 'KTH',
+  },
+  {
+    title: 'Problem Solving and Programming under Pressure',
+    number: 'DD2458',
+    link: 'https://www.kth.se/student/kurser/kurs/DD2458?l=en',
+    university: 'KTH',
+  },
   {
     title: 'Computer Security',
     number: 'DD2395',

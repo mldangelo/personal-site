@@ -40,6 +40,11 @@ const skills = [
     category: ['Languages'],
   },
   {
+    title: 'Haskell',
+    competency: 1,
+    category: ['Languages'],
+  },
+  {
     title: 'Git',
     competency: 3,
     category: ['Tools'],
@@ -51,12 +56,12 @@ const skills = [
   },
   {
     title: 'NumPy',
-    competency: 5,
+    competency: 4,
     category: ['Python'],
   },
   {
     title: 'Pandas',
-    competency: 4,
+    competency: 3,
     category: ['Python'],
   },
   {
