@@ -75,7 +75,7 @@ const skills = [
     category: ['Python'],
   },
   {
-    title: 'Gym',
+    title: 'OpenAI-Gym',
     competency: 4,
     category: ['Python'],
   },

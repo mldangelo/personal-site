@@ -2,17 +2,17 @@
 
 I'm Marc, a computer science student at KTH and I love studying here. However, computer science isn't everything in my life (I know, very surprising). Here, you can learn a bit about me.    
 
-My father introduced me to computers early on and I loved playing video games. I still remember playing Space Invaders on the old Windows 98 machine of my father. In school, I had a passion for natural sciences (except biology, I don't know we just don't work together) and mathematics. I also had a computer science course there and from then on I knew what field I wanted to work in later. So, I started my bachelor's in computer science at one of the local universities. When finishing my degree, I loved the idea of studying abroad, so I just decided to go for it and do a full degree program in Norway. The experience of living abroad has been amazing and meeting so many new people and cultures is great. In my master's in Norway, I more and more realised that what I loved most about the topics was the theory and algorithms behind everything. So, I decided to do another master's to explore these topics more in-depth. Of course, abroad again! So in August 2023, I moved to Sweden and have been doing my master's there ever since. 
+My father introduced me to computers early on and I loved playing video games. I still remember playing Space Invaders on the old Windows 98 machine of my father. In school, I had a passion for natural sciences (except biology, I don't know we just don't work together) and mathematics. I also had a computer science course there and from then on I knew what field I wanted to work in later. So, I started my bachelor's in computer science at the Free University of Berlin. When finishing my degree, I loved the idea of studying abroad, so I just decided to go for it and do a full degree program in Norway at the Norwegian University of Science and Technology. The experience of living abroad has been amazing and meeting so many new people and cultures is great. In my master's in Norway, I more and more realised that what I loved most about the topics was the theory and algorithms behind everything. So, I decided to do another master's to explore these topics more in-depth. Of course, abroad again! So in August 2023, I moved to Sweden and have been doing my master's here ever since.
 
 # Some things that I like doing in an arbitrary order
 
 - Coding
 - Playing Badminton
-- Working out
+- Working out in the gym
 - Playing video games
 - Singing (sometimes to the detriment of the people around me)
 - Playing Dungeons and Dragons
-- Solving riddles
+- Solving logic riddles
 
 # Miscellaneous
 

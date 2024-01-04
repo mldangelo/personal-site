@@ -31,7 +31,7 @@ const data = [
   },
   {
     key: 'location',
-    label: 'Current city',
+    label: 'Current place of residence',
     value: 'Stockholm, Sweden',
   },
   {

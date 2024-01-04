@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 const Course = ({ data, last }) => (
   <li className="course-container">
-    <a href={data.link}>
+    <a href={data.link} target="_blank" rel="noreferrer">
       <h4 className="course-number">{data.number}:</h4>
       <p className="course-name">{data.title}</p>
     </a>
