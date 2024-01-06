@@ -5,8 +5,13 @@ const skills = [
     category: ['Languages'],
   },
   {
-    title: 'C/C++',
+    title: 'C++',
     competency: 4,
+    category: ['Languages'],
+  },
+  {
+    title: 'C',
+    competency: 3,
     category: ['Languages'],
   },
   {
