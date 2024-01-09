@@ -101,7 +101,7 @@ const courses = [
     title: 'Artificial Intelligence ',
     number: 'IE502014',
     link: 'https://www.ntnu.edu/studies/courses/IE502014/2021#tab=omEmnet',
-    university: '',
+    university: 'NTNU',
   },
   {
     title: 'Experts in Teamwork - Oceanic Recreation',
@@ -234,7 +234,7 @@ const courses = [
     title: 'Software Project',
     number: '19329012',
     link: 'https://archiv.vv.fu-berlin.de/ss20/en/lv/0086c_k150/597165/224801/',
-    university: '',
+    university: 'FU',
   },
   {
     title: 'Advanced Algorithms',
