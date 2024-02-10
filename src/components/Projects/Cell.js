@@ -10,7 +10,7 @@ const Cell = ({ data }) => (
         <time className="published">{dayjs(data.date).format('MMMM, YYYY')}</time>
       </header>
       <a href={data.link} className="image">
-        <img src={`${process.env.PUBLIC_URL}${data.image}`} alt={data.title} />
+        <img src={`${import.meta.env.PUBLIC_URL ?? '/'}${data.image}`} alt={data.title} />
       </a>
       <div className="description">
         <p>{data.desc}</p>

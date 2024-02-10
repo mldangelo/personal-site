@@ -3,18 +3,9 @@ import { Link } from 'react-router-dom';
 import Markdown from 'markdown-to-jsx';
 
 import Main from '../layouts/Main';
+import markdown from '../data/about.md';
 
 const About = () => {
-  const [markdown, setMarkdown] = useState('');
-
-  useEffect(() => {
-    import('../data/about.md')
-      .then((res) => {
-        fetch(res.default)
-          .then((r) => r.text())
-          .then(setMarkdown);
-      });
-  });
 
   const count = markdown.split(/\s+/)
     .map((s) => s.replace(/\W/g, ''))

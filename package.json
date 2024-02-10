@@ -10,12 +10,12 @@
   "engines": {
     "node": ">=16.x"
   },
+  "type": "module",
   "scripts": {
-    "analyze": "npm run build && source-map-explorer build/static/js/*.chunk.js",
-    "build": "rimraf ./build && react-scripts build",
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
     "lint": "eslint \"**/*.js\"",
-    "predeploy": "npm run build && react-snap",
-    "start": "react-scripts start",
     "test": "npx jest"
   },
   "dependencies": {
@@ -23,6 +23,7 @@
     "@fortawesome/free-brands-svg-icons": "^6.5.1",
     "@fortawesome/free-regular-svg-icons": "^6.5.1",
     "@fortawesome/react-fontawesome": "0.2.0",
+    "@vitejs/plugin-react": "^4.2.1",
     "dayjs": "^1.11.10",
     "markdown-to-jsx": "^7.4.0",
     "prop-types": "^15.8.1",
@@ -32,7 +33,11 @@
     "react-ga": "^3.3.1",
     "react-helmet-async": "^2.0.4",
     "react-router-dom": "^6.21.1",
-    "react-scripts": "^5.0.1"
+    "vite": "^5.1.1",
+    "vite-jsconfig-paths": "^2.0.1",
+    "vite-plugin-ejs": "^1.7.0",
+    "vite-plugin-markdown": "^2.2.0",
+    "vite-tsconfig-paths": "^4.3.1"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.23.3",
@@ -47,10 +52,8 @@
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-jsx-a11y": "6.8.0",
     "eslint-plugin-react": "^7.33.2",
-    "react-snap": "^1.23.0",
     "rimraf": "^5.0.5",
-    "sass": "^1.69.7",
-    "source-map-explorer": "^2.5.3"
+    "sass": "^1.69.7"
   },
   "browserslist": {
     "production": [
