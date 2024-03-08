@@ -7,9 +7,9 @@ const courses = [
     university: '',
   },
   {
-    title: 'Swedish B1 for Engineers',
-    number: 'LS1522',
-    link: 'https://www.kth.se/student/kurser/kurs/LS1522?l=en',
+    title: 'Swedish A2 for Engineers',
+    number: 'LS1512',
+    link: 'https://www.kth.se/student/kurser/kurs/LS1512?l=en',
     university: 'KTH',
   },
   {
