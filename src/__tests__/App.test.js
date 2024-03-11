@@ -7,7 +7,7 @@ import '@testing-library/react';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { act } from 'react-dom/test-utils';
-import App from '../App';
+import App from '../App.js';
 
 describe('renders the app', () => {
   // mocks the fetch API used on the stats page and the about page.

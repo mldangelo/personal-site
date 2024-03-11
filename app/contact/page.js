@@ -1,19 +1,21 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+"use client";
 
-import Main from '../layouts/Main';
-import EmailLink from '../components/Contact/EmailLink';
-import ContactIcons from '../components/Contact/ContactIcons';
+import React from 'react';
+import Link from 'next/link';
+
+// import Main from '../layouts/Main';
+import EmailLink from '../../src/components/Contact/EmailLink';
+import ContactIcons from '../../src/components/Contact/ContactIcons';
 
 const Contact = () => (
-  <Main
+  <div
     title="Contact"
     description="Contact Michael D'Angelo via email @ hi@mldangelo.com"
   >
     <article className="post" id="contact">
       <header>
         <div className="title">
-          <h2><Link to="/contact">Contact</Link></h2>
+          <h2><Link href="/contact">Contact</Link></h2>
         </div>
       </header>
       <div className="email-at">
@@ -22,7 +24,7 @@ const Contact = () => (
       </div>
       <ContactIcons />
     </article>
-  </Main>
+  </div>
 );
 
 export default Contact;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { createRoot, hydrateRoot } from 'react-dom/client';
-import App from './App';
+import App from './App.js';
 
 // See https://reactjs.org/docs/strict-mode.html
 const StrictApp = () => (
