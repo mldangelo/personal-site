@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 
 import Table from './Table';
-import initialData from '../../src/data/stats/site';
+import initialData from '../../data/stats/site';
 
 const Stats = () => {
   const [data, setResponseData] = useState(initialData);

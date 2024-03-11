@@ -6,7 +6,7 @@ import Link from 'next/link';
 // import Main from '../layouts/Main';
 
 import Cell from '../../components/Projects/Cell';
-import data from '../../src/data/projects';
+import data from '../../data/projects';
 
 const Projects = () => (
   <div

@@ -1,7 +1,7 @@
 import React, { Suspense, lazy, useState } from 'react';
 
 import Link from 'next/link';
-import routes from '../../src/data/routes';
+import routes from '../../data/routes';
 
 const Menu = lazy(() => import('react-burger-menu/lib/menus/slide'));
 

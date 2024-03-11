@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 
 import Hamburger from './Hamburger';
-import routes from '../../src/data/routes';
+import routes from '../../data/routes';
 
 // Websites Navbar, displays routes defined in 'src/data/routes'
 const Navigation = () => (
