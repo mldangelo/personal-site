@@ -1,3 +1,5 @@
+'use client';
+
 import React, { Suspense, lazy, useState } from 'react';
 
 import Link from 'next/link';

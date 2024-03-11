@@ -29,6 +29,7 @@ module.exports = {
     'no-console': ['error', {
       allow: ['warn', 'error', 'info'],
     }],
+    '@next/next/no-img-element': 0,
     'no-underscore-dangle': 0,
     'react/destructuring-assignment': 0,
     'react/function-component-definition': [2, { namedComponents: 'arrow-function' }],

@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import Markdown from 'markdown-to-jsx';
 import content from './about.md';
@@ -8,7 +8,6 @@ import content from './about.md';
 // import Main from '../layouts/Main';
 
 const About = () => {
-
   const count = content.split(/\s+/)
     .map((s) => s.replace(/\W/g, ''))
     .filter((s) => s.length).length;

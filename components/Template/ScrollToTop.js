@@ -1,13 +1,22 @@
-import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+'use client';
 
-// See https://reacttraining.com/react-router/web/guides/scroll-restoration/scroll-to-top
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+
 const ScrollToTop = () => {
-  const { pathname } = useLocation();
+  const router = useRouter();
 
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
+    const handleRouteChange = () => {
+      window.scrollTo(0, 0);
+    };
+
+    router.events.on('routeChangeComplete', handleRouteChange);
+
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [router.events]);
 
   return null;
 };
