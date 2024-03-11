@@ -5,8 +5,8 @@ import Link from 'next/link';
 
 // import Main from '../layouts/Main';
 
-import Personal from '../../src/components/Stats/Personal';
-import Site from '../../src/components/Stats/Site';
+import Personal from '../../components/Stats/Personal';
+import Site from '../../components/Stats/Site';
 
 const Stats = () => (
   <div

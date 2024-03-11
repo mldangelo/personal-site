@@ -4,8 +4,8 @@ import React from 'react';
 import Link from 'next/link';
 
 // import Main from '../layouts/Main';
-import EmailLink from '../../src/components/Contact/EmailLink';
-import ContactIcons from '../../src/components/Contact/ContactIcons';
+import EmailLink from '../../components/Contact/EmailLink';
+import ContactIcons from '../../components/Contact/ContactIcons';
 
 const Contact = () => (
   <div

@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 // import Main from '../layouts/Main';
 
-import Cell from '../../src/components/Projects/Cell';
+import Cell from '../../components/Projects/Cell';
 import data from '../../src/data/projects';
 
 const Projects = () => (

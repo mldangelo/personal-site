@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 
-import Analytics from '../components/Template/Analytics';
-import Navigation from '../components/Template/Navigation';
-import SideBar from '../components/Template/SideBar';
-import ScrollToTop from '../components/Template/ScrollToTop';
+import Analytics from '../../components/Template/Analytics';
+import Navigation from '../../components/Template/Navigation';
+import SideBar from '../../components/Template/SideBar';
+import ScrollToTop from '../../components/Template/ScrollToTop';
 
 const Main = (props) => (
   <HelmetProvider>

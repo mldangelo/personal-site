@@ -5,11 +5,11 @@ import Link from 'next/link';
 
 // import Main from '../layouts/Main';
 
-import Education from '../../src/components/Resume/Education';
-import Experience from '../../src/components/Resume/Experience';
-import Skills from '../../src/components/Resume/Skills';
-import Courses from '../../src/components/Resume/Courses';
-import References from '../../src/components/Resume/References';
+import Education from '../../components/Resume/Education';
+import Experience from '../../components/Resume/Experience';
+import Skills from '../../components/Resume/Skills';
+import Courses from '../../components/Resume/Courses';
+import References from '../../components/Resume/References';
 
 import courses from '../../src/data/resume/courses';
 import degrees from '../../src/data/resume/degrees';
