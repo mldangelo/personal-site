@@ -6,7 +6,10 @@ module.exports = {
     jest: true,
     node: true,
   },
-  extends: 'airbnb',
+  extends: [
+    'airbnb',
+    "next/core-web-vitals"
+  ],
   ignorePatterns: [
     'node_modules/',
     'build/',
