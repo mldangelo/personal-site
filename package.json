@@ -39,7 +39,7 @@
     "@babel/preset-env": "^7.24.0",
     "@babel/preset-react": "^7.23.3",
     "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^14.1.2",
+    "@testing-library/react": "^14.2.1",
     "@testing-library/user-event": "^14.5.2",
     "babel-jest": "^29.7.0",
     "eslint": "^8.57.0",
