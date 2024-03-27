@@ -5,7 +5,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://ebrahimss.github.io/"
+    "url": "https://github.com/ebrahimss/ebrahimss.github.io.git"
   },
   "engines": {
     "node": ">=16.x"
