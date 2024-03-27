@@ -19,8 +19,7 @@ const SideBar = () => (
 
     <section className="blurb">
       <h2>About</h2>
-      <p>Hi, I&apos;m Ebrahim. I am a PhD candidate at <a href="https://ise.utk.edu//">Uni of Tennessee ISE</a>, 
-      and a <a href="https://en.sharif.edu///">Sharif</a> Alumni.
+      <p>Hi, I&apos;m Ebrahim. I am a PhD candidate at <a href="https://ise.utk.edu//">Uni of Tennessee ISE</a>, and a <a href="https://en.sharif.edu///">Sharif</a> Alumni.
       </p>
       <ul className="actions">
         <li>
