@@ -12,7 +12,7 @@ const Index = () => (
         <div className="title">
           <h1><Link to="/">About this site</Link></h1>
           <p>
-        I'm Ebrahim Sharifnia, a PhD candidate in engineering with a passion for data science and optimization. With a background in Industrial Engieering and Statistics, I've contributed to various projects that you can explore some of them <Link to="/projects">here</Link>. This website serves as a media to my portfolio, including my <Link to="/resume">resume</Link> and a collection of personal and professional projects that reflect my skills and interests.
+            I'm Ebrahim Sharifnia, a PhD candidate in engineering with a passion for data science and optimization. With a background in Industrial Engieering and Statistics, I've contributed to various projects that you can explore some of them <Link to="/projects">here</Link>. This website serves as a media to my portfolio, including my <Link to="/resume">resume</Link> and a collection of personal and professional projects that reflect my skills and interests.
           </p>
         </div>
       </header>
