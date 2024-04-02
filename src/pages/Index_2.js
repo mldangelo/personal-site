@@ -17,7 +17,7 @@ const Index = () => (
         </div>
       </header>
       <p>
-        I'm Ebrahim Sharifnia, a dedicated professional with a passion for [Your Profession/Area of Expertise]. With a background in [Your Background - e.g., software development, data science, etc.], I've contributed to various projects that you can explore <Link to="/projects">here</Link>. This website serves as a comprehensive portfolio of my work, including my <Link to="/resume">resume</Link> and a collection of personal and professional projects that reflect my skills and interests.
+        I'm Ebrahim Sharifnia, a PhD candidate in engineering with a passion for data science and optimization. With a background in Industrial Engieering and Statistics, I've contributed to various projects that you can explore some of them <Link to="/projects">here</Link>. This website serves as a media to my portfolio, including my <Link to="/resume">resume</Link> and a collection of personal and professional projects that reflect my skills and interests.
       </p>
       <p>
         Beyond my professional interests, I'm enthusiastic about [mention any hobbies or personal interests]. You can also find some insights into my website's performance and visitor statistics <Link to="/stats">here</Link>.
