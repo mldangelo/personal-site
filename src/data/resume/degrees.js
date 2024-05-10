@@ -1,6 +1,6 @@
 const degrees = [
   {
-    school: 'Stanford University',
+    school: 'ENS-PSL',
     degree: 'M.S. Computational and Mathematical Engineering',
     link: 'https://stanford.edu',
     year: 2016,
