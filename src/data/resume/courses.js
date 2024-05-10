@@ -4,7 +4,7 @@ const courses = [
     number: '?',
     link: '',
     university: 'ENS',
-  }
+  },
 ];
 
 export default courses;
