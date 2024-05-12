@@ -45,7 +45,7 @@ const Resume = () => (
       <p>
         View my{' '}
         <a
-          href="/personal-site/files/Marius_Mercier_cv.pdf"
+          href="/files/Marius_Mercier_cv.pdf"
           target="_blank"
           rel="noreferrer"
         >
