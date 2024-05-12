@@ -23,7 +23,7 @@ const sections = {
   // References: () => <References />,
 };
 
-const { PUBLIC_URL } = process.env;
+// const { PUBLIC_URL } = process.env;
 
 const Resume = () => (
   <Main
@@ -45,7 +45,7 @@ const Resume = () => (
       <p>
         View my{' '}
         <a
-          href={`${PUBLIC_URL}/files/Marius_Mercier_cv.pdf`}
+          href="https://drive.google.com/file/d/1hcAxfOf_gW1r-q4YQqws9siJsLHs6d0G/view"
           target="_blank"
           rel="noopener noreferrer"
         >
