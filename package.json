@@ -52,6 +52,11 @@
     "sass": "^1.71.1",
     "source-map-explorer": "^2.5.3"
   },
+  "reactSnap": {
+    "exclude": [
+      "**/files/*.pdf"
+    ]
+  },
   "browserslist": {
     "production": [
       ">0.2%",
