@@ -44,12 +44,13 @@ const Resume = () => (
       </header>
       <p>
         View my{' '}
-        <Link
-          to={`${PUBLIC_URL}/files/Marius_Mercier_cv.pdf`}
+        <a
+          href={`${PUBLIC_URL}/files/Marius_Mercier_cv.pdf`}
           target="_blank"
+          rel="noopener noreferrer"
         >
           CV
-        </Link>
+        </a>
         .
       </p>
       {Object.entries(sections).map(([name, Section]) => (
