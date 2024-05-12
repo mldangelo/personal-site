@@ -23,7 +23,7 @@ const sections = {
   // References: () => <References />,
 };
 
-// const { PUBLIC_URL } = process.env;
+const { PUBLIC_URL } = process.env;
 
 const Resume = () => (
   <Main
@@ -44,13 +44,12 @@ const Resume = () => (
       </header>
       <p>
         View my{' '}
-        <a
-          href="/files/Marius_Mercier_cv.pdf"
+        <Link
+          to={`${PUBLIC_URL}/files/Marius_Mercier_cv.pdf`}
           target="_blank"
-          rel="noreferrer"
         >
           CV
-        </a>
+        </Link>
         .
       </p>
       {Object.entries(sections).map(([name, Section]) => (
