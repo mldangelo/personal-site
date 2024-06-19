@@ -39,8 +39,29 @@ jobs:
           cache: "npm"
       - name: Install
         run: npm ci
-      - name: Build and render
-        run: npm run predeploy
+      - name: Build and Render
+        shell: bash
+        run: |
+          # NOTE: Rendering can be flaky and react-snap is no
+          # longer maintained, so retry until I convert to next.
+          function retry {
+            local n=1
+            local max=5
+            local delay=1
+            while true; do
+              "$@" && break || {
+                if [[ $n -lt $max ]]; then
+                  ((n++))
+                  echo "Command failed. Attempt $n/$max:"
+                  sleep $delay;
+                else
+                  echo "The command has failed after $n attempts."
+                  return 1
+                fi
+              }
+            done
+          }
+          retry npm run predeploy
         env:
           NODE_ENV: production
           # Remove this line if you would like to skip using google analytics
