@@ -53,7 +53,7 @@ jobs:
       - run: npm ci
       - name: Build and Statically Render
         run: |
-          retry() {
+          function retry {
             local n=1
             local max=3
             local delay=5
