@@ -52,6 +52,7 @@ jobs:
           cache: "npm"
       - run: npm ci
       - name: Build and Statically Render
+        shell: bash
         run: |
           function retry {
             local n=1
