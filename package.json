@@ -14,7 +14,6 @@
     "analyze": "npm run build && source-map-explorer build/static/js/*.chunk.js",
     "build": "rimraf ./build && react-scripts build",
     "lint": "eslint \"**/*.js\"",
-    "retry": "bash -c 'retry() { n=1; max=5; delay=3; while true; do \"$@\" && break || { if [[ $n -lt $max ]]; then ((n++)); echo \"Command failed. Attempt $n/$max:\"; sleep $delay; else echo \"The command has failed after $n attempts.\"; return 1; fi; } done }; retry \"$@\"'",
     "predeploy": "npm run build && react-snap",
     "start": "react-scripts start",
     "test": "npx jest"
