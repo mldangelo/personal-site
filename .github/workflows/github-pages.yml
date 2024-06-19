@@ -40,7 +40,8 @@ jobs:
       - name: Install
         run: npm ci
       - name: Build and render
-        run: npm run predeploy
+        run: npm run retry -- npm run predeploy
+        shell: bash
         env:
           NODE_ENV: production
           # Remove this line if you would like to skip using google analytics
