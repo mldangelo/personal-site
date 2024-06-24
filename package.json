@@ -22,7 +22,7 @@
     "@fortawesome/fontawesome-svg-core": "^6.5.1",
     "@fortawesome/free-brands-svg-icons": "^6.5.1",
     "@fortawesome/free-regular-svg-icons": "^6.5.1",
-    "@fortawesome/react-fontawesome": "0.2.0",
+    "@fortawesome/react-fontawesome": "0.2.2",
     "dayjs": "^1.11.10",
     "markdown-to-jsx": "^7.4.3",
     "prop-types": "^15.8.1",
