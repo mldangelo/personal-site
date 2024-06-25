@@ -26,7 +26,7 @@
     "dayjs": "^1.11.10",
     "markdown-to-jsx": "^7.4.3",
     "prop-types": "^15.8.1",
-    "react": "^18.2.0",
+    "react": "^18.3.1",
     "react-burger-menu": "^3.0.9",
     "react-dom": "^18.2.0",
     "react-ga": "^3.3.1",
