@@ -242,11 +242,11 @@ const colors = [
   '#64cb7b',
 ];
 
-const categories = [
-  ...new Set(skills.flatMap(({ category }) => category)),
-].sort().map((category, index) => ({
-  name: category,
-  color: colors[index],
-}));
+const categories = [...new Set(skills.flatMap(({ category }) => category))]
+  .sort()
+  .map((category, index) => ({
+    name: category,
+    color: colors[index],
+  }));
 
 export { categories, skills };

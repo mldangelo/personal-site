@@ -20,16 +20,18 @@ const Table = ({ data }) => (
 );
 
 Table.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.shape({
-    format: PropTypes.func,
-    label: PropTypes.string.isRequired,
-    link: PropTypes.string,
-    value: PropTypes.oneOfType([
-      PropTypes.element,
-      PropTypes.number,
-      PropTypes.string,
-    ]),
-  })).isRequired,
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      format: PropTypes.func,
+      label: PropTypes.string.isRequired,
+      link: PropTypes.string,
+      value: PropTypes.oneOfType([
+        PropTypes.element,
+        PropTypes.number,
+        PropTypes.string,
+      ]),
+    }),
+  ).isRequired,
 };
 
 export default Table;

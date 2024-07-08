@@ -46,7 +46,9 @@ describe('renders the app', () => {
 
   it('can navigate to /about', async () => {
     expect.assertions(7);
-    const aboutLink = document.querySelector('#header > nav > ul > li:nth-child(1) > a');
+    const aboutLink = document.querySelector(
+      '#header > nav > ul > li:nth-child(1) > a',
+    );
     expect(aboutLink).toBeInTheDocument();
     await act(async () => {
       await aboutLink.click();
@@ -61,7 +63,9 @@ describe('renders the app', () => {
 
   it('can navigate to /resume', async () => {
     expect.assertions(3);
-    const contactLink = document.querySelector('#header > nav > ul > li:nth-child(2) > a');
+    const contactLink = document.querySelector(
+      '#header > nav > ul > li:nth-child(2) > a',
+    );
     expect(contactLink).toBeInTheDocument();
     await act(async () => {
       await contactLink.click();
@@ -72,7 +76,9 @@ describe('renders the app', () => {
 
   it('can navigate to /projects', async () => {
     expect.assertions(3);
-    const contactLink = document.querySelector('#header > nav > ul > li:nth-child(3) > a');
+    const contactLink = document.querySelector(
+      '#header > nav > ul > li:nth-child(3) > a',
+    );
     expect(contactLink).toBeInTheDocument();
     await act(async () => {
       await contactLink.click();
@@ -83,7 +89,9 @@ describe('renders the app', () => {
 
   it('can navigate to /stats', async () => {
     expect.assertions(5);
-    const contactLink = document.querySelector('#header > nav > ul > li:nth-child(4) > a');
+    const contactLink = document.querySelector(
+      '#header > nav > ul > li:nth-child(4) > a',
+    );
     expect(contactLink).toBeInTheDocument();
     await act(async () => {
       await contactLink.click();
@@ -96,7 +104,9 @@ describe('renders the app', () => {
 
   it('can navigate to /contact', async () => {
     expect.assertions(3);
-    const contactLink = document.querySelector('#header > nav > ul > li:nth-child(5) > a');
+    const contactLink = document.querySelector(
+      '#header > nav > ul > li:nth-child(5) > a',
+    );
     expect(contactLink).toBeInTheDocument();
     await act(async () => {
       await contactLink.click();

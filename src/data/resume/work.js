@@ -75,7 +75,7 @@ const work = [
     highlights: [
       'Trained a model for the Brazilian Coffee Scenes Dataset with better than state of the art accuracy.',
       'Collected training sets on the ground in Uganda. Built dashboards to visualize work of surveyors using Flask, React, and D3.',
-      'Performed supporting analysis to ensure data integrity using Pandas, t-SNE, SVM\'s, and other techniques.',
+      "Performed supporting analysis to ensure data integrity using Pandas, t-SNE, SVM's, and other techniques.",
     ],
   },
   {
@@ -140,7 +140,7 @@ const work = [
     highlights: [
       'Developed software in python for automated testing of servers.',
       'Performed statistical analysis with R, HIVE to assist in triage of malfunctioning servers.',
-      'Worked with vendors and ODM\'s during triage to assist in risk mitigation.',
+      "Worked with vendors and ODM's during triage to assist in risk mitigation.",
     ],
   },
   {
@@ -150,7 +150,7 @@ const work = [
     startDate: '2013-10-01',
     endDate: '2014-10-01',
     highlights: [
-      'Elected to Board of Directors of the USA\'s largest student space advocacy group based on 5+ years of work with SEDS.',
+      "Elected to Board of Directors of the USA's largest student space advocacy group based on 5+ years of work with SEDS.",
       'Responsibilities included: organizational strategy, conference presentations, fundraising, special projects, promoting SEDS nationally and internationally, and photographing conferences.',
     ],
   },

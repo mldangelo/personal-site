@@ -6,21 +6,21 @@
 
 /* Footer */
 
-	#footer {
-		.icons {
-			color: _palette(fg-light);
-		}
+#footer {
+  .icons {
+    color: _palette(fg-light);
+  }
 
-		.copyright {
-			color: _palette(fg-light);
-			font-family: _font(family-heading);
-			font-size: 0.5em;
-			font-weight: _font(weight-heading);
-			letter-spacing: _font(kerning-heading);
-			text-transform: uppercase;
-		}
+  .copyright {
+    color: _palette(fg-light);
+    font-family: _font(family-heading);
+    font-size: 0.5em;
+    font-weight: _font(weight-heading);
+    letter-spacing: _font(kerning-heading);
+    text-transform: uppercase;
+  }
 
-		body.single & {
-			text-align: center;
-		}
-	}
+  body.single & {
+    text-align: center;
+  }
+}
