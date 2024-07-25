@@ -1,15 +1,17 @@
 const degrees = [
   {
-    school: 'Stanford University',
-    degree: 'M.S. Computational and Mathematical Engineering',
-    link: 'https://stanford.edu',
-    year: 2016,
+    school: 'University College London',
+    degree: 'M.Sc. Geospatial Information Science',
+    link: 'https://www.ucl.ac.uk/civil-environmental-geomatic-engineering/geospatial-sciences-msc#:~:text=Geospatial%20Sciences%20MSc%20consists%20of,90%20credits)%20is%20also%20available.',
+    honor: 'Honours Thesis nominated for the Royal Institution of Chartered Surveyors (RICS) Prize',
+    honorlink: 'https://www.rics.org/training-events/rics-awards',
+    year: 2014,
   },
   {
-    school: 'University at Buffalo',
-    degree: 'B.S. Electrical Engineering, Computer Engineering',
-    link: 'https://buffalo.edu',
-    year: 2012,
+    school: 'Barnard College, Columbia University',
+    degree: 'B.A. Environmental Science',
+    link: 'https://barnard.edu/u',
+    year: 2011,
   },
 ];
 

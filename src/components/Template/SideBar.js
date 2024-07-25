@@ -12,24 +12,19 @@ const SideBar = () => (
         <img src={`${PUBLIC_URL}/images/me.jpg`} alt="" />
       </Link>
       <header>
-        <h2>Michael D&apos;Angelo</h2>
-        <p>
-          <a href="mailto:michael@mldangelo.com">michael@mldangelo.com</a>
-        </p>
+        <h2>Claire Fram</h2>
       </header>
     </section>
 
     <section className="blurb">
       <h2>About</h2>
       <p>
-        Hi, I&apos;m Michael. I am a{' '}
-        <a href="https://icme.stanford.edu/">Stanford ICME</a> graduate, YC
-        Alumni, and the VP of Engineering at{' '}
-        <a href="https://smileidentity.com">Smile Identity</a>. Previously, I
-        was the co-founder and CTO of <a href="https://arthena.com">Arthena</a>,
-        co-founder of <a href="https://matroid.com">Matroid</a>, and worked at{' '}
-        <a href="https://planet.com">Planet</a> and{' '}
-        <a href="https://facebook.com">Facebook</a>.
+        I am a Product Manager and Entrepreneur.
+      </p>
+      <p>
+        I specialize in open source software development, geospatial data science,
+        user research, strategy, operations, partnership development,
+        and agile product management.
       </p>
       <ul className="actions">
         <li>

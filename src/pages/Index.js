@@ -6,34 +6,53 @@ import Main from '../layouts/Main';
 const Index = () => (
   <Main
     description={
-      "Michael D'Angelo's personal website. New York based Stanford ICME graduate, "
-      + 'VP of Engineering at Smile Identity, co-founder of Arthena and Matroid, and YC Alumni.'
+      "Claire Fram's personal website"
+      + 'Product Manager and Entrepreneur. Based in San Francisco.'
     }
   >
     <article className="post" id="index">
       <header>
         <div className="title">
           <h2>
-            <Link to="/">About this site</Link>
+            <Link to="/">Hello</Link>
           </h2>
           <p>
-            A beautiful, responsive, statically-generated, react application
-            written with modern Javascript.
+            I&apos;m Claire Fram. A San Francisco-based product manager
+            with a focus on geospatial and transit-tech.
           </p>
         </div>
       </header>
       <p>
-        {' '}
-        Welcome to my website. Please feel free to read more{' '}
-        <Link to="/about">about me</Link>, or you can check out my{' '}
-        <Link to="/resume">resume</Link>, <Link to="/projects">projects</Link>,{' '}
-        view <Link to="/stats">site statistics</Link>, or{' '}
-        <Link to="/contact">contact</Link> me.
+        I have a decade of experience in product management for geospatial and open source products.
+        My specialism is building technical tools for planners, transport professionals
+        and health-care providers.
       </p>
       <p>
-        {' '}
-        Source available{' '}
-        <a href="https://github.com/mldangelo/personal-site">here</a>.
+        In 2020 I co-founded <Link to="https:diagonal.works/"> Diagonal</Link>, a civic tech data analytics company.{' '}
+        We built some tools along the way:
+        <li><Link to="https://github.com/diagonalworks/diagonal-b6"> bedrock (b6)</Link> - a compact represenetation of geospatial data and analysis engine.</li>
+        <li><Link to="https://github.com/diagonalworks/diagonal-pets"> Privacy enhancing technology</Link> to predict the risk of virus-infection, based on the aggregate number of visitors to places.</li>
+        <li><Link to="https://github.com/diagonalworks/ucl-population-health"> Population health modelling</Link> to understand health care supply/demand scenarios using a synthetic UK population.</li>
+      </p>
+      <p>
+        Before Diagonal, I spent many years at <Link to="https://arup.com/">Arup</Link> where I led multiple data analytics
+        products for transport professionals - including the <Link to="https://www.arup.com/services/city-modelling-lab/"> City Modelling Lab.</Link>
+
+      </p>
+      <p>
+        It&apos;s nice to do things outside of work too.
+      </p>
+      <p>
+        I run marathons. I&apos;ve finished 7: San Francisco, Stockholm,
+        London, Madrid, Budapest, Paris, Milan.
+        I volunteer with the <Link to="https://www.citysurfproject.com/">City Surf Project</Link> and <Link to="https://www.mewaterfoundation.org/">MeWater Foundation. </Link>
+        I am a member of the <Link to="https://sfbike.org/">San Francisco Bicycle Coalition</Link> and <Link to="https://walksf.org/"> Walk SF</Link> - where I advocate for safer streets for everyone.
+
+      </p>
+      <p>
+        You can check out my{' '}
+        <Link to="/resume">resume</Link> or{' '}
+        <Link to="/contact">contact</Link> me for more.
       </p>
     </article>
   </Main>
