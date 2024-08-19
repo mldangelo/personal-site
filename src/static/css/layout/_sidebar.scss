@@ -6,28 +6,28 @@
 
 /* Sidebar */
 
-	#sidebar {
-		margin-right: _size(section-spacing);
-		min-width: 22em;
-		width: 22em;
+#sidebar {
+  margin-right: _size(section-spacing);
+  min-width: 22em;
+  width: 22em;
 
-		> * {
-			border-top: solid 1px _palette(border);
-			margin: _size(section-spacing) 0 0 0;
-			padding: _size(section-spacing) 0 0 0;
-		}
+  > * {
+    border-top: solid 1px _palette(border);
+    margin: _size(section-spacing) 0 0 0;
+    padding: _size(section-spacing) 0 0 0;
+  }
 
-		> :first-child {
-			border-top: 0;
-			margin-top: 0;
-			padding-top: 0;
-		}
+  > :first-child {
+    border-top: 0;
+    margin-top: 0;
+    padding-top: 0;
+  }
 
-		@include breakpoint(large) {
-			border-top: solid 1px _palette(border);
-			margin: _size(section-spacing) 0 0 0;
-			min-width: 0;
-			padding: _size(section-spacing) 0 0 0;
-			width: 100%;
-		}
-	}
+  @include breakpoint(large) {
+    border-top: solid 1px _palette(border);
+    margin: _size(section-spacing) 0 0 0;
+    min-width: 0;
+    padding: _size(section-spacing) 0 0 0;
+    width: 100%;
+  }
+}

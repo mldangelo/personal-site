@@ -6,21 +6,21 @@
 
 /* Icon */
 
-	.icon {
-		@include icon;
-		border-bottom: none;
-		position: relative;
+.icon {
+  @include icon;
+  border-bottom: none;
+  position: relative;
 
-		> .label {
-			display: none;
-		}
+  > .label {
+    display: none;
+  }
 
-		&.prefix {
-		}
+  &.prefix {
+  }
 
-		&.suffix {
-			&:before {
-				float: right;
-			}
-		}
-	}
+  &.suffix {
+    &:before {
+      float: right;
+    }
+  }
+}

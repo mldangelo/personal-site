@@ -31,13 +31,28 @@ const skills = [
   },
   {
     title: 'Javascript',
-    competency: 2,
-    category: ['Languages'],
+    competency: 3,
+    category: ['Languages', 'Web Development'],
   },
   {
-    title: 'HTML + CSS',
-    competency: 2,
-    category: ['Languages'],
+    title: 'Typescript',
+    competency: 3,
+    category: ['Languages', 'Web Development'],
+  },
+  {
+    title: 'HTML',
+    competency: 3,
+    category: ['Languages', 'Web Development'],
+  },
+  {
+    title: 'CSS',
+    competency: 3,
+    category: ['Languages', 'Web Development'],
+  },
+  {
+    title: 'Angular',
+    competency: 3,
+    category: ['Web Development'],
   },
   {
     title: 'SQL',
@@ -51,7 +66,7 @@ const skills = [
   },
   {
     title: 'Git',
-    competency: 3,
+    competency: 4,
     category: ['Tools'],
   },
   {
@@ -107,11 +122,11 @@ const colors = [
   '#64cb7b',
 ];
 
-const categories = [
-  ...new Set(skills.flatMap(({ category }) => category)),
-].sort().map((category, index) => ({
-  name: category,
-  color: colors[index],
-}));
+const categories = [...new Set(skills.flatMap(({ category }) => category))]
+  .sort()
+  .map((category, index) => ({
+    name: category,
+    color: colors[index],
+  }));
 
 export { categories, skills };

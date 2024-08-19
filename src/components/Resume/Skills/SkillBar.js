@@ -18,7 +18,9 @@ const SkillBar = ({ data, categories }) => {
 
   return (
     <div className="skillbar clearfix">
-      <div className="skillbar-title" style={titleStyle}><span>{title}</span></div>
+      <div className="skillbar-title" style={titleStyle}>
+        <span>{title}</span>
+      </div>
       <div className="skillbar-bar" style={barStyle} />
       <div className="skill-bar-percent">{competency} / 5</div>
     </div>
@@ -31,10 +33,12 @@ SkillBar.propTypes = {
     competency: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
   }).isRequired,
-  categories: PropTypes.arrayOf(PropTypes.shape({
-    name: PropTypes.string,
-    color: PropTypes.string,
-  })),
+  categories: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      color: PropTypes.string,
+    }),
+  ),
 };
 
 SkillBar.defaultProps = {

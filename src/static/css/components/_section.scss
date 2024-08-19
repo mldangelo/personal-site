@@ -6,20 +6,21 @@
 
 /* Section/Article */
 
-	section, article {
-		&.special {
-			text-align: center;
-		}
-	}
+section,
+article {
+  &.special {
+    text-align: center;
+  }
+}
 
-	header {
-		p {
-			font-family: _font(family-heading);
-			font-size: 0.7em;
-			font-weight: _font(weight-heading);
-			letter-spacing: _font(kerning-heading);
-			line-height: 2.5;
-			margin-top: -1em;
-			text-transform: uppercase;
-		}
-	}
+header {
+  p {
+    font-family: _font(family-heading);
+    font-size: 0.7em;
+    font-weight: _font(weight-heading);
+    letter-spacing: _font(kerning-heading);
+    line-height: 2.5;
+    margin-top: -1em;
+    text-transform: uppercase;
+  }
+}

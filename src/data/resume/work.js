@@ -13,6 +13,20 @@
  */
 const work = [
   {
+    name: 'Scania Group',
+    position: 'Fullstack Developer Summer Worker',
+    summary: 'Worked as a fullstack developer in the team modular system tools (EMTMV) in R&D of Scania.',
+    url: 'https://www.scania.com/',
+    startDate: '2024-06',
+    endDate: '2024-08',
+    highlights: [
+      'migrated the frontend of an angular application to the new internal package, modifying over 200 files and 9000 lines of code in the process',
+      'improved the runtime of the current algorithm to compute compatible vehicle components by 300%',
+      'designed, implemented and tested an algorithm to detect redundant rules for the above mentioned algorithm',
+      'participated in fullstack development (mainly html+css+typescript) and code reviews',
+    ],
+  },
+  {
     name: 'Norwegian University of Science and Technology',
     position: 'Teaching Assistant',
     summary: `I worked as a teaching assistant for a course in algorithms and data structures for the bachelor level. 

@@ -7,6 +7,30 @@ const courses = [
     university: '',
   },
   {
+    title: 'Individual Project in Theoretical Computer Science',
+    number: 'DD2467',
+    link: 'https://www.kth.se/student/kurser/kurs/DD2467?l=en',
+    university: 'KTH',
+  },
+  {
+    title: 'Scalable Software Development with Functional Programming',
+    number: 'DD2489',
+    link: 'https://www.kth.se/student/kurser/kurs/DD2489?l=en',
+    university: 'KTH',
+  },
+  {
+    title: 'Parallel and Distributed Computing',
+    number: 'DD2443',
+    link: 'https://www.kth.se/student/kurser/kurs/DD2443?l=en',
+    university: 'KTH',
+  },
+  {
+    title: 'Formal Methods',
+    number: 'DD2452',
+    link: 'https://www.kth.se/student/kurser/kurs/DD2452?l=en',
+    university: 'KTH',
+  },
+  {
     title: 'Swedish A2 for Engineers',
     number: 'LS1512',
     link: 'https://www.kth.se/student/kurser/kurs/LS1512?l=en',
