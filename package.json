@@ -46,7 +46,7 @@
     "eslint-config-airbnb": "^19.0.4",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-jsx-a11y": "6.9.0",
-    "eslint-plugin-react": "^7.35.0",
+    "eslint-plugin-react": "^7.35.2",
     "react-snap": "^1.23.0",
     "rimraf": "^6.0.1",
     "sass": "^1.77.8",
