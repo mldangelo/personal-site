@@ -49,7 +49,7 @@
     "eslint-plugin-react": "^7.36.1",
     "react-snap": "^1.23.0",
     "rimraf": "^6.0.1",
-    "sass": "^1.78.0",
+    "sass": "^1.79.3",
     "source-map-explorer": "^2.5.3"
   },
   "browserslist": {
