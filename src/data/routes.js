@@ -2,27 +2,27 @@ const routes = [
   {
     index: true,
     label: "Austin Dase",
-    path: '/',
+    path: "/",
   },
   {
-    label: 'About',
-    path: '/about',
+    label: "About",
+    path: "/about",
   },
   {
-    label: 'Resume',
-    path: '/resume',
+    label: "Resume",
+    path: "/resume",
   },
   {
-    label: 'Projects',
-    path: '/projects',
+    label: "Projects",
+    path: "/projects",
   },
   {
-    label: 'Stats',
-    path: '/stats',
+    label: "Stats",
+    path: "/stats",
   },
   {
-    label: 'Contact',
-    path: '/contact',
+    label: "Contact",
+    path: "/contact",
   },
 ];
 
