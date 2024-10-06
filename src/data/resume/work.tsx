@@ -29,12 +29,12 @@ const work: IWorkExperience[] = [
     url: 'https://fundrise.com',
     startDate: '2022-01-01',
     summary:
-      'I lead a team responsible for developing new products and applications, including Equitize, which has facilitated millions of dollars in transactions, and a new AI/ML-focused project. I oversee the architecture, collaborate with executive teams, and contribute to back-end development for applications including API, databases, and machine learning.',
+      'I lead a team responsible for developing new products and applications, including Equitize, which has facilitated millions of dollars in transactions, as well as a new AI/ML-focused project. I oversee the architecture, collaborate with executive teams, and contribute to back-end development.',
     highlights: [
-      'Led development of Equitize, facilitating millions of dollars in transactions.',
       'Manage a team of three engineers (two principal and one senior) with a focus on AI/ML products.',
-      'Contributed to backend systems using Spring Boot, Java 21, Postgres, Vue3, and AWS infrastructure.',
-      'Coordinated with the Chief Technology Officer and Chief Strategy Officer on project requirements and deliverables.',
+      'Lead development of Equitize, facilitating millions of dollars in transactions.',
+      'Contribute to backend systems using Spring Boot, Java 21, Postgres, Vue3, and AWS infrastructure.',
+      'Coordinate with the our executive team on project requirements and deliverables.',
     ],
   },
   {
@@ -44,11 +44,11 @@ const work: IWorkExperience[] = [
     startDate: '2021-01-01',
     endDate: '2022-01-01',
     summary:
-      'As the senior engineer on the Daily Processing team, I developed software to process payments, handle KYC, and issue shares. I led several key initiatives, including rewriting ACH processing systems and integrating new payment methods.',
+      'As the senior engineer on our "Daily Processing" team, I developed software to process payments, handle KYC, and issue shares. I led several key initiatives, including rewriting ACH processing systems, implementing our transfer agent share reconciliation process, and integrating new payment methods.',
     highlights: [
       'Rewrote ACH processing software, handling over $1 billion in transactions in the first year.',
       'Integrated Stripe for debit card funding, processing over 40,000 transactions in the first year.',
-      'Developed a new integration with Cybersource, automating reconciliation of shareholdings.',
+      'Developed a new integration with our transfer agent, automating reconciliation of shareholdings.',
       'Created a test data framework used department-wide for local test data generation.',
     ],
   },
@@ -62,7 +62,7 @@ const work: IWorkExperience[] = [
       'Joined Fundrise to build new products like IRA offerings and Short Term Notes. Worked on core systems related to auto-invest scheduling and KYC processes.',
     highlights: [
       'Developed the IRA product offering from inception to deployment.',
-      'Built and designed the Short Term Notes product, a new business offering.',
+      'Built and designed the backend processing of our Short Term Notes product, a new business offering.',
       'Enhanced internal KYC and investment approval processes for increased efficiency.',
     ],
   },
@@ -76,7 +76,7 @@ const work: IWorkExperience[] = [
       'Worked on internal tools and machine learning projects at Travelers. Developed deployment execution management tools and handled Java/Spring, Python, and SQL-based systems.',
     highlights: [
       'Developed internal tooling using Java, Spring Boot, and Python.',
-      'Collaborated on machine learning projects, utilizing RDBMS systems like SqlServer and Oracle.',
+      'Collaborated on machine learning projects, utilizing database systems like SQLServer and Oracle.',
     ],
   },
   {
@@ -88,8 +88,8 @@ const work: IWorkExperience[] = [
     summary:
       'Led development of internal applications and tooling for Travelers using Java and Spring Boot.',
     highlights: [
-      'Led key internal projects involving tool development and deployment automation.',
-      'Worked with Python and RDBMS systems for internal applications.',
+      'Converted a legacy internal tooling suite from Perl to Python and web-based Java Spring Boot applications.',
+      'Worked with Python and Perl systems for internal applications.',
     ],
   },
   {
@@ -101,8 +101,8 @@ const work: IWorkExperience[] = [
     summary:
       'Started my career at Travelers working on internal development projects involving Java, Python, and SQL-based systems.',
     highlights: [
-      'Developed internal tools using Java and Spring Boot.',
-      'Worked on deployment execution management systems.',
+      'Developed internal tools using Perl, Java, and Spring Boot.',
+      'Managed nightly deployments as part of the release train.',
     ],
   },
 ];

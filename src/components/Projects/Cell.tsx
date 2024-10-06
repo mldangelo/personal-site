@@ -1,36 +1,43 @@
 import dayjs from 'dayjs';
-import PropTypes from 'prop-types';
 import React from 'react';
+import { IProject } from '../../data/projects';
+import PdfViewer from './Pdf';
 
-const Cell = ({ data }) => (
+export interface ICell {
+  data: IProject;
+}
+
+const Cell: React.FC<ICell> = ({ data }) => (
   <div className="cell-container">
     <article className="mini-post">
       <header>
         <h3>
           <a href={data.link}>{data.title}</a>
         </h3>
-        <time className="published">
-          {dayjs(data.date).format('MMMM, YYYY')}
-        </time>
+        {data.date ? (
+          <time className="published">
+            {dayjs(data.date).format('MMMM, YYYY')}
+          </time>
+        ) : (
+          <div></div>
+        )}
       </header>
-      <a href={data.link} className="image">
-        <img src={`${process.env.PUBLIC_URL}${data.image}`} alt={data.title} />
-      </a>
+      {data.image ? (
+        <a href={data.link} className="image">
+          <img
+            src={`${process.env.PUBLIC_URL}${data.image}`}
+            alt={data.title}
+          />
+        </a>
+      ) : (
+        <div></div>
+      )}
+      {data.pdf ? PdfViewer(data.pdf) : <div></div>}
       <div className="description">
         <p>{data.desc}</p>
       </div>
     </article>
   </div>
 );
-
-Cell.propTypes = {
-  data: PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    link: PropTypes.string,
-    image: PropTypes.string.isRequired,
-    date: PropTypes.string.isRequired,
-    desc: PropTypes.string.isRequired,
-  }).isRequired,
-};
 
 export default Cell;
