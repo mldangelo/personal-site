@@ -1,8 +1,6 @@
 # Adapting this Website
 
-Many people have contacted me about adapting this website. I have tried to make things as simple as possible. There are still bugs. I am sorry. If you find a bug, please email me (help@mldangelo.com), submit a pull request (I'll buy you a coffee as a thank you), or submit an issue.
-
-You may wish to fork this repository or remove my remote origin and add your own. Go [here](https://help.github.com/articles/changing-a-remote-s-url/) for more information on how to change remotes.
+The following is taken directly from [https://mldangelo.github.io/personal-site/](https://mldangelo.github.io/personal-site/)
 
 ## Before you start
 
@@ -13,7 +11,7 @@ You may wish to fork this repository or remove my remote origin and add your own
 
 ### Setup
 
-1. Run the project before making any modifications by following the set up and running instructions in the main [README.md](https://github.com/mldangelo/personal-site#set-up).
+1. Run the project before making any modifications by following the set up and running instructions in the main [README.md](https://github.com/adase11/personal-site#set-up).
 1. Change `homepage` in `package.json` to reflect where you plan to host the site. This is important for static exporting via react-snap. This also changes your path when developing locally. For example, a homepage of `mldangelo.com` places the site at `localhost:3000` and a homepage of `https://mldangelo.github.io/personal-site/` places the site at `localhost:3000/personal-site/`. If you plan to host at on a path such as `https://[your-github-username].github.io/[your-repo-name]`, you should set this now so that your development environment mirrors your production environment.
 1. Create a `.env` file. To do this, run:
 
@@ -37,7 +35,7 @@ I recommend keeping the project running as you go (with `npm start`) to help cor
 
 ### Deploy
 
-See deployment instructions [here](https://github.com/mldangelo/personal-site#deploying-to-github-pages). If you plan to use a custom url, modify `public/CNAME` and enter your URL. You can run:
+See deployment instructions [here](https://github.com/adase11/personal-site#deploying-to-github-pages). If you plan to use a custom url, modify `public/CNAME` and enter your URL. You can run:
 
 ```bash
 echo "[your-custom-domain][.com]" > public/CNAME
@@ -63,7 +61,7 @@ Here are answers to questions I've been asked at least twice. I've attempted to 
 
 2. LF / CRLF issues with eslint.
 
-   This is a common Windows development pitfall. See @[FrozenFury](https://github.com/FrozenFury)'s [comment](https://github.com/mldangelo/personal-site/issues/263#issuecomment-759216299) for how to update your eslint config to resolve this issue.
+   This is a common Windows development pitfall. See @[FrozenFury](https://github.com/FrozenFury)'s [comment](https://github.com/adase11/personal-site/issues/263#issuecomment-759216299) for how to update your eslint config to resolve this issue.
 
 3. master / main
 
