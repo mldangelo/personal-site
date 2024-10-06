@@ -1,6 +1,5 @@
 export interface WebLink {
   urlString: string;
-  url: URL;
 }
 
 export interface University extends WebLink {
@@ -27,14 +26,11 @@ export const UniversityOfMaryland: University = {
   name: 'University of Maryland',
   detailedName: 'University of Maryland, College Park',
   urlString: umd,
-  url: URL.parse(umd)!,
   school: {
     name: 'Robert H. Smith School of Business',
     urlString: smithSchool,
-    url: URL.parse(smithSchool)!,
     department: {
       name: 'Information Systems',
-      url: URL.parse(smithInfoSystems)!,
       urlString: smithInfoSystems,
     },
   },
@@ -48,15 +44,12 @@ const towsonCompSci =
 export const TowsonUniversity: University = {
   name: 'Towson University',
   detailedName: 'Towson University',
-  url: URL.parse(towson)!,
   urlString: towson,
   school: {
     name: 'Jess & Mildred Fisher College of Science & Mathematics',
-    url: URL.parse(fisherSchool)!,
     urlString: fisherSchool,
     department: {
       name: '',
-      url: URL.parse(towsonCompSci)!,
       urlString: towsonCompSci,
     },
   },

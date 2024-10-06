@@ -46,7 +46,7 @@ jobs:
           # longer maintained, so retry until I convert to next.
           function retry {
             local n=1
-            local max=5
+            local max=3
             local delay=1
             while true; do
               "$@" && break || {
