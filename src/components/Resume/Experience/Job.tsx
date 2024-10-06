@@ -1,9 +1,13 @@
 import dayjs from 'dayjs';
 import Markdown from 'markdown-to-jsx';
-import PropTypes from 'prop-types';
 import React from 'react';
+import { IWorkExperience } from '../../../data/resume/work';
 
-const Job = ({
+export interface IJob {
+  data: IWorkExperience;
+}
+
+const Job: React.FC<IJob> = ({
   data: { name, position, url, startDate, endDate, summary, highlights },
 }) => (
   <article className="jobs-container">
@@ -41,17 +45,5 @@ const Job = ({
     ) : null}
   </article>
 );
-
-Job.propTypes = {
-  data: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    position: PropTypes.string.isRequired,
-    url: PropTypes.string.isRequired,
-    startDate: PropTypes.string.isRequired,
-    endDate: PropTypes.string,
-    summary: PropTypes.string,
-    highlights: PropTypes.arrayOf(PropTypes.string.isRequired),
-  }).isRequired,
-};
 
 export default Job;

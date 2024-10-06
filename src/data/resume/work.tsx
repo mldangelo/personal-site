@@ -11,7 +11,18 @@
  * @property {string|undefined} summary - html/markdown summary of the position
  * @property {string[]} highlights - plain text highlights of the position (bulleted list)
  */
-const work = [
+
+export interface IWorkExperience {
+  name: string;
+  position: string;
+  url: string;
+  startDate: string;
+  endDate?: string;
+  summary: string;
+  highlights: string[];
+}
+
+const work: IWorkExperience[] = [
   {
     name: 'Fundrise',
     position: 'Lead Software Engineer | Engineering Manager',

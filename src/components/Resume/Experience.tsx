@@ -1,8 +1,12 @@
-import PropTypes from 'prop-types';
 import React from 'react';
+import { IWorkExperience } from '../../data/resume/work';
 import Job from './Experience/Job';
 
-const Experience = ({ data }) => (
+export interface IExperience {
+  data: IWorkExperience[];
+}
+
+const Experience: React.FC<IExperience> = ({ data }) => (
   <div className="experience">
     <div className="link-to" id="experience" />
     <div className="title">
@@ -13,23 +17,5 @@ const Experience = ({ data }) => (
     ))}
   </div>
 );
-
-Experience.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.exact({
-      name: PropTypes.string,
-      position: PropTypes.string,
-      url: PropTypes.string,
-      startDate: PropTypes.string,
-      endDate: PropTypes.string,
-      highlights: PropTypes.arrayOf(PropTypes.string),
-      summary: PropTypes.string,
-    })
-  ),
-};
-
-Experience.defaultProps = {
-  data: [],
-};
 
 export default Experience;

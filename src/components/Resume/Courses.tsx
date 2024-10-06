@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import { CourseInfo } from '../../data/resume/courses';
 import Course from './Courses/Course';
@@ -21,7 +20,11 @@ const getRows = (courses: CourseInfo[]) =>
       />
     ));
 
-const Courses = ({ data }) => (
+export interface Courses {
+  data: CourseInfo[];
+}
+
+const Courses: React.FC<Courses> = ({ data }) => (
   <div className="courses">
     <div className="link-to" id="courses" />
     <div className="title">
@@ -30,20 +33,5 @@ const Courses = ({ data }) => (
     <ul className="course-list">{getRows(data)}</ul>
   </div>
 );
-
-Courses.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      title: PropTypes.string,
-      number: PropTypes.string,
-      link: PropTypes.string,
-      university: PropTypes.string,
-    })
-  ),
-};
-
-Courses.defaultProps = {
-  data: [],
-};
 
 export default Courses;
