@@ -27,11 +27,10 @@ const messages = [
   'thanks',
 ];
 
-const useInterval = (callback, delay) => {
-  const savedCallback: React.MutableRefObject<any> = useRef<any>();
-  if (!savedCallback) {
-    throw new Error();
-  }
+const useInterval = (callback: () => void, delay: number | null) => {
+  const savedCallback: React.MutableRefObject<() => void> = useRef<() => void>(
+    () => {}
+  );
 
   useEffect(() => {
     savedCallback.current = callback;
