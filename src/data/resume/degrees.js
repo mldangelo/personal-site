@@ -1,15 +1,15 @@
 const degrees = [
   {
-    school: 'Stanford University',
-    degree: 'M.S. Computational and Mathematical Engineering',
-    link: 'https://stanford.edu',
-    year: 2016,
+    school: 'Indian Institute of Technology (BHU), Varanasi',
+    degree: 'B.Tech in Electronics Engineering ( Current CPI: 9.4)',
+    link: 'https://iitbhu.ac.in/',
+    year: 2023,
   },
   {
-    school: 'University at Buffalo',
-    degree: 'B.S. Electrical Engineering, Computer Engineering',
-    link: 'https://buffalo.edu',
-    year: 2012,
+    school: 'Sanawar, Bathinda',
+    degree: 'Class XII , Central Board of Secondary Education ( Percentage: 93.8)',
+    link: 'http://sanawarschool.com/',
+    year: 2019,
   },
 ];
 

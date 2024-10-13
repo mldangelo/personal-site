@@ -1,6 +1,7 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFilePdf } from '@fortawesome/free-regular-svg-icons/faFilePdf';
 import { Link } from 'react-router-dom';
-
 import Main from '../layouts/Main';
 
 import Education from '../components/Resume/Education';
@@ -26,14 +27,12 @@ const sections = {
 const Resume = () => (
   <Main
     title="Resume"
-    description="Michael D'Angelo's Resume. Smile Identity, Arthena, Matroid, YC, Skeptical Investments, Stanford ICME, Planet, and Facebook."
+    description="Pranav Mittal's Resume. St. Xavier's High School , Bathinda , IIT(BHU) Varanasi , Nvidia Intern and Qualcomm FT."
   >
     <article className="post" id="resume">
       <header>
         <div className="title">
-          <h2>
-            <Link to="resume">Resume</Link>
-          </h2>
+          <h2><Link to="/resume">Resume</Link><a href="https://drive.google.com/uc?export=download&id=1W4P8wKW_Fd7fI2D0qvixubQ3RH0PpAye" download="Pranav_Mittal_CV" aria-label="resume_pdf"><FontAwesomeIcon icon={faFilePdf} /></a></h2>
           <div className="link-container">
             {Object.keys(sections).map((sec) => (
               <h4 key={sec}>
