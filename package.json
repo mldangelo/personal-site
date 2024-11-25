@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
-    "@fortawesome/free-brands-svg-icons": "^6.6.0",
+    "@fortawesome/free-brands-svg-icons": "^6.7.1",
     "@fortawesome/free-regular-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "0.2.2",
     "dayjs": "^1.11.13",
