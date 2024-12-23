@@ -1,24 +1,26 @@
 import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
-import { devtools } from 'zustand/middleware';
+import { persist } from 'zustand/middleware';
 import { theme as antTheme } from 'antd';
 import type { ThemeConfig } from 'antd';
 
 const { defaultAlgorithm, darkAlgorithm } = antTheme;
 
-// Theme tokens with strict typing
+// Base theme configuration
 const baseTokens = {
   colorPrimary: '#0088CC',
   fontFamily: "'Source Sans Pro', system-ui, sans-serif",
   borderRadius: 6,
-} as const satisfies Partial<ThemeConfig['token']>;
+} as const;
 
-// Theme configurations with better type safety
+// Theme configurations
 const createThemeConfig = (isDark: boolean): ThemeConfig => ({
   token: {
     ...baseTokens,
     colorBgContainer: isDark ? '#141414' : '#ffffff',
     colorBgElevated: isDark ? '#1f1f1f' : '#ffffff',
+    colorBgLayout: isDark ? '#000000' : '#f0f2f5',
+    colorText: isDark ? 'rgba(255, 255, 255, 0.85)' : 'rgba(0, 0, 0, 0.85)',
+    colorTextSecondary: isDark ? 'rgba(255, 255, 255, 0.65)' : 'rgba(0, 0, 0, 0.65)',
     boxShadow: `0 2px 8px rgba(0, 0, 0, ${isDark ? '0.35' : '0.15'})`,
     boxShadowSecondary: `0 4px 12px rgba(0, 0, 0, ${isDark ? '0.35' : '0.15'})`,
   },
@@ -26,105 +28,109 @@ const createThemeConfig = (isDark: boolean): ThemeConfig => ({
     Button: {
       algorithm: true,
       borderRadius: 6,
+      controlHeight: 36,
+      controlHeightLG: 40,
+      controlHeightSM: 28,
+      paddingContentHorizontal: 16,
     },
     Layout: {
       bodyBg: isDark ? '#000000' : '#f0f2f5',
       headerBg: isDark ? '#141414' : '#ffffff',
       siderBg: isDark ? '#141414' : '#ffffff',
+      lightSiderBg: '#ffffff',
+      darkSiderBg: '#141414',
+    },
+    Menu: {
+      darkItemBg: '#141414',
+      darkItemHoverBg: '#1f1f1f',
+      darkItemSelectedBg: '#1f1f1f',
+      darkSubMenuItemBg: '#141414',
     },
   },
-  algorithm: [isDark ? darkAlgorithm : defaultAlgorithm],
+  algorithm: isDark ? darkAlgorithm : defaultAlgorithm,
 });
 
 interface ThemeState {
   isDarkMode: boolean;
   theme: ThemeConfig;
   systemPreference: boolean;
-  error: Error | null;
 }
 
 interface ThemeActions {
   toggleTheme: () => void;
   setSystemPreference: (useSystem: boolean) => void;
-  setError: (error: Error | null) => void;
 }
 
 // Helper to safely check system preference
 const getSystemPreference = (): boolean => {
   try {
     return window?.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false;
-  } catch (error) {
-    console.warn(`Failed to detect system theme preference:${error}`);
+  } catch {
     return false;
   }
 };
 
 // Create the store with middleware
 export const useThemeStore = create<ThemeState & ThemeActions>()(
-  devtools(
-    persist(
-      (set, get) => ({
-        isDarkMode: getSystemPreference(),
-        theme: createThemeConfig(getSystemPreference()),
+  persist(
+    (set) => {
+      // Initialize system preference listener
+      const initializeSystemPreference = () => {
+        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        const handleChange = (e: MediaQueryListEvent) => {
+          set((state) =>
+            state.systemPreference
+              ? {
+                  isDarkMode: e.matches,
+                  theme: createThemeConfig(e.matches),
+                }
+              : state
+          );
+        };
+
+        mediaQuery.addEventListener('change', handleChange);
+        return () => mediaQuery.removeEventListener('change', handleChange);
+      };
+
+      // Try to initialize system preference listener
+      if (typeof window !== 'undefined') {
+        initializeSystemPreference();
+      }
+
+      const initialSystemPreference = getSystemPreference();
+
+      return {
+        isDarkMode: initialSystemPreference,
+        theme: createThemeConfig(initialSystemPreference),
         systemPreference: true,
-        error: null,
 
-        toggleTheme: () => {
-          try {
-            const newIsDarkMode = !get().isDarkMode;
-            set({
-              isDarkMode: newIsDarkMode,
-              theme: createThemeConfig(newIsDarkMode),
-              systemPreference: false,
-              error: null,
-            });
-          } catch (error) {
-            const typedError = error instanceof Error ? error : new Error(String(error));
-            console.error('Failed to toggle theme:', typedError);
-            set({ error: typedError });
-          }
-        },
+        toggleTheme: () =>
+          set((state) => ({
+            isDarkMode: !state.isDarkMode,
+            theme: createThemeConfig(!state.isDarkMode),
+            systemPreference: false,
+          })),
 
-        setSystemPreference: (useSystem: boolean) => {
-          try {
+        setSystemPreference: (useSystem: boolean) =>
+          set(() => {
             if (useSystem) {
               const systemIsDark = getSystemPreference();
-              set({
+              return {
                 isDarkMode: systemIsDark,
                 theme: createThemeConfig(systemIsDark),
                 systemPreference: true,
-                error: null,
-              });
-
-              // Listen for system theme changes
-              const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-              const handleChange = (e: MediaQueryListEvent) => {
-                set({
-                  isDarkMode: e.matches,
-                  theme: createThemeConfig(e.matches),
-                });
               };
-              mediaQuery.addEventListener('change', handleChange);
-              return () => mediaQuery.removeEventListener('change', handleChange);
             }
-          } catch (error) {
-            const typedError = error instanceof Error ? error : new Error(String(error));
-            console.error('Failed to set system preference:', typedError);
-            set({ error: typedError });
-          }
-        },
-
-        setError: (error: Error | null) => set({ error }),
+            return { systemPreference: false };
+          }),
+      };
+    },
+    {
+      name: 'theme-storage',
+      partialize: (state) => ({
+        isDarkMode: state.isDarkMode,
+        systemPreference: state.systemPreference,
       }),
-      {
-        name: 'theme-storage',
-        storage: createJSONStorage(() => localStorage),
-        partialize: (state) => ({
-          isDarkMode: state.isDarkMode,
-          systemPreference: state.systemPreference,
-        }),
-      }
-    ),
-    { name: 'Theme Store' }
+    }
   )
 );
