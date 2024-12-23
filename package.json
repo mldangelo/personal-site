@@ -1,6 +1,6 @@
 {
   "name": "personal-site",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "homepage": "https://mldangelo.com/",
   "license": "MIT",
   "repository": {
@@ -10,58 +10,48 @@
   "engines": {
     "node": ">=16.x"
   },
+  "type": "module",
   "scripts": {
-    "analyze": "npm run build && source-map-explorer build/static/js/*.chunk.js",
-    "build": "rimraf ./build && react-scripts build",
-    "lint": "eslint \"**/*.js\"",
-    "predeploy": "npm run build && react-snap",
-    "start": "react-scripts start",
-    "test": "npx jest"
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "build:watch": "vite build --watch",
+    "lint": "biome lint .",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "format": "biome format --write .",
+    "check": "biome check --apply .",
+    "ci": "biome ci .",
+    "format:check": "biome format .",
+    "lint:fix": "biome lint --write ."
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^6.6.0",
-    "@fortawesome/free-brands-svg-icons": "^6.7.1",
-    "@fortawesome/free-regular-svg-icons": "^6.7.1",
+    "@ant-design/icons": "^5.3.0",
+    "@fortawesome/fontawesome-svg-core": "^6.7.2",
+    "@fortawesome/free-brands-svg-icons": "^6.7.2",
+    "@fortawesome/free-regular-svg-icons": "^6.7.2",
     "@fortawesome/react-fontawesome": "0.2.2",
+    "antd": "^5.15.0",
     "dayjs": "^1.11.13",
-    "markdown-to-jsx": "^7.7.1",
-    "prop-types": "^15.8.1",
-    "react": "^18.3.1",
-    "react-burger-menu": "^3.0.9",
-    "react-dom": "^18.3.1",
-    "react-ga": "^3.3.1",
-    "react-helmet-async": "^2.0.5",
-    "react-router-dom": "^6.28.0",
-    "react-scripts": "^5.0.1"
+    "dedent": "^1.5.3",
+    "framer-motion": "^11.15.0",
+    "markdown-to-jsx": "^7.7.2",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7.1.0",
+    "zustand": "^5.0.2"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.25.9",
-    "@babel/preset-env": "^7.25.3",
-    "@babel/preset-react": "^7.25.9",
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^16.0.1",
-    "@testing-library/user-event": "^14.5.2",
-    "babel-jest": "^29.7.0",
-    "eslint": "^8.57.1",
-    "eslint-config-airbnb": "^19.0.4",
-    "eslint-plugin-import": "^2.31.0",
-    "eslint-plugin-jsx-a11y": "6.10.2",
-    "eslint-plugin-react": "^7.37.2",
-    "react-snap": "^1.23.0",
-    "rimraf": "^6.0.1",
-    "sass": "^1.81.0",
-    "source-map-explorer": "^2.5.3"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "@biomejs/biome": "1.9.4",
+    "@types/node": "^22.10.2",
+    "@types/react": "^19.0.2",
+    "@types/react-burger-menu": "^2.8.7",
+    "@types/react-dom": "^19.0.2",
+    "@types/react-helmet": "^6.1.11",
+    "@types/react-router-dom": "^5.3.3",
+    "@vitejs/plugin-react": "^4.3.4",
+    "sass": "^1.83.0",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.5",
+    "vite-plugin-sass": "^0.1.0"
   }
 }
