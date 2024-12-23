@@ -13,7 +13,6 @@ import {
   Grid,
 } from 'antd';
 import { GithubOutlined, LinkedinOutlined } from '@ant-design/icons';
-import Main from '../layouts/Main';
 
 import Education from '../components/Resume/Education';
 import Experience from '../components/Resume/Experience';
@@ -71,95 +70,93 @@ const Resume = () => {
   const contentWidth = screens.lg ? 19 : 24;
 
   return (
-    <Main>
-      <Content style={{ padding: token.paddingLG, maxWidth: 1400, margin: '0 auto' }}>
-        <Row gutter={[24, 24]}>
-          <Col xs={24} lg={sidebarWidth}>
-            <Affix offsetTop={24}>
-              <Card
-                size="small"
-                bodyStyle={{
-                  padding: token.padding,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: token.paddingXS,
-                }}
-                style={{
-                  borderRadius: token.borderRadiusLG,
-                }}
-              >
-                <Space direction="vertical" size={1}>
-                  <Title level={4} style={{ marginBottom: 0 }}>
-                    Michael D&apos;Angelo
-                  </Title>
-                  <Text type="secondary">Co-founder & CTO at Promptfoo</Text>
-                </Space>
-                <Space
-                  split={<Divider type="vertical" />}
-                  wrap
-                  style={{ justifyContent: 'center' }}
-                >
-                  <Link to="https://github.com/mldangelo" target="_blank" rel="noopener noreferrer">
-                    <Space size="small">
-                      <GithubOutlined />
-                      <Text>GitHub</Text>
-                    </Space>
-                  </Link>
-                  <Link
-                    to="https://www.linkedin.com/in/mldangelo"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Space size="small">
-                      <LinkedinOutlined />
-                      <Text>LinkedIn</Text>
-                    </Space>
-                  </Link>
-                </Space>
-                {screens.lg && (
-                  <>
-                    <Divider style={{ margin: `${token.marginXS}px 0` }} />
-                    <Anchor
-                      items={items}
-                      targetOffset={token.marginLG}
-                      style={{ marginTop: 0 }}
-                      affix={false}
-                    />
-                  </>
-                )}
-              </Card>
-            </Affix>
-          </Col>
-          <Col xs={24} lg={contentWidth}>
+    <Content style={{ padding: token.paddingLG, maxWidth: 1400, margin: '0 auto' }}>
+      <Row gutter={[24, 24]}>
+        <Col xs={24} lg={sidebarWidth}>
+          <Affix offsetTop={24}>
             <Card
+              size="small"
               bodyStyle={{
-                padding: screens.lg ? token.paddingLG : token.padding,
+                padding: token.padding,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: token.paddingXS,
               }}
               style={{
                 borderRadius: token.borderRadiusLG,
               }}
             >
-              {Object.entries(sections).map(([name, Section], index, array) => (
-                <div
-                  key={name}
-                  id={name.toLowerCase()}
-                  style={{
-                    scrollMarginTop: token.marginLG,
-                    marginBottom: index === array.length - 1 ? 0 : token.marginLG * 2,
-                  }}
+              <Space direction="vertical" size={1}>
+                <Title level={4} style={{ marginBottom: 0 }}>
+                  Michael D&apos;Angelo
+                </Title>
+                <Text type="secondary">Co-founder & CTO at Promptfoo</Text>
+              </Space>
+              <Space
+                split={<Divider type="vertical" />}
+                wrap
+                style={{ justifyContent: 'center' }}
+              >
+                <Link to="https://github.com/mldangelo" target="_blank" rel="noopener noreferrer">
+                  <Space size="small">
+                    <GithubOutlined />
+                    <Text>GitHub</Text>
+                  </Space>
+                </Link>
+                <Link
+                  to="https://www.linkedin.com/in/mldangelo"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  <Title level={3}>{name}</Title>
-                  <Section {...sectionData[name]} />
-                  {index !== array.length - 1 && (
-                    <Divider style={{ margin: `${token.marginLG * 2}px 0 0` }} />
-                  )}
-                </div>
-              ))}
+                  <Space size="small">
+                    <LinkedinOutlined />
+                    <Text>LinkedIn</Text>
+                  </Space>
+                </Link>
+              </Space>
+              {screens.lg && (
+                <>
+                  <Divider style={{ margin: `${token.marginXS}px 0` }} />
+                  <Anchor
+                    items={items}
+                    targetOffset={token.marginLG}
+                    style={{ marginTop: 0 }}
+                    affix={false}
+                  />
+                </>
+              )}
             </Card>
-          </Col>
-        </Row>
-      </Content>
-    </Main>
+          </Affix>
+        </Col>
+        <Col xs={24} lg={contentWidth}>
+          <Card
+            bodyStyle={{
+              padding: screens.lg ? token.paddingLG : token.padding,
+            }}
+            style={{
+              borderRadius: token.borderRadiusLG,
+            }}
+          >
+            {Object.entries(sections).map(([name, Section], index, array) => (
+              <div
+                key={name}
+                id={name.toLowerCase()}
+                style={{
+                  scrollMarginTop: token.marginLG,
+                  marginBottom: index === array.length - 1 ? 0 : token.marginLG * 2,
+                }}
+              >
+                <Title level={3}>{name}</Title>
+                <Section {...sectionData[name]} />
+                {index !== array.length - 1 && (
+                  <Divider style={{ margin: `${token.marginLG * 2}px 0 0` }} />
+                )}
+              </div>
+            ))}
+          </Card>
+        </Col>
+      </Row>
+    </Content>
   );
 };
 

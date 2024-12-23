@@ -388,7 +388,7 @@ const About = () => {
                 , where I led the development of tools that have helped over 170 million people in
                 Africa gain access to financial services.
               </Paragraph>
-              <Paragraph style={{ fontSize: token.fontSizeMD }}>
+              <Paragraph style={{ fontSize: token.fontSize }}>
                 In my spare time, I enjoy investing in people and ideas through a{' '}
                 <TextLink href="https://skepticalinvestments.biz" target="_blank">
                   small venture fund
