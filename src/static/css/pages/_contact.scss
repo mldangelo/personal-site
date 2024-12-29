@@ -1,15 +1,13 @@
 // Contact page (/contact)
 
 #contact {
-
-  .email-at{
-    
+  .email-at {
     margin: 3em 0;
-    
+
     p {
       margin: 0;
     }
-    
+
     .inline-container {
       width: 100%;
 
@@ -19,19 +17,17 @@
         border: 0;
         text-align: right;
       }
-
     }
   }
-
 }
 
 .inline {
-    min-width: 150px;
-    display: inline-block;
-    margin: 0;
-    padding: 0;
-    font-size: 15;
-    outline: 0;
-    border: 0;
-    text-align: right;
+  min-width: 150px;
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  font-size: 15;
+  outline: 0;
+  border: 0;
+  text-align: right;
 }

@@ -6,33 +6,33 @@
 
 /* Wrapper */
 
-	#wrapper {
-		@include vendor('display', 'flex');
-		@include vendor('flex-direction', 'row-reverse');
-		@include vendor('transition', 'opacity #{_duration(menu)} ease');
-		margin: 0 auto;
-		max-width: 100%;
-		opacity: 1;
-		padding: (_size(section-spacing) * 1.5);
-		width: 90em;
+#wrapper {
+  @include vendor("display", "flex");
+  @include vendor("flex-direction", "row-reverse");
+  @include vendor("transition", "opacity #{_duration(menu)} ease");
+  margin: 0 auto;
+  max-width: 100%;
+  opacity: 1;
+  padding: (_size(section-spacing) * 1.5);
+  width: 90em;
 
-		body.is-menu-visible & {
-			opacity: 0.15;
-		}
+  body.is-menu-visible & {
+    opacity: 0.15;
+  }
 
-		@include breakpoint(xlarge) {
-			padding: _size(section-spacing);
-		}
+  @include breakpoint(xlarge) {
+    padding: _size(section-spacing);
+  }
 
-		@include breakpoint(large) {
-			display: block;
-		}
+  @include breakpoint(large) {
+    display: block;
+  }
 
-		@include breakpoint(small) {
-			padding: _size(section-spacing-small);
-		}
+  @include breakpoint(small) {
+    padding: _size(section-spacing-small);
+  }
 
-		body.single & {
-			display: block;
-		}
-	}
+  body.single & {
+    display: block;
+  }
+}

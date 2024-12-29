@@ -35,12 +35,33 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version-file: '.nvmrc'
-          cache: 'npm'
+          node-version-file: ".nvmrc"
+          cache: "npm"
       - name: Install
         run: npm ci
-      - name: Build and render
-        run: npm run predeploy
+      - name: Build and Render
+        shell: bash
+        run: |
+          # NOTE: Rendering can be flaky and react-snap is no
+          # longer maintained, so retry until I convert to next.
+          function retry {
+            local n=1
+            local max=5
+            local delay=1
+            while true; do
+              "$@" && break || {
+                if [[ $n -lt $max ]]; then
+                  ((n++))
+                  echo "Command failed. Attempt $n/$max:"
+                  sleep $delay;
+                else
+                  echo "The command has failed after $n attempts."
+                  return 1
+                fi
+              }
+            done
+          }
+          retry npm run predeploy
         env:
           NODE_ENV: production
           # Remove this line if you would like to skip using google analytics
@@ -50,7 +71,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
-          path: 'build'
+          path: "build"
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2

@@ -24,29 +24,29 @@ Ensure you have [node](https://nodejs.org/) >= v16. Optionally, use [nvm](https:
 
 1. Clone the repository:
 
-    ```bash
-    git clone git://github.com/mldangelo/personal-site.git
-    cd personal-site
-    ```
+   ```bash
+   git clone git://github.com/mldangelo/personal-site.git
+   cd personal-site
+   ```
 
 2. (Optional) Ensure you're on Node v16 or higher:
 
-    ```bash
-    nvm install
-    node --version
-    ```
+   ```bash
+   nvm install
+   node --version
+   ```
 
 3. Install dependencies:
 
-    ```bash
-    npm install
-    ```
+   ```bash
+   npm install
+   ```
 
 4. Start the application:
 
-    ```bash
-    npm start
-    ```
+   ```bash
+   npm start
+   ```
 
 By default, the application should be available at [http://localhost:3000/](http://localhost:3000/).
 
@@ -67,9 +67,9 @@ For a static export without deploying to GitHub Pages:
 - Remove or disable `.github/workflows/github-pages.yml`.
 - Execute:
 
-    ```bash
-    npm run predeploy
-    ```
+  ```bash
+  npm run predeploy
+  ```
 
 This will generate a static version in `personal-site/build/` which you can host or deploy to a CDN.
 

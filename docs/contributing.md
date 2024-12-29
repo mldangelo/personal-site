@@ -13,9 +13,9 @@ Here are a few recommendations to land PRs quickly.
 ## Preparing a Pull Request
 
 1. Write a good summary in your PR description.
-    - Concisely explain your changes.
-    - Justify why your changes are important.
-    - Explain how to test your change (if not obvious).
+   - Concisely explain your changes.
+   - Justify why your changes are important.
+   - Explain how to test your change (if not obvious).
 1. Make sure everything runs.
 1. Write tests (if appropriate).
 1. Self review your branch.
