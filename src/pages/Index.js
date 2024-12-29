@@ -28,7 +28,7 @@ const Index = () => {
         <header>
           <div className="title">
             <h2><Link to="/">About Me</Link></h2>
-            <p>(in about {count} words)</p>
+            <p>(in {count} words)</p>
           </div>
         </header>
         <Markdown>
