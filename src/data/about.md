@@ -13,6 +13,3 @@ Now, I am working on the dynamics of impression formation with a computational a
 # Alongside Academia
 
 In my spare time, I work as a freelance data scientist with extensive experience in designing and deploying scalable solutions for data-driven projects. My expertise spans machine learning, natural language processing, large language models and statistical analysis.
-
-  
-I also enjoy rock climbing, video games and learning new skills.

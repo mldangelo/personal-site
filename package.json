@@ -53,6 +53,8 @@
     "source-map-explorer": "^2.5.3"
   },
   "reactSnap": {
+    "port": 45679,
+    "puppeteerArgs": ["--no-sandbox", "--disable-setuid-sandbox"],
     "exclude": [
       "**/files/*.pdf"
     ]
