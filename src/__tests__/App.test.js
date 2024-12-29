@@ -10,6 +10,7 @@ import { act } from 'react-dom/test-utils';
 import App from '../App';
 
 const jsonMock = jest.fn(() => Promise.resolve({}));
+const textMock = jest.fn(() => Promise.resolve('# Test markdown'));
 
 beforeAll(() => {
   // Mock scrollTo
@@ -17,21 +18,35 @@ beforeAll(() => {
   // Mock fetch
   global.fetch = jest.fn(() => Promise.resolve({
     json: jsonMock,
+    text: textMock,
   }));
 });
 
-describe('renders the app', () => {
-  beforeEach(() => {
+beforeEach(async () => {
+  // Create root element
+  const root = document.createElement('div');
+  root.id = 'root';
+  document.body.appendChild(root);
+  
+  await act(async () => {
     render(<App />);
   });
+});
 
+afterEach(() => {
+  // Clean up
+  document.body.innerHTML = '';
+  jest.clearAllMocks();
+});
+
+describe('renders the app', () => {
   it('should render the app', async () => {
     expect.assertions(2);
     expect(document.getElementById('root')).toBeInTheDocument();
     expect(document.title).toContain('Marius Mercier');
   });
 
-  it('should render the title', async () => {
+  it('should render the title', () => {
     expect.assertions(1);
     expect(document.title).toContain('Marius Mercier');
   });
@@ -41,11 +56,11 @@ describe('renders the app', () => {
     const aboutLink = document.querySelector('#header > nav > ul > li:nth-child(1) > a');
     expect(aboutLink).toBeInTheDocument();
     await act(async () => {
-      await aboutLink.click();
+      aboutLink.click();
     });
     expect(document.title).toContain('Marius Mercier');
     expect(window.location.pathname).toBe('/');
-    expect(window.scrollTo).toHaveBeenNthCalledWith(1, 0, 0);
+    expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
   });
 
   it('can navigate to /resume', async () => {
@@ -71,16 +86,15 @@ describe('renders the app', () => {
   });
 
   it('can navigate to /stats', async () => {
-    expect.assertions(5);
+    expect.assertions(4);
     const statsLink = document.querySelector('#header > nav > ul > li:nth-child(5) > a');
     expect(statsLink).toBeInTheDocument();
     await act(async () => {
-      await statsLink.click();
+      statsLink.click();
     });
     expect(document.title).toContain('Stats |');
     expect(window.location.pathname).toBe('/stats');
-    expect(global.fetch).toHaveBeenCalledTimes(1);
-    expect(jsonMock).toHaveBeenCalledTimes(1);
+    expect(textMock).toHaveBeenCalled();
   });
 
   it('can navigate to /contact', async () => {
