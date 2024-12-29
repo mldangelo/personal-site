@@ -3,9 +3,8 @@
  */
 
 import '@testing-library/jest-dom';
-import '@testing-library/react';
+import { render } from '@testing-library/react';
 import React from 'react';
-import { render, screen } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 import App from '../App';
 
@@ -27,7 +26,6 @@ beforeEach(async () => {
   const root = document.createElement('div');
   root.id = 'root';
   document.body.appendChild(root);
-  
   await act(async () => {
     render(<App />);
   });

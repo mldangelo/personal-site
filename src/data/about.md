@@ -8,8 +8,11 @@ During my MPhil in Cognitive Science, I have worked on **insight** and its link 
   
 Now, I am working on the dynamics of impression formation with a computational approach. Specifically, I am interested in how people update their judgment about the **competence** of others when presented with new (noisy) evidence. Does it follow optimal Bayesian rules? How do first impressions (mostly non-verbal cues) interact with behavioral and verbal cues?
 
-# Outside academia
+# Informal CV
 
-In my free time, I am a freelance data scientist. I develop and integrate machine learning algorithms within 
+# Alongside Academia
 
+In my spare time, I work as a freelance data scientist with extensive experience in designing and deploying scalable solutions for data-driven projects. My expertise spans machine learning, natural language processing, large language models and statistical analysis.
 
+  
+I also enjoy rock climbing, video games and learning new skills.
