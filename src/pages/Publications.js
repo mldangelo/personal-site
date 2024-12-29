@@ -4,11 +4,11 @@ import Markdown from 'markdown-to-jsx';
 
 import Main from '../layouts/Main';
 
-const Index = () => {
+const Publications = () => {
   const [markdown, setMarkdown] = useState('');
 
   useEffect(() => {
-    import('../data/about.md')
+    import('../data/publications.md')
       .then((res) => {
         fetch(res.default)
           .then((r) => r.text())
@@ -16,19 +16,15 @@ const Index = () => {
       });
   });
 
-  const count = markdown.split(/\s+/)
-    .map((s) => s.replace(/\W/g, ''))
-    .filter((s) => s.length).length;
-
   return (
     <Main
-      description={"Marius Mercier's personal website. Psychology Graduate Student."}
+      title="Publications"
+      description="Publications by Marius Mercier"
     >
-      <article className="post markdown" id="index">
+      <article className="post markdown" id="publications">
         <header>
           <div className="title">
-            <h2><Link to="/">About Me</Link></h2>
-            <p>(in about {count} words)</p>
+            <h2><Link to="/publications">Publications</Link></h2>
           </div>
         </header>
         <Markdown>
@@ -39,4 +35,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default Publications;

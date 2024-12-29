@@ -6,11 +6,15 @@ const routes = [
   },
   {
     label: 'About',
-    path: '/about',
+    path: '/',
   },
   {
     label: 'Resume',
     path: '/resume',
+  },
+  {
+    label: 'Publications',
+    path: '/publications',
   },
   {
     label: 'Projects',

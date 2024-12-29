@@ -1,43 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import Markdown from 'markdown-to-jsx';
-
-import Main from '../layouts/Main';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const About = () => {
-  const [markdown, setMarkdown] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
-    import('../data/about.md')
-      .then((res) => {
-        fetch(res.default)
-          .then((r) => r.text())
-          .then(setMarkdown);
-      });
-  });
+    navigate('/');
+  }, [navigate]);
 
-  const count = markdown.split(/\s+/)
-    .map((s) => s.replace(/\W/g, ''))
-    .filter((s) => s.length).length;
-
-  return (
-    <Main
-      title="About"
-      description="Learn about Marius Mercier."
-    >
-      <article className="post markdown" id="about">
-        <header>
-          <div className="title">
-            <h2><Link to="/about">About Me</Link></h2>
-            <p>(in about {count} words)</p>
-          </div>
-        </header>
-        <Markdown>
-          {markdown}
-        </Markdown>
-      </article>
-    </Main>
-  );
+  return null;
 };
 
 export default About;
