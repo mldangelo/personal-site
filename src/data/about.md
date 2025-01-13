@@ -6,13 +6,14 @@ My father introduced me to computers early on and I loved playing video games. I
 
 # Some things that I like doing in an arbitrary order
 
-- Coding
 - Playing Badminton
+- Coding
 - Working out in the gym
 - Playing video games
 - Singing (sometimes to the detriment of the people around me)
 - Playing Dungeons and Dragons
 - Solving logic riddles
+- Reading books (mostly fantasy and sci-fi)
 
 # Miscellaneous
 

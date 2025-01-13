@@ -13,9 +13,20 @@
  */
 const work = [
   {
+    name: 'Carmenta Geospatial Technologies AB',
+    position: 'Master Thesis Student: Algorithm Design',
+    summary: 'Employed as a thesis student to research algorithms on time-synchronized routing.',
+    url: 'https://carmenta.com/',
+    startDate: '2025-01',
+    endDate: '2025-06',
+    highlights: [
+      'problem description: compute a path for two UGVs to their goal point while keeping a line-of-sight constraint with a UAV',
+    ],
+  },
+  {
     name: 'Scania Group',
-    position: 'Fullstack Developer Summer Worker',
-    summary: 'Worked as a fullstack developer in the team modular system tools (EMTMV) in R&D of Scania.',
+    position: 'Software Engineer Summer Worker',
+    summary: 'Worked as a software engineer in the team modular system tools (EMTMV) in R&D of Scania.',
     url: 'https://www.scania.com/',
     startDate: '2024-06',
     endDate: '2024-08',

@@ -65,6 +65,11 @@ const skills = [
     category: ['Languages'],
   },
   {
+    title: 'Clojure',
+    competency: 3,
+    category: ['Languages'],
+  },
+  {
     title: 'Git',
     competency: 4,
     category: ['Tools'],

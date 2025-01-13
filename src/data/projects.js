@@ -1,6 +1,17 @@
 // TODO Add a couple lines about each project
 const data = [
   {
+    title: 'Backyard Cuckoo Hashing - A Theoretical Construction Put Into Practice',
+    subtitle: '',
+    image: '/images/projects/backyard_cuckoo_hashing.png',
+    date: '2025-01-01',
+    link: 'https://github.com/mgroling/Backyard-Cuckoo-Hashing',
+    desc:
+      'Examined a state-of-the-art data structure to maintain a dynamic set under lookup-queries. '
+      + 'Implemented the theoretical construction proposed in the paper and conducted experiments on it,'
+      + ' getting one step closer to make it usable for practice.',
+  },
+  {
     title: 'Master thesis: E-Waste Tracking with Blockchain',
     subtitle: '',
     image: '/images/projects/master_thesis_1.png',
