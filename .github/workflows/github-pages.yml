@@ -1,4 +1,4 @@
-# Deploy static content to GitHub Pages using updated actions
+# Deploy static content to GitHub Pages using the latest actions
 name: Deploy static content to Pages
 
 on:
@@ -38,7 +38,7 @@ jobs:
       - name: Build and Render
         shell: bash
         run: |
-          # Rendering can be flaky, so retry until successful.
+          # Retry function to handle transient failures during the build
           function retry {
             local n=1
             local max=5
@@ -59,17 +59,17 @@ jobs:
           retry npm run predeploy
         env:
           NODE_ENV: production
-          # Remove or update this if you don’t need Google Analytics.
+          # Update or remove if you don't need Google Analytics tracking
           REACT_APP_GA_TRACKING_ID: UA-68649021-1
 
       - name: Setup GitHub Pages
-        uses: actions/configure-pages@v3
+        uses: actions/configure-pages@v5
 
-      - name: Upload build artifact
-        uses: actions/upload-pages-artifact@v2
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
           path: "build"
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v2.2.0
+        uses: actions/deploy-pages@v4
