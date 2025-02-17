@@ -39,6 +39,15 @@ jobs:
           cache: "npm"
       - name: Install
         run: npm ci
+      - name: Install Dependencies
+        run: npm install
+      - name: Configure react-snap
+        run: |
+          echo '{ "puppeteerArgs": ["--no-sandbox", "--disable-setuid-sandbox"] }' > react-snap.json
+      - name: Build
+        run: npm run build
+        env:
+          CI: false
       - name: Build and Render
         shell: bash
         run: |
