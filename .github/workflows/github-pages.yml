@@ -47,9 +47,6 @@ jobs:
         run: npm ci
       - name: Install Dependencies
         run: npm install
-      - name: Configure react-snap
-        run: |
-          echo '{ "puppeteerArgs": ["--no-sandbox", "--disable-setuid-sandbox"] }' > react-snap.json
       - name: Build
         run: npm run build
         env:
@@ -84,7 +81,7 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v3
         with:
           path: "build"
       - name: Deploy to GitHub Pages
