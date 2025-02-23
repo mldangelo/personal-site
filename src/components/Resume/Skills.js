@@ -65,9 +65,8 @@ const Skills = ({ skills, categories }) => {
       <div className="link-to" id="skills" />
       <div className="title">
         <h3>Skills</h3>
-        <p>Not sure if it is different in other countries, but in Germany when they give
-          the lottery numbers on television, they always say something like &quot;As always, all
-          information without guarantees.&quot; (&quot;Alle Angaben wie immer ohne Gewähr&quot;).
+        <p>As they always say before giving out the German lottery numbers on tv, &quot;Alle Angaben
+          wie immer ohne Gewähr&quot;(As always, all information without guarantees).
         </p>
       </div>
       <div className="skill-button-container">{getButtons()}</div>

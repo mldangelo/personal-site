@@ -1,22 +1,22 @@
 const skills = [
   {
     title: 'Python',
-    competency: 5,
-    category: ['Languages'],
-  },
-  {
-    title: 'C++',
     competency: 4,
     category: ['Languages'],
   },
   {
+    title: 'C++',
+    competency: 5,
+    category: ['Languages'],
+  },
+  {
     title: 'C',
-    competency: 3,
+    competency: 4,
     category: ['Languages'],
   },
   {
     title: 'Rust',
-    competency: 2,
+    competency: 1,
     category: ['Languages'],
   },
   {
@@ -70,13 +70,18 @@ const skills = [
     category: ['Languages'],
   },
   {
+    title: 'LLM Prompting',
+    competency: 3,
+    category: ['Tools'],
+  },
+  {
     title: 'Git',
     competency: 4,
     category: ['Tools'],
   },
   {
     title: 'Bash',
-    competency: 2,
+    competency: 3,
     category: ['Tools'],
   },
   {
@@ -101,12 +106,12 @@ const skills = [
   },
   {
     title: 'OpenAI-Gym',
-    competency: 4,
+    competency: 3,
     category: ['Python'],
   },
   {
     title: 'Pytorch',
-    competency: 3,
+    competency: 2,
     category: ['Python'],
   },
 ].map((skill) => ({ ...skill, category: skill.category.sort() }));
