@@ -36,12 +36,46 @@
   }
 
   .jobs-container {
+    .company-name {
+      font-size: 0.8em;
+      font-weight: bold;
+      margin-bottom: 0;
+    }
     .points {
       li {
-        margin: 0;
+        font-size: 0.8em;
         padding: 0;
-        font-size: 0.9em;
+        margin: 0;
       }
+    }
+    .company-summary{
+      font-size: 0.8em;
+      margin-top: 0;
+    }
+    .company-daterange {
+      text-transform: uppercase;
+      margin: 0;
+      font-style: italic;
+    }
+  }
+
+  .projects {
+    margin-left: 20px;
+    margin: 0;
+
+    .project-name {
+      font-size: 0.7em;
+      font-weight: bold;
+      margin: 0;
+    }
+    .project-daterange {
+      text-transform: uppercase;
+      font-size: 0.6em;
+      margin: 0;
+      font-style: italic;
+    }
+    .project-summary{
+      font-size: 0.8em;
     }
   }
 
@@ -80,10 +114,6 @@
       text-align: center;
     }
   }
-}
-
-.daterange {
-  margin-bottom: 0.2em;
 }
 
 .degree-container {

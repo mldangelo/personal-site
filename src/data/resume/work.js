@@ -10,171 +10,138 @@
  * If undefined, the position is still active.
  * @property {string|undefined} summary - html/markdown summary of the position
  * @property {string[]} highlights - plain text highlights of the position (bulleted list)
+ * @property {string[]} projects - List of projects worked on during the position
+ * @property {string} projects[].name - Name of the project
+ * @property {string} projects[].startDate - Start date of the project in YYYY-MM-DD format
+ * @property {string|undefined} projects[].endDate - End date of the project in YYYY-MM-DD format.
+ * @property {string|undefined} projects[].summary - Summary of the project
+ * @property {string[]} projects[].highlights - Highlights of the project
  */
 const work = [
   {
-    name: 'Promptfoo',
-    position: 'Co-founder & CTO',
-    url: 'https://promptfoo.dev',
-    startDate: '2024-07-01',
-    summary: 'Promptfoo builds open-source tools to evaluate, find, and fix vulnerabilities in large language models (LLMs). Our open-source tools are used by over 35,000 developers and researchers worldwide.',
+    name: 'SYSTRA India',
+    position: 'Transport Planner',
+    url: 'https://www.systra.com',
+    startDate: '2023-05-01',
+    summary: 'Involved marjorly in Strategic and Data Science projects.',
     highlights: [
-      'Built and scaled engineering team, emphasizing diversity and open-source contribution',
-      'Established key partnerships with AI research institutions and tech companies',
+      'Skills Learned: SATURN Networking Development, CUBE Scripting, TUBA, COBALT',
+      'Developed automation tools to streamline transport modeling processes.',
+    ],
+    projects: [
+      {
+        name: 'Digital Innovation (Automation Tool)',
+        summary: 'Developed a Python-based app to automate strategic transport modeling tasks.',
+        startDate: '2024-09-01',
+        highlights: [
+          'Developed a Python-based app with a PySide GUI to automate strategic transport modeling, accelerating LAM model development.',
+          'The Saturn Assistant App generates GIS files (links, nodes, zones, spigots, connectors, routes from the 77777 card) for network checks, with automated shapefile generation from UFN or recreated DAT files.',
+          'The app simplifies the conversion of Buffer Networks to Simulation Networks using additional data.',
+          'Provides one-click reverse distance, free flow speed, and capacity checks for efficient network analysis.',
+          'The app can quickly generate Matrix Validation Plots to compare post vs. prior matrices, including trip length distribution, trip cells, and trip ends, following TAG guidelines.',
+          'GitHub Release: https://github.com/shivam-a/saturn-assistant/releases/tag/v0.0.1',
+        ],
+      },
+      {
+        name: 'Bus Connects Cork (Strategic)',
+        summary: 'Developed and validated transport models for the Cork Bus Connects project.',
+        startDate: '2023-10-01',
+        highlights: [
+          'Cordoned the South West Regional Model (SWRM) network using SATURN to create a specific Local Area Model (LAM).',
+          'Developed the Base Model by densifying the network using Google Maps and Street View for accuracy.',
+          'Disaggregated and split LAM zones based on administrative boundaries, workplace zones, and data-driven insights to enhance trip-end distribution.',
+          'Improved the SATURN network by adding new spigots/connectors and refining demand distribution factors.',
+          'Calibrated and validated the Base Model in accordance with TAG guidelines, writing Python scripts to generate TLD files, matrix validation plots, and shapefiles directly from UFS/UFN files.',
+          'Modified and prepared DM/DS (Do-Minimum/Do-Something) models to incorporate future transport schemes in Cork.',
+          'Assisted in writing CUBE scripts to generate GIS-compatible AADT and flow difference plots between models.',
+        ],
+      },
+
+      {
+        name: 'A404 UK Project (Strategic)',
+        summary: 'Contributed to the A404 UK Project by conducting transport modeling and analysis.',
+        startDate: '2023-05-01',
+        endDate: '2023-09-01',
+        highlights: [
+          'Conducted speed and road classification checks for Do-Minimum and Do-Something scenarios.',
+          'Assisted in report writing by compiling and integrating relevant plots and tables.',
+          'Ran the TUBA and COBALT processes, gaining insights into their significance in transport studies.',
+        ],
+      },
     ],
   },
   {
-    name: 'Smile Identity',
-    position: 'VP Engineering & Head of AI',
-    url: 'https://smileidentity.com',
-    startDate: '2022-01-01',
-    endDate: '2024-07-01',
-    summary: `Smile builds machine learning APIs to compare user submitted photos to ID documents. Our APIs are
-    used by hundreds of thousands of people every day to access financial services. As VP of Engineering,
-    I provide technical leadership on high-impact projects, influence and coach a distributed team of engineers,
-    and facilitate alignment and clarity across teams on goals, outcomes, and timelines. I was promoted
-    from Director of Engineering to VP of Engineering in April 2022, and then to VP of Engineering and Head
-    of AI in November 2022. I lead a 20+ person engineering org. I directly manage ~8 engineers and spend
-    >50% of my time writing code.`,
+    name: 'Indian Institute of Technology',
+    position: 'Research Associate',
+    url: 'https://www.iit.ac.in',
+    startDate: '2022-09-01',
+    endDate: '2023-04-30',
+    summary: 'Conducted traffic modeling, simulation, and economic impact analysis while mentoring students and contributing to research and consultancy projects.',
     highlights: [
-      'Redesigned engineering processes for bug tracking, meetings, and standups. Improved culture for code reviews, blameless post-mortems, and retrospectives.',
-      'Re-architected engineering hiring and onboarding processes. Recruited several strong engineers.',
-      'Reorged engineering teams to focus on product delivery. Created a new team to focus on ML infrastructure.',
-      'Lead re-design of internal APIs for inference. Built new computer vision pipelines for industry leading certifications (NIST/iBeta liveness).',
-      'Pitched, designed, developed, deployed, and maintain a fraud detection product based on 1-N facial recognition using embeddings and vector search.',
+      'Developed and tested mixed traffic signals for Indian cities using agent simulator (MATSim).',
+      'Used GAMS code to assess economic impacts of network shocks on Transport Economics CGE model.',
+      'Evaluated GPS-app data to create OD matrices for trip-based models of Indian cities.',
+      'Conducted tutorials on VISSIM and workshops on MATSim for students and participants.',
+      'Contributed to the consultancy project on Dadar\'s flood evacuation traffic-simulation model.',
+      'Assisted in writing research papers and reports and collaborated with PG scholars.',
+      'Maintained and updated project and code documentation.',
     ],
   },
   {
-    name: 'Skeptical Investments',
-    position: 'Co-founder',
-    url: 'http://skepticalinvestments.biz',
-    startDate: '2017-04-01',
-    summary: `Skeptical Investments is a micro-vc fund focused on Angel, Seed, and Series-A
-    YC companies.`,
+    name: 'Indian Institute of Technology Roorkee',
+    position: 'Ad-hoc Research Associate',
+    url: 'https://www.iitr.ac.in',
+    startDate: '2022-03-01',
+    endDate: '2022-05-31',
+    summary: 'Developed and debugged traffic simulations, integrated real-time congestion and pollution data, and contributed to published research.',
     highlights: [
-      'Created the InstaSafe. Fast, automated investment docs for YC companies.',
-      'Advise several startups in the fund.',
+      'Debugged Java code integrating real-time traffic congestion and air pollution exposure from HERE Maps API and WAQI API using GraphHopper\'s multi-modal routing engine.',
+      'Assisted PG scholars in successful publishing of a research paper in a peer-reviewed journal.',
+      'Developed a heterogeneous traffic-based agent-based simulation in MATSim.',
     ],
   },
   {
-    name: 'Arthena',
-    position: 'Co-founder & C.T.O.',
-    url: 'https://arthena.com',
-    startDate: '2014-01-01',
-    endDate: '2022-01-01',
-    summary: `Arthena is a Series A Company funded by <a href="https://www.anthemis.com/">Athemis</a>,
-    <a href="https://foundationcapital.com">Foundation Capital</a>, and <a href="https://ycombinator.com/">YC</a>.
-    We develop quantitative strategies to predict the value of fine art and build investment products.
-    I ran a 20-person product and engineering org for 8 years. We were acquired by
-    <a href="https://www.masterworks.com/">Masterworks</a> in 2023.`,
+    name: 'Teralytics AG',
+    position: 'Transport Modelling Intern',
+    url: 'https://www.teralytics.net',
+    startDate: '2021-09-01',
+    endDate: '2022-02-28',
+    summary: 'Enhanced STREETS product with new features, automated validation and OSM data reporting, conducted research on traffic routing, and managed tasks using agile tools.',
     highlights: [
-      'Built production, online, end-to-end optimized machine learning pipelines for time-series prediction.',
-      'Designed micro-service architecture around: data collection, data integrity, feature engineering, research, strategy, backtesting, deployment, and reporting.',
-      "Set and communicated team priorities that supported the broader organization's goals. Aligned strategy, processes, and decision-making across teams.",
-      "Set clear expectations with individuals based on their level and role and aligned them to the broader organization's goals. Met regularly with individuals to discuss performance and development, and provided feedback and coaching.",
-      'Developed the long-term technical vision and roadmap within, and often beyond, the scope of my teams. Evolved the roadmap to meet anticipated future requirements and infrastructure needs.',
+      'Improved company\'s proprietary product pipeline STREETS by developing and implementing new features using Python.',
+      'Automated validation report generation using Airflow and Docker using Python scripts to compare simulated traffic volume with ground truth values.',
+      'Developed and automated a script that generates reports on OSM data.',
+      'Conducted extensive literature review on routing of vehicles and traffic volume estimation using telco data.',
+      'Utilized JIRA, git, and Confluence toolsets for daily stand-up meetings and cultivated an agile working method for managing tasks.',
     ],
   },
   {
-    name: 'Enveritas',
-    position: 'ML Engineering Contractor',
-    url: 'http://enveritas.org',
-    startDate: '2016-09-01',
-    endDate: '2018-01-01',
-    summary: `Enveritas is a non-profit that works with coffee farmers to improve their livelihoods.
-    I joined on day one and helped build a variety of tools to collect and analyze data. I also advised
-    on technical strategy, helped hire engineers, and advised on their YC application.`,
+    name: 'Technische Universität München',
+    position: 'Student Research Assistant',
+    url: 'https://www.tum.de',
+    startDate: '2021-04-01',
+    endDate: '2022-02-28',
+    summary: 'Enhanced activity-based modeling with open data, integrated macro-micro transport models, conducted spatial analysis, developed travel demand models, and created a marketing video.',
     highlights: [
-      'Trained a model for the Brazilian Coffee Scenes Dataset with better than state of the art accuracy.',
-      'Collected training sets on the ground in Uganda. Built dashboards to visualize work of surveyors using Flask, React, and D3.',
-      "Performed supporting analysis to ensure data integrity using Pandas, t-SNE, SVM's, and other techniques.",
+      'Improved location-choice and time-choice model of a larger activity-based model by incorporating data from various open data sources including Twitter API and Google popular time.',
+      'Collaborated with team members to link macroscopic and microscopic transport modeling and validated open transport model using traditional methods, sensitivity analysis, and meta-analysis.',
+      'Conducted spatial data analysis using QGIS, Python, and R libraries to analyze geographic patterns and relationships, identify spatial outliers and anomalies, and support decision-making.',
+      'Analyzed, cleaned, and manipulated census tract data to develop the MITO San Francisco model for travel demand generation.',
+      'Designed marketing video for the department using After Effects.',
     ],
   },
   {
-    name: 'Zenysis',
-    position: 'Software Engineering Contractor',
-    url: 'https://zenysis.com',
-    startDate: '2016-02-01',
-    endDate: '2016-03-01',
-    summary: `Zenysis develops data analysis and visualization tools for government agencies and international organizations.
-    Their solutions help improve decision-making by integrating and analyzing large-scale datasets from various sources.
-    I was the second contributor to the codebase. We built data visualization tools and tackled complex data ingestion
-    challenges for the Ethiopian Ministry of Health.`,
+    name: 'Europäisches Institut für Energieforschung, EIfER',
+    position: 'Transportation Research Intern',
+    url: 'https://www.eifer.kit.edu',
+    startDate: '2020-08-01',
+    endDate: '2021-01-31',
+    summary: 'Researched activity-based modeling, analyzed household travel data, developed predictive models for EV users, and simulated EV Park-and-Ride behavior in MATSim.',
     highlights: [
-      'Worked in Addis Ababa for the Ethiopian Ministry of Health and built data visualization tools in React and Flask.',
-      'Ingested multiple databases with different alphabets, calendars, and without official spellings of geographic locations.',
-    ],
-  },
-  {
-    name: 'Matroid',
-    position: 'Co-founder',
-    url: 'https://matroid.com',
-    startDate: '2015-07-01',
-    endDate: '2016-01-01',
-    summary: `Matroid is a computer vision platform for creating and deploying detectors. Detectors help customers identify objects,
-    events, or patterns in images and videos without requiring machine learning or coding expertise. I played a crucial role in
-    defining the company's vision. I was responsible for architecting and building the initial product. I left shortly after the
-    Series A to focus on Arthena.`,
-    highlights: [
-      'Developed end to end machine learning pipeline to train visual classifiers from keywords using Caffe, Node.JS, Redis, MongoDB, and other technologies.',
-    ],
-  },
-  {
-    name: 'Planet',
-    position: 'Missions Intern',
-    url: 'https://planet.com',
-    startDate: '2014-06-01',
-    endDate: '2015-01-01',
-    highlights: [
-      'Built models to improve image quality, signal to noise ratio, and dynamic range.',
-      'Performed statistical analysis of image quality in Matlab and Python.  Developed flight software in C++.',
-      'Organized first hackathon, prototyped hardware, and designed and built photography equipment for rocket launches.',
-    ],
-  },
-  {
-    name: 'Planetary Resources',
-    position: 'Avionics Intern',
-    startDate: '2014-01-01',
-    endDate: '2014-05-01',
-    url: 'http://planetaryresources.com',
-    highlights: [
-      'Developed simulations in Matlab for Attitude Determination and Control Subsystem.',
-      'Developed processes for in lab testing and characterization of various subsystems.',
-      'Assembled flight hardware in cleanroom.',
-    ],
-  },
-  {
-    name: 'Facebook',
-    position: 'Software Engineer Intern',
-    url: 'https://facebook.com',
-    startDate: '2013-06-01',
-    endDate: '2013-09-01',
-    highlights: [
-      'Developed software in python for automated testing of servers.',
-      'Performed statistical analysis with R, HIVE to assist in triage of malfunctioning servers.',
-      "Worked with vendors and ODM's during triage to assist in risk mitigation.",
-    ],
-  },
-  {
-    name: 'SEDS-USA',
-    position: 'At Large Board Member',
-    url: 'http://seds.org',
-    startDate: '2013-10-01',
-    endDate: '2014-10-01',
-    highlights: [
-      "Elected to Board of Directors of the USA's largest student space advocacy group based on 5+ years of work with SEDS.",
-      'Responsibilities included: organizational strategy, conference presentations, fundraising, special projects, promoting SEDS nationally and internationally, and photographing conferences.',
-    ],
-  },
-  {
-    name: 'UB Nanosatellite Program',
-    position: 'Co-founder, Program Manager',
-    url: 'https://ubnl.space/',
-    startDate: '2010-10-01',
-    endDate: '2012-06-01',
-    highlights: [
-      'Coauthored grant to build a multi-spectral imaging satellite as part of the AFRL University Nanosatellite Program.',
-      'Lead a team of 60 students through satellite development life cycle. Served as a technical expert, acquired intimate working knowledge of satellite subsystems.  Solicited funding through NASA, AFOSR, and several corporate sponsors.',
+      'Conducted extensive research on activity-based modeling/agent-based modeling and its distinction from trip-based models.',
+      'Conducted statistical analysis of household travel survey data using Python, including plotting, frequency tables, and various statistical tests, to explore relationships and patterns in the data.',
+      'Implemented a Multinomial Logit Model using survey data with biogeme/scikit-learn package to predict home-based activity chains of EV users.',
+      'Implemented EV Park and Ride behavior with MATSim-contrib EV and parking modules, enabling the simulation of charging at PuT stops.',
     ],
   },
 ];
