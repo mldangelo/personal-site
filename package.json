@@ -16,7 +16,7 @@
     "lint": "eslint \"**/*.js\"",
     "predeploy": "npm run build",
     "start": "react-scripts start",
-    "test": "npx jest"
+    "test": "npx jest --passWithNoTests"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
