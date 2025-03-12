@@ -1,11 +1,11 @@
 {
   "name": "personal-site",
   "version": "4.0.0",
-  "homepage": "https://mldangelo.com/",
+  "homepage": "https://shivam-a.github.io/",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mldangelo/personal-site.git"
+    "url": "https://github.com/shivam-a/personal-site.git"
   },
   "engines": {
     "node": ">=16.x"
@@ -14,9 +14,9 @@
     "analyze": "npm run build && source-map-explorer build/static/js/*.chunk.js",
     "build": "rimraf ./build && react-scripts build",
     "lint": "eslint \"**/*.js\"",
-    "predeploy": "npm run build && react-snap",
+    "predeploy": "npm run build",
     "start": "react-scripts start",
-    "test": "npx jest"
+    "test": "npx jest --passWithNoTests"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
@@ -39,15 +39,14 @@
     "@babel/preset-env": "^7.25.3",
     "@babel/preset-react": "^7.25.9",
     "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^16.2.0",
+    "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.5.2",
     "babel-jest": "^29.7.0",
     "eslint": "^8.57.1",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-plugin-import": "^2.31.0",
-    "eslint-plugin-jsx-a11y": "6.10.2",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-react": "^7.37.2",
-    "react-snap": "^1.23.0",
     "rimraf": "^6.0.1",
     "sass": "^1.85.0",
     "source-map-explorer": "^2.5.3"

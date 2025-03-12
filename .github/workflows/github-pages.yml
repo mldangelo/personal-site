@@ -22,56 +22,42 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # Single deploy job since we're just deploying
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-20.04
-    timeout-minutes: 10
+  # Build job
+  build:
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout Repository
         uses: actions/checkout@v4
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version-file: ".nvmrc"
           cache: "npm"
-      - name: Install
+
+      - name: Install Dependencies
         run: npm ci
-      - name: Build and Render
+
+      - name: Build Project
         shell: bash
-        run: |
-          # NOTE: Rendering can be flaky and react-snap is no
-          # longer maintained, so retry until I convert to next.
-          function retry {
-            local n=1
-            local max=5
-            local delay=1
-            while true; do
-              "$@" && break || {
-                if [[ $n -lt $max ]]; then
-                  ((n++))
-                  echo "Command failed. Attempt $n/$max:"
-                  sleep $delay;
-                else
-                  echo "The command has failed after $n attempts."
-                  return 1
-                fi
-              }
-            done
-          }
-          retry npm run predeploy
+        run: npm run build
         env:
           NODE_ENV: production
-          # Remove this line if you would like to skip using google analytics
-          REACT_APP_GA_TRACKING_ID: UA-68649021-1
-      - name: Setup Pages
-        uses: actions/configure-pages@v3
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v2
+
+      - name: Upload static files as artifact
+        id: upload-artifact
+        uses: actions/upload-pages-artifact@v3
         with:
           path: "build"
+
+  # Deploy job
+  deploy:
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v2
+        uses: actions/deploy-pages@v4
