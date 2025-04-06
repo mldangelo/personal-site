@@ -19,7 +19,7 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version-file: ".nvmrc"
           cache: "npm"
@@ -32,8 +32,8 @@ jobs:
     timeout-minutes: 10
     strategy:
       matrix:
-        node-version: [16.x, 18.x, 20.x]
-        os: [ubuntu-20.04, windows-latest, macos-latest]
+        node-version: [18.x, 20.x, 22.x]
+        os: [ubuntu-latest, windows-latest, macos-latest]
         exclude:
           - os: windows-latest
             node-version: 16.x
@@ -46,14 +46,25 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
+      # Add Chrome installation - but only for Linux
+      - name: Install Chrome
+        if: runner.os == 'Linux'
+        run: |
+          wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+          sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
       - run: npm ci
       - name: Build and Statically Render
         shell: bash
         run: |
+          # Create react-snap config
+          echo 'module.exports = { puppeteerArgs: ["--no-sandbox", "--disable-setuid-sandbox"] };' > react-snap.config.js
+          
           function retry {
             local n=1
             local max=5
