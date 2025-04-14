@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
 import Link from 'next/link';
+import React from 'react';
 
 import Main from '../components/Main';
 import Cell from '../components/Projects/Cell';

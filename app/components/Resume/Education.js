@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
 import PropTypes from 'prop-types';
+import React from 'react';
 
 import Degree from './Education/Degree';
 
@@ -24,7 +24,7 @@ Education.propTypes = {
       degree: PropTypes.string,
       link: PropTypes.string,
       year: PropTypes.number,
-    }),
+    })
   ),
 };
 
@@ -32,4 +32,4 @@ Education.defaultProps = {
   data: [],
 };
 
-export default Education; 
+export default Education;

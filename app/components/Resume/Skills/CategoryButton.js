@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
 import PropTypes from 'prop-types';
+import React from 'react';
 
 const CategoryButton = ({ handleClick, active, label }) => (
   <button
@@ -19,4 +19,4 @@ CategoryButton.propTypes = {
   active: PropTypes.objectOf(PropTypes.bool.isRequired).isRequired,
 };
 
-export default CategoryButton; 
+export default CategoryButton;

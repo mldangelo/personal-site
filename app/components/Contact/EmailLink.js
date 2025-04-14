@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
+import React, { useState, useEffect, useRef } from 'react';
 
 // Validates the first half of an email address.
 const validateText = (text) => {
@@ -77,7 +77,7 @@ const EmailLink = ({ loopMessage }) => {
         updateChar(newChar + 1);
       }
     },
-    isActive ? delay : null,
+    isActive ? delay : null
   );
 
   return (
@@ -103,4 +103,4 @@ EmailLink.propTypes = {
   loopMessage: PropTypes.bool,
 };
 
-export default EmailLink; 
+export default EmailLink;

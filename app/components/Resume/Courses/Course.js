@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
 import PropTypes from 'prop-types';
+import React from 'react';
 
 const Course = ({ data, last }) => (
   <li className="course-container">
@@ -30,4 +30,4 @@ Course.defaultProps = {
   last: false,
 };
 
-export default Course; 
+export default Course;

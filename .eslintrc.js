@@ -5,10 +5,7 @@ module.exports = {
     browser: true,
     node: true,
   },
-  extends: [
-    'airbnb',
-    'next/core-web-vitals',
-  ],
+  extends: ['airbnb', 'next/core-web-vitals'],
   ignorePatterns: ['node_modules/', 'build/'],
   parser: '@babel/eslint-parser',
   plugins: ['react'],

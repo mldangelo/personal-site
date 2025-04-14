@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
 import PropTypes from 'prop-types';
+import React from 'react';
 
 const Degree = ({ data }) => (
   <article className="degree-container">
@@ -23,4 +23,4 @@ Degree.propTypes = {
   }).isRequired,
 };
 
-export default Degree; 
+export default Degree;

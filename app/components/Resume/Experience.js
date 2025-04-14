@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
 import PropTypes from 'prop-types';
+import React from 'react';
 
 import Job from './Experience/Job';
 
@@ -27,7 +27,7 @@ Experience.propTypes = {
       endDate: PropTypes.string,
       highlights: PropTypes.arrayOf(PropTypes.string),
       summary: PropTypes.string,
-    }),
+    })
   ),
 };
 
@@ -35,4 +35,4 @@ Experience.defaultProps = {
   data: [],
 };
 
-export default Experience; 
+export default Experience;

@@ -2,8 +2,8 @@
 
 import React, { useState, useCallback, useEffect } from 'react';
 
-import Table from './Table';
 import initialData from '../../data/stats/site';
+import Table from './Table';
 
 const Site = () => {
   const [data, setResponseData] = useState(initialData);
@@ -14,17 +14,17 @@ const Site = () => {
   const fetchData = useCallback(async () => {
     // Don't run on server side
     if (typeof window === 'undefined') return;
-    
+
     try {
       setLoading(true);
       setError(null);
-      
+
       // request must be authenticated if private
       const res = await fetch(
         'https://api.github.com/repos/mldangelo/personal-site',
         { cache: 'no-store' } // Always fetch fresh data
       );
-      
+
       if (!res.ok) {
         throw new Error(`GitHub API returned ${res.status}: ${res.statusText}`);
       }
@@ -34,10 +34,8 @@ const Site = () => {
         initialData.map((field) => ({
           ...field,
           // update value if value was returned by call to github
-          value: Object.keys(resData).includes(field.key)
-            ? resData[field.key]
-            : field.value,
-        })),
+          value: Object.keys(resData).includes(field.key) ? resData[field.key] : field.value,
+        }))
       );
     } catch (error) {
       console.error('Error fetching GitHub stats:', error);
@@ -55,7 +53,7 @@ const Site = () => {
   return (
     <div>
       <h3>
-        Some stats about this site 
+        Some stats about this site
         {loading && ' (loading...)'}
         {error && ` (${error})`}
       </h3>
@@ -64,4 +62,4 @@ const Site = () => {
   );
 };
 
-export default Site; 
+export default Site;

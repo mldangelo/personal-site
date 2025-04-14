@@ -9,7 +9,7 @@ const Age = () => {
   const tick = () => {
     // Make sure we're in a browser environment
     if (typeof window === 'undefined') return;
-    
+
     const divisor = 1000 * 60 * 60 * 24 * 365.2421897; // ms in an average year
     const birthTime = new Date('1990-02-05T09:24:00');
     setAge(((Date.now() - birthTime) / divisor).toFixed(11));
@@ -18,7 +18,7 @@ const Age = () => {
   useEffect(() => {
     // Don't run on server side
     if (typeof window === 'undefined') return;
-    
+
     setMounted(true);
     const timer = setInterval(() => tick(), 25);
     return () => {
@@ -49,4 +49,4 @@ const data = [
   },
 ];
 
-export default data; 
+export default data;

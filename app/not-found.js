@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
 import Link from 'next/link';
+import React from 'react';
 import Main from './components/Main';
 
 export default function NotFound() {
@@ -14,7 +14,9 @@ export default function NotFound() {
           </div>
         </header>
         <p>The page you requested does not exist.</p>
-        <p>You may want to head back to the <Link href="/">homepage</Link>.</p>
+        <p>
+          You may want to head back to the <Link href="/">homepage</Link>.
+        </p>
       </article>
     </Main>
   );

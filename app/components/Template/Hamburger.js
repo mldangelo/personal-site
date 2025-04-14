@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
 import Link from 'next/link';
+import React, { useState } from 'react';
 import routes from '../../data/routes';
 
 // We'll only render the BurgerMenu on the client side
@@ -15,7 +15,7 @@ const BurgerMenu = ({ open, setOpen }) => {
       .then((module) => {
         setMenu(() => module.default);
       })
-      .catch(err => {
+      .catch((err) => {
         console.error('Failed to load burger menu:', err);
       });
   }, []);
@@ -65,4 +65,4 @@ const Hamburger = () => {
   );
 };
 
-export default Hamburger; 
+export default Hamburger;

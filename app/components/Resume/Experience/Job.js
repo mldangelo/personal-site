@@ -1,15 +1,11 @@
 'use client';
 
-import React from 'react';
-import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import Markdown from 'markdown-to-jsx';
+import PropTypes from 'prop-types';
+import React from 'react';
 
-const Job = ({
-  data: {
-    name, position, url, startDate, endDate, summary, highlights,
-  },
-}) => (
+const Job = ({ data: { name, position, url, startDate, endDate, summary, highlights } }) => (
   <article className="jobs-container">
     <header>
       <h4>
@@ -58,4 +54,4 @@ Job.propTypes = {
   }).isRequired,
 };
 
-export default Job; 
+export default Job;

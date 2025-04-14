@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
 import PropTypes from 'prop-types';
+import React from 'react';
 
 import TableRow from './TableRow';
 
@@ -27,13 +27,9 @@ Table.propTypes = {
       format: PropTypes.func,
       label: PropTypes.string.isRequired,
       link: PropTypes.string,
-      value: PropTypes.oneOfType([
-        PropTypes.element,
-        PropTypes.number,
-        PropTypes.string,
-      ]),
-    }),
+      value: PropTypes.oneOfType([PropTypes.element, PropTypes.number, PropTypes.string]),
+    })
   ).isRequired,
 };
 
-export default Table; 
+export default Table;

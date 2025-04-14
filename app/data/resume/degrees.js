@@ -13,4 +13,4 @@ const degrees = [
   },
 ];
 
-export default degrees; 
+export default degrees;

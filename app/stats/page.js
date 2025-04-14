@@ -1,7 +1,7 @@
 'use client';
 
-import React, { Suspense } from 'react';
 import Link from 'next/link';
+import React, { Suspense } from 'react';
 
 import Main from '../components/Main';
 
@@ -18,10 +18,7 @@ const StatsSectionLoader = ({ title }) => (
 
 export default function StatsPage() {
   return (
-    <Main
-      title="Stats"
-      description="Some statistics about Michael D'Angelo and mldangelo.com"
-    >
+    <Main title="Stats" description="Some statistics about Michael D'Angelo and mldangelo.com">
       <article className="post" id="stats">
         <header>
           <div className="title">
@@ -30,11 +27,11 @@ export default function StatsPage() {
             </h2>
           </div>
         </header>
-        
+
         <Suspense fallback={<StatsSectionLoader title="Personal Stats" />}>
           <Personal />
         </Suspense>
-        
+
         <Suspense fallback={<StatsSectionLoader title="Site Stats" />}>
           <Site />
         </Suspense>

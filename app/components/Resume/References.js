@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
 import Link from 'next/link';
+import React from 'react';
 
 const References = () => (
   <div className="references">
@@ -14,4 +14,4 @@ const References = () => (
   </div>
 );
 
-export default References; 
+export default References;

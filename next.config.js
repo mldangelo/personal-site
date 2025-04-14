@@ -8,6 +8,10 @@ const nextConfig = {
   sassOptions: {
     includePaths: ['./app/styles'],
   },
+  eslint: {
+    // Skip ESLint during builds since we're using Biome
+    ignoreDuringBuilds: true,
+  },
 };
 
-module.exports = nextConfig; 
+module.exports = nextConfig;

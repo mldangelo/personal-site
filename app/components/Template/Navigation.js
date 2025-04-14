@@ -1,10 +1,10 @@
 'use client';
 
-import React from 'react';
 import Link from 'next/link';
+import React from 'react';
 
-import Hamburger from './Hamburger';
 import routes from '../../data/routes';
+import Hamburger from './Hamburger';
 
 // Websites Navbar, displays routes defined in 'app/data/routes'
 const Navigation = () => (
@@ -33,4 +33,4 @@ const Navigation = () => (
   </header>
 );
 
-export default Navigation; 
+export default Navigation;
