@@ -36,10 +36,10 @@ const courses = [
     university: 'Stanford',
   },
   {
-    title: 'PDE's of Applied Mathematics',
-    number: 'CME 303',
-    link: 'http://web.stanford.edu/class/math220/index.html',
-    university: 'Stanford',
+    title: "PDE's of Applied Mathematics",
+    number: "CME 303",
+    link: "http://web.stanford.edu/class/math220/index.html",
+    university: "Stanford",
   },
   {
     title: 'Introduction to Linear Dynamical Systems',

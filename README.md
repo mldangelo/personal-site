@@ -1,10 +1,10 @@
 # Personal Website
 
-Welcome to my [personal website](https://mldangelo.com)! This is an [MIT licensed](https://github.com/mldangelo/personal-site/blob/main/LICENSE) React-based Jamstack application. It offers a simple interface, easy modifications, static export capabilities, and free automatic deployments via [GitHub Pages](https://pages.github.com/).
+Welcome to my [personal website](https://mldangelo.com)! This is an [MIT licensed](https://github.com/mldangelo/personal-site/blob/main/LICENSE) Next.js-based application. It offers a simple interface, easy modifications, static export capabilities, and free automatic deployments via [GitHub Pages](https://pages.github.com/).
 
 ## 🚀 Features
 
-- Built with modern JavaScript, using tools and frameworks like [create-react-app](https://github.com/facebook/create-react-app), [React-Router](https://reactrouter.com/), and SCSS.
+- Built with modern JavaScript, using [Next.js](https://nextjs.org/) with the App Router, React, and SCSS.
 - Automated workflows via [GitHub Actions](https://github.com/features/actions).
 - And more!
 
@@ -18,7 +18,7 @@ Your contributions are warmly welcomed! If you wish to contribute, please review
 
 ## 🔧 Dependencies
 
-Ensure you have [node](https://nodejs.org/) >= v16. Optionally, use [nvm](https://github.com/nvm-sh/nvm#installing-and-updating) to manage node versions.
+Ensure you have [node](https://nodejs.org/) >= v20. Optionally, use [nvm](https://github.com/nvm-sh/nvm#installing-and-updating) to manage node versions.
 
 ## 🚀 Setup and Running
 
@@ -29,7 +29,7 @@ Ensure you have [node](https://nodejs.org/) >= v16. Optionally, use [nvm](https:
    cd personal-site
    ```
 
-2. (Optional) Ensure you're on Node v16 or higher:
+2. (Optional) Ensure you're on Node v20 or higher:
 
    ```bash
    nvm install
@@ -45,7 +45,7 @@ Ensure you have [node](https://nodejs.org/) >= v16. Optionally, use [nvm](https:
 4. Start the application:
 
    ```bash
-   npm start
+   npm run dev
    ```
 
 By default, the application should be available at [http://localhost:3000/](http://localhost:3000/).
@@ -68,10 +68,10 @@ For a static export without deploying to GitHub Pages:
 - Execute:
 
   ```bash
-  npm run predeploy
+  npm run build
   ```
 
-This will generate a static version in `personal-site/build/` which you can host or deploy to a CDN.
+This will generate a static version in `personal-site/out/` which you can host or deploy to a CDN.
 
 ## 🙌 Acknowledgements
 

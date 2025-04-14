@@ -3,10 +3,12 @@ const os = require('os');
 module.exports = {
   env: {
     browser: true,
-    jest: true,
     node: true,
   },
-  extends: 'airbnb',
+  extends: [
+    'airbnb',
+    'next/core-web-vitals',
+  ],
   ignorePatterns: ['node_modules/', 'build/'],
   parser: '@babel/eslint-parser',
   plugins: ['react'],
@@ -14,9 +16,9 @@ module.exports = {
     'jsx-a11y/anchor-is-valid': [
       'error',
       {
-        aspects: ['noHref', 'invalidHref', 'preferButton'],
         components: ['Link'],
-        specialLink: ['to', 'hrefLeft', 'hrefRight'],
+        specialLink: ['hrefLeft', 'hrefRight'],
+        aspects: ['invalidHref', 'preferButton'],
       },
     ],
     'jsx-a11y/click-events-have-key-events': 0,
@@ -31,10 +33,7 @@ module.exports = {
     ],
     'no-underscore-dangle': 0,
     'react/destructuring-assignment': 0,
-    'react/function-component-definition': [
-      2,
-      { namedComponents: 'arrow-function' },
-    ],
+    'react/function-component-definition': 0,
     'react/jsx-filename-extension': [
       1,
       {
@@ -52,5 +51,11 @@ module.exports = {
         return: true,
       },
     ],
+    'react/prop-types': 0,
+    'react/react-in-jsx-scope': 'off',
+    'import/extensions': 0,
+    'import/no-unresolved': 0,
+    'import/prefer-default-export': 0,
+    'jsx-a11y/media-has-caption': 0,
   },
 };
