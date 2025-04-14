@@ -11,11 +11,11 @@
     "node": ">=20.x"
   },
   "scripts": {
-    "analyze": "ANALYZE=true next build",
-    "build": "next build",
-    "dev": "node node_modules/.bin/next dev",
-    "lint": "next lint",
-    "start": "node node_modules/.bin/next start",
+    "analyze": "ANALYZE=true npx next build",
+    "build": "npx next build",
+    "dev": "npx next dev",
+    "lint": "npx next lint",
+    "start": "npx next start",
     "test": "npx jest"
   },
   "dependencies": {

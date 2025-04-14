@@ -6,9 +6,12 @@ import PropTypes from 'prop-types';
 const TableRow = ({
   label, link, value, format,
 }) => {
+  // Ensure format is a function before using it
+  const safeFormat = typeof format === 'function' ? format : (x) => x;
+  
   // Safely format the value
   const formattedValue = value !== undefined && value !== null 
-    ? format(value) 
+    ? safeFormat(value) 
     : 'N/A';
     
   return (
