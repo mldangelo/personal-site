@@ -16,4 +16,4 @@ export default function ResumePage() {
       </article>
     </Main>
   );
-} 
+}

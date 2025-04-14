@@ -16,4 +16,4 @@ export default function ContactPage() {
       </article>
     </Main>
   );
-} 
+}

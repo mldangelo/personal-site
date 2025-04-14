@@ -4,12 +4,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 
-// Import the components from their current location
-// Later, we'll move these to the new structure
-import Analytics from '../../src/components/Template/Analytics';
-import Navigation from '../../src/components/Template/Navigation';
-import SideBar from '../../src/components/Template/SideBar';
-import ScrollToTop from '../../src/components/Template/ScrollToTop';
+// Import from new component locations
+import Analytics from './Template/Analytics';
+import Navigation from './Template/Navigation';
+import SideBar from './Template/SideBar';
+import ScrollToTop from './Template/ScrollToTop';
 
 const Main = (props) => (
   <HelmetProvider>
@@ -48,4 +47,4 @@ Main.defaultProps = {
   description: "Michael D'Angelo's personal website.",
 };
 
-export default Main; 
+export default Main;

@@ -10,11 +10,19 @@ export default function AboutPage() {
   const [markdown, setMarkdown] = useState('');
 
   useEffect(() => {
-    import('../../src/data/about.md').then((res) => {
-      fetch(res.default)
-        .then((r) => r.text())
-        .then(setMarkdown);
-    });
+    // In Next.js, we need to fetch the markdown content differently
+    fetch('/about.md')
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.text();
+      })
+      .then((text) => setMarkdown(text))
+      .catch((error) => {
+        console.error('Error loading markdown:', error);
+        setMarkdown('Failed to load content. Please try again later.');
+      });
   }, []);
 
   const count = markdown
@@ -37,4 +45,4 @@ export default function AboutPage() {
       </article>
     </Main>
   );
-} 
+}

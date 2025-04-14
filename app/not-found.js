@@ -18,4 +18,4 @@ export default function NotFound() {
       </article>
     </Main>
   );
-} 
+}
