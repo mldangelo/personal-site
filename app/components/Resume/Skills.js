@@ -15,15 +15,16 @@ const Skills = ({ skills, categories }) => {
 
   const handleChildClick = (label) => {
     // Toggle button that was clicked. Turn all other buttons off.
-    const newButtons = Object.keys(buttons).reduce(
-      (obj, key) => ({
-        ...obj,
-        [key]: label === key && !buttons[key],
-      }),
-      {}
-    );
+    // Instead of using spread with reduce, create a new object directly
+    const newButtons = {};
+
+    // Initialize all buttons to false
+    for (const key of Object.keys(buttons)) {
+      newButtons[key] = label === key && !buttons[key];
+    }
+
     // Turn on 'All' button if other buttons are off
-    newButtons.All = !Object.keys(buttons).some((key) => newButtons[key]);
+    newButtons.All = !Object.keys(newButtons).some((key) => newButtons[key]);
     setButtons(newButtons);
   };
 

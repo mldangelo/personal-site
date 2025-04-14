@@ -16,9 +16,9 @@
     "dev": "npx next dev",
     "lint": "biome lint .",
     "format": "biome format --write .",
-    "check": "biome check --apply .",
-    "start": "npx next start",
-    "test": "npx jest"
+    "check": "biome check --write .",
+    "start": "npx next start -p 3001",
+    "clean": "rimraf .next out"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
@@ -33,19 +33,10 @@
     "react-burger-menu": "^3.1.0",
     "react-dom": "^18.3.1",
     "react-ga": "^3.3.1",
-    "react-helmet-async": "^2.0.5",
-    "react-router-dom": "^6.28.0"
+    "react-helmet-async": "^2.0.5"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^16.2.0",
-    "@testing-library/user-event": "^14.6.1",
-    "eslint": "^8.57.1",
-    "eslint-config-airbnb": "^19.0.4",
-    "eslint-plugin-import": "^2.31.0",
-    "eslint-plugin-jsx-a11y": "6.10.2",
-    "eslint-plugin-react": "^7.37.2",
     "rimraf": "^6.0.1",
     "sass": "^1.86.3",
     "source-map-explorer": "^2.5.3"

@@ -1,15 +1,17 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
+// Remove the import for usePathname since we're not using it
+// import { usePathname } from 'next/navigation';
 
 const ScrollToTop = () => {
-  const pathname = usePathname();
+  // Remove the unused pathname declaration
+  // const pathname = usePathname();
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
     window.scrollTo(0, 0);
-  }, [pathname]);
+  }, []); // Runs once on component mount
 
   return null;
 };

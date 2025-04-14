@@ -1,19 +1,19 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 const Age = () => {
   const [age, setAge] = useState('');
   const [mounted, setMounted] = useState(false);
 
-  const tick = () => {
+  const tick = useCallback(() => {
     // Make sure we're in a browser environment
     if (typeof window === 'undefined') return;
 
     const divisor = 1000 * 60 * 60 * 24 * 365.2421897; // ms in an average year
     const birthTime = new Date('1990-02-05T09:24:00');
     setAge(((Date.now() - birthTime) / divisor).toFixed(11));
-  };
+  }, []);
 
   useEffect(() => {
     // Don't run on server side
@@ -24,7 +24,7 @@ const Age = () => {
     return () => {
       clearInterval(timer);
     };
-  }, []);
+  }, [tick]);
 
   if (!mounted) return <>Loading...</>;
   return <>{age}</>;
