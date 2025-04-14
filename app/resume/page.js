@@ -5,8 +5,26 @@ import Link from 'next/link';
 
 import Main from '../components/Main';
 
-// We'll create these components in the next steps
-// Keep this simple for now until we migrate all the components
+import Education from '../components/Resume/Education';
+import Experience from '../components/Resume/Experience';
+import Skills from '../components/Resume/Skills';
+import Courses from '../components/Resume/Courses';
+import References from '../components/Resume/References';
+
+import courses from '../data/resume/courses';
+import degrees from '../data/resume/degrees';
+import work from '../data/resume/work';
+import { skills, categories } from '../data/resume/skills';
+
+// NOTE: sections are displayed in order defined.
+const sections = {
+  Education: () => <Education data={degrees} />,
+  Experience: () => <Experience data={work} />,
+  Skills: () => <Skills skills={skills} categories={categories} />,
+  Courses: () => <Courses data={courses} />,
+  References: () => <References />,
+};
+
 export default function ResumePage() {
   return (
     <Main
@@ -20,15 +38,17 @@ export default function ResumePage() {
               <Link href="/resume">Resume</Link>
             </h2>
             <div className="link-container">
-              <h4><a href="#education">Education</a></h4>
-              <h4><a href="#experience">Experience</a></h4>
-              <h4><a href="#skills">Skills</a></h4>
-              <h4><a href="#courses">Courses</a></h4>
-              <h4><a href="#references">References</a></h4>
+              {Object.keys(sections).map((sec) => (
+                <h4 key={sec}>
+                  <a href={`#${sec.toLowerCase()}`}>{sec}</a>
+                </h4>
+              ))}
             </div>
           </div>
         </header>
-        <p>This page will be completed in the next step of the migration.</p>
+        {Object.entries(sections).map(([name, Section]) => (
+          <Section key={name} />
+        ))}
       </article>
     </Main>
   );
