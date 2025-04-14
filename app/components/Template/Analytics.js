@@ -8,9 +8,11 @@ const Analytics = () => {
   const pathname = usePathname();
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     if (process.env.NODE_ENV === 'production') {
       // Initialize GA if not already initialized
-      if (!window.GA_INITIALIZED) {
+      if (!window.GA_INITIALIZED && process.env.NEXT_PUBLIC_GA_TRACKING_ID) {
         ReactGA.initialize(process.env.NEXT_PUBLIC_GA_TRACKING_ID);
         window.GA_INITIALIZED = true;
       }

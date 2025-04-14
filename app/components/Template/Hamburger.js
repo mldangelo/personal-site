@@ -1,10 +1,15 @@
 'use client';
 
-import React, { Suspense, lazy, useState } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import routes from '../../data/routes';
 
-const Menu = lazy(() => import('react-burger-menu/lib/menus/slide'));
+// Dynamically import the Menu component with SSR disabled
+const Menu = dynamic(
+  () => import('react-burger-menu/lib/menus/slide').then((mod) => mod.default),
+  { ssr: false, loading: () => <></> }
+);
 
 const Hamburger = () => {
   const [open, setOpen] = useState(false);
@@ -28,19 +33,17 @@ const Hamburger = () => {
           )}
         </ul>
       </nav>
-      <Suspense fallback={<></>}>
-        <Menu right isOpen={open}>
-          <ul className="hamburger-ul">
-            {routes.map((l) => (
-              <li key={l.label}>
-                <Link href={l.path} onClick={() => setOpen(!open)}>
-                  <h3 className={l.index ? 'index-li' : undefined}>{l.label}</h3>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </Menu>
-      </Suspense>
+      <Menu right isOpen={open}>
+        <ul className="hamburger-ul">
+          {routes.map((l) => (
+            <li key={l.label}>
+              <Link href={l.path} onClick={() => setOpen(!open)}>
+                <h3 className={l.index ? 'index-li' : undefined}>{l.label}</h3>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </Menu>
     </div>
   );
 };

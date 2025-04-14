@@ -1,12 +1,18 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import ContactIcons from '../Contact/ContactIcons';
 
 const SideBar = () => {
   const pathname = usePathname();
+  const [showResumeLink, setShowResumeLink] = useState(true);
+
+  useEffect(() => {
+    // Check pathname only on the client side
+    setShowResumeLink(!pathname.includes('/resume'));
+  }, [pathname]);
 
   return (
     <section id="sidebar">
@@ -35,7 +41,7 @@ const SideBar = () => {
         </p>
         <ul className="actions">
           <li>
-            {!pathname.includes('/resume') ? (
+            {showResumeLink ? (
               <Link href="/resume" className="button">
                 Learn More
               </Link>
