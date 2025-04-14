@@ -1,19 +1,27 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
+
 import Main from '../components/Main';
+import Cell from '../components/Projects/Cell';
+import data from '../data/projects';
 
 export default function ProjectsPage() {
   return (
-    <Main title="Projects" description="Learn about Michael D'Angelo's projects">
+    <Main title="Projects" description="Learn about Michael D'Angelo's projects.">
       <article className="post" id="projects">
         <header>
           <div className="title">
-            <h2>Projects</h2>
-            <p>A selection of projects I've worked on</p>
+            <h2>
+              <Link href="/projects">Projects</Link>
+            </h2>
+            <p>A selection of projects that I&apos;m not too ashamed of</p>
           </div>
         </header>
-        <p>Content will be migrated from the original project.</p>
+        {data.map((project) => (
+          <Cell data={project} key={project.title} />
+        ))}
       </article>
     </Main>
   );
