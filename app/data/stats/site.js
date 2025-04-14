@@ -1,3 +1,5 @@
+'use client';
+
 import dayjs from 'dayjs';
 
 /* Keys match keys returned by the github api. Fields without keys are

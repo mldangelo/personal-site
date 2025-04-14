@@ -5,12 +5,23 @@ import PropTypes from 'prop-types';
 
 const TableRow = ({
   label, link, value, format,
-}) => (
-  <tr>
-    <td width="70%">{label}</td>
-    <td>{link ? <a href={link}>{format(value)}</a> : format(value)}</td>
-  </tr>
-);
+}) => {
+  // Safely format the value
+  const formattedValue = value !== undefined && value !== null 
+    ? format(value) 
+    : 'N/A';
+    
+  return (
+    <tr>
+      <td width="70%">{label}</td>
+      <td>
+        {link 
+          ? <a href={link} target="_blank" rel="noopener noreferrer">{formattedValue}</a> 
+          : formattedValue}
+      </td>
+    </tr>
+  );
+};
 
 TableRow.propTypes = {
   format: PropTypes.func,
