@@ -1,0 +1,138 @@
+/* Resume */
+
+#resume {
+  .link-to {
+    position: relative;
+    top: -4.5em;
+  }
+
+  .link-container h4 {
+    text-decoration: none;
+    border-bottom: none;
+    display: inline-flex;
+
+    a {
+      padding: 0 0.5em;
+      margin: 0;
+    }
+  }
+
+  .education {
+    .title {
+      text-align: center;
+      margin-bottom: 2em;
+    }
+  }
+  .experience {
+    .title {
+      text-align: center;
+    }
+    .job {
+      margin: 1em;
+      p {
+        margin: 0;
+      }
+    }
+  }
+
+  .jobs-container {
+    .points {
+      li {
+        margin: 0;
+        padding: 0;
+        font-size: 0.9em;
+      }
+    }
+  }
+
+  .courses {
+    padding-top: 1.6em;
+    .title {
+      text-align: center;
+    }
+    .course-list {
+      text-align: center;
+
+      h4 {
+        white-space: nowrap;
+      }
+    }
+  }
+
+  .skills {
+    margin-top: 2em;
+    .title {
+      text-align: center;
+      p {
+        font-size: 0.9em;
+      }
+    }
+  }
+
+  .summary {
+    margin-bottom: 0.5em;
+    font-size: 0.9em;
+  }
+
+  .references {
+    margin: 2em 0;
+    .title {
+      text-align: center;
+    }
+  }
+}
+
+.daterange {
+  margin-bottom: 0.2em;
+}
+
+.degree-container {
+  h4 {
+    font-weight: normal;
+  }
+
+  .degree {
+    margin-bottom: 0.1em;
+    text-transform: none;
+    letter-spacing: 0.16em;
+    font-size: 0.8em;
+  }
+
+  .school {
+    text-transform: none;
+    padding-top: 0.3em;
+    margin-bottom: 1em;
+  }
+}
+
+.courses .course-number {
+  display: inline;
+}
+.courses .course-name {
+  display: inline;
+  font-family: "Raleway", Helvetica, sans-serif;
+  font-size: 0.7em;
+  font-weight: 400;
+  letter-spacing: 0.25em;
+  line-height: 2.5;
+  margin-top: -1em;
+  text-transform: uppercase;
+}
+
+.courses ul li {
+  display: inline;
+}
+
+.course-dot {
+  display: inline;
+  // display: none;
+}
+
+@include breakpoint(small) {
+  .course-dot {
+    display: none;
+  }
+  .course-container a {
+    display: block;
+  }
+}

@@ -7,7 +7,7 @@ const nextConfig = {
     unoptimized: true, // Required for static export
   },
   sassOptions: {
-    includePaths: ['./src/static/css'],
+    includePaths: ['./app/styles'],
   },
 };
 

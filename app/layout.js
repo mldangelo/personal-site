@@ -1,4 +1,4 @@
-import '../src/static/css/main.scss';
+import './styles/main.scss';
 
 export const metadata = {
   title: "Michael D'Angelo",
