@@ -8,14 +8,14 @@
     "url": "https://github.com/mldangelo/personal-site.git"
   },
   "engines": {
-    "node": ">=16.x"
+    "node": ">=20.x"
   },
   "scripts": {
     "analyze": "ANALYZE=true next build",
     "build": "next build",
-    "dev": "next dev",
+    "dev": "node node_modules/.bin/next dev",
     "lint": "next lint",
-    "start": "next start",
+    "start": "node node_modules/.bin/next start",
     "test": "npx jest"
   },
   "dependencies": {
@@ -25,31 +25,26 @@
     "@fortawesome/react-fontawesome": "0.2.2",
     "dayjs": "^1.11.13",
     "markdown-to-jsx": "^7.7.1",
+    "next": "^15.3.0",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
-    "react-burger-menu": "^3.0.9",
+    "react-burger-menu": "^3.1.0",
     "react-dom": "^18.3.1",
     "react-ga": "^3.3.1",
     "react-helmet-async": "^2.0.5",
-    "react-router-dom": "^6.28.0",
-    "react-scripts": "^5.0.1"
+    "react-router-dom": "^6.28.0"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.25.9",
-    "@babel/preset-env": "^7.25.3",
-    "@babel/preset-react": "^7.26.3",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^16.2.0",
     "@testing-library/user-event": "^14.6.1",
-    "babel-jest": "^29.7.0",
     "eslint": "^8.57.1",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-jsx-a11y": "6.10.2",
     "eslint-plugin-react": "^7.37.2",
-    "react-snap": "^1.23.0",
     "rimraf": "^6.0.1",
-    "sass": "^1.85.0",
+    "sass": "^1.86.3",
     "source-map-explorer": "^2.5.3"
   },
   "browserslist": {

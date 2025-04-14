@@ -2,14 +2,41 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import dynamic from 'next/dynamic';
 import routes from '../../data/routes';
 
-// Dynamically import the Menu component with SSR disabled
-const Menu = dynamic(
-  () => import('react-burger-menu/lib/menus/slide').then((mod) => mod.default),
-  { ssr: false, loading: () => <></> }
-);
+// We'll only render the BurgerMenu on the client side
+const BurgerMenu = ({ open, setOpen }) => {
+  // Import the burger menu component only on the client side
+  const [Menu, setMenu] = useState(null);
+
+  React.useEffect(() => {
+    // Dynamically import the Menu component only on the client side
+    import('react-burger-menu/lib/menus/slide')
+      .then((module) => {
+        setMenu(() => module.default);
+      })
+      .catch(err => {
+        console.error('Failed to load burger menu:', err);
+      });
+  }, []);
+
+  // Only render the menu if it's loaded
+  if (!Menu) return null;
+
+  return (
+    <Menu right isOpen={open}>
+      <ul className="hamburger-ul">
+        {routes.map((l) => (
+          <li key={l.label}>
+            <Link href={l.path} onClick={() => setOpen(!open)}>
+              <h3 className={l.index ? 'index-li' : undefined}>{l.label}</h3>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </Menu>
+  );
+};
 
 const Hamburger = () => {
   const [open, setOpen] = useState(false);
@@ -33,17 +60,7 @@ const Hamburger = () => {
           )}
         </ul>
       </nav>
-      <Menu right isOpen={open}>
-        <ul className="hamburger-ul">
-          {routes.map((l) => (
-            <li key={l.label}>
-              <Link href={l.path} onClick={() => setOpen(!open)}>
-                <h3 className={l.index ? 'index-li' : undefined}>{l.label}</h3>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </Menu>
+      <BurgerMenu open={open} setOpen={setOpen} />
     </div>
   );
 };
