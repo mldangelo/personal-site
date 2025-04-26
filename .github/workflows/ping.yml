@@ -1,0 +1,8 @@
+# .github/workflows/ping.yml
+name: ping
+on: push
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🎉 workflow triggered!"
