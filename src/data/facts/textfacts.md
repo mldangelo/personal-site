@@ -1,0 +1,4 @@
+- I share the same name (both the pronunciation and Chinese characters) with more than 120'000 people in this world. To further distinguish me, use my personal code *No. 1a685a255*.
+- I love my name. It's easy.
+- I am the only child in my family.
+- [Lugano, the beautiful Swiss city, is the sister city of my hometown Hangzhou.](https://www.ehangzhou.gov.cn/2018-06/15/c_243457.htm)

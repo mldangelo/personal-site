@@ -1,25 +1,29 @@
 const routes = [
   {
     index: true,
-    label: "Michael D'Angelo",
+    label: 'Kai Zhang',
     path: '/',
   },
   {
-    label: 'About',
-    path: '/about',
+    label: 'Home',
+    path: '/',
   },
+  // {
+  //   label: 'CV',
+  //   path: '/resume',
+  // },
   {
-    label: 'Resume',
-    path: '/resume',
+    label: 'Research',
+    path: '/research',
   },
-  {
-    label: 'Projects',
-    path: '/projects',
-  },
-  {
-    label: 'Stats',
-    path: '/stats',
-  },
+  // {
+  //   label: 'About',
+  //   path: '/about',
+  // },
+  // {
+  //   label: 'Stats',
+  //   path: '/stats',
+  // },
   {
     label: 'Contact',
     path: '/contact',

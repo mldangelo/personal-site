@@ -7,6 +7,7 @@
 /* Intro */
 
 #intro {
+
   .logo {
     border-bottom: 0;
     display: inline-block;
@@ -15,13 +16,17 @@
     position: relative;
 
     img {
-      width: 10em;
+      width: 15em;
       border-radius: 50%;
       display: block;
     }
   }
 
   header {
+    width: 15em; // Same as image width
+    // margin-left: auto;
+    // margin-right: auto;
+    text-align: center;
     h2 {
       font-size: 1.5em;
       font-weight: _font(weight-heading-extrabold);
@@ -37,8 +42,10 @@
     text-align: center;
 
     header {
+      margin-left: auto;
+      margin-right: auto;
       h2 {
-        font-size: 2em;
+        font-size: 1.5em;
       }
 
       p {
@@ -60,6 +67,8 @@
     }
 
     header {
+      margin-left: auto;
+      margin-right: auto;
       h2 {
         font-size: 1.25em;
       }

@@ -26,13 +26,13 @@ const sections = {
 const Resume = () => (
   <Main
     title="Resume"
-    description="Michael D'Angelo's Resume. Smile Identity, Arthena, Matroid, YC, Skeptical Investments, Stanford ICME, Planet, and Facebook."
+    description="Kai Zhang's CV."
   >
     <article className="post" id="resume">
       <header>
         <div className="title">
           <h2>
-            <Link to="resume">Resume</Link>
+            <Link to="resume">Curriculum Vitae</Link>
           </h2>
           <div className="link-container">
             {Object.keys(sections).map((sec) => (

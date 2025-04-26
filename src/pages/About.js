@@ -21,17 +21,18 @@ const About = () => {
     .filter((s) => s.length).length;
 
   return (
-    <Main title="About" description="Learn about Michael D'Angelo">
+    <Main title="About" description="Learn about Kai Zhang">
       <article className="post markdown" id="about">
         <header>
           <div className="title">
             <h2>
-              <Link to="/about">About Me</Link>
+              <Link to="/">About Me</Link>
             </h2>
             <p>(in about {count} words)</p>
           </div>
         </header>
         <Markdown>{markdown}</Markdown>
+        <p><Link to="/facts">You can click here to view my random facts.</Link></p>
       </article>
     </Main>
   );
