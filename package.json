@@ -35,7 +35,7 @@
     "react-scripts": "^5.0.1"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.25.9",
+    "@babel/eslint-parser": "^7.27.0",
     "@babel/preset-env": "^7.25.3",
     "@babel/preset-react": "^7.26.3",
     "@testing-library/jest-dom": "^6.6.3",
