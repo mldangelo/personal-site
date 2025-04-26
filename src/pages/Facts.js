@@ -17,7 +17,10 @@ const Facts = () => (
           <h2>
             <Link to="/facts">Random Facts</Link>
           </h2>
-          <p>The random facts about me are small yet certain proofs that I am unlike anyone else in this world.</p>
+          <p>
+            The random facts about me are small
+            yet certain proofs that I am unlike anyone else in this world.
+          </p>
         </div>
       </header>
       <Personal />
