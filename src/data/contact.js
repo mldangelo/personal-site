@@ -21,7 +21,7 @@ const data = [
     icon: faGithub,
   },
   {
-    link: 'https://www.linkedin.com/in/kai-zhang-1a685a255/',
+    link: 'https://www.linkedin.com/in/kaizhang2099/',
     label: 'LinkedIn',
     icon: faLinkedinIn,
   },

@@ -24,7 +24,7 @@ const Contact = () => (
         <p>
           ETH Zürich<br />
           Automatic Control Laboratory (IfA)<br />
-          Physikstrasse 3, ETL K 11<br />
+          Physikstrasse 3, ETL K11<br />
           CH-8092 Zürich
         </p>
         {/* <EmailLink /> */}
