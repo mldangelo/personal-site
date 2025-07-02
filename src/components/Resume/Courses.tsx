@@ -14,9 +14,7 @@ const getRows = (courses: CourseType[]) =>
       else if (a.number < b.number) ret = -1;
       return ret;
     })
-    .map((course, idx) => (
-      <Course data={course} key={course.title} last={idx === courses.length - 1} />
-    ));
+    .map((course) => <Course data={course} key={course.title} />);
 
 interface CoursesProps {
   data?: CourseType[];
