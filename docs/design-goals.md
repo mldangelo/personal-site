@@ -35,7 +35,7 @@ This projects attempts to follow these design principles. Feedback and discussio
 ## Stable
 
 1. Use _Boring_ technologies
-   - Javascript over reason or typescript. Limited ecmascript experimental features.
+   - TypeScript for type safety while maintaining readability. Limited experimental features.
    - Prefer popular and well maintained npm packages.
 1. Maintainable
    - Easy setup.

@@ -7,33 +7,33 @@ You may wish to fork this repository or remove my remote origin and add your own
 ## Before you start
 
 1. Make sure you have a good text editor. I recommend [Visual Studio Code](https://code.visualstudio.com/).
-1. Review `src/App.js`. This file contains all of our route definitions. If you wish to add or remove a page, you should do so here.
+2. Review the project structure. This is a Next.js app using the App Router. Pages are defined in the `app/` directory. If you wish to add or remove a page, you should do so there.
 
 ## Checklist
 
 ### Setup
 
 1. Run the project before making any modifications by following the set up and running instructions in the main [README.md](https://github.com/mldangelo/personal-site#set-up).
-1. Change `homepage` in `package.json` to reflect where you plan to host the site. This is important for static exporting via react-snap. This also changes your path when developing locally. For example, a homepage of `mldangelo.com` places the site at `localhost:3000` and a homepage of `https://mldangelo.github.io/personal-site/` places the site at `localhost:3000/personal-site/`. If you plan to host at on a path such as `https://[your-github-username].github.io/[your-repo-name]`, you should set this now so that your development environment mirrors your production environment.
-1. Create a `.env` file. To do this, run:
+2. Change `homepage` in `package.json` to reflect where you plan to host the site. This is important for static exporting. This also changes your path when developing locally. For example, a homepage of `mldangelo.com` places the site at `localhost:3000` and a homepage of `https://mldangelo.github.io/personal-site/` places the site at `localhost:3000/personal-site/`. If you plan to host at on a path such as `https://[your-github-username].github.io/[your-repo-name]`, you should set this now so that your development environment mirrors your production environment.
+3. Create a `.env.local` file. To do this, run:
 
    ```bash
-   cp sample.env .env
+   cp .env.example .env.local
    ```
 
-   and set values as appropriate. Most people will not need to modify this file.
+   and set values as appropriate. Most people will only need to update the Google Analytics tracking ID.
 
 ### Adapt Content
 
-I recommend keeping the project running as you go (with `npm start`) to help correct mistakes quickly.
+I recommend keeping the project running as you go (with `npm run dev`) to help correct mistakes quickly.
 
-1. Start by changing text in the sidebar. This file is located at `src/components/Template/SideBar.js`.
-1. Add an image of yourself in `public/images/me.jpg`. Your image should be approximately 256 x 256 pixels. Larger and smaller is ok, but avoid very large images to save bandwidth. If you need help resizing your image, Adobe makes a great online tool [here](https://www.adobe.com/photoshop/online/resize-image.html).
-1. Modify the text on the homepage. This file is located at `src/pages/Index.js`.
-1. Modify the files in `src/data/resume/` next.
-1. Modify all of the other files in the `src/data/` directory.
-1. You've finished modifying >95% of the pages. Search through the rest of the files for references to `Michael` or `Angelo` and change values to your name.
-1. Change or remove the favicon in `public/index.html`. [This](https://realfavicongenerator.net/) website may be helpful.
+1. Start by changing text in the sidebar. This file is located at `src/components/Template/SideBar.tsx`.
+2. Add an image of yourself in `public/images/me.jpg`. Your image should be approximately 256 x 256 pixels. Larger and smaller is ok, but avoid very large images to save bandwidth. If you need help resizing your image, Adobe makes a great online tool [here](https://www.adobe.com/photoshop/online/resize-image.html).
+3. Modify the text on the homepage. This file is located at `app/page.tsx`.
+4. Modify the files in `src/data/resume/` next.
+5. Modify all of the other files in the `src/data/` directory.
+6. You've finished modifying >95% of the pages. Search through the rest of the files for references to `Michael` or `Angelo` and change values to your name.
+7. Change or remove the favicon in `public/favicon.ico` and images in `public/images/favicon/`. [This](https://realfavicongenerator.net/) website may be helpful.
 
 ### Deploy
 
@@ -69,13 +69,13 @@ Here are answers to questions I've been asked at least twice. I've attempted to 
 
    Github decided to rename the default branch of all of their repositories from master to main, and so did I. See their reasoning [here](https://github.com/github/renaming). If you're trying to pull in recent changes, consider renaming your own branch, or just create a merge commit from my main.
 
-4. Google Analytics Warnings when exporting.
+4. Google Analytics Warnings when building.
 
-   Either set up Google Analytics or disable the `Analytics.js` component. Read more about [react-ga](https://github.com/react-ga/react-ga).
+   Either set up Google Analytics 4 or remove the `<GoogleAnalytics />` component from `app/layout.tsx`. The site now uses the official `@next/third-parties` package for GA4 integration.
 
 5. How do I configure git? What is nano?
 
-   Read through [git-scm](https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup)'s excellent documentation. I recommend setting your default text editor to something you're comfortable with.I like to use vim for writing commit messages.
+   Read through [git-scm](https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup)'s excellent documentation. I recommend setting your default text editor to something you're comfortable with. I like to use vim for writing commit messages.
 
 6. Can I host at [username.github.io]?
 

@@ -4,7 +4,7 @@ Welcome to my [personal website](https://mldangelo.com)! This is an [MIT license
 
 ## 🚀 Features
 
-- Built with modern TypeScript, using [Next.js 14](https://nextjs.org/), [React 18](https://react.dev/), and SCSS.
+- Built with modern TypeScript, using [Next.js 15](https://nextjs.org/), [React 18](https://react.dev/), and SCSS.
 - Type-safe development with TypeScript strict mode.
 - Optimized performance with static export and automatic font optimization.
 - Automated workflows via [GitHub Actions](https://github.com/features/actions).
@@ -58,8 +58,9 @@ Ensure you have [node](https://nodejs.org/) >= v24. Optionally, use [nvm](https:
 
    ```bash
    npm run build
-   npm run export
    ```
+
+   The build process automatically creates a static export in the `out/` directory.
 
 2. Preview the production build locally:
 
@@ -89,16 +90,17 @@ You can export the site as static HTML to host anywhere:
 
 ```bash
 npm run build
-npm run export
 ```
 
-The static files will be in the `out/` directory.
+The static files will be automatically generated in the `out/` directory.
 
 ## 🔬 Testing
 
 ```bash
 npm run lint          # Run ESLint
 npm run type-check    # Run TypeScript type checking
+npm run format        # Format code with Prettier
+npm run format:check  # Check code formatting
 ```
 
 ## 🎨 Customization

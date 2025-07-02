@@ -8,7 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 # Install dependencies
 npm install
 
-# Start development server (http://localhost:3000)
+# Start development server with Turbopack (http://localhost:3000)
 npm run dev
 
 # Run linting
@@ -20,11 +20,8 @@ npm run type-check
 # Build for production
 npm run build
 
-# Export static site
-npm run export
-
 # Build and export (for deployment)
-npm run predeploy
+npm run predeploy  # This runs 'npm run build' which includes static export
 
 # Analyze bundle size
 npm run analyze
@@ -35,7 +32,7 @@ npm run analyze
 This is a personal portfolio/resume website built with Next.js and TypeScript, designed to be easily forked and customized.
 
 ### Technology Stack
-- **Next.js 14** with App Router
+- **Next.js 15** with App Router
 - **TypeScript** for type safety
 - **React 18** with functional components and hooks
 - **SCSS** for styling
@@ -65,5 +62,5 @@ This is a personal portfolio/resume website built with Next.js and TypeScript, d
 - All pages must remain exactly the same as the original React site
 - The site uses static export (`output: 'export'`) for GitHub Pages compatibility
 - Client components use 'use client' directive
-- Google Analytics is configured with NEXT_PUBLIC_GA_TRACKING_ID
+- Google Analytics 4 is configured with NEXT_PUBLIC_GA_TRACKING_ID using @next/third-parties
 - Fonts are optimized using Next.js font optimization
