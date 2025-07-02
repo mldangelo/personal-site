@@ -11,7 +11,7 @@
     "node": ">=24.x"
   },
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -45,6 +45,7 @@
     "eslint-config-next": "^15.3.4",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.5.1",
+    "postcss-normalize": "^13.0.1",
     "prettier": "^3.6.2",
     "raw-loader": "^4.0.2",
     "sass": "^1.89.2",
