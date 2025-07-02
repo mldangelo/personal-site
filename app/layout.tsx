@@ -3,7 +3,7 @@ import React from 'react';
 import type { Metadata } from 'next';
 import { Raleway, Source_Sans_3 } from 'next/font/google';
 
-import Analytics from '@/components/Template/Analytics';
+import GoogleAnalytics from '@/components/Template/GoogleAnalytics';
 import Navigation from '@/components/Template/Navigation';
 import '@/static/css/main.scss';
 
@@ -33,11 +33,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${sourceSans.variable} ${raleway.variable}`}>
       <body>
-        <Analytics />
         <div id="wrapper">
           <Navigation />
           {children}
         </div>
+        <GoogleAnalytics />
       </body>
     </html>
   );
