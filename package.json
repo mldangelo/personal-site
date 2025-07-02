@@ -8,15 +8,17 @@
     "url": "https://github.com/mldangelo/personal-site.git"
   },
   "engines": {
-    "node": ">=16.x"
+    "node": ">=24.x"
   },
   "scripts": {
-    "analyze": "npm run build && source-map-explorer build/static/js/*.chunk.js",
-    "build": "rimraf ./build && react-scripts build",
-    "lint": "eslint \"**/*.js\"",
-    "predeploy": "npm run build && react-snap",
-    "start": "react-scripts start",
-    "test": "npx jest"
+    "dev": "next dev",
+    "build": "next build",
+    "export": "next export",
+    "start": "next start",
+    "lint": "next lint",
+    "type-check": "tsc --noEmit",
+    "predeploy": "npm run build && npm run export",
+    "analyze": "ANALYZE=true npm run build"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
@@ -25,32 +27,31 @@
     "@fortawesome/react-fontawesome": "0.2.2",
     "dayjs": "^1.11.13",
     "markdown-to-jsx": "^7.7.1",
-    "prop-types": "^15.8.1",
+    "next": "14.2.15",
     "react": "^18.3.1",
     "react-burger-menu": "^3.0.9",
     "react-dom": "^18.3.1",
-    "react-ga": "^3.3.1",
-    "react-helmet-async": "^2.0.5",
-    "react-router-dom": "^6.28.0",
-    "react-scripts": "^5.0.1"
+    "react-ga": "^3.3.1"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.25.9",
-    "@babel/preset-env": "^7.25.3",
-    "@babel/preset-react": "^7.26.3",
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^16.2.0",
-    "@testing-library/user-event": "^14.6.1",
-    "babel-jest": "^29.7.0",
+    "@next/bundle-analyzer": "^14.2.15",
+    "@types/node": "^22.9.0",
+    "@types/react": "^18.3.12",
+    "@types/react-burger-menu": "^2.8.7",
+    "@types/react-dom": "^18.3.1",
+    "@types/react-router-dom": "^5.3.3",
+    "@typescript-eslint/eslint-plugin": "^8.13.0",
+    "@typescript-eslint/parser": "^8.13.0",
     "eslint": "^8.57.1",
     "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-airbnb-typescript": "^18.0.0",
+    "eslint-config-next": "14.2.15",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-jsx-a11y": "6.10.2",
     "eslint-plugin-react": "^7.37.2",
-    "react-snap": "^1.23.0",
-    "rimraf": "^6.0.1",
+    "eslint-plugin-react-hooks": "^5.0.0",
     "sass": "^1.85.0",
-    "source-map-explorer": "^2.5.3"
+    "typescript": "^5.7.2"
   },
   "browserslist": {
     "production": [

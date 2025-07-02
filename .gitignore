@@ -42,6 +42,11 @@ dist/
 tmp/
 build/
 
+# Next.js
+.next/
+out/
+.swc/
+
 # OSX
 .DS_Store
 

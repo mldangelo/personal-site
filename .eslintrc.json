@@ -1,0 +1,25 @@
+{
+  "extends": [
+    "next/core-web-vitals",
+    "airbnb",
+    "airbnb-typescript"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "rules": {
+    "react/jsx-filename-extension": [1, { "extensions": [".tsx"] }],
+    "react/prop-types": "off",
+    "react/require-default-props": "off",
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "ts": "never",
+        "tsx": "never"
+      }
+    ],
+    "@typescript-eslint/explicit-module-boundary-types": "off"
+  }
+}
