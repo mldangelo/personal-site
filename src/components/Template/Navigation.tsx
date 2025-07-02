@@ -5,7 +5,7 @@ import Hamburger from './Hamburger';
 import routes from '../../data/routes';
 
 // Websites Navbar, displays routes defined in 'src/data/routes'
-const Navigation = () => (
+const Navigation: React.FC = () => (
   <header id="header">
     <h1 className="index-link">
       {routes

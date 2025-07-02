@@ -1,4 +1,10 @@
-const routes = [
+export interface Route {
+  label: string;
+  path: string;
+  index?: boolean;
+}
+
+const routes: Route[] = [
   {
     index: true,
     label: "Michael D'Angelo",
