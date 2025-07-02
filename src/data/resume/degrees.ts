@@ -1,4 +1,11 @@
-const degrees = [
+export interface Degree {
+  school: string;
+  degree: string;
+  link: string;
+  year: number;
+}
+
+const degrees: Degree[] = [
   {
     school: 'Stanford University',
     degree: 'M.S. Computational and Mathematical Engineering',

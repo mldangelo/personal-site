@@ -1,8 +1,9 @@
+'use client';
+
 import React, { useState, useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
 
 // Validates the first half of an email address.
-const validateText = (text) => {
+const validateText = (text: string): boolean => {
   // NOTE: Passes RFC 5322 but not tested on google's standard.
   // eslint-disable-next-line no-useless-escape
   const re = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))$/;
@@ -27,8 +28,8 @@ const messages = [
   'thanks',
 ];
 
-const useInterval = (callback, delay) => {
-  const savedCallback = useRef();
+const useInterval = (callback: () => void, delay: number | null) => {
+  const savedCallback = useRef<() => void>();
 
   useEffect(() => {
     savedCallback.current = callback;
@@ -37,7 +38,7 @@ const useInterval = (callback, delay) => {
   useEffect(() => {
     if (delay) {
       const id = setInterval(() => {
-        savedCallback.current();
+        savedCallback.current?.();
       }, delay);
       return () => clearInterval(id);
     }
@@ -45,7 +46,11 @@ const useInterval = (callback, delay) => {
   }, [delay]);
 };
 
-const EmailLink = ({ loopMessage = false }) => {
+interface EmailLinkProps {
+  loopMessage?: boolean;
+}
+
+const EmailLink: React.FC<EmailLinkProps> = ({ loopMessage = false }) => {
   const hold = 50; // ticks to wait after message is complete before rendering next message
   const delay = 50; // tick length in mS
 
@@ -91,10 +96,6 @@ const EmailLink = ({ loopMessage = false }) => {
       </a>
     </div>
   );
-};
-
-EmailLink.propTypes = {
-  loopMessage: PropTypes.bool,
 };
 
 export default EmailLink;
