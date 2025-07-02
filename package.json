@@ -13,13 +13,12 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "export": "next export",
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,scss}\"",
     "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,scss}\"",
-    "predeploy": "npm run build && npm run export",
+    "predeploy": "npm run build",
     "analyze": "ANALYZE=true npm run build"
   },
   "dependencies": {
