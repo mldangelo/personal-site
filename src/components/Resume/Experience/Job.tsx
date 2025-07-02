@@ -26,8 +26,10 @@ const Job: React.FC<JobProps> = ({
     {summary ? (
       <Markdown
         options={{
+          wrapper: React.Fragment,
           overrides: {
             p: {
+              component: 'div',
               props: {
                 className: 'summary',
               },

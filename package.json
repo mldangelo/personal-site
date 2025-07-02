@@ -30,17 +30,17 @@
     "dayjs": "^1.11.13",
     "markdown-to-jsx": "^7.7.10",
     "next": "^15.3.4",
-    "react": "^18.3.1",
+    "react": "^19.1.0",
     "react-burger-menu": "^3.1.0",
-    "react-dom": "^18.3.1"
+    "react-dom": "^19.1.0"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "^15.3.4",
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
     "@types/node": "^24.0.10",
-    "@types/react": "^18.3.23",
+    "@types/react": "^19.1.8",
     "@types/react-burger-menu": "^2.8.7",
-    "@types/react-dom": "^18.3.7",
+    "@types/react-dom": "^19.1.6",
     "eslint": "^8.57.1",
     "eslint-config-next": "^15.3.4",
     "eslint-config-prettier": "^10.1.5",

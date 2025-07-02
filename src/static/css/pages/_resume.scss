@@ -72,6 +72,16 @@
   .summary {
     margin-bottom: 0.5em;
     font-size: 0.9em;
+    display: block;
+
+    p {
+      margin-bottom: 0.5em;
+    }
+
+    a {
+      color: _palette(accent);
+      text-decoration: underline;
+    }
   }
 
   .references {

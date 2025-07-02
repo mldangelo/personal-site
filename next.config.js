@@ -6,6 +6,7 @@ const nextConfig = {
   },
   sassOptions: {
     includePaths: ['./src/static/css'],
+    silenceDeprecations: ['import'], // Silence @import deprecation warnings
   },
   basePath: process.env.NODE_ENV === 'production' ? '' : '',
   assetPrefix: process.env.NODE_ENV === 'production' ? '' : '',
