@@ -21,6 +21,7 @@ $size: (
 // Font.
 $font: (
   family: (
+    var(--font-source-sans),
     "Source Sans Pro",
     Helvetica,
     sans-serif,
@@ -30,6 +31,7 @@ $font: (
     monospace,
   ),
   family-heading: (
+    var(--font-raleway),
     "Raleway",
     Helvetica,
     sans-serif,
