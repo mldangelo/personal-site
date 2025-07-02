@@ -1,19 +1,25 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-
 import CategoryButton from './Skills/CategoryButton';
 import SkillBar from './Skills/SkillBar';
+import type { Skill, Category } from '../../data/resume/skills';
 
-const Skills = ({ skills = [], categories = [] }) => {
-  const initialButtons = Object.fromEntries(
+interface SkillsProps {
+  skills?: Skill[];
+  categories?: Category[];
+}
+
+type ButtonState = Record<string, boolean>;
+
+const Skills: React.FC<SkillsProps> = ({ skills = [], categories = [] }) => {
+  const initialButtons: ButtonState = Object.fromEntries(
     [['All', false]].concat(categories.map(({ name }) => [name, false])),
   );
 
-  const [buttons, setButtons] = useState(initialButtons);
+  const [buttons, setButtons] = useState<ButtonState>(initialButtons);
 
-  const handleChildClick = (label) => {
+  const handleChildClick = (label: string): void => {
     // Toggle button that was clicked. Turn all other buttons off.
-    const newButtons = Object.keys(buttons).reduce(
+    const newButtons = Object.keys(buttons).reduce<ButtonState>(
       (obj, key) => ({
         ...obj,
         [key]: label === key && !buttons[key],
@@ -25,14 +31,14 @@ const Skills = ({ skills = [], categories = [] }) => {
     setButtons(newButtons);
   };
 
-  const getRows = () => {
+  const getRows = (): React.ReactElement[] => {
     // search for true active categories
     const actCat = Object.keys(buttons).reduce(
       (cat, key) => (buttons[key] ? key : cat),
       'All',
     );
 
-    const comparator = (a, b) => {
+    const comparator = (a: Skill, b: Skill): number => {
       let ret = 0;
       if (a.competency > b.competency) ret = -1;
       else if (a.competency < b.competency) ret = 1;
@@ -51,7 +57,7 @@ const Skills = ({ skills = [], categories = [] }) => {
       ));
   };
 
-  const getButtons = () => Object.keys(buttons).map((key) => (
+  const getButtons = (): React.ReactElement[] => Object.keys(buttons).map((key) => (
     <CategoryButton
       label={key}
       key={key}
@@ -74,22 +80,6 @@ const Skills = ({ skills = [], categories = [] }) => {
       <div className="skill-row-container">{getRows()}</div>
     </div>
   );
-};
-
-Skills.propTypes = {
-  skills: PropTypes.arrayOf(
-    PropTypes.shape({
-      title: PropTypes.string,
-      competency: PropTypes.number,
-      category: PropTypes.arrayOf(PropTypes.string),
-    }),
-  ),
-  categories: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string,
-      color: PropTypes.string,
-    }),
-  ),
 };
 
 export default Skills;
