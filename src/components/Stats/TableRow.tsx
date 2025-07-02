@@ -1,10 +1,11 @@
 import React from 'react';
+
 import { TableRowProps } from './types';
 
 const TableRow: React.FC<TableRowProps> = ({
-  label, 
-  link = null, 
-  value = null, 
+  label,
+  link = null,
+  value = null,
   format = (x) => String(x),
 }) => (
   <tr>

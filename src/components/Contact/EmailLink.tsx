@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 // Validates the first half of an email address.
 const validateText = (text: string): boolean => {

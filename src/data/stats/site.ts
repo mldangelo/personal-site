@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+
 import { StatData } from '../../components/Stats/types';
 
 /* Keys match keys returned by the github api. Fields without keys are

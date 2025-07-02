@@ -1,23 +1,27 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+
 import Link from 'next/link';
+
 import Markdown from 'markdown-to-jsx';
+
 import PageWrapper from '../components/PageWrapper';
 
-const count = (str: string) => str.split(/\s+/)
-  .filter((word) => word !== '').length;
+const count = (str: string) => str.split(/\s+/).filter((word) => word !== '').length;
 
 export default function AboutPage() {
   const [markdown, setMarkdown] = useState('');
 
   useEffect(() => {
     // @ts-expect-error - Markdown imports
-    import('@/data/about.md').then((res) => {
-      setMarkdown(res.default || '');
-    }).catch(() => {
-      setMarkdown('# About\n\nContent could not be loaded.');
-    });
+    import('@/data/about.md')
+      .then((res) => {
+        setMarkdown(res.default || '');
+      })
+      .catch(() => {
+        setMarkdown('# About\n\nContent could not be loaded.');
+      });
   }, []);
 
   return (

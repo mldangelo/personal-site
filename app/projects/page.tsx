@@ -1,9 +1,12 @@
 import React from 'react';
-import Link from 'next/link';
+
 import type { Metadata } from 'next';
-import PageWrapper from '../components/PageWrapper';
+import Link from 'next/link';
+
 import Cell from '@/components/Projects/Cell';
 import data from '@/data/projects';
+
+import PageWrapper from '../components/PageWrapper';
 
 export const metadata: Metadata = {
   title: 'Projects',

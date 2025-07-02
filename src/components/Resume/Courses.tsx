@@ -1,23 +1,22 @@
 import React from 'react';
-import Course from './Courses/Course';
+
 import type { Course as CourseType } from '@/data/resume/courses';
 
-const getRows = (courses: CourseType[]) => courses
-  .sort((a, b) => {
-    let ret = 0;
-    if (a.university > b.university) ret = -1;
-    else if (a.university < b.university) ret = 1;
-    else if (a.number > b.number) ret = 1;
-    else if (a.number < b.number) ret = -1;
-    return ret;
-  })
-  .map((course, idx) => (
-    <Course
-      data={course}
-      key={course.title}
-      last={idx === courses.length - 1}
-    />
-  ));
+import Course from './Courses/Course';
+
+const getRows = (courses: CourseType[]) =>
+  courses
+    .sort((a, b) => {
+      let ret = 0;
+      if (a.university > b.university) ret = -1;
+      else if (a.university < b.university) ret = 1;
+      else if (a.number > b.number) ret = 1;
+      else if (a.number < b.number) ret = -1;
+      return ret;
+    })
+    .map((course, idx) => (
+      <Course data={course} key={course.title} last={idx === courses.length - 1} />
+    ));
 
 interface CoursesProps {
   data?: CourseType[];

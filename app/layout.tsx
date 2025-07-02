@@ -1,6 +1,8 @@
 import React from 'react';
+
 import type { Metadata } from 'next';
-import { Source_Sans_3, Raleway } from 'next/font/google';
+import { Raleway, Source_Sans_3 } from 'next/font/google';
+
 import Analytics from '@/components/Template/Analytics';
 import Navigation from '@/components/Template/Navigation';
 import '@/static/css/main.scss';
@@ -22,16 +24,12 @@ const raleway = Raleway({
 export const metadata: Metadata = {
   title: {
     default: "Michael D'Angelo",
-    template: "%s | Michael D'Angelo"
+    template: "%s | Michael D'Angelo",
   },
   description: "Michael D'Angelo's personal website.",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${sourceSans.variable} ${raleway.variable}`}>
       <body>

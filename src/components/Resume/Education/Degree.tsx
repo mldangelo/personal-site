@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { Degree as DegreeType } from '../../../data/resume/degrees';
 
 interface DegreeProps {

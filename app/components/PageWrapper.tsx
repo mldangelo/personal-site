@@ -1,7 +1,9 @@
 'use client';
 
 import React, { useEffect } from 'react';
+
 import { usePathname } from 'next/navigation';
+
 import SideBar from '@/components/Template/SideBar';
 
 interface PageWrapperProps {

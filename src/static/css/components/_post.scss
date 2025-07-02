@@ -14,7 +14,7 @@
   position: relative;
 
   > header {
-    @include vendor("display", "flex");
+    @include vendor('display', 'flex');
     border-bottom: solid 1px _palette(border);
     left: (_size(section-spacing) * -1);
     margin: (_size(section-spacing) * -1) 0 _size(section-spacing) 0;
@@ -22,10 +22,10 @@
     width: calc(100% + #{_size(section-spacing) * 2});
 
     .title {
-      @include vendor("flex-grow", "1");
+      @include vendor('flex-grow', '1');
       -ms-flex: 1;
-      padding: (_size(section-spacing) * 1.25) _size(section-spacing)
-        (_size(section-spacing) * 1.1) _size(section-spacing);
+      padding: (_size(section-spacing) * 1.25) _size(section-spacing) (_size(section-spacing) * 1.1)
+        _size(section-spacing);
 
       h2 {
         font-weight: _font(weight-heading-extrabold);
@@ -70,25 +70,22 @@
     overflow: hidden;
 
     img {
-      @include vendor(
-        "transition",
-        "transform #{_duration(transition)} ease-out"
-      );
+      @include vendor('transition', 'transform #{_duration(transition)} ease-out');
     }
 
     &:hover {
       img {
-        @include vendor("transform", "scale(1.05)");
+        @include vendor('transform', 'scale(1.05)');
       }
     }
   }
 
   > footer {
-    @include vendor("display", "flex");
-    @include vendor("align-items", "center");
+    @include vendor('display', 'flex');
+    @include vendor('align-items', 'center');
 
     .actions {
-      @include vendor("flex-grow", "1");
+      @include vendor('flex-grow', '1');
     }
 
     .stats {
@@ -133,12 +130,8 @@
     width: calc(100% + (#{_size(section-spacing)} * 2));
 
     > header {
-      @include vendor("flex-direction", "column");
-      @include padding(
-        _size(section-spacing) * 1.25,
-        _size(section-spacing),
-        (0, 0, -0.5em, 0)
-      );
+      @include vendor('flex-direction', 'column');
+      @include padding(_size(section-spacing) * 1.25, _size(section-spacing), (0, 0, -0.5em, 0));
       border-left: 0;
 
       .title {
@@ -149,9 +142,9 @@
       }
 
       .meta {
-        @include vendor("align-items", "center");
-        @include vendor("display", "flex");
-        @include vendor("justify-content", "center");
+        @include vendor('align-items', 'center');
+        @include vendor('display', 'flex');
+        @include vendor('justify-content', 'center');
         border-left: 0;
         margin: 0 0 _size(element-margin) 0;
         padding-top: 0;
@@ -177,7 +170,7 @@
         }
 
         .author {
-          @include vendor("flex-direction", "row-reverse");
+          @include vendor('flex-direction', 'row-reverse');
           margin-bottom: 0;
 
           .name {
@@ -193,10 +186,7 @@
   }
 
   @include breakpoint(small) {
-    @include padding(
-      _size(section-spacing-small),
-      _size(section-spacing-small)
-    );
+    @include padding(_size(section-spacing-small), _size(section-spacing-small));
     left: _size(section-spacing-small) * -1;
     margin: 0 0 _size(element-margin) 0;
     width: calc(100% + (#{_size(section-spacing-small)} * 2));
@@ -208,8 +198,7 @@
         (0, 0, -0.5em, 0)
       );
       left: (_size(section-spacing-small) * -1);
-      margin: (_size(section-spacing-small) * -1) 0 _size(section-spacing-small)
-        0;
+      margin: (_size(section-spacing-small) * -1) 0 _size(section-spacing-small) 0;
       width: calc(100% + #{_size(section-spacing-small) * 2});
 
       .title {
@@ -223,8 +212,8 @@
   @include breakpoint(xsmall) {
     > header {
       .meta {
-        @include vendor("align-items", "center");
-        @include vendor("flex-direction", "column");
+        @include vendor('align-items', 'center');
+        @include vendor('flex-direction', 'column');
 
         > * {
           border-left: 0;
@@ -247,8 +236,8 @@
     }
 
     > footer {
-      @include vendor("align-items", "stretch");
-      @include vendor("flex-direction", "column-reverse");
+      @include vendor('align-items', 'stretch');
+      @include vendor('flex-direction', 'column-reverse');
 
       .stats {
         text-align: center;

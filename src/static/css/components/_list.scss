@@ -81,18 +81,18 @@ ul {
 
     &.pagination {
       .next {
-        @include icon("", after);
+        @include icon('', after);
 
         &:after {
-          content: "\f054";
+          content: '\f054';
         }
       }
 
       .previous {
-        @include icon("", before);
+        @include icon('', before);
 
         &:before {
-          content: "\f053";
+          content: '\f053';
         }
       }
 
@@ -223,9 +223,9 @@ ul {
     }
 
     article {
-      @include vendor("display", "flex");
-      @include vendor("align-items", "flex-start");
-      @include vendor("flex-direction", "row-reverse");
+      @include vendor('display', 'flex');
+      @include vendor('align-items', 'flex-start');
+      @include vendor('flex-direction', 'row-reverse');
 
       .image {
         display: block;
@@ -239,7 +239,7 @@ ul {
       }
 
       header {
-        @include vendor("flex-grow", "1");
+        @include vendor('flex-grow', '1');
         -ms-flex: 1;
 
         h3 {

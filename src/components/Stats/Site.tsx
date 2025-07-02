@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState, useCallback, useEffect } from 'react';
-import Table from './Table';
+import React, { useCallback, useEffect, useState } from 'react';
+
 import initialData from '../../data/stats/site';
+import Table from './Table';
 import { StatData } from './types';
 
 interface GitHubRepoData {
@@ -11,21 +12,20 @@ interface GitHubRepoData {
 
 const Stats: React.FC = () => {
   const [data, setResponseData] = useState<StatData[]>(initialData);
-  
+
   const fetchData = useCallback(async () => {
     try {
-      const res = await fetch(
-        'https://api.github.com/repos/mldangelo/personal-site',
-      );
+      const res = await fetch('https://api.github.com/repos/mldangelo/personal-site');
       const resData: GitHubRepoData = await res.json();
-      
+
       setResponseData(
         initialData.map((field) => ({
           ...field,
           // update value if value was returned by call to github
-          value: field.key && Object.keys(resData).includes(field.key)
-            ? resData[field.key] ?? field.value
-            : field.value,
+          value:
+            field.key && Object.keys(resData).includes(field.key)
+              ? (resData[field.key] ?? field.value)
+              : field.value,
         })),
       );
     } catch (error) {

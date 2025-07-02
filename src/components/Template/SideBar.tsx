@@ -1,8 +1,10 @@
 'use client';
 
 import React from 'react';
+
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+
 import ContactIcons from '../Contact/ContactIcons';
 
 const SideBar: React.FC = () => {
@@ -25,13 +27,12 @@ const SideBar: React.FC = () => {
       <section className="blurb">
         <h2>About</h2>
         <p>
-          Hi, I&apos;m Michael. I am a{' '}
-          <a href="https://icme.stanford.edu/">Stanford ICME</a> graduate, YC
-          alumnus, and the co-founder and CTO of{' '}
-          <a href="https://promptfoo.dev">Promptfoo</a>. Previously, I
-          was VP of Engineering at <a href="https://usesmileid.com">SmileID</a>,
-          co-founder and CTO of <a href="https://arthena.com">Arthena</a>, and
-          co-founded <a href="https://matroid.com">Matroid</a>.
+          Hi, I&apos;m Michael. I am a <a href="https://icme.stanford.edu/">Stanford ICME</a>{' '}
+          graduate, YC alumnus, and the co-founder and CTO of{' '}
+          <a href="https://promptfoo.dev">Promptfoo</a>. Previously, I was VP of Engineering at{' '}
+          <a href="https://usesmileid.com">SmileID</a>, co-founder and CTO of{' '}
+          <a href="https://arthena.com">Arthena</a>, and co-founded{' '}
+          <a href="https://matroid.com">Matroid</a>.
         </p>
         <ul className="actions">
           <li>

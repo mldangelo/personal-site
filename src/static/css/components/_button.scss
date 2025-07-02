@@ -6,18 +6,18 @@
 
 /* Button */
 
-input[type="submit"],
-input[type="reset"],
-input[type="button"],
+input[type='submit'],
+input[type='reset'],
+input[type='button'],
 button,
 .button {
-  @include vendor("appearance", "none");
+  @include vendor('appearance', 'none');
   @include vendor(
-    "transition",
+    'transition',
     (
-      "background-color #{_duration(transition)} ease",
-      "box-shadow #{_duration(transition)} ease",
-      "color #{_duration(transition)} ease"
+      'background-color #{_duration(transition)} ease',
+      'box-shadow #{_duration(transition)} ease',
+      'color #{_duration(transition)} ease'
     )
   );
   background-color: transparent;
@@ -80,7 +80,7 @@ button,
 
   &.disabled,
   &:disabled {
-    @include vendor("pointer-events", "none");
+    @include vendor('pointer-events', 'none');
     color: _palette(border) !important;
 
     &:before {

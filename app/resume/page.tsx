@@ -1,22 +1,24 @@
 import React from 'react';
-import Link from 'next/link';
-import type { Metadata } from 'next';
-import PageWrapper from '../components/PageWrapper';
 
+import type { Metadata } from 'next';
+import Link from 'next/link';
+
+import Courses from '@/components/Resume/Courses';
 import Education from '@/components/Resume/Education';
 import Experience from '@/components/Resume/Experience';
-import Skills from '@/components/Resume/Skills';
-import Courses from '@/components/Resume/Courses';
 import References from '@/components/Resume/References';
-
+import Skills from '@/components/Resume/Skills';
 import courses from '@/data/resume/courses';
 import degrees from '@/data/resume/degrees';
+import { categories, skills } from '@/data/resume/skills';
 import work from '@/data/resume/work';
-import { skills, categories } from '@/data/resume/skills';
+
+import PageWrapper from '../components/PageWrapper';
 
 export const metadata: Metadata = {
   title: 'Resume',
-  description: "Michael D'Angelo's Resume. Arthena, Matroid, YC, Skeptical Investments, Stanford ICME, Planet, and Facebook.",
+  description:
+    "Michael D'Angelo's Resume. Arthena, Matroid, YC, Skeptical Investments, Stanford ICME, Planet, and Facebook.",
 };
 
 const sections = ['Education', 'Experience', 'Skills', 'Courses', 'References'];

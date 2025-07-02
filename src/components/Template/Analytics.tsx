@@ -1,7 +1,9 @@
 'use client';
 
 import { useEffect } from 'react';
+
 import { usePathname } from 'next/navigation';
+
 import ReactGA from 'react-ga';
 
 const { NODE_ENV, NEXT_PUBLIC_GA_TRACKING_ID } = process.env;

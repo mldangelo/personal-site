@@ -1,5 +1,6 @@
 import React from 'react';
-import type { Skill, Category } from '../../../data/resume/skills';
+
+import type { Category, Skill } from '../../../data/resume/skills';
 
 interface SkillBarProps {
   data: Skill;
@@ -11,9 +12,7 @@ const SkillBar: React.FC<SkillBarProps> = ({ data, categories = [] }) => {
 
   // TODO: Consider averaging colors
   const titleStyle: React.CSSProperties = {
-    background: categories
-      .filter((cat) => category.includes(cat.name))
-      .map((cat) => cat.color)[0],
+    background: categories.filter((cat) => category.includes(cat.name)).map((cat) => cat.color)[0],
   };
 
   const barStyle: React.CSSProperties = {

@@ -1,4 +1,5 @@
 import React from 'react';
+
 import type { Course as CourseType } from '@/data/resume/courses';
 
 interface CourseProps {

@@ -1,13 +1,16 @@
 import React from 'react';
-import Link from 'next/link';
+
 import type { Metadata } from 'next';
-import PageWrapper from '../components/PageWrapper';
-import EmailLink from '@/components/Contact/EmailLink';
+import Link from 'next/link';
+
 import ContactIcons from '@/components/Contact/ContactIcons';
+import EmailLink from '@/components/Contact/EmailLink';
+
+import PageWrapper from '../components/PageWrapper';
 
 export const metadata: Metadata = {
   title: 'Contact',
-  description: 'Contact Michael D\'Angelo via email @ hi@mldangelo.com',
+  description: "Contact Michael D'Angelo via email @ hi@mldangelo.com",
 };
 
 export default function ContactPage() {

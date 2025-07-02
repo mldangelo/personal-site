@@ -17,7 +17,8 @@ const work: Position[] = [
     position: 'Co-founder & CTO',
     url: 'https://promptfoo.dev',
     startDate: '2024-07-01',
-    summary: 'Promptfoo builds open-source tools to evaluate, find, and fix vulnerabilities in large language models (LLMs). Our open-source tools are used by over 35,000 developers and researchers worldwide.',
+    summary:
+      'Promptfoo builds open-source tools to evaluate, find, and fix vulnerabilities in large language models (LLMs). Our open-source tools are used by over 35,000 developers and researchers worldwide.',
     highlights: [
       'Built and scaled engineering team, emphasizing diversity and open-source contribution',
       'Established key partnerships with AI research institutions and tech companies',
@@ -88,7 +89,7 @@ const work: Position[] = [
     technical foundation and strategic direction.`,
     highlights: [
       'Developed core computer vision algorithms and initial product prototypes.',
-      'Worked with the team to define the company\'s vision and product roadmap.',
+      "Worked with the team to define the company's vision and product roadmap.",
       'Collaborated with CEO on fundraising and investor relations.',
     ],
   },
@@ -110,7 +111,7 @@ const work: Position[] = [
     startDate: '2012-06-01',
     endDate: '2012-09-01',
     highlights: [
-      'Developed and optimized Facebook\'s core news feed algorithms.',
+      "Developed and optimized Facebook's core news feed algorithms.",
       'Worked on large-scale data processing and machine learning infrastructure.',
     ],
   },

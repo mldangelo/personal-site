@@ -1,6 +1,8 @@
 import React from 'react';
+
 import dayjs from 'dayjs';
 import Markdown from 'markdown-to-jsx';
+
 import type { Position } from '@/data/resume/work';
 
 interface JobProps {
@@ -8,9 +10,7 @@ interface JobProps {
 }
 
 const Job: React.FC<JobProps> = ({
-  data: {
-    name, position, url, startDate, endDate, summary, highlights,
-  },
+  data: { name, position, url, startDate, endDate, summary, highlights },
 }) => (
   <article className="jobs-container">
     <header>

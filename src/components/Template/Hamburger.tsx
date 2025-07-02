@@ -1,7 +1,9 @@
 'use client';
 
 import React, { Suspense, lazy, useState } from 'react';
+
 import Link from 'next/link';
+
 import routes from '../../data/routes';
 
 // @ts-expect-error - react-burger-menu doesn't have proper TypeScript definitions for lazy loading

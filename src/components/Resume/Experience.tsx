@@ -1,6 +1,8 @@
 import React from 'react';
-import Job from './Experience/Job';
+
 import type { Position } from '@/data/resume/work';
+
+import Job from './Experience/Job';
 
 interface ExperienceProps {
   data?: Position[];

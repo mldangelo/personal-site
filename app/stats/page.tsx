@@ -1,13 +1,16 @@
 import React from 'react';
-import Link from 'next/link';
+
 import type { Metadata } from 'next';
-import PageWrapper from '../components/PageWrapper';
+import Link from 'next/link';
+
 import Personal from '@/components/Stats/Personal';
 import Site from '@/components/Stats/Site';
 
+import PageWrapper from '../components/PageWrapper';
+
 export const metadata: Metadata = {
   title: 'Stats',
-  description: 'Some statistics about Michael D\'Angelo and mldangelo.com',
+  description: "Some statistics about Michael D'Angelo and mldangelo.com",
 };
 
 export default function StatsPage() {

@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+
 import { StatData } from '../../components/Stats/types';
 
 const Age: React.FC = () => {
@@ -19,7 +20,7 @@ const Age: React.FC = () => {
       clearInterval(timer);
     };
   }, []);
-  
+
   return <>{age}</>;
 };
 

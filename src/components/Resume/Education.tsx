@@ -1,6 +1,7 @@
 import React from 'react';
-import Degree from './Education/Degree';
+
 import { Degree as DegreeType } from '../../data/resume/degrees';
+import Degree from './Education/Degree';
 
 interface EducationProps {
   data?: DegreeType[];

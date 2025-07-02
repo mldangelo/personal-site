@@ -1,5 +1,7 @@
 import React from 'react';
+
 import dayjs from 'dayjs';
+
 import type { Project } from '@/data/projects';
 
 interface CellProps {
@@ -13,9 +15,7 @@ const Cell: React.FC<CellProps> = ({ data }) => (
         <h3>
           <a href={data.link}>{data.title}</a>
         </h3>
-        <time className="published">
-          {dayjs(data.date).format('MMMM, YYYY')}
-        </time>
+        <time className="published">{dayjs(data.date).format('MMMM, YYYY')}</time>
       </header>
       <a href={data.link} className="image">
         <img src={data.image} alt={data.title} />
