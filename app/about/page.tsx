@@ -1,29 +1,18 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import Link from 'next/link';
 
 import Markdown from 'markdown-to-jsx';
+
+import { aboutMarkdown } from '@/data/about';
 
 import PageWrapper from '../components/PageWrapper';
 
 const count = (str: string) => str.split(/\s+/).filter((word) => word !== '').length;
 
 export default function AboutPage() {
-  const [markdown, setMarkdown] = useState('');
-
-  useEffect(() => {
-    // @ts-expect-error - Markdown imports
-    import('@/data/about.md')
-      .then((res) => {
-        setMarkdown(res.default || '');
-      })
-      .catch(() => {
-        setMarkdown('# About\n\nContent could not be loaded.');
-      });
-  }, []);
-
   return (
     <PageWrapper>
       <article className="post markdown" id="about">
@@ -32,10 +21,10 @@ export default function AboutPage() {
             <h2>
               <Link href="/about">About Me</Link>
             </h2>
-            <p>(in about {count(markdown)} words)</p>
+            <p>(in about {count(aboutMarkdown)} words)</p>
           </div>
         </header>
-        <Markdown>{markdown}</Markdown>
+        <Markdown>{aboutMarkdown}</Markdown>
       </article>
     </PageWrapper>
   );
