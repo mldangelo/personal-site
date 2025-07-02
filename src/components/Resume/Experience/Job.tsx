@@ -24,21 +24,22 @@ const Job: React.FC<JobProps> = ({
       </p>
     </header>
     {summary ? (
-      <Markdown
-        options={{
-          wrapper: React.Fragment,
-          overrides: {
-            p: {
-              component: 'div',
-              props: {
-                className: 'summary',
+      <div className="summary">
+        <Markdown
+          options={{
+            wrapper: React.Fragment,
+            overrides: {
+              p: {
+                props: {
+                  style: { margin: 0 },
+                },
               },
             },
-          },
-        }}
-      >
-        {summary}
-      </Markdown>
+          }}
+        >
+          {summary}
+        </Markdown>
+      </div>
     ) : null}
     {highlights ? (
       <ul className="points">
