@@ -12,8 +12,11 @@ export default function AboutPage() {
   const [markdown, setMarkdown] = useState('');
 
   useEffect(() => {
+    // @ts-expect-error - Markdown imports
     import('@/data/about.md').then((res) => {
-      setMarkdown(res.default);
+      setMarkdown(res.default || '');
+    }).catch(() => {
+      setMarkdown('# About\n\nContent could not be loaded.');
     });
   }, []);
 

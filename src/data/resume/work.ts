@@ -88,7 +88,7 @@ const work: Position[] = [
     technical foundation and strategic direction.`,
     highlights: [
       'Developed core computer vision algorithms and initial product prototypes.',
-      'Worked with the team to define the company's vision and product roadmap.',
+      'Worked with the team to define the company\'s vision and product roadmap.',
       'Collaborated with CEO on fundraising and investor relations.',
     ],
   },
@@ -110,13 +110,14 @@ const work: Position[] = [
     startDate: '2012-06-01',
     endDate: '2012-09-01',
     highlights: [
-      'Developed and optimized Facebook's core news feed algorithms.',
+      'Developed and optimized Facebook\'s core news feed algorithms.',
       'Worked on large-scale data processing and machine learning infrastructure.',
     ],
   },
   {
     name: 'Startup',
     position: 'Co-founder',
+    url: '#',
     startDate: '2012-02-01',
     endDate: '2013-01-01',
     summary: 'Started an NFC-based marketing company with a team of four.',

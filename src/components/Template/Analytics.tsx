@@ -18,7 +18,7 @@ const Analytics: React.FC = () => {
       ReactGA.set({
         page: pathname,
       });
-      ReactGA.pageview(pathname);
+      ReactGA.pageview(pathname || '/');
     }
   }, [pathname]);
 

@@ -1,10 +1,12 @@
+'use client';
+
 import React, { useState, useCallback, useEffect } from 'react';
 import Table from './Table';
 import initialData from '../../data/stats/site';
 import { StatData } from './types';
 
 interface GitHubRepoData {
-  [key: string]: any;
+  [key: string]: string | number | boolean | null;
 }
 
 const Stats: React.FC = () => {
@@ -22,7 +24,7 @@ const Stats: React.FC = () => {
           ...field,
           // update value if value was returned by call to github
           value: field.key && Object.keys(resData).includes(field.key)
-            ? resData[field.key]
+            ? resData[field.key] ?? field.value
             : field.value,
         })),
       );

@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import CategoryButton from './Skills/CategoryButton';
 import SkillBar from './Skills/SkillBar';

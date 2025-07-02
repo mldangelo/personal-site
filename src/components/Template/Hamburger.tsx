@@ -1,9 +1,11 @@
+'use client';
+
 import React, { Suspense, lazy, useState } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import routes from '../../data/routes';
 
-// @ts-ignore - react-burger-menu doesn't have proper TypeScript definitions for lazy loading
-const Menu = lazy(() => import('react-burger-menu/lib/menus/slide') as any);
+// @ts-expect-error - react-burger-menu doesn't have proper TypeScript definitions for lazy loading
+const Menu = lazy(() => import('react-burger-menu/lib/menus/slide'));
 
 const Hamburger: React.FC = () => {
   const [open, setOpen] = useState<boolean>(false);
@@ -32,7 +34,7 @@ const Hamburger: React.FC = () => {
           <ul className="hamburger-ul">
             {routes.map((l) => (
               <li key={l.label}>
-                <Link to={l.path} onClick={() => setOpen(!open)}>
+                <Link href={l.path} onClick={() => setOpen(!open)}>
                   <h3 className={l.index ? 'index-li' : undefined}>{l.label}</h3>
                 </Link>
               </li>

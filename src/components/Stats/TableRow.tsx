@@ -5,7 +5,7 @@ const TableRow: React.FC<TableRowProps> = ({
   label, 
   link = null, 
   value = null, 
-  format = (x) => x,
+  format = (x) => String(x),
 }) => (
   <tr>
     <td width="70%">{label}</td>
