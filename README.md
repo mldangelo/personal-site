@@ -1,10 +1,12 @@
 # Personal Website
 
-Welcome to my [personal website](https://mldangelo.com)! This is an [MIT licensed](https://github.com/mldangelo/personal-site/blob/main/LICENSE) React-based Jamstack application. It offers a simple interface, easy modifications, static export capabilities, and free automatic deployments via [GitHub Pages](https://pages.github.com/).
+Welcome to my [personal website](https://mldangelo.com)! This is an [MIT licensed](https://github.com/mldangelo/personal-site/blob/main/LICENSE) Next.js-based Jamstack application. It offers a simple interface, easy modifications, static export capabilities, and free automatic deployments via [GitHub Pages](https://pages.github.com/).
 
 ## 🚀 Features
 
-- Built with modern JavaScript, using tools and frameworks like [create-react-app](https://github.com/facebook/create-react-app), [React-Router](https://reactrouter.com/), and SCSS.
+- Built with modern TypeScript, using [Next.js 14](https://nextjs.org/), [React 18](https://react.dev/), and SCSS.
+- Type-safe development with TypeScript strict mode.
+- Optimized performance with static export and automatic font optimization.
 - Automated workflows via [GitHub Actions](https://github.com/features/actions).
 - And more!
 
@@ -18,7 +20,7 @@ Your contributions are warmly welcomed! If you wish to contribute, please review
 
 ## 🔧 Dependencies
 
-Ensure you have [node](https://nodejs.org/) >= v16. Optionally, use [nvm](https://github.com/nvm-sh/nvm#installing-and-updating) to manage node versions.
+Ensure you have [node](https://nodejs.org/) >= v24. Optionally, use [nvm](https://github.com/nvm-sh/nvm#installing-and-updating) to manage node versions.
 
 ## 🚀 Setup and Running
 
@@ -29,7 +31,7 @@ Ensure you have [node](https://nodejs.org/) >= v16. Optionally, use [nvm](https:
    cd personal-site
    ```
 
-2. (Optional) Ensure you're on Node v16 or higher:
+2. (Optional) Ensure you're on Node v24 or higher:
 
    ```bash
    nvm install
@@ -42,39 +44,69 @@ Ensure you have [node](https://nodejs.org/) >= v16. Optionally, use [nvm](https:
    npm install
    ```
 
-4. Start the application:
+4. Start the development server:
 
    ```bash
-   npm start
+   npm run dev
    ```
 
-By default, the application should be available at [http://localhost:3000/](http://localhost:3000/).
+   By default, the application will be available at [http://localhost:3000/](http://localhost:3000/).
+
+## 🏗 Building for Production
+
+1. Build the static export:
+
+   ```bash
+   npm run build
+   npm run export
+   ```
+
+2. Preview the production build locally:
+
+   ```bash
+   npm run start
+   ```
 
 ## 🚢 Deploying
 
 ### Deploying to GitHub Pages
 
 1. Update the environment variables and Git remote URL in [`.github/workflows/github-pages.yml`](.github/workflows/github-pages.yml).
-2. Adjust the `homepage` value in `package.json` based on your hosting preferences.
-3. Planning on using a custom domain? Update `public/CNAME`. Otherwise, remove it.
 
-After making a commit to `main`, simply push your changes, and the deployment will be handled automatically.
+2. Enable GitHub Actions and Pages for your repository.
+
+3. Push to the `main` branch to trigger automatic deployment.
+
+   ```bash
+   git add .
+   git commit -m "Deploy to GitHub Pages"
+   git push origin main
+   ```
 
 ### Static Export
 
-For a static export without deploying to GitHub Pages:
+You can export the site as static HTML to host anywhere:
 
-- Remove or disable `.github/workflows/github-pages.yml`.
-- Execute:
+```bash
+npm run build
+npm run export
+```
 
-  ```bash
-  npm run predeploy
-  ```
+The static files will be in the `out/` directory.
 
-This will generate a static version in `personal-site/build/` which you can host or deploy to a CDN.
+## 🔬 Testing
 
-## 🙌 Acknowledgements
+```bash
+npm run lint          # Run ESLint
+npm run type-check    # Run TypeScript type checking
+```
 
-- Initial template from [Future Imperfect](https://html5up.net/future-imperfect) by [@ajlkn](https://github.com/ajlkn) for [HTML5 UP](html5up.net).
-- Special thanks to [@typpo](https://github.com/typpo) for tirelessly answering all of my node.js and react questions.
-- Kudos to [@notrueblood](https://github.com/notrueblood)[<sup>[1]</sup>](https://github.com/mldangelo/personal-site/pull/218) and [@sjhsieh](https://github.com/sjhsieh)[<sup>[2]</sup>](https://github.com/mldangelo/personal-site/issues/168) for their constructive feedback.
+## 🎨 Customization
+
+- **Personal Information**: Update files in `src/data/` with your information.
+- **Images**: Replace images in `public/images/` with your own.
+- **Theme**: Modify SCSS variables in `src/static/css/libs/_vars.scss`.
+
+## 📝 License
+
+[MIT](https://github.com/mldangelo/personal-site/blob/main/LICENSE)
