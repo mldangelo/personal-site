@@ -7,9 +7,9 @@
 /* Wrapper */
 
 #wrapper {
-  @include vendor("display", "flex");
-  @include vendor("flex-direction", "row-reverse");
-  @include vendor("transition", "opacity #{_duration(menu)} ease");
+  @include vendor('display', 'flex');
+  @include vendor('flex-direction', 'row-reverse');
+  @include vendor('transition', 'opacity #{_duration(menu)} ease');
   margin: 0 auto;
   max-width: 100%;
   opacity: 1;

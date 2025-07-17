@@ -18,7 +18,7 @@ This projects attempts to follow these design principles. Feedback and discussio
    - It should be relatively straight forward to replace the content in this repository or to add a new feature.
    - Good separation of concerns. Components keep track of their own state. Props are not over-utilized.
    - Limited vertical depth (changes should be relatively self encapsulated).
-   - Correct abstractions. - Webpack is complex, but developers don't need to understand how exactly webpack works to use this project.
+   - Correct abstractions. - Next.js build system is complex, but developers don't need to understand the internals to use this project.
 1. Good Documentation
    - Comments exist and have an appropriate level of detail.
    - Code should be readable.
@@ -28,14 +28,14 @@ This projects attempts to follow these design principles. Feedback and discussio
    - Buy, don't build. Don't reinvent the wheel. Use popular npm libraries when possible.
 1. Limited horizontal fragmentation
    - Linter to prevent easy PR nits & to prevent developers from wasting time thinking about code style.
-   - Preferred React Style - ie (functional components & proptypes).
+   - Preferred React Style - functional components with TypeScript for type safety.
    - Consistent file structure based on current best practices.
    - Similar features are built similarly. Code reads like an assembly line, not a layer cake.
 
 ## Stable
 
 1. Use _Boring_ technologies
-   - Javascript over reason or typescript. Limited ecmascript experimental features.
+   - TypeScript for type safety while maintaining readability. Limited experimental features.
    - Prefer popular and well maintained npm packages.
 1. Maintainable
    - Easy setup.
@@ -49,4 +49,4 @@ This projects attempts to follow these design principles. Feedback and discussio
 
 For further reading, please review
 
-- React's [Design Principles](https://reactjs.org/docs/design-principles.html).
+- React's [Design Principles](https://react.dev/learn/thinking-in-react).

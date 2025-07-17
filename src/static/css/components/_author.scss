@@ -7,10 +7,10 @@
 /* Author */
 
 .author {
-  @include vendor("display", "flex");
-  @include vendor("flex-direction", "row");
-  @include vendor("align-items", "center");
-  @include vendor("justify-content", "flex-end");
+  @include vendor('display', 'flex');
+  @include vendor('flex-direction', 'row');
+  @include vendor('align-items', 'center');
+  @include vendor('justify-content', 'flex-end');
   border-bottom: 0;
   font-family: _font(family-heading);
   font-size: 0.6em;
@@ -20,10 +20,7 @@
   white-space: nowrap;
 
   .name {
-    @include vendor(
-      "transition",
-      "border-bottom-color #{_duration(transition)} ease"
-    );
+    @include vendor('transition', 'border-bottom-color #{_duration(transition)} ease');
     border-bottom: dotted 1px _palette(border-alt);
     display: block;
     margin: 0 1.5em 0 0;

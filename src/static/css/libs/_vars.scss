@@ -21,16 +21,18 @@ $size: (
 // Font.
 $font: (
   family: (
-    "Source Sans Pro",
+    var(--font-source-sans),
+    'Source Sans Pro',
     Helvetica,
     sans-serif,
   ),
   family-fixed: (
-    "Courier New",
+    'Courier New',
     monospace,
   ),
   family-heading: (
-    "Raleway",
+    var(--font-raleway),
+    'Raleway',
     Helvetica,
     sans-serif,
   ),

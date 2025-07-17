@@ -39,18 +39,15 @@ textarea {
 
 a {
   @include vendor(
-    "transition",
-    (
-      "color #{_duration(transition)} ease",
-      "border-bottom-color #{_duration(transition)} ease"
-    )
+    'transition',
+    ('color #{_duration(transition)} ease', 'border-bottom-color #{_duration(transition)} ease')
   );
   border-bottom: dotted 1px _palette(border-alt);
   color: inherit;
   text-decoration: none;
 
   &:before {
-    @include vendor("transition", ("color #{_duration(transition)} ease"));
+    @include vendor('transition', ('color #{_duration(transition)} ease'));
   }
 
   &:hover {
@@ -134,8 +131,7 @@ blockquote {
   border-left: solid 4px _palette(border);
   font-style: italic;
   margin: 0 0 _size(element-margin) 0;
-  padding: calc(_size(element-margin) / 4) 0 calc(_size(element-margin) / 4)
-    _size(element-margin);
+  padding: calc(_size(element-margin) / 4) 0 calc(_size(element-margin) / 4) _size(element-margin);
 }
 
 code {

@@ -5,88 +5,134 @@
 }
 
 .skill-button-container {
-  margin: 1.5em 0;
+  margin: 1.5em 0 2.5em 0;
   text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5em;
+
+  @include breakpoint(small) {
+    gap: 0.35em;
+  }
 }
 
 .skillbutton {
-  box-shadow: none;
-  outline: none;
+  display: inline-block;
+  height: 2.75em;
+  line-height: 2.75em;
+  padding: 0 1.5em;
+  border: 0;
+  border-radius: 0;
+  background: _palette(bg);
+  color: _palette(fg);
+  font-family: _font(family-heading);
+  font-size: 0.6em;
+  font-weight: _font(weight-heading);
+  letter-spacing: _font(kerning-heading);
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: inset 0 0 0 1px _palette(border);
+  transition: all _duration(transition) ease;
+  outline: 0;
+
+  &:hover {
+    color: _palette(accent);
+    box-shadow: inset 0 0 0 1px _palette(accent);
+  }
+
+  &:focus {
+    outline: 0;
+    box-shadow: inset 0 0 0 1px _palette(accent);
+  }
 }
 
 .skillbutton-active {
-  box-shadow: inset 0 0 0 1px _palette(accent);
-  color: _palette(accent) !important;
+  background: _palette(accent);
+  color: _palette(bg) !important;
+  box-shadow: none !important;
+
+  &:hover {
+    opacity: 0.9;
+  }
 }
 
 .skillbar {
   position: relative;
   display: block;
-  margin-bottom: 15px;
+  margin-bottom: _size(element-margin) * 0.75;
   width: 100%;
-  background: #eee;
-  height: 35px;
-  border-radius: 3px;
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
-  -webkit-transition: 0.4s linear;
-  -moz-transition: 0.4s linear;
-  -ms-transition: 0.4s linear;
-  -o-transition: 0.4s linear;
-  transition: 0.4s linear;
-  -webkit-transition-property: width, background-color;
-  -moz-transition-property: width, background-color;
-  -ms-transition-property: width, background-color;
-  -o-transition-property: width, background-color;
-  transition-property: width, background-color;
+  background: _palette(border-bg);
+  height: 2.5em;
+  border-radius: 0;
+  overflow: hidden;
+  transition: opacity _duration(transition) ease;
+
+  @include breakpoint(small) {
+    height: 2.25em;
+    margin-bottom: _size(element-margin) * 0.5;
+  }
+
+  &:hover {
+    opacity: 0.85;
+  }
 }
 
 .skillbar-title {
   position: absolute;
   top: 0;
   left: 0;
-  font-weight: bold;
-  font-size: 13px;
+  font-weight: _font(weight-bold);
+  font-size: 0.85em;
   color: #fff;
-  background: #6adcfa;
-  -webkit-border-top-left-radius: 3px;
-  -webkit-border-bottom-left-radius: 4px;
-  -moz-border-radius-topleft: 3px;
-  -moz-border-radius-bottomleft: 3px;
-  border-top-left-radius: 3px;
-  border-bottom-left-radius: 3px;
+  background: _palette(accent);
+  height: 100%;
+  min-width: 110px;
+  z-index: 2;
+
+  @include breakpoint(small) {
+    font-size: 0.8em;
+    min-width: 100px;
+  }
 }
 
 .skillbar-title span {
-  display: block;
-  background: rgba(0, 0, 0, 0.1);
-  padding: 0 20px;
-  height: 35px;
-  line-height: 35px;
-  -webkit-border-top-left-radius: 3px;
-  -webkit-border-bottom-left-radius: 3px;
-  -moz-border-radius-topleft: 3px;
-  -moz-border-radius-bottomleft: 3px;
-  border-top-left-radius: 3px;
-  border-bottom-left-radius: 3px;
+  display: flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.15);
+  padding: 0 1em;
+  height: 100%;
+  white-space: nowrap;
+
+  @include breakpoint(small) {
+    padding: 0 0.75em;
+  }
 }
 
 .skillbar-bar {
-  height: 35px;
+  height: 100%;
   width: 0px;
-  background: #6adcfa;
-  border-radius: 3px;
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
+  background: _palette(accent);
+  position: relative;
+  transition: width 1.4s ease-in-out;
 }
 
 .skill-bar-percent {
   position: absolute;
-  right: 10px;
+  right: 1em;
   top: 0;
-  font-size: 11px;
-  height: 35px;
-  line-height: 35px;
-  color: #444;
-  color: rgba(0, 0, 0, 0.4);
+  font-family: _font(family-heading);
+  font-size: 0.7em;
+  font-weight: _font(weight-heading);
+  letter-spacing: 0.05em;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  color: _palette(fg-light);
+  z-index: 1;
+
+  @include breakpoint(small) {
+    font-size: 0.65em;
+    right: 0.75em;
+  }
 }

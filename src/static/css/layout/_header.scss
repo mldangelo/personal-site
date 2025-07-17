@@ -11,8 +11,8 @@ body {
 }
 
 #header {
-  @include vendor("display", "flex");
-  @include vendor("justify-content", "space-between");
+  @include vendor('display', 'flex');
+  @include vendor('justify-content', 'space-between');
   background-color: _palette(bg);
   border-bottom: solid 1px _palette(border);
   height: 3.5em;
@@ -51,7 +51,7 @@ body {
   }
 
   .links {
-    @include vendor("flex", "1");
+    @include vendor('flex', '1');
     border-left: solid 1px _palette(border);
     height: inherit;
     line-height: inherit;
@@ -191,7 +191,7 @@ body {
 .bm-item-list {
   color: _palette(fg-bold);
   padding: 0.8em;
-  font-family: "Raleway", Helvetica, sans-serif;
+  font-family: 'Raleway', Helvetica, sans-serif;
 }
 
 #header .index-link {

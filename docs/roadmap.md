@@ -2,6 +2,20 @@
 
 This site has been a work in progress since 2014. I have tried to make updates to reflect a) my knowledge of web development and b) current best practices. It will continue to evolve a as a WIP guided by the following design goals.
 
+## Recently Completed ✅
+
+- **Migrated to TypeScript** - The entire codebase now uses TypeScript for better type safety and developer experience
+- **Upgraded to Next.js 15.4.1** - Using the latest version with App Router
+- **Upgraded to React 19** - Latest React version with improved performance
+- **Implemented modern Google Analytics 4** - Using @next/third-parties for optimal performance
+- **Added Prettier** - Consistent code formatting across the project
+- **Enabled Turbopack** - Faster development builds
+- **Migrated from SCSS `@import` to `@use`** - Addressed all deprecation warnings
+- **Added Jest testing with SWC** - 20x faster test execution with TypeScript support
+- **Implemented SEO features** - Sitemap generation, Open Graph tags, proper metadata
+- **Fixed Resume page styling** - Restored original design consistency
+- **Optimized images** - Using Next.js Image component for better performance
+
 ## Future Direction
 
 ### Improvements
@@ -15,8 +29,8 @@ This site has been a work in progress since 2014. I have tried to make updates t
 - Make FA integration less terrible (consider building FA library).
 - Simplify Favicon. See: https://news.ycombinator.com/item?id=25520655
 - Better tests
-  - one test per component.
-  - test using puppeteer again.
+  - Add more comprehensive component tests
+  - test using playwright.
   - test cross browser compatibility.
   - Use google lighthouse.
 - Introduce a spell checker.
@@ -42,7 +56,7 @@ This site has been a work in progress since 2014. I have tried to make updates t
 
 ### Under Consideration
 
-- Use typescript everywhere instead of Vanilla JS/JSX - will this hinder new developer experience?
 - Add support for more exotic integrations (reason, webassembly).
 - hydrate all unique content on the site from one location -> deploy as npm package + json.
 - Use husky for git pre-commit hooks.
+- Consider migrating to Tailwind CSS for more maintainable styles
