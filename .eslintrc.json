@@ -2,7 +2,12 @@
   "extends": ["next/core-web-vitals", "next/typescript", "prettier"],
   "plugins": ["prettier"],
   "rules": {
-    "prettier/prettier": "error",
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "lf"
+      }
+    ],
     "react/jsx-filename-extension": [1, { "extensions": [".tsx"] }],
     "react/prop-types": "off",
     "react/require-default-props": "off",
