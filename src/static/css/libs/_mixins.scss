@@ -1,3 +1,6 @@
+@use 'sass:list';
+@use 'sass:math';
+
 /// Makes an element's :before pseudoelement a FontAwesome icon.
 /// @param {string} $content Optional content value to use.
 /// @param {string} $where Optional pseudoelement to target (before or after).
@@ -28,8 +31,9 @@
     $important: '!important';
   }
 
-  padding: ($tb + nth($pad, 1)) ($lr + nth($pad, 2))
-    max(0.1em, $tb - _size(element-margin) + nth($pad, 3)) ($lr + nth($pad, 4)) #{$important};
+  padding: ($tb + list.nth($pad, 1)) ($lr + list.nth($pad, 2))
+    math.max(0.1em, $tb - _size(element-margin) + list.nth($pad, 3)) ($lr + list.nth($pad, 4))
+    #{$important};
 }
 
 /// Encodes a SVG data URL so IE doesn't choke (via codepen.io/jakob-e/pen/YXXBrp).

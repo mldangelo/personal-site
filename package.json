@@ -8,7 +8,7 @@
     "url": "https://github.com/mldangelo/personal-site.git"
   },
   "engines": {
-    "node": ">=24.x"
+    "node": ">=20.x"
   },
   "scripts": {
     "dev": "next dev --turbopack",
@@ -18,6 +18,8 @@
     "type-check": "tsc --noEmit",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,scss}\"",
     "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,scss}\"",
+    "test": "jest",
+    "test:watch": "jest --watch",
     "predeploy": "npm run build",
     "analyze": "ANALYZE=true npm run build"
   },
@@ -36,7 +38,10 @@
   },
   "devDependencies": {
     "@next/bundle-analyzer": "^15.3.4",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
+    "@types/jest": "^30.0.0",
     "@types/node": "^24.0.10",
     "@types/react": "^19.1.8",
     "@types/react-burger-menu": "^2.8.7",
@@ -45,6 +50,8 @@
     "eslint-config-next": "^15.3.4",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.5.1",
+    "jest": "^30.0.4",
+    "jest-environment-jsdom": "^30.0.4",
     "postcss-normalize": "^13.0.1",
     "prettier": "^3.6.2",
     "sass": "^1.89.2",

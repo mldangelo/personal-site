@@ -1,5 +1,9 @@
 // skel.scss v3.0.1 | (c) skel.io | MIT licensed */
 
+@use 'sass:map';
+@use 'sass:list';
+@use 'sass:string';
+
 // Vars.
 
 /// Breakpoints.
@@ -69,15 +73,15 @@ $vendor-values: ('filter', 'flex', 'linear-gradient', 'radial-gradient', 'transf
     @warn "$index: #{quote($index)} is not a number for `remove-nth`.";
   } @else if $index == 0 {
     @warn "List index 0 must be a non-zero integer for `remove-nth`.";
-  } @else if abs($index) > length($list) {
-    @warn "List index is #{$index} but list is only #{length($list)} item long for `remove-nth`.";
+  } @else if abs($index) > list.length($list) {
+    @warn "List index is #{$index} but list is only #{list.length($list)} item long for `remove-nth`.";
   } @else {
     $result: ();
-    $index: if($index < 0, length($list) + $index + 1, $index);
+    $index: if($index < 0, list.length($list) + $index + 1, $index);
 
-    @for $i from 1 through length($list) {
+    @for $i from 1 through list.length($list) {
       @if $i != $index {
-        $result: append($result, nth($list, $i));
+        $result: list.append($result, list.nth($list, $i));
       }
     }
   }
@@ -92,11 +96,11 @@ $vendor-values: ('filter', 'flex', 'linear-gradient', 'radial-gradient', 'transf
 /// @param {string} $replace Replacement.
 /// @return {string} Updated string.
 @function str-replace($string, $search, $replace: '') {
-  $index: str-index($string, $search);
+  $index: string.index($string, $search);
 
   @if $index {
-    @return str-slice($string, 1, $index - 1) + $replace +
-      str-replace(str-slice($string, $index + str-length($search)), $search, $replace);
+    @return string.slice($string, 1, $index - 1) + $replace +
+      str-replace(string.slice($string, $index + string.length($search)), $search, $replace);
   }
 
   @return $string;
@@ -109,7 +113,11 @@ $vendor-values: ('filter', 'flex', 'linear-gradient', 'radial-gradient', 'transf
 /// @return {list} Updated list of strings.
 @function str-replace-all($strings, $search, $replace: '') {
   @each $string in $strings {
-    $strings: set-nth($strings, index($strings, $string), str-replace($string, $search, $replace));
+    $strings: list.set-nth(
+      $strings,
+      list.index($strings, $string),
+      str-replace($string, $search, $replace)
+    );
   }
 
   @return $strings;
@@ -121,12 +129,12 @@ $vendor-values: ('filter', 'flex', 'linear-gradient', 'radial-gradient', 'transf
 /// @param {string} $keys Key(s).
 /// @return {string} Value.
 @function val($map, $keys...) {
-  @if nth($keys, 1) == null {
+  @if list.nth($keys, 1) == null {
     $keys: remove-nth($keys, 1);
   }
 
   @each $key in $keys {
-    $map: map-get($map, $key);
+    $map: map.get($map, $key);
   }
 
   @return $map;
@@ -155,8 +163,8 @@ $vendor-values: ('filter', 'flex', 'linear-gradient', 'radial-gradient', 'transf
   $query: 'screen';
 
   // Breakpoint.
-  @if $breakpoint and map-has-key($breakpoints, $breakpoint) {
-    $query: $query + ' and ' + map-get($breakpoints, $breakpoint);
+  @if $breakpoint and map.has-key($breakpoints, $breakpoint) {
+    $query: $query + ' and ' + map.get($breakpoints, $breakpoint);
   }
 
   // Queries.
@@ -185,8 +193,8 @@ $vendor-values: ('filter', 'flex', 'linear-gradient', 'radial-gradient', 'transf
   // Locked?
   $lock: false;
 
-  @if length($width) == 2 {
-    $width: nth($width, 1);
+  @if list.length($width) == 2 {
+    $width: list.nth($width, 1);
     $lock: true;
   }
 
@@ -363,13 +371,13 @@ $vendor-values: ('filter', 'flex', 'linear-gradient', 'radial-gradient', 'transf
 /// @param {integer} $multiplier Multiplier (default is 1).
 @mixin grid-gutters($gutters, $class: null, $multiplier: 1) {
   // Expand gutters if it's not a list.
-  @if length($gutters) == 1 {
+  @if list.length($gutters) == 1 {
     $gutters: ($gutters, 0);
   }
 
   // Get column and row gutter values.
-  $c: nth($gutters, 1);
-  $r: nth($gutters, 2);
+  $c: list.nth($gutters, 1);
+  $r: list.nth($gutters, 2);
 
   // Get class (if provided).
   $x: '';
@@ -428,14 +436,14 @@ $vendor-values: ('filter', 'flex', 'linear-gradient', 'radial-gradient', 'transf
   // Config.
   $configPerBreakpoint: ();
 
-  $z: map-get($config, 'breakpoints');
+  $z: map.get($config, 'breakpoints');
 
   @if $z {
     $configPerBreakpoint: $z;
   }
 
   // Reset.
-  $x: map-get($config, 'reset');
+  $x: map.get($config, 'reset');
 
   @if $x {
     /* Reset */
@@ -444,7 +452,7 @@ $vendor-values: ('filter', 'flex', 'linear-gradient', 'radial-gradient', 'transf
   }
 
   // Box model.
-  $x: map-get($config, 'boxModel');
+  $x: map.get($config, 'boxModel');
 
   @if $x {
     /* Box Model */
@@ -453,7 +461,7 @@ $vendor-values: ('filter', 'flex', 'linear-gradient', 'radial-gradient', 'transf
   }
 
   // Containers.
-  $containers: map-get($config, 'containers');
+  $containers: map.get($config, 'containers');
 
   @if $containers {
     /* Containers */
@@ -472,13 +480,13 @@ $vendor-values: ('filter', 'flex', 'linear-gradient', 'radial-gradient', 'transf
     @include containers($containers);
 
     // Apply per-breakpoint.
-    @each $name in map-keys($breakpoints) {
+    @each $name in map.keys($breakpoints) {
       // Get/use breakpoint setting if it exists.
-      $x: map-get($configPerBreakpoint, $name);
+      $x: map.get($configPerBreakpoint, $name);
 
       // Per-breakpoint config exists?
       @if $x {
-        $y: map-get($x, 'containers');
+        $y: map.get($x, 'containers');
 
         // Setting exists? Use it.
         @if $y {
@@ -487,14 +495,14 @@ $vendor-values: ('filter', 'flex', 'linear-gradient', 'radial-gradient', 'transf
       }
 
       // Create @media block.
-      @media screen and #{map-get($breakpoints, $name)} {
+      @media screen and #{map.get($breakpoints, $name)} {
         @include containers($containers);
       }
     }
   }
 
   // Grid.
-  $grid: map-get($config, 'grid');
+  $grid: map.get($config, 'grid');
 
   @if $grid {
     /* Grid */
@@ -506,7 +514,7 @@ $vendor-values: ('filter', 'flex', 'linear-gradient', 'radial-gradient', 'transf
 
     // Sub-setting: Gutters.
     $grid-gutters: 40px;
-    $x: map-get($grid, 'gutters');
+    $x: map.get($grid, 'gutters');
 
     @if $x {
       $grid-gutters: $x;
@@ -550,18 +558,18 @@ $vendor-values: ('filter', 'flex', 'linear-gradient', 'radial-gradient', 'transf
     @include grid($grid-gutters);
 
     // Apply per-breakpoint.
-    @each $name in map-keys($breakpoints) {
+    @each $name in map.keys($breakpoints) {
       // Get/use breakpoint setting if it exists.
-      $x: map-get($configPerBreakpoint, $name);
+      $x: map.get($configPerBreakpoint, $name);
 
       // Per-breakpoint config exists?
       @if $x {
-        $y: map-get($x, 'grid');
+        $y: map.get($x, 'grid');
 
         // Setting exists?
         @if $y {
           // Sub-setting: Gutters.
-          $x: map-get($y, 'gutters');
+          $x: map.get($y, 'gutters');
 
           @if $x {
             $grid-gutters: $x;
@@ -570,7 +578,7 @@ $vendor-values: ('filter', 'flex', 'linear-gradient', 'radial-gradient', 'transf
       }
 
       // Create @media block.
-      @media screen and #{map-get($breakpoints, $name)} {
+      @media screen and #{map.get($breakpoints, $name)} {
         @include grid($grid-gutters, $name);
       }
     }
@@ -898,15 +906,15 @@ $vendor-values: ('filter', 'flex', 'linear-gradient', 'radial-gradient', 'transf
 /// @param {mixed} $value String/list of value(s).
 @mixin vendor($property, $value) {
   // Determine if property should expand.
-  $expandProperty: index($vendor-properties, $property);
+  $expandProperty: list.index($vendor-properties, $property);
 
   // Determine if value should expand (and if so, add '-prefix-' placeholder).
   $expandValue: false;
 
   @each $x in $value {
     @each $y in $vendor-values {
-      @if $y == str-slice($x, 1, str-length($y)) {
-        $value: set-nth($value, index($value, $x), '-prefix-' + $x);
+      @if $y == string.slice($x, 1, string.length($y)) {
+        $value: list.set-nth($value, list.index($value, $x), '-prefix-' + $x);
         $expandValue: true;
       }
     }

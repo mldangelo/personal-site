@@ -43,7 +43,7 @@ button,
     color: _palette(accent) !important;
 
     &:active {
-      background-color: transparentize(_palette(accent), 0.95);
+      background-color: rgba(46, 89, 186, 0.05); // _palette(accent) with 5% opacity
     }
   }
 

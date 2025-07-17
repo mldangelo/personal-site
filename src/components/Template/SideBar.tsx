@@ -2,6 +2,7 @@
 
 import React from 'react';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -14,7 +15,7 @@ const SideBar: React.FC = () => {
     <section id="sidebar">
       <section id="intro">
         <Link href="/" className="logo">
-          <img src="/images/me.jpg" alt="" />
+          <Image src="/images/me.jpg" alt="Michael D'Angelo" width={200} height={200} priority />
         </Link>
         <header>
           <h2>Michael D&apos;Angelo</h2>
