@@ -56,7 +56,3 @@ jobs:
         run: npm run build
         env:
           NODE_ENV: production
-      - name: Export Static Site
-        run: npm run export
-        env:
-          NODE_ENV: production
