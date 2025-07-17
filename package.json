@@ -14,7 +14,7 @@
     "analyze": "npm run build && source-map-explorer build/static/js/*.chunk.js",
     "build": "rimraf ./build && react-scripts build",
     "lint": "eslint \"**/*.js\"",
-    "predeploy": "npm run build && react-snap",
+    "predeploy": "npm run build",
     "start": "react-scripts start",
     "test": "npx jest"
   },
@@ -31,7 +31,7 @@
     "react-dom": "18.3.1",
     "react-ga": "^3.3.1",
     "react-helmet-async": "^2.0.5",
-    "react-router-dom": "^7.7.0",
+    "react-router-dom": "^6.23.1",
     "react-scripts": "^5.0.1"
   },
   "devDependencies": {
@@ -47,8 +47,7 @@
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-jsx-a11y": "6.10.2",
     "eslint-plugin-react": "^7.37.2",
-    "react-snap": "^1.23.0",
-    "rimraf": "^6.0.1",
+    "rimraf": "4.4.1",
     "sass": "^1.85.0",
     "source-map-explorer": "^2.5.3"
   },
@@ -62,12 +61,6 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
-    ]
-  },
-  "reactSnap": {
-    "puppeteerArgs": [
-      "--no-sandbox",
-      "--disable-setuid-sandbox"
     ]
   }
 }

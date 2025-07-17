@@ -42,6 +42,12 @@ Ensure you have [node](https://nodejs.org/) >= v16. Optionally, use [nvm](https:
    npm install
    ```
 
+4. [*] Verify building before pushing:
+   
+   ```bash
+   npm run build
+   '''
+
 4. Start the application:
 
    ```bash
