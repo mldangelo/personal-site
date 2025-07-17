@@ -25,6 +25,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    environment: github-pages
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -61,8 +62,8 @@ jobs:
         run: npm run build
         env:
           NODE_ENV: production
-          # Use repository variable for GA tracking ID
-          NEXT_PUBLIC_GA_TRACKING_ID: ${{ vars.NEXT_PUBLIC_GA_TRACKING_ID || 'UA-68649021-1' }}
+          # Use environment variable for GA tracking ID
+          NEXT_PUBLIC_GA_TRACKING_ID: ${{ vars.NEXT_PUBLIC_GA_TRACKING_ID }}
 
       - name: Verify build output
         run: |
