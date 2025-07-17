@@ -5,7 +5,7 @@
   // Navigation section inside header
   .link-container {
     padding-top: 1em;
-    
+
     h4 {
       text-decoration: none;
       border-bottom: none;
@@ -39,7 +39,7 @@
 
   .jobs-container {
     margin-bottom: 2em;
-    
+
     .points {
       li {
         margin: 0;
@@ -52,11 +52,11 @@
   // Courses section
   .courses {
     padding-top: 1.6em;
-    
+
     .title {
       text-align: center;
     }
-    
+
     .course-list {
       text-align: center;
 
@@ -69,10 +69,10 @@
   // Skills section
   .skills {
     margin-top: 2em;
-    
+
     .title {
       text-align: center;
-      
+
       p {
         font-size: 0.9em;
       }
@@ -83,9 +83,10 @@
   .summary {
     margin-bottom: 0.5em;
     font-size: 0.9em;
-    
+
     // Override any code block styling from markdown
-    code, pre {
+    code,
+    pre {
       background: none;
       border: none;
       padding: 0;
@@ -93,7 +94,7 @@
       font-family: inherit;
       font-size: inherit;
     }
-    
+
     pre code {
       display: inline;
       line-height: inherit;
@@ -103,7 +104,7 @@
   // References section
   .references {
     margin: 2em 0;
-    
+
     .title {
       text-align: center;
     }
@@ -146,7 +147,7 @@
   .course-number {
     display: inline;
   }
-  
+
   .course-name {
     display: inline;
     font-family: _font(family-heading);
@@ -157,7 +158,7 @@
     margin-top: -1em;
     text-transform: uppercase;
   }
-  
+
   ul li {
     display: inline;
   }
@@ -172,7 +173,7 @@
   .course-dot {
     display: none;
   }
-  
+
   .course-container a {
     display: block;
   }
