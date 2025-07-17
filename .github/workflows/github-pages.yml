@@ -72,6 +72,12 @@ jobs:
           fi
           echo "Build successful. Generated $(find out -type f | wc -l) files."
           du -sh out/
+          
+      - name: Ensure .nojekyll exists in output
+        run: |
+          if [ ! -f "out/.nojekyll" ]; then
+            cp public/.nojekyll out/.nojekyll || touch out/.nojekyll
+          fi
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
