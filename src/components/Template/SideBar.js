@@ -42,7 +42,7 @@ const SideBar = ({ showFooter }) => (
       <section id="footer">
         <ContactIcons />
         <p className="copyright">
-          &copy; 2025 Kai Zhang (No. 1a685a255)
+          &copy; 2025 Kai Zhang (NO. 131085e).
         </p>
       </section>
     )}

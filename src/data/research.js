@@ -1,47 +1,64 @@
 // TODO Add a couple lines about each project
 const data = [
   {
-    title: 'Nearest Dollar',
-    subtitle: '2015 BVP Hackathon',
-    image: '/images/projects/nearestdollar.jpg',
-    date: '2015-11-20',
-    desc:
-      'Built for a social impact hackathon. '
-      + 'NearestDollar connected to your bank accounts, credit cards, '
-      + 'or debit cards and rounded up your purchases to donate the balance to '
-      + 'the charity of your choice.',
+    category: {
+      title: 'Energy Markets',
+      image: '/images/research/proactive_electricity_markets.jpeg',
+    },
+    papers: [
+      {
+        title: 'Proactive Electricity Markets',
+        authors: 'Kai Zhang, Keith Moffat, Nicolas Lanzetti, Florian Dörfler',
+        status: 'Working Paper',
+        links: [
+          {
+            link: 'https://svorasro.wordpress.com/2025/07/07/congratulations-to-kai-zhang-on-receiving-the-2025-svor-masters-thesis-award/',
+            text: 'SVOR Best Master Thesis Award 2025',
+          },
+          {
+            link: '/files/proactive_electricity_markets_svor.pdf',
+            text: 'SVOR Slides',
+          },
+        ],
+      },
+    ],
   },
   {
-    title: 'Harvest',
-    subtitle: 'Won 3rd. place in 2015 Techcrunch Disrupt SF Hackathon',
-    link: 'https://devpost.com/software/harvest',
-    image: '/images/projects/harvest.jpg',
-    date: '2015-09-20',
-    desc:
-      'Won ~ $7000 in prizes for an advanced, low cost monitoring solution '
-      + 'for crops. Harvest was designed to catch irrigation leaks, overwatering, '
-      + 'and nutrient deficiencies at an affordable price for the developing world.',
-  },
-  {
-    title: 'Space Potato',
-    subtitle: 'A kickstarter funded potato powered weather balloon.',
-    link: 'http://www.spacepotato.org',
-    image: '/images/projects/spacepotato.jpg',
-    date: '2015-06-28',
-    desc:
-      'Launched a potato battery powered weather balloon with two cameras '
-      + 'and gps transponder. Resulting photos were published in a coffee table book. '
-      + 'You can email me for a copy.',
-  },
-  {
-    title: 'Cat Detector',
-    subtitle: 'A convolutional neural network to classify cats! (and dogs)',
-    image: '/images/projects/catdetector.jpg',
-    date: '2015-05-15',
-    desc:
-      'Trained a convolutional neural network to classify between ~ 80 cats breeds. '
-      + 'Over 60,000 cats were classified before server bills made the project too expensive '
-      + 'to continue hosting.',
+    category: {
+      title: 'Data-Driven Control',
+      image: '/images/research/deeprc.png',
+      // desc:
+      //   'Built for a social impact hackathon. '
+      //   + 'NearestDollar connected to your bank accounts, credit cards, '
+      //   + 'or debit cards and rounded up your purchases to donate the balance to '
+      //   + 'the charity of your choice.',
+    },
+    papers: [
+      {
+        title: 'Data-Enabled Predictive Iterative Control',
+        authors: 'Kai Zhang, Riccardo Zuliani, Efe Balta, John Lygeros',
+        journal: 'IEEE Control Systems Letters',
+        year: 2024,
+        links: [
+          {
+            link: 'https://doi.org/10.1109/LCSYS.2024.3408073',
+            text: '10.1109/LCSYS.2024.3408073',
+          },
+        ],
+      },
+      {
+        title: 'Data-Enabled Predictive Control for Dynamic Traffic Routing',
+        authors: 'Kai Zhang, Kenan Zhang, Linbin Huang, Giuseppe Belgioioso, John Lygeros, Florian Dörfler',
+        journal: 'TRB Annual Meeting',
+        year: 2024,
+        links: [
+          {
+            link: 'https://www.research-collection.ethz.ch/bitstream/handle/20.500.11850/719197/6/23_Zhang_TRBAM_DeePC-routing.pdf',
+            text: 'ETH Zurich Research Collection',
+          },
+        ],
+      },
+    ],
   },
 ];
 
