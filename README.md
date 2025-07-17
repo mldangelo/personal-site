@@ -4,7 +4,7 @@ Welcome to my [personal website](https://mldangelo.com)! This is an [MIT license
 
 ## 🚀 Features
 
-- Built with modern TypeScript, using [Next.js 15](https://nextjs.org/), [React 18](https://react.dev/), and SCSS.
+- Built with modern TypeScript, using [Next.js 15.4](https://nextjs.org/), [React 19](https://react.dev/), and SCSS.
 - Type-safe development with TypeScript strict mode.
 - Optimized performance with static export and automatic font optimization.
 - Automated workflows via [GitHub Actions](https://github.com/features/actions).
@@ -20,7 +20,7 @@ Your contributions are warmly welcomed! If you wish to contribute, please review
 
 ## 🔧 Dependencies
 
-Ensure you have [node](https://nodejs.org/) >= v24. Optionally, use [nvm](https://github.com/nvm-sh/nvm#installing-and-updating) to manage node versions.
+Ensure you have [node](https://nodejs.org/) >= v20. Optionally, use [nvm](https://github.com/nvm-sh/nvm#installing-and-updating) to manage node versions.
 
 ## 🚀 Setup and Running
 
@@ -31,7 +31,7 @@ Ensure you have [node](https://nodejs.org/) >= v24. Optionally, use [nvm](https:
    cd personal-site
    ```
 
-2. (Optional) Ensure you're on Node v24 or higher:
+2. (Optional) Ensure you're on Node v20 or higher:
 
    ```bash
    nvm install
@@ -101,6 +101,7 @@ npm run lint          # Run ESLint
 npm run type-check    # Run TypeScript type checking
 npm run format        # Format code with Prettier
 npm run format:check  # Check code formatting
+npm test              # Run Jest tests
 ```
 
 ## 🎨 Customization

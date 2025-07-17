@@ -1,13 +1,14 @@
 import React from 'react';
 
-import { Degree as DegreeType } from '../../data/resume/degrees';
+import type { Degree as DegreeType } from '@/data/resume/degrees';
+
 import Degree from './Education/Degree';
 
 interface EducationProps {
-  data?: DegreeType[];
+  data: DegreeType[];
 }
 
-const Education: React.FC<EducationProps> = ({ data = [] }) => (
+const Education: React.FC<EducationProps> = ({ data }) => (
   <div className="education">
     <div className="link-to" id="education" />
     <div className="title">

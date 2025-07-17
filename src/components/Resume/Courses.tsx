@@ -4,6 +4,10 @@ import type { Course as CourseType } from '@/data/resume/courses';
 
 import Course from './Courses/Course';
 
+interface CoursesProps {
+  data: CourseType[];
+}
+
 const getRows = (courses: CourseType[]) =>
   courses
     .sort((a, b) => {
@@ -14,13 +18,11 @@ const getRows = (courses: CourseType[]) =>
       else if (a.number < b.number) ret = -1;
       return ret;
     })
-    .map((course) => <Course data={course} key={course.title} />);
+    .map((course, idx) => (
+      <Course data={course} key={course.title} last={idx === courses.length - 1} />
+    ));
 
-interface CoursesProps {
-  data?: CourseType[];
-}
-
-const Courses: React.FC<CoursesProps> = ({ data = [] }) => (
+const Courses: React.FC<CoursesProps> = ({ data }) => (
   <div className="courses">
     <div className="link-to" id="courses" />
     <div className="title">

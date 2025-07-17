@@ -1,432 +1,179 @@
 /* Resume */
 
+// The resume page uses the .post wrapper for consistent styling
 #resume {
-  // Override post container styles for resume page to prevent overflow
-  &.post {
-    margin: 0;
-    left: 0;
-    width: 100%;
-    max-width: 100%;
-    overflow-x: hidden;
-
-    // Remove the negative margins and width calculations
-    @include breakpoint(medium) {
-      left: 0;
-      width: 100%;
-      border-left: solid 1px _palette(border);
-      border-right: solid 1px _palette(border);
-    }
-
-    @include breakpoint(small) {
-      left: 0;
-      width: 100%;
-      padding: 2em 1.5em;
-      border: solid 1px _palette(border);
-    }
-
-    > header {
-      left: 0;
-      width: 100%;
-      margin: 0 0 3em 0;
-      padding: 2em 0 1em 0;
-      border-bottom: solid 2px _palette(border);
-
-      @include breakpoint(medium) {
-        left: 0;
-        width: 100%;
-        margin: 0 0 2em 0;
-      }
-
-      @include breakpoint(small) {
-        left: 0;
-        width: 100%;
-        padding: 1.5em 0 1em 0;
-      }
-
-      .title {
-        text-align: center;
-        padding: 0;
-
-        h2 {
-          margin-bottom: 0.5em;
-          font-size: 2em;
-
-          @include breakpoint(small) {
-            font-size: 1.5em;
-          }
-        }
-      }
-    }
-  }
-
-  .link-to {
-    position: relative;
-    top: -5em;
-    visibility: hidden;
-  }
-
+  // Navigation section inside header
   .link-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1em;
-    margin-top: 1em;
-
+    padding-top: 1em;
+    
     h4 {
       text-decoration: none;
       border-bottom: none;
-      display: inline-block;
-      margin: 0;
-      font-size: 0.9em;
+      display: inline-flex;
 
       a {
-        padding: 0.5em 1em;
+        padding: 0 0.5em;
         margin: 0;
-        background: _palette(bg-alt);
-        border-radius: 0.25em;
-        color: _palette(fg-bold);
-        text-decoration: none;
-        transition: all 0.2s ease;
-        display: block;
-
-        &:hover {
-          background: _palette(accent);
-          color: _palette(bg);
-          transform: translateY(-2px);
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
       }
     }
   }
 
-  // Section styling
+  // Common section styles
   .education,
   .experience,
   .skills,
   .courses,
   .references {
-    margin-bottom: 4em;
-
-    @include breakpoint(small) {
-      margin-bottom: 3em;
-    }
-
     .title {
       text-align: center;
-      margin-bottom: 2.5em;
-      position: relative;
-
-      h3 {
-        font-size: 1.75em;
-        color: _palette(fg-bold);
-        margin-bottom: 0.25em;
-
-        @include breakpoint(small) {
-          font-size: 1.5em;
-        }
-      }
-
-      p {
-        color: _palette(fg-light);
-        font-style: italic;
-        margin: 0;
-      }
-
-      // Decorative underline
-      &:after {
-        content: '';
-        display: block;
-        width: 60px;
-        height: 3px;
-        background: _palette(accent);
-        margin: 1em auto 0;
-      }
+      margin-bottom: 2em;
     }
   }
 
-  // Education specific
-  .education {
-    .degree-container {
-      margin-bottom: 2em;
+  // Experience section
+  .experience {
+    .title {
       text-align: center;
+    }
+  }
 
-      h4 {
-        font-weight: _font(weight-heading-bold);
-        margin-bottom: 0.5em;
-        font-size: 1.1em;
-
-        a {
-          color: inherit;
-          text-decoration: none;
-          border-bottom: 1px dotted _palette(fg-light);
-
-          &:hover {
-            color: _palette(accent);
-            border-bottom-color: _palette(accent);
-          }
-        }
-      }
-
-      .degree {
-        margin-bottom: 0.25em;
-        text-transform: none;
-        letter-spacing: 0.05em;
-        font-size: 0.95em;
-        color: _palette(fg);
-      }
-
-      .school {
-        text-transform: none;
-        padding-top: 0;
-        margin-bottom: 0;
-        color: _palette(fg-light);
+  .jobs-container {
+    margin-bottom: 2em;
+    
+    .points {
+      li {
+        margin: 0;
+        padding: 0;
         font-size: 0.9em;
       }
     }
   }
 
-  // Experience specific
-  .experience {
-    .jobs-container {
-      margin: 0 0 3em 0;
-      padding: 2em;
-      background: _palette(bg-alt);
-      border-radius: 0.5em;
-      position: relative;
-      transition: all 0.3s ease;
-
-      @include breakpoint(small) {
-        padding: 1.5em;
-        margin: 0 0 2em 0;
-      }
-
-      &:hover {
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        transform: translateY(-2px);
-      }
-
-      &:last-child {
-        margin-bottom: 0;
-      }
-
-      header {
-        margin-bottom: 1.5em;
-        padding-bottom: 1em;
-        border-bottom: 1px solid _palette(border);
-
-        h4 {
-          margin-bottom: 0.5em;
-          font-size: 1.35em;
-          font-weight: _font(weight-heading-bold);
-          color: _palette(fg-bold);
-
-          @include breakpoint(small) {
-            font-size: 1.2em;
-          }
-
-          a {
-            color: inherit;
-            text-decoration: none;
-            transition: color 0.2s ease;
-
-            &:hover {
-              color: _palette(accent);
-            }
-          }
-        }
-
-        .daterange {
-          margin: 0;
-          color: _palette(accent);
-          font-size: 0.95em;
-          font-style: normal;
-          font-weight: 500;
-        }
-      }
-
-      .summary {
-        margin-bottom: 1.5em;
-        font-size: 1em;
-        line-height: 1.8;
-        color: _palette(fg);
-
-        p {
-          margin: 0 0 1em 0;
-
-          &:last-child {
-            margin-bottom: 0;
-          }
-        }
-
-        a {
-          color: _palette(accent);
-          text-decoration: none;
-          font-weight: 500;
-          border-bottom: 1px solid transparent;
-          transition: border-color 0.2s ease;
-
-          &:hover {
-            border-bottom-color: _palette(accent);
-          }
-        }
-      }
-
-      .points {
-        margin: 0;
-        padding-left: 1.25em;
-
-        li {
-          margin: 0 0 0.75em 0;
-          padding: 0;
-          font-size: 0.95em;
-          line-height: 1.7;
-          color: _palette(fg);
-          position: relative;
-
-          &:last-child {
-            margin-bottom: 0;
-          }
-
-          // Custom bullet points
-          &:before {
-            content: '▸';
-            position: absolute;
-            left: -1.25em;
-            color: _palette(accent);
-            font-weight: bold;
-          }
-        }
-      }
+  // Courses section
+  .courses {
+    padding-top: 1.6em;
+    
+    .title {
+      text-align: center;
     }
-  }
-
-  // Skills specific
-  .skills {
-    .skill-button-container {
-      margin: 2em 0 3em 0;
+    
+    .course-list {
       text-align: center;
 
-      .skillbutton {
-        margin: 0.25em;
-        font-size: 0.85em;
-        padding: 0.5em 1.25em;
-        background: _palette(bg-alt);
-        border: 1px solid _palette(border);
-
-        &:hover {
-          background: _palette(bg);
-          border-color: _palette(accent);
-        }
-
-        &.skillbutton-active {
-          background: _palette(accent);
-          color: _palette(bg) !important;
-          border-color: _palette(accent);
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-        }
-      }
-    }
-
-    .skills-container {
-      max-width: 800px;
-      margin: 0 auto;
-    }
-  }
-
-  // Courses specific
-  .courses {
-    .course-list {
-      text-align: left;
-      max-width: 700px;
-      margin: 0 auto;
-
       h4 {
-        white-space: normal;
-        margin-bottom: 2em;
-        text-align: center;
-        color: _palette(fg-light);
-        font-size: 0.95em;
-      }
-
-      ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 1em;
-
-        @include breakpoint(small) {
-          grid-template-columns: 1fr;
-        }
-
-        li {
-          display: block;
-
-          a {
-            display: block;
-            padding: 1em;
-            background: _palette(bg-alt);
-            border-radius: 0.25em;
-            text-decoration: none;
-            transition: all 0.2s ease;
-
-            &:hover {
-              background: _palette(bg);
-              box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-              transform: translateY(-2px);
-
-              .course-name {
-                color: _palette(accent);
-              }
-            }
-
-            .course-number {
-              font-weight: bold;
-              color: _palette(accent);
-              margin-right: 0.5em;
-            }
-
-            .course-name {
-              font-family: _font(family);
-              font-size: 0.9em;
-              font-weight: normal;
-              letter-spacing: normal;
-              line-height: 1.4;
-              text-transform: none;
-              color: _palette(fg);
-            }
-          }
-        }
+        white-space: nowrap;
       }
     }
   }
 
-  // References specific
-  .references {
-    text-align: center;
-    padding: 2em;
-    background: _palette(bg-alt);
-    border-radius: 0.5em;
-
-    p {
-      margin: 0;
-      font-size: 1.1em;
-
-      a {
-        color: _palette(accent);
-        text-decoration: none;
-        font-weight: 500;
-
-        &:hover {
-          text-decoration: underline;
-        }
+  // Skills section
+  .skills {
+    margin-top: 2em;
+    
+    .title {
+      text-align: center;
+      
+      p {
+        font-size: 0.9em;
       }
     }
+  }
+
+  // Summary text in experience
+  .summary {
+    margin-bottom: 0.5em;
+    font-size: 0.9em;
+    
+    // Override any code block styling from markdown
+    code, pre {
+      background: none;
+      border: none;
+      padding: 0;
+      margin: 0;
+      font-family: inherit;
+      font-size: inherit;
+    }
+    
+    pre code {
+      display: inline;
+      line-height: inherit;
+    }
+  }
+
+  // References section
+  .references {
+    margin: 2em 0;
+    
+    .title {
+      text-align: center;
+    }
+  }
+
+  // Anchor links
+  .link-to {
+    position: relative;
+    top: -4.5em;
   }
 }
 
-// Remove course dots completely
+// Date ranges
+.daterange {
+  margin-bottom: 0.2em;
+}
+
+// Education degrees
+.degree-container {
+  h4 {
+    font-weight: normal;
+  }
+
+  .degree {
+    margin-bottom: 0.1em;
+    text-transform: none;
+    letter-spacing: 0.16em;
+    font-size: 0.8em;
+  }
+
+  .school {
+    text-transform: none;
+    padding-top: 0.3em;
+    margin-bottom: 1em;
+  }
+}
+
+// Course styling
+.courses {
+  .course-number {
+    display: inline;
+  }
+  
+  .course-name {
+    display: inline;
+    font-family: _font(family-heading);
+    font-size: 0.7em;
+    font-weight: 400;
+    letter-spacing: 0.25em;
+    line-height: 2.5;
+    margin-top: -1em;
+    text-transform: uppercase;
+  }
+  
+  ul li {
+    display: inline;
+  }
+}
+
 .course-dot {
-  display: none;
+  display: inline;
+}
+
+// Responsive
+@include breakpoint(small) {
+  .course-dot {
+    display: none;
+  }
+  
+  .course-container a {
+    display: block;
+  }
 }

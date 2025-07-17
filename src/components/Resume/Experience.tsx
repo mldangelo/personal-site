@@ -5,10 +5,10 @@ import type { Position } from '@/data/resume/work';
 import Job from './Experience/Job';
 
 interface ExperienceProps {
-  data?: Position[];
+  data: Position[];
 }
 
-const Experience: React.FC<ExperienceProps> = ({ data = [] }) => (
+const Experience: React.FC<ExperienceProps> = ({ data }) => (
   <div className="experience">
     <div className="link-to" id="experience" />
     <div className="title">

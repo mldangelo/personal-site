@@ -2,43 +2,47 @@
 
 import React, { useState } from 'react';
 
-import type { Category, Skill } from '../../data/resume/skills';
+import type { Category, Skill } from '@/data/resume/skills';
+
 import CategoryButton from './Skills/CategoryButton';
 import SkillBar from './Skills/SkillBar';
 
 interface SkillsProps {
-  skills?: Skill[];
-  categories?: Category[];
+  skills: Skill[];
+  categories: Category[];
 }
 
-type ButtonState = Record<string, boolean>;
-
-const Skills: React.FC<SkillsProps> = ({ skills = [], categories = [] }) => {
-  const initialButtons: ButtonState = Object.fromEntries(
+const Skills: React.FC<SkillsProps> = ({ skills, categories }) => {
+  const initialButtons = Object.fromEntries(
     [['All', false]].concat(categories.map(({ name }) => [name, false])),
   );
 
-  const [buttons, setButtons] = useState<ButtonState>(initialButtons);
+  const [buttons, setButtons] = useState(initialButtons);
 
-  const handleChildClick = (label: string): void => {
+  const handleChildClick = (label: string) => {
     // Toggle button that was clicked. Turn all other buttons off.
-    const newButtons = Object.keys(buttons).reduce<ButtonState>(
+    const newButtons = Object.keys(buttons).reduce(
       (obj, key) => ({
         ...obj,
         [key]: label === key && !buttons[key],
       }),
-      {},
+      {} as Record<string, boolean>,
     );
     // Turn on 'All' button if other buttons are off
     newButtons.All = !Object.keys(buttons).some((key) => newButtons[key]);
     setButtons(newButtons);
   };
 
-  const getRows = (): React.ReactElement[] => {
+  const getButtons = () =>
+    Object.keys(buttons).map((key) => (
+      <CategoryButton label={key} key={key} active={buttons} handleClick={handleChildClick} />
+    ));
+
+  const getRows = () => {
     // search for true active categories
     const actCat = Object.keys(buttons).reduce((cat, key) => (buttons[key] ? key : cat), 'All');
 
-    const comparator = (a: Skill, b: Skill): number => {
+    const comparator = (a: Skill, b: Skill) => {
       let ret = 0;
       if (a.competency > b.competency) ret = -1;
       else if (a.competency < b.competency) ret = 1;
@@ -54,11 +58,6 @@ const Skills: React.FC<SkillsProps> = ({ skills = [], categories = [] }) => {
       .filter((skill) => actCat === 'All' || skill.category.includes(actCat))
       .map((skill) => <SkillBar categories={categories} data={skill} key={skill.title} />);
   };
-
-  const getButtons = (): React.ReactElement[] =>
-    Object.keys(buttons).map((key) => (
-      <CategoryButton label={key} key={key} active={buttons} handleClick={handleChildClick} />
-    ));
 
   return (
     <div className="skills">

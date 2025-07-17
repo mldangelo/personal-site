@@ -1,21 +1,21 @@
 import React from 'react';
 
-import type { Category, Skill } from '../../../data/resume/skills';
+import type { Category, Skill } from '@/data/resume/skills';
 
 interface SkillBarProps {
   data: Skill;
-  categories?: Category[];
+  categories: Category[];
 }
 
-const SkillBar: React.FC<SkillBarProps> = ({ data, categories = [] }) => {
+const SkillBar: React.FC<SkillBarProps> = ({ data, categories }) => {
   const { category, competency, title } = data;
 
   // TODO: Consider averaging colors
-  const titleStyle: React.CSSProperties = {
+  const titleStyle = {
     background: categories.filter((cat) => category.includes(cat.name)).map((cat) => cat.color)[0],
   };
 
-  const barStyle: React.CSSProperties = {
+  const barStyle = {
     ...titleStyle,
     width: `${String(Math.min(100, Math.max((competency / 5.0) * 100.0, 0)))}%`,
   };
