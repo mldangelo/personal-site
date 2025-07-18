@@ -8,7 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 # Install dependencies
 npm install
 
-# Start development server with Turbopack (http://localhost:3000)
+# Start development server with Turbopack (http://localhost:3456)
 npm run dev
 
 # Run linting
@@ -38,7 +38,7 @@ This is a personal portfolio/resume website built with Next.js and TypeScript, d
 - **Next.js 15.4** with App Router
 - **TypeScript** for type safety
 - **React 19** with functional components and hooks
-- **SCSS** for styling
+- **Tailwind CSS v4** for styling
 - **Jest** with React Testing Library and SWC
 - **Static Export** for GitHub Pages deployment
 - **Node 20+** runtime
@@ -47,7 +47,7 @@ This is a personal portfolio/resume website built with Next.js and TypeScript, d
 - `/app/` - Next.js App Router pages and layouts
 - `/src/components/` - React components organized by feature
 - `/src/data/` - Static data files (resume, projects, stats)
-- `/src/static/` - SCSS styles
+- `/app/tailwind.css` - Tailwind CSS configuration
 - `/public/` - Static assets (images, favicons)
 
 ### Key Design Patterns
