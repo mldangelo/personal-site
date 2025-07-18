@@ -16,7 +16,18 @@ const Cell = ({ data, papers }) => (
         </time> */}
       </header>
       <a href={data.link} className="image">
-        <img src={`${process.env.PUBLIC_URL}${data.image}`} alt={data.title} />
+        <picture>
+          {/* Show mobile image on phones if provided, else fall back */}
+          <source
+            media="(max-width: 600px)"
+            srcSet={`${process.env.PUBLIC_URL}${data.imageMobile || data.image}`}
+          />
+          {/* Default / desktop image */}
+          <img
+            src={`${process.env.PUBLIC_URL}${data.image}`}
+            alt={data.title}
+          />
+        </picture>
         {data.desc && (
           <div className="description">
             <p>{data.desc}</p>
@@ -37,6 +48,7 @@ Cell.propTypes = {
     title: PropTypes.string.isRequired,
     link: PropTypes.string,
     image: PropTypes.string.isRequired,
+    imageMobile: PropTypes.string,
     desc: PropTypes.string,
   }).isRequired,
   papers: PropTypes.arrayOf(

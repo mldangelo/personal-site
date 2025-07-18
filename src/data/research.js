@@ -4,11 +4,12 @@ const data = [
     category: {
       title: 'Energy Markets',
       image: '/images/research/proactive_electricity_markets.jpeg',
+      imageMobile: '/images/research/proactive_electricity_markets_mobile.jpeg',
     },
     papers: [
       {
         title: 'Proactive Electricity Markets',
-        authors: 'Kai Zhang, Keith Moffat, Nicolas Lanzetti, Florian Dörfler',
+        authors: 'Kai Zhang, Nicolas Lanzetti, Florian Dörfler, Keith Moffat',
         status: 'Working Paper',
         links: [
           {
@@ -27,6 +28,7 @@ const data = [
     category: {
       title: 'Data-Driven Control',
       image: '/images/research/deeprc.png',
+      imageMobile: '/images/research/deeprc_mobile.jpeg',
       // desc:
       //   'Built for a social impact hackathon. '
       //   + 'NearestDollar connected to your bank accounts, credit cards, '
