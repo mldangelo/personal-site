@@ -48,9 +48,10 @@ const useInterval = (callback: () => void, delay: number | null) => {
 
 interface EmailLinkProps {
   loopMessage?: boolean;
+  className?: string;
 }
 
-const EmailLink: React.FC<EmailLinkProps> = ({ loopMessage = false }) => {
+const EmailLink: React.FC<EmailLinkProps> = ({ loopMessage = false, className = '' }) => {
   const hold = 50; // ticks to wait after message is complete before rendering next message
   const delay = 50; // tick length in mS
 
@@ -83,16 +84,28 @@ const EmailLink: React.FC<EmailLinkProps> = ({ loopMessage = false }) => {
     isActive ? delay : null,
   );
 
+  const isValid = validateText(message);
+
   return (
     <div
-      className="inline-container"
-      style={validateText(message) ? {} : { color: 'red' }}
+      className={`inline-block ${className}`}
       onMouseEnter={() => setIsActive(false)}
       onMouseLeave={() => idx < messages.length && setIsActive(true)}
     >
-      <a href={validateText(message) ? `mailto:${message}@mldangelo.com` : ''}>
-        <span>{message}</span>
-        <span>@mldangelo.com</span>
+      <a
+        href={isValid ? `mailto:${message}@mldangelo.com` : ''}
+        className={`
+          inline-flex items-center font-mono text-xl px-8 py-4 rounded-2xl
+          border-2 transition-all duration-300
+          ${
+            isValid
+              ? 'bg-primary text-white border-primary hover:bg-primary-dark hover:border-primary-dark hover:scale-105 hover:shadow-xl cursor-pointer'
+              : 'bg-red-50 dark:bg-red-900/20 text-red-500 dark:text-red-400 border-red-200 dark:border-red-800 cursor-not-allowed'
+          }
+        `}
+      >
+        <span className="min-w-[240px] text-right pr-1">{message}</span>
+        <span className="font-bold">@mldangelo.com</span>
       </a>
     </div>
   );

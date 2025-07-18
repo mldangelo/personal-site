@@ -1,3 +1,13 @@
+import {
+  faClock,
+  faCode,
+  faCodeBranch,
+  faCodePullRequest,
+  faExclamationTriangle,
+  faEye,
+  faStar,
+  faUtensils,
+} from '@fortawesome/free-solid-svg-icons';
 import dayjs from 'dayjs';
 
 import { StatData } from '../../components/Stats/types';
@@ -11,35 +21,42 @@ const data: StatData[] = [
     label: 'Stars this repository has on github',
     key: 'stargazers_count',
     link: 'https://github.com/mldangelo/personal-site/stargazers',
+    icon: faStar,
   },
   {
     label: 'Number of people watching this repository',
     key: 'subscribers_count',
     link: 'https://github.com/mldangelo/personal-site/stargazers',
+    icon: faEye,
   },
   {
     label: 'Number of forks',
     key: 'forks',
     link: 'https://github.com/mldangelo/personal-site/network',
+    icon: faCodeBranch,
   },
   {
     label: 'Number of spoons',
     value: '0',
+    icon: faUtensils,
   },
   {
     label: 'Number of linter warnings',
     value: '0', // enforced via github workflow
+    icon: faExclamationTriangle,
   },
   {
     label: 'Open github issues',
     key: 'open_issues_count',
     link: 'https://github.com/mldangelo/personal-site/issues',
+    icon: faCodePullRequest,
   },
   {
     label: 'Last updated at',
     key: 'pushed_at',
     link: 'https://github.com/mldangelo/personal-site/commits',
     format: (x: unknown) => dayjs(x as string).format('MMMM DD, YYYY'),
+    icon: faClock,
   },
   {
     // TODO update this with a pre-commit hook
@@ -48,6 +65,7 @@ const data: StatData[] = [
     label: 'Lines of TypeScript powering this website',
     value: '2150',
     link: 'https://github.com/mldangelo/personal-site/graphs/contributors',
+    icon: faCode,
   },
 ];
 

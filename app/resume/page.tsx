@@ -19,53 +19,83 @@ export const metadata: Metadata = {
 };
 
 const sections = [
-  { name: 'Education', id: 'education' },
-  { name: 'Experience', id: 'experience' },
-  { name: 'Skills', id: 'skills' },
-  { name: 'Courses', id: 'courses' },
-  { name: 'References', id: 'references' },
+  { name: 'Education', id: 'education', icon: '🎓' },
+  { name: 'Experience', id: 'experience', icon: '💼' },
+  { name: 'Skills', id: 'skills', icon: '🚀' },
+  { name: 'Courses', id: 'courses', icon: '📚' },
+  { name: 'References', id: 'references', icon: '👥' },
 ];
 
 export default function ResumePage() {
   return (
-    <article className="post" id="resume">
-      <header>
-        <div className="title">
-          <h2>Resume</h2>
-          <div className="link-container">
-            {sections.map((section) => (
-              <h4 key={section.id}>
-                <a href={`#${section.id}`}>{section.name}</a>
-              </h4>
-            ))}
+    <div className="min-h-screen py-20">
+      <div className="container max-w-6xl mx-auto">
+        <div className="space-y-16">
+          {/* Header */}
+          <div className="text-center space-y-6 animate-fade-up">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black">Resume</h1>
+
+            {/* Section Navigation */}
+            <nav className="flex flex-wrap justify-center gap-4">
+              {sections.map((section) => (
+                <a
+                  key={section.id}
+                  href={`#${section.id}`}
+                  className="px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-primary hover:text-white dark:hover:bg-accent dark:hover:text-black transition-all duration-200 flex items-center gap-2"
+                >
+                  <span>{section.icon}</span>
+                  <span className="font-medium">{section.name}</span>
+                </a>
+              ))}
+            </nav>
           </div>
+
+          {/* Education Section */}
+          <section id="education" className="space-y-8 animate-fade-up animation-delay-200">
+            <h2 className="text-3xl font-bold flex items-center gap-3">
+              <span className="text-4xl">🎓</span>
+              Education
+            </h2>
+            <Education data={degrees} />
+          </section>
+
+          {/* Experience Section */}
+          <section id="experience" className="space-y-8 animate-fade-up animation-delay-300">
+            <h2 className="text-3xl font-bold flex items-center gap-3">
+              <span className="text-4xl">💼</span>
+              Experience
+            </h2>
+            <Experience data={work} />
+          </section>
+
+          {/* Skills Section */}
+          <section id="skills" className="space-y-8 animate-fade-up animation-delay-400">
+            <h2 className="text-3xl font-bold flex items-center gap-3">
+              <span className="text-4xl">🚀</span>
+              Skills
+            </h2>
+            <Skills skills={skills} categories={categories} />
+          </section>
+
+          {/* Courses Section */}
+          <section id="courses" className="space-y-8 animate-fade-up animation-delay-500">
+            <h2 className="text-3xl font-bold flex items-center gap-3">
+              <span className="text-4xl">📚</span>
+              Courses
+            </h2>
+            <Courses data={courses} />
+          </section>
+
+          {/* References Section */}
+          <section id="references" className="space-y-8 animate-fade-up animation-delay-500">
+            <h2 className="text-3xl font-bold flex items-center gap-3">
+              <span className="text-4xl">👥</span>
+              References
+            </h2>
+            <References />
+          </section>
         </div>
-      </header>
-
-      <section id="education" className="education">
-        <div className="link-to" />
-        <Education data={degrees} />
-      </section>
-
-      <section id="experience" className="experience">
-        <div className="link-to" />
-        <Experience data={work} />
-      </section>
-
-      <section id="skills" className="skills">
-        <div className="link-to" />
-        <Skills skills={skills} categories={categories} />
-      </section>
-
-      <section id="courses" className="courses">
-        <div className="link-to" />
-        <Courses data={courses} />
-      </section>
-
-      <section id="references" className="references">
-        <div className="link-to" />
-        <References />
-      </section>
-    </article>
+      </div>
+    </div>
   );
 }

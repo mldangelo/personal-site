@@ -20,9 +20,15 @@ export default function PageWrapper({ children, fullPage = false }: PageWrapperP
   }, [pathname]);
 
   return (
-    <>
-      <div id="main">{children}</div>
-      {!fullPage && <SideBar />}
-    </>
+    <div className="flex flex-col lg:flex-row-reverse items-start max-w-[calc(100%-17em)] mx-auto xl:max-w-[72em] lg:max-w-full min-h-screen">
+      {!fullPage && (
+        <aside className="lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto">
+          <SideBar />
+        </aside>
+      )}
+      <main className="flex-1 w-full px-12 py-12 lg:px-10 lg:py-10 sm:px-8 sm:py-8 xs:px-6 xs:py-6">
+        <div className="max-w-4xl mx-auto">{children}</div>
+      </main>
+    </div>
   );
 }

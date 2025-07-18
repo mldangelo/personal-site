@@ -23,12 +23,14 @@ const getRows = (courses: CourseType[]) =>
     ));
 
 const Courses: React.FC<CoursesProps> = ({ data }) => (
-  <div className="courses">
+  <div className="mb-8">
     <div className="link-to" id="courses" />
-    <div className="title">
-      <h3>Selected Courses</h3>
+    <div className="mb-6">
+      <h3 className="text-2xl font-heading font-heading-bold uppercase tracking-heading">
+        Selected Courses
+      </h3>
     </div>
-    <ul className="course-list">{getRows(data)}</ul>
+    <ul className="flex flex-wrap items-center gap-2">{getRows(data)}</ul>
   </div>
 );
 

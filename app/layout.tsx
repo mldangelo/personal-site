@@ -5,7 +5,9 @@ import { Raleway, Source_Sans_3 } from 'next/font/google';
 
 import GoogleAnalytics from '@/components/Template/GoogleAnalytics';
 import Navigation from '@/components/Template/Navigation';
-import '@/static/css/main.scss';
+import { ThemeProvider } from '@/components/Theme/ThemeProvider';
+
+import './globals.css';
 
 const sourceSans = Source_Sans_3({
   weight: ['400', '700'],
@@ -66,16 +68,39 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/images/favicon/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/images/favicon/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/images/favicon/favicon-96x96.png', sizes: '96x96', type: 'image/png' },
+    ],
+    shortcut: [{ url: '/favicon.ico' }],
+    apple: [
+      { url: '/images/favicon/apple-icon-180x180.png', sizes: '180x180' },
+      { url: '/images/favicon/apple-icon-152x152.png', sizes: '152x152' },
+      { url: '/images/favicon/apple-icon-120x120.png', sizes: '120x120' },
+    ],
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${sourceSans.variable} ${raleway.variable}`}>
-      <body>
-        <div id="wrapper">
+    <html
+      lang="en"
+      className={`${sourceSans.variable} ${raleway.variable}`}
+      suppressHydrationWarning
+    >
+      <body className="pt-16">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
           <Navigation />
-          {children}
-        </div>
+          <main>{children}</main>
+        </ThemeProvider>
         <GoogleAnalytics />
       </body>
     </html>
