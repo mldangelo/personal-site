@@ -42,7 +42,7 @@
     "react-dom": "^19.1.0"
   },
   "devDependencies": {
-    "@next/bundle-analyzer": "^15.4.1",
+    "@next/bundle-analyzer": "^15.4.2",
     "@swc/core": "^1.12.14",
     "@swc/jest": "^0.2.39",
     "@testing-library/jest-dom": "^6.6.3",
