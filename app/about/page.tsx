@@ -2,115 +2,174 @@ import React from 'react';
 
 import Markdown from 'markdown-to-jsx';
 
+import PartnerLogos from '@/components/About/PartnerLogos';
 import { aboutMarkdown } from '@/data/about';
-
-const count = (str: string) => str.split(/\s+/).filter((word) => word !== '').length;
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen py-20">
-      <div className="container max-w-4xl mx-auto">
-        <div className="space-y-12">
-          {/* Header */}
-          <div className="text-center space-y-4 animate-fade-up">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black">About Me</h1>
-            <p className="text-lg text-gray-600 dark:text-gray-400">
-              ~{count(aboutMarkdown).toLocaleString()} words
-            </p>
+    <main className="px-6 py-16 sm:px-12 lg:px-16">
+      <div className="max-w-3xl mx-auto">
+        {/* Hero section with photo placeholder */}
+        <div className="mb-12 text-center">
+          {/* TODO: Add professional headshot */}
+          <div className="w-32 h-32 rounded-full bg-gray-200 dark:bg-gray-800 mx-auto mb-6 flex items-center justify-center">
+            <span className="text-gray-400 text-sm">Photo</span>
           </div>
+        </div>
 
-          {/* Content */}
-          <div className="prose prose-lg prose-gray dark:prose-invert max-w-none animate-fade-up animation-delay-200">
-            <Markdown
-              options={{
-                overrides: {
-                  h1: {
-                    component: ({ children, ...props }) => (
-                      <h1 className="text-3xl font-bold mt-12 mb-6" {...props}>
-                        {children}
-                      </h1>
-                    ),
+        <div className="prose prose-gray dark:prose-invert max-w-none">
+          <Markdown
+            options={{
+              overrides: {
+                h1: {
+                  props: {
+                    className: 'text-3xl font-bold mb-2 text-center',
                   },
-                  h2: {
-                    component: ({ children, ...props }) => (
-                      <h2 className="text-2xl font-bold mt-10 mb-4" {...props}>
-                        {children}
-                      </h2>
-                    ),
+                },
+                strong: {
+                  component: ({ children }) => {
+                    // Check if this is the tagline
+                    if (children?.toString().includes('CTO, Promptfoo')) {
+                      return (
+                        <span className="block text-xl text-center mb-4 text-gray-700 dark:text-gray-300">
+                          {children}
+                        </span>
+                      );
+                    }
+                    return <strong>{children}</strong>;
                   },
-                  h3: {
-                    component: ({ children, ...props }) => (
-                      <h3 className="text-xl font-semibold mt-8 mb-3" {...props}>
-                        {children}
-                      </h3>
-                    ),
+                },
+                h2: {
+                  props: {
+                    className: 'text-xl font-semibold mt-12 mb-4 text-black dark:text-white',
                   },
-                  p: {
-                    component: ({ children, ...props }) => (
-                      <p className="mb-6 leading-relaxed" {...props}>
+                },
+                h3: {
+                  props: {
+                    className: 'text-lg font-semibold mt-6 mb-2 text-black dark:text-white',
+                  },
+                },
+                p: {
+                  component: ({ children, ...props }) => {
+                    // Check if this is the metrics line
+                    const text = children?.toString() || '';
+                    if (text.includes('125,000+ developers')) {
+                      return (
+                        <p
+                          className="text-center mb-8 text-lg font-medium text-gray-700 dark:text-gray-300"
+                          {...props}
+                        >
+                          {children}
+                        </p>
+                      );
+                    }
+                    return (
+                      <p
+                        className="mb-4 leading-relaxed text-gray-700 dark:text-gray-300"
+                        {...props}
+                      >
                         {children}
                       </p>
-                    ),
+                    );
                   },
-                  a: {
-                    component: ({ children, ...props }) => (
+                },
+                ul: {
+                  props: {
+                    className:
+                      'list-disc list-inside mb-6 space-y-3 text-gray-700 dark:text-gray-300',
+                  },
+                },
+                em: {
+                  props: {
+                    className: 'text-gray-600 dark:text-gray-400',
+                  },
+                },
+                a: {
+                  component: ({ children, href, ...props }) => {
+                    const text = children?.toString() || '';
+
+                    // Check if this is a CTA link
+                    const isCTA =
+                      href === 'https://calendly.com/mdangelo' ||
+                      href === 'mailto:michael@mldangelo.com';
+
+                    // Check if this is an internal link
+                    const isInternal = href?.startsWith('/');
+
+                    if (isCTA) {
+                      return (
+                        <a
+                          href={href}
+                          className="inline-block bg-black dark:bg-white text-white dark:text-black px-6 py-3 rounded-lg hover:opacity-80 transition-all transform hover:scale-105 mr-4 mb-4 shadow-lg hover:shadow-xl gpu-accelerated"
+                          {...props}
+                        >
+                          {children}
+                        </a>
+                      );
+                    }
+
+                    // Check if this is the Read more stories link
+                    if (text.includes('Read more stories')) {
+                      return (
+                        <a
+                          href={href}
+                          className="block text-center mt-8 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 hover:underline"
+                          {...props}
+                        >
+                          {children}
+                        </a>
+                      );
+                    }
+
+                    if (isInternal) {
+                      return (
+                        <a
+                          href={href}
+                          className="text-blue-600 dark:text-blue-400 hover:underline"
+                          {...props}
+                        >
+                          {children}
+                        </a>
+                      );
+                    }
+
+                    return (
                       <a
-                        className="text-primary dark:text-accent hover:underline transition-colors"
+                        href={href}
+                        className="text-blue-600 dark:text-blue-400 hover:underline"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         {...props}
                       >
                         {children}
                       </a>
-                    ),
-                  },
-                  ul: {
-                    component: ({ children, ...props }) => (
-                      <ul className="list-disc list-inside mb-6 space-y-2" {...props}>
-                        {children}
-                      </ul>
-                    ),
-                  },
-                  ol: {
-                    component: ({ children, ...props }) => (
-                      <ol className="list-decimal list-inside mb-6 space-y-2" {...props}>
-                        {children}
-                      </ol>
-                    ),
-                  },
-                  blockquote: {
-                    component: ({ children, ...props }) => (
-                      <blockquote
-                        className="border-l-4 border-primary dark:border-accent pl-6 my-6 italic text-gray-600 dark:text-gray-400"
-                        {...props}
-                      >
-                        {children}
-                      </blockquote>
-                    ),
-                  },
-                  code: {
-                    component: ({ children, className, ...props }) => {
-                      const isInline = !className;
-                      return isInline ? (
-                        <code
-                          className="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-800 rounded text-sm font-mono"
-                          {...props}
-                        >
-                          {children}
-                        </code>
-                      ) : (
-                        <code className={className} {...props}>
-                          {children}
-                        </code>
-                      );
-                    },
+                    );
                   },
                 },
-              }}
-            >
-              {aboutMarkdown}
-            </Markdown>
-          </div>
+                ol: {
+                  props: {
+                    className: 'list-decimal list-inside mb-4 space-y-1',
+                  },
+                },
+                blockquote: {
+                  props: {
+                    className: 'border-l-4 border-gray-300 dark:border-gray-700 pl-4 my-4 italic',
+                  },
+                },
+                code: {
+                  props: {
+                    className: 'font-inherit',
+                  },
+                },
+              },
+            }}
+          >
+            {aboutMarkdown}
+          </Markdown>
+
+          <PartnerLogos />
         </div>
       </div>
-    </div>
+    </main>
   );
 }

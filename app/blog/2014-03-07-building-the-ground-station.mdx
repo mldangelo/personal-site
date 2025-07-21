@@ -1,0 +1,21 @@
+---
+title: "Building the Ground Station: Our Connection to the Flock"
+date: "2014-03-07"
+summary: "This week, my focus has been on the ground station software. It's the critical, unseen part of the mission—the bridge between our satellites in orbit and our data centers on Earth. It's a complex dance of scheduling, signal processing, and data routing."
+tags: ["planet labs", "software", "ground station", "python", "infrastructure", "space"]
+category: "Technology"
+readTime: 3
+period: "Stanford"
+---
+
+For every satellite in orbit, there's a critical piece of infrastructure on the ground that makes it all possible: the ground station. This week, I've been deep in the code that runs our global network of antennas, and it's a fascinating and complex challenge.
+
+The ground station software is the unsung hero of the mission. It's a sophisticated system that has to solve a multi-faceted optimization problem in real-time, 24/7.
+
+First, there's the scheduling. With a growing flock of satellites constantly moving across the sky, the software needs to predict when each satellite will be in view of a ground station and for how long. It then has to schedule communication passes, prioritizing which satellites need to downlink their data most urgently.
+
+Second, there's the communication itself. The software commands the antenna to track the satellite with incredible precision as it flies overhead. It handles the modulation and demodulation of the radio signals, pulling the precious image data out of the noisy ether.
+
+Finally, there's the data routing. Once the data is on the ground, it needs to be reliably and securely transferred to our cloud processing pipeline.
+
+We're using Python extensively to orchestrate these systems. Its flexibility and rich ecosystem of libraries make it perfect for this kind of complex, high-stakes automation. It's a side of the space industry that most people never see, but it's where the magic of turning radio waves into a queryable dataset of the planet truly begins.

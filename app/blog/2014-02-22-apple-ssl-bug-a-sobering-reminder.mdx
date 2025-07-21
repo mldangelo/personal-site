@@ -1,0 +1,17 @@
+---
+title: "The Apple SSL Bug: A Sobering Reminder About Trust and Simplicity"
+date: "2014-02-22"
+summary: "A critical SSL vulnerability was revealed in iOS and OS X this week, caused by a single, duplicated line of code. It's a humbling lesson for all software engineers about the fragility of trust and the danger of complexity."
+tags: ["security", "apple", "ssl", "bug", "software quality", "testing"]
+category: "Technology"
+readTime: 2
+period: "Stanford"
+---
+
+The news of the Apple SSL bug this week sent a chill through the software community. The vulnerability, which allowed attackers to bypass SSL/TLS verification, was caused by a shockingly simple error: a duplicated `goto fail;` line. A single, extra line of code, likely the result of a copy-paste error during a merge, compromised the security of millions of users.
+
+This is a deeply humbling moment for anyone who writes code. It demonstrates that even in the most mature, well-funded, and security-conscious codebases, catastrophic failures can arise from the smallest of mistakes.
+
+For me, it's a powerful argument for simplicity and rigorous testing. In the world of "agile aerospace," where we're moving quickly, this is a sobering reminder that speed cannot come at the expense of quality. When the code you write is beamed up to a satellite, you don't get a second chance to patch it.
+
+This bug will undoubtedly lead to better static analysis tools and more robust code review processes across the industry. It's a stark reminder that the systems we build, which are foundational to modern life, are built on layers of trust. And that trust can be broken by a single, misplaced line of code.

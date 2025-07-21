@@ -7,7 +7,6 @@ interface SkeletonProps {
   variant?: 'text' | 'circular' | 'rectangular';
   width?: string | number;
   height?: string | number;
-  animation?: 'pulse' | 'wave';
 }
 
 export const Skeleton: React.FC<SkeletonProps> = ({
@@ -15,24 +14,18 @@ export const Skeleton: React.FC<SkeletonProps> = ({
   variant = 'text',
   width,
   height,
-  animation = 'pulse',
 }) => {
-  const baseClasses = 'bg-muted relative overflow-hidden';
+  const baseClasses = 'bg-gray-200 dark:bg-gray-800';
 
   const variantClasses = {
-    text: 'rounded',
+    text: '',
     circular: 'rounded-full',
-    rectangular: 'rounded-lg',
-  };
-
-  const animationClasses = {
-    pulse: 'animate-pulse',
-    wave: 'after:absolute after:inset-0 after:translate-x-[-100%] after:animate-shimmer after:bg-gradient-to-r after:from-transparent after:via-white/10 after:to-transparent',
+    rectangular: '',
   };
 
   return (
     <div
-      className={cn(baseClasses, variantClasses[variant], animationClasses[animation], className)}
+      className={cn(baseClasses, variantClasses[variant], className)}
       style={{
         width: width,
         height: height || (variant === 'text' ? '1em' : undefined),
@@ -54,7 +47,7 @@ export const SkeletonText: React.FC<{ lines?: number; className?: string }> = ({
 );
 
 export const SkeletonCard: React.FC<{ className?: string }> = ({ className }) => (
-  <div className={cn('p-6 rounded-xl glass glass-border', className)}>
+  <div className={cn('p-6 border border-gray-200 dark:border-gray-800', className)}>
     <div className="flex items-start justify-between mb-4">
       <div className="flex-1">
         <Skeleton className="h-6 w-3/4 mb-2" />
@@ -67,7 +60,7 @@ export const SkeletonCard: React.FC<{ className?: string }> = ({ className }) =>
 );
 
 export const SkeletonProjectCard: React.FC<{ className?: string }> = ({ className }) => (
-  <div className={cn('overflow-hidden rounded-xl glass glass-border', className)}>
+  <div className={cn('overflow-hidden border border-gray-200 dark:border-gray-800', className)}>
     <Skeleton variant="rectangular" className="aspect-[3/2]" />
     <div className="p-4">
       <Skeleton className="h-6 w-3/4 mb-2" />

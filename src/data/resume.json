@@ -1,0 +1,284 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json",
+  "basics": {
+    "name": "Michael D'Angelo",
+    "label": "Co-founder & CTO",
+    "image": "/images/me.jpg",
+    "email": "michael.l.dangelo@gmail.com",
+    "phone": "",
+    "url": "https://mldangelo.com",
+    "summary": "Hi, I'm Michael. I'm the co-founder and CTO of Promptfoo (YC S24), where we make software security and reliability tools for LLM developers used by 125,000+ developers. We recently announced our $5 million seed round. Before Promptfoo, I was the VP of Engineering at SmileID (YC W19), where I scaled our engineering team to build a world-leading product in identity verification. We focused on Africa, and we grew from 0 to 10 million verifications and 170 million users. In 2016, I co-founded Arthena (YC S17), where I was CEO. Arthena quantified and securitized art, and I ran platform development, business development, and fundraising. We became the number one art investment platform globally and were featured in many publications. Our collectors have done very well with their collections, with appraised values over $1.5 billion. On the side, I angel invest. I've made about 100 small pre-seed investments via Skeptical Investments. I've averaged ~3x (as of mid-2024), with much of the portfolio still outstanding. Some well-known investments include: Varda Space Industries, Airhart Aeronautics, Rewind. I've found my engineering background to be particularly helpful when investing in hard tech. I like to run, ski, and take photos in my spare time.",
+    "location": {
+      "address": "",
+      "postalCode": "",
+      "city": "San Francisco",
+      "countryCode": "US",
+      "region": "California"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "mldangelo",
+        "url": "https://github.com/mldangelo"
+      },
+      {
+        "network": "LinkedIn",
+        "username": "michaelldangelo",
+        "url": "https://www.linkedin.com/in/michaelldangelo"
+      },
+      {
+        "network": "Twitter",
+        "username": "dangelosaurus",
+        "url": "https://twitter.com/dangelosaurus"
+      },
+      {
+        "network": "AngelList",
+        "username": "michael-d-angelo",
+        "url": "https://angel.co/michael-d-angelo"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "Promptfoo",
+      "position": "Co-founder & CTO",
+      "url": "https://promptfoo.dev",
+      "startDate": "2024-03",
+      "summary": "Promptfoo makes testing and security tools for developers of LLM applications. It's used by over 25,000 developers, including 35% of the Fortune 500.",
+      "highlights": [
+        "Raised $5 million seed round from Andreessen Horowitz",
+        "125,000+ developers using our tools",
+        "YC S24"
+      ]
+    },
+    {
+      "name": "Smile Identity",
+      "position": "VP Engineering",
+      "url": "https://smileidentity.com",
+      "startDate": "2020-04",
+      "endDate": "2023-10",
+      "summary": "Smile Identity provides identity verification, KYC compliance, and onboarding across the African continent. YC W19.",
+      "highlights": [
+        "Scaled engineering team from 6 to 27 engineers",
+        "Grew from 0 to 10 million identity verifications and 170 million users",
+        "Led re-architecture that improved matching accuracy by 50%",
+        "Reduced infrastructure costs by 80% through optimization"
+      ]
+    },
+    {
+      "name": "Skeptical Investments",
+      "position": "Co-founder",
+      "url": "https://skeptical.investments",
+      "startDate": "2017-04",
+      "summary": "Skeptical Investments is a micro-vc fund with ~100 pre-seed investments.",
+      "highlights": [
+        "Averaged ~3x returns as of mid-2024",
+        "Notable investments: Varda Space Industries, Airhart Aeronautics, Rewind"
+      ]
+    },
+    {
+      "name": "Arthena",
+      "position": "Co-founder & CEO",
+      "url": "https://arthena.com",
+      "startDate": "2016-08",
+      "endDate": "2020-01",
+      "summary": "Arthena is a quantitative investment fund specializing in art. YC S17.",
+      "highlights": [
+        "Became #1 art investment platform globally",
+        "Managed collections with appraised values over $1.5 billion",
+        "Featured in numerous major publications"
+      ]
+    },
+    {
+      "name": "Matroid",
+      "position": "Co-founder",
+      "url": "https://matroid.com",
+      "startDate": "2016-01",
+      "endDate": "2016-08",
+      "summary": "Matroid is a computer vision platform that helps people build and deploy visual detection models.",
+      "highlights": []
+    },
+    {
+      "name": "Planet",
+      "position": "Missions Intern",
+      "url": "https://planet.com",
+      "startDate": "2014-06",
+      "endDate": "2015-01",
+      "summary": "Planet is the leading provider of global, daily satellite imagery and insights.",
+      "highlights": []
+    },
+    {
+      "name": "Facebook",
+      "position": "Intern",
+      "url": "https://facebook.com",
+      "startDate": "2013-06",
+      "endDate": "2013-09",
+      "summary": "Worked on the web performance team.",
+      "highlights": []
+    },
+    {
+      "name": "UB Nanosatellite Program",
+      "position": "Hardware Lead",
+      "url": "https://ubnl.space/",
+      "startDate": "2010-10",
+      "endDate": "2012-06",
+      "summary": "Developed and implemented the power subsystem and actively contributed to the development and testing of the communications, thermal, and command and data handling subsystems for GLADOS, a 3U CubeSat.",
+      "highlights": []
+    }
+  ],
+  "volunteer": [],
+  "education": [
+    {
+      "institution": "Stanford University",
+      "url": "https://stanford.edu",
+      "area": "Computational and Mathematical Engineering",
+      "studyType": "Master of Science",
+      "startDate": "2014-09",
+      "endDate": "2016-06",
+      "score": "",
+      "courses": [
+        "Machine Learning (CS 229)",
+        "Convolutional Neural Networks for Visual Recognition (CS 231n)",
+        "Natural Language Processing with Deep Learning (CS 224d)",
+        "Convex Optimization (EE 364a)",
+        "Numerical Linear Algebra (CME 302)",
+        "Discrete Math and Algorithms (CME 305)",
+        "Numerical Solution of Partial Differential Equations (CME 306)",
+        "Optimization (CME 304)",
+        "Theory and Applications of Stochastic Differential Equations (CME 308)",
+        "Randomized Algorithms and Probabilistic Analysis (CS 265)",
+        "Computer Vision: Foundations and Applications (CS 131)",
+        "Mining Massive Datasets (CS 246)",
+        "Computer Graphics in the Era of AI (CS 348C)"
+      ]
+    },
+    {
+      "institution": "University at Buffalo",
+      "url": "https://buffalo.edu",
+      "area": "Electrical Engineering, Computer Engineering",
+      "studyType": "Bachelor of Science",
+      "startDate": "2008-08",
+      "endDate": "2012-05",
+      "score": "Summa Cum Laude",
+      "courses": []
+    }
+  ],
+  "awards": [],
+  "certificates": [],
+  "publications": [],
+  "skills": [
+    {
+      "name": "Languages",
+      "level": "Master",
+      "keywords": [
+        "Python",
+        "JavaScript",
+        "TypeScript",
+        "Ruby",
+        "Java",
+        "Go",
+        "C++",
+        "Matlab",
+        "R"
+      ]
+    },
+    {
+      "name": "Web Development",
+      "level": "Master",
+      "keywords": [
+        "Node.js",
+        "React",
+        "Next.js",
+        "HTML/CSS",
+        "Flask",
+        "Django",
+        "Ruby on Rails",
+        "Express"
+      ]
+    },
+    {
+      "name": "Databases",
+      "level": "Advanced",
+      "keywords": [
+        "PostgreSQL",
+        "MySQL",
+        "MongoDB",
+        "Redis",
+        "ElasticSearch",
+        "SQLite"
+      ]
+    },
+    {
+      "name": "Machine Learning",
+      "level": "Advanced",
+      "keywords": [
+        "PyTorch",
+        "TensorFlow",
+        "Scikit-Learn",
+        "Pandas",
+        "NumPy",
+        "SciPy",
+        "OpenCV"
+      ]
+    },
+    {
+      "name": "DevOps & Tools",
+      "level": "Advanced",
+      "keywords": [
+        "Git",
+        "Docker",
+        "AWS",
+        "Kubernetes",
+        "CI/CD",
+        "Linux",
+        "Terraform"
+      ]
+    },
+    {
+      "name": "Data Engineering",
+      "level": "Intermediate",
+      "keywords": [
+        "Apache Spark",
+        "Apache Kafka",
+        "Airflow",
+        "ETL",
+        "Data Pipelines"
+      ]
+    }
+  ],
+  "languages": [
+    {
+      "language": "English",
+      "fluency": "Native speaker"
+    }
+  ],
+  "interests": [
+    {
+      "name": "Running",
+      "keywords": []
+    },
+    {
+      "name": "Skiing",
+      "keywords": []
+    },
+    {
+      "name": "Photography",
+      "keywords": []
+    },
+    {
+      "name": "Angel Investing",
+      "keywords": [
+        "Pre-seed",
+        "Hard tech",
+        "Developer tools"
+      ]
+    }
+  ],
+  "references": [],
+  "projects": [],
+  "meta": {
+    "canonical": "https://raw.githubusercontent.com/jsonresume/resume-schema/master/resume.json",
+    "version": "v1.0.0",
+    "lastModified": "2024-07-20T12:00:00"
+  }
+}

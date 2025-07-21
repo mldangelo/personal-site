@@ -21,6 +21,11 @@ const Stats: React.FC = () => {
     setIsLoading(true);
     try {
       const res = await fetch('https://api.github.com/repos/mldangelo/personal-site');
+
+      if (!res.ok) {
+        throw new Error(`GitHub API returned ${res.status}`);
+      }
+
       const resData: GitHubRepoData = await res.json();
 
       setResponseData(
@@ -35,6 +40,7 @@ const Stats: React.FC = () => {
       );
     } catch (error) {
       console.error('Failed to fetch GitHub data:', error);
+      // Keep showing initial/static data on error
     } finally {
       setIsLoading(false);
     }
@@ -45,10 +51,13 @@ const Stats: React.FC = () => {
   }, [fetchData]);
 
   const LoadingSkeleton = (
-    <div className="overflow-hidden rounded-xl glass glass-border glass-shadow">
+    <div className="border border-gray-200 dark:border-gray-800">
       <div className="space-y-0">
         {Array.from({ length: 8 }).map((_, i) => (
-          <div key={i} className="flex justify-between p-3 border-b border-border/30 last:border-0">
+          <div
+            key={i}
+            className="flex justify-between p-3 border-b border-gray-200 dark:border-gray-800 last:border-0"
+          >
             <div className="flex items-center gap-3">
               <Skeleton className="w-4 h-4" variant="circular" />
               <Skeleton className="h-4 w-48" />
@@ -62,9 +71,7 @@ const Stats: React.FC = () => {
 
   return (
     <div className="mb-8">
-      <h3 className="text-2xl font-heading font-heading-bold uppercase tracking-heading mb-4">
-        Some stats about this site
-      </h3>
+      <h2 className="text-xl font-semibold mb-4">Site</h2>
       <AsyncContent loading={isLoading} skeleton={LoadingSkeleton}>
         <Table data={data} />
       </AsyncContent>

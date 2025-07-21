@@ -30,13 +30,8 @@ const work: Position[] = [
     url: 'https://smileidentity.com',
     startDate: '2022-01-01',
     endDate: '2024-07-01',
-    summary: `Smile builds machine learning APIs to compare user submitted photos to ID documents. Our APIs are
-    used by hundreds of thousands of people every day to access financial services. As VP of Engineering,
-    I provide technical leadership on high-impact projects, influence and coach a distributed team of engineers,
-    and facilitate alignment and clarity across teams on goals, outcomes, and timelines. I was promoted
-    from Director of Engineering to VP of Engineering in April 2022, and then to VP of Engineering and Head
-    of AI in November 2022. I lead a 20+ person engineering org. I directly manage ~8 engineers and spend
-    >50% of my time writing code.`,
+    summary:
+      'Smile builds machine learning APIs to compare user submitted photos to ID documents. Our APIs are used by hundreds of thousands of people every day to access financial services. As VP of Engineering, I provide technical leadership on high-impact projects, influence and coach a distributed team of engineers, and facilitate alignment and clarity across teams on goals, outcomes, and timelines. I was promoted from Director of Engineering to VP of Engineering in April 2022, and then to VP of Engineering and Head of AI in November 2022. I lead a 20+ person engineering org. I directly manage 8 engineers and spend over 50% of my time writing code.',
     highlights: [
       'Redesigned engineering processes for bug tracking, meetings, and standups. Improved culture for code reviews, blameless post-mortems, and retrospectives.',
       'Re-architected engineering hiring and onboarding processes. Recruited several strong engineers.',
@@ -50,10 +45,10 @@ const work: Position[] = [
     position: 'Co-founder',
     url: 'http://skepticalinvestments.biz',
     startDate: '2017-04-01',
-    summary: `Skeptical Investments is a micro-VC fund that makes angel investments. I consult with and invest
-    in startups in the Bay Area. I work part-time on this.`,
+    summary:
+      'Skeptical Investments is a micro-VC fund that makes angel investments. I consult with and invest in startups in the Bay Area. I work part-time on this.',
     highlights: [
-      'Created the InstaSafe. Fast, automated investment docs for YC companies.',
+      'Created InstaSafe - fast, automated investment docs for YC companies.',
       'Advise startups on web, mobile, and ML engineering.',
       'Sourced and analyzed over 1,000 startup deals.',
       'Invested in over 60 startups.',
@@ -65,10 +60,8 @@ const work: Position[] = [
     url: 'https://arthena.com',
     startDate: '2014-01-01',
     endDate: '2022-01-01',
-    summary: `Arthena is a Series A Company funded by <a href='https://www.anthemis.com/'>Anthemis</a>,
-    <a href='https://foundationcapital.com'>Foundation Capital</a>, and <a href='https://ycombinator.com'>YCombinator</a>.
-    We build quantitative strategies to predict the value of fine art and build investment products.
-    I ran a 20-person product and engineering org for 8 years. We were profitable and the #1 art investment platform in the world.`,
+    summary:
+      'Arthena is a Series A Company funded by [Anthemis](https://www.anthemis.com/), [Foundation Capital](https://foundationcapital.com), and [YCombinator](https://ycombinator.com). We build quantitative strategies to predict the value of fine art and build investment products. I ran a 20-person product and engineering org for 8 years. We were profitable and the #1 art investment platform in the world.',
     highlights: [
       'Built production models for fine art valuation, resulting in $1.5B in cumulative art valuations (70k+ artworks).',
       'Built computer vision models for artwork identification.',
@@ -83,10 +76,8 @@ const work: Position[] = [
     url: 'https://matroid.com',
     startDate: '2016-01-01',
     endDate: '2016-12-01',
-    summary: `Matroid is a Series A company funded by <a href='https://www.nea.com'>NEA</a> 
-    and <a href='https://www.accel.com'>Accel</a> building computer vision infrastructure.
-    I played a crucial role in the company's early development, contributing to both the
-    technical foundation and strategic direction.`,
+    summary:
+      "Matroid is a Series A company funded by [NEA](https://www.nea.com) and [Accel](https://www.accel.com) building computer vision infrastructure. I played a crucial role in the company's early development, contributing to both the technical foundation and strategic direction.",
     highlights: [
       'Developed core computer vision algorithms and initial product prototypes.',
       "Worked with the team to define the company's vision and product roadmap.",
@@ -114,14 +105,6 @@ const work: Position[] = [
       "Developed and optimized Facebook's core news feed algorithms.",
       'Worked on large-scale data processing and machine learning infrastructure.',
     ],
-  },
-  {
-    name: 'Startup',
-    position: 'Co-founder',
-    url: '#',
-    startDate: '2012-02-01',
-    endDate: '2013-01-01',
-    summary: 'Started an NFC-based marketing company with a team of four.',
   },
   {
     name: 'UB Nanosatellite Program',

@@ -6,8 +6,8 @@ import TableRow from './TableRow';
 import { TableProps } from './types';
 
 const Table: React.FC<TableProps> = ({ data }) => (
-  <div className="overflow-hidden rounded-xl glass glass-border glass-shadow">
-    <UITable className="relative">
+  <div className="glass rounded-lg overflow-hidden">
+    <UITable className="backdrop-blur-sm">
       <TableBody>
         {data.map((pair) => (
           <TableRow
@@ -16,7 +16,6 @@ const Table: React.FC<TableProps> = ({ data }) => (
             label={pair.label}
             link={pair.link}
             value={pair.value}
-            icon={pair.icon}
           />
         ))}
       </TableBody>

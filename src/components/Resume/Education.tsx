@@ -10,14 +10,8 @@ interface EducationProps {
 
 const Education: React.FC<EducationProps> = ({ data }) => (
   <div className="space-y-6">
-    {data.map((degree, index) => (
-      <div
-        key={degree.school}
-        className="animate-fade-up"
-        style={{ animationDelay: `${index * 100}ms` }}
-      >
-        <Degree data={degree} />
-      </div>
+    {data.map((degree) => (
+      <Degree key={degree.school} data={degree} />
     ))}
   </div>
 );

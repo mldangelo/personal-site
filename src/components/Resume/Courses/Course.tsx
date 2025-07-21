@@ -8,17 +8,16 @@ interface CourseProps {
 }
 
 const Course: React.FC<CourseProps> = ({ data, last = false }) => (
-  <li className="flex items-center">
+  <li className="inline">
     <a
       href={data.link}
-      className="flex items-center hover:text-accent transition-colors group"
+      className="hover:underline text-sm"
       target="_blank"
       rel="noopener noreferrer"
     >
-      <span className="font-bold text-foreground-bold group-hover:text-accent">{data.number}:</span>
-      <span className="ml-1 text-foreground group-hover:text-accent">{data.title}</span>
+      {data.number}: {data.title}
     </a>
-    {!last && <span className="mx-2 text-foreground-light">•</span>}
+    {!last && <span className="mx-2 text-gray-400">•</span>}
   </li>
 );
 

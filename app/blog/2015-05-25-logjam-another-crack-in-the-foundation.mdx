@@ -1,0 +1,19 @@
+---
+title: "Logjam: Another Crack in the Foundation of Web Security"
+date: "2015-05-25"
+summary: "Another month, another major SSL/TLS vulnerability. The 'Logjam' attack shows that even the core cryptographic protocols of the internet are not immune to flaws. It's a reminder of the complexity of our security infrastructure and the need for constant vigilance."
+tags: ["logjam", "security", "vulnerability", "ssl", "tls", "cryptography"]
+category: "Technology"
+readTime: 3
+period: "Stanford"
+---
+
+It's becoming a depressingly familiar story. A new, cleverly named vulnerability is discovered in the protocols that we all rely on for secure communication on the internet. This month, it's "Logjam."
+
+The Logjam attack is a flaw in the way that many servers handle the Diffie-Hellman key exchange, a fundamental part of SSL/TLS. The vulnerability allows a man-in-the-middle attacker to downgrade the connection to a much weaker, export-grade level of cryptography that can be broken with relative ease.
+
+This is another example of the long tail of technical debt in our shared infrastructure. The "export-grade" cryptography that is at the heart of this vulnerability is a relic of the 1990s, when the U.S. government restricted the export of strong cryptographic tools. That policy is long gone, but the legacy of it lives on in the code that is still running on millions of servers.
+
+Like Heartbleed, Shellshock, and POODLE before it, Logjam is a reminder of the incredible complexity of our security ecosystem. There are so many layers, so many protocols, and so many different implementations that it's almost impossible to ensure that everything is perfect.
+
+It's also a reminder of the importance of the ongoing work of the security research community. These are the people who are finding these flaws, who are responsibly disclosing them, and who are pushing the industry to be better. We owe them a debt of gratitude.

@@ -1,0 +1,22 @@
+---
+title: "Building the Telescope's Brain: Our Image Processing Pipeline"
+date: "2014-04-15"
+summary: "The raw data that comes down from our satellites is just the beginning. The real magic happens in our image processing pipeline, a massive, automated system that turns a stream of raw pixels into a beautiful, scientifically accurate, and queryable map of the world."
+tags: ["planet labs", "data pipeline", "computer vision", "cloud computing", "aws", "python"]
+category: "Technology"
+readTime: 3
+period: "Stanford"
+---
+
+A satellite is essentially a camera in space, but the images it takes aren't instantly ready for use. The raw data that we downlink from our Doves is a stream of pixel values that needs to go through a complex and computationally intensive process before it becomes the beautiful, seamless imagery you see on a map. This is the work of our image processing pipeline.
+
+Think of it as a digital darkroom that operates at a global scale. The pipeline is a series of automated steps, running in the cloud, that takes the raw data as input and outputs a fully corrected, georectified image.
+
+The key stages include:
+
+1.  **Decompression and Decoding:** The raw data is unpacked and decoded into a usable format.
+2.  **Radiometric Correction:** We correct for atmospheric effects and the unique characteristics of each sensor to ensure that a picture of a green field in Kansas looks the same as a green field in France.
+3.  **Geometric Correction:** This is the crucial step of georectification. We use ground control points and orbital data to precisely map each pixel to its exact location on Earth. This is what turns a picture into a piece of scientific data.
+4.  **Mosaicking and Color Correction:** Finally, we stitch the individual images together, smoothing out the seams and balancing the colors to create a single, seamless mosaic of a large area.
+
+We're leveraging the power of the cloud (primarily AWS) and a host of open-source tools, with Python as the glue that holds it all together. Building this pipeline is a monumental software challenge, but it's the engine that turns our raw data into a living, breathing map of our planet.

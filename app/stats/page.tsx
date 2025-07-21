@@ -1,12 +1,9 @@
 import React from 'react';
 
 import type { Metadata } from 'next';
-import Link from 'next/link';
 
 import Personal from '@/components/Stats/Personal';
 import Site from '@/components/Stats/Site';
-
-import PageWrapper from '../components/PageWrapper';
 
 export const metadata: Metadata = {
   title: 'Stats',
@@ -15,18 +12,14 @@ export const metadata: Metadata = {
 
 export default function StatsPage() {
   return (
-    <PageWrapper>
-      <article className="post" id="stats">
-        <header>
-          <div className="title">
-            <h2>
-              <Link href="/stats">Stats</Link>
-            </h2>
-          </div>
-        </header>
-        <Personal />
-        <Site />
-      </article>
-    </PageWrapper>
+    <main className="px-6 py-16 sm:px-12 lg:px-16">
+      <div className="max-w-3xl mx-auto">
+        <h1 className="text-3xl font-semibold mb-8">Statistics</h1>
+        <div className="space-y-12">
+          <Personal />
+          <Site />
+        </div>
+      </div>
+    </main>
   );
 }

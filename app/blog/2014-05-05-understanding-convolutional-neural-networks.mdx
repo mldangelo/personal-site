@@ -1,0 +1,19 @@
+---
+title: "Understanding Convolutional Neural Networks: A Visual Intuition"
+date: "2014-05-05"
+summary: "As I get deeper into CS231n, I'm building a more intuitive understanding of how CNNs 'see' the world. It's not magic; it's a beautiful hierarchy of feature detectors, inspired by the human visual cortex."
+tags: ["cs231n", "deep learning", "neural networks", "computer vision", "intuition"]
+category: "Academics"
+readTime: 3
+period: "Stanford"
+---
+
+One of the most beautiful concepts in deep learning is the intuition behind how a Convolutional Neural Network (CNN) learns to recognize images. It's not a black box; it's an elegant, hierarchical system that learns to see in a way that's remarkably similar to how our own visual cortex works.
+
+At the lowest level, the first few layers of the network learn to recognize very simple features: edges, corners, and color gradients. You can actually visualize these filters, and they look like little Gabor filters or color blobs.
+
+The output of these layers is then fed into the next set of layers. These layers learn to combine the simple features from the previous layer into more complex patterns. They might learn to recognize textures, like fur or water, or simple shapes, like an eye or a wheel.
+
+This process continues through the layers of the network. Each layer learns to recognize increasingly complex and abstract concepts by building on the patterns learned by the layer before it. A layer might learn to combine the "eye," "nose," and "fur" detectors from the previous layer to create a "cat face" detector.
+
+This hierarchical approach is what makes CNNs so powerful. They're not just memorizing images; they're learning a compositional model of the world. It's a powerful and beautiful idea, and it's the key to unlocking the potential of the massive visual dataset we're building at Planet.

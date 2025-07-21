@@ -1,0 +1,1071 @@
+# Blog Posts Index (2009-2024)
+
+Goal: ~50 posts per year = ~750 total posts
+Current: 47 posts
+Needed: ~700 more posts
+
+## 2009 (Freshman at UB)
+### Completed (7):
+- [x] 2009-09-15: Starting My Journey in Electrical Engineering
+- [x] 2009-10-05: Getting Started with Astrophotography on a Student Budget
+- [x] 2009-10-20: Building My First 555 Timer Circuit
+- [x] 2009-11-15: Arduino: My Gateway Drug to Embedded Systems
+- [x] 2009-11-28: Building a DIY Star Tracker with Arduino
+- [x] 2009-12-31: 2009: Year in Review
+
+### Planned (60):
+- [ ] 2009-01-05: Bitcoin is launched. What is it?
+- [ ] 2009-01-12: Prepping for my first semester of college.
+- [ ] 2009-01-19: Why I chose Electrical Engineering.
+- [ ] 2009-01-26: My goals for my freshman year.
+- [ ] 2009-02-02: A look at the Palm Pre. Can it compete with the iPhone?
+- [ ] 2009-02-09: Getting my first laptop for college.
+- [ ] 2009-02-16: What's on my pre-college reading list.
+- [ ] 2009-02-23: The tech I'm bringing to my dorm room.
+- [ ] 2009-03-02: My first soldering iron.
+- [ ] 2009-03-09: Learning the basics of circuit theory.
+- [ ] 2009-03-16: My first Arduino arrives.
+- [ ] 2009-03-23: Blinking an LED with Arduino. It works!
+- [ ] 2009-03-30: What is this "maker movement" I keep hearing about?
+- [ ] 2009-04-06: Kickstarter launches. This could be huge for creators.
+- [ ] 2009-04-13: The first MakerBot 3D printer is available. I want one.
+- [ ] 2009-04-20: My first "real" Arduino project: a temperature logger.
+- [ ] 2009-04-27: The swine flu pandemic.
+- [ ] 2009-05-04: High school graduation is just around the corner.
+- [ ] 2009-05-11: Summer plans before college.
+- [ ] 2009-05-18: My first astrophotography setup.
+- [ ] 2009-05-25: Capturing my first image of the moon.
+- [ ] 2009-06-01: The iPhone 3GS is announced.
+- [ ] 2009-06-08: Farmville is taking over Facebook.
+- [ ] 2009-06-15: My summer job. Saving up for college.
+- [ ] 2009-06-22: Reading through my first college textbooks.
+- [ ] 2009-06-29: The death of Michael Jackson.
+- [ ] 2009-07-06: Google announces ChromeOS. An operating system in a browser?
+- [ ] 2009-07-13: Prepping for my move to Buffalo.
+- [ ] 2009-07-20: What to pack for my dorm room.
+- [ ] 2009-07-27: My last summer at home.
+- [ ] 2009-08-03: The journey to Buffalo.
+- [ ] 2009-08-10: Setting up my dorm room.
+- [ ] 2009-08-17: Freshman orientation week.
+- [ ] 2009-08-24: My first week of college classes.
+- [ ] 2009-08-31: Setting up my dorm room electronics lab.
+- [ ] 2009-09-07: Why hardware still matters in a software world.
+- [ ] 2009-09-14: Understanding Ohm's Law: It's more than just V=IR.
+- [ ] 2009-09-21: The tech scene in Buffalo. First impressions.
+- [ ] 2009-09-28: Debugging my first circuit. A lesson in patience.
+- [ ] 2009-10-05: Windows 7 is released. A big improvement over Vista.
+- [ ] 2009-10-12: Linux vs. Windows for an engineering student.
+- [ ] 2009-10-19: My first midterms.
+- [ ] 2009-10-26: A Halloween LED project.
+- [ ] 2009-11-02: A survival guide for EE midterms.
+- [ ] 2009-11-09: Building a simple weather station with an Arduino.
+- [ ] 2009-11-16: Breadboarding best practices I wish I knew earlier.
+- [ ] 2009-11-23: Thanksgiving break project: building an FM radio.
+- [ ] 2009-11-30: Prepping for finals. A study guide for circuit analysis.
+- [ ] 2009-12-07: Capturing the beauty of a Buffalo snowstorm.
+- [ ] 2009-12-14: A beginner's guide to choosing electronic components.
+- [ ] 2009-12-21: Reflecting on my first semester of college.
+- [ ] 2009-12-28: Holiday hacking: LED Christmas ornaments.
+- [ ] 2009-09-09: First Week at UB: Engineering Orientation.
+- [ ] 2009-09-23: Dorm Room Electronics Lab Setup.
+- [ ] 2009-10-14: Debugging My First Circuit: Lessons in Patience.
+- [ ] 2009-11-18: Building a Weather Station with Arduino.
+- [ ] 2009-12-02: Finals Prep: Circuit Analysis Study Guide.
+- [ ] 2009-12-16: Building a USB Charger from Scratch.
+- [ ] 2009-12-23: Reflecting on First Semester: What I Learned.
+- [ ] 2009-12-30: Holiday Hacking: LED Christmas Ornaments.
+
+## 2010 (Sophomore, CubeSat Program)
+### Completed (7):
+- [x] 2010-02-15: P ≠ NP? Making Sense of Vinay Deolalikar's Proof Attempt
+- [x] 2010-03-20: ISS Transit Photography: Precision Timing and Preparation
+- [x] 2010-04-10: Why the iPad is More Than a Big iPhone
+- [x] 2010-10-15: Joining the UB Nanosatellite Program: Building Actual Spacecraft
+- [x] 2010-12-31: 2010: Year in Review
+
+### Planned (60):
+- [ ] 2010-01-11: New year, new classes. Digital Logic Design is my favorite so far.
+- [ ] 2010-01-18: My first look at an oscilloscope. It's like a window into the soul of a circuit.
+- [ ] 2010-01-25: Building a simple function generator for my dorm room lab.
+- [ ] 2010-02-01: Power supply design: The difference between linear and switching regulators.
+- [ ] 2010-02-08: An introduction to satellite communication basics.
+- [ ] 2010-02-22: My first PCB design with Eagle CAD.
+- [ ] 2010-03-01: Understanding microcontroller interrupts.
+- [ ] 2010-03-08: Building a simple logic analyzer with an Arduino.
+- [ ] 2010-03-15: Spring Break project: A GPS data logger.
+- [ ] 2010-03-22: A deep dive into the I2C and SPI protocols.
+- [ ] 2010-03-29: An introduction to antenna theory.
+- [ ] 2010-04-05: The iPad is here. Is it a game-changer for students?
+- [ ] 2010-04-12: First impressions of the iPad: It's great for reading PDFs.
+- [ ] 2010-04-19: Testing and characterizing solar panels for our satellite.
+- [ ] 2010-04-26: How to build a mini clean room environment for sensitive electronics.
+- [ ] 2010-05-03: An introduction to orbital mechanics.
+- [ ] 2010-05-10: Designing a battery management system for a CubeSat.
+- [ ] 2010-05-17: Finals week: Signals and Systems is a beast.
+- [ ] 2010-05-24: Reflecting on my sophomore year.
+- [ ] 2010-05-31: Summer project ideas for an EE student.
+- [ ] 2010-06-07: The iPhone 4 is announced. That retina display is incredible.
+- [ ] 2010-06-14: My summer internship at a local electronics company.
+- [ ] 2010-06-21: The difference between the classroom and the real world.
+- [ ] 2010-06-28: Building a simple spectrum analyzer.
+- [ ] 2010-07-05: An introduction to EMI/EMC basics.
+- [ ] 2010-07-12: Halfway through my summer internship.
+- [ ] 2010-07-19: A visit to the NASA Glenn Research Center.
+- [ ] 2010-07-26: Why every EE student should get an amateur radio license.
+- [ ] 2010-08-02: My first experiments with Software Defined Radio (SDR).
+- [ ] 2010-08-09: Preparing for junior year.
+- [ ] 2010-08-16: The Stuxnet worm discovery is a wake-up call for industrial control system security.
+- [ ] 2010-08-23: Designing the ground station for our CubeSat.
+- [ ] 2010-08-30: Wrapping up my summer internship.
+- [ ] 2010-09-06: Back to school. Junior year begins.
+- [ ] 2010-09-13: Advanced circuit analysis.
+- [ ] 2010-09-20: My first experience leading a technical team on the CubeSat project.
+- [ ] 2010-09-27: "The Social Network" is in theaters. A dramatized look at the world I want to join.
+- [ ] 2010-10-04: Instagram just launched. A photo-a-day app? Interesting.
+- [ ] 2010-10-11: War stories from debugging our satellite hardware.
+- [ ] 2010-10-18: An introduction to radiation effects on electronics.
+- [ ] 2010-10-25: Building test equipment for our space hardware.
+- [ ] 2010-11-01: Preparing for my first conference presentation.
+- [ ] 2010-11-08: The Kinect for Xbox 360 is here. The computer vision implications are huge.
+- [ ] 2010-11-15: I gave my first conference presentation!
+- [ ] 2010-11-22: Thanksgiving break.
+- [ ] 2010-11-29: Prepping for the CubeSat Critical Design Review (CDR).
+- [ ] 2010-12-06: The WikiLeaks diplomatic cables release is shaking the world.
+- [ ] 2010-12-13: Finals week.
+- [ ] 2010-12-20: Looking ahead to my goals for 2011.
+- [ ] 2010-12-27: Holiday hacking: building an automated star tracker.
+- [ ] 2010-01-27: Understanding Digital Logic: From Gates to Systems.
+- [ ] 2010-02-17: CubeSat Power Budget Calculations.
+- [ ] 2010-04-21: April Fools: The Quantum Arduino.
+- [ ] 2010-05-12: Summer Internship Hunt: EE Edition.
+- [ ] 2010-06-16: Real World vs Classroom: First Job Insights.
+- [ ] 2010-08-11: End of Summer Reflections.
+- [ ] 2010-10-27: Debugging Satellite Hardware: War Stories.
+- [ ] 2010-12-01: CubeSat Critical Design Review Prep.
+
+## 2011 (Junior, Hardware Lead)
+### Completed (5):
+- [x] 2011-04-15: Time-Lapse Photography: Capturing Our CubeSat Assembly
+- [x] 2011-06-10: Lessons from Vacuum Chamber Testing
+- [x] 2011-10-06: Remembering Steve Jobs: How One Person Changed Technology
+- [x] 2011-12-31: 2011: Year in Review
+
+### Planned (60):
+- [ ] 2011-01-10: New role, new responsibilities: My first month as Hardware Lead for the CubeSat project.
+- [ ] 2011-01-17: How to build a thermal vacuum chamber on a university budget.
+- [ ] 2011-01-24: The fundamentals of spacecraft thermal design.
+- [ ] 2011-01-31: Our first vibration test. Did it survive?
+- [ ] 2011-02-07: Managing a hardware development schedule.
+- [ ] 2011-02-14: The art of sourcing space-grade components.
+- [ ] 2011-02-21: Designing for manufacturability: A lesson in humility.
+- [ ] 2011-02-28: The importance of good hardware documentation.
+- [ ] 2011-03-07: Making sense of MIL-STD requirements.
+- [ ] 2011-03-14: Building a DIY shake table for vibration testing.
+- [ ] 2011-03-21: Component derating for high-reliability systems.
+- [ ] 2011-03-28: Spring Break at Kennedy Space Center.
+- [ ] 2011-04-04: What I learned from our NASA design review.
+- [ ] 2011-04-11: Failure Mode and Effects Analysis (FMEA) for our CubeSat.
+- [ ] 2011-04-18: Designing redundancy into critical systems.
+- [ ] 2011-04-25: Why you should always calibrate your test equipment.
+- [ ] 2011-05-02: The art of technical writing for a research paper.
+- [ ] 2011-05-09: Understanding ITAR and export controls. It's serious business.
+- [ ] 2011-05-16: The difference between a prototype and flight hardware.
+- [ ] 2011-05-23: An introduction to stress analysis.
+- [ ] 2011-05-30: How to select materials for the space environment.
+- [ ] 2011-06-06: Finals week: Electromagnetics is tough.
+- [ ] 2011-06-13: Google+ launches. Is this a Facebook killer?
+- [ ] 2011-06-20: Summer research project: Advanced composite materials.
+- [ ] 2011-06-27: My first conference paper submission.
+- [ ] 2011-07-04: Building a thermal cycling chamber from scratch.
+- [ ] 2011-07-11: Halfway through my summer research.
+- [ ] 2011-07-18: An introduction to composite materials.
+- [ ] 2011-07-25: Can we 3D print parts for our satellite?
+- [ ] 2011-08-01: Visiting local aerospace companies.
+- [ ] 2011-08-08: Why I'm studying for the GREs.
+- [ ] 2011-08-15: The grad school application process begins.
+- [ ] 2011-08-22: Wrapping up my summer research.
+- [ ] 2011-08-29: Senior year is here.
+- [ ] 2011-09-05: Mentoring the new members of the CubeSat team.
+- [ ] 2011-09-12: Advanced control systems theory.
+- [ ] 2011-09-19: The challenges of integrating all the CubeSat subsystems.
+- [ ] 2011-09-26: Stripe has launched. This could change online payments.
+- [ ] 2011-10-03: Writing my grad school application essays.
+- [ ] 2011-10-10: The iPhone 4S with Siri is out. Is this the future of interaction?
+- [ ] 2011-10-17: Debugging under pressure as deadlines approach.
+- [ ] 2011-10-24: Interview season for internships and jobs.
+- [ ] 2011-10-31: Balancing a full course load with my CubeSat responsibilities.
+- [ ] 2011-11-07: Where should I apply? Industry vs. grad school.
+- [ ] 2011-11-14: The final push for CubeSat testing.
+- [ ] 2011-11-21: Thanksgiving break.
+- [ ] 2011-11-28: The first semester of senior year is almost done.
+- [ ] 2011-12-05: The Kindle Fire is surprisingly good for the price.
+- [ ] 2011-12-12: Final exams.
+- [ ] 2011-12-19: Reflecting on a year of leadership and growth.
+- [ ] 2011-12-26: Holiday hacking projects.
+- [ ] 2011-01-12: Thermal Vacuum Chamber: Building vs Buying.
+- [ ] 2011-02-16: Supplier Relations: Getting Parts for Space.
+- [ ] 2011-03-16: Lessons from NASA Design Reviews.
+- [ ] 2011-05-18: Reflection on Leadership Growth.
+- [ ] 2011-06-15: Conference Paper: First Authorship.
+- [ ] 2011-08-10: Graduate School Applications Begin.
+- [ ] 2011-10-26: Debugging Under Pressure.
+- [ ] 2011-12-14: Final CubeSat Testing Push.
+
+## 2012 (Senior Year, Facebook)
+### Completed (5):
+- [x] 2012-02-20: HDR Astrophotography: Capturing the Full Dynamic Range of the Night Sky
+- [x] 2012-03-20: From Hardware to Software: Pivoting My Career Path
+- [x] 2012-05-10: Graduating Summa Cum Laude: Lessons from Four Years of Engineering
+- [x] 2012-12-31: 2012: Year in Review
+
+### Planned (60):
+- [ ] 2012-01-09: Senior design project: Let's build something cool.
+- [ ] 2012-01-16: Why I'm learning to code in Python. It's not just for scripting.
+- [ ] 2012-01-23: Starting the great pivot: from hardware to software.
+- [ ] 2012-01-30: My interview prep plan: Cracking the Coding Interview is my new bible.
+- [ ] 2012-02-06: The Facebook IPO filing is public. The numbers are staggering.
+- [ ] 2012-02-13: Understanding Big O notation for the first time.
+- [ ] 2012-02-20: The Raspberry Pi is here! A game-changer for hobbyists.
+- [ ] 2012-02-27: My first mock interviews. They were brutal.
+- [ ] 2012-03-05: Rejection is part of the process. Learning from a failed interview.
+- [ ] 2012-03-12: Spring Break trip to Silicon Valley for interviews.
+- [ ] 2012-03-19: First impressions of the Bay Area. It's... expensive.
+- [ ] 2012-03-26: My onsite interview at Facebook. A whirlwind day.
+- [ ] 2012-04-02: The waiting game. Checking my email every 5 minutes.
+- [ ] 2012-04-09: Google's Project Glass is announced. The future is weird.
+- [ ] 2012-04-16: I got the offer from Facebook!
+- [ ] 2012-04-23: How to negotiate your first tech salary.
+- [ ] 2012-04-30: Finishing my last semester strong.
+- [ ] 2012-05-07: The final push: senior design presentations and final exams.
+- [ ] 2012-05-14: The Facebook IPO. A rocky start.
+- [ ] 2012-05-21: Graduation. It's over. Now what?
+- [ ] 2012-05-28: Planning my cross-country move to California.
+- [ ] 2012-06-04: A summer of intensive learning. I need to ramp up my web development skills.
+- [ ] 2012-06-11: Building my first real web app.
+- [ ] 2012-06-18: Reading "JavaScript: The Good Parts".
+- [ ] 2012-06-25: The discovery of the Higgs boson. A huge day for physics.
+- [ ] 2012-07-02: Prepping for my start date at Facebook.
+- [ ] 2012-07-09: Apartment hunting in the Bay Area is a full-time job.
+- [ ] 2012-07-16: The cost of living shock is real.
+- [ ] 2012-07-23: My last East Coast summer.
+- [ ] 2012-07-30: Two weeks until I start.
+- [ ] 2012-08-06: Saying goodbye to Buffalo.
+- [ ] 2012-08-13: The cross-country drive.
+- [ ] 2012-08-20: I've arrived in California.
+- [ ] 2012-08-27: First day at Facebook. Orientation.
+- [ ] 2012-09-03: Facebook Bootcamp begins. Drinking from the firehose.
+- [ ] 2012-09-10: The culture of "move fast and break things."
+- [ ] 2012-09-17: My first code commit to the Facebook codebase.
+- [ ] 2012-09-24: The Apple Maps disaster. A lesson in launching too early.
+- [ ] 2012-10-01: Choosing a team at Facebook.
+- [ ] 2012-10-08: The AlexNet paper just won the ImageNet competition. Something big is happening in AI.
+- [ ] 2012-10-15: Trying to understand convolutional neural networks.
+- [ ] 2012-10-22: One month in. Reflections on working at one of the biggest tech companies in the world.
+- [ ] 2012-10-29: Hurricane Sandy batters the East Coast.
+- [ ] 2012-11-05: The 2012 presidential election.
+- [ ] 2012-11-12: Finding my rhythm at work.
+- [ ] 2012-11-19: My first real code review.
+- [ ] 2012-11-26: Thanksgiving in California.
+- [ ] 2012-12-03: My first performance review.
+- [ ] 2012-12-10: Planning for my first year as a software engineer.
+- [ ] 2012-12-17: The world was supposed to end today, according to the Mayans.
+- [ ] 2012-12-24: A quiet Christmas in my new home.
+- [ ] 2012-01-18: Data Structures for Hardware Engineers.
+- [ ] 2012-02-15: From Circuits to Code: The Mindset Shift.
+- [ ] 2012-03-21: Waiting for Offer Letters.
+- [ ] 2012-04-18: CubeSat Handoff Documentation.
+- [ ] 2012-05-16: Post-Graduation Plans.
+- [ ] 2012-08-22: Arriving in California.
+- [ ] 2012-10-24: One Month In: Reflections.
+- [ ] 2012-12-12: Year One at Facebook Planning.
+
+## 2013 (Facebook / Stanford)
+### Completed (5):
+- [x] 2013-06-15: First Week at Facebook: From 20 to 1 Billion Users
+- [x] 2013-07-22: Silicon Valley Skies: Astrophotography in Light-Polluted Paradise
+- [x] 2013-12-31: 2013: Year in Review
+
+### Planned (60):
+- [ ] 2013-01-07: New Year, New Perf Goals: Shaving Milliseconds off Facebook's Front End
+- [ ] 2013-01-14: The Power of a Single Packet: Dissecting Web Performance with Wireshark
+- [ ] 2013-01-21: PHP at Scale is... Actually Fast? HipHop VM Deep Dive
+- [ ] 2013-01-28: My First On-call Rotation: Surviving a Sev
+- [ ] 2013-02-04: Hackathon Project: Visualizing Facebook's Internal Services Graph
+- [ ] 2013-02-11: Why A/B Testing Everything is Harder Than It Looks
+- [ ] 2013-02-18: The Rise of Bitcoin: Should I be Buying This? (A Hacker News Discussion)
+- [ ] 2013-02-25: BigPipe at Facebook: A Look Under the Hood
+- [ ] 2013-03-04: Code Review Culture: Learning from the Best Engineers I've Met
+- [ ] 2013-03-11: Is Google Glass the Future or a Fad? First Impressions from a Friend's Explorer Edition
+- [ ] 2013-03-18: The Yahoo/Tumblr Acquisition: What it Means for the Valley
+- [ ] 2013-03-25: My First Contribution to a Major Internal Library
+- [ ] 2013-04-01: April Fools: Announcing 'Face-scent', the Olfactory Social Network
+- [ ] 2013-04-08: The Docker Demo That Blew My Mind
+- [ ] 2013-04-15: Performance is a Feature: How We Track Regressions
+- [ ] 2013-04-22: Deciding to Go Back to School: Why I'm Applying to Stanford
+- [ ] 2013-04-29: GREs for Engineers: A Waste of Time?
+- [ ] 2013-05-06: Studying for GREs while working full time is not fun.
+- [ ] 2013-05-13: React.js: This new library from Jordan Walke might just change everything.
+- [ ] 2013-05-20: Thinking in Components: First steps with React.
+- [ ] 2013-05-27: Got into Stanford! Now the hard part... leaving Facebook.
+- [ ] 2013-06-03: Saying Goodbye to the Best Job I've Ever Had
+- [ ] 2013-06-10: Lessons Learned from a Year at Facebook
+- [ ] 2013-06-17: What I'll miss most: The Culture of 'Move Fast and Break Things'
+- [ ] 2013-06-24: Road Trip! Driving from SF to Buffalo and back before school.
+- [ ] 2013-07-01: Summer Reading List: Prepping for Grad School
+- [ ] 2013-07-08: Trying to understand the Snowden leaks. What does this mean for us?
+- [ ] 2013-07-15: Building a small project with React to really learn it.
+- [ ] 2013-07-29: Bay Area Bucket List: Things to do before becoming a student again.
+- [ ] 2013-08-05: Apartment hunting near Stanford. Sticker shock is real.
+- [ ] 2013-08-12: Brushing up on Linear Algebra. It's been a while.
+- [ ] 2013-08-19: What is "Computational & Mathematical Engineering" anyway?
+- [ ] 2013-08-26: Setting up my new student life.
+- [ ] 2013-09-02: First Day at Stanford: It's... different.
+- [ ] 2013-09-09: NSO (New Student Orientation) and the firehose of information.
+- [ ] 2013-09-16: Choosing Classes: The Paradox of Choice
+- [ ] 2013-09-23: First impressions of CS229 with Andrew Ng. The hype is real.
+- [ ] 2013-09-30: Imposter Syndrome is hitting hard this week.
+- [ ] 2013-10-07: The Google "Word2Vec" paper just dropped and it's incredible.
+- [ ] 2013-10-14: Trying to implement Word2Vec from scratch. This is hard.
+- [ ] 2013-10-21: Problem Sets at Stanford are a different level of difficulty.
+- [ ] 2013-10-28: Attending my first research seminar. I understood maybe 10% of it.
+- [ ] 2013-11-04: Midterms. The pressure is on.
+- [ ] 2013-11-11: The DeepMind Atari paper is circulating. Are we close to AGI? (No, but it's cool).
+- [ ] 2013-11-18: First experiments with word embeddings. The results are magical.
+- [ ] 2013-11-25: Thanksgiving in California. No snow.
+- [ ] 2013-12-02: CS229 Final Project: Trying to predict something, anything.
+- [ ] 2013-12-09: Finals week. I live in the library now.
+- [ ] 2013-12-16: First quarter is done. I survived.
+- [ ] 2013-12-23: Winter break project: Building a better personal website.
+- [ ] 2013-01-16: Understanding Facebook's Scale.
+- [ ] 2013-02-20: JavaScript Performance Profiling.
+- [ ] 2013-04-17: Mobile Web Performance Challenges.
+- [ ] 2013-05-15: Building Developer Tools.
+- [ ] 2013-08-14: Lessons from Industry.
+- [ ] 2013-09-18: Imposter Syndrome at Stanford.
+- [ ] 2013-10-23: Silicon Valley from a Student's Perspective.
+- [ ] 2013-11-20: First Experiments with Neural Networks for NLP.
+
+## 2014 (Stanford MS Year 1, Planet Labs)
+### Completed (3):
+- [x] 2014-09-15: Back to School: Starting My Master's at Stanford
+- [x] 2014-12-31: 2014: Year in Review
+
+### Planned (60):
+- [ ] 2014-01-06: Winter Quarter Begins. Diving into Convex Optimization.
+- [ ] 2014-01-13: Interviewing with a satellite startup? From Facebook to Space.
+- [ ] 2014-01-20: Why I'm joining Planet Labs: Monitoring the Earth in real-time.
+- [ ] 2014-01-27: First week at Planet. It's a hardware company, but with a software soul.
+- [ ] 2014-02-03: Juggling a full course load and a startup job. Is this sustainable?
+- [ ] 2014-02-10: Flock 1 is in orbit! Watching our satellites get deployed is surreal.
+- [ ] 2014-02-17: First light: The first images from our new satellites are coming down.
+- [ ] 2014-02-24: The Mt. Gox collapse. A cautionary tale for the crypto world.
+- [ ] 2014-03-03: Building the image processing pipeline: From raw data to beautiful pictures.
+- [ ] 2014-03-10: Python is everywhere here. It's the glue of the aerospace industry now.
+- [ ] 2014-03-17: Facebook bought Oculus for $2B. The future is here.
+- [ ] 2014-03-24: Spring Break: Catching up on sleep.
+- [ ] 2014-03-31: CS231n: Learning about Convolutional Neural Networks. This feels important.
+- [ ] 2014-04-07: The Heartbleed Bug: A good reminder to take security seriously.
+- [ ] 2014-04-14: Applying CNNs to satellite imagery: First attempts.
+- [ ] 2014-04-21: "Agile Aerospace" is not an oxymoron. How Planet makes it work.
+- [ ] 2014-04-28: The challenge of cloud detection in satellite images.
+- [ ] 2014-05-05: Mid-terms vs. satellite commissioning. A balancing act.
+- [ ] 2014-05-12: DeepFace from Facebook. Facial recognition is getting scarily good.
+- [ ] 2014-05-19: Building a tool to automatically find ships in the ocean.
+- [ ] 2014-05-26: Memorial Day. Took a trip to Yosemite to see some of the planet we're imaging.
+- [ ] 2014-06-02: Apple announced Swift. A new language to learn.
+- [ ] 2014-06-09: Finals week. The CS231n final project is a beast.
+- [ ] 2014-06-16: The GAN paper just dropped from Goodfellow et al. This is a game changer.
+- [ ] 2014-06-23: Trying to understand Generative Adversarial Networks. My head hurts.
+- [ ] 2014-06-30: Summer at Planet: Full-time focus on building out the data pipeline.
+- [ ] 2014-07-07: Project: Detecting deforestation in the Amazon from space.
+- [ ] 2014-07-14: The scale of data at Planet is staggering.
+- [ ] 2014-07-21: Building internal tools for mission control.
+- [ ] 2014-07-28: The Amazon Fire Phone is a flop. A lesson in product.
+- [ ] 2014-08-04: Prepping for my talk at the SmallSat conference.
+- [ ] 2014-08-11: Gave my first conference talk! It was terrifying and exhilarating.
+- [ ] 2014-08-18: What I learned at SmallSat 2014.
+- [ ] 2014-08-25: Back to school prep. One more year to go.
+- [ ] 2014-09-01: Fall quarter begins. Advanced ML courses.
+- [ ] 2014-09-08: The PhD question: To be or not to be?
+- [ ] 2014-09-15: Taking CS224d for NLP. From images to text.
+- [ ] 2014-09-22: Research vs. Product: Where do I fit best?
+- [ ] 2014-09-29: Starting to think about my Master's thesis.
+- [ ] 2014-10-06: Thesis idea: Using GANs for satellite image enhancement?
+- [ ] 2014-10-13: The Adam optimizer paper is out. A new default for training neural nets.
+- [ ] 2014-10-20: Juggling thesis research with my work at Planet.
+- [ ] 2014-10-27: Building a small GIS tool to visualize our data.
+- [ ] 2014-11-03: Mid-term season again.
+- [ ] 2014-11-10: Contributing to an open-source mapping library.
+- [ ] 2014-11-17: The startup idea is starting to form: "Everitas".
+- [ ] 2014-11-24: Thanksgiving break. Hacking on the Everitas prototype.
+- [ ] 2014-12-01: Why academic publishing is broken and how we can fix it.
+- [ ] 2014-12-08: Finals week. The last one of 2014.
+- [ ] 2014-12-15: Pitching Everitas to friends. Getting feedback.
+- [ ] 2014-12-22: Two years in Silicon Valley. What a ride.
+- [ ] 2014-01-22: From Facebook to Hardware Again.
+- [ ] 2014-02-12: Computer Vision for Satellite Imagery.
+- [ ] 2014-04-16: Cloud Computing for Satellite Data.
+- [ ] 2014-05-21: Summer Internship Decisions.
+- [ ] 2014-07-16: Understanding Precision Agriculture.
+- [ ] 2014-08-06: Orbital Transfer Optimization for a Solar Sail.
+- [ ] 2014-10-29: GIS + ML Integration.
+- [ ] 2014-12-17: Everitas: Building Trust Networks for Academic Research.
+
+## 2015 (Stanford MS Year 2, Matroid, Arthena)
+### Completed (3):
+- [x] 2015-08-15: Iceland Aurora Photography: When Nature Provides the Light Show
+- [x] 2015-12-31: 2015: Year in Review
+
+### Planned (60):
+- [ ] 2015-01-05: Final push at Stanford. Thesis work is consuming my life.
+- [ ] 2015-01-12: Thesis update: Applying deep learning to satellite image analysis.
+- [ ] 2015-01-19: The "Show, Attend and Tell" paper is fascinating. Image captioning is here.
+- [ ] 2015-01-26: Juggling thesis, classes, and Planet Labs. Something has to give.
+- [ ] 2015-02-02: Research is hard. Full of dead ends.
+- [ ] 2015-02-09: Submitting my first academic paper. The review process is opaque.
+- [ ] 2015-02-16: The startup bug is biting again. But what's the idea?
+- [ ] 2015-02-23: "The Dress". A lesson in human perception (and virality).
+- [ ] 2015-03-02: Spring Break will be a thesis-writing marathon.
+- [ ] 2015-03-09: Using GPUs for training models. It's like a superpower.
+- [ ] 2015-03-16: The Apple Watch is out. Do I need one? (Probably not).
+- [ ] 2015-03-23: The idea for Matroid is born: Making computer vision accessible to everyone.
+- [ ] 2015-03-30: First conversations with my Matroid co-founder.
+- [ ] 2015-04-06: Job interviews vs. starting a company. The ultimate fork in the road.
+- [ ] 2015-04-13: The siren song of big tech offers.
+- [ ] 2015-04-20: We're doing it. We're starting a company.
+- [ ] 2015-04-27: Thesis defense prep. Can I explain my research to normal people?
+- [ ] 2015-05-04: I defended my thesis! I'm officially done with the hard part.
+- [ ] 2015-05-11: Reflecting on my time at Stanford. It was worth it.
+- [ ] 2015-05-18: Graduation is next month. What a journey.
+- [ ] 2015-05-25: The hardest decision of my life: Turning down the Stanford PhD track.
+- [ ] 2015-06-01: Graduation Day. I'm a Master of Science.
+- [ ] 2015-06-08: Saying goodbye to Planet Labs. An incredible experience.
+- [ ] 2015-06-15: Day 1 at Matroid. We have a couch and a whiteboard.
+- [ ] 2015-06-22: Building the Matroid MVP. The vision is huge.
+- [ ] 2015-06-29: From research to product. A different mindset.
+- [ ] 2015-07-06: Fundraising 101: Crafting the perfect pitch deck.
+- [ ] 2015-07-13: First meetings with Angel investors.
+- [ ] 2015-07-20: The feedback is... mixed. Is our vision too big?
+- [ ] 2015-07-27: Iceland trip. Need to clear my head. The Northern Lights are unreal.
+- [ ] 2015-08-03: Back from Iceland with a new perspective.
+- [ ] 2015-08-10: Google is now Alphabet. A sign of the times.
+- [ ] 2015-08-17: Product debates. We're not all on the same page.
+- [ ] 2015-08-24: The classic founder dilemma: Pivot or persevere?
+- [ ] 2015-08-31: Team dynamics are hard. Really hard.
+- [ ] 2015-09-07: This isn't working. The hardest realization.
+- [ ] 2015-09-14: The idea for Arthena is sparked during a museum visit.
+- [ ] 2015-09-21: Why is the art market so opaque? It's a data problem.
+- [ ] 2015-09-28: Exploring the intersection of art and technology.
+- [ ] 2015-10-05: The decision is made. I'm leaving Matroid to start something new.
+- [ ] 2015-10-12: My new co-founder is an art world expert. This is key.
+- [ ] 2015-10-19: Building the business plan for Arthena.
+- [ ] 2015-10-26: Diving into art history and market data.
+- [ ] 2015-11-02: We're incorporating. Arthena is real.
+- [ ] 2015-11-09: Google just open-sourced TensorFlow. This changes the game for everyone.
+- [ ] 2015-11-16: First look at TensorFlow. The learning curve is steep, but powerful.
+- [ ] 2015-11-23: Building the Arthena MVP with TensorFlow in the backend.
+- [ ] 2015-11-30: Thanksgiving. Thankful for a new direction.
+- [ ] 2015-12-07: Attending NIPS 2015 (now NeurIPS). The energy is electric.
+- [ ] 2015-12-14: The ResNet paper is the talk of the conference. Deeper networks are now possible.
+- [ ] 2015-12-21: First trip to Art Basel Miami. A whole different world.
+- [ ] 2015-12-28: 2015: The most turbulent year of my life.
+- [ ] 2015-01-21: Advanced Computer Vision Seminar.
+- [ ] 2015-02-11: Collaboration with Planet Labs on Thesis Research.
+- [ ] 2015-03-11: YC Application Thoughts.
+- [ ] 2015-04-15: Negotiating Multiple Offers.
+- [ ] 2015-06-17: Computer Vision Without the PhD: Building Matroid.
+- [ ] 2015-08-12: First Customer Conversations.
+- [ ] 2015-10-21: Why Art Needs Tech.
+- [ ] 2015-12-09: From Computer Vision to Computer Vision for Art.
+
+## 2016 (Starting Arthena / YC)
+### Completed (3):
+- [x] 2016-08-15: Leaving Matroid to Start Arthena
+- [x] 2016-12-31: 2016: Year in Review
+
+### Planned (60):
+- [ ] 2016-01-04: Day 1, Full-time at Arthena. Let's build this.
+- [ ] 2016-01-11: The Art Market is Inefficient. Here's our plan to fix it.
+- [ ] 2016-01-18: Meeting with gallery owners and collectors. Learning the language.
+- [ ] 2016-01-25: Building the financial models for art investment funds.
+- [ ] 2016-02-01: Navigating the legal maze of SEC regulations for investment.
+- [ ] 2016-02-08: Our tech stack: Python, Django, and now React for the front-end.
+- [ ] 2016-02-15: Building our first quantitative models for art valuation.
+- [ ] 2016-02-22: Scraping auction data is a messy business.
+- [ ] 2016-02-29: The AlphaGo vs. Lee Sedol match is happening. A milestone for AI.
+- [ ] 2016-03-07: AlphaGo won. I'm speechless. The power of reinforcement learning.
+- [ ] 2016-03-14: We're applying to Y Combinator. It feels like a long shot.
+- [ ] 2016-03-21: The YC application is a lesson in clarity.
+- [ ] 2016-03-28: Endless pitch practice. Can I explain art finance in 2 minutes?
+- [ ] 2016-04-04: We got a YC interview! Flying to Mountain View.
+- [ ] 2016-04-11: The 10-minute YC interview was the most intense 10 minutes of my life.
+- [ ] 2016-04-18: We got in! Arthena is a YC S16 company.
+- [ ] 2016-04-25: Pre-YC reading list and prep work.
+- [ ] 2016-05-02: The first YC dinner. The energy in the room is insane.
+- [ ] 2016-05-09: First office hours with a YC partner. Brutal, honest feedback.
+- [ ] 2016-05-16: "Make something people want." It's on the walls for a reason.
+- [ ] 2016-05-23: The search for Product-Market Fit.
+- [ ] 2016-05-30: The DAO hack. A big setback for crypto.
+- [ ] 2016-06-06: Tuesday night dinners are the highlight of the week.
+- [ ] 2016-06-13: The pressure to show growth every week is immense.
+- [ ] 2016-06-20: Prepping for Demo Day. It's all about the metrics.
+- [ ] 2016-06-27: The YC network is real. So many intros.
+- [ ] 2016-07-04: Happy 4th. No break, just coding.
+- [ ] 2016-07-11: Pokemon Go is everywhere. A lesson in AR and viral loops.
+- [ ] 2016-07-18: The Prisma app is making style transfer mainstream. We've been thinking about this for art.
+- [ ] 2016-07-25: Month-long Europe trip after YC? A much needed break.
+- [ ] 2016-08-01: Demo Day practice runs.
+- [ ] 2016-08-08: Demo Day. A blur of faces and conversations.
+- [ ] 2016-08-15: Post-Demo Day fundraising is a full-time job.
+- [ ] 2016-08-22: We closed our seed round! Now the real work begins.
+- [ ] 2016-08-29: Back from Europe. So much art, so many ideas.
+- [ ] 2016-09-05: Making our first hire. This is a big step.
+- [ ] 2016-09-12: Launching our first art fund.
+- [ ] 2016-09-19: Onboarding our first clients.
+- [ ] 2016-09-26: Pandas Vectorization: How I made our analysis 100x faster.
+- [ ] 2016-10-03: From For-Loops to Vector Ops: A Pandas Journey.
+- [ ] 2016-10-10: Building out our network of art dealers and advisors.
+- [ ] 2016-10-17: The technical challenges of financial reporting for art.
+- [ ] 2016-10-24: Twitter shuts down Vine. The end of an era.
+- [ ] 2016-10-31: Halloween in the office. We're a real company now.
+- [ ] 2016-11-07: The 2016 election. A shock to Silicon Valley.
+- [ ] 2016-11-14: What does the political climate mean for the art market?
+- [ ] 2016-11-21: DeepMind's WaveNet paper is out. Generating raw audio is a huge step.
+- [ ] 2016-11-28: Planning for 2017. How do we scale?
+- [ ] 2016-12-05: Art Basel Miami. This time, we're not just tourists.
+- [ ] 2016-12-12: Reflecting on our first year. From idea to YC to funded company.
+- [ ] 2016-12-19: Company holiday party.
+- [ ] 2016-12-26: Lessons learned from YC.
+- [ ] 2016-01-27: Building a Recommendation Engine for Art.
+- [ ] 2016-02-17: Finding Co-founders.
+- [ ] 2016-03-16: Data Sources for the Art Market.
+- [ ] 2016-05-18: Office Hours with YC Partners.
+- [ ] 2016-07-13: First Hire Decisions.
+- [ ] 2016-08-24: Marketing Strategy Development.
+- [ ] 2016-10-19: Real-World Pandas Performance: Analyzing Million-Row Art Datasets.
+- [ ] 2016-12-14: Hiring Art Experts.
+
+## 2017 (Arthena Growth)
+### Completed (3):
+- [x] 2017-06-20: YC S17: Lessons from Demo Day
+- [x] 2017-12-31: 2017: Year in Review
+
+### Planned (60):
+- [ ] 2017-01-09: 2017 Goals: Scaling Arthena from a seed-stage company to a Series A company.
+- [ ] 2017-01-16: The Nintendo Switch announcement has me thinking about hardware UX again.
+- [ ] 2017-01-23: Building our data moat: The long-term value of proprietary art data.
+- [ ] 2017-01-30: First steps in quantitative art analysis.
+- [ ] 2017-02-06: Launching our first major art collection. The logistics are intense.
+- [ ] 2017-02-13: Crafting a press strategy. Getting the Arthena story out there.
+- [ ] 2017-02-20: The great AWS S3 outage of 2017. A good day to be multi-cloud.
+- [ ] 2017-02-27: Building out the tech team: What we look for in our first 10 hires.
+- [ ] 2017-03-06: We closed our Series A! Lessons from the fundraising trail.
+- [ ] 2017-03-13: The "Fearless Girl" statue appears on Wall Street. A powerful statement.
+- [ ] 2017-03-20: Analyzing our Q1 results. Growth is strong.
+- [ ] 2017-03-27: Planning Arthena V2. What does the next generation of the platform look like?
+- [ ] 2017-04-03: The Fyre Festival debacle. A cautionary tale for founders.
+- [ ] 2017-04-10: Internationalization begins: First stop, Hong Kong.
+- [ ] 2017-04-17: Exploring the Asian art market. It's a different world.
+- [ ] 2017-04-24: The challenges of currency hedging for international investments.
+- [ ] 2017-05-01: A trip to the Venice Biennale. So much inspiration.
+- [ ] 2017-05-08: Prepping for GDPR. A new era of data privacy.
+- [ ] 2017-05-15: WannaCry ransomware attack: a wake-up call for security.
+- [ ] 2017-05-22: Iterating on our engineering culture as we grow.
+- [ ] 2017-05-29: What works at 10 people, breaks at 20.
+- [ ] 2017-06-05: The "Attention Is All You Need" paper just dropped. Transformers could change everything in NLP.
+- [ ] 2017-06-12: Trying to understand the Transformer architecture. My first read-through.
+- [ ] 2017-06-19: Apple announces the HomePod. The smart speaker wars are heating up.
+- [ ] 2017-06-26: Post-Series A strategy: How to deploy capital effectively.
+- [ ] 2017-07-03: Scaling our operations. The non-glamorous side of startups.
+- [ ] 2017-07-10: The logistics of art storage and insurance.
+- [ ] 2017-07-17: Should we build a mobile app? The eternal question.
+- [ ] 2017-07-24: The crypto bull run is starting to get crazy.
+- [ ] 2017-07-31: Summer slowdown? Not at a startup.
+- [ ] 2017-08-07: The Google "anti-diversity" memo. A lot to unpack here.
+- [ ] 2017-08-14: Our team has grown to 20. Time for a company offsite.
+- [ ] 2017-08-21: The total solar eclipse. A moment of perspective.
+- [ ] 2017-08-28: Engineering Culture 2.0: Scaling what works, fixing what doesn't.
+- [ ] 2017-09-04: Fall art season is here. The busiest time of the year.
+- [ ] 2017-09-11: The Equifax data breach is a disaster.
+- [ ] 2017-09-18: Why we're migrating to TypeScript. Type safety is not optional.
+- [ ] 2017-09-25: First steps with TypeScript. The learning curve is worth it.
+- [ ] 2017-10-02: "Vibe Coding": How we build features by feel and intuition.
+- [ ] 2017-10-09: Strong Q3 results. The machine is working.
+- [ ] 2017-10-16: Optimizing our platform for performance.
+- [ ] 2017-10-23: The Harvey Weinstein story breaks. A cultural reckoning.
+- [ ] 2017-10-30: Tackling tech debt before it sinks us.
+- [ ] 2017-11-06: The Paradise Papers leak. More transparency is needed.
+- [ ] 2017-11-13: Leonardo da Vinci's "Salvator Mundi" sells for $450M. What does this mean for the art market?
+- [ ] 2017-11-20: Bitcoin is nearing $10,000. This is wild.
+- [ ] 2017-11-27: Strategic planning for 2018. What's next?
+- [ ] 2017-12-04: The Thomas Fire in California. A sobering reminder of climate change.
+- [ ] 2017-12-11: Our first company holiday party.
+- [ ] 2017-12-18: Reflecting on a year of intense growth.
+- [ ] 2017-12-25: Merry Christmas. A quiet week to recharge.
+- [ ] 2017-01-25: ML for Art Valuation: Our approach.
+- [ ] 2017-02-15: Building Institutional Partnerships.
+- [ ] 2017-03-15: Platform V2 Planning.
+- [ ] 2017-04-26: Building an Advisory Board.
+- [ ] 2017-06-28: Team Offsite Planning.
+- [ ] 2017-08-16: Building a Collector Events Series.
+- [ ] 2017-09-27: TypeScript Tricks That Save Hours of Debugging.
+- [ ] 2017-11-15: Preparing for Scale.
+
+## 2018 (Arthena Scaling)
+### Completed (2):
+- [x] 2018-12-31: 2018: Year in Review
+
+### Planned (60):
+- [ ] 2018-01-08: Setting our 2018 OKRs: The Year of the Data Moat.
+- [ ] 2018-01-15: The Spectre and Meltdown vulnerabilities are a huge deal. What they mean for cloud security.
+- [ ] 2018-01-22: The great crypto crash of 2018 begins. Was the bubble inevitable?
+- [ ] 2018-01-29: Exploring the idea of tokenizing art assets on the blockchain. Is it viable?
+- [ ] 2018-02-05: Announcing our Q4 2017 results and our plans for the year.
+- [ ] 2018-02-12: SpaceX successfully launched the Falcon Heavy. A huge moment for commercial space.
+- [ ] 2018-02-19: Building brand recognition in a niche market.
+- [ ] 2018-02-26: Announcing our first major institutional partnership.
+- [ ] 2018-03-05: International Women's Day: Highlighting the amazing women in art and tech on our team.
+- [ ] 2018-03-12: The Cambridge Analytica scandal breaks. A turning point for data privacy.
+- [ ] 2018-03-19: What the Cambridge Analytica news means for us and our users.
+- [ ] 2018-03-26: Finally upgrading our backend to Python 3. A migration story.
+- [ ] 2018-04-02: Q1 review: Exceeding targets despite market volatility.
+- [ ] 2018-04-09: Zuckerberg's testimony before Congress. A new era of scrutiny for big tech.
+- [ ] 2018-04-16: Finding our first office space in NYC. The search is a nightmare.
+- [ ] 2018-04-23: Why we chose SoHo: The perfect intersection of art and tech.
+- [ ] 2018-04-30: Building a global, remote-first team culture.
+- [ ] 2018-05-07: Google Duplex demoed at I/O. The Turing test is getting closer.
+- [ ] 2018-05-14: Internationalizing our platform: The challenges of multi-currency support.
+- [ ] 2018-05-21: GDPR is officially in effect. We're ready.
+- [ ] 2018-05-28: Memorial Day. A moment to pause.
+- [ ] 2018-06-04: Microsoft acquires GitHub for $7.5B. What does this mean for open source?
+- [ ] 2018-06-11: Starting to think about our Series B. What metrics will matter?
+- [ ] 2018-06-18: Building a defensible moat around our business.
+- [ ] 2018-06-25: Planning our summer team retreat.
+- [ ] 2018-06-27: Our Automated Valuation Model: How it Works.
+- [ ] 2018-07-02: Reflecting on 3 years since starting this journey.
+- [ ] 2018-07-09: Lessons I'm learning as a CEO.
+- [ ] 2018-07-16: The importance of building an executive team you can trust.
+- [ ] 2018-07-23: Learning to delegate and let go.
+- [ ] 2018-07-30: The MoviePass collapse. A lesson in unsustainable unit economics.
+- [ ] 2018-08-06: Launching a major platform update.
+- [ ] 2018-08-13: Integrating customer feedback into our product cycle.
+- [ ] 2018-08-20: Are we heading for a recession? How to prepare the company.
+- [ ] 2018-08-27: Our risk management strategy is evolving.
+- [ ] 2018-08-29: The Pros and Cons of a Serverless Architecture for a Fintech Startup.
+- [ ] 2018-09-03: Labor Day. The unofficial end of summer.
+- [ ] 2018-09-10: Participating in the Frieze art fair.
+- [ ] 2018-09-17: Building a community for our collectors.
+- [ ] 2018-09-24: Apple's new iPhones are out. The notch is here to stay.
+- [ ] 2018-10-01: Q3 was our best quarter yet.
+- [ ] 2018-10-08: The challenges of hiring at scale.
+- [ ] 2018-10-15: The BERT paper is published. This will change NLP forever.
+- [ ] 2018-10-22: First experiments with BERT. The power of contextual embeddings.
+- [ ] 2018-10-29: Fine-tuning BERT for art description analysis.
+- [ ] 2018-11-05: Optimizing platform performance for our growing user base.
+- [ ] 2018-11-07: How We Built a CI/CD Pipeline for a Growing Team.
+- [ ] 2018-11-12: Amazon announces HQ2 locations. The tech landscape is decentralizing.
+- [ ] 2018-11-19: Thanksgiving week. Time for reflection.
+- [ ] 2018-11-26: The year-end sprint is on.
+- [ ] 2018-11-28: Our Customer Retention Strategy.
+- [ ] 2018-12-03: Setting the vision for 2019.
+- [ ] 2018-12-10: Art Basel Miami. It feels like our home turf now.
+- [ ] 2018-12-17: Three years of Arthena. What a ride.
+- [ ] 2018-12-24: A quiet holiday week.
+
+## 2019 (Arthena Established)
+### Completed (2):
+- [x] 2019-12-31: 2019: Year in Review
+
+### Planned (60):
+- [ ] 2019-01-07: 2019: The Year of Profitability. Setting our company's most important goal yet.
+- [ ] 2019-01-14: A deep dive into our unit economics.
+- [ ] 2019-01-21: Navigating a cooling art market. How we're adapting our strategy.
+- [ ] 2019-01-28: The US government shutdown's effect on the economy.
+- [ ] 2019-02-04: OpenAI announces GPT-2, but doesn't release the full model. A debate on responsible disclosure.
+- [ ] 2019-02-11: First experiments with the smaller GPT-2 model. The results are stunning.
+- [ ] 2019-02-18: Preparing for our Forbes feature.
+- [ ] 2019-02-25: My thoughts on the Apex Legends launch. A new challenger in the battle royale space.
+- [ ] 2019-03-04: Speaking on a Women in FinTech panel.
+- [ ] 2019-03-11: The college admissions scandal. A story of privilege and access.
+- [ ] 2019-03-18: Building our reputation as thought leaders in the art x tech space.
+- [ ] 2019-03-25: Our platform has reached a new level of maturity. What's next?
+- [ ] 2019-03-27: How We Use Transfer Learning to Analyze Art.
+- [ ] 2019-04-01: Five years of living in Silicon Valley. What's changed.
+- [ ] 2019-04-08: The first photo of a black hole. A monumental achievement for science.
+- [ ] 2019-04-15: The Notre Dame Cathedral fire. A loss for world heritage.
+- [ ] 2019-04-22: Lessons learned from scaling a company and a team.
+- [ ] 2019-04-29: Is work-life balance possible in a startup?
+- [ ] 2019-05-06: A trip to the Venice Biennale.
+- [ ] 2019-05-13: Gaining acceptance in the traditional art world.
+- [ ] 2019-05-20: RoBERTa vs. BERT: Benchmarking on our art text data.
+- [ ] 2019-05-27: Building an image captioning system for artworks.
+- [ ] 2019-05-29: The Challenges of Data Cleaning for Art Market Analysis.
+- [ ] 2019-06-03: A mid-year strategic review. Are we on track for profitability?
+- [ ] 2019-06-10: The first acquisition offers are coming in.
+- [ ] 2019-06-17: To sell or not to sell? The founder's dilemma.
+- [ ] 2019-06-24: Why we're choosing to stay independent.
+- [ ] 2019-06-26: Our Internal Debate: Monorepo vs. Multi-repo.
+- [ ] 2019-07-01: The vision for the next phase of Arthena.
+- [ ] 2019-07-08: Recognizing the signs of burnout.
+- [ ] 2019-07-15: The importance of CEO mental health.
+- [ ] 2019-07-22: The Capital One data breach. Another major security failure.
+- [ ] 2019-07-29: Fine-tuning GPT-2 on an art criticism corpus.
+- [ ] 2019-08-05: Strategies for recharging and building resilience.
+- [ ] 2019-08-12: The evolution of my leadership style.
+- [ ] 2019-08-19: The WeWork IPO filing. A lot of red flags.
+- [ ] 2019-08-26: Thinking about succession planning.
+- [ ] 2019-09-02: Fall art season is here.
+- [ ] 2019-09-09: We hit a major milestone.
+- [ ] 2019-09-16: We're profitable! A huge moment for the team.
+- [ ] 2019-09-23: Celebrating our Q3 results.
+- [ ] 2019-09-25: Why We Chose GraphQL for Our New API.
+- [ ] 2019-09-30: The climate strikes. A new generation is demanding action.
+- [ ] 2019-10-07: What's next for me, personally and professionally?
+- [ ] 2019-10-14: The ethics of AI-generated art descriptions.
+- [ ] 2019-10-21: Google claims quantum supremacy with Sycamore.
+- [ ] 2019-10-28: Exploring new challenges and opportunities.
+- [ ] 2019-11-04: The full GPT-2 model is released.
+- [ ] 2019-11-11: Thinking about the tech scene in Africa.
+- [ ] 2019-11-18: Disney+ launches. The streaming wars are in full swing.
+- [ ] 2019-11-20: Building a Culture of Written Documentation.
+- [ ] 2019-11-25: Thanksgiving. A time for gratitude.
+- [ ] 2019-12-02: Exploring new markets and ideas.
+- [ ] 2019-12-09: Planning for 2020.
+- [ ] 2019-12-11: The Rise of Remote Work: Our Experience.
+- [ ] 2019-12-16: It feels like the end of an era.
+- [ ] 2019-12-23: Ready for a change.
+
+## 2020 (SmileID Transition, Pandemic)
+### Completed (3):
+- [x] 2020-04-15: New Chapter: Joining SmileID as VP of Engineering
+- [x] 2020-12-31: 2020: Year in Review
+
+### Planned (60):
+- [ ] 2020-01-06: A new decade. What will the 2020s bring for tech?
+- [ ] 2020-01-13: My final days at Arthena. Preparing for the transition.
+- [ ] 2020-01-20: Why I'm joining SmileID and why identity in Africa is so important.
+- [ ] 2020-01-27: The tragic death of Kobe Bryant. A reminder of how fragile life is.
+- [ ] 2020-02-03: Due diligence on a new industry: From art to identity verification.
+- [ ] 2020-02-10: Meeting the SmileID team.
+- [ ] 2020-02-17: The "Parasite" Oscar win is a huge moment for international film.
+- [ ] 2020-02-24: Planning a trip to Africa to meet the team and customers.
+- [ ] 2020-03-02: The world is starting to feel different. Rumors of a new virus.
+- [ ] 2020-03-09: The COVID-19 pandemic is declared. Everything is changing.
+- [ ] 2020-03-16: The Bay Area goes into lockdown. Working from home is the new reality.
+- [ ] 2020-03-23: Onboarding to a new company, remotely. A strange experience.
+- [ ] 2020-03-30: Leading a team through a crisis.
+- [ ] 2020-04-06: Remote vibe coding: Building by intuition when you can't whiteboard.
+- [ ] 2020-04-13: Shipping features in a pandemic: Speed over perfection.
+- [ ] 2020-04-20: The digital identity space is exploding.
+- [ ] 2020-04-27: One month at SmileID. It feels like a year.
+- [ ] 2020-05-04: Building an engineering culture from a distance.
+- [ ] 2020-05-11: Microsoft unveils one of the world's most powerful supercomputers for AI.
+- [ ] 2020-05-18: The murder of George Floyd. A painful moment for the country.
+- [ ] 2020-05-25: SpaceX launches astronauts from US soil for the first time in nearly a decade.
+- [ ] 2020-05-28: A Deep Dive into Our Remote Interview Process.
+- [ ] 2020-06-01: Planning our Q2, remotely.
+- [ ] 2020-06-08: How do you hire when you can't meet in person?
+- [ ] 2020-06-15: Building trust with a virtual team.
+- [ ] 2020-06-17: Choosing Our Tech Stack for the Next Generation of SmileID Products.
+- [ ] 2020-06-22: Apple announces the transition to Apple Silicon at a virtual WWDC.
+- [ ] 2020-06-29: The unique challenges of building for the African market.
+- [ ] 2020-07-06: Six months into 2020. What a year.
+- [ ] 2020-07-13: OpenAI releases the GPT-3 API. This is a major leap forward.
+- [ ] 2020-07-20: My first experiments with GPT-3. The results are mind-blowing.
+- [ ] 2020-07-22: The Technical Challenges of Low-Bandwidth Video Calls.
+- [ ] 2020-07-27: Virtual team building activities that don't suck.
+- [ ] 2020-08-03: Growing during a crisis.
+- [ ] 2020-08-10: Focusing on platform reliability as usage soars.
+- [ ] 2020-08-17: The TikTok ban controversy.
+- [ ] 2020-08-24: The importance of a documentation-first culture.
+- [ ] 2020-08-26: How We Use Terraform to Manage Our Infrastructure.
+- [ ] 2020-08-31: The death of Chadwick Boseman. Another hero gone too soon.
+- [ ] 2020-09-07: A fall without travel.
+- [ ] 2020-09-14: The unique constraints of building for low-bandwidth environments.
+- [ ] 2020-09-16: Nvidia acquires Arm. What does this mean for the industry?
+- [ ] 2020-09-21: The social dilemma. A documentary everyone in tech should watch.
+- [ ] 2020-09-28: Q3 results are strong. The world is adapting.
+- [ ] 2020-10-05: Our team has doubled in size since I joined.
+- [ ] 2020-10-12: Stripe acquires Paystack. A huge moment for the African tech ecosystem.
+- [ ] 2020-10-19: Preparing for the next phase of growth.
+- [ ] 2020-10-26: The US election is dominating everything.
+- [ ] 2020-11-02: Election week. A tense time.
+- [ ] 2020-11-09: The election is called. A sense of relief.
+- [ ] 2020-11-16: Planning for 2021, with cautious optimism.
+- [ ] 2020-11-23: Thanksgiving in lockdown.
+- [ ] 2020-11-30: A year of adaptation.
+- [ ] 2020-12-07: Lessons learned from leading a fully remote team.
+- [ ] 2020-12-09: Our Approach to Data Residency in Africa.
+- [ ] 2020-12-14: The SolarWinds hack. A massive cybersecurity failure.
+- [ ] 2020-12-16: Why We're Betting on Kotlin Multiplatform.
+- [ ] 2020-12-21: The opportunity in Africa is clearer than ever.
+- [ ] 2020-12-28: Optimistic for 2021.
+
+## 2021 (SmileID Growth)
+### Completed (2):
+- [x] 2021-12-31: 2021: Year in Review
+
+### Planned (61):
+- [ ] 2021-01-04: Setting ambitious OKRs for 2021. This is the year we scale.
+- [ ] 2021-01-11: The GameStop saga begins. A wild ride for Wall Street and the internet.
+- [ ] 2021-01-18: Scaling our engineering team: Lessons in remote hiring.
+- [ ] 2021-01-25: Building out our presence in Lagos, Nigeria.
+- [ ] 2021-01-28: The Hidden Complexities of National ID Formats in Africa.
+- [ ] 2021-02-01: A deep dive into biometrics and the ethics of facial recognition.
+- [ ] 2021-02-08: The rise of NFTs. Is this the future of digital ownership or a bubble?
+- [ ] 2021-02-15: Designing for privacy first.
+- [ ] 2021-02-18: Mitigating Bias in Facial Recognition Models: A Never-Ending Task.
+- [ ] 2021-02-22: Navigating the complexities of GDPR-like regulations in Africa.
+- [ ] 2021-03-01: A $69 million NFT was just sold at Christie's. The world is changing.
+- [ ] 2021-03-08: Building the infrastructure of trust for a continent.
+- [ ] 2021-03-15: Our API design philosophy.
+- [ ] 2021-03-22: Focusing on developer experience as a core product feature.
+- [ ] 2021-03-25: Our Tech Stack for High-Availability Identity Verification.
+- [ ] 2021-03-29: The Suez Canal blockage is a perfect metaphor for supply chain fragility.
+- [ ] 2021-04-05: Q1 growth has been explosive.
+- [ ] 2021-04-12: The Coinbase direct listing. A landmark moment for crypto.
+- [ ] 2021-04-19: Good scaling pains: When your infrastructure is groaning under load.
+- [ ] 2021-04-22: The "Great Resignation": How We're Building a Culture People Want to Stay In.
+- [ ] 2021-04-26: Why we're investing heavily in a multi-cloud strategy.
+- [ ] 2021-05-03: We just passed 100 million identity verifications.
+- [ ] 2021-05-10: Celebrating a major milestone with a distributed team.
+- [ ] 2021-05-17: What "scale" really means for a B2B infrastructure company.
+- [ ] 2021-05-20: From Monolith to Microservices: A Painful but Necessary Migration Story.
+- [ ] 2021-05-24: The challenges of on-call rotations for a global team.
+- [ ] 2021-05-31: Fine-tuning language models for African languages.
+- [ ] 2021-06-07: The vibe shift: From careful planning to rapid iteration.
+- [ ] 2021-06-14: Building out our presence in Accra, Ghana.
+- [ ] 2021-06-21: The incredible tech talent in Ghana.
+- [ ] 2021-06-28: Our vision for a pan-African identity network.
+- [ ] 2021-07-05: We're raising our Series A.
+- [ ] 2021-07-12: Fundraising while building a company is a special kind of challenge.
+- [ ] 2021-07-15: The Web3 Hype Cycle: What's Real and What's Not?
+- [ ] 2021-07-19: How to tell the Africa story to global investors.
+- [ ] 2021-07-26: The due diligence sprint.
+- [ ] 2021-08-02: A summer of building in Africa.
+- [ ] 2021-08-09: Planning our first post-pandemic team retreat.
+- [ ] 2021-08-16: The first in-person meetings in over a year.
+- [ ] 2021-08-23: Building company culture IRL.
+- [ ] 2021-08-26: Managing Engineering Teams Across Multiple Timezones: Lessons Learned.
+- [ ] 2021-08-30: The fall of Kabul. A heartbreaking moment.
+- [ ] 2021-09-06: We closed our Series A! Time to accelerate.
+- [ ] 2021-09-13: The hiring sprint begins.
+- [ ] 2021-09-20: El Salvador adopts Bitcoin as legal tender.
+- [ ] 2021-09-27: Q3 results are breaking records.
+- [ ] 2021-10-04: The Facebook outage. A reminder of how centralized the internet has become.
+- [ ] 2021-10-11: Planning for the next generation of our platform.
+- [ ] 2021-10-18: OpenAI's Codex is a glimpse into the future of programming.
+- [ ] 2021-10-21: The Technical Challenges of Processing Low-Quality ID Photos.
+- [ ] 2021-10-25: Facebook rebrands to Meta. The metaverse is coming.
+- [ ] 2021-11-01: Preparing for 2022.
+- [ ] 2021-11-08: Building out the leadership team.
+- [ ] 2021-11-15: The COP26 climate summit. Are we doing enough?
+- [ ] 2021-11-22: Thanksgiving.
+- [ ] 2021-11-25: A Deep Dive into Our Incident Response Process.
+- [ ] 2021-11-29: The year-end push.
+- [ ] 2021-12-06: Two years at SmileID.
+- [ ] 2021-12-13: The Log4j vulnerability is a nightmare for the entire internet.
+- [ ] 2021-12-20: The opportunity in Africa is massive.
+- [ ] 2021-12-27: 2022 is going to be huge.
+
+## 2022 (SmileID Scale)
+### Completed (2):
+- [x] 2022-12-31: 2022: Year in Review
+
+### Planned (60):
+- [ ] 2022-01-10: My reality as a VP of Engineering: Managing managers.
+- [ ] 2022-01-17: The transition from IC to leadership.
+- [ ] 2022-01-24: Building a healthy engineering culture at scale.
+- [ ] 2022-01-31: Microsoft acquires Activision Blizzard. A huge consolidation in gaming.
+- [ ] 2022-02-07: We passed 150 million verifications.
+- [ ] 2022-02-14: The "crypto winter" is here.
+- [ ] 2022-02-21: Managing tech debt when you're growing fast.
+- [ ] 2022-02-28: Russia invades Ukraine. A dark day for the world.
+- [ ] 2022-03-07: Launching new products: Document verification.
+- [ ] 2022-03-14: Expanding our capabilities beyond selfies.
+- [ ] 2022-03-21: Building out our computer vision team.
+- [ ] 2022-03-28: Apple's CODA wins Best Picture. A win for streaming.
+- [ ] 2022-04-04: Strong Q1 results.
+- [ ] 2022-04-05: The first EHT image of Sagittarius A*, the black hole at the center of our galaxy.
+- [ ] 2022-04-11: Expanding into Kenya and East Africa.
+- [ ] 2022-04-18: Navigating the complex regulatory landscape.
+- [ ] 2022-04-25: Elon Musk's bid to buy Twitter.
+- [ ] 2022-05-02: Speaking at an Africa-focused tech conference.
+- [ ] 2022-05-09: Sharing the SmileID story with the world.
+- [ ] 2022-05-16: The collapse of Terra/Luna. A major crypto disaster.
+- [ ] 2022-05-23: Giving back to the community through open source.
+- [ ] 2022-05-30: A mid-year reflection.
+- [ ] 2022-06-06: Our engineering team is now 50 strong.
+- [ ] 2022-06-13: The challenges of scaling company culture.
+- [ ] 2022-06-20: Why we're committed to being remote-first, forever.
+- [ ] 2022-06-27: Building an async-first culture.
+- [ ] 2022-06-29: GitHub Copilot is now generally available. Is it the end of programming as we know it?
+- [ ] 2022-07-04: A different kind of summer.
+- [ ] 2022-07-11: The James Webb Space Telescope's first images are breathtaking.
+- [ ] 2022-07-18: Strategies for preventing burnout on a remote team.
+- [ ] 2022-07-25: DALL-E 2 is incredible. The pace of progress is accelerating.
+- [ ] 2022-08-01: Focusing on platform stability.
+- [ ] 2022-08-08: Building out our SRE team.
+- [ ] 2022-08-15: Investing in observability.
+- [ ] 2022-08-22: Monitoring at scale.
+- [ ] 2022-08-29: The Ethereum Merge is coming.
+- [ ] 2022-09-05: A fall growth sprint.
+- [ ] 2022-09-12: The challenges of B2B2C.
+- [ ] 2022-09-15: The Ethereum Merge is complete. A massive engineering achievement.
+- [ ] 2022-09-19: Serving our first enterprise customers.
+- [ ] 2022-09-22: Nvidia announces the 40-series GPUs.
+- [ ] 2022-09-26: The death of Queen Elizabeth II.
+- [ ] 2022-10-03: Q3 was another record-breaker.
+- [ ] 2022-10-10: We hit 170 million verifications.
+- [ ] 2022-10-11: Meta's Connect conference and the state of the metaverse.
+- [ ] 2022-10-17: The UK political turmoil.
+- [ ] 2022-10-24: Musk finally acquires Twitter.
+- [ ] 2022-10-31: Halloween.
+- [ ] 2022-11-07: Planning for 2023.
+- [ ] 2202-11-14: The FTX collapse. A massive fraud.
+- [ ] 2022-11-16: The Artemis I launch is a success.
+- [ ] 2022-11-21: Three years at SmileID. A reflection.
+- [ ] 2022-11-28: OpenAI releases ChatGPT. The world is about to change.
+- [ ] 2022-12-05: My first conversations with ChatGPT. I'm stunned.
+- [ ] 2022-12-12: What's next for me? The AI revolution is calling.
+- [ ] 2022-12-13: A major breakthrough in nuclear fusion.
+- [ ] 2022-12-19: Considering a change.
+- [ ] 2022-12-26: A quiet holiday week to think.
+
+## 2023 (Transition Year)
+### Completed (2):
+- [x] 2023-12-31: 2023: Year in Review
+
+### Planned (63):
+- [ ] 2023-01-09: The AI revolution is here, and I need to be a part of it.
+- [ ] 2023-01-16: How could LLMs be applied to identity verification?
+- [ ] 2023-01-23: The new wave of AI-native startups.
+- [ ] 2023-01-30: Microsoft invests $10 billion in OpenAI.
+- [ ] 2023-02-06: Planning my transition out of SmileID.
+- [ ] 2023-02-13: Training my replacement and ensuring a smooth handover.
+- [ ] 2023-02-20: A sprint to document years of institutional knowledge.
+- [ ] 2023-02-22: Google's Bard Announcement Feels Rushed. A Sign of a New Tech Race.
+- [ ] 2023-02-27: The art of a graceful exit.
+- [ ] 2023-03-06: The security implications of LLMs are fascinating.
+- [ ] 2023-03-13: The risk of prompt injection and other adversarial attacks.
+- [ ] 2023-03-14: GPT-4 is out. The leap from 3.5 is staggering.
+- [ ] 2023-03-20: The collapse of Silicon Valley Bank. A scary moment for the startup world.
+- [ ] 2023-03-27: Building my first proof-of-concept for an LLM security tool.
+- [ ] 2023-03-29: The "Pause Giant AI Experiments" Letter: A Necessary Brake or Futile Gesture?
+- [ ] 2023-04-03: The idea for an open-source evaluation tool takes shape.
+- [ ] 2023-04-10: My last day at SmileID. A bittersweet moment.
+- [ ] 2023-04-17: Lessons learned from building and scaling a company in Africa.
+- [ ] 2023-04-24: What I'll cherish most about my time at SmileID.
+- [ ] 2023-05-01: The freedom and uncertainty of being a founder again.
+- [ ] 2023-05-04: The "We Have No Moat" Google Memo Leaks. Is Open Source the Future of AI?
+- [ ] 2023-05-08: Diving deep into the AI safety and security space.
+- [ ] 2023-05-12: My first experiments with Meta's LLaMA model.
+- [ ] 2023-05-15: Meeting with other founders in the AI space.
+- [ ] 2023-05-22: The LLM security niche is wide open.
+- [ ] 2023-05-29: Building the first prototype of promptfoo.
+- [ ] 2023-06-05: Apple announces the Vision Pro. A bold bet on spatial computing.
+- [ ] 2023-06-12: Why I'm building promptfoo as an open-source project first.
+- [ ] 2023-06-14: The Reddit API protests. A community fights back.
+- [ ] 2023-06-19: The challenges of community building for a developer tool.
+- [ ] 2023-06-22: The OceanGate Titan submersible tragedy: An engineering cautionary tale.
+- [ ] 2023-06-26: Our first users and early adopters.
+- [ ] 2023-07-03: The search for product-market fit.
+- [ ] 2023-07-10: A summer of building.
+- [ ] 2023-07-17: The life of a solo founder. It's lonely but liberating.
+- [ ] 2023-07-19: Llama 2 is here and it's commercially usable. A game-changer.
+- [ ] 2023-07-24: The "Barbenheimer" phenomenon.
+- [ ] 2023-07-25: Twitter is now X. What a strange decision.
+- [ ] 2023-07-31: Building in public and sharing the journey.
+- [ ] 2023-08-07: The traction is starting to build.
+- [ ] 2023-08-14: Our first major users are giving great feedback.
+- [ ] 2023-08-21: Integrating feedback and iterating quickly.
+- [ ] 2023-08-28: The product is evolving based on user needs.
+- [ ] 2023-09-04: A fall acceleration.
+- [ ] 2023-09-11: Speaking at my first AI security conference.
+- [ ] 2023-09-13: The Unity runtime fee controversy. How to alienate your developer community.
+- [ ] 2023-09-18: Building a reputation in a new field.
+- [ ] 2023-09-25: The momentum is building in Q3.
+- [ ] 2023-10-02: Should I hire my first employee?
+- [ ] 2023-10-09: The trial of Sam Bankman-Fried begins.
+- [ ] 2023-10-16: To bootstrap or raise VC? The eternal question.
+- [ ] 2023-10-23: The AI safety summit.
+- [ ] 2023-10-30: A year-end sprint.
+- [ ] 2023-11-06: The OpenAI board drama. A wild week in AI.
+- [ ] 2023-11-13: What the OpenAI saga means for the future of AI governance.
+- [ ] 2023-11-20: Thanksgiving.
+- [ ] 2023-11-27: The vision for 2024 is becoming clear.
+- [ ] 2023-12-04: The future of AI security is bright.
+- [ ] 2023-12-11: Ready for a year of growth.
+- [ ] 2023-12-13: Mistral's Mixtral 8x7B release via a torrent link is peak hacker culture.
+- [ ] 2023-12-18: A reflection on a year of transition.
+- [ ] 2023-12-25: A quiet holiday week.
+
+## 2024 (Promptfoo Growth)
+### Completed (3):
+- [x] 2024-03-15: Introducing Promptfoo: Open Source LLM Security for Developers
+- [x] 2024-12-31: 2024: Year in Review
+
+### Planned (52):
+- [ ] 2024-01-08: Setting aggressive goals for 2024.
+- [ ] 2024-01-15: Building an LLM security platform.
+- [ ] 2024-01-22: The challenges of hiring for a niche developer tool.
+- [ ] 2024-01-29: How to grow an open-source community.
+- [ ] 2024-02-05: Engaging with our community on Discord and GitHub.
+- [ ] 2024-02-12: Our first major release of the year.
+- [ ] 2024-02-19: Getting press coverage for a developer tool.
+- [ ] 2024-02-26: A spike in user growth.
+- [ ] 2024-03-04: The first signs of enterprise interest.
+- [ ] 2024-03-11: Thinking through our pricing model.
+- [ ] 2024-03-18: Hitting our Q1 milestones.
+- [ ] 2024-03-25: Speaking at more conferences.
+- [ ] 2024-04-01: Building partnerships in the security ecosystem.
+- [ ] 2024-04-08: The solar eclipse.
+- [ ] 2024-04-15: A successful Q1 review.
+- [ ] 2024-04-22: A hiring sprint.
+- [ ] 2024-04-29: Building company culture from the very beginning.
+- [ ] 2024-05-06: Why we're staying remote-first.
+- [ ] 2024-05-13: Building processes that scale.
+- [ ] 2024-05-20: Our product roadmap for the rest of the year.
+- [ ] 2024-05-27: How we prioritize features based on customer feedback.
+- [ ] 2024-06-03: The importance of iteration speed.
+- [ ] 2024-06-10: Analyzing the competitive landscape.
+- [ ] 2024-06-17: A mid-year checkpoint.
+- [ ] 2024-06-24: We just passed 100,000 developers using promptfoo.
+- [ ] 2024-07-01: The challenges of scaling a popular open-source project.
+- [ ] 2024-07-08: Managing infrastructure costs.
+- [ ] 2024-07-15: A summer of growth.
+- [ ] 2024-07-22: Building a moat around our business.
+- [ ] 2024-07-29: The Paris Olympics.
+- [ ] 2024-08-05: Should we file for patents?
+- [ ] 2024-08-12: The balance between open source and commercial interests.
+- [ ] 2024-08-19: Prepping for our Series A.
+- [ ] 2024-08-26: The first investor meetings.
+- [ ] 2024-09-02: Refining our pitch.
+- [ ] 2024-09-09: The due diligence process.
+- [ ] 2024-09-16: A fall push.
+- [ ] 2024-09-23: A major announcement is coming.
+- [ ] 2024-09-30: Launching our enterprise product.
+- [ ] 2024-10-07: Celebrating a successful Q3.
+- [ ] 2024-10-14: We just passed 125,000 developers.
+- [ ] 2024-10-21: The US election is heating up.
+- [ ] 2024-10-28: Planning for 2025.
+- [ ] 2024-11-04: Election week.
+- [ ] 2024-11-11: Expanding our vision for the future.
+- [ ] 2024-11-18: Thanksgiving.
+- [ ] 2024-11-25: A year-end reflection.
+- [ ] 2024-12-02: What an amazing year.
+- [ ] 2024-12-09: The future is bright.
+- [ ] 2024-12-16: Planning the next chapter.
+- [ ] 2024-12-23: A quiet holiday week.
+
+## Summary
+- Completed: 47 posts
+- Planned: 758 posts
+- Total: 805 posts
+
+## Next Steps
+1. Create generator scripts for each year
+2. Focus on authentic content for each time period
+3. Ensure technical accuracy for the era
+4. Include personal growth and learning
+5. Reference actual events and technologies
