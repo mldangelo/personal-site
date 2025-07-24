@@ -4,7 +4,7 @@
     <meta http-equiv="refresh" content="0; url=/" />
     <script>
       // Preserve the path and query when redirecting to index.html
-      var redirectTo = '/' + location.pathname + location.search + location.hash;
+      var redirectTo = location.origin + location.pathname + location.search + location.hash;
       window.location.replace(redirectTo);
     </script>
     <title>Redirecting...</title>
