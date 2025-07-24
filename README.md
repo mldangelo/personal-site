@@ -1,8 +1,6 @@
 # Personal Website
 
-Welcome to my [personal website](https://zhangkai.io)! This is an [MIT licensed](https://github.com/mldangelo/personal-site/blob/main/LICENSE) React-based Jamstack application.
-It began as a fork of [Michael D'Angelo’s personal‑site](https://github.com/mldangelo/personal-site).  
-Michael, if you ever read this: thanks for the fantastic template and your great taste!
+Welcome to my [personal website](https://zhangkai.io)! This is an [MIT licensed](https://github.com/mldangelo/personal-site/blob/main/LICENSE) React-based Jamstack application. It began as a fork of [Michael D'Angelo’s personal‑site](https://github.com/mldangelo/personal-site). Michael, if you ever read this: thanks for the fantastic template and your great taste!
 
 ## 🛠 Adapting this Project
 
@@ -77,4 +75,4 @@ This will generate a static version in `personal-site/build/` which you can host
 
 - Again, I would like to mention that the original template is developed by [Michael D'Angelo](https://github.com/mldangelo/personal-site). Excellent design!
 - Thanks [Zikai](https://zikailiu.com) for inspiring me to create this personal website.
-- Special thanks to [Saverio](https://www.bsaver.io) and [Ezzat](https://www.elokda.info) for inspirations towards the website contents. Obviously they have been amazing mentors beyond research.
+- Special thanks to [Saverio](https://www.bsaver.io) and [Ezzat](https://www.elokda.info) for inspirations towards the website contents. Obviously they have been amazing mentors beyond just research.

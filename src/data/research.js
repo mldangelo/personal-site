@@ -13,12 +13,12 @@ const data = [
         status: 'Working Paper',
         links: [
           {
-            link: 'https://svorasro.wordpress.com/2025/07/07/congratulations-to-kai-zhang-on-receiving-the-2025-svor-masters-thesis-award/',
-            text: 'SVOR Best Master Thesis Award 2025',
+            link: '/files/master_thesis_stochastic_electricity_markets.pdf',
+            text: 'Master Thesis',
           },
           {
-            link: '/files/proactive_electricity_markets_svor.pdf',
-            text: 'SVOR Slides',
+            link: 'https://svorasro.wordpress.com/2025/07/07/congratulations-to-kai-zhang-on-receiving-the-2025-svor-masters-thesis-award/',
+            text: 'SVOR Best Master Thesis Award 2025',
           },
         ],
       },
