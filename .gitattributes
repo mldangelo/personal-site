@@ -1,1 +1,21 @@
-* text=auto
+# Auto detect text files and perform LF normalization
+* text=auto eol=lf
+
+# Force batch scripts to always use CRLF line endings
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Force bash scripts to always use LF line endings
+*.sh text eol=lf
+
+# Denote all files that are truly binary and should not be modified
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary

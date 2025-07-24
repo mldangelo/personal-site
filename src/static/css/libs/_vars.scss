@@ -21,8 +21,14 @@ $size: (
 // Font.
 $font: (
   family: (
-    "Source Sans Pro",
-    Helvetica,
+    "Inter",
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
     sans-serif,
   ),
   family-fixed: (
