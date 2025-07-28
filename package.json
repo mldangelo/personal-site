@@ -35,7 +35,7 @@
     "@fortawesome/react-fontawesome": "0.2.2",
     "@next/third-parties": "^15.4.1",
     "dayjs": "^1.11.13",
-    "markdown-to-jsx": "^7.7.10",
+    "markdown-to-jsx": "^7.7.12",
     "next": "^15.4.2",
     "react": "^19.1.0",
     "react-burger-menu": "^3.1.0",
