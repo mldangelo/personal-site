@@ -59,7 +59,7 @@
     "eslint-plugin-prettier": "^5.5.1",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^30.0.4",
-    "jest-environment-jsdom": "^30.0.4",
+    "jest-environment-jsdom": "^30.0.5",
     "postcss-normalize": "^13.0.1",
     "prettier": "^3.6.2",
     "sass": "^1.89.2",
