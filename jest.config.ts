@@ -1,6 +1,6 @@
 import nextJest from 'next/jest.js';
 
-import type { Config } from 'jest';
+import type { Config } from '@jest/types';
 
 const createJestConfig = nextJest({
   // Provide the path to your Next.js app to load next.config.js and .env files in your test environment
@@ -8,7 +8,7 @@ const createJestConfig = nextJest({
 });
 
 // Add any custom config to be passed to Jest
-const config: Config = {
+const config: Config.InitialProjectOptions = {
   // Use SWC for transformations
   transform: {
     '^.+\\.(t|j)sx?$': [
@@ -28,7 +28,7 @@ const config: Config = {
           target: 'es2021',
         },
       },
-    ],
+    ] as [string, any],
   },
 
   // Add more setup options before each test is run
@@ -73,8 +73,7 @@ const config: Config = {
   // Test match patterns
   testMatch: ['**/__tests__/**/*.(ts|tsx|js)', '**/*.(test|spec).(ts|tsx|js)'],
 
-  // Verbose output
-  verbose: true,
+  // Verbose output (not available in InitialProjectOptions, use CLI flag instead)
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
