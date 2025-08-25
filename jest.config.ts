@@ -1,4 +1,5 @@
 import nextJest from 'next/jest.js';
+
 import type { Config } from '@jest/types';
 
 const createJestConfig = nextJest({
@@ -10,21 +11,24 @@ const createJestConfig = nextJest({
 const config: Config.InitialProjectOptions = {
   // Use SWC for transformations
   transform: {
-    '^.+\\.(t|j)sx?$': ['@swc/jest', {
-      jsc: {
-        parser: {
-          syntax: 'typescript',
-          tsx: true,
-          decorators: true,
-        },
-        transform: {
-          react: {
-            runtime: 'automatic',
+    '^.+\\.(t|j)sx?$': [
+      '@swc/jest',
+      {
+        jsc: {
+          parser: {
+            syntax: 'typescript',
+            tsx: true,
+            decorators: true,
           },
+          transform: {
+            react: {
+              runtime: 'automatic',
+            },
+          },
+          target: 'es2021',
         },
-        target: 'es2021',
       },
-    }] as [string, any],
+    ] as [string, any],
   },
 
   // Add more setup options before each test is run
