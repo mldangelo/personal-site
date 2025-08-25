@@ -54,7 +54,7 @@
     "@types/react-burger-menu": "^2.8.7",
     "@types/react-dom": "^19.1.6",
     "eslint": "^9.31.0",
-    "eslint-config-next": "^15.4.2",
+    "eslint-config-next": "^15.5.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.1",
     "identity-obj-proxy": "^3.0.0",
