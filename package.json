@@ -58,7 +58,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
     "identity-obj-proxy": "^3.0.0",
-    "jest": "^30.0.5",
+    "jest": "^30.1.3",
     "jest-environment-jsdom": "^30.0.5",
     "postcss-normalize": "^13.0.1",
     "prettier": "^3.6.2",
