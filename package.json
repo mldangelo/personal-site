@@ -29,9 +29,9 @@
     "analyze:browser": "BUNDLE_ANALYZE=browser npm run analyze"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^7.0.1",
-    "@fortawesome/free-brands-svg-icons": "^7.0.1",
-    "@fortawesome/free-regular-svg-icons": "^7.0.0",
+    "@fortawesome/fontawesome-svg-core": "^7.1.0",
+    "@fortawesome/free-brands-svg-icons": "^7.1.0",
+    "@fortawesome/free-regular-svg-icons": "^7.1.0",
     "@fortawesome/react-fontawesome": "^3.0.2",
     "@next/third-parties": "^16.0.0",
     "dayjs": "^1.11.13",
