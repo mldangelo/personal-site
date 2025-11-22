@@ -63,21 +63,6 @@ button,
     padding: 0 0.75em 0 0;
   }
 
-  &.fit {
-    display: block;
-    margin: 0 0 (_size(element-margin) * 0.5) 0;
-    width: 100%;
-  }
-
-  &.big {
-    font-size: 0.7em;
-    padding: 0 3em;
-  }
-
-  &.small {
-    font-size: 0.5em;
-  }
-
   &.disabled,
   &:disabled {
     @include vendor('pointer-events', 'none');
