@@ -1,7 +1,6 @@
-import React from 'react';
-
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import React from 'react';
 
 import Personal from '@/components/Stats/Personal';
 import Site from '@/components/Stats/Site';

@@ -1,8 +1,7 @@
 'use client';
 
-import React, { Suspense, lazy, useState } from 'react';
-
 import Link from 'next/link';
+import React, { lazy, Suspense, useState } from 'react';
 
 import routes from '../../data/routes';
 
@@ -37,7 +36,9 @@ const Hamburger: React.FC = () => {
             {routes.map((l) => (
               <li key={l.label}>
                 <Link href={l.path} onClick={() => setOpen(!open)}>
-                  <h3 className={l.index ? 'index-li' : undefined}>{l.label}</h3>
+                  <h3 className={l.index ? 'index-li' : undefined}>
+                    {l.label}
+                  </h3>
                 </Link>
               </li>
             ))}

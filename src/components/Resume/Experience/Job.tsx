@@ -1,7 +1,6 @@
-import React from 'react';
-
 import dayjs from 'dayjs';
 import Markdown from 'markdown-to-jsx';
+import React from 'react';
 
 import type { Position } from '@/data/resume/work';
 

@@ -129,7 +129,8 @@ const work: Position[] = [
     url: 'https://ubnl.space/',
     startDate: '2010-10-01',
     endDate: '2012-06-01',
-    summary: 'Developed and implemented attitude control systems for university satellite project.',
+    summary:
+      'Developed and implemented attitude control systems for university satellite project.',
     highlights: [
       'Designed Attitude Determination and Control System (ADCS) for satellite.',
       'Integrated sun sensors, magnetometer, and reaction wheels.',

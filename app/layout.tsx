@@ -1,7 +1,6 @@
-import React from 'react';
-
 import type { Metadata } from 'next';
 import { Raleway, Source_Sans_3 } from 'next/font/google';
+import React from 'react';
 
 import GoogleAnalytics from '@/components/Template/GoogleAnalytics';
 import Navigation from '@/components/Template/Navigation';
@@ -45,7 +44,8 @@ export const metadata: Metadata = {
     url: 'https://mldangelo.com',
     siteName: "Michael D'Angelo",
     title: "Michael D'Angelo",
-    description: 'Data scientist, machine learning engineer, and full-stack developer.',
+    description:
+      'Data scientist, machine learning engineer, and full-stack developer.',
     images: [
       {
         url: '/images/me.jpg',
@@ -68,7 +68,11 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en" className={`${sourceSans.variable} ${raleway.variable}`}>
       <body>

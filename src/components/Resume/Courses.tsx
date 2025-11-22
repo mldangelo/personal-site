@@ -19,7 +19,11 @@ const getRows = (courses: CourseType[]) =>
       return ret;
     })
     .map((course, idx) => (
-      <Course data={course} key={course.title} last={idx === courses.length - 1} />
+      <Course
+        data={course}
+        key={course.title}
+        last={idx === courses.length - 1}
+      />
     ));
 
 const Courses: React.FC<CoursesProps> = ({ data }) => (

@@ -6,7 +6,11 @@ interface CategoryButtonProps {
   active: Record<string, boolean>;
 }
 
-const CategoryButton: React.FC<CategoryButtonProps> = ({ handleClick, active, label }) => (
+const CategoryButton: React.FC<CategoryButtonProps> = ({
+  handleClick,
+  active,
+  label,
+}) => (
   <button
     className={`skillbutton ${active[label] ? 'skillbutton-active' : ''}`}
     type="button"

@@ -1,8 +1,7 @@
 'use client';
 
-import React from 'react';
-
 import Link from 'next/link';
+import React from 'react';
 
 import routes from '../../data/routes';
 import Hamburger from './Hamburger';
