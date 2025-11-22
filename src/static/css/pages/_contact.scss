@@ -11,6 +11,20 @@
     .inline-container {
       width: 100%;
 
+      &:focus {
+        outline: 2px solid #0066cc;
+        outline-offset: 2px;
+      }
+
+      &:focus:not(:focus-visible) {
+        outline: none;
+      }
+
+      .invalid-email {
+        cursor: default;
+        opacity: 0.7;
+      }
+
       span:focus {
         display: inline-block;
         outline: 2px solid #0066cc;
