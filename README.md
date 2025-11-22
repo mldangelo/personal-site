@@ -4,7 +4,7 @@ Welcome to my [personal website](https://mldangelo.com)! This is an [MIT license
 
 ## 🚀 Features
 
-- Built with modern TypeScript, using [Next.js 15.4](https://nextjs.org/), [React 19](https://react.dev/), and SCSS.
+- Built with modern TypeScript, using [Next.js 16](https://nextjs.org/), [React 19](https://react.dev/), and SCSS.
 - Type-safe development with TypeScript strict mode.
 - Optimized performance with static export and automatic font optimization.
 - Automated workflows via [GitHub Actions](https://github.com/features/actions).
@@ -97,9 +97,9 @@ The static files will be automatically generated in the `out/` directory.
 ## 🔬 Testing
 
 ```bash
-npm run lint          # Run ESLint
+npm run lint          # Run Biome linter
 npm run type-check    # Run TypeScript type checking
-npm run format        # Format code with Prettier
+npm run format        # Format code with Biome and Prettier
 npm run format:check  # Check code formatting
 npm test              # Run Jest tests
 ```
