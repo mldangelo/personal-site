@@ -140,6 +140,10 @@
 // Date ranges
 .daterange {
   margin-bottom: 0.2em;
+
+  time {
+    display: inline;
+  }
 }
 
 // Education degrees
@@ -159,6 +163,10 @@
     text-transform: none;
     padding-top: 0.3em;
     margin-bottom: 1em;
+
+    time {
+      display: inline;
+    }
   }
 }
 
