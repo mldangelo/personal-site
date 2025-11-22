@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useReducer } from 'react';
 
 import type { Category, Skill } from '@/data/resume/skills';
 
@@ -12,25 +12,46 @@ interface SkillsProps {
   categories: Category[];
 }
 
+// React 19: Using useReducer for complex filter state management
+type ButtonState = Record<string, boolean>;
+
+type ButtonAction = {
+  type: 'TOGGLE_CATEGORY';
+  label: string;
+};
+
+const buttonReducer = (
+  state: ButtonState,
+  action: ButtonAction,
+): ButtonState => {
+  switch (action.type) {
+    case 'TOGGLE_CATEGORY': {
+      // Toggle button that was clicked. Turn all other buttons off.
+      const newButtons = Object.keys(state).reduce(
+        (obj, key) => ({
+          ...obj,
+          [key]: action.label === key && !state[key],
+        }),
+        {} as ButtonState,
+      );
+      // Turn on 'All' button if other buttons are off
+      newButtons.All = !Object.keys(state).some((key) => newButtons[key]);
+      return newButtons;
+    }
+    default:
+      return state;
+  }
+};
+
 const Skills: React.FC<SkillsProps> = ({ skills, categories }) => {
   const initialButtons = Object.fromEntries(
     [['All', false]].concat(categories.map(({ name }) => [name, false])),
   );
 
-  const [buttons, setButtons] = useState(initialButtons);
+  const [buttons, dispatch] = useReducer(buttonReducer, initialButtons);
 
   const handleChildClick = (label: string) => {
-    // Toggle button that was clicked. Turn all other buttons off.
-    const newButtons = Object.keys(buttons).reduce(
-      (obj, key) => ({
-        ...obj,
-        [key]: label === key && !buttons[key],
-      }),
-      {} as Record<string, boolean>,
-    );
-    // Turn on 'All' button if other buttons are off
-    newButtons.All = !Object.keys(buttons).some((key) => newButtons[key]);
-    setButtons(newButtons);
+    dispatch({ type: 'TOGGLE_CATEGORY', label });
   };
 
   const getButtons = () =>

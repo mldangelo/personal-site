@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useReducer, useRef } from 'react';
 
 // Validates the first half of an email address.
 const validateText = (text: string): boolean => {
@@ -46,6 +46,67 @@ const useInterval = (callback: () => void, delay: number | null) => {
   }, [delay]);
 };
 
+// React 19: Using useReducer for complex state management
+type AnimationState = {
+  idx: number;
+  message: string;
+  char: number;
+  isActive: boolean;
+};
+
+type AnimationAction =
+  | { type: 'TICK'; loopMessage: boolean; hold: number }
+  | { type: 'PAUSE' }
+  | { type: 'RESUME'; maxIdx: number };
+
+const animationReducer = (
+  state: AnimationState,
+  action: AnimationAction,
+): AnimationState => {
+  switch (action.type) {
+    case 'TICK': {
+      let newIdx = state.idx;
+      let newChar = state.char;
+
+      if (state.char - action.hold >= messages[state.idx].length) {
+        newIdx += 1;
+        newChar = 0;
+      }
+
+      if (newIdx === messages.length) {
+        if (action.loopMessage) {
+          return {
+            idx: 0,
+            message: '',
+            char: 0,
+            isActive: true,
+          };
+        }
+        return {
+          ...state,
+          isActive: false,
+        };
+      }
+
+      return {
+        idx: newIdx,
+        message: messages[newIdx].slice(0, newChar),
+        char: newChar + 1,
+        isActive: true,
+      };
+    }
+    case 'PAUSE':
+      return { ...state, isActive: false };
+    case 'RESUME':
+      return {
+        ...state,
+        isActive: state.idx < action.maxIdx,
+      };
+    default:
+      return state;
+  }
+};
+
 interface EmailLinkProps {
   loopMessage?: boolean;
 }
@@ -54,44 +115,35 @@ const EmailLink: React.FC<EmailLinkProps> = ({ loopMessage = false }) => {
   const hold = 50; // ticks to wait after message is complete before rendering next message
   const delay = 50; // tick length in mS
 
-  const [idx, updateIter] = useState(0); // points to current message
-  const [message, updateMessage] = useState(messages[idx]);
-  const [char, updateChar] = useState(0); // points to current char
-  const [isActive, setIsActive] = useState(true); // disable when all messages are printed
+  const [state, dispatch] = useReducer(animationReducer, {
+    idx: 0,
+    message: messages[0],
+    char: 0,
+    isActive: true,
+  });
 
   useInterval(
     () => {
-      let newIdx = idx;
-      let newChar = char;
-      if (char - hold >= messages[idx].length) {
-        newIdx += 1;
-        newChar = 0;
-      }
-      if (newIdx === messages.length) {
-        if (loopMessage) {
-          updateIter(0);
-          updateChar(0);
-        } else {
-          setIsActive(false);
-        }
-      } else {
-        updateMessage(messages[newIdx].slice(0, newChar));
-        updateIter(newIdx);
-        updateChar(newChar + 1);
-      }
+      dispatch({ type: 'TICK', loopMessage, hold });
     },
-    isActive ? delay : null,
+    state.isActive ? delay : null,
   );
 
   return (
     <div
       className="inline-container"
-      style={validateText(message) ? {} : { color: 'red' }}
-      onMouseEnter={() => setIsActive(false)}
-      onMouseLeave={() => idx < messages.length && setIsActive(true)}
+      style={validateText(state.message) ? {} : { color: 'red' }}
+      onMouseEnter={() => dispatch({ type: 'PAUSE' })}
+      onMouseLeave={() => dispatch({ type: 'RESUME', maxIdx: messages.length })}
     >
-      <a href={validateText(message) ? `mailto:${message}@mldangelo.com` : ''}>
-        <span>{message}</span>
+      <a
+        href={
+          validateText(state.message)
+            ? `mailto:${state.message}@mldangelo.com`
+            : ''
+        }
+      >
+        <span>{state.message}</span>
         <span>@mldangelo.com</span>
       </a>
     </div>
