@@ -253,7 +253,9 @@ const colors: string[] = [
   '#64cb7b',
 ];
 
-const categories: Category[] = Array.from(new Set(skills.flatMap(({ category }) => category)))
+const categories: Category[] = Array.from(
+  new Set(skills.flatMap(({ category }) => category)),
+)
   .sort()
   .map((category, index) => ({
     name: category,

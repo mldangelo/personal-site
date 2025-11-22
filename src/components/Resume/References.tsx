@@ -1,6 +1,5 @@
-import React from 'react';
-
 import Link from 'next/link';
+import React from 'react';
 
 const References: React.FC = () => (
   <div className="references">

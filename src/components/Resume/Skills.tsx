@@ -35,12 +35,20 @@ const Skills: React.FC<SkillsProps> = ({ skills, categories }) => {
 
   const getButtons = () =>
     Object.keys(buttons).map((key) => (
-      <CategoryButton label={key} key={key} active={buttons} handleClick={handleChildClick} />
+      <CategoryButton
+        label={key}
+        key={key}
+        active={buttons}
+        handleClick={handleChildClick}
+      />
     ));
 
   const getRows = () => {
     // search for true active categories
-    const actCat = Object.keys(buttons).reduce((cat, key) => (buttons[key] ? key : cat), 'All');
+    const actCat = Object.keys(buttons).reduce(
+      (cat, key) => (buttons[key] ? key : cat),
+      'All',
+    );
 
     const comparator = (a: Skill, b: Skill) => {
       let ret = 0;
@@ -56,7 +64,9 @@ const Skills: React.FC<SkillsProps> = ({ skills, categories }) => {
     return skills
       .sort(comparator)
       .filter((skill) => actCat === 'All' || skill.category.includes(actCat))
-      .map((skill) => <SkillBar categories={categories} data={skill} key={skill.title} />);
+      .map((skill) => (
+        <SkillBar categories={categories} data={skill} key={skill.title} />
+      ));
   };
 
   return (
@@ -65,8 +75,8 @@ const Skills: React.FC<SkillsProps> = ({ skills, categories }) => {
       <div className="title">
         <h3>Skills</h3>
         <p>
-          Note: I think these sections are silly, but everyone seems to have one. Here is a *mostly*
-          honest overview of my skills.
+          Note: I think these sections are silly, but everyone seems to have
+          one. Here is a *mostly* honest overview of my skills.
         </p>
       </div>
       <div className="skill-button-container">{getButtons()}</div>

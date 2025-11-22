@@ -24,7 +24,10 @@ const nextConfig: NextConfig = {
   // Experimental features
   experimental: {
     // Enable optimizations for packages
-    optimizePackageImports: ['@fortawesome/react-fontawesome', '@fortawesome/fontawesome-svg-core'],
+    optimizePackageImports: [
+      '@fortawesome/react-fontawesome',
+      '@fortawesome/fontawesome-svg-core',
+    ],
   },
 };
 

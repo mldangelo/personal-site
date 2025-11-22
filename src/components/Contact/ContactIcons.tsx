@@ -1,6 +1,5 @@
-import React from 'react';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React from 'react';
 
 import data from '@/data/contact';
 

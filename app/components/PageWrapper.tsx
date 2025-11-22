@@ -1,8 +1,7 @@
 'use client';
 
-import React, { useEffect } from 'react';
-
 import { usePathname } from 'next/navigation';
+import React, { useEffect } from 'react';
 
 import SideBar from '@/components/Template/SideBar';
 
@@ -11,7 +10,10 @@ interface PageWrapperProps {
   fullPage?: boolean;
 }
 
-export default function PageWrapper({ children, fullPage = false }: PageWrapperProps) {
+export default function PageWrapper({
+  children,
+  fullPage = false,
+}: PageWrapperProps) {
   const pathname = usePathname();
 
   // Scroll to top on route change

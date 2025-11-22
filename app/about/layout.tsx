@@ -5,6 +5,10 @@ export const metadata: Metadata = {
   description: "Learn about Michael D'Angelo",
 };
 
-export default function AboutLayout({ children }: { children: React.ReactNode }) {
+export default function AboutLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return children;
 }
