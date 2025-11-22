@@ -35,9 +35,11 @@ npm run analyze
 This is a personal portfolio/resume website built with Next.js and TypeScript, designed to be easily forked and customized.
 
 ### Technology Stack
-- **Next.js 15.4** with App Router
+- **Next.js 16** with App Router and Turbopack
 - **TypeScript** for type safety
 - **React 19** with functional components and hooks
+- **Biome** for linting and code formatting
+- **Prettier** for markdown, CSS, and SCSS formatting
 - **SCSS** for styling
 - **Jest** with React Testing Library and SWC
 - **Static Export** for GitHub Pages deployment
