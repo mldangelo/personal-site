@@ -13,7 +13,8 @@
 
       span:focus {
         display: inline-block;
-        outline: none;
+        outline: 2px solid #0066cc;
+        outline-offset: 2px;
         border: 0;
         text-align: right;
       }
@@ -27,7 +28,11 @@
   margin: 0;
   padding: 0;
   font-size: 15;
-  outline: 0;
   border: 0;
   text-align: right;
+
+  &:focus {
+    outline: 2px solid #0066cc;
+    outline-offset: 2px;
+  }
 }

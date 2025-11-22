@@ -76,6 +76,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${sourceSans.variable} ${raleway.variable}`}>
       <body>
+        <a href="#main" className="skip-link">
+          Skip to main content
+        </a>
         <div id="wrapper">
           <Navigation />
           {children}

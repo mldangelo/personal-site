@@ -13,24 +13,48 @@ const Hamburger: React.FC = () => {
 
   return (
     <div className="hamburger-container">
-      <nav className="main" id="hambuger-nav">
+      <nav
+        className="main"
+        id="hamburger-nav"
+        aria-label="Mobile navigation menu"
+      >
         <ul>
           {open ? (
             <li className="menu close-menu">
-              <div onClick={() => setOpen(!open)} className="menu-hover">
-                &#10005;
-              </div>
+              <button
+                onClick={() => setOpen(!open)}
+                className="menu-hover"
+                aria-label="Close navigation menu"
+                aria-expanded={open}
+                type="button"
+              >
+                <span aria-hidden="true">&#10005;</span>
+                <span className="sr-only">Close menu</span>
+              </button>
             </li>
           ) : (
             <li className="menu open-menu">
-              <div onClick={() => setOpen(!open)} className="menu-hover">
-                &#9776;
-              </div>
+              <button
+                onClick={() => setOpen(!open)}
+                className="menu-hover"
+                aria-label="Open navigation menu"
+                aria-expanded={open}
+                type="button"
+              >
+                <span aria-hidden="true">&#9776;</span>
+                <span className="sr-only">Open menu</span>
+              </button>
             </li>
           )}
         </ul>
       </nav>
-      <Suspense fallback={<></>}>
+      <Suspense
+        fallback={
+          <div role="status" aria-live="polite">
+            <span className="sr-only">Loading menu...</span>
+          </div>
+        }
+      >
         <Menu right isOpen={open}>
           <ul className="hamburger-ul">
             {routes.map((l) => (
