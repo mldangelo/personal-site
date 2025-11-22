@@ -36,6 +36,14 @@ table {
 
   thead {
     border-bottom: solid 2px _palette(border);
+
+    &.sr-only {
+      border-bottom: none;
+
+      th {
+        padding: 0;
+      }
+    }
   }
 
   tfoot {
