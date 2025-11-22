@@ -83,17 +83,31 @@ const EmailLink: React.FC<EmailLinkProps> = ({ loopMessage = false }) => {
     isActive ? delay : null,
   );
 
+  const isValid = validateText(message);
+
   return (
     <div
       className="inline-container"
-      style={validateText(message) ? {} : { color: 'red' }}
+      style={isValid ? {} : { color: 'red' }}
       onMouseEnter={() => setIsActive(false)}
       onMouseLeave={() => idx < messages.length && setIsActive(true)}
+      onFocus={() => setIsActive(false)}
+      onBlur={() => idx < messages.length && setIsActive(true)}
+      tabIndex={0}
+      role="region"
+      aria-label="Email address with animated suggestions"
     >
-      <a href={validateText(message) ? `mailto:${message}@mldangelo.com` : ''}>
-        <span>{message}</span>
-        <span>@mldangelo.com</span>
-      </a>
+      {isValid ? (
+        <a href={`mailto:${message}@mldangelo.com`}>
+          <span>{message}</span>
+          <span>@mldangelo.com</span>
+        </a>
+      ) : (
+        <span className="invalid-email" aria-label="Invalid email format">
+          <span>{message}</span>
+          <span>@mldangelo.com</span>
+        </span>
+      )}
     </div>
   );
 };

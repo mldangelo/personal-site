@@ -17,7 +17,7 @@ const TableRow: React.FC<TableRowProps> = ({
 
   return (
     <tr>
-      <td width="70%">{label}</td>
+      <th scope="row">{label}</th>
       <td>{link ? <a href={link}>{displayValue}</a> : displayValue}</td>
     </tr>
   );

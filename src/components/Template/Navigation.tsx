@@ -13,12 +13,16 @@ const Navigation: React.FC = () => (
       {routes
         .filter((l) => l.index)
         .map((l) => (
-          <Link key={l.label} href={l.path}>
+          <Link
+            key={l.label}
+            href={l.path}
+            aria-label="Home - Michael D'Angelo"
+          >
             {l.label}
           </Link>
         ))}
     </h1>
-    <nav className="links">
+    <nav className="links" aria-label="Main navigation">
       <ul>
         {routes
           .filter((l) => !l.index)

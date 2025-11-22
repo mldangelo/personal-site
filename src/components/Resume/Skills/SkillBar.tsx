@@ -23,12 +23,26 @@ const SkillBar: React.FC<SkillBarProps> = ({ data, categories }) => {
   };
 
   return (
-    <div className="skillbar clearfix">
+    <div
+      className="skillbar clearfix"
+      role="group"
+      aria-label={`${title}: ${competency} out of 5`}
+    >
       <div className="skillbar-title" style={titleStyle}>
         <span>{title}</span>
       </div>
-      <div className="skillbar-bar" style={barStyle} />
-      <div className="skill-bar-percent">{competency} / 5</div>
+      <div
+        className="skillbar-bar"
+        style={barStyle}
+        role="progressbar"
+        aria-valuenow={competency}
+        aria-valuemin={0}
+        aria-valuemax={5}
+        aria-label={`Skill level: ${competency} out of 5`}
+      />
+      <div className="skill-bar-percent" aria-hidden="true">
+        {competency} / 5
+      </div>
     </div>
   );
 };

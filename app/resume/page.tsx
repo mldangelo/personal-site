@@ -31,13 +31,18 @@ export default function ResumePage() {
       <header>
         <div className="title">
           <h2>Resume</h2>
-          <div className="link-container">
-            {sections.map((section) => (
-              <h4 key={section.id}>
-                <a href={`#${section.id}`}>{section.name}</a>
-              </h4>
-            ))}
-          </div>
+          <nav
+            className="link-container"
+            aria-label="Resume section navigation"
+          >
+            <ul>
+              {sections.map((section) => (
+                <li key={section.id}>
+                  <a href={`#${section.id}`}>{section.name}</a>
+                </li>
+              ))}
+            </ul>
+          </nav>
         </div>
       </header>
 
