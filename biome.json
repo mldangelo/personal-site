@@ -10,7 +10,7 @@
       "complexity": { "noUselessTypeConstraint": "error" },
       "correctness": { "noUnusedVariables": "warn" },
       "performance": {
-        "noImgElement": "off",
+        "noImgElement": "warn",
         "noUnwantedPolyfillio": "warn",
         "useGoogleFontPreconnect": "warn"
       },
