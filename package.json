@@ -33,7 +33,7 @@
     "@fortawesome/free-brands-svg-icons": "^7.0.1",
     "@fortawesome/free-regular-svg-icons": "^7.0.0",
     "@fortawesome/react-fontawesome": "^3.0.2",
-    "@next/third-parties": "^15.4.6",
+    "@next/third-parties": "^16.0.0",
     "dayjs": "^1.11.13",
     "markdown-to-jsx": "^7.7.13",
     "next": "^15.5.2",
