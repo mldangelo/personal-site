@@ -31,38 +31,43 @@ export default function ResumePage() {
       <header>
         <div className="title">
           <h2>Resume</h2>
-          <div className="link-container">
-            {sections.map((section) => (
-              <h4 key={section.id}>
-                <a href={`#${section.id}`}>{section.name}</a>
-              </h4>
-            ))}
-          </div>
+          <nav
+            className="link-container"
+            aria-label="Resume section navigation"
+          >
+            <ul>
+              {sections.map((section) => (
+                <li key={section.id}>
+                  <a href={`#${section.id}`}>{section.name}</a>
+                </li>
+              ))}
+            </ul>
+          </nav>
         </div>
       </header>
 
       <section id="education" className="education">
-        <div className="link-to" />
+        <div className="link-to" aria-hidden="true" />
         <Education data={degrees} />
       </section>
 
       <section id="experience" className="experience">
-        <div className="link-to" />
+        <div className="link-to" aria-hidden="true" />
         <Experience data={work} />
       </section>
 
       <section id="skills" className="skills">
-        <div className="link-to" />
+        <div className="link-to" aria-hidden="true" />
         <Skills skills={skills} categories={categories} />
       </section>
 
       <section id="courses" className="courses">
-        <div className="link-to" />
+        <div className="link-to" aria-hidden="true" />
         <Courses data={courses} />
       </section>
 
       <section id="references" className="references">
-        <div className="link-to" />
+        <div className="link-to" aria-hidden="true" />
         <References />
       </section>
     </article>

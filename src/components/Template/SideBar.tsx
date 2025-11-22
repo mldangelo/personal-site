@@ -11,7 +11,7 @@ const SideBar: React.FC = () => {
   const pathname = usePathname();
 
   return (
-    <section id="sidebar">
+    <aside id="sidebar" aria-label="Sidebar">
       <section id="intro">
         <Link href="/" className="logo">
           <Image
@@ -56,13 +56,13 @@ const SideBar: React.FC = () => {
         </ul>
       </section>
 
-      <section id="footer">
+      <footer id="footer">
         <ContactIcons />
         <p className="copyright">
           &copy; Michael D&apos;Angelo <Link href="/">mldangelo.com</Link>.
         </p>
-      </section>
-    </section>
+      </footer>
+    </aside>
   );
 };
 

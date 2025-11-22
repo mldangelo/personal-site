@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function NotFound() {
   return (
     <div id="wrapper">
-      <div id="main">
+      <main id="main">
         <article className="post" id="contact">
           <header>
             <div className="title">
@@ -19,7 +19,7 @@ export default function NotFound() {
           </header>
           <Link href="/">Return Home</Link>
         </article>
-      </div>
+      </main>
     </div>
   );
 }

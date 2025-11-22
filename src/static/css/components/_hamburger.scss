@@ -6,6 +6,11 @@
 
 .menu-hover {
   padding: 0 1em;
+  background: none;
+  border: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
 }
 
 .menu-hover:hover {

@@ -16,12 +16,21 @@ const Cell: React.FC<CellProps> = ({ data }) => (
         <h3>
           <a href={data.link}>{data.title}</a>
         </h3>
-        <time className="published">
+        <time className="published" dateTime={data.date}>
           {dayjs(data.date).format('MMMM, YYYY')}
         </time>
       </header>
-      <a href={data.link} className="image">
-        <Image src={data.image} alt={data.title} width={600} height={400} />
+      <a
+        href={data.link}
+        className="image"
+        aria-label={`View ${data.title} project`}
+      >
+        <Image
+          src={data.image}
+          alt={`${data.title} project screenshot`}
+          width={600}
+          height={400}
+        />
       </a>
       <div className="description">
         <p>{data.desc}</p>

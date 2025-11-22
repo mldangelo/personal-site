@@ -42,7 +42,9 @@ const Stats: React.FC = () => {
   return (
     <div>
       <h3>Some stats about this site</h3>
-      <Table data={data} />
+      <div aria-live="polite" aria-atomic="true">
+        <Table data={data} />
+      </div>
     </div>
   );
 };

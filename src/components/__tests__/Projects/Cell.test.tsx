@@ -15,9 +15,8 @@ describe('Cell', () => {
 
   it('renders project title with link', () => {
     render(<Cell data={mockProject} />);
-    const titleLinks = screen.getAllByRole('link', { name: mockProject.title });
-    expect(titleLinks).toHaveLength(2); // Title link and image link
-    expect(titleLinks[0]).toHaveAttribute('href', mockProject.link);
+    const titleLink = screen.getByRole('link', { name: mockProject.title });
+    expect(titleLink).toHaveAttribute('href', mockProject.link);
   });
 
   it('renders project description', () => {
@@ -32,8 +31,19 @@ describe('Cell', () => {
 
   it('renders project image with alt text', () => {
     render(<Cell data={mockProject} />);
-    const image = screen.getByAltText(mockProject.title);
+    const image = screen.getByAltText(
+      `${mockProject.title} project screenshot`,
+    );
     expect(image).toBeInTheDocument();
     expect(image).toHaveAttribute('src', expect.stringContaining('test.jpg'));
+  });
+
+  it('renders image link with descriptive aria-label', () => {
+    render(<Cell data={mockProject} />);
+    const imageLink = screen.getByRole('link', {
+      name: `View ${mockProject.title} project`,
+    });
+    expect(imageLink).toHaveAttribute('href', mockProject.link);
+    expect(imageLink).toHaveClass('image');
   });
 });

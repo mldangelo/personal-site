@@ -28,3 +28,38 @@ body {
     }
   }
 }
+
+// Accessibility Utilities
+
+// Screen reader only text (visually hidden but accessible to screen readers)
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+// Skip to main content link (visible only on focus)
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: _palette(accent);
+  color: _palette(bg);
+  padding: 8px 16px;
+  text-decoration: none;
+  z-index: 100;
+  font-weight: _font(weight-bold);
+  border-radius: 0 0 4px 0;
+
+  &:focus {
+    top: 0;
+    outline: 2px solid _palette(fg-bold);
+    outline-offset: 2px;
+  }
+}

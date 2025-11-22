@@ -16,14 +16,27 @@ export default function PageWrapper({
 }: PageWrapperProps) {
   const pathname = usePathname();
 
-  // Scroll to top on route change
+  // Scroll to top on route change and announce to screen readers
   useEffect(() => {
     window.scrollTo(0, 0);
+
+    // Announce page change to screen readers
+    const announcement = document.getElementById('route-announcer');
+    if (announcement) {
+      announcement.textContent = `Navigated to ${pathname}`;
+    }
   }, [pathname]);
 
   return (
     <>
-      <div id="main">{children}</div>
+      <div
+        id="route-announcer"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      />
+      <main id="main">{children}</main>
       {!fullPage && <SideBar />}
     </>
   );
