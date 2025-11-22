@@ -6,13 +6,6 @@
 
 /* Section/Article */
 
-section,
-article {
-  &.special {
-    text-align: center;
-  }
-}
-
 header {
   p {
     font-family: _font(family-heading);

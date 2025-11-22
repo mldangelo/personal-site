@@ -150,8 +150,6 @@ $vendor-values: ('filter', 'flex', 'linear-gradient', 'radial-gradient', 'transf
   *,
   *:before,
   *:after {
-    -moz-box-sizing: #{$x};
-    -webkit-box-sizing: #{$x};
     box-sizing: #{$x};
   }
 }
@@ -406,15 +404,6 @@ $vendor-values: ('filter', 'flex', 'linear-gradient', 'radial-gradient', 'transf
 /// Wraps @content in vendorized keyframe blocks.
 /// @param {string} $name Name.
 @mixin keyframes($name) {
-  @-moz-keyframes #{$name} {
-    @content;
-  }
-  @-webkit-keyframes #{$name} {
-    @content;
-  }
-  @-ms-keyframes #{$name} {
-    @content;
-  }
   @keyframes #{$name} {
     @content;
   }
@@ -523,15 +512,11 @@ $vendor-values: ('filter', 'flex', 'linear-gradient', 'radial-gradient', 'transf
     // Rows.
     .row {
       border-bottom: solid 1px transparent;
-      -moz-box-sizing: border-box;
-      -webkit-box-sizing: border-box;
       box-sizing: border-box;
     }
 
     .row > * {
       float: left;
-      -moz-box-sizing: border-box;
-      -webkit-box-sizing: border-box;
       box-sizing: border-box;
     }
 
@@ -592,7 +577,6 @@ $vendor-values: ('filter', 'flex', 'linear-gradient', 'radial-gradient', 'transf
     // normalize.css v3.0.2 | MIT License | git.io/normalize
     html {
       font-family: sans-serif;
-      -ms-text-size-adjust: 100%;
       -webkit-text-size-adjust: 100%;
     }
     body {
@@ -679,7 +663,6 @@ $vendor-values: ('filter', 'flex', 'linear-gradient', 'radial-gradient', 'transf
       margin: 1em 40px;
     }
     hr {
-      -moz-box-sizing: content-box;
       box-sizing: content-box;
       height: 0;
     }
@@ -739,8 +722,6 @@ $vendor-values: ('filter', 'flex', 'linear-gradient', 'radial-gradient', 'transf
     }
     input[type='search'] {
       -webkit-appearance: textfield;
-      -moz-box-sizing: content-box;
-      -webkit-box-sizing: content-box;
       box-sizing: content-box;
     }
     input[type='search']::-webkit-search-cancel-button,

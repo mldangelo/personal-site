@@ -8,28 +8,6 @@
 
 form {
   margin: 0 0 _size(element-margin) 0;
-
-  &.search {
-    @include icon;
-    position: relative;
-
-    &:before {
-      color: _palette(fg-light);
-      content: '\f002';
-      display: block;
-      height: _size(element-height);
-      left: 0;
-      line-height: _size(element-height);
-      position: absolute;
-      text-align: center;
-      top: 0;
-      width: 2.5em;
-    }
-
-    > input:first-child {
-      padding-left: 2.5em;
-    }
-  }
 }
 
 label {
@@ -65,30 +43,6 @@ textarea {
   &:focus {
     border-color: _palette(accent);
     box-shadow: inset 0 0 0 1px _palette(accent);
-  }
-}
-
-.select-wrapper {
-  @include icon;
-  display: block;
-  position: relative;
-
-  &:before {
-    color: _palette(border);
-    content: '\f078';
-    display: block;
-    height: _size(element-height);
-    line-height: _size(element-height);
-    pointer-events: none;
-    position: absolute;
-    right: 0;
-    text-align: center;
-    top: 0;
-    width: _size(element-height);
-  }
-
-  select::-ms-expand {
-    display: none;
   }
 }
 
@@ -156,13 +110,6 @@ input[type='radio'] {
   }
 }
 
-input[type='checkbox'] {
-  & + label {
-    &:before {
-    }
-  }
-}
-
 input[type='radio'] {
   & + label {
     &:before {
@@ -171,27 +118,7 @@ input[type='radio'] {
   }
 }
 
-::-webkit-input-placeholder {
-  color: _palette(fg-light) !important;
-  opacity: 1;
-}
-
-:-moz-placeholder {
-  color: _palette(fg-light) !important;
-  opacity: 1;
-}
-
-::-moz-placeholder {
-  color: _palette(fg-light) !important;
-  opacity: 1;
-}
-
-:-ms-input-placeholder {
-  color: _palette(fg-light) !important;
-  opacity: 1;
-}
-
-.formerize-placeholder {
+::placeholder {
   color: _palette(fg-light) !important;
   opacity: 1;
 }

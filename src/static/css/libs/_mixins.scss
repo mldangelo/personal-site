@@ -35,19 +35,3 @@
     math.max(0.1em, $tb - _size(element-margin) + list.nth($pad, 3)) ($lr + list.nth($pad, 4))
     #{$important};
 }
-
-/// Encodes a SVG data URL so IE doesn't choke (via codepen.io/jakob-e/pen/YXXBrp).
-/// @param {string} $svg SVG data URL.
-/// @return {string} Encoded SVG data URL.
-@function svg-url($svg) {
-  $svg: str-replace($svg, '"', "'");
-  $svg: str-replace($svg, '<', '%3C');
-  $svg: str-replace($svg, '>', '%3E');
-  $svg: str-replace($svg, '&', '%26');
-  $svg: str-replace($svg, '#', '%23');
-  $svg: str-replace($svg, '{', '%7B');
-  $svg: str-replace($svg, '}', '%7D');
-  $svg: str-replace($svg, ';', '%3B');
-
-  @return url('data:image/svg+xml;charset=utf8,#{$svg}');
-}

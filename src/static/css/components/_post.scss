@@ -23,7 +23,6 @@
 
     .title {
       @include vendor('flex-grow', '1');
-      -ms-flex: 1;
       padding: (_size(section-spacing) * 1.25) _size(section-spacing) (_size(section-spacing) * 1.1)
         _size(section-spacing);
 
@@ -87,40 +86,6 @@
     .actions {
       @include vendor('flex-grow', '1');
     }
-
-    .stats {
-      cursor: default;
-      list-style: none;
-      padding: 0;
-
-      li {
-        border-left: solid 1px _palette(border);
-        display: inline-block;
-        font-family: _font(family-heading);
-        font-size: 0.6em;
-        font-weight: _font(weight-heading);
-        letter-spacing: _font(kerning-heading);
-        line-height: 1;
-        margin: 0 0 0 2em;
-        padding: 0 0 0 2em;
-        text-transform: uppercase;
-
-        &:first-child {
-          border-left: 0;
-          margin-left: 0;
-          padding-left: 0;
-        }
-
-        .icon {
-          border-bottom: 0;
-
-          &:before {
-            color: _palette(border);
-            margin-right: 0.75em;
-          }
-        }
-      }
-    }
   }
 
   @include breakpoint(medium) {
@@ -135,7 +100,6 @@
       border-left: 0;
 
       .title {
-        -ms-flex: 0 1 auto;
         margin: 0 0 _size(element-margin) 0;
         padding: 0;
         text-align: center;

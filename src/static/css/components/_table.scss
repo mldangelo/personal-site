@@ -6,11 +6,6 @@
 
 /* Table */
 
-.table-wrapper {
-  -webkit-overflow-scrolling: touch;
-  overflow-x: auto;
-}
-
 table {
   margin: 0 0 _size(element-margin) 0;
   width: 100%;
@@ -45,37 +40,5 @@ table {
 
   tfoot {
     border-top: solid 2px _palette(border);
-  }
-
-  &.alt {
-    border-collapse: separate;
-
-    tbody {
-      tr {
-        td {
-          border: solid 1px _palette(border);
-          border-left-width: 0;
-          border-top-width: 0;
-
-          &:first-child {
-            border-left-width: 1px;
-          }
-        }
-
-        &:first-child {
-          td {
-            border-top-width: 1px;
-          }
-        }
-      }
-    }
-
-    thead {
-      border-bottom: 0;
-    }
-
-    tfoot {
-      border-top: 0;
-    }
   }
 }
