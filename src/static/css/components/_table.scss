@@ -32,6 +32,15 @@ table {
     font-weight: _font(weight-bold);
     padding: 0 0.75em 0.75em 0.75em;
     text-align: left;
+
+    // Row headers should look like regular cells, not column headers
+    &[scope='row'] {
+      color: inherit;
+      font-size: inherit;
+      font-weight: inherit;
+      padding: 0.75em 0.75em;
+      width: 70%;
+    }
   }
 
   thead {
