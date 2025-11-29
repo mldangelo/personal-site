@@ -21,10 +21,10 @@ const work: Position[] = [
     red-teaming and vulnerability analysis. Our open-source, developer-first approach has made Promptfoo the most
     widely adopted tool in the LLM eval space, with over 200,000 users at companies like Anthropic, Amazon, and Shopify.`,
     highlights: [
-      'Defined technical vision and architecture for LLM evaluation and red-teaming platform.',
-      'Built and scaled the engineering team from founding through Series A.',
+      'Own company-wide technical strategy and product roadmap, balancing open-source community, commercial product, and research investments.',
+      'Co-led fundraising and technical due diligence for $23M+ in venture financing from Insight Partners and Andreessen Horowitz.',
+      'Built and scaled the engineering team from founding through Series A, including hiring, leveling, and performance management.',
       'Led development of core evaluation framework, vulnerability scanning, and automated red-teaming capabilities.',
-      'Partnered with founders to translate red-teaming capabilities into enterprise-ready features, enabling adoption by Fortune 500 security teams.',
     ],
   },
   {
@@ -34,14 +34,14 @@ const work: Position[] = [
     startDate: '2022-01-01',
     endDate: '2024-07-01',
     summary: `Smile Identity provides ML-powered identity verification APIs used by banks, fintechs, and
-    telcos across Africa. During my tenure, our systems processed over 200 million identity verifications,
-    helping tens of millions of people access financial services.`,
+    telcos across Africa. Promoted from Director to VP Engineering to VP Engineering & Head of AI within one year,
+    joining the executive team and leading teams building APIs that now process hundreds of millions of identity checks.`,
     highlights: [
-      'Restructured the 20-person engineering department into domain-specific squads (Platform, ML, Product) to increase delivery velocity and ownership.',
-      'Owned API reliability and performance for critical banking partners, scaling throughput while maintaining high availability.',
+      'Owned engineering org design, headcount planning, and hiring across backend, mobile, and ML teams, growing to 20+ engineers.',
+      'Partnered with Product, Compliance, and Operations to set SLAs, prioritize roadmap, and balance fraud prevention against onboarding friction.',
+      'Restructured engineering into domain-specific squads (Platform, ML, Product) to increase delivery velocity and ownership.',
       'Led re-architecture of inference APIs and built computer vision pipelines for liveness detection certification.',
       'Pitched, designed, and shipped a fraud detection product using 1-N facial recognition with embeddings and vector search.',
-      'Established engineering processes including blameless post-mortems, on-call rotations, and standardized code review practices.',
     ],
   },
   {
@@ -64,14 +64,13 @@ const work: Position[] = [
     endDate: '2022-01-01',
     summary: `Arthena was a quantitative art investment platform backed by <a href='https://www.anthemis.com/'>Anthemis</a>,
     <a href='https://foundationcapital.com'>Foundation Capital</a>, and <a href='https://ycombinator.com'>Y Combinator</a>.
-    I led a 20-person product and engineering org for 8 years, building the proprietary valuation models and data
-    platform that formed the core IP acquired by Masterworks in 2023.`,
+    Built Arthena from idea through profitability and eventual acquisition by Masterworks in 2023.`,
     highlights: [
-      'Developed long-term technical vision and roadmap, evolving the platform from a retail investment tool to an institutional quantitative engine.',
+      'Co-founded Arthena and led technical strategy from seed through acquisition, including fundraising, investor diligence, and board communication.',
+      'Built and managed a cross-functional team of 20 engineers, data scientists, and analysts.',
+      'Developed long-term technical vision, evolving the platform from a retail investment tool to an institutional quantitative engine.',
       'Built production ML pipelines for time-series prediction of fine art valuations.',
       'Designed micro-service architecture for data collection, feature engineering, backtesting, and reporting.',
-      'Led technical due diligence for fundraising rounds with institutional investors.',
-      'Recruited and managed a team of 20 engineers, data scientists, and analysts.',
     ],
   },
   {
@@ -126,16 +125,16 @@ const work: Position[] = [
   },
   {
     name: 'UB Nanosatellite Program',
-    position: 'Co-founder & Program Manager',
+    position: 'Program Manager',
     url: 'https://ubnl.space/',
     startDate: '2011-06-01',
     endDate: '2012-05-01',
     summary:
-      'Co-founded the program and led 60+ students through the system development life cycle for a space telescope.',
+      'Led a 60-person student team through the satellite development lifecycle for the AFRL University Nanosatellite Program.',
     highlights: [
-      'Co-authored grant proposal to design and build a space telescope.',
+      'Co-authored grant proposal to design and build a multi-spectral imaging satellite.',
       'Established budget and schedule from initial concept to launch.',
-      'Led requirement analysis, design, development, testing, and implementation phases.',
+      'Designed and implemented the Attitude Determination and Control System (ADCS).',
     ],
   },
 ];
