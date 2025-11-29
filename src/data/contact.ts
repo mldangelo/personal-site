@@ -40,8 +40,8 @@ const data: ContactItem[] = [
     icon: faAngellist,
   },
   {
-    link: 'https://twitter.com/dangelosaurus',
-    label: 'Twitter',
+    link: 'https://x.com/dangelosaurus',
+    label: 'X',
     icon: faTwitter,
   },
   {

@@ -18,12 +18,7 @@ const skills: Skill[] = [
   },
   {
     title: 'TypeScript',
-    competency: 4,
-    category: ['Languages', 'Web Development'],
-  },
-  {
-    title: 'JavaScript',
-    competency: 4,
+    competency: 5,
     category: ['Languages', 'Web Development'],
   },
   {
@@ -31,24 +26,34 @@ const skills: Skill[] = [
     competency: 4,
     category: ['Languages', 'Databases'],
   },
-  // ML & AI
+  // AI & LLM
+  {
+    title: 'AI Agents',
+    competency: 5,
+    category: ['ML Engineering'],
+  },
+  {
+    title: 'LLM Evaluation',
+    competency: 5,
+    category: ['ML Engineering'],
+  },
+  {
+    title: 'AI Red-teaming',
+    competency: 5,
+    category: ['ML Engineering'],
+  },
   {
     title: 'LLM APIs',
     competency: 5,
     category: ['ML Engineering'],
   },
   {
-    title: 'Pandas',
-    competency: 5,
-    category: ['ML Engineering', 'Data Engineering'],
-  },
-  {
-    title: 'PyTorch',
+    title: 'RAG',
     competency: 4,
     category: ['ML Engineering'],
   },
   {
-    title: 'Scikit-Learn',
+    title: 'Prompt Engineering',
     competency: 4,
     category: ['ML Engineering'],
   },
@@ -58,19 +63,14 @@ const skills: Skill[] = [
     category: ['ML Engineering', 'Databases'],
   },
   {
-    title: 'Prompt Engineering',
+    title: 'PyTorch',
     competency: 4,
     category: ['ML Engineering'],
   },
   {
-    title: 'NumPy',
-    competency: 4,
+    title: 'Pandas',
+    competency: 5,
     category: ['ML Engineering', 'Data Engineering'],
-  },
-  {
-    title: 'TensorFlow/Keras',
-    competency: 3,
-    category: ['ML Engineering'],
   },
   // Web Development
   {
@@ -81,11 +81,6 @@ const skills: Skill[] = [
   {
     title: 'FastAPI',
     competency: 4,
-    category: ['Web Development'],
-  },
-  {
-    title: 'Flask',
-    competency: 3,
     category: ['Web Development'],
   },
   {
@@ -121,9 +116,9 @@ const skills: Skill[] = [
     category: ['Infrastructure'],
   },
   {
-    title: 'Git',
+    title: 'Observability',
     competency: 4,
-    category: ['Infrastructure'],
+    category: ['Infrastructure', 'ML Engineering'],
   },
 ].map((skill) => ({ ...skill, category: skill.category.sort() }));
 

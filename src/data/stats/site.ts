@@ -46,7 +46,7 @@ const data: StatData[] = [
     /* find . | grep ".js" | grep -vE ".min.js|node_modules|.git|.json" |
     xargs -I file cat file | wc -l */
     label: 'Lines of TypeScript powering this website',
-    value: '2150',
+    value: '2279',
     link: 'https://github.com/mldangelo/personal-site/graphs/contributors',
   },
 ];

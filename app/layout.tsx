@@ -26,14 +26,14 @@ export const metadata: Metadata = {
     template: "%s | Michael D'Angelo",
   },
   description:
-    "Michael D'Angelo's personal website. Data scientist, machine learning engineer, and full-stack developer.",
+    'Co-founder & CTO building LLM security tools. Previously VP Engineering, YC alum, Stanford ICME.',
   keywords: [
     "Michael D'Angelo",
-    'data scientist',
+    'LLM security',
     'machine learning',
-    'full-stack developer',
-    'engineer',
-    'portfolio',
+    'CTO',
+    'startup founder',
+    'YC',
   ],
   authors: [{ name: "Michael D'Angelo" }],
   creator: "Michael D'Angelo",
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
     siteName: "Michael D'Angelo",
     title: "Michael D'Angelo",
     description:
-      'Data scientist, machine learning engineer, and full-stack developer.',
+      'Co-founder & CTO building LLM security tools. Previously VP Engineering, YC alum, Stanford ICME.',
     images: [
       {
         url: '/images/me.jpg',

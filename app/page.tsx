@@ -6,7 +6,7 @@ import PageWrapper from './components/PageWrapper';
 
 export const metadata: Metadata = {
   description:
-    "Michael D'Angelo is a data scientist, machine learning engineer, and full-stack engineer.",
+    'Co-founder & CTO building LLM security tools. Previously VP Engineering, YC alum, Stanford ICME.',
 };
 
 export default function HomePage() {
@@ -20,7 +20,7 @@ export default function HomePage() {
             </h2>
             <p>
               A beautiful, responsive, statically-generated, react application
-              written with modern Javascript.
+              written with modern TypeScript.
             </p>
           </div>
         </header>
