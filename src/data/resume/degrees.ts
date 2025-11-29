@@ -8,7 +8,7 @@ export interface Degree {
 const degrees: Degree[] = [
   {
     school: 'Stanford University',
-    degree: 'M.S. Computational and Mathematical Engineering',
+    degree: 'M.S. Computational and Mathematical Engineering (ICME)',
     link: 'https://stanford.edu',
     year: 2016,
   },

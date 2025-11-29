@@ -17,11 +17,14 @@ const work: Position[] = [
     position: 'Co-founder & CTO',
     url: 'https://promptfoo.dev',
     startDate: '2024-07-01',
-    summary:
-      'Promptfoo builds open-source tools to evaluate, find, and fix vulnerabilities in large language models (LLMs). Our open-source tools are used by over 35,000 developers and researchers worldwide.',
+    summary: `Promptfoo discovers and eliminates LLM risks before they reach production through automated
+    red-teaming and vulnerability analysis. Our open-source, developer-first approach has made Promptfoo the most
+    widely adopted LLM security tool, with over 200,000 users at companies like Anthropic, Amazon, and Shopify.`,
     highlights: [
-      'Built and scaled engineering team, emphasizing diversity and open-source contribution',
-      'Established key partnerships with AI research institutions and tech companies',
+      'Own company-wide technical strategy and product roadmap, balancing open-source community, commercial product, and research investments.',
+      'Led technical due diligence for $23M+ in venture financing from Insight Partners and Andreessen Horowitz.',
+      'Built and scaled the engineering team from founding through Series A, including hiring, leveling, and performance management.',
+      'Led development of core evaluation framework, vulnerability scanning, and automated red-teaming capabilities.',
     ],
   },
   {
@@ -30,19 +33,15 @@ const work: Position[] = [
     url: 'https://smileidentity.com',
     startDate: '2022-01-01',
     endDate: '2024-07-01',
-    summary: `Smile builds machine learning APIs to compare user submitted photos to ID documents. Our APIs are
-    used by hundreds of thousands of people every day to access financial services. As VP of Engineering,
-    I provide technical leadership on high-impact projects, influence and coach a distributed team of engineers,
-    and facilitate alignment and clarity across teams on goals, outcomes, and timelines. I was promoted
-    from Director of Engineering to VP of Engineering in April 2022, and then to VP of Engineering and Head
-    of AI in November 2022. I lead a 20+ person engineering org. I directly manage ~8 engineers and spend
-    >50% of my time writing code.`,
+    summary: `Smile Identity provides ML-powered identity verification APIs used by banks, fintechs, and
+    telcos across Africa. Promoted from Director to VP Engineering to VP Engineering & Head of AI within one year,
+    leading teams building APIs that now process hundreds of millions of identity checks.`,
     highlights: [
-      'Redesigned engineering processes for bug tracking, meetings, and standups. Improved culture for code reviews, blameless post-mortems, and retrospectives.',
-      'Re-architected engineering hiring and onboarding processes. Recruited several strong engineers.',
-      'Reorged engineering teams to focus on product delivery. Created a new team to focus on ML infrastructure.',
-      'Lead re-design of internal APIs for inference. Built new computer vision pipelines for industry leading certifications (NIST/iBeta liveness).',
-      'Pitched, designed, developed, deployed, and maintain a fraud detection product based on 1-N facial recognition using embeddings and vector search.',
+      'Owned engineering org design, headcount planning, and hiring across backend and ML teams, growing to 20+ engineers.',
+      'Transformed engineering velocity from weekly releases to continuous deployment, migrating to TypeScript, adding tests in CI, and leading ceremonies.',
+      'Re-architected inference APIs on AWS Lambda, scaling from 1,000 to 1M+ users per day and cutting job time from 30+ seconds to 7 seconds.',
+      'Built computer vision pipelines for liveness detection certification.',
+      'Pitched, designed, and shipped a fraud detection product using 1-N facial recognition with embeddings and vector search.',
     ],
   },
   {
@@ -50,13 +49,11 @@ const work: Position[] = [
     position: 'Co-founder',
     url: 'http://skepticalinvestments.biz',
     startDate: '2017-04-01',
-    summary: `Skeptical Investments is a micro-VC fund that makes angel investments. I consult with and invest
-    in startups in the Bay Area. I work part-time on this.`,
+    summary: `Skeptical Investments is a micro-VC fund focused on early-stage technical founders,
+    with investments in ML, infrastructure, and space startups.`,
     highlights: [
-      'Created the InstaSafe. Fast, automated investment docs for YC companies.',
-      'Advise startups on web, mobile, and ML engineering.',
-      'Sourced and analyzed over 1,000 startup deals.',
-      'Invested in over 60 startups.',
+      'Created InstaSafe, a tool that automates YC-standard investment documents.',
+      'Advise portfolio founders on ML, infrastructure, hiring, and fundraising strategy.',
     ],
   },
   {
@@ -65,76 +62,77 @@ const work: Position[] = [
     url: 'https://arthena.com',
     startDate: '2014-01-01',
     endDate: '2022-01-01',
-    summary: `Arthena is a Series A Company funded by <a href='https://www.anthemis.com/'>Anthemis</a>,
-    <a href='https://foundationcapital.com'>Foundation Capital</a>, and <a href='https://ycombinator.com'>YCombinator</a>.
-    We build quantitative strategies to predict the value of fine art and build investment products.
-    I ran a 20-person product and engineering org for 8 years. We were profitable and the #1 art investment platform in the world.`,
+    summary: `Arthena was a quantitative art investment platform backed by <a href='https://www.anthemis.com/'>Anthemis</a>,
+    <a href='https://foundationcapital.com'>Foundation Capital</a>, and <a href='https://ycombinator.com'>Y Combinator</a>.
+    Built Arthena from idea to acquisition by Masterworks in 2023.`,
     highlights: [
-      'Built production models for fine art valuation, resulting in $1.5B in cumulative art valuations (70k+ artworks).',
-      'Built computer vision models for artwork identification.',
-      'Designed and implemented CRM, data management, and accounting systems. Performed accounting and tax filings.',
-      'Set up company structure, worked with lawyers, and raised multiple fundraising rounds.',
-      'Managed a team of 15 engineers, data scientists, and analysts.',
+      'Co-founded Arthena and led technical strategy; sat on board and led fundraising, including debt financing for a 9-figure investment vehicle in the auction guarantee market.',
+      'Built and managed a cross-functional team of 20 engineers, data scientists, and analysts.',
+      'Built data pipelines, quantitative research tools, and visualization systems to scale investment research and augment analyst decision-making.',
+      'Developed valuation models on irregularly-sampled time series using graph embeddings, probabilistic forecasting with calibrated prediction intervals, and online learning with walk-forward validation.',
+      'Designed micro-service architecture for data collection, feature engineering, backtesting, and reporting.',
     ],
   },
   {
     name: 'Matroid',
     position: 'Co-founder',
     url: 'https://matroid.com',
-    startDate: '2016-01-01',
-    endDate: '2016-12-01',
-    summary: `Matroid is a Series A company funded by <a href='https://www.nea.com'>NEA</a> 
-    and <a href='https://www.accel.com'>Accel</a> building computer vision infrastructure.
-    I played a crucial role in the company's early development, contributing to both the
-    technical foundation and strategic direction.`,
+    startDate: '2015-09-01',
+    endDate: '2016-06-01',
+    summary: `Matroid is a computer vision platform for creating and deploying detectors, now funded by
+    <a href='https://www.nea.com'>NEA</a> and <a href='https://www.accel.com'>Accel</a>. I co-founded
+    the company and built the initial product through our first fundraise.`,
     highlights: [
-      'Developed core computer vision algorithms and initial product prototypes.',
-      "Worked with the team to define the company's vision and product roadmap.",
-      'Collaborated with CEO on fundraising and investor relations.',
+      'Defined company vision and product strategy.',
+      'Architected and built the initial detector platform for identifying objects, events, and patterns in video.',
+      'Led technical fundraising efforts for seed round.',
     ],
   },
   {
     name: 'Planet',
-    position: 'Missions Intern',
+    position: 'Avionics Intern',
     url: 'https://planet.com',
     startDate: '2014-06-01',
     endDate: '2015-01-01',
     highlights: [
-      'Developed open source mission control software from scratch in NodeJS.',
-      'Integrated with Google Earth, Cesium, and MATLAB.',
+      'Built models for cloud detection and optimal exposure using Earth albedo, incorporating sensor physics, astronomy, and optics.',
+      'Worked with optics and camera hardware; developed satellite software in C++ and Python (OpenCV, NumPy, SciPy).',
+    ],
+  },
+  {
+    name: 'Planetary Resources',
+    position: 'Avionics Intern',
+    url: 'https://www.planetaryresources.com',
+    startDate: '2014-01-01',
+    endDate: '2014-05-01',
+    highlights: [
+      'Developed simulations for Attitude Determination and Control Subsystem.',
+      'Built flight hardware for Electrical Power Subsystem in clean room; performed thermal vacuum chamber testing.',
     ],
   },
   {
     name: 'Facebook',
-    position: 'Intern',
+    position: 'Software Engineering Intern',
     url: 'https://facebook.com',
-    startDate: '2012-06-01',
-    endDate: '2012-09-01',
+    startDate: '2013-06-01',
+    endDate: '2013-09-01',
     highlights: [
-      "Developed and optimized Facebook's core news feed algorithms.",
-      'Worked on large-scale data processing and machine learning infrastructure.',
+      "Worked on Facebook's first GPU compute team, benchmarking NVIDIA GPUs for initial data center deployment.",
+      'Built log collection software and performed statistical analysis in Python, Hack, R, and HQL.',
     ],
   },
   {
-    name: 'Startup',
-    position: 'Co-founder',
-    url: '#',
-    startDate: '2012-02-01',
-    endDate: '2013-01-01',
-    summary: 'Started an NFC-based marketing company with a team of four.',
-  },
-  {
     name: 'UB Nanosatellite Program',
-    position: 'Hardware (Attitude Control) Lead',
+    position: 'Program Manager',
     url: 'https://ubnl.space/',
-    startDate: '2010-10-01',
-    endDate: '2012-06-01',
+    startDate: '2011-06-01',
+    endDate: '2012-05-01',
     summary:
-      'Developed and implemented attitude control systems for university satellite project.',
+      'Led a 60-person student team through the satellite development lifecycle for the AFRL University Nanosatellite Program.',
     highlights: [
-      'Designed Attitude Determination and Control System (ADCS) for satellite.',
-      'Integrated sun sensors, magnetometer, and reaction wheels.',
-      'Developed algorithms for satellite orientation control.',
+      'Co-authored grant proposal to design and build a multi-spectral imaging satellite.',
+      'Established budget and schedule from initial concept through design reviews.',
+      'Designed ADCS and worked on sensor integration.',
     ],
   },
 ];
