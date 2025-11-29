@@ -28,9 +28,9 @@ const work: Position[] = [
     ],
   },
   {
-    name: 'Smile Identity',
+    name: 'Smile ID',
     position: 'VP Engineering & Head of AI',
-    url: 'https://smileidentity.com',
+    url: 'https://usesmileid.com',
     startDate: '2022-01-01',
     endDate: '2024-07-01',
     summary: `Smile Identity provides ML-powered identity verification APIs used by banks, fintechs, and
