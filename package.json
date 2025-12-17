@@ -44,7 +44,7 @@
   "devDependencies": {
     "@biomejs/biome": "^2.3.8",
     "@next/bundle-analyzer": "^16.0.10",
-    "@swc/core": "^1.15.4",
+    "@swc/core": "^1.15.5",
     "@swc/jest": "^0.2.39",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
