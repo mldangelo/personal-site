@@ -42,7 +42,7 @@
     "react-dom": "^19.2.3"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.3.8",
+    "@biomejs/biome": "^2.3.10",
     "@next/bundle-analyzer": "^16.0.10",
     "@swc/core": "^1.15.5",
     "@swc/jest": "^0.2.39",
