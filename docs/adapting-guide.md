@@ -45,7 +45,7 @@ echo "[your-custom-domain][.com]" > public/CNAME
 
 as a shortcut.
 
-I recommend purchasing your own domain name from [Google Domains](https://domains.google). The project is pre-configured to automatically deploy to github pages via the deploy github action. Go to `https://github.com/[your-github-username]/[your-repo-name]/settings` and configure accordingly:
+I recommend purchasing your own domain name from [Squarespace Domains](https://domains.squarespace.com) (formerly Google Domains), [Cloudflare Registrar](https://www.cloudflare.com/products/registrar/), or [Namecheap](https://www.namecheap.com). The project is pre-configured to automatically deploy to GitHub Pages via the deploy GitHub action. Go to `https://github.com/[your-github-username]/[your-repo-name]/settings` and configure accordingly:
 
 <center><img src="images/gh-pages.png"></center>
 
@@ -61,9 +61,9 @@ Here are answers to questions I've been asked at least twice. I've attempted to 
 
    Make sure the `homepage` field of `package.json` points to where you plan to host your site index. Also, double check that you created a `CNAME` file (see deployment instructions above). If neither of these work, please open an issue or send me an [email](mailto:help@mldangelo.com).
 
-2. LF / CRLF issues with eslint.
+2. LF / CRLF issues on Windows.
 
-   This is a common Windows development pitfall. See @[FrozenFury](https://github.com/FrozenFury)'s [comment](https://github.com/mldangelo/personal-site/issues/263#issuecomment-759216299) for how to update your eslint config to resolve this issue.
+   This is a common Windows development pitfall. The project uses `.gitattributes` to enforce LF line endings. If you're having issues, ensure your Git is configured with `core.autocrlf=input` or `core.autocrlf=false`.
 
 3. master / main
 
@@ -81,9 +81,9 @@ Here are answers to questions I've been asked at least twice. I've attempted to 
 
    Sure, see github's documentation [here](https://pages.github.com/).
 
-7. How do I disable eslint?
+7. How do I configure or disable linting?
 
-   `echo "*\n" > .eslintignore` Although I really don't recommend it. Linters are good. They help prevent errors, enforce uniform style so that you can spend less time thinking about formatting and more time reading code, and eliminate easy nits for code reviews. If the rules aren't working for you, you should change them. See eslint's documentation [here](https://eslint.org/docs/about/) for more information.
+   This project uses [Biome](https://biomejs.dev/) for linting and formatting. You can modify rules in `biome.json`. To disable linting entirely (not recommended), you can remove the lint script from `package.json`. Linters help prevent errors and enforce consistent style, so consider adjusting rules rather than disabling them entirely.
 
 8. Why is my website rendering the readme file?
 
