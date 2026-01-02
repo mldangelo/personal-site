@@ -1,0 +1,73 @@
+// Slide Menu Component
+// Native replacement for react-burger-menu
+
+$slide-menu-width: 300px;
+$slide-menu-max-width: 80vw;
+$slide-menu-transition-duration: 0.3s;
+$slide-menu-transition-easing: cubic-bezier(0.4, 0, 0.2, 1);
+
+.slide-menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity $slide-menu-transition-duration $slide-menu-transition-easing;
+  z-index: _misc(z-index-base) + 1;
+
+  &--open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+.slide-menu {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: $slide-menu-width;
+  max-width: $slide-menu-max-width;
+  background: _palette(bg);
+  padding: 2.5em 1.5em 0;
+  font-size: 1.15em;
+  z-index: _misc(z-index-base) + 2;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  transition: transform $slide-menu-transition-duration $slide-menu-transition-easing;
+
+  // Right side (default)
+  &--right {
+    right: 0;
+    transform: translateX(100%);
+  }
+
+  // Left side
+  &--left {
+    left: 0;
+    transform: translateX(-100%);
+  }
+
+  // Open state
+  &--open {
+    transform: translateX(0);
+  }
+
+  // Menu item list (matches previous .bm-item-list styling)
+  ul {
+    color: _palette(fg-bold);
+    padding: 0.8em;
+    font-family: 'Raleway', Helvetica, sans-serif;
+    margin-top: 0;
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .slide-menu-overlay {
+    transition: none;
+  }
+
+  .slide-menu {
+    transition: none;
+  }
+}

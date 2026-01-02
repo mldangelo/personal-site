@@ -160,40 +160,6 @@ body {
   }
 }
 
-/* Position and sizing of burger button */
-.bm-burger-button {
-  display: none;
-}
-
-/* Color/shape of burger icon bars */
-.bm-burger-bars {
-  display: none;
-}
-
-/* Position and sizing of clickable cross button */
-.bm-cross-button {
-  display: none;
-}
-
-/* Color/shape of close button cross */
-.bm-cross {
-  display: none;
-}
-
-/* General sidebar styles */
-.bm-menu {
-  background: _palette(bg);
-  padding: 2.5em 1.5em 0;
-  font-size: 1.15em;
-}
-
-/* Wrapper for item list */
-.bm-item-list {
-  color: _palette(fg-bold);
-  padding: 0.8em;
-  font-family: 'Raleway', Helvetica, sans-serif;
-}
-
 #header .index-link {
   z-index: 3;
 }
@@ -202,8 +168,11 @@ body {
   cursor: pointer;
 }
 
+#header .main ul li.menu {
+  border-left: 0;
+}
+
 #header .main .close-menu {
-  border: 0;
   z-index: 10000;
 }
 
@@ -211,21 +180,13 @@ body {
   border: 0;
 }
 
-.open-menu {
-  position: fixed;
-  right: 0;
-  border: none;
-}
-
 .close-menu {
-  position: fixed;
-  right: 0;
-  z-index: 3;
-  border-left: 0;
+  z-index: 10001; // Above slide menu overlay when open
 }
 
 .hamburger-container {
   display: none;
+  margin-right: 0.5em;
 }
 
 @include breakpoint(medium) {
