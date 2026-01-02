@@ -42,11 +42,8 @@ const data: StatData[] = [
     format: (x: unknown) => dayjs(x as string).format('MMMM DD, YYYY'),
   },
   {
-    // TODO update this with a pre-commit hook
-    /* find . | grep ".js" | grep -vE ".min.js|node_modules|.git|.json" |
-    xargs -I file cat file | wc -l */
     label: 'Lines of TypeScript powering this website',
-    value: '2279',
+    value: '2272',
     link: 'https://github.com/mldangelo/personal-site/graphs/contributors',
   },
 ];
