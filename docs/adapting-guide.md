@@ -67,7 +67,7 @@ Here are answers to questions I've been asked at least twice. I've attempted to 
 
 3. master / main
 
-   Github decided to rename the default branch of all of their repositories from master to main, and so did I. See their reasoning [here](https://github.com/github/renaming). If you're trying to pull in recent changes, consider renaming your own branch, or just create a merge commit from my main.
+   GitHub decided to rename the default branch of all of their repositories from master to main, and so did I. See their reasoning [here](https://github.com/github/renaming). If you're trying to pull in recent changes, consider renaming your own branch, or just create a merge commit from my main.
 
 4. Google Analytics Warnings when building.
 
@@ -79,7 +79,7 @@ Here are answers to questions I've been asked at least twice. I've attempted to 
 
 6. Can I host at [username.github.io]?
 
-   Sure, see github's documentation [here](https://pages.github.com/).
+   Sure, see GitHub's documentation [here](https://pages.github.com/).
 
 7. How do I configure or disable linting?
 
@@ -87,4 +87,4 @@ Here are answers to questions I've been asked at least twice. I've attempted to 
 
 8. Why is my website rendering the readme file?
 
-   See 1. above and make sure that `.nojekyll` still exists in `public`. This file directs github to not attempt to render the website with Jekyll.
+   See 1. above and make sure that `.nojekyll` still exists in `public`. This file directs GitHub to not attempt to render the website with Jekyll.
