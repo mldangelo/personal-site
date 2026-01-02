@@ -11,10 +11,8 @@
     "node": ">=20.x"
   },
   "scripts": {
-    "dev": "TURBOPACK=1 next dev --turbopack",
-    "dev:webpack": "next dev",
+    "dev": "next dev --turbopack",
     "build": "next build",
-    "build:turbo": "TURBOPACK=1 next build --turbopack",
     "start": "next start",
     "lint": "biome check .",
     "type-check": "tsc --noEmit",
@@ -24,9 +22,7 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "predeploy": "npm run build",
-    "analyze": "ANALYZE=true npm run build",
-    "analyze:server": "BUNDLE_ANALYZE=server npm run analyze",
-    "analyze:browser": "BUNDLE_ANALYZE=browser npm run analyze"
+    "analyze": "ANALYZE=true npm run build"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^7.1.0",

@@ -35,6 +35,7 @@ npm run analyze
 This is a personal portfolio/resume website built with Next.js and TypeScript, designed to be easily forked and customized.
 
 ### Technology Stack
+
 - **Next.js 16** with App Router and Turbopack
 - **TypeScript** for type safety
 - **React 19** with functional components and hooks
@@ -46,6 +47,7 @@ This is a personal portfolio/resume website built with Next.js and TypeScript, d
 - **Node 20+** runtime
 
 ### Project Structure
+
 - `/app/` - Next.js App Router pages and layouts
 - `/src/components/` - React components organized by feature
 - `/src/data/` - Static data files (resume, projects, stats)
@@ -53,6 +55,7 @@ This is a personal portfolio/resume website built with Next.js and TypeScript, d
 - `/public/` - Static assets (images, favicons)
 
 ### Key Design Patterns
+
 1. **App Router**: File-based routing with layouts
 2. **Component Structure**: TypeScript functional components with type safety
 3. **Styling**: SCSS modules with shared variables and mixins
@@ -60,11 +63,13 @@ This is a personal portfolio/resume website built with Next.js and TypeScript, d
 5. **Performance**: Static export, lazy loading, optimized fonts
 
 ### Deployment
+
 - Static export to `/out` directory
 - GitHub Actions for automatic deployment to GitHub Pages
 - Custom domain support through CNAME file
 
 ### Important Notes
+
 - All pages must remain exactly the same as the original React site
 - The site uses static export (`output: 'export'`) for GitHub Pages compatibility
 - Client components use 'use client' directive

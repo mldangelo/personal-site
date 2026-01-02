@@ -1,41 +1,18 @@
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
+# Prettier is only used for markdown, CSS, and SCSS
+# Biome handles JavaScript, TypeScript, and JSON formatting
 
-# testing
-/coverage
+# Dependencies
+node_modules/
 
-# next.js
-/.next/
-/out/
+# Build outputs
+.next/
+out/
+build/
+coverage/
 
-# production
-/build
-
-# misc
-.DS_Store
-*.pem
-
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# local env files
-.env*.local
-
-# vercel
-.vercel
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
-
-# generated files
+# Generated files
 package-lock.json
 pnpm-lock.yaml
 yarn.lock
-
-# markdown
-*.md
+*.tsbuildinfo
+next-env.d.ts

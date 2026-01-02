@@ -139,7 +139,7 @@ jobs:
         run: npm run build
         env:
           NODE_ENV: production
-          NEXT_PUBLIC_GA_TRACKING_ID: ${{ vars.NEXT_PUBLIC_GA_TRACKING_ID || 'UA-XXXXXXXXX-X' }}
+          NEXT_PUBLIC_GA_TRACKING_ID: ${{ vars.NEXT_PUBLIC_GA_TRACKING_ID || 'G-XXXXXXXXXX' }}
 
       - name: Verify static export
         shell: bash
