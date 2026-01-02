@@ -37,7 +37,7 @@
     "dayjs": "^1.11.19",
     "markdown-to-jsx": "^9.5.0",
     "next": "^16.1.1",
-    "react": "^19.2.0",
+    "react": "^19.2.3",
     "react-dom": "^19.2.3"
   },
   "devDependencies": {
