@@ -8,7 +8,10 @@
     "rules": {
       "recommended": false,
       "complexity": { "noUselessTypeConstraint": "error" },
-      "correctness": { "noUnusedVariables": "warn" },
+      "correctness": {
+        "noUnusedImports": "error",
+        "noUnusedVariables": "warn"
+      },
       "performance": {
         "noImgElement": "warn",
         "noUnwantedPolyfillio": "warn",
@@ -81,7 +84,7 @@
       }
     },
     {
-      "includes": ["*.config.ts", "*.config.js", "jest.setup.ts"],
+      "includes": ["*.config.ts", "*.config.js", "vitest.setup.tsx"],
       "linter": {
         "rules": {
           "style": { "noCommonJs": "off" },

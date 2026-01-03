@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import React from 'react';
 
 import Personal from '@/components/Stats/Personal';
 import Site from '@/components/Stats/Site';

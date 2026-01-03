@@ -14,11 +14,11 @@ This site has been a work in progress since 2014, evolving to reflect current be
 **Infrastructure**
 
 - Migrated from SCSS to Tailwind CSS v4
+- Migrated from Jest to Vitest with 76%+ test coverage (268 tests)
 - Upgraded to Next.js 16 (App Router, Turbopack) and React 19
 - Migrated from ESLint to Biome
 - Replaced react-burger-menu with native slide menu
 - TypeScript strict mode throughout
-- Jest testing with SWC
 - Google Analytics 4 via @next/third-parties
 - SEO: sitemap, Open Graph, structured metadata
 
@@ -27,9 +27,9 @@ This site has been a work in progress since 2014, evolving to reflect current be
 **Improvements**
 
 - Adopt [JSON Resume](https://jsonresume.org/) standard
-- Improve test coverage
 - Add Playwright for e2e testing
 - Optimize FontAwesome (consider custom icon library)
+- Improve accessibility (WCAG compliance)
 
 **Repository**
 

@@ -9,7 +9,7 @@ npm run dev          # Start dev server (localhost:3000)
 npm run format       # Format with Prettier + Biome (run before committing)
 npm run lint         # Biome linting
 npm run type-check   # TypeScript checking
-npm test             # Jest tests
+npm test             # Vitest tests
 npm run build        # Production build + static export
 ```
 
@@ -50,7 +50,7 @@ npm test -- ComponentName                    # Test single component
 
 ## Tech Stack
 
-Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4 · Biome · Jest
+Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4 · Biome · Vitest
 
 ## Key Patterns
 

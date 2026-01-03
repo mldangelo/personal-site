@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import React from 'react';
 
 import writing from '@/data/writing';
 import { getAllPosts } from '@/lib/posts';
