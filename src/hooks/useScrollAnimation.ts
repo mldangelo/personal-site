@@ -69,6 +69,7 @@ export function useStaggeredAnimation(itemCount: number, baseDelay = 100) {
     new Array(itemCount).fill(false),
   );
   const containerRef = useRef<HTMLDivElement>(null);
+  const timeoutIds = useRef<NodeJS.Timeout[]>([]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -87,13 +88,14 @@ export function useStaggeredAnimation(itemCount: number, baseDelay = 100) {
         if (entry.isIntersecting) {
           // Stagger the animations
           for (let i = 0; i < itemCount; i++) {
-            setTimeout(() => {
+            const timeoutId = setTimeout(() => {
               setVisibleItems((prev) => {
                 const next = [...prev];
                 next[i] = true;
                 return next;
               });
             }, i * baseDelay);
+            timeoutIds.current.push(timeoutId);
           }
           observer.unobserve(container);
         }
@@ -105,6 +107,9 @@ export function useStaggeredAnimation(itemCount: number, baseDelay = 100) {
 
     return () => {
       observer.unobserve(container);
+      // Clear all pending timeouts to prevent state updates after unmount
+      timeoutIds.current.forEach((id) => clearTimeout(id));
+      timeoutIds.current = [];
     };
   }, [itemCount, baseDelay]);
 

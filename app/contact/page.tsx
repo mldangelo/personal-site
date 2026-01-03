@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <PageWrapper hideFooter>
+    <PageWrapper>
       <section className="contact-page">
         <header className="contact-header">
           <h1 className="page-title">Get in Touch</h1>

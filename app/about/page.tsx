@@ -1,7 +1,6 @@
 'use client';
 
 import Markdown from 'markdown-to-jsx';
-import type { Metadata } from 'next';
 import React from 'react';
 
 import { aboutMarkdown } from '@/data/about';
