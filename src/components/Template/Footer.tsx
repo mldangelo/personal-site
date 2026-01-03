@@ -1,10 +1,10 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
 import ContactIcons from '../Contact/ContactIcons';
+import ThemePortrait from './ThemePortrait';
 
 const Footer: React.FC = () => {
   return (
@@ -12,13 +12,7 @@ const Footer: React.FC = () => {
       <div className="footer-content">
         <div className="footer-identity">
           <Link href="/" className="footer-avatar">
-            <Image
-              src="/images/me.jpg"
-              alt="Michael D'Angelo"
-              width={80}
-              height={80}
-              loading="lazy"
-            />
+            <ThemePortrait width={80} height={80} />
           </Link>
           <div className="footer-info">
             <h3>Michael D&apos;Angelo</h3>

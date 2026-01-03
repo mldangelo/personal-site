@@ -1,11 +1,11 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React from 'react';
 
 import ContactIcons from '../Contact/ContactIcons';
+import ThemePortrait from './ThemePortrait';
 
 const SideBar: React.FC = () => {
   const pathname = usePathname();
@@ -14,13 +14,7 @@ const SideBar: React.FC = () => {
     <section className="site-sidebar">
       <section className="site-intro">
         <Link href="/" className="logo">
-          <Image
-            src="/images/me.jpg"
-            alt="Michael D'Angelo"
-            width={200}
-            height={200}
-            priority
-          />
+          <ThemePortrait width={200} height={200} priority />
         </Link>
         <header>
           <h2>Michael D&apos;Angelo</h2>

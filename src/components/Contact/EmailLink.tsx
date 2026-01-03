@@ -145,10 +145,7 @@ const EmailLink: React.FC<EmailLinkProps> = ({ loopMessage = false }) => {
     >
       <a
         href={isValid ? `mailto:${state.message}@mldangelo.com` : '#'}
-        className="contact-email-link"
-        style={
-          isValid ? {} : { color: 'var(--color-fg-light)', cursor: 'default' }
-        }
+        className={`contact-email-link${isValid ? '' : ' contact-email-link--invalid'}`}
         onClick={handleClick}
         aria-disabled={!isValid}
       >

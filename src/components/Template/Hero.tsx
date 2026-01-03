@@ -1,21 +1,16 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
+
+import ThemePortrait from './ThemePortrait';
 
 const Hero: React.FC = () => {
   return (
     <section className="hero">
       <div className="hero-content">
         <div className="hero-avatar">
-          <Image
-            src="/images/me.jpg"
-            alt="Michael D'Angelo"
-            width={120}
-            height={120}
-            priority
-          />
+          <ThemePortrait width={120} height={120} priority />
         </div>
 
         <h1 className="hero-title">
