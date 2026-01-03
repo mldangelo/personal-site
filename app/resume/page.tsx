@@ -6,6 +6,7 @@ import Experience from '@/components/Resume/Experience';
 import References from '@/components/Resume/References';
 import ResumeNav from '@/components/Resume/ResumeNav';
 import Skills from '@/components/Resume/Skills';
+import profile from '@/data/profile';
 import courses from '@/data/resume/courses';
 import degrees from '@/data/resume/degrees';
 import { categories, skills } from '@/data/resume/skills';
@@ -15,8 +16,7 @@ import PageWrapper from '../components/PageWrapper';
 
 export const metadata: Metadata = {
   title: 'Resume',
-  description:
-    "Michael D'Angelo's Resume. Promptfoo, Smile ID, Arthena, Matroid, Stanford ICME, YC alum.",
+  description: `${profile.name}'s Resume. ${profile.company.name}, Smile ID, Arthena, Matroid, Stanford ICME, YC alum.`,
 };
 
 export default function ResumePage() {
@@ -25,12 +25,7 @@ export default function ResumePage() {
       <section className="resume-page">
         <header className="resume-header">
           <h1 className="resume-title">Resume</h1>
-          <p className="resume-summary">
-            Engineering leader with 10+ years building products at the
-            intersection of machine learning and security. Currently CTO &
-            Co-founder at Promptfoo, building open-source LLM security tools.
-            Stanford MS, YC alum, previously VP Engineering.
-          </p>
+          <p className="resume-summary">{profile.summary}</p>
         </header>
 
         <ResumeNav />

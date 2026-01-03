@@ -1,6 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
+import profile from '@/data/profile';
+
 import Hero from '../../Template/Hero';
 
 describe('Hero', () => {
@@ -15,25 +17,25 @@ describe('Hero', () => {
     render(<Hero />);
 
     const heading = screen.getByRole('heading', { level: 1 });
-    expect(heading).toHaveTextContent("Michael D'Angelo");
+    expect(heading).toHaveTextContent(profile.name);
   });
 
-  it('renders the tagline with Promptfoo link', () => {
+  it('renders the tagline with company link', () => {
     render(<Hero />);
 
-    const promptfooLink = screen.getByRole('link', { name: /promptfoo/i });
-    expect(promptfooLink).toHaveAttribute('href', 'https://promptfoo.dev');
-    expect(promptfooLink).toHaveClass('hero-highlight');
+    const companyLink = screen.getByRole('link', {
+      name: new RegExp(profile.company.name, 'i'),
+    });
+    expect(companyLink).toHaveAttribute('href', profile.company.url);
+    expect(companyLink).toHaveClass('hero-highlight');
   });
 
   it('displays hero chips for credentials', () => {
     render(<Hero />);
 
-    expect(screen.getByText('YC Alum')).toBeInTheDocument();
-    expect(screen.getByText('Stanford ICME')).toBeInTheDocument();
-    expect(
-      screen.getByText('Co-founded Arthena & Matroid'),
-    ).toBeInTheDocument();
+    for (const chip of profile.chips) {
+      expect(screen.getByText(chip)).toBeInTheDocument();
+    }
   });
 
   it('renders CTA buttons with correct links', () => {

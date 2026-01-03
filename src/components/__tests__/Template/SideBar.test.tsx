@@ -1,6 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import profile from '@/data/profile';
+
 import SideBar from '../../Template/SideBar';
 
 const mockPathname = vi.fn();
@@ -23,16 +25,16 @@ describe('SideBar', () => {
   it('displays the name', () => {
     render(<SideBar />);
 
-    expect(screen.getByText("Michael D'Angelo")).toBeInTheDocument();
+    expect(screen.getByText(profile.name)).toBeInTheDocument();
   });
 
   it('displays email link', () => {
     render(<SideBar />);
 
     const emailLink = screen.getByRole('link', {
-      name: /michael@mldangelo\.com/i,
+      name: new RegExp(profile.email.replace(/\./g, '\\.')),
     });
-    expect(emailLink).toHaveAttribute('href', 'mailto:michael@mldangelo.com');
+    expect(emailLink).toHaveAttribute('href', `mailto:${profile.email}`);
   });
 
   it('renders about section with bio', () => {
@@ -42,12 +44,20 @@ describe('SideBar', () => {
     expect(screen.getByText(/Stanford ICME/)).toBeInTheDocument();
   });
 
-  it('renders external links', () => {
+  it('renders bio with company links', () => {
     render(<SideBar />);
 
     expect(screen.getByRole('link', { name: /promptfoo/i })).toHaveAttribute(
       'href',
       'https://promptfoo.dev',
+    );
+    expect(screen.getByRole('link', { name: /smileid/i })).toHaveAttribute(
+      'href',
+      'https://usesmileid.com',
+    );
+    expect(screen.getByRole('link', { name: /arthena/i })).toHaveAttribute(
+      'href',
+      'https://arthena.com',
     );
   });
 
@@ -81,7 +91,9 @@ describe('SideBar', () => {
   it('renders copyright notice', () => {
     render(<SideBar />);
 
-    expect(screen.getByText(/© Michael D'Angelo/)).toBeInTheDocument();
+    expect(
+      screen.getByText(new RegExp(`© ${profile.name}`)),
+    ).toBeInTheDocument();
   });
 
   it('has logo link to home', () => {

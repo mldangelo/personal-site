@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import React from 'react';
 
+import profile from '@/data/profile';
+
 import ContactIcons from '../Contact/ContactIcons';
 import ThemePortrait from './ThemePortrait';
 
@@ -15,8 +17,8 @@ const Footer: React.FC = () => {
             <ThemePortrait width={80} height={80} />
           </Link>
           <div className="footer-info">
-            <h3>Michael D&apos;Angelo</h3>
-            <p className="footer-role">CTO & Co-founder</p>
+            <h3>{profile.name}</h3>
+            <p className="footer-role">{profile.company.role}</p>
             <p className="footer-copyright">
               &copy; {new Date().getFullYear()} ·{' '}
               <a

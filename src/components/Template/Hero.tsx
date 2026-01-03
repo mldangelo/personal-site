@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import React from 'react';
 
+import profile from '@/data/profile';
+
 import ThemePortrait from './ThemePortrait';
 
 const Hero: React.FC = () => {
@@ -14,23 +16,25 @@ const Hero: React.FC = () => {
         </div>
 
         <h1 className="hero-title">
-          <span className="hero-name">Michael D&apos;Angelo</span>
+          <span className="hero-name">{profile.name}</span>
         </h1>
 
         <p className="hero-tagline">
-          Co-founder & CTO at{' '}
-          <a href="https://promptfoo.dev" className="hero-highlight">
-            Promptfoo
+          {profile.company.role} at{' '}
+          <a href={profile.company.url} className="hero-highlight">
+            {profile.company.name}
           </a>
-          , the most widely adopted open-source LLM security platform.
+          , {profile.tagline[0]}
           <br />
-          Building AI products for over a decade.
+          {profile.tagline[1]}
         </p>
 
         <div className="hero-chips">
-          <span className="hero-chip">YC Alum</span>
-          <span className="hero-chip">Stanford ICME</span>
-          <span className="hero-chip">Co-founded Arthena & Matroid</span>
+          {profile.chips.map((chip) => (
+            <span key={chip} className="hero-chip">
+              {chip}
+            </span>
+          ))}
         </div>
 
         <div className="hero-cta">
