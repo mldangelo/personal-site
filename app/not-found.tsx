@@ -4,22 +4,27 @@ import React from 'react';
 
 export const metadata: Metadata = {
   title: 'Page Not Found',
-  description: 'Page not found',
+  description: 'The page you are looking for could not be found.',
 };
 
 export default function NotFound() {
   return (
-    <div id="wrapper">
-      <div id="main">
-        <article className="post" id="contact">
-          <header>
-            <div className="title">
-              <h2>Page Not Found</h2>
-            </div>
-          </header>
-          <Link href="/">Return Home</Link>
-        </article>
+    <main className="not-found-page">
+      <div className="not-found-content">
+        <span className="not-found-code">404</span>
+        <h1 className="not-found-title">Page Not Found</h1>
+        <p className="not-found-message">
+          The page you&apos;re looking for doesn&apos;t exist or has been moved.
+        </p>
+        <div className="not-found-actions">
+          <Link href="/" className="not-found-button">
+            Go Home
+          </Link>
+          <Link href="/contact" className="not-found-link">
+            Contact Me
+          </Link>
+        </div>
       </div>
-    </div>
+    </main>
   );
 }

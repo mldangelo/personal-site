@@ -2138,6 +2138,100 @@ body.is-menu-visible .site-wrapper {
   justify-content: center;
 }
 
+/* Not Found page */
+.not-found-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - var(--header-height) - 4rem);
+  padding: 2rem;
+  text-align: center;
+}
+
+.not-found-content {
+  max-width: 480px;
+}
+
+.not-found-code {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: clamp(6rem, 20vw, 10rem);
+  font-weight: var(--weight-black);
+  line-height: 1;
+  background: linear-gradient(
+    135deg,
+    var(--color-accent) 0%,
+    color-mix(in srgb, var(--color-accent) 60%, var(--color-fg)) 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  opacity: 0.9;
+  margin-bottom: 1rem;
+}
+
+.not-found-title {
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-bold);
+  color: var(--color-fg-bold);
+  margin-bottom: 0.75rem;
+  letter-spacing: var(--tracking-tight);
+}
+
+.not-found-message {
+  font-size: var(--text-lg);
+  color: var(--color-fg-light);
+  line-height: var(--leading-normal);
+  margin-bottom: 2rem;
+}
+
+.not-found-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.not-found-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.875rem 1.75rem;
+  font-size: var(--text-base);
+  font-weight: var(--weight-medium);
+  color: #fff;
+  background: var(--color-accent);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
+}
+
+.not-found-button:hover {
+  background: var(--color-fg-bold);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.not-found-link {
+  font-size: var(--text-base);
+  font-weight: var(--weight-medium);
+  color: var(--color-fg);
+  text-decoration: underline;
+  text-decoration-color: var(--color-border-alt);
+  text-underline-offset: 3px;
+  transition:
+    color var(--duration-fast) var(--ease-out),
+    text-decoration-color var(--duration-fast) var(--ease-out);
+}
+
+.not-found-link:hover {
+  color: var(--color-accent);
+  text-decoration-color: var(--color-accent);
+}
+
 /* Resume page specific */
 .resume-page {
   max-width: 880px;
@@ -2883,6 +2977,22 @@ body.is-menu-visible .site-wrapper {
   color: rgba(255, 255, 255, 0.6);
 }
 
+/* Dark mode not-found page */
+[data-theme='dark'] .not-found-code {
+  background: linear-gradient(
+    135deg,
+    #60a5fa 0%,
+    color-mix(in srgb, #60a5fa 70%, #fff) 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+[data-theme='dark'] .not-found-button:hover {
+  background: #fff;
+  color: var(--color-bg);
+}
+
 /* System preference dark mode (when no manual override) */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
@@ -3009,6 +3119,22 @@ body.is-menu-visible .site-wrapper {
 
   .contact-hint {
     color: rgba(255, 255, 255, 0.6);
+  }
+
+  /* Dark mode not-found page */
+  .not-found-code {
+    background: linear-gradient(
+      135deg,
+      #60a5fa 0%,
+      color-mix(in srgb, #60a5fa 70%, #fff) 100%
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+  }
+
+  .not-found-button:hover {
+    background: #fff;
+    color: var(--color-bg);
   }
 
   /* Card hover states in dark mode */
