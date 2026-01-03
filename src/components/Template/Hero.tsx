@@ -24,7 +24,7 @@ const Hero: React.FC = () => {
           </a>
           , the most widely adopted open-source LLM security platform.
           <br />
-          Previously VP Engineering & Head of AI at Smile ID.
+          Building AI products for over a decade.
         </p>
 
         <div className="hero-chips">

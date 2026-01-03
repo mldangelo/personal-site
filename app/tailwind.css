@@ -243,10 +243,11 @@
     background-size: 100% 1.5px;
   }
 
-  /* Keep simple underline for inline content links */
-  p a,
-  li a,
-  .blurb a {
+  /* Keep simple underline for inline content links
+     Exclude .hero-highlight which uses text-decoration instead */
+  p a:not(.hero-highlight),
+  li a:not(.hero-highlight),
+  .blurb a:not(.hero-highlight) {
     background-image: linear-gradient(transparent calc(100% - 1.5px), rgba(46, 89, 186, 0.3) 1.5px);
     background-size: 100% 100%;
     transition:
@@ -254,9 +255,9 @@
       background-image var(--duration-fast) var(--ease-out);
   }
 
-  p a:hover,
-  li a:hover,
-  .blurb a:hover {
+  p a:not(.hero-highlight):hover,
+  li a:not(.hero-highlight):hover,
+  .blurb a:not(.hero-highlight):hover {
     color: var(--color-accent);
     background-image: linear-gradient(transparent calc(100% - 1.5px), var(--color-accent) 1.5px);
   }
@@ -3582,17 +3583,17 @@ body.is-menu-visible .site-wrapper {
 }
 
 /* Link underlines */
-[data-theme='dark'] p a,
-[data-theme='dark'] li a,
-[data-theme='dark'] .blurb a {
+[data-theme='dark'] p a:not(.hero-highlight),
+[data-theme='dark'] li a:not(.hero-highlight),
+[data-theme='dark'] .blurb a:not(.hero-highlight) {
   background-image: linear-gradient(
     transparent calc(100% - 1.5px),
     var(--color-accent-underline) 1.5px
   );
 }
 
-[data-theme='dark'] p a:hover,
-[data-theme='dark'] li a:hover,
-[data-theme='dark'] .blurb a:hover {
+[data-theme='dark'] p a:not(.hero-highlight):hover,
+[data-theme='dark'] li a:not(.hero-highlight):hover,
+[data-theme='dark'] .blurb a:not(.hero-highlight):hover {
   background-image: linear-gradient(transparent calc(100% - 1.5px), var(--color-accent) 1.5px);
 }
