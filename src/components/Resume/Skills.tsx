@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useReducer } from 'react';
+import React, { useMemo, useReducer } from 'react';
 
 import type { Category, Skill } from '@/data/resume/skills';
 
@@ -59,7 +59,7 @@ const Skills: React.FC<SkillsProps> = ({ skills, categories }) => {
       <CategoryButton
         label={key}
         key={key}
-        active={buttons}
+        isActive={buttons[key]}
         handleClick={handleChildClick}
       />
     ));
@@ -70,34 +70,37 @@ const Skills: React.FC<SkillsProps> = ({ skills, categories }) => {
     'All',
   );
 
-  // Sort skills by competency (highest first), then alphabetically
-  const sortedSkills = [...skills].sort((a, b) => {
-    if (a.competency !== b.competency) return b.competency - a.competency;
-    return a.title.localeCompare(b.title);
-  });
+  // Memoize sorting, filtering, and grouping to avoid recalculating on every render
+  const groupedSkills = useMemo(() => {
+    // Sort skills by competency (highest first), then alphabetically
+    const sortedSkills = [...skills].sort((a, b) => {
+      if (a.competency !== b.competency) return b.competency - a.competency;
+      return a.title.localeCompare(b.title);
+    });
 
-  // Filter skills based on active category
-  const filteredSkills = sortedSkills.filter(
-    (skill) =>
-      activeCategory === 'All' || skill.category.includes(activeCategory),
-  );
+    // Filter skills based on active category
+    const filteredSkills = sortedSkills.filter(
+      (skill) =>
+        activeCategory === 'All' || skill.category.includes(activeCategory),
+    );
 
-  // Group skills by their primary category for grouped view
-  const groupedSkills =
-    activeCategory === 'All'
-      ? categories.reduce(
-          (groups, category) => {
-            const categorySkills = filteredSkills.filter((skill) =>
-              skill.category.includes(category.name),
-            );
-            if (categorySkills.length > 0) {
-              groups[category.name] = categorySkills;
-            }
-            return groups;
-          },
-          {} as Record<string, Skill[]>,
-        )
-      : { [activeCategory]: filteredSkills };
+    // Group skills by their primary category for grouped view
+    if (activeCategory === 'All') {
+      return categories.reduce(
+        (groups, category) => {
+          const categorySkills = filteredSkills.filter((skill) =>
+            skill.category.includes(category.name),
+          );
+          if (categorySkills.length > 0) {
+            groups[category.name] = categorySkills;
+          }
+          return groups;
+        },
+        {} as Record<string, Skill[]>,
+      );
+    }
+    return { [activeCategory]: filteredSkills };
+  }, [skills, categories, activeCategory]);
 
   return (
     <div className="skills">

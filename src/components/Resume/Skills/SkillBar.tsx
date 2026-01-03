@@ -10,16 +10,16 @@ interface SkillBarProps {
 const SkillBar: React.FC<SkillBarProps> = ({ data, categories }) => {
   const { category, competency, title } = data;
 
-  // TODO: Consider averaging colors
-  const titleStyle = {
-    background: categories
-      .filter((cat) => category.includes(cat.name))
-      .map((cat) => cat.color)[0],
-  };
+  // Get the primary category color for styling
+  const categoryColor = categories.find((cat) =>
+    category.includes(cat.name),
+  )?.color;
+
+  const titleStyle = { background: categoryColor };
 
   const barStyle = {
     ...titleStyle,
-    width: `${String(Math.min(100, Math.max((competency / 5.0) * 100.0, 0)))}%`,
+    width: `${Math.min(100, Math.max((competency / 5.0) * 100.0, 0))}%`,
   };
 
   return (

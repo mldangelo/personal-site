@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useReducer, useRef } from 'react';
+import React, { useEffect, useReducer, useRef, useState } from 'react';
 
 // Validates the first half of an email address.
 const validateText = (text: string): boolean => {
@@ -8,6 +8,12 @@ const validateText = (text: string): boolean => {
   // eslint-disable-next-line no-useless-escape
   const re = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))$/;
   return re.test(text) || text.length === 0;
+};
+
+// Check for reduced motion preference
+const prefersReducedMotion = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 };
 
 const messages = [
@@ -115,6 +121,13 @@ const EmailLink: React.FC<EmailLinkProps> = ({ loopMessage = false }) => {
   const hold = 50; // ticks to wait after message is complete before rendering next message
   const delay = 50; // tick length in mS
 
+  // Check for reduced motion preference
+  const [reducedMotion, setReducedMotion] = useState(false);
+
+  useEffect(() => {
+    setReducedMotion(prefersReducedMotion());
+  }, []);
+
   const [state, dispatch] = useReducer(animationReducer, {
     idx: 0,
     message: '',
@@ -122,14 +135,31 @@ const EmailLink: React.FC<EmailLinkProps> = ({ loopMessage = false }) => {
     isActive: true,
   });
 
+  // If user prefers reduced motion, show static email immediately
+  useEffect(() => {
+    if (reducedMotion) {
+      dispatch({ type: 'PAUSE' });
+    }
+  }, [reducedMotion]);
+
   useInterval(
     () => {
       dispatch({ type: 'TICK', loopMessage, hold });
     },
-    state.isActive ? delay : null,
+    state.isActive && !reducedMotion ? delay : null,
   );
 
-  const isValid = validateText(state.message);
+  // Use 'hi' as default message when reduced motion or paused with empty message
+  const displayMessage =
+    reducedMotion || state.message === '' ? 'hi' : state.message;
+  const isValid = validateText(displayMessage);
+
+  const handlePause = () => dispatch({ type: 'PAUSE' });
+  const handleResume = () => {
+    if (!reducedMotion) {
+      dispatch({ type: 'RESUME', maxIdx: messages.length });
+    }
+  };
 
   const handleClick = (e: React.MouseEvent) => {
     if (!isValid) {
@@ -137,19 +167,30 @@ const EmailLink: React.FC<EmailLinkProps> = ({ loopMessage = false }) => {
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (!isValid && (e.key === 'Enter' || e.key === ' ')) {
+      e.preventDefault();
+    }
+  };
+
   return (
     <div
       className="contact-email-container"
-      onMouseEnter={() => dispatch({ type: 'PAUSE' })}
-      onMouseLeave={() => dispatch({ type: 'RESUME', maxIdx: messages.length })}
+      onMouseEnter={handlePause}
+      onMouseLeave={handleResume}
     >
       <a
-        href={isValid ? `mailto:${state.message}@mldangelo.com` : '#'}
+        href={isValid ? `mailto:${displayMessage}@mldangelo.com` : undefined}
         className={`contact-email-link${isValid ? '' : ' contact-email-link--invalid'}`}
         onClick={handleClick}
-        aria-disabled={!isValid}
+        onKeyDown={handleKeyDown}
+        onFocus={handlePause}
+        onBlur={handleResume}
+        role={isValid ? undefined : 'link'}
+        aria-disabled={!isValid || undefined}
+        tabIndex={0}
       >
-        <span className="contact-email-prefix">{state.message}</span>
+        <span className="contact-email-prefix">{displayMessage}</span>
         <span className="contact-email-domain">@mldangelo.com</span>
       </a>
     </div>

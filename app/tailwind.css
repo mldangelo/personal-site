@@ -11,6 +11,7 @@
      =================== */
   --color-bg: #ffffff;
   --color-bg-alt: #f5f5f7;
+  --color-bg-offset: #f0f0f2;
   --color-fg: #1d1d1f;
   --color-fg-bold: #1d1d1f;
   --color-fg-light: #58585d;
@@ -27,6 +28,7 @@
   --color-surface-active: rgba(0, 0, 0, 0.1);
   --color-text-muted: rgba(0, 0, 0, 0.5);
   --color-text-dim: rgba(0, 0, 0, 0.6);
+  --color-fg-muted: rgba(0, 0, 0, 0.5);
 
   /* ===================
      TYPOGRAPHY - Fonts
@@ -40,6 +42,7 @@
      =================== */
   --font-weight-normal: 400;
   --font-weight-medium: 600;
+  --font-weight-semibold: 600;
   --font-weight-bold: 700;
   --font-weight-black: 800;
 
@@ -1501,6 +1504,23 @@ body.is-menu-visible .site-wrapper {
 
 .stat-table td:last-child a {
   color: var(--color-accent);
+}
+
+.stat-table-label {
+  width: 70%;
+}
+
+/* Screen reader only - visually hidden but accessible */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
 
 /* Stats page layout */
@@ -3418,6 +3438,7 @@ body.is-menu-visible .site-wrapper {
   /* Core colors */
   --color-bg: #0a0a0a;
   --color-bg-alt: #111111;
+  --color-bg-offset: #1a1a1a;
   --color-fg: #e5e5e5;
   --color-fg-bold: #ffffff;
   --color-fg-light: #b0b0b5;
@@ -3441,6 +3462,7 @@ body.is-menu-visible .site-wrapper {
   --color-surface-active: rgba(255, 255, 255, 0.12);
   --color-text-muted: rgba(255, 255, 255, 0.6);
   --color-text-dim: rgba(255, 255, 255, 0.7);
+  --color-fg-muted: rgba(255, 255, 255, 0.5);
 
   /* Shadows */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);

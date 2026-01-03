@@ -6,8 +6,13 @@ import initialData from '../../data/stats/site';
 import Table from './Table';
 import { StatData } from './types';
 
+// GitHub API response fields used by this component
 interface GitHubRepoData {
-  [key: string]: string | number | boolean | null;
+  stargazers_count: number;
+  subscribers_count: number;
+  forks: number;
+  open_issues_count: number;
+  pushed_at: string;
 }
 
 const Stats: React.FC = () => {
@@ -25,10 +30,10 @@ const Stats: React.FC = () => {
         setResponseData(
           initialData.map((field) => ({
             ...field,
-            // update value if value was returned by call to github
+            // Update value if key exists in GitHub response
             value:
-              field.key && Object.keys(resData).includes(field.key)
-                ? (resData[field.key] ?? field.value)
+              field.key && field.key in resData
+                ? (resData[field.key as keyof GitHubRepoData] ?? field.value)
                 : field.value,
           })),
         );

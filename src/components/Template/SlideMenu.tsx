@@ -2,6 +2,10 @@
 
 import { type FC, type ReactNode, useCallback, useEffect, useRef } from 'react';
 
+// Selector for focusable elements within the menu
+const FOCUSABLE_SELECTOR =
+  'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
 interface SlideMenuProps {
   id: string;
   isOpen: boolean;
@@ -68,9 +72,8 @@ const SlideMenu: FC<SlideMenuProps> = ({
       previousActiveElement.current = document.activeElement as HTMLElement;
 
       // Focus first focusable element in menu
-      const focusableElements = menuRef.current?.querySelectorAll<HTMLElement>(
-        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
-      );
+      const focusableElements =
+        menuRef.current?.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR);
       if (focusableElements?.length) {
         focusableElements[0].focus();
       }
@@ -85,9 +88,8 @@ const SlideMenu: FC<SlideMenuProps> = ({
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (e.key !== 'Tab') return;
 
-    const focusableElements = menuRef.current?.querySelectorAll<HTMLElement>(
-      'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
-    );
+    const focusableElements =
+      menuRef.current?.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR);
 
     if (!focusableElements?.length) return;
 
