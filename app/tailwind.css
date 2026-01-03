@@ -2893,10 +2893,10 @@ body.is-menu-visible .site-wrapper {
 
 /* Manual dark mode - component overrides */
 [data-theme='dark'] .site-header {
-  background-color: rgba(10, 10, 10, 0.82);
+  background-color: rgba(17, 17, 17, 0.9);
   backdrop-filter: blur(24px) saturate(180%);
   -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border-bottom-color: rgba(255, 255, 255, 0.1);
+  border-bottom-color: rgba(255, 255, 255, 0.12);
 }
 
 [data-theme='dark'] .nav-link:hover {
@@ -3037,10 +3037,10 @@ body.is-menu-visible .site-wrapper {
 
   /* Dark mode header glassmorphism - lighter for glass effect */
   .site-header {
-    background-color: rgba(10, 10, 10, 0.82);
+    background-color: rgba(17, 17, 17, 0.9);
     backdrop-filter: blur(24px) saturate(180%);
     -webkit-backdrop-filter: blur(24px) saturate(180%);
-    border-bottom-color: rgba(255, 255, 255, 0.1);
+    border-bottom-color: rgba(255, 255, 255, 0.12);
   }
 
   /* Dark mode nav link hover - more visible */
