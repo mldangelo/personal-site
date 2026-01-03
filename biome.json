@@ -39,7 +39,7 @@
   "css": {
     "parser": { "cssModules": true },
     "linter": { "enabled": true },
-    "formatter": { "enabled": true }
+    "formatter": { "enabled": false }
   },
   "overrides": [
     {
