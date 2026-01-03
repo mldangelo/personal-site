@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import writing, { type WritingItem } from '../writing';
+import writing from '../writing';
 
 describe('writing data', () => {
   it('exports an array of writing items', () => {

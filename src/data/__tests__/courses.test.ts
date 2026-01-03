@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import courses, { type Course } from '../resume/courses';
+import courses from '../resume/courses';
 
 describe('courses data', () => {
   it('exports an array of courses', () => {

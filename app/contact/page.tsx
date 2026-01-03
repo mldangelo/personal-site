@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import React from 'react';
 
 import ContactIcons from '@/components/Contact/ContactIcons';
 import EmailLink from '@/components/Contact/EmailLink';

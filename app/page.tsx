@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import React from 'react';
 
 import Hero from '@/components/Template/Hero';
 

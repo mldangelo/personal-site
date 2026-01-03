@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import routes, { type Route } from '../routes';
+import routes from '../routes';
 
 describe('routes', () => {
   it('exports an array of routes', () => {

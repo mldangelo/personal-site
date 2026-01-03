@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import React from 'react';
 
 import Cell from '@/components/Projects/Cell';
 import data from '@/data/projects';

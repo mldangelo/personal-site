@@ -1,11 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import {
-  type Category,
-  categories,
-  type Skill,
-  skills,
-} from '../resume/skills';
+import { categories, skills } from '../resume/skills';
 
 describe('skills data', () => {
   it('exports an array of skills', () => {
