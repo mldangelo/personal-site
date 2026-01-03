@@ -16,11 +16,7 @@ describe('site stats data', () => {
     }
   });
 
-  it('has GitHub API stats with keys', () => {
-    const apiStats = data.filter((s) => s.key);
-
-    expect(apiStats.length).toBeGreaterThan(3);
-
+  it('has GitHub API stats with expected keys', () => {
     const expectedKeys = [
       'stargazers_count',
       'subscribers_count',
@@ -29,8 +25,10 @@ describe('site stats data', () => {
       'pushed_at',
     ];
 
+    // Verify each expected GitHub API key is present
     for (const key of expectedKeys) {
-      expect(apiStats.some((s) => s.key === key)).toBe(true);
+      const stat = data.find((s) => s.key === key);
+      expect(stat).toBeDefined();
     }
   });
 

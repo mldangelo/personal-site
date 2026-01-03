@@ -48,7 +48,8 @@ describe('skills data', () => {
     }
   });
 
-  it('skill categories are sorted alphabetically', () => {
+  // Data quality: categories should be sorted for consistent UI display
+  it('skill categories are sorted alphabetically for UI consistency', () => {
     for (const skill of skills) {
       const sorted = [...skill.category].sort();
       expect(skill.category).toEqual(sorted);
@@ -80,6 +81,7 @@ describe('categories data', () => {
     }
   });
 
+  // Data quality: categories should be sorted for filter button display order
   it('categories are sorted alphabetically by name', () => {
     const names = categories.map((c) => c.name);
     const sorted = [...names].sort();
