@@ -1893,7 +1893,7 @@ body.is-menu-visible .site-wrapper {
   color: var(--color-accent);
   font-weight: var(--weight-bold);
   text-decoration: underline;
-  text-decoration-color: rgba(96, 165, 250, 0.3);
+  text-decoration-color: rgba(96, 165, 250, 0.5);
   text-underline-offset: 3px;
   text-decoration-thickness: 2px;
   transition: text-decoration-color var(--duration-fast) var(--ease-out);
@@ -2011,12 +2011,14 @@ body.is-menu-visible .site-wrapper {
 }
 
 .about-content h1 {
-  font-size: var(--text-xl);
+  font-size: var(--text-lg);
   font-weight: var(--weight-bold);
   color: var(--color-fg-bold);
   margin: 2.5rem 0 1rem;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid var(--color-border);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
 }
 
 .about-content h1:first-child {
@@ -2302,7 +2304,7 @@ body.is-menu-visible .site-wrapper {
 }
 
 .resume-section {
-  scroll-margin-top: calc(var(--header-height) + 2rem);
+  scroll-margin-top: calc(var(--header-height) + 5rem);
   padding-top: 1.5rem;
   border-top: 1px solid var(--color-border);
 }
@@ -2384,6 +2386,16 @@ body.is-menu-visible .site-wrapper {
 }
 
 .nav-link.active::after {
+  transform: scaleX(1);
+}
+
+.nav-link:focus-visible {
+  color: var(--color-accent);
+  background-color: var(--color-border-bg);
+  outline: none;
+}
+
+.nav-link:focus-visible::after {
   transform: scaleX(1);
 }
 
@@ -2969,8 +2981,12 @@ body.is-menu-visible .site-wrapper {
 }
 
 [data-theme='dark'] .contact-socials {
-  background: rgba(255, 255, 255, 0.03);
-  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+[data-theme='dark'] .stat-table tr:nth-child(odd) {
+  background: rgba(255, 255, 255, 0.05);
 }
 
 [data-theme='dark'] .contact-hint {
@@ -3113,12 +3129,16 @@ body.is-menu-visible .site-wrapper {
   }
 
   .contact-socials {
-    background: rgba(255, 255, 255, 0.03);
-    border-color: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.12);
   }
 
   .contact-hint {
     color: rgba(255, 255, 255, 0.6);
+  }
+
+  .stat-table tr:nth-child(odd) {
+    background: rgba(255, 255, 255, 0.05);
   }
 
   /* Dark mode not-found page */
@@ -3180,11 +3200,6 @@ body.is-menu-visible .site-wrapper {
   /* Avatar gradient in dark mode */
   .site-intro .logo::before {
     background: linear-gradient(135deg, var(--color-accent), #818cf8);
-  }
-
-  /* Stat table striping */
-  .stat-table tr:nth-child(odd) {
-    background: rgba(255, 255, 255, 0.02);
   }
 
   /* Skill bar background */
