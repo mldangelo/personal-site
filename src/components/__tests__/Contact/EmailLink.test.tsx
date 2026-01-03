@@ -28,17 +28,16 @@ describe('EmailLink', () => {
   it('animates through messages over time', async () => {
     render(<EmailLink />);
 
-    const initialPrefix = screen.getByText('hi');
-    expect(initialPrefix).toBeInTheDocument();
+    // Initial state is empty, animation types out characters
+    const prefix = document.querySelector('.contact-email-prefix');
+    expect(prefix?.textContent).toBe('');
 
-    // Advance time to let animation progress
+    // Advance time to let animation type out first message
     act(() => {
-      vi.advanceTimersByTime(100);
+      vi.advanceTimersByTime(150); // 3 ticks = 'hi' fully typed
     });
 
-    // The message should have changed or be changing
-    const container = document.querySelector('.contact-email-prefix');
-    expect(container).toBeInTheDocument();
+    expect(prefix?.textContent).toBe('hi');
   });
 
   it('pauses animation on mouse enter', async () => {
@@ -101,8 +100,13 @@ describe('EmailLink', () => {
   it('generates valid mailto href for valid email prefixes', () => {
     render(<EmailLink />);
 
+    // Advance time to get a valid email prefix
+    act(() => {
+      vi.advanceTimersByTime(150); // Type out 'hi'
+    });
+
     const link = screen.getByRole('link');
-    expect(link.getAttribute('href')).toMatch(/^mailto:.+@mldangelo\.com$/);
+    expect(link.getAttribute('href')).toBe('mailto:hi@mldangelo.com');
   });
 
   it('has invalid class when email prefix is invalid', async () => {

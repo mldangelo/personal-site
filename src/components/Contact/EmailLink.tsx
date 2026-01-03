@@ -117,7 +117,7 @@ const EmailLink: React.FC<EmailLinkProps> = ({ loopMessage = false }) => {
 
   const [state, dispatch] = useReducer(animationReducer, {
     idx: 0,
-    message: messages[0],
+    message: '',
     char: 0,
     isActive: true,
   });
