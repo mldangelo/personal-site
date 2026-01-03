@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 /* ========================================
    THEME CONFIGURATION
@@ -22,10 +22,9 @@
   /* ===================
      TYPOGRAPHY - Fonts
      =================== */
-  --font-sans:
-    var(--font-source-sans), "Source Sans Pro", Helvetica, sans-serif;
-  --font-heading: var(--font-raleway), "Raleway", Helvetica, sans-serif;
-  --font-mono: "Courier New", monospace;
+  --font-sans: var(--font-source-sans), 'Source Sans Pro', Helvetica, sans-serif;
+  --font-heading: var(--font-raleway), 'Raleway', Helvetica, sans-serif;
+  --font-mono: 'Courier New', monospace;
 
   /* ===================
      TYPOGRAPHY - Font Weights
@@ -1230,7 +1229,7 @@ body.is-menu-visible .site-wrapper {
 
 .clearfix::before,
 .clearfix::after {
-  content: "";
+  content: '';
   display: table;
 }
 
