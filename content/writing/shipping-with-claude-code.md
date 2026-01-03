@@ -1,6 +1,6 @@
 ---
 title: How I Use Claude Code
-date: "2026-01-03"
+date: '2026-01-03'
 description: How I shipped 1,000+ PRs in 2025 with parallel agents and cross-model audits.
 ---
 
@@ -48,12 +48,14 @@ When Claude has access to these checks, it stops guessing and starts converging.
 ## The split of responsibility
 
 **Agent:**
+
 - Find the right files, make edits, run checks
 - Open a browser and verify UI behavior
 - Write small, scoped commits
 - Draft PRs and release notes
 
 **Me:**
+
 - Set the goal and constraints
 - Review the diff for semantic changes
 - Run cross-model audits when it matters
@@ -105,6 +107,7 @@ For comparison: I had [5,396 contributions in 2024](https://github.com/mldangelo
 I regularly audit Claude's work with Codex and Gemini.
 
 Different models have different blind spots:
+
 - Claude sometimes over-abstracts or adds unnecessary flexibility
 - Codex catches edge cases Claude glosses over
 - Gemini flags structural issues the others miss
