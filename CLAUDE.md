@@ -40,25 +40,25 @@ This is a personal portfolio/resume website built with Next.js and TypeScript, d
 - **TypeScript** for type safety
 - **React 19** with functional components and hooks
 - **Biome** for linting and code formatting
-- **Prettier** for markdown, CSS, and SCSS formatting
-- **SCSS** for styling
-- **Jest** with React Testing Library and SWC
+- **Prettier** for markdown and CSS formatting
+- **Tailwind CSS v4** for styling
+- **Vitest** with React Testing Library
 - **Static Export** for GitHub Pages deployment
 - **Node 20+** runtime
 
 ### Project Structure
 
-- `/app/` - Next.js App Router pages and layouts
+- `/app/` - Next.js App Router pages, layouts, and Tailwind CSS styles
 - `/src/components/` - React components organized by feature
 - `/src/data/` - Static data files (resume, projects, stats)
-- `/src/static/` - SCSS styles
+- `/src/hooks/` - Custom React hooks
 - `/public/` - Static assets (images, favicons)
 
 ### Key Design Patterns
 
 1. **App Router**: File-based routing with layouts
 2. **Component Structure**: TypeScript functional components with type safety
-3. **Styling**: SCSS modules with shared variables and mixins
+3. **Styling**: Tailwind CSS v4 with CSS variables for theming
 4. **Data Management**: Static TypeScript files in `/src/data/`
 5. **Performance**: Static export, lazy loading, optimized fonts
 

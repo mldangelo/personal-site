@@ -4,7 +4,7 @@ Welcome to my [personal website](https://mldangelo.com)! This is an [MIT license
 
 ## 🚀 Features
 
-- Built with modern TypeScript, using [Next.js 16](https://nextjs.org/), [React 19](https://react.dev/), and SCSS.
+- Built with modern TypeScript, using [Next.js 16](https://nextjs.org/), [React 19](https://react.dev/), and [Tailwind CSS v4](https://tailwindcss.com/).
 - Type-safe development with TypeScript strict mode.
 - Optimized performance with static export and automatic font optimization.
 - Automated workflows via [GitHub Actions](https://github.com/features/actions).
@@ -101,14 +101,14 @@ npm run lint          # Run Biome linter
 npm run type-check    # Run TypeScript type checking
 npm run format        # Format code with Biome and Prettier
 npm run format:check  # Check code formatting
-npm test              # Run Jest tests
+npm test              # Run Vitest tests
 ```
 
 ## 🎨 Customization
 
 - **Personal Information**: Update files in `src/data/` with your information.
 - **Images**: Replace images in `public/images/` with your own.
-- **Theme**: Modify SCSS variables in `src/static/css/libs/_vars.scss`.
+- **Theme**: Modify CSS variables in `app/tailwind.css` or use Tailwind utility classes.
 
 ## 📝 License
 

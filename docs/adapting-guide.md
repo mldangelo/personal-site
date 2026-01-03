@@ -13,8 +13,8 @@ You may wish to fork this repository or remove my remote origin and add your own
 
 ### Setup
 
-1. Run the project before making any modifications by following the set up and running instructions in the main [README.md](https://github.com/mldangelo/personal-site#set-up).
-2. Change `homepage` in `package.json` to reflect where you plan to host the site. This is important for static exporting. This also changes your path when developing locally. For example, a homepage of `mldangelo.com` places the site at `localhost:3000` and a homepage of `https://mldangelo.github.io/personal-site/` places the site at `localhost:3000/personal-site/`. If you plan to host at on a path such as `https://[your-github-username].github.io/[your-repo-name]`, you should set this now so that your development environment mirrors your production environment.
+1. Run the project before making any modifications by following the setup and running instructions in the main [README.md](https://github.com/mldangelo/personal-site#-setup-and-running).
+2. Change `homepage` in `package.json` to reflect where you plan to host the site. This is important for static exporting. This also changes your path when developing locally. For example, a homepage of `mldangelo.com` places the site at `localhost:3000` and a homepage of `https://mldangelo.github.io/personal-site/` places the site at `localhost:3000/personal-site/`. If you plan to host on a path such as `https://[your-github-username].github.io/[your-repo-name]`, you should set this now so that your development environment mirrors your production environment.
 3. Create a `.env.local` file. To do this, run:
 
    ```bash
@@ -34,6 +34,7 @@ I recommend keeping the project running as you go (with `npm run dev`) to help c
 5. Modify all of the other files in the `src/data/` directory.
 6. You've finished modifying >95% of the pages. Search through the rest of the files for references to `Michael` or `Angelo` and change values to your name.
 7. Change or remove the favicon in `public/favicon.ico` and images in `public/images/favicon/`. [This](https://realfavicongenerator.net/) website may be helpful.
+8. (Optional) Customize the theme colors in `app/tailwind.css`. The site uses CSS custom properties (variables) for theming, which you can modify to match your brand.
 
 ### Deploy
 
@@ -88,3 +89,7 @@ Here are answers to questions I've been asked at least twice. I've attempted to 
 8. Why is my website rendering the readme file?
 
    See 1. above and make sure that `.nojekyll` still exists in `public`. This file directs GitHub to not attempt to render the website with Jekyll.
+
+9. How do I customize colors and styles?
+
+   This project uses [Tailwind CSS v4](https://tailwindcss.com/) for styling. Theme colors are defined as CSS custom properties in `app/tailwind.css`. You can modify these variables to change the site's color scheme. For component-specific styles, use Tailwind utility classes directly in the component files.
