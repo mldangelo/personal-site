@@ -24,11 +24,13 @@ npm test -- ComponentName                    # Test single component
 ## Project Structure
 
 ```
-/app/                 → Pages, layouts, tailwind.css
-/src/components/      → React components by feature
-/src/data/            → Static data (resume, projects, stats)
-/src/hooks/           → Custom React hooks
-/public/images/       → Images and favicons
+app/                  → Pages, layouts, global CSS
+src/components/       → React components (organized by feature)
+src/data/             → Static data (resume, projects, contact)
+src/hooks/            → Custom React hooks
+content/writing/      → Blog posts (Markdown with frontmatter)
+public/images/        → Images and favicons
+docs/                 → Documentation
 ```
 
 ## Code Style
@@ -40,6 +42,7 @@ npm test -- ComponentName                    # Test single component
 - Keep components small and focused
 - Use existing patterns from similar components
 - Mark client components with `'use client'`
+- Follow conventional commits: `feat:`, `fix:`, `chore:`, `docs:`
 
 **Don't:**
 
@@ -57,9 +60,21 @@ Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4 · Biome ·
 - **Theming**: `data-theme` attribute on `<html>`, persisted to localStorage
 - **Static export**: `output: 'export'` for GitHub Pages—no server features
 - **Theme images**: Use `ThemePortrait` component for light/dark variants
+- **Blog posts**: Markdown files in `content/writing/` with frontmatter (title, date, description); slug derived from filename
+
+## Testing
+
+Tests live in `__tests__/` directories adjacent to the code they test. Run `npm test` before committing.
+
+```bash
+npm test                        # Run all tests
+npm test -- --watch             # Watch mode
+npm test -- ComponentName       # Run specific test
+```
 
 ## Further Reading
 
 - [README.md](./README.md) — Setup and deployment
-- [docs/adapting-guide.md](./docs/adapting-guide.md) — Customization checklist
+- [docs/adapting-guide.md](./docs/adapting-guide.md) — Guide for forking and customizing
 - [docs/design-goals.md](./docs/design-goals.md) — Architecture principles
+- [docs/contributing.md](./docs/contributing.md) — Contribution guidelines

@@ -1,115 +1,69 @@
-# Personal Website
+# Personal Website Template
 
-Welcome to my [personal website](https://mldangelo.com)! This is an [MIT licensed](https://github.com/mldangelo/personal-site/blob/main/LICENSE) Next.js-based Jamstack application. It offers a simple interface, easy modifications, static export capabilities, and free automatic deployments via [GitHub Pages](https://pages.github.com/).
+[![Build Status](https://img.shields.io/github/actions/workflow/status/mldangelo/personal-site/node.js.yml?branch=main)](https://github.com/mldangelo/personal-site/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
+[![GitHub Stars](https://img.shields.io/github/stars/mldangelo/personal-site?style=social)](https://github.com/mldangelo/personal-site/stargazers)
+[![GitHub Forks](https://img.shields.io/github/forks/mldangelo/personal-site?style=social)](https://github.com/mldangelo/personal-site/network/members)
 
-## 🚀 Features
+A free, open-source portfolio website template built with [Next.js](https://nextjs.org/), [React](https://react.dev/), [TypeScript](https://www.typescriptlang.org/), and [Tailwind CSS](https://tailwindcss.com/). Fork it and make it your own in under an hour.
 
-- Built with modern TypeScript, using [Next.js 16](https://nextjs.org/), [React 19](https://react.dev/), and [Tailwind CSS v4](https://tailwindcss.com/).
-- Type-safe development with TypeScript strict mode.
-- Optimized performance with static export and automatic font optimization.
-- Dark mode support with system preference detection and manual toggle.
-- Automated workflows via [GitHub Actions](https://github.com/features/actions).
+**[See it live →](https://mldangelo.com)**
 
-## 🛠 Adapting this Project
+## Why This Template?
 
-Want to create your own personal website based on this project? You can set it up in as little as 30 minutes! Follow the setup instructions below and check out the **[detailed guide and checklist](./docs/adapting-guide.md)** on adapting this project to your needs. If you encounter any challenges, don't hesitate to contact me through an issue or email at [help@mldangelo.com](mailto:help@mldangelo.com).
+- **Zero setup required.** Fork, open in GitHub Codespaces, and start editing.
+- **Modern tech stack.** Next.js 16, React 19, TypeScript, Tailwind CSS v4.
+- **Free hosting.** Deploys automatically to GitHub Pages.
+- **Dark mode.** System preference detection with manual toggle.
+- **Blog ready.** Markdown posts with RSS feed (optional).
+- **AI-friendly.** Works great with GitHub Copilot, Claude, and Cursor.
 
-## 🤝 Contributing
+## Get Started
 
-Your contributions are warmly welcomed! If you wish to contribute, please review the [design goals](./docs/design-goals.md), [roadmap](./docs/roadmap.md), and [contributing guidelines](./docs/contributing.md). For any bugs or suggestions, you can reach out via email, submit a pull request (I'd be happy to get you a coffee as a thank-you!), or open an issue.
-
-## 🔧 Dependencies
-
-Ensure you have [node](https://nodejs.org/) >= v20. Optionally, use [nvm](https://github.com/nvm-sh/nvm#installing-and-updating) to manage node versions.
-
-## 🚀 Setup and Running
-
-1. Clone the repository:
-
-   ```bash
-   git clone git://github.com/mldangelo/personal-site.git
-   cd personal-site
-   ```
-
-2. (Optional) Ensure you're on Node v20 or higher:
-
-   ```bash
-   nvm install
-   node --version
-   ```
-
-3. Install dependencies:
-
-   ```bash
-   npm install
-   ```
-
-4. Start the development server:
-
-   ```bash
-   npm run dev
-   ```
-
-   By default, the application will be available at [http://localhost:3000/](http://localhost:3000/).
-
-## 🏗 Building for Production
-
-1. Build the static export:
-
-   ```bash
-   npm run build
-   ```
-
-   The build process automatically creates a static export in the `out/` directory.
-
-2. Preview the production build locally:
-
-   ```bash
-   npm run start
-   ```
-
-## 🚢 Deploying
-
-### Deploying to GitHub Pages
-
-1. Update the environment variables and Git remote URL in [`.github/workflows/github-pages.yml`](.github/workflows/github-pages.yml).
-
-2. Enable GitHub Actions and Pages for your repository.
-
-3. Push to the `main` branch to trigger automatic deployment.
-
-   ```bash
-   git add .
-   git commit -m "Deploy to GitHub Pages"
-   git push origin main
-   ```
-
-### Static Export
-
-You can export the site as static HTML to host anywhere:
+### Option 1: Local Development
 
 ```bash
-npm run build
+gh repo fork mldangelo/personal-site --clone
+cd personal-site
+npm install
+npm run dev
 ```
 
-The static files will be automatically generated in the `out/` directory.
+Requires [GitHub CLI](https://cli.github.com/) and Node.js 20+ ([nvm](https://github.com/nvm-sh/nvm) recommended).
 
-## 🔬 Testing
+### Option 2: GitHub Codespaces
+
+1. Click **Fork** at the top of this page
+2. In your fork, click **Code** → **Codespaces** → **Create codespace**
+3. Run `npm run dev`
+
+No local setup needed. Everything runs in your browser.
+
+## Customize It
+
+Follow the **[adapting guide](./docs/adapting-guide.md)** for a step-by-step checklist.
+
+**Pro tip:** Open the adapting guide in Copilot Chat or your favorite AI assistant and ask it to help you customize each section.
+
+## Commands
 
 ```bash
-npm run lint          # Run Biome linter
-npm run type-check    # Run TypeScript type checking
-npm run format        # Format code with Biome and Prettier
-npm run format:check  # Check code formatting
-npm test              # Run Vitest tests
+npm run dev      # Start dev server
+npm run build    # Build for production
+npm run format   # Format code
+npm test         # Run tests
 ```
 
-## 🎨 Customization
+## Deploy
 
-- **Personal Information**: Update files in `src/data/` with your information.
-- **Images**: Replace images in `public/images/` with your own.
-- **Theme**: Modify CSS custom properties in `app/tailwind.css` or use Tailwind utility classes.
+Push to `main` and GitHub Pages deploys automatically. See the [adapting guide](./docs/adapting-guide.md#deployment) for custom domain setup.
 
-## 📝 License
+## Contributing
 
-[MIT](https://github.com/mldangelo/personal-site/blob/main/LICENSE)
+Contributions welcome! If you find a bug or want to improve something, please open a PR.
+
+See [contributing guide](./docs/contributing.md) and [design goals](./docs/design-goals.md).
+
+## License
+
+[MIT](./LICENSE). Use it however you want.
