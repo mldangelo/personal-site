@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import React from 'react';
 
 import ContactIcons from '@/components/Contact/ContactIcons';
@@ -14,21 +13,23 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <PageWrapper>
-      <article className="post" id="contact">
-        <header>
-          <div className="title">
-            <h2>
-              <Link href="/contact">Contact</Link>
-            </h2>
-          </div>
+    <PageWrapper hideFooter>
+      <section className="contact-page">
+        <header className="contact-header">
+          <h1 className="page-title">Get in Touch</h1>
+          <p className="page-subtitle">
+            I&apos;d love to hear from you
+          </p>
         </header>
-        <div>
-          <p>Feel free to get in touch. You can email me at:</p>
+        <div className="contact-content">
+          <p>Feel free to reach out. You can email me at:</p>
           <EmailLink />
+          <div className="contact-socials">
+            <p className="contact-socials-title">Or find me on</p>
+            <ContactIcons />
+          </div>
         </div>
-        <ContactIcons />
-      </article>
+      </section>
     </PageWrapper>
   );
 }

@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import React from 'react';
 
+import Hero from '@/components/Template/Hero';
+
 import PageWrapper from './components/PageWrapper';
 
 export const metadata: Metadata = {
@@ -12,33 +14,25 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <PageWrapper>
-      <article className="post" id="index">
-        <header>
-          <div className="title">
-            <h2>
-              <Link href="/about">About this site</Link>
-            </h2>
-            <p>
-              A beautiful, responsive, statically-generated, react application
-              written with modern TypeScript.
-            </p>
-          </div>
-        </header>
-        <p>
-          {' '}
-          Welcome to my website. Please feel free to read more{' '}
-          <Link href="/about">about me</Link>, or you can check out my{' '}
+      <Hero />
+
+      <section className="home-section">
+        <h2 className="section-title">
+          <span className="section-title-text">About this site</span>
+        </h2>
+        <p className="section-desc">
+          A statically-generated portfolio built with Next.js, TypeScript, and
+          React. Feel free to explore my{' '}
+          <Link href="/about">background</Link>,{' '}
           <Link href="/resume">resume</Link>,{' '}
-          <Link href="/projects">projects</Link>, view{' '}
-          <Link href="/stats">site statistics</Link>, or{' '}
-          <Link href="/contact">contact</Link> me.
+          <Link href="/projects">projects</Link>, or{' '}
+          <Link href="/contact">get in touch</Link>.
         </p>
-        <p>
-          {' '}
-          Source available{' '}
-          <a href="https://github.com/mldangelo/personal-site">here</a>.
+        <p className="section-desc section-desc-muted">
+          Source available on{' '}
+          <a href="https://github.com/mldangelo/personal-site">GitHub</a>.
         </p>
-      </article>
+      </section>
     </PageWrapper>
   );
 }

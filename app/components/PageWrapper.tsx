@@ -3,16 +3,18 @@
 import { usePathname } from 'next/navigation';
 import React, { useEffect } from 'react';
 
-import SideBar from '@/components/Template/SideBar';
+import Footer from '@/components/Template/Footer';
 
 interface PageWrapperProps {
   children: React.ReactNode;
   fullPage?: boolean;
+  hideFooter?: boolean;
 }
 
 export default function PageWrapper({
   children,
   fullPage = false,
+  hideFooter = false,
 }: PageWrapperProps) {
   const pathname = usePathname();
 
@@ -22,9 +24,9 @@ export default function PageWrapper({
   }, [pathname]);
 
   return (
-    <>
-      <div className="site-main">{children}</div>
-      {!fullPage && <SideBar />}
-    </>
+    <div className={`page-container ${fullPage ? 'full-page' : ''}`}>
+      <main className="page-main">{children}</main>
+      {!hideFooter && <Footer />}
+    </div>
   );
 }
