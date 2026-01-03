@@ -2055,36 +2055,87 @@ body.is-menu-visible .site-wrapper {
   text-align: center;
 }
 
-.contact-content p {
+.contact-intro {
   font-size: var(--text-lg);
   color: var(--color-fg);
-  margin-bottom: 1.5rem;
+  margin-bottom: 2.5rem;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: var(--leading-normal);
 }
 
-.contact-email {
+/* Email CTA block */
+.contact-email-block {
+  margin-bottom: 3rem;
+}
+
+.contact-email-container {
   display: inline-block;
+  margin-bottom: 0.75rem;
+}
+
+.contact-email-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  padding: 1rem 1.75rem;
   font-size: var(--text-xl);
   font-weight: var(--weight-bold);
   color: var(--color-accent);
-  margin-bottom: 2rem;
+  background: var(--color-accent-light);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
 }
 
-.contact-email:hover {
-  text-decoration: underline;
+.contact-email-link:hover {
+  background: color-mix(in srgb, var(--color-accent-light) 80%, var(--color-accent) 20%);
+  border-color: var(--color-accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
+.contact-email-prefix {
+  color: var(--color-accent);
+}
+
+.contact-email-domain {
+  color: var(--color-fg);
+  font-weight: var(--weight-medium);
+}
+
+.contact-hint {
+  font-size: var(--text-sm);
+  color: var(--color-fg-light);
+  margin: 0;
+}
+
+/* Socials section */
 .contact-socials {
-  margin-top: 2rem;
-  padding-top: 2rem;
-  border-top: 1px solid var(--color-border);
+  margin-top: 3rem;
+  padding: 2rem;
+  background: var(--color-bg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
 }
 
 .contact-socials-title {
-  font-size: var(--text-sm);
-  color: var(--color-fg-light);
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-wide);
-  margin-bottom: 1rem;
+  font-size: var(--text-base);
+  font-weight: var(--weight-medium);
+  color: var(--color-fg);
+  text-transform: none;
+  letter-spacing: var(--tracking-normal);
+  margin-bottom: 1.25rem;
+}
+
+.contact-socials .icons {
+  justify-content: center;
 }
 
 /* Resume page specific */
@@ -2812,6 +2863,26 @@ body.is-menu-visible .site-wrapper {
   background: rgba(255, 255, 255, 0.08);
 }
 
+/* Dark mode contact page */
+[data-theme='dark'] .contact-email-link {
+  background: rgba(96, 165, 250, 0.15);
+  border-color: rgba(96, 165, 250, 0.3);
+}
+
+[data-theme='dark'] .contact-email-link:hover {
+  background: rgba(96, 165, 250, 0.25);
+  border-color: rgba(96, 165, 250, 0.5);
+}
+
+[data-theme='dark'] .contact-socials {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme='dark'] .contact-hint {
+  color: rgba(255, 255, 255, 0.6);
+}
+
 /* System preference dark mode (when no manual override) */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
@@ -2918,6 +2989,26 @@ body.is-menu-visible .site-wrapper {
 
   .skill-tag:hover {
     background: rgba(255, 255, 255, 0.08);
+  }
+
+  /* Dark mode contact page */
+  .contact-email-link {
+    background: rgba(96, 165, 250, 0.15);
+    border-color: rgba(96, 165, 250, 0.3);
+  }
+
+  .contact-email-link:hover {
+    background: rgba(96, 165, 250, 0.25);
+    border-color: rgba(96, 165, 250, 0.5);
+  }
+
+  .contact-socials {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .contact-hint {
+    color: rgba(255, 255, 255, 0.6);
   }
 
   /* Card hover states in dark mode */

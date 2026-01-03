@@ -17,15 +17,21 @@ export default function ContactPage() {
       <section className="contact-page">
         <header className="contact-header">
           <h1 className="page-title">Get in Touch</h1>
-          <p className="page-subtitle">
-            I&apos;d love to hear from you
-          </p>
+          <p className="page-subtitle">I&apos;d love to hear from you</p>
         </header>
         <div className="contact-content">
-          <p>Feel free to reach out. You can email me at:</p>
-          <EmailLink />
+          <p className="contact-intro">
+            Have a question, project idea, or just want to say hello? Feel free
+            to reach out.
+          </p>
+          <div className="contact-email-block">
+            <EmailLink />
+            <p className="contact-hint">
+              I typically respond within a day or two
+            </p>
+          </div>
           <div className="contact-socials">
-            <p className="contact-socials-title">Or find me on</p>
+            <p className="contact-socials-title">Or connect with me</p>
             <ContactIcons />
           </div>
         </div>
