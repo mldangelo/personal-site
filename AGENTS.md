@@ -6,6 +6,7 @@ Guidance for AI coding agents working on this Next.js personal portfolio site.
 
 ```bash
 npm run dev          # Start dev server (localhost:3000)
+npm run format       # Format with Prettier + Biome (run before committing)
 npm run lint         # Biome linting
 npm run type-check   # TypeScript checking
 npm test             # Vitest tests
