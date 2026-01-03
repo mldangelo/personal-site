@@ -17,6 +17,7 @@
     "paths": {
       "@/*": ["./src/*"]
     },
+    "types": [],
     "plugins": [
       {
         "name": "next"
@@ -28,7 +29,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "jest.setup.ts",
+    "vitest.setup.tsx",
     ".next/dev/types/**/*.ts"
   ],
   "exclude": ["node_modules"]
