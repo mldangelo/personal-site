@@ -1,11 +1,16 @@
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import { faAngellist } from '@fortawesome/free-brands-svg-icons/faAngellist';
-import { faFacebookF } from '@fortawesome/free-brands-svg-icons/faFacebookF';
-import { faGithub } from '@fortawesome/free-brands-svg-icons/faGithub';
-import { faInstagram } from '@fortawesome/free-brands-svg-icons/faInstagram';
-import { faLinkedinIn } from '@fortawesome/free-brands-svg-icons/faLinkedinIn';
-import { faTwitter } from '@fortawesome/free-brands-svg-icons/faTwitter';
-import { faEnvelope } from '@fortawesome/free-regular-svg-icons/faEnvelope';
+/**
+ * Contact/social profile data
+ * Re-exports from consolidated resume.json with icon mapping
+ */
+
+import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+
+import type { ExtendedResume } from '@/types/resume-extended';
+import { getIcon } from '@/utils/iconMapping';
+
+import resumeData from './resume.json';
+
+const resume = resumeData as unknown as ExtendedResume;
 
 export interface ContactItem {
   link: string;
@@ -13,42 +18,10 @@ export interface ContactItem {
   icon: IconDefinition;
 }
 
-const data: ContactItem[] = [
-  {
-    link: 'https://www.linkedin.com/in/michaelldangelo',
-    label: 'LinkedIn',
-    icon: faLinkedinIn,
-  },
-  {
-    link: 'https://github.com/mldangelo',
-    label: 'Github',
-    icon: faGithub,
-  },
-  {
-    link: 'https://x.com/dangelosaurus',
-    label: 'X',
-    icon: faTwitter,
-  },
-  {
-    link: 'https://angel.co/michael-d-angelo',
-    label: 'Angel List',
-    icon: faAngellist,
-  },
-  {
-    link: 'https://www.instagram.com/dangelosaurus/',
-    label: 'Instagram',
-    icon: faInstagram,
-  },
-  {
-    link: 'https://facebook.com/d',
-    label: 'Facebook',
-    icon: faFacebookF,
-  },
-  {
-    link: 'mailto:michael.l.dangelo@gmail.com',
-    label: 'Email',
-    icon: faEnvelope,
-  },
-];
+const data: ContactItem[] = resume.basics.profiles.map((profile) => ({
+  link: profile.url,
+  label: profile.network,
+  icon: getIcon(profile._icon),
+}));
 
 export default data;

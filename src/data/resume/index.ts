@@ -1,6 +1,6 @@
 /**
  * JSON Resume aggregator
- * Combines all resume data into JSON Resume schema format
+ * Imports consolidated resume data and exports in various formats
  * https://jsonresume.org/schema
  */
 
@@ -11,175 +11,115 @@ import type {
   JsonResumeProject,
   JsonResumeSkill,
 } from '@/types/json-resume';
+import type { ExtendedResume } from '@/types/resume-extended';
 
-import contact from '../contact';
-import profile from '../profile';
-import projects from '../projects';
-import courses from './courses';
-import degrees from './degrees';
-import { skills } from './skills';
-import work from './work';
+import resumeData from '../resume.json';
 
-/**
- * Map competency score (1-5) to JSON Resume level string
- */
-function competencyToLevel(competency: number): string {
-  switch (competency) {
-    case 5:
-      return 'Master';
-    case 4:
-      return 'Advanced';
-    case 3:
-      return 'Intermediate';
-    case 2:
-      return 'Beginner';
-    default:
-      return 'Beginner';
-  }
+// Type assertion for the extended resume data
+const resume = resumeData as unknown as ExtendedResume;
+
+// Re-export work data
+export const work = resume.work;
+export type { ExtendedWork as Position } from '@/types/resume-extended';
+
+// Re-export degrees from _degrees
+export const degrees = resume._degrees;
+
+// Re-export courses from _courses
+export const courses = resume._courses;
+
+// Re-export skills as flat list (matching original format)
+export interface Skill {
+  title: string;
+  competency: number;
+  category: string[];
 }
 
-/**
- * Extract username from profile URL
- */
-function extractUsername(url: string, network: string): string {
-  try {
-    const parsed = new URL(url);
-    const pathParts = parsed.pathname.split('/').filter(Boolean);
-    return pathParts[pathParts.length - 1] || network.toLowerCase();
-  } catch {
-    return network.toLowerCase();
-  }
+export const skills: Skill[] = resume.skills.flatMap((skillGroup) =>
+  skillGroup.keywords.map((keyword) => ({
+    title: keyword.name,
+    competency: keyword._competency,
+    category: keyword._categories.sort(),
+  })),
+);
+
+// Re-export categories
+export interface Category {
+  name: string;
+  color: string;
 }
 
-/**
- * Normalize network names to standard formats
- */
-function normalizeNetwork(label: string): string {
-  const networkMap: Record<string, string> = {
-    Github: 'GitHub',
-    X: 'Twitter',
-    'Angel List': 'AngelList',
-  };
-  return networkMap[label] || label;
-}
+export const categories: Category[] = resume._categories;
 
 /**
- * Build profiles array from contact data (excluding email)
+ * Build profiles array for JSON Resume format (excluding email)
  */
 function buildProfiles(): JsonResumeProfile[] {
-  return contact
-    .filter((c) => !c.link.startsWith('mailto:'))
-    .map((c) => ({
-      network: normalizeNetwork(c.label),
-      username: extractUsername(c.link, c.label),
-      url: c.link,
+  return resume.basics.profiles
+    .filter((p) => !p.url.startsWith('mailto:'))
+    .map((p) => ({
+      network: p.network,
+      username: p.username,
+      url: p.url,
     }));
 }
 
 /**
- * Build education entries with embedded courses
+ * Build education entries for JSON Resume format
  */
 function buildEducation(): JsonResumeEducation[] {
-  return degrees.map((deg) => {
-    // Parse degree string: "M.S. Computational and Mathematical Engineering (ICME)"
-    // or "B.S. Electrical Engineering, Computer Engineering"
-    const degreeMatch = deg.degree.match(
-      /^(M\.S\.|B\.S\.|Ph\.D\.|M\.A\.|B\.A\.)\s+(.+)$/,
-    );
-    const studyType = degreeMatch
-      ? degreeMatch[1].replace(/\./g, '')
-      : 'Degree';
-    const area = degreeMatch ? degreeMatch[2] : deg.degree;
-
-    // Get courses for this school (match first word of school name)
-    const schoolPrefix = deg.school.split(' ')[0];
-    const schoolCourses = courses
-      .filter((c) => c.university === schoolPrefix)
-      .map((c) => `${c.number}: ${c.title}`);
-
-    // Estimate start date (4 years before for BS, 2 for MS)
-    const yearsToComplete = studyType === 'BS' ? 4 : 2;
-
-    return {
-      institution: deg.school,
-      url: deg.link,
-      area,
-      studyType,
-      startDate: `${deg.year - yearsToComplete}-09-01`,
-      endDate: `${deg.year}-06-01`,
-      courses: schoolCourses,
-    };
-  });
+  return resume.education;
 }
 
 /**
- * Build skills grouped by category
- * Each category becomes a skill entry with keywords
+ * Build skills grouped by category for JSON Resume format
  */
 function buildSkills(): JsonResumeSkill[] {
-  const categoryMap = new Map<
-    string,
-    { keywords: string[]; maxLevel: number }
-  >();
-
-  for (const skill of skills) {
-    for (const cat of skill.category) {
-      if (!categoryMap.has(cat)) {
-        categoryMap.set(cat, { keywords: [], maxLevel: 0 });
-      }
-      const entry = categoryMap.get(cat)!;
-      entry.keywords.push(skill.title);
-      entry.maxLevel = Math.max(entry.maxLevel, skill.competency);
-    }
-  }
-
-  return Array.from(categoryMap.entries())
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([name, { keywords, maxLevel }]) => ({
-      name,
-      level: competencyToLevel(maxLevel),
-      keywords: keywords.sort(),
-    }));
-}
-
-/**
- * Build projects array
- */
-function buildProjects(): JsonResumeProject[] {
-  return projects.map((p) => ({
-    name: p.title,
-    description: p.desc,
-    highlights: p.subtitle ? [p.subtitle] : undefined,
-    keywords: p.tech,
-    startDate: p.date,
-    url: p.link,
+  return resume.skills.map((s) => ({
+    name: s.name,
+    level: s.level,
+    keywords: s.keywords.map((k) => k.name),
   }));
 }
 
 /**
- * Build complete JSON Resume object
+ * Build projects array for JSON Resume format
+ */
+function buildProjects(): JsonResumeProject[] {
+  return resume.projects.map((p) => ({
+    name: p.name,
+    description: p.description,
+    highlights: p.highlights,
+    keywords: p.keywords,
+    startDate: p.startDate,
+    url: p.url,
+  }));
+}
+
+/**
+ * Build complete JSON Resume object (standard format without custom fields)
  */
 export function buildJsonResume(): JsonResume {
   return {
     $schema:
       'https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json',
     basics: {
-      name: profile.name,
-      label: profile.label,
-      image: profile.image,
-      email: profile.email,
-      url: profile.url,
-      summary: profile.summary,
-      location: profile.location,
+      name: resume.basics.name,
+      label: resume.basics.label,
+      image: resume.basics.image,
+      email: resume.basics.email,
+      url: resume.basics.url,
+      summary: resume.basics.summary,
+      location: resume.basics.location,
       profiles: buildProfiles(),
     },
-    work,
+    work: resume.work,
     education: buildEducation(),
     skills: buildSkills(),
     projects: buildProjects(),
     meta: {
-      canonical: 'https://mldangelo.com/resume.json',
-      version: 'v1.0.0',
+      canonical: resume.meta.canonical,
+      version: resume.meta.version,
       lastModified: new Date().toISOString().split('T')[0],
     },
   };
@@ -187,5 +127,8 @@ export function buildJsonResume(): JsonResume {
 
 // Export pre-built resume for static generation
 export const jsonResume = buildJsonResume();
+
+// Export raw extended resume for components needing custom fields
+export { resume as extendedResume };
 
 export default jsonResume;

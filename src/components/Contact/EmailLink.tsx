@@ -2,6 +2,8 @@
 
 import React, { useEffect, useReducer, useRef } from 'react';
 
+import profile from '@/data/profile';
+
 // Validates the first half of an email address.
 const validateText = (text: string): boolean => {
   // NOTE: Passes RFC 5322 but not tested on google's standard.
@@ -144,13 +146,13 @@ const EmailLink: React.FC<EmailLinkProps> = ({ loopMessage = false }) => {
       onMouseLeave={() => dispatch({ type: 'RESUME', maxIdx: messages.length })}
     >
       <a
-        href={isValid ? `mailto:${state.message}@mldangelo.com` : '#'}
+        href={isValid ? `mailto:${state.message}@${profile.emailDomain}` : '#'}
         className={`contact-email-link${isValid ? '' : ' contact-email-link--invalid'}`}
         onClick={handleClick}
         aria-disabled={!isValid}
       >
         <span className="contact-email-prefix">{state.message}</span>
-        <span className="contact-email-domain">@mldangelo.com</span>
+        <span className="contact-email-domain">@{profile.emailDomain}</span>
       </a>
     </div>
   );

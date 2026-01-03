@@ -9,7 +9,24 @@ afterEach(() => {
 
 // Mock Next.js Image component for tests
 vi.mock('next/image', () => ({
-  default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => {
+  default: ({
+    priority: _priority,
+    fill: _fill,
+    loader: _loader,
+    quality: _quality,
+    placeholder: _placeholder,
+    blurDataURL: _blurDataURL,
+    unoptimized: _unoptimized,
+    ...props
+  }: React.ImgHTMLAttributes<HTMLImageElement> & {
+    priority?: boolean;
+    fill?: boolean;
+    loader?: unknown;
+    quality?: number;
+    placeholder?: string;
+    blurDataURL?: string;
+    unoptimized?: boolean;
+  }) => {
     // biome-ignore lint/performance/noImgElement: Intentional mock for Next.js Image
     return <img {...props} />;
   },

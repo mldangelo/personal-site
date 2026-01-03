@@ -32,8 +32,8 @@ const Stats: React.FC = () => {
                 : field.value,
           })),
         );
-      } catch (error) {
-        console.error('Failed to fetch GitHub data:', error);
+      } catch {
+        // Silently fail - initial data will be displayed
       }
     };
 

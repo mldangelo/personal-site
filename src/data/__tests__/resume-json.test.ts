@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { buildJsonResume } from '../resume';
+import { buildJsonResume } from '../resume/index';
 
 describe('JSON Resume export', () => {
   const resume = buildJsonResume();

@@ -1,4 +1,4 @@
-import { buildJsonResume } from '@/data/resume';
+import { buildJsonResume } from '@/data/resume/index';
 
 export const dynamic = 'force-static';
 

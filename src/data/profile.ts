@@ -1,7 +1,14 @@
 /**
  * Centralized profile data - single source of truth for identity information
+ * Re-exports from consolidated resume.json
  * Used by Hero, Footer, SideBar, resume page, and JSON Resume export
  */
+
+import type { ExtendedResume } from '@/types/resume-extended';
+
+import resumeData from './resume.json';
+
+const resume = resumeData as unknown as ExtendedResume;
 
 export interface ProfileLocation {
   city: string;
@@ -19,6 +26,7 @@ export interface Profile {
   name: string;
   label: string;
   email: string;
+  emailDomain: string;
   url: string;
   image: string;
   summary: string;
@@ -31,29 +39,19 @@ export interface Profile {
 }
 
 const profile: Profile = {
-  name: "Michael D'Angelo",
-  label: 'Co-founder & CTO at Promptfoo',
-  email: 'michael.l.dangelo@gmail.com',
-  url: 'https://mldangelo.com',
-  image: '/images/me.jpg',
-  summary: `Engineering leader with 10+ years building products at the intersection of machine learning and security. Currently CTO & Co-founder at Promptfoo, building open-source LLM security tools. Stanford MS, YC alum, previously VP Engineering.`,
-  tagline: [
-    'the most widely adopted open-source LLM security platform.',
-    'Building AI products for over a decade.',
-  ],
-  chips: ['YC Alum', 'Stanford ICME', 'Co-founded Arthena & Matroid'],
-  bio: `Hi, I'm Michael. I am a Stanford ICME graduate, YC alumnus, and the co-founder and CTO of Promptfoo. Previously, I was VP of Engineering at SmileID, co-founder and CTO of Arthena, and co-founded Matroid.`,
-  bioHtml: `Hi, I'm Michael. I am a <a href="https://icme.stanford.edu/">Stanford ICME</a> graduate, YC alumnus, and the co-founder and CTO of <a href="https://promptfoo.dev">Promptfoo</a>. Previously, I was VP of Engineering at <a href="https://usesmileid.com">SmileID</a>, co-founder and CTO of <a href="https://arthena.com">Arthena</a>, and co-founded <a href="https://matroid.com">Matroid</a>.`,
-  location: {
-    city: 'New York',
-    region: 'NY',
-    countryCode: 'US',
-  },
-  company: {
-    name: 'Promptfoo',
-    url: 'https://promptfoo.dev',
-    role: 'Co-founder & CTO',
-  },
+  name: resume.basics.name,
+  label: resume.basics.label,
+  email: resume.basics.email,
+  emailDomain: resume.basics._emailDomain,
+  url: resume.basics.url,
+  image: resume.basics.image,
+  summary: resume.basics.summary,
+  tagline: resume.basics._tagline,
+  chips: resume.basics._chips,
+  bio: resume.basics._bio,
+  bioHtml: resume.basics._bioHtml,
+  location: resume.basics.location,
+  company: resume.basics._company,
 };
 
 export default profile;

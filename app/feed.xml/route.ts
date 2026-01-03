@@ -1,9 +1,10 @@
+import profile from '@/data/profile';
 import writing from '@/data/writing';
 import { getAllPosts } from '@/lib/posts';
 
 export const dynamic = 'force-static';
 
-const baseUrl = 'https://mldangelo.com';
+const baseUrl = profile.url;
 
 function escapeXml(text: string): string {
   return text

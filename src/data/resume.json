@@ -1,0 +1,528 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json",
+  "basics": {
+    "name": "Michael D'Angelo",
+    "label": "Co-founder & CTO at Promptfoo",
+    "image": "/images/me.jpg",
+    "email": "michael.l.dangelo@gmail.com",
+    "url": "https://mldangelo.com",
+    "summary": "Engineering leader with 10+ years building products at the intersection of machine learning and security. Currently CTO & Co-founder at Promptfoo, building open-source LLM security tools. Stanford MS, YC alum, previously VP Engineering.",
+    "location": {
+      "city": "New York",
+      "region": "NY",
+      "countryCode": "US"
+    },
+    "profiles": [
+      {
+        "network": "LinkedIn",
+        "username": "michaelldangelo",
+        "url": "https://www.linkedin.com/in/michaelldangelo",
+        "_icon": "faLinkedinIn"
+      },
+      {
+        "network": "Github",
+        "username": "mldangelo",
+        "url": "https://github.com/mldangelo",
+        "_icon": "faGithub"
+      },
+      {
+        "network": "X",
+        "username": "dangelosaurus",
+        "url": "https://x.com/dangelosaurus",
+        "_icon": "faTwitter"
+      },
+      {
+        "network": "Angel List",
+        "username": "michael-d-angelo",
+        "url": "https://angel.co/michael-d-angelo",
+        "_icon": "faAngellist"
+      },
+      {
+        "network": "Instagram",
+        "username": "dangelosaurus",
+        "url": "https://www.instagram.com/dangelosaurus/",
+        "_icon": "faInstagram"
+      },
+      {
+        "network": "Facebook",
+        "username": "mldangelo",
+        "url": "https://facebook.com/mldangelo",
+        "_icon": "faFacebookF"
+      },
+      {
+        "network": "Email",
+        "username": "michael.l.dangelo",
+        "url": "mailto:michael.l.dangelo@gmail.com",
+        "_icon": "faEnvelope"
+      }
+    ],
+    "_tagline": [
+      "the most widely adopted open-source LLM security platform.",
+      "Building AI products for over a decade."
+    ],
+    "_chips": ["YC Alum", "Stanford ICME", "Co-founded Arthena & Matroid"],
+    "_bio": "Hi, I'm Michael. I am a Stanford ICME graduate, YC alumnus, and the co-founder and CTO of Promptfoo. Previously, I was VP of Engineering at SmileID, co-founder and CTO of Arthena, and co-founded Matroid.",
+    "_bioHtml": "Hi, I'm Michael. I am a <a href=\"https://icme.stanford.edu/\">Stanford ICME</a> graduate, YC alumnus, and the co-founder and CTO of <a href=\"https://promptfoo.dev\">Promptfoo</a>. Previously, I was VP of Engineering at <a href=\"https://usesmileid.com\">SmileID</a>, co-founder and CTO of <a href=\"https://arthena.com\">Arthena</a>, and co-founded <a href=\"https://matroid.com\">Matroid</a>.",
+    "_company": {
+      "name": "Promptfoo",
+      "url": "https://promptfoo.dev",
+      "role": "Co-founder & CTO"
+    },
+    "_emailDomain": "mldangelo.com"
+  },
+  "work": [
+    {
+      "name": "Promptfoo",
+      "position": "Co-founder & CTO",
+      "url": "https://promptfoo.dev",
+      "startDate": "2024-07-01",
+      "summary": "Promptfoo discovers and eliminates LLM risks before they reach production through automated red-teaming and vulnerability analysis. Our open-source, developer-first approach has made Promptfoo the most widely adopted LLM security tool, with over 200,000 users at companies like Anthropic, Amazon, and Shopify.",
+      "highlights": [
+        "Own company-wide technical strategy and product roadmap, balancing open-source community, commercial product, and research investments.",
+        "Led technical due diligence for $23M+ in venture financing from Insight Partners and Andreessen Horowitz.",
+        "Built and scaled the engineering team from founding through Series A, including hiring, leveling, and performance management.",
+        "Led development of core evaluation framework, vulnerability scanning, and automated red-teaming capabilities."
+      ]
+    },
+    {
+      "name": "Smile ID",
+      "position": "VP Engineering & Head of AI",
+      "url": "https://usesmileid.com",
+      "startDate": "2022-01-01",
+      "endDate": "2024-07-01",
+      "summary": "Smile Identity provides ML-powered identity verification APIs used by banks, fintechs, and telcos across Africa. Promoted from Director to VP Engineering to VP Engineering & Head of AI within one year, leading teams building APIs that now process hundreds of millions of identity checks.",
+      "highlights": [
+        "Owned engineering org design, headcount planning, and hiring across backend and ML teams, growing to 20+ engineers.",
+        "Transformed engineering velocity from weekly releases to continuous deployment, migrating to TypeScript, adding tests in CI, and leading ceremonies.",
+        "Re-architected inference APIs on AWS Lambda, scaling from 1,000 to 1M+ users per day and cutting job time from 30+ seconds to 7 seconds.",
+        "Built computer vision pipelines for liveness detection certification.",
+        "Pitched, designed, and shipped a fraud detection product using 1-N facial recognition with embeddings and vector search."
+      ]
+    },
+    {
+      "name": "Skeptical Investments",
+      "position": "Co-founder",
+      "url": "http://skepticalinvestments.biz",
+      "startDate": "2017-04-01",
+      "summary": "Skeptical Investments is a micro-VC fund focused on early-stage technical founders, with investments in ML, infrastructure, and space startups.",
+      "highlights": [
+        "Created InstaSafe, a tool that automates YC-standard investment documents.",
+        "Advise portfolio founders on ML, infrastructure, hiring, and fundraising strategy."
+      ]
+    },
+    {
+      "name": "Arthena",
+      "position": "Co-founder & CTO",
+      "url": "https://arthena.com",
+      "startDate": "2014-01-01",
+      "endDate": "2022-01-01",
+      "summary": "Arthena was a quantitative art investment platform backed by <a href='https://www.anthemis.com/'>Anthemis</a>, <a href='https://foundationcapital.com'>Foundation Capital</a>, and <a href='https://ycombinator.com'>Y Combinator</a>. Built Arthena from idea to acquisition by Masterworks in 2023.",
+      "highlights": [
+        "Co-founded Arthena and led technical strategy; sat on board and led fundraising, including debt financing for a 9-figure investment vehicle in the auction guarantee market.",
+        "Built and managed a cross-functional team of 20 engineers, data scientists, and analysts.",
+        "Built data pipelines, quantitative research tools, and visualization systems to scale investment research and augment analyst decision-making.",
+        "Developed valuation models on irregularly-sampled time series using graph embeddings, probabilistic forecasting with calibrated prediction intervals, and online learning with walk-forward validation.",
+        "Designed micro-service architecture for data collection, feature engineering, backtesting, and reporting."
+      ]
+    },
+    {
+      "name": "Matroid",
+      "position": "Co-founder",
+      "url": "https://matroid.com",
+      "startDate": "2015-09-01",
+      "endDate": "2016-06-01",
+      "summary": "Matroid is a computer vision platform for creating and deploying detectors, now funded by <a href='https://www.nea.com'>NEA</a> and <a href='https://www.accel.com'>Accel</a>. I co-founded the company and built the initial product through our first fundraise.",
+      "highlights": [
+        "Defined company vision and product strategy.",
+        "Architected and built the initial detector platform for identifying objects, events, and patterns in video.",
+        "Led technical fundraising efforts for seed round."
+      ]
+    },
+    {
+      "name": "Planet",
+      "position": "Avionics Intern",
+      "url": "https://planet.com",
+      "startDate": "2014-06-01",
+      "endDate": "2015-01-01",
+      "highlights": [
+        "Built models for cloud detection and optimal exposure using Earth albedo, incorporating sensor physics, astronomy, and optics.",
+        "Worked with optics and camera hardware; developed satellite software in C++ and Python (OpenCV, NumPy, SciPy)."
+      ]
+    },
+    {
+      "name": "Planetary Resources",
+      "position": "Avionics Intern",
+      "url": "https://www.planetaryresources.com",
+      "startDate": "2014-01-01",
+      "endDate": "2014-05-01",
+      "highlights": [
+        "Developed simulations for Attitude Determination and Control Subsystem.",
+        "Built flight hardware for Electrical Power Subsystem in clean room; performed thermal vacuum chamber testing."
+      ]
+    },
+    {
+      "name": "Facebook",
+      "position": "Software Engineering Intern",
+      "url": "https://facebook.com",
+      "startDate": "2013-06-01",
+      "endDate": "2013-09-01",
+      "highlights": [
+        "Worked on Facebook's first GPU compute team, benchmarking NVIDIA GPUs for initial data center deployment.",
+        "Built log collection software and performed statistical analysis in Python, Hack, R, and HQL."
+      ]
+    },
+    {
+      "name": "UB Nanosatellite Program",
+      "position": "Program Manager",
+      "url": "https://ubnl.space/",
+      "startDate": "2011-06-01",
+      "endDate": "2012-05-01",
+      "summary": "Led a 60-person student team through the satellite development lifecycle for the AFRL University Nanosatellite Program.",
+      "highlights": [
+        "Co-authored grant proposal to design and build a multi-spectral imaging satellite.",
+        "Established budget and schedule from initial concept through design reviews.",
+        "Designed ADCS and worked on sensor integration."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Stanford University",
+      "url": "https://stanford.edu",
+      "area": "Computational and Mathematical Engineering (ICME)",
+      "studyType": "MS",
+      "startDate": "2014-09-01",
+      "endDate": "2016-06-01",
+      "courses": [
+        "EE 364a: Convex Optimization",
+        "CS 229: Machine Learning",
+        "CS 231n: Convolutional Neural Networks for Visual Recognition",
+        "CME 302: Numerical Linear Algebra",
+        "CME 304: Numerical Optimization",
+        "CME 305: Discrete Mathematics and Algorithms",
+        "CME 306: Stochastic Methods in Engineering",
+        "CME 307: Optimization",
+        "CME 308: Stochastic Processes",
+        "CS 365: Randomized Algorithms and Probabilistic Analysis",
+        "CS 224d: Deep Learning for Natural Language Processing",
+        "CS 246: Mining Massive Data Sets",
+        "CS 131: Computer Vision: Foundations and Applications"
+      ]
+    },
+    {
+      "institution": "University at Buffalo",
+      "url": "https://buffalo.edu",
+      "area": "Electrical Engineering, Computer Engineering",
+      "studyType": "BS",
+      "startDate": "2008-09-01",
+      "endDate": "2012-06-01",
+      "courses": []
+    }
+  ],
+  "skills": [
+    {
+      "name": "Data Engineering",
+      "level": "Master",
+      "keywords": [
+        {
+          "name": "Pandas",
+          "_competency": 5,
+          "_categories": ["ML Engineering", "Data Engineering"]
+        }
+      ]
+    },
+    {
+      "name": "Databases",
+      "level": "Advanced",
+      "keywords": [
+        {
+          "name": "PostgreSQL",
+          "_competency": 4,
+          "_categories": ["Databases"]
+        },
+        { "name": "Redis", "_competency": 3, "_categories": ["Databases"] },
+        {
+          "name": "SQL",
+          "_competency": 4,
+          "_categories": ["Languages", "Databases"]
+        },
+        {
+          "name": "Vector Databases",
+          "_competency": 4,
+          "_categories": ["ML Engineering", "Databases"]
+        }
+      ]
+    },
+    {
+      "name": "Infrastructure",
+      "level": "Advanced",
+      "keywords": [
+        { "name": "AWS", "_competency": 4, "_categories": ["Infrastructure"] },
+        {
+          "name": "Docker",
+          "_competency": 4,
+          "_categories": ["Infrastructure"]
+        },
+        {
+          "name": "Kubernetes",
+          "_competency": 3,
+          "_categories": ["Infrastructure"]
+        },
+        {
+          "name": "Observability",
+          "_competency": 4,
+          "_categories": ["Infrastructure", "ML Engineering"]
+        }
+      ]
+    },
+    {
+      "name": "Languages",
+      "level": "Master",
+      "keywords": [
+        {
+          "name": "Python",
+          "_competency": 5,
+          "_categories": ["Languages", "ML Engineering"]
+        },
+        {
+          "name": "SQL",
+          "_competency": 4,
+          "_categories": ["Languages", "Databases"]
+        },
+        {
+          "name": "TypeScript",
+          "_competency": 5,
+          "_categories": ["Languages", "Web Development"]
+        }
+      ]
+    },
+    {
+      "name": "ML Engineering",
+      "level": "Master",
+      "keywords": [
+        {
+          "name": "AI Agents",
+          "_competency": 5,
+          "_categories": ["ML Engineering"]
+        },
+        {
+          "name": "AI Red-teaming",
+          "_competency": 5,
+          "_categories": ["ML Engineering"]
+        },
+        {
+          "name": "LLM APIs",
+          "_competency": 5,
+          "_categories": ["ML Engineering"]
+        },
+        {
+          "name": "LLM Evaluation",
+          "_competency": 5,
+          "_categories": ["ML Engineering"]
+        },
+        {
+          "name": "Observability",
+          "_competency": 4,
+          "_categories": ["Infrastructure", "ML Engineering"]
+        },
+        {
+          "name": "Pandas",
+          "_competency": 5,
+          "_categories": ["ML Engineering", "Data Engineering"]
+        },
+        {
+          "name": "Prompt Engineering",
+          "_competency": 4,
+          "_categories": ["ML Engineering"]
+        },
+        {
+          "name": "PyTorch",
+          "_competency": 4,
+          "_categories": ["ML Engineering"]
+        },
+        {
+          "name": "Python",
+          "_competency": 5,
+          "_categories": ["Languages", "ML Engineering"]
+        },
+        { "name": "RAG", "_competency": 4, "_categories": ["ML Engineering"] },
+        {
+          "name": "Vector Databases",
+          "_competency": 4,
+          "_categories": ["ML Engineering", "Databases"]
+        }
+      ]
+    },
+    {
+      "name": "Web Development",
+      "level": "Master",
+      "keywords": [
+        {
+          "name": "FastAPI",
+          "_competency": 4,
+          "_categories": ["Web Development"]
+        },
+        {
+          "name": "Next.js",
+          "_competency": 3,
+          "_categories": ["Web Development"]
+        },
+        {
+          "name": "Node.js",
+          "_competency": 5,
+          "_categories": ["Web Development"]
+        },
+        {
+          "name": "TypeScript",
+          "_competency": 5,
+          "_categories": ["Languages", "Web Development"]
+        }
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Nearest Dollar",
+      "description": "Connected to bank accounts to round up purchases and donate spare change to charity.",
+      "highlights": ["2015 BVP Hackathon"],
+      "keywords": ["React", "Node.js", "Plaid API", "MongoDB"],
+      "startDate": "2015-11-20",
+      "_image": "/images/projects/nearestdollar.jpg",
+      "_featured": true
+    },
+    {
+      "name": "Harvest",
+      "description": "Low-cost crop monitoring to catch irrigation leaks and nutrient deficiencies.",
+      "highlights": ["3rd place at Techcrunch Disrupt SF"],
+      "keywords": ["Python", "Arduino", "Computer Vision", "AWS"],
+      "startDate": "2015-09-20",
+      "url": "https://devpost.com/software/harvest",
+      "_image": "/images/projects/harvest.jpg",
+      "_featured": true
+    },
+    {
+      "name": "Space Potato",
+      "description": "Potato-powered weather balloon with cameras. Photos published in a coffee table book.",
+      "highlights": ["Kickstarter-funded weather balloon"],
+      "keywords": ["Hardware", "GPS", "Photography"],
+      "startDate": "2015-06-28",
+      "url": "http://www.spacepotato.org",
+      "_image": "/images/projects/spacepotato.jpg"
+    },
+    {
+      "name": "Cat Detector",
+      "description": "Classified 60,000+ cats across 80 breeds before server costs shut it down.",
+      "highlights": ["CNN for cat breed classification"],
+      "keywords": ["Python", "TensorFlow", "CNN", "AWS"],
+      "startDate": "2015-05-15",
+      "_image": "/images/projects/catdetector.jpg"
+    }
+  ],
+  "_degrees": [
+    {
+      "school": "Stanford University",
+      "degree": "M.S. Computational and Mathematical Engineering (ICME)",
+      "link": "https://stanford.edu",
+      "year": 2016
+    },
+    {
+      "school": "University at Buffalo",
+      "degree": "B.S. Electrical Engineering, Computer Engineering",
+      "link": "https://buffalo.edu",
+      "year": 2012
+    }
+  ],
+  "_courses": [
+    {
+      "title": "Convex Optimization",
+      "number": "EE 364a",
+      "link": "http://stanford.edu/class/ee364a/",
+      "university": "Stanford"
+    },
+    {
+      "title": "Machine Learning",
+      "number": "CS 229",
+      "link": "http://cs229.stanford.edu/",
+      "university": "Stanford"
+    },
+    {
+      "title": "Convolutional Neural Networks for Visual Recognition",
+      "number": "CS 231n",
+      "link": "http://cs231n.stanford.edu/",
+      "university": "Stanford"
+    },
+    {
+      "title": "Numerical Linear Algebra",
+      "number": "CME 302",
+      "link": "http://scpd.stanford.edu/search/publicCourseSearchDetails.do;jsessionid=561188A06434D7D97953C4706DE12831?method=load&courseId=11685",
+      "university": "Stanford"
+    },
+    {
+      "title": "Numerical Optimization",
+      "number": "CME 304",
+      "link": "http://web.stanford.edu/class/cme304/",
+      "university": "Stanford"
+    },
+    {
+      "title": "Discrete Mathematics and Algorithms",
+      "number": "CME 305",
+      "link": "http://stanford.edu/~rezab/discrete/",
+      "university": "Stanford"
+    },
+    {
+      "title": "Stochastic Methods in Engineering",
+      "number": "CME 306",
+      "link": "http://web.stanford.edu/class/cme306/",
+      "university": "Stanford"
+    },
+    {
+      "title": "Optimization",
+      "number": "CME 307",
+      "link": "http://stanford.edu/class/cme307/",
+      "university": "Stanford"
+    },
+    {
+      "title": "Stochastic Processes",
+      "number": "CME 308",
+      "link": "http://web.stanford.edu/class/cme308/",
+      "university": "Stanford"
+    },
+    {
+      "title": "Randomized Algorithms and Probabilistic Analysis",
+      "number": "CS 365",
+      "link": "http://web.stanford.edu/class/cs365/",
+      "university": "Stanford"
+    },
+    {
+      "title": "Deep Learning for Natural Language Processing",
+      "number": "CS 224d",
+      "link": "http://cs224d.stanford.edu",
+      "university": "Stanford"
+    },
+    {
+      "title": "Mining Massive Data Sets",
+      "number": "CS 246",
+      "link": "http://web.stanford.edu/class/cs246/",
+      "university": "Stanford"
+    },
+    {
+      "title": "Computer Vision: Foundations and Applications",
+      "number": "CS 131",
+      "link": "http://vision.stanford.edu/teaching/cs131_fall1415/index.html",
+      "university": "Stanford"
+    }
+  ],
+  "_categories": [
+    { "name": "Data Engineering", "color": "#6968b3" },
+    { "name": "Databases", "color": "#37b1f5" },
+    { "name": "Infrastructure", "color": "#40494e" },
+    { "name": "Languages", "color": "#515dd4" },
+    { "name": "ML Engineering", "color": "#e47272" },
+    { "name": "Web Development", "color": "#cc7b94" }
+  ],
+  "meta": {
+    "canonical": "https://mldangelo.com/resume.json",
+    "version": "v1.0.0",
+    "lastModified": "2025-01-03"
+  }
+}

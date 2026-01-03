@@ -69,19 +69,17 @@ describe('Site', () => {
   });
 
   it('handles fetch errors gracefully', async () => {
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     global.fetch = vi.fn().mockRejectedValue(new Error('Network error'));
 
     render(<Site />);
 
+    // Component should still render with initial data when fetch fails
     await waitFor(() => {
-      expect(consoleSpy).toHaveBeenCalledWith(
-        'Failed to fetch GitHub data:',
-        expect.any(Error),
-      );
+      expect(screen.getByRole('table')).toBeInTheDocument();
     });
 
-    consoleSpy.mockRestore();
+    // Static values should still be visible
+    expect(screen.getByText('Number of spoons')).toBeInTheDocument();
   });
 
   it('has links for GitHub-sourced stats', async () => {
