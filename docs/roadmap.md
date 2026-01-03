@@ -5,12 +5,14 @@ This site has been a work in progress since 2014, evolving to reflect current be
 ## Recently Completed (2024-2026)
 
 **Features**
+
 - Writing/blog page with RSS feed (`/writing`, `/feed.xml`)
 - Dark mode with system preference detection and manual toggle
 - Theme-aware portraits for light/dark modes
 - Modernized favicon with SVG source
 
 **Infrastructure**
+
 - Migrated from SCSS to Tailwind CSS v4
 - Upgraded to Next.js 16 (App Router, Turbopack) and React 19
 - Migrated from ESLint to Biome
@@ -23,11 +25,13 @@ This site has been a work in progress since 2014, evolving to reflect current be
 ## Future Direction
 
 **Improvements**
+
 - Adopt [JSON Resume](https://jsonresume.org/) standard
 - Improve test coverage
 - Add Playwright for e2e testing
 - Optimize FontAwesome (consider custom icon library)
 
 **Repository**
+
 - Branch protection for main
 - Automated releases with semantic versioning

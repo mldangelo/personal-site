@@ -13,6 +13,7 @@ npm run build        # Production build + static export
 ```
 
 **File-scoped (faster feedback):**
+
 ```bash
 npx tsc --noEmit path/to/file.tsx           # Type check single file
 npx biome check path/to/file.tsx            # Lint single file
@@ -32,6 +33,7 @@ npm test -- ComponentName                    # Test single component
 ## Code Style
 
 **Do:**
+
 - Use TypeScript strict mode, functional components with hooks
 - Style with CSS custom properties in `app/tailwind.css`
 - Keep components small and focused
@@ -39,6 +41,7 @@ npm test -- ComponentName                    # Test single component
 - Mark client components with `'use client'`
 
 **Don't:**
+
 - Add new dependencies without clear need
 - Create god components or monolithic files
 - Hard-code colors—use CSS variables (`var(--color-*)`)
