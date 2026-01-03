@@ -6,13 +6,12 @@ import CategoryButton from '../../Resume/Skills/CategoryButton';
 describe('CategoryButton', () => {
   it('renders button with label', () => {
     const handleClick = vi.fn();
-    const active = { Languages: false };
 
     render(
       <CategoryButton
         label="Languages"
         handleClick={handleClick}
-        active={active}
+        isActive={false}
       />,
     );
 
@@ -23,13 +22,12 @@ describe('CategoryButton', () => {
 
   it('calls handleClick with label when clicked', () => {
     const handleClick = vi.fn();
-    const active = { Languages: false };
 
     render(
       <CategoryButton
         label="Languages"
         handleClick={handleClick}
-        active={active}
+        isActive={false}
       />,
     );
 
@@ -39,13 +37,12 @@ describe('CategoryButton', () => {
 
   it('applies active class when active', () => {
     const handleClick = vi.fn();
-    const active = { Languages: true };
 
     render(
       <CategoryButton
         label="Languages"
         handleClick={handleClick}
-        active={active}
+        isActive={true}
       />,
     );
 
@@ -55,13 +52,12 @@ describe('CategoryButton', () => {
 
   it('does not apply active class when inactive', () => {
     const handleClick = vi.fn();
-    const active = { Languages: false };
 
     render(
       <CategoryButton
         label="Languages"
         handleClick={handleClick}
-        active={active}
+        isActive={false}
       />,
     );
 
@@ -76,7 +72,7 @@ describe('CategoryButton', () => {
       <CategoryButton
         label="Languages"
         handleClick={handleClick}
-        active={{ Languages: false }}
+        isActive={false}
       />,
     );
 
@@ -86,7 +82,7 @@ describe('CategoryButton', () => {
       <CategoryButton
         label="Languages"
         handleClick={handleClick}
-        active={{ Languages: true }}
+        isActive={true}
       />,
     );
 

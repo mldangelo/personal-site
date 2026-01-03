@@ -61,7 +61,8 @@ describe('Table', () => {
     const table = screen.getByRole('table');
     expect(table).toBeInTheDocument();
 
+    // Should have 1 row for the header (thead)
     const rows = screen.queryAllByRole('row');
-    expect(rows.length).toBe(0);
+    expect(rows.length).toBe(1);
   });
 });

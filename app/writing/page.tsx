@@ -35,6 +35,48 @@ const formatDate = (dateStr: string): string => {
   });
 };
 
+// Extracted component to reduce duplication
+interface WritingItemProps {
+  item: UnifiedItem;
+  showDate?: boolean;
+}
+
+function WritingItem({ item, showDate = true }: WritingItemProps) {
+  const content = (
+    <>
+      {showDate && item.date && (
+        <time className="writing-date">{formatDate(item.date)}</time>
+      )}
+      <h2 className="writing-title">{item.title}</h2>
+      <p className="writing-description">{item.description}</p>
+      {item.isExternal && (
+        <span className="writing-external" aria-hidden="true">
+          ↗
+        </span>
+      )}
+    </>
+  );
+
+  if (item.isExternal) {
+    return (
+      <a
+        href={item.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="writing-item"
+      >
+        {content}
+      </a>
+    );
+  }
+
+  return (
+    <Link href={item.url} className="writing-item">
+      {content}
+    </Link>
+  );
+}
+
 export default function WritingPage() {
   // Get internal posts from markdown files
   const internalPosts = getAllPosts();
@@ -77,56 +119,16 @@ export default function WritingPage() {
         </header>
 
         <div className="writing-list">
-          {dated.map((item) =>
-            item.isExternal ? (
-              <a
-                key={item.url}
-                href={item.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="writing-item"
-              >
-                <time className="writing-date">{formatDate(item.date)}</time>
-                <h2 className="writing-title">{item.title}</h2>
-                <p className="writing-description">{item.description}</p>
-                <span className="writing-external" aria-hidden="true">
-                  ↗
-                </span>
-              </a>
-            ) : (
-              <Link key={item.url} href={item.url} className="writing-item">
-                <time className="writing-date">{formatDate(item.date)}</time>
-                <h2 className="writing-title">{item.title}</h2>
-                <p className="writing-description">{item.description}</p>
-              </Link>
-            ),
-          )}
+          {dated.map((item) => (
+            <WritingItem key={item.url} item={item} />
+          ))}
 
           {undated.length > 0 && (
             <>
               <div className="writing-section-label">Guides</div>
-              {undated.map((item) =>
-                item.isExternal ? (
-                  <a
-                    key={item.url}
-                    href={item.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="writing-item"
-                  >
-                    <h2 className="writing-title">{item.title}</h2>
-                    <p className="writing-description">{item.description}</p>
-                    <span className="writing-external" aria-hidden="true">
-                      ↗
-                    </span>
-                  </a>
-                ) : (
-                  <Link key={item.url} href={item.url} className="writing-item">
-                    <h2 className="writing-title">{item.title}</h2>
-                    <p className="writing-description">{item.description}</p>
-                  </Link>
-                ),
-              )}
+              {undated.map((item) => (
+                <WritingItem key={item.url} item={item} showDate={false} />
+              ))}
             </>
           )}
         </div>
