@@ -20,7 +20,7 @@ const Job: React.FC<JobProps> = ({ data }) => {
         <p className="daterange">
           {' '}
           {dayjs(startDate).format('MMMM YYYY')} -{' '}
-          {endDate ? dayjs(endDate).format('MMMM YYYY') : 'PRESENT'}
+          {endDate ? dayjs(endDate).format('MMMM YYYY') : 'Present'}
         </p>
       </header>
       {summary ? (
