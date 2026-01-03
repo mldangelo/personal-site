@@ -60,7 +60,6 @@ function WritingItem({ item, showDate = true }: WritingItemProps) {
   if (item.isExternal) {
     return (
       <a
-        key={item.url}
         href={item.url}
         target="_blank"
         rel="noopener noreferrer"
@@ -72,7 +71,7 @@ function WritingItem({ item, showDate = true }: WritingItemProps) {
   }
 
   return (
-    <Link key={item.url} href={item.url} className="writing-item">
+    <Link href={item.url} className="writing-item">
       {content}
     </Link>
   );

@@ -186,9 +186,7 @@ const EmailLink: React.FC<EmailLinkProps> = ({ loopMessage = false }) => {
         onKeyDown={handleKeyDown}
         onFocus={handlePause}
         onBlur={handleResume}
-        role={isValid ? undefined : 'link'}
-        aria-disabled={!isValid || undefined}
-        tabIndex={0}
+        aria-disabled={!isValid ? true : undefined}
       >
         <span className="contact-email-prefix">{displayMessage}</span>
         <span className="contact-email-domain">@mldangelo.com</span>
