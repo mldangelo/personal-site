@@ -13,11 +13,11 @@ describe('Cell', () => {
     link: 'https://example.com',
   };
 
-  it('renders project title with link', () => {
+  it('renders project as a clickable card with link', () => {
     render(<Cell data={mockProject} />);
-    const titleLinks = screen.getAllByRole('link', { name: mockProject.title });
-    expect(titleLinks).toHaveLength(2); // Title link and image link
-    expect(titleLinks[0]).toHaveAttribute('href', mockProject.link);
+    const link = screen.getByRole('link');
+    expect(link).toHaveAttribute('href', mockProject.link);
+    expect(link).toHaveClass('project-card-link');
   });
 
   it('renders project description', () => {
@@ -27,7 +27,7 @@ describe('Cell', () => {
 
   it('renders project date in correct format', () => {
     render(<Cell data={mockProject} />);
-    expect(screen.getByText('January, 2023')).toBeInTheDocument();
+    expect(screen.getByText('2023')).toBeInTheDocument();
   });
 
   it('renders project image with alt text', () => {
