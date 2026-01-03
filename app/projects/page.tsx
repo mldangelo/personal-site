@@ -20,9 +20,7 @@ export default function ProjectsPage() {
       <section className="projects-page">
         <header className="projects-header">
           <h1 className="page-title">Projects</h1>
-          <p className="page-subtitle">
-            A selection of things I&apos;ve built
-          </p>
+          <p className="page-subtitle">A selection of things I&apos;ve built</p>
         </header>
 
         {featuredProjects.length > 0 && (

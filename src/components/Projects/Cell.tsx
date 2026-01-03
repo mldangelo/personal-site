@@ -15,7 +15,9 @@ const Cell: React.FC<CellProps> = ({ data }) => {
   const cardProps = link ? { href: link, className: 'project-card-link' } : {};
 
   return (
-    <article className={`project-card ${featured ? 'project-card--featured' : ''}`}>
+    <article
+      className={`project-card ${featured ? 'project-card--featured' : ''}`}
+    >
       <CardWrapper {...cardProps}>
         <div className="project-card-image">
           <Image src={image} alt={title} width={600} height={400} />

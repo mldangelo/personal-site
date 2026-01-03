@@ -22,8 +22,7 @@ export default function HomePage() {
         </h2>
         <p className="section-desc">
           A statically-generated portfolio built with Next.js, TypeScript, and
-          React. Feel free to explore my{' '}
-          <Link href="/about">background</Link>,{' '}
+          React. Feel free to explore my <Link href="/about">background</Link>,{' '}
           <Link href="/resume">resume</Link>,{' '}
           <Link href="/projects">projects</Link>, or{' '}
           <Link href="/contact">get in touch</Link>.

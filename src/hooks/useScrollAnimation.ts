@@ -15,7 +15,11 @@ interface UseScrollAnimationOptions {
 export function useScrollAnimation<T extends HTMLElement = HTMLDivElement>(
   options: UseScrollAnimationOptions = {},
 ) {
-  const { threshold = 0.1, rootMargin = '0px 0px -50px 0px', triggerOnce = true } = options;
+  const {
+    threshold = 0.1,
+    rootMargin = '0px 0px -50px 0px',
+    triggerOnce = true,
+  } = options;
 
   const ref = useRef<T>(null);
   const [isVisible, setIsVisible] = useState(false);
@@ -25,7 +29,9 @@ export function useScrollAnimation<T extends HTMLElement = HTMLDivElement>(
     if (!element) return;
 
     // Check for reduced motion preference
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)',
+    ).matches;
     if (prefersReducedMotion) {
       setIsVisible(true);
       return;
@@ -59,14 +65,18 @@ export function useScrollAnimation<T extends HTMLElement = HTMLDivElement>(
  * Hook to animate multiple children with staggered delays
  */
 export function useStaggeredAnimation(itemCount: number, baseDelay = 100) {
-  const [visibleItems, setVisibleItems] = useState<boolean[]>(new Array(itemCount).fill(false));
+  const [visibleItems, setVisibleItems] = useState<boolean[]>(
+    new Array(itemCount).fill(false),
+  );
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)',
+    ).matches;
     if (prefersReducedMotion) {
       setVisibleItems(new Array(itemCount).fill(true));
       return;
