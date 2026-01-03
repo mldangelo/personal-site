@@ -20,6 +20,12 @@ npm run type-check
 # Run tests
 npm test
 
+# Run tests with coverage report
+npm run test:coverage
+
+# Run tests in watch mode
+npm run test:watch
+
 # Build for production
 npm run build
 
@@ -68,9 +74,26 @@ This is a personal portfolio/resume website built with Next.js and TypeScript, d
 - GitHub Actions for automatic deployment to GitHub Pages
 - Custom domain support through CNAME file
 
+### Testing
+
+- **Framework**: Vitest with React Testing Library and jsdom environment
+- **Coverage**: ~76% statement coverage with 268+ tests
+- **Conventions**:
+  - Use explicit Vitest imports: `import { describe, expect, it, vi } from 'vitest'`
+  - Tests run in random order for isolation (`sequence: { shuffle: true }`)
+  - Test files in `__tests__/` subdirectories mirroring source structure
+  - Component tests: `src/components/__tests__/`
+  - Data tests: `src/data/__tests__/`
+  - Hook tests: `src/hooks/__tests__/`
+
+### Code Quality
+
+- **Biome** handles linting with strict rules including `noUnusedImports`
+- Run `npm run lint` before committing to catch issues early
+- Use `npx biome check . --write` to auto-fix issues
+
 ### Important Notes
 
-- All pages must remain exactly the same as the original React site
 - The site uses static export (`output: 'export'`) for GitHub Pages compatibility
 - Client components use 'use client' directive
 - Google Analytics 4 is configured with NEXT_PUBLIC_GA_TRACKING_ID using @next/third-parties
