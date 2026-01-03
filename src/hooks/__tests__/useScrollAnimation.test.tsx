@@ -11,16 +11,30 @@ import {
 let intersectionCallback: (entries: IntersectionObserverEntry[]) => void;
 const mockObserve = vi.fn();
 const mockUnobserve = vi.fn();
+const mockDisconnect = vi.fn();
+
+class MockIntersectionObserver implements IntersectionObserver {
+  readonly root: Element | Document | null = null;
+  readonly rootMargin: string = '';
+  readonly thresholds: ReadonlyArray<number> = [];
+
+  constructor(callback: IntersectionObserverCallback) {
+    intersectionCallback = callback as (
+      entries: IntersectionObserverEntry[],
+    ) => void;
+  }
+
+  observe = mockObserve;
+  unobserve = mockUnobserve;
+  disconnect = mockDisconnect;
+  takeRecords(): IntersectionObserverEntry[] {
+    return [];
+  }
+}
 
 beforeEach(() => {
-  window.IntersectionObserver = vi.fn().mockImplementation((callback) => {
-    intersectionCallback = callback;
-    return {
-      observe: mockObserve,
-      unobserve: mockUnobserve,
-      disconnect: vi.fn(),
-    };
-  });
+  window.IntersectionObserver =
+    MockIntersectionObserver as unknown as typeof IntersectionObserver;
 
   // Mock matchMedia - defaults to not preferring reduced motion
   window.matchMedia = vi.fn().mockImplementation(() => ({
@@ -74,7 +88,7 @@ describe('useScrollAnimation', () => {
   it('creates an IntersectionObserver', () => {
     render(<TestScrollComponent />);
 
-    expect(window.IntersectionObserver).toHaveBeenCalled();
+    // Verify the observer was created and observe was called
     expect(mockObserve).toHaveBeenCalled();
   });
 
