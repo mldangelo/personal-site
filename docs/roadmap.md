@@ -1,6 +1,6 @@
 # Roadmap
 
-This site has been a work in progress since 2014, evolving to reflect current best practices. Guided by the [design goals](./design-goals.md).
+This site has been a work in progress since 2014, evolving to reflect current best practices, guided by the [design goals](./design-goals.md).
 
 ## Recently Completed (2024-2026)
 
