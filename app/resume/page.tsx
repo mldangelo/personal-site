@@ -25,18 +25,24 @@ export default function ResumePage() {
     <PageWrapper>
       <section className="resume-page">
         <header className="resume-header">
-          <h1 className="page-title">Resume</h1>
+          <h1 className="resume-title">Resume</h1>
+          <p className="resume-summary">
+            Engineering leader with 10+ years building products at the
+            intersection of machine learning and security. Currently CTO &
+            Co-founder at Promptfoo, building open-source LLM security tools.
+            Stanford MS, YC alum, previously VP Engineering.
+          </p>
         </header>
 
         <ResumeNav />
 
         <div className="resume-content">
-          <section id="education" className="resume-section">
-            <Education data={degrees} />
-          </section>
-
           <section id="experience" className="resume-section">
             <Experience data={work} />
+          </section>
+
+          <section id="education" className="resume-section">
+            <Education data={degrees} />
           </section>
 
           <section id="skills" className="resume-section">

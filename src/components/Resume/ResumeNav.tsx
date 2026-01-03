@@ -3,15 +3,15 @@
 import React, { useEffect, useState } from 'react';
 
 const sections = [
-  { name: 'Education', id: 'education' },
   { name: 'Experience', id: 'experience' },
+  { name: 'Education', id: 'education' },
   { name: 'Skills', id: 'skills' },
   { name: 'Courses', id: 'courses' },
   { name: 'References', id: 'references' },
 ];
 
 const ResumeNav: React.FC = () => {
-  const [activeSection, setActiveSection] = useState('education');
+  const [activeSection, setActiveSection] = useState('experience');
 
   useEffect(() => {
     const handleScroll = () => {
