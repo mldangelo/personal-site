@@ -1,10 +1,21 @@
 import { MetadataRoute } from 'next';
 
+import { getAllPosts } from '@/lib/posts';
+
 export const dynamic = 'force-static';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://mldangelo.com';
   const currentDate = new Date();
+
+  // Generate entries for blog posts
+  const posts = getAllPosts();
+  const postEntries: MetadataRoute.Sitemap = posts.map((post) => ({
+    url: `${baseUrl}/writing/${post.slug}`,
+    lastModified: new Date(post.date),
+    changeFrequency: 'monthly',
+    priority: 0.6,
+  }));
 
   return [
     {
@@ -49,5 +60,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'yearly',
       priority: 0.5,
     },
+    ...postEntries,
   ];
 }

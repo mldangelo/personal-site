@@ -6,7 +6,7 @@ description: How I shipped 1,000+ PRs in 2025 with parallel agents and cross-mod
 
 ## Context
 
-I spend most of my time building [Promptfoo](https://github.com/promptfoo/promptfoo), an open-source LLM evaluation tool. Before I bought a Max plan, I was burning through ~$10K/month in API credits.
+I spend most of my time building [Promptfoo](https://github.com/promptfoo/promptfoo), an open-source LLM evaluation tool. Before I bought a Max plan, I was burning through ~$10K/month in API credits on Claude Code alone—this was my interactive development workflow, not production workloads.
 
 ![Anthropic API costs for July 2025 showing $9,986.20 in token usage](/images/writing/api-costs-july-2025.png)
 
@@ -19,7 +19,7 @@ This is a direct description of how I use Claude Code day to day.
 ## My setup
 
 - **Two Max plans.** I hit the weekly limit, so I run two accounts.
-- **Ghostty with six worktrees.** Four copies of the Promptfoo repo, plus other repos I'm touching. Each worktree gets its own Claude Code session.
+- **Ghostty with six panes + git worktrees.** Four worktrees of the Promptfoo repo, plus other repos I'm touching. Each worktree gets its own Claude Code session.
 - **Claude Code with Opus 4.5.** I use the most capable model even if it's slower. Speed matters less when you're switching between six terminals.
 - **Cross-model audits.** I regularly verify work with Codex and Gemini. Different models catch different things.
 - **CLAUDE.md and AGENTS.md files** nested throughout the repo. I update them frequently. Whenever Claude makes a repeated mistake, the fix goes into a rules file.
@@ -98,9 +98,9 @@ Claude Code reduces the overhead: finding the right files, tracing data flows, d
 
 I've merged 1,000+ PRs to Promptfoo in 2025. The four-worktree setup makes this possible: one agent implements while another verifies; a third reviews or explores edge cases. No blocking, no context switching.
 
-[![8,482 GitHub contributions in 2025](/images/writing/github-contributions-2025.png)](https://github.com/mldangelo?tab=overview&from=2025-12-01&to=2025-12-31)
+[![8,482 GitHub contributions in 2025](/images/writing/github-contributions-2025.png)](https://github.com/mldangelo?tab=overview&from=2025-01-01&to=2025-12-31)
 
-For comparison: I had [5,396 contributions in 2024](https://github.com/mldangelo?tab=overview&from=2024-12-01&to=2024-12-31), before these tools matured. Same person, better workflow.
+For comparison: I had [5,396 contributions in 2024](https://github.com/mldangelo?tab=overview&from=2024-01-01&to=2024-12-31), before these tools matured. Same person, better workflow.
 
 ## Cross-model verification
 
