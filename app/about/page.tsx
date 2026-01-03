@@ -15,7 +15,7 @@ const count = (str: string) =>
 export default function AboutPage() {
   return (
     <PageWrapper>
-      <article className="post markdown" id="about">
+      <article className="post" id="about">
         <header>
           <div className="title">
             <h2>

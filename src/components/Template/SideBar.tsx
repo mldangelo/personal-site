@@ -11,8 +11,8 @@ const SideBar: React.FC = () => {
   const pathname = usePathname();
 
   return (
-    <section id="sidebar">
-      <section id="intro">
+    <section className="site-sidebar">
+      <section className="site-intro">
         <Link href="/" className="logo">
           <Image
             src="/images/me.jpg"
@@ -56,7 +56,7 @@ const SideBar: React.FC = () => {
         </ul>
       </section>
 
-      <section id="footer">
+      <section className="site-footer">
         <ContactIcons />
         <p className="copyright">
           &copy; Michael D&apos;Angelo <Link href="/">mldangelo.com</Link>.

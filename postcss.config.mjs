@@ -1,5 +1,5 @@
 export default {
   plugins: {
-    'postcss-normalize': {},
+    '@tailwindcss/postcss': {},
   },
 };

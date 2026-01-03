@@ -27,7 +27,7 @@ const sections = [
 
 export default function ResumePage() {
   return (
-    <article className="post" id="resume">
+    <article className="post resume-page">
       <header>
         <div className="title">
           <h2>Resume</h2>
