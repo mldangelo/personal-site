@@ -23,7 +23,7 @@ export default function PageWrapper({
 
   return (
     <>
-      <div id="main">{children}</div>
+      <div className="site-main">{children}</div>
       {!fullPage && <SideBar />}
     </>
   );

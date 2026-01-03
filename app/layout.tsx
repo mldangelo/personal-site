@@ -4,7 +4,7 @@ import React from 'react';
 
 import GoogleAnalytics from '@/components/Template/GoogleAnalytics';
 import Navigation from '@/components/Template/Navigation';
-import '@/static/css/main.scss';
+import './tailwind.css';
 
 const sourceSans = Source_Sans_3({
   weight: ['400', '700'],
@@ -76,7 +76,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${sourceSans.variable} ${raleway.variable}`}>
       <body>
-        <div id="wrapper">
+        <div className="site-wrapper">
           <Navigation />
           {children}
         </div>

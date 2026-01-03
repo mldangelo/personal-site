@@ -18,11 +18,11 @@ const Hamburger: React.FC = () => {
     <div className="hamburger-container">
       <nav className="main" id="hamburger-nav">
         <ul>
-          <li className={`menu ${open ? 'close-menu' : 'open-menu'}`}>
+          <li className="menu">
             <button
               type="button"
               onClick={toggleMenu}
-              className="menu-hover hamburger-button"
+              className="hamburger-button"
               aria-label={
                 open ? 'Close navigation menu' : 'Open navigation menu'
               }

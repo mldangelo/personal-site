@@ -8,7 +8,7 @@ import Hamburger from './Hamburger';
 
 // Websites Navbar, displays routes defined in 'src/data/routes'
 const Navigation: React.FC = () => (
-  <header id="header">
+  <header className="site-header">
     <h1 className="index-link">
       {routes
         .filter((l) => l.index)

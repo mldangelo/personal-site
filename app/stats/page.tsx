@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 export default function StatsPage() {
   return (
     <PageWrapper>
-      <article className="post" id="stats">
+      <article className="post stats-page">
         <header>
           <div className="title">
             <h2>

@@ -4,7 +4,7 @@ import TableRow from './TableRow';
 import { TableProps } from './types';
 
 const Table: React.FC<TableProps> = ({ data }) => (
-  <table>
+  <table className="stat-table">
     <tbody>
       {data.map((pair) => (
         <TableRow
