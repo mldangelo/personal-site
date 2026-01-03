@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="5" fill="#2e59ba"/>
+  <text
+    x="16"
+    y="22.5"
+    text-anchor="middle"
+    font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+    font-size="17"
+    font-weight="700"
+    fill="white"
+    letter-spacing="-0.5"
+  >MD</text>
+</svg>

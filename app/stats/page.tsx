@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import React from 'react';
 
 import Personal from '@/components/Stats/Personal';
@@ -15,17 +14,22 @@ export const metadata: Metadata = {
 export default function StatsPage() {
   return (
     <PageWrapper>
-      <article className="post stats-page">
-        <header>
-          <div className="title">
-            <h2>
-              <Link href="/stats">Stats</Link>
-            </h2>
-          </div>
+      <section className="stats-page">
+        <header className="stats-header">
+          <h1 className="stats-title">Stats</h1>
+          <p className="stats-subtitle">Some fun numbers</p>
         </header>
-        <Personal />
-        <Site />
-      </article>
+        <div className="stats-content">
+          <section>
+            <h2 className="stats-section-title">About me</h2>
+            <Personal />
+          </section>
+          <section>
+            <h2 className="stats-section-title">This site</h2>
+            <Site />
+          </section>
+        </div>
+      </section>
     </PageWrapper>
   );
 }

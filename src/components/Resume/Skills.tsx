@@ -5,7 +5,7 @@ import React, { useReducer } from 'react';
 import type { Category, Skill } from '@/data/resume/skills';
 
 import CategoryButton from './Skills/CategoryButton';
-import SkillBar from './Skills/SkillBar';
+import SkillTag from './Skills/SkillTag';
 
 interface SkillsProps {
   skills: Skill[];
@@ -64,31 +64,40 @@ const Skills: React.FC<SkillsProps> = ({ skills, categories }) => {
       />
     ));
 
-  const getRows = () => {
-    // search for true active categories
-    const actCat = Object.keys(buttons).reduce(
-      (cat, key) => (buttons[key] ? key : cat),
-      'All',
-    );
+  // Get active category
+  const activeCategory = Object.keys(buttons).reduce(
+    (cat, key) => (buttons[key] ? key : cat),
+    'All',
+  );
 
-    const comparator = (a: Skill, b: Skill) => {
-      let ret = 0;
-      if (a.competency > b.competency) ret = -1;
-      else if (a.competency < b.competency) ret = 1;
-      else if (a.category[0] > b.category[0]) ret = -1;
-      else if (a.category[0] < b.category[0]) ret = 1;
-      else if (a.title > b.title) ret = 1;
-      else if (a.title < b.title) ret = -1;
-      return ret;
-    };
+  // Sort skills by competency (highest first), then alphabetically
+  const sortedSkills = [...skills].sort((a, b) => {
+    if (a.competency !== b.competency) return b.competency - a.competency;
+    return a.title.localeCompare(b.title);
+  });
 
-    return skills
-      .sort(comparator)
-      .filter((skill) => actCat === 'All' || skill.category.includes(actCat))
-      .map((skill) => (
-        <SkillBar categories={categories} data={skill} key={skill.title} />
-      ));
-  };
+  // Filter skills based on active category
+  const filteredSkills = sortedSkills.filter(
+    (skill) =>
+      activeCategory === 'All' || skill.category.includes(activeCategory),
+  );
+
+  // Group skills by their primary category for grouped view
+  const groupedSkills =
+    activeCategory === 'All'
+      ? categories.reduce(
+          (groups, category) => {
+            const categorySkills = filteredSkills.filter((skill) =>
+              skill.category.includes(category.name),
+            );
+            if (categorySkills.length > 0) {
+              groups[category.name] = categorySkills;
+            }
+            return groups;
+          },
+          {} as Record<string, Skill[]>,
+        )
+      : { [activeCategory]: filteredSkills };
 
   return (
     <div className="skills">
@@ -97,7 +106,30 @@ const Skills: React.FC<SkillsProps> = ({ skills, categories }) => {
         <h3>Skills</h3>
       </div>
       <div className="skill-button-container">{getButtons()}</div>
-      <div className="skill-row-container">{getRows()}</div>
+      <div className="skill-groups">
+        {Object.entries(groupedSkills).map(([categoryName, categorySkills]) => {
+          const category = categories.find((c) => c.name === categoryName);
+          return (
+            <div key={categoryName} className="skill-group">
+              <h4
+                className="skill-group-title"
+                style={{ color: category?.color }}
+              >
+                {categoryName}
+              </h4>
+              <div className="skill-tags">
+                {categorySkills.map((skill) => (
+                  <SkillTag
+                    key={skill.title}
+                    data={skill}
+                    categories={categories}
+                  />
+                ))}
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };

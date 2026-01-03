@@ -5,6 +5,8 @@ export interface Project {
   image: string;
   date: string;
   desc: string;
+  tech?: string[];
+  featured?: boolean;
 }
 
 const data: Project[] = [
@@ -13,43 +15,36 @@ const data: Project[] = [
     subtitle: '2015 BVP Hackathon',
     image: '/images/projects/nearestdollar.jpg',
     date: '2015-11-20',
-    desc:
-      'Built for a social impact hackathon. ' +
-      'NearestDollar connected to your bank accounts, credit cards, ' +
-      'or debit cards and rounded up your purchases to donate the balance to ' +
-      'the charity of your choice.',
+    desc: 'Connected to bank accounts to round up purchases and donate spare change to charity.',
+    tech: ['React', 'Node.js', 'Plaid API', 'MongoDB'],
+    featured: true,
   },
   {
     title: 'Harvest',
-    subtitle: 'Won 3rd. place in 2015 Techcrunch Disrupt SF Hackathon',
+    subtitle: '3rd place at Techcrunch Disrupt SF',
     link: 'https://devpost.com/software/harvest',
     image: '/images/projects/harvest.jpg',
     date: '2015-09-20',
-    desc:
-      'Won ~ $7000 in prizes for an advanced, low cost monitoring solution ' +
-      'for crops. Harvest was designed to catch irrigation leaks, overwatering, ' +
-      'and nutrient deficiencies at an affordable price for the developing world.',
+    desc: 'Low-cost crop monitoring to catch irrigation leaks and nutrient deficiencies.',
+    tech: ['Python', 'Arduino', 'Computer Vision', 'AWS'],
+    featured: true,
   },
   {
     title: 'Space Potato',
-    subtitle: 'A kickstarter funded potato powered weather balloon.',
+    subtitle: 'Kickstarter-funded weather balloon',
     link: 'http://www.spacepotato.org',
     image: '/images/projects/spacepotato.jpg',
     date: '2015-06-28',
-    desc:
-      'Launched a potato battery powered weather balloon with two cameras ' +
-      'and gps transponder. Resulting photos were published in a coffee table book. ' +
-      'You can email me for a copy.',
+    desc: 'Potato-powered weather balloon with cameras. Photos published in a coffee table book.',
+    tech: ['Hardware', 'GPS', 'Photography'],
   },
   {
     title: 'Cat Detector',
-    subtitle: 'A convolutional neural network to classify cats! (and dogs)',
+    subtitle: 'CNN for cat breed classification',
     image: '/images/projects/catdetector.jpg',
     date: '2015-05-15',
-    desc:
-      'Trained a convolutional neural network to classify between ~ 80 cats breeds. ' +
-      'Over 60,000 cats were classified before server bills made the project too expensive ' +
-      'to continue hosting.',
+    desc: 'Classified 60,000+ cats across 80 breeds before server costs shut it down.',
+    tech: ['Python', 'TensorFlow', 'CNN', 'AWS'],
   },
 ];
 

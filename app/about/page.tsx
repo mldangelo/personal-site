@@ -1,8 +1,6 @@
 'use client';
 
 import Markdown from 'markdown-to-jsx';
-
-import Link from 'next/link';
 import React from 'react';
 
 import { aboutMarkdown } from '@/data/about';
@@ -15,17 +13,17 @@ const count = (str: string) =>
 export default function AboutPage() {
   return (
     <PageWrapper>
-      <article className="post" id="about">
-        <header>
-          <div className="title">
-            <h2>
-              <Link href="/about">About Me</Link>
-            </h2>
-            <p>(in about {count(aboutMarkdown)} words)</p>
-          </div>
+      <section className="about-page">
+        <header className="about-header">
+          <h1 className="page-title">About Me</h1>
+          <p className="page-subtitle">
+            A quick intro in {count(aboutMarkdown)} words
+          </p>
         </header>
-        <Markdown>{aboutMarkdown}</Markdown>
-      </article>
+        <article className="about-content">
+          <Markdown>{aboutMarkdown}</Markdown>
+        </article>
+      </section>
     </PageWrapper>
   );
 }

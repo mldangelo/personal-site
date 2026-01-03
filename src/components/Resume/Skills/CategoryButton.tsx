@@ -15,6 +15,7 @@ const CategoryButton: React.FC<CategoryButtonProps> = ({
     className={`skillbutton ${active[label] ? 'skillbutton-active' : ''}`}
     type="button"
     onClick={() => handleClick(label)}
+    aria-pressed={active[label]}
   >
     {label}
   </button>

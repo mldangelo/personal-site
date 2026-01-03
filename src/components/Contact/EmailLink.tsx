@@ -129,22 +129,28 @@ const EmailLink: React.FC<EmailLinkProps> = ({ loopMessage = false }) => {
     state.isActive ? delay : null,
   );
 
+  const isValid = validateText(state.message);
+
+  const handleClick = (e: React.MouseEvent) => {
+    if (!isValid) {
+      e.preventDefault();
+    }
+  };
+
   return (
     <div
-      className="inline-container"
-      style={validateText(state.message) ? {} : { color: 'red' }}
+      className="contact-email-container"
       onMouseEnter={() => dispatch({ type: 'PAUSE' })}
       onMouseLeave={() => dispatch({ type: 'RESUME', maxIdx: messages.length })}
     >
       <a
-        href={
-          validateText(state.message)
-            ? `mailto:${state.message}@mldangelo.com`
-            : ''
-        }
+        href={isValid ? `mailto:${state.message}@mldangelo.com` : '#'}
+        className={`contact-email-link${isValid ? '' : ' contact-email-link--invalid'}`}
+        onClick={handleClick}
+        aria-disabled={!isValid}
       >
-        <span>{state.message}</span>
-        <span>@mldangelo.com</span>
+        <span className="contact-email-prefix">{state.message}</span>
+        <span className="contact-email-domain">@mldangelo.com</span>
       </a>
     </div>
   );

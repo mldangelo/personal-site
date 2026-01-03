@@ -40,12 +40,7 @@ const Stats: React.FC = () => {
     fetchData();
   }, []);
 
-  return (
-    <div>
-      <h3>Some stats about this site</h3>
-      <Table data={data} />
-    </div>
-  );
+  return <Table data={data} />;
 };
 
 export default Stats;

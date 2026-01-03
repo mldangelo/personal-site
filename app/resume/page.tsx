@@ -5,11 +5,14 @@ import Courses from '@/components/Resume/Courses';
 import Education from '@/components/Resume/Education';
 import Experience from '@/components/Resume/Experience';
 import References from '@/components/Resume/References';
+import ResumeNav from '@/components/Resume/ResumeNav';
 import Skills from '@/components/Resume/Skills';
 import courses from '@/data/resume/courses';
 import degrees from '@/data/resume/degrees';
 import { categories, skills } from '@/data/resume/skills';
 import work from '@/data/resume/work';
+
+import PageWrapper from '../components/PageWrapper';
 
 export const metadata: Metadata = {
   title: 'Resume',
@@ -17,54 +20,44 @@ export const metadata: Metadata = {
     "Michael D'Angelo's Resume. Promptfoo, Smile ID, Arthena, Matroid, Stanford ICME, YC alum.",
 };
 
-const sections = [
-  { name: 'Education', id: 'education' },
-  { name: 'Experience', id: 'experience' },
-  { name: 'Skills', id: 'skills' },
-  { name: 'Courses', id: 'courses' },
-  { name: 'References', id: 'references' },
-];
-
 export default function ResumePage() {
   return (
-    <article className="post resume-page">
-      <header>
-        <div className="title">
-          <h2>Resume</h2>
-          <div className="link-container">
-            {sections.map((section) => (
-              <h4 key={section.id}>
-                <a href={`#${section.id}`}>{section.name}</a>
-              </h4>
-            ))}
-          </div>
+    <PageWrapper>
+      <section className="resume-page">
+        <header className="resume-header">
+          <h1 className="resume-title">Resume</h1>
+          <p className="resume-summary">
+            Engineering leader with 10+ years building products at the
+            intersection of machine learning and security. Currently CTO &
+            Co-founder at Promptfoo, building open-source LLM security tools.
+            Stanford MS, YC alum, previously VP Engineering.
+          </p>
+        </header>
+
+        <ResumeNav />
+
+        <div className="resume-content">
+          <section id="experience" className="resume-section">
+            <Experience data={work} />
+          </section>
+
+          <section id="education" className="resume-section">
+            <Education data={degrees} />
+          </section>
+
+          <section id="skills" className="resume-section">
+            <Skills skills={skills} categories={categories} />
+          </section>
+
+          <section id="courses" className="resume-section">
+            <Courses data={courses} />
+          </section>
+
+          <section id="references" className="resume-section">
+            <References />
+          </section>
         </div>
-      </header>
-
-      <section id="education" className="education">
-        <div className="link-to" />
-        <Education data={degrees} />
       </section>
-
-      <section id="experience" className="experience">
-        <div className="link-to" />
-        <Experience data={work} />
-      </section>
-
-      <section id="skills" className="skills">
-        <div className="link-to" />
-        <Skills skills={skills} categories={categories} />
-      </section>
-
-      <section id="courses" className="courses">
-        <div className="link-to" />
-        <Courses data={courses} />
-      </section>
-
-      <section id="references" className="references">
-        <div className="link-to" />
-        <References />
-      </section>
-    </article>
+    </PageWrapper>
   );
 }

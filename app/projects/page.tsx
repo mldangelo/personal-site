@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import React from 'react';
 
 import Cell from '@/components/Projects/Cell';
@@ -13,21 +12,39 @@ export const metadata: Metadata = {
 };
 
 export default function ProjectsPage() {
+  const featuredProjects = data.filter((p) => p.featured);
+  const otherProjects = data.filter((p) => !p.featured);
+
   return (
     <PageWrapper>
-      <article className="post" id="projects">
-        <header>
-          <div className="title">
-            <h2>
-              <Link href="/projects">Projects</Link>
-            </h2>
-            <p>A selection of projects that I&apos;m not too ashamed of</p>
-          </div>
+      <section className="projects-page">
+        <header className="projects-header">
+          <h1 className="page-title">Projects</h1>
+          <p className="page-subtitle">A selection of things I&apos;ve built</p>
         </header>
-        {data.map((project) => (
-          <Cell data={project} key={project.title} />
-        ))}
-      </article>
+
+        {featuredProjects.length > 0 && (
+          <section className="projects-featured">
+            <h2 className="projects-section-title">Featured</h2>
+            <div className="projects-grid projects-grid--featured">
+              {featuredProjects.map((project) => (
+                <Cell data={project} key={project.title} />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {otherProjects.length > 0 && (
+          <section className="projects-other">
+            <h2 className="projects-section-title">More Projects</h2>
+            <div className="projects-grid">
+              {otherProjects.map((project) => (
+                <Cell data={project} key={project.title} />
+              ))}
+            </div>
+          </section>
+        )}
+      </section>
     </PageWrapper>
   );
 }
