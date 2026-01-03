@@ -1,5 +1,9 @@
 {
   "name": "mldangelo.com",
+  "short_name": "MD",
+  "theme_color": "#2e59ba",
+  "background_color": "#2e59ba",
+  "display": "standalone",
   "icons": [
     {
       "src": "/images/favicon/android-icon-36x36.png",
