@@ -7,8 +7,8 @@ Welcome to my [personal website](https://mldangelo.com)! This is an [MIT license
 - Built with modern TypeScript, using [Next.js 16](https://nextjs.org/), [React 19](https://react.dev/), and [Tailwind CSS v4](https://tailwindcss.com/).
 - Type-safe development with TypeScript strict mode.
 - Optimized performance with static export and automatic font optimization.
+- Dark mode support with system preference detection and manual toggle.
 - Automated workflows via [GitHub Actions](https://github.com/features/actions).
-- And more!
 
 ## 🛠 Adapting this Project
 
@@ -108,7 +108,7 @@ npm test              # Run Vitest tests
 
 - **Personal Information**: Update files in `src/data/` with your information.
 - **Images**: Replace images in `public/images/` with your own.
-- **Theme**: Modify CSS variables in `app/tailwind.css` or use Tailwind utility classes.
+- **Theme**: Modify CSS custom properties in `app/tailwind.css` or use Tailwind utility classes.
 
 ## 📝 License
 

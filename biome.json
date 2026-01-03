@@ -84,7 +84,7 @@
       }
     },
     {
-      "includes": ["*.config.ts", "*.config.js", "jest.setup.ts"],
+      "includes": ["*.config.ts", "*.config.js", "vitest.setup.tsx"],
       "linter": {
         "rules": {
           "style": { "noCommonJs": "off" },
