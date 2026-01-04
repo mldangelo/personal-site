@@ -1,0 +1,370 @@
+/* ========================================
+   CARD COMPONENTS
+   Project cards, job cards, and card patterns
+   ======================================== */
+
+/* Cell container for project cards */
+@layer components {
+  .cell-container {
+    display: block;
+  }
+
+  /* Theme-aware portrait images */
+  .theme-portrait {
+    display: inline-block;
+    position: relative;
+    line-height: 0;
+  }
+
+  /* Light mode: show light image, hide dark */
+  .theme-portrait-light {
+    display: block;
+  }
+
+  .theme-portrait-dark {
+    display: none;
+  }
+}
+
+/* ========================================
+   PROJECT CARDS - Bento Grid
+   ======================================== */
+
+.projects-page {
+  padding-bottom: 2rem;
+}
+
+.projects-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.projects-section-title {
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-fg-light);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  margin-bottom: 1.5rem;
+}
+
+.projects-featured {
+  margin-bottom: 4rem;
+  position: relative;
+}
+
+.projects-featured::before {
+  content: 'Featured';
+  position: absolute;
+  top: -2rem;
+  left: 0;
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-accent);
+}
+
+.projects-grid {
+  display: grid;
+  gap: 1.75rem;
+  grid-template-columns: 1fr;
+}
+
+@media screen and (min-width: 600px) {
+  .projects-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.projects-grid--featured .project-card {
+  grid-column: 1 / -1;
+  box-shadow:
+    var(--shadow-lg),
+    0 0 0 2px var(--color-accent-light);
+}
+
+@media screen and (min-width: 600px) {
+  .projects-grid--featured {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .projects-grid--featured .project-card {
+    grid-column: auto;
+  }
+}
+
+.project-card {
+  background: var(--color-bg);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: all var(--duration-normal) var(--ease-out);
+}
+
+.project-card:hover {
+  transform: translateY(var(--lift-md));
+  box-shadow: var(--shadow-xl);
+}
+
+/* Full card link wrapper */
+.project-card-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.project-card-link:focus-visible {
+  outline: none;
+}
+
+.project-card:has(.project-card-link:focus-visible) {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Static (non-linked) project cards */
+.project-card--static {
+  cursor: default;
+}
+
+.project-card--static:hover {
+  transform: none;
+  box-shadow: var(--shadow-md);
+}
+
+.project-card-static {
+  display: block;
+}
+
+.project-card-image {
+  position: relative;
+  display: block;
+  aspect-ratio: 16/10;
+  overflow: hidden;
+}
+
+.project-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--duration-normal) var(--ease-out);
+}
+
+.project-card:hover .project-card-image img {
+  transform: scale(var(--scale-sm));
+}
+
+.project-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, var(--color-overlay-darker) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.project-card-content {
+  padding: 1.5rem;
+}
+
+.project-card-header {
+  margin-bottom: 0.875rem;
+}
+
+.project-card-title {
+  font-size: var(--text-xl);
+  font-weight: var(--font-weight-black);
+  margin-bottom: 0.35rem;
+}
+
+.project-card-title a {
+  color: var(--color-fg-bold);
+  text-decoration: none;
+}
+
+.project-card-title a:hover {
+  color: var(--color-accent);
+}
+
+.project-card-subtitle {
+  font-size: var(--text-sm);
+  color: var(--color-fg-light);
+  font-weight: var(--font-weight-medium);
+}
+
+.project-card-desc {
+  font-size: var(--text-base);
+  color: var(--color-fg);
+  margin-bottom: 1.25rem;
+  line-height: var(--leading-normal);
+}
+
+.project-card-tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.625rem;
+  margin-bottom: 1.25rem;
+}
+
+.project-card-date {
+  font-size: var(--text-xs);
+  color: var(--color-fg-light);
+}
+
+/* ========================================
+   JOB CARDS
+   ======================================== */
+
+.jobs-container {
+  margin-bottom: 2rem;
+  padding: 1.75rem;
+  background: var(--color-surface-subtle);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-bg);
+  transition:
+    border-color var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
+}
+
+.jobs-container:hover {
+  border-color: var(--color-border);
+  transform: translateY(var(--lift-md));
+  box-shadow: var(--shadow-lg);
+}
+
+.jobs-container:last-child {
+  margin-bottom: 0;
+}
+
+.jobs-container header h4 {
+  font-size: var(--text-xl);
+  font-weight: var(--font-weight-black);
+  margin-bottom: 0.35rem;
+  line-height: 1.3;
+}
+
+.jobs-container header h4 a {
+  color: var(--color-fg-bold);
+  text-decoration: none;
+}
+
+.jobs-container header h4 a:hover {
+  color: var(--color-accent);
+}
+
+.jobs-container .role {
+  display: block;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-fg);
+  font-size: var(--text-md);
+  margin-top: 0.25rem;
+}
+
+.jobs-container .points {
+  margin-top: 1rem;
+}
+
+.jobs-container .points li {
+  font-size: var(--text-base);
+  line-height: 1.7;
+  margin-bottom: 0.6rem;
+  padding: 0;
+  color: var(--color-fg-light);
+}
+
+.daterange {
+  font-size: var(--text-sm);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-fg-light);
+  margin-bottom: 0.5em;
+}
+
+.summary {
+  font-size: var(--text-md);
+  margin-bottom: 0.5em;
+}
+
+.summary code,
+.summary pre {
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+.summary pre code {
+  display: inline;
+  line-height: inherit;
+}
+
+/* ========================================
+   EDUCATION CARDS
+   ======================================== */
+
+.degree-container {
+  margin-bottom: 1.5em;
+}
+
+.degree-container h4 {
+  font-weight: var(--font-weight-normal);
+}
+
+.degree-container .degree {
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-normal);
+  margin-bottom: 0.25em;
+  text-transform: none;
+  color: var(--color-fg-bold);
+}
+
+.degree-container .school {
+  font-size: var(--text-sm);
+  letter-spacing: var(--tracking-normal);
+  color: var(--color-fg-light);
+  margin-bottom: 0.5em;
+  padding-top: 0.2em;
+  text-transform: none;
+}
+
+/* ========================================
+   COURSE CARDS
+   ======================================== */
+
+.course-container {
+  display: block;
+}
+
+.course-container a {
+  display: block;
+  padding: 1rem 1.25rem;
+  background: var(--color-surface-subtle);
+  border: 1px solid var(--color-border-bg);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.course-container a:hover {
+  border-color: var(--color-border);
+  background: var(--color-surface-hover);
+  transform: translateY(var(--lift-sm));
+}
+
+.courses .course-number {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-accent);
+  margin-bottom: 0.25rem;
+}
+
+.courses .course-name {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-fg);
+}

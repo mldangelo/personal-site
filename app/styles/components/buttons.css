@@ -1,0 +1,99 @@
+/* ========================================
+   BUTTON COMPONENTS
+   Primary and secondary button variants
+   ======================================== */
+
+@layer components {
+  /* Button - Modern solid style with hover lift */
+  .btn,
+  .button {
+    appearance: none;
+    background: var(--color-accent);
+    background-image: none !important;
+    border: 0;
+    border-radius: var(--radius-sm);
+    box-shadow:
+      var(--shadow-md),
+      inset 0 1px 0 var(--color-overlay-light);
+    color: var(--color-white);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+    font-family: var(--font-heading);
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-bold);
+    height: 3.25rem;
+    letter-spacing: var(--tracking-normal);
+    padding: 0 2em;
+    text-align: center;
+    text-decoration: none !important;
+    transition:
+      transform var(--duration-fast) var(--ease-out),
+      box-shadow var(--duration-fast) var(--ease-out),
+      background-color var(--duration-fast) var(--ease-out);
+  }
+
+  .btn:hover,
+  .button:hover {
+    background: color-mix(in srgb, var(--color-accent) 85%, black);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(var(--lift-sm));
+    color: var(--color-white);
+  }
+
+  .btn:active,
+  .button:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .btn:focus-visible,
+  .button:focus-visible {
+    box-shadow:
+      var(--shadow-md),
+      0 0 0 3px var(--color-accent-light);
+    outline: none;
+  }
+
+  /* Primary button (explicit alias - .button is already primary-styled) */
+  .btn-primary,
+  .button-primary {
+    /* Inherits from .button - accent color is the primary style */
+  }
+
+  /* Secondary/ghost button variant */
+  .btn-secondary,
+  .button-secondary {
+    background: transparent;
+    box-shadow: inset 0 0 0 1.5px var(--color-border-alt);
+    color: var(--color-fg-light);
+    font-weight: var(--font-weight-medium);
+  }
+
+  .btn-secondary:hover,
+  .button-secondary:hover {
+    background: var(--color-accent-light);
+    box-shadow: inset 0 0 0 1.5px var(--color-accent);
+    color: var(--color-accent);
+    transform: translateY(var(--lift-sm));
+  }
+
+  /* Actions list */
+  .actions {
+    list-style: none;
+    margin: var(--spacing-element) 0 0 0;
+    padding: 0;
+  }
+
+  .actions li {
+    display: inline-block;
+    margin: 0 0.75em 0 0;
+    padding: 0;
+  }
+
+  .actions li:last-child {
+    margin-right: 0;
+  }
+}

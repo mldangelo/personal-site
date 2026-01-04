@@ -1,0 +1,175 @@
+/* ========================================
+   RESUME PAGE STYLES
+   ======================================== */
+
+.resume-page .link-container {
+  padding-top: 1em;
+}
+
+.resume-page .link-container h4 {
+  border-bottom: none;
+  display: inline-flex;
+  text-decoration: none;
+}
+
+.resume-page .link-container h4 a {
+  margin: 0;
+  padding: 0 0.5em;
+}
+
+.resume-page .education .title,
+.resume-page .experience .title,
+.resume-page .skills .title,
+.resume-page .courses .title,
+.resume-page .references .title {
+  margin-bottom: 2.5rem;
+  text-align: center;
+}
+
+.resume-page .education .title h3,
+.resume-page .experience .title h3,
+.resume-page .skills .title h3,
+.resume-page .courses .title h3,
+.resume-page .references .title h3 {
+  font-size: var(--text-3xl);
+  font-weight: var(--font-weight-black);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-fg-bold);
+  display: inline-block;
+  padding-bottom: 0.75rem;
+  border-bottom: 3px solid var(--color-accent);
+}
+
+.resume-page .skills {
+  margin-top: 2em;
+}
+
+.resume-page .skills .title p {
+  font-size: var(--text-md);
+}
+
+.resume-page .courses {
+  padding-top: 1em;
+}
+
+.resume-page .courses .course-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+@media (max-width: 736px) {
+  .resume-page .courses .course-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+.resume-page .references {
+  margin: var(--spacing-8) 0;
+}
+
+/* Resume page specific */
+.resume-page {
+  max-width: 880px;
+  margin: 0 auto;
+}
+
+.resume-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.resume-title {
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: var(--font-weight-black);
+  letter-spacing: var(--tracking-tight);
+  margin-bottom: 1.25rem;
+  color: var(--color-fg-bold);
+}
+
+.resume-summary {
+  font-size: var(--text-lg);
+  line-height: 1.7;
+  color: var(--color-fg);
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.resume-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--spacing-2);
+  margin-top: var(--spacing-6);
+  margin-bottom: var(--spacing-4);
+  position: sticky;
+  top: var(--header-height);
+  z-index: var(--z-sticky);
+  background: color-mix(in srgb, var(--color-bg-alt) 92%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: var(--spacing-4) var(--spacing-6);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border-bg);
+  box-shadow: var(--shadow-sm);
+}
+
+@media (max-width: 736px) {
+  .resume-nav {
+    top: var(--header-height-mobile);
+    gap: var(--spacing-1);
+    padding: var(--spacing-3) var(--spacing-4);
+    border-radius: var(--radius-md);
+    margin-left: calc(-1 * var(--spacing-2));
+    margin-right: calc(-1 * var(--spacing-2));
+  }
+}
+
+.resume-nav-link {
+  padding: 0.5rem 1rem;
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-fg-light);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.resume-nav-link:hover {
+  color: var(--color-fg);
+  background: var(--color-surface-hover);
+}
+
+/* Active state - subtle highlight */
+.resume-nav-link.active {
+  color: var(--color-accent);
+  background: var(--color-accent-subtle);
+  font-weight: var(--font-weight-bold);
+}
+
+.resume-nav-link:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.resume-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4.5rem;
+}
+
+.resume-section {
+  scroll-margin-top: calc(var(--header-height) + var(--scroll-offset-resume));
+  padding-top: var(--spacing-10);
+  border-top: 2px solid var(--color-border);
+}
+
+.resume-section:first-child {
+  border-top: none;
+  padding-top: 0;
+}

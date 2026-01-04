@@ -1,0 +1,52 @@
+/* ========================================
+   ICON COMPONENTS
+   Social icons and icon lists
+   ======================================== */
+
+@layer components {
+  /* Icon list */
+  .icons {
+    cursor: default;
+    list-style: none;
+    margin: 0;
+    margin-bottom: 2em;
+    padding: 0;
+  }
+
+  .icons li {
+    display: inline-block;
+    padding: 0 1em 0 0;
+  }
+
+  .icons li:last-child {
+    padding-right: 0;
+  }
+
+  .icons li a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5em;
+    height: 2.5em;
+    border-radius: var(--radius-sm);
+    color: var(--color-fg-light);
+    text-decoration: none;
+    background-image: none !important;
+    transition:
+      color var(--duration-fast) var(--ease-out),
+      background-color var(--duration-fast) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out);
+  }
+
+  .icons li a:hover {
+    background-color: var(--color-accent-light);
+    color: var(--color-accent);
+    transform: translateY(var(--lift-sm));
+  }
+
+  /* Icons in main content area are darker */
+  .post .icons li a,
+  article .icons li a {
+    color: var(--color-fg);
+  }
+}

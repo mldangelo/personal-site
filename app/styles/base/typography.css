@@ -1,0 +1,117 @@
+/* ========================================
+   BASE TYPOGRAPHY
+   Headings, paragraphs, lists, and text elements
+   ======================================== */
+
+@layer base {
+  strong,
+  b {
+    color: var(--color-fg-bold);
+    font-weight: var(--font-weight-medium);
+  }
+
+  em,
+  i {
+    font-style: italic;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: var(--color-fg-bold);
+    font-family: var(--font-heading);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: var(--tracking-tight);
+    line-height: var(--leading-tight);
+    margin: 0 0 0.75em 0;
+  }
+
+  h1 a,
+  h2 a,
+  h3 a,
+  h4 a,
+  h5 a,
+  h6 a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  h1 a:hover,
+  h2 a:hover,
+  h3 a:hover,
+  h4 a:hover,
+  h5 a:hover,
+  h6 a:hover {
+    color: var(--color-accent);
+  }
+
+  h1 {
+    font-size: var(--text-3xl);
+  }
+
+  h2 {
+    font-size: var(--text-2xl);
+  }
+
+  h3 {
+    font-size: var(--text-xl);
+  }
+
+  h4 {
+    font-size: var(--text-lg);
+  }
+
+  h5 {
+    font-size: var(--text-md);
+  }
+
+  h6 {
+    font-size: var(--text-base);
+  }
+
+  p {
+    margin: 0 0 var(--spacing-element) 0;
+  }
+
+  code {
+    background: var(--color-border-bg);
+    border: solid 1px var(--color-border);
+    font-family: var(--font-mono);
+    font-size: var(--text-md);
+    margin: 0 0.25em;
+    padding: 0.25em 0.65em;
+  }
+
+  ul {
+    list-style-type: disc;
+    margin: 0 0 var(--spacing-element) 0;
+    padding-left: 1em;
+  }
+
+  ol {
+    list-style-type: decimal;
+    margin: 0 0 var(--spacing-element) 0;
+    padding-left: 1em;
+  }
+
+  ul li,
+  ol li {
+    padding-left: 0.5em;
+  }
+
+  blockquote {
+    border-left: solid 4px var(--color-border);
+    font-style: italic;
+    margin: 0 0 var(--spacing-element) 0;
+    padding: 0.5em 0 0.5em var(--spacing-element);
+  }
+
+  hr {
+    border: 0;
+    border-bottom: solid 1px var(--color-border);
+    margin: var(--spacing-element) 0;
+  }
+}

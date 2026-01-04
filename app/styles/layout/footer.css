@@ -1,0 +1,204 @@
+/* ========================================
+   FOOTER LAYOUT
+   Full-width footer with bio
+   ======================================== */
+
+/* Footer container - distinct from page with subtle gradient */
+.site-footer-new {
+  background: linear-gradient(
+    to bottom,
+    var(--color-bg-alt) 0%,
+    color-mix(in srgb, var(--color-bg-alt) 94%, black) 100%
+  );
+  border-top: 1px solid var(--color-border-alt);
+  padding: 3rem 1.5rem 1.75rem;
+  margin-top: auto;
+}
+
+/* Footer content - 2-column signature card layout */
+.footer-content {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  align-items: center;
+  text-align: center;
+}
+
+@media screen and (min-width: 900px) {
+  .footer-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    text-align: left;
+    gap: 3rem;
+  }
+}
+
+/* Left column - Identity block */
+.footer-identity {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+}
+
+@media screen and (max-width: 899px) {
+  .footer-identity {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* Right column - Nav and social */
+.footer-right {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+@media screen and (min-width: 900px) {
+  .footer-right {
+    flex-direction: row;
+    gap: 3rem;
+  }
+}
+
+/* Avatar - styled to match hero */
+.footer-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.footer-avatar:hover {
+  transform: scale(var(--scale-sm));
+}
+
+.footer-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Footer info block */
+.footer-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.footer-info h3 {
+  font-size: var(--text-md);
+  font-weight: var(--font-weight-bold);
+  margin: 0;
+  letter-spacing: var(--tracking-tight);
+}
+
+.footer-role {
+  font-size: var(--text-sm);
+  color: var(--color-fg-light);
+  margin: 0;
+}
+
+.footer-copyright {
+  font-size: var(--text-xs);
+  color: var(--color-fg-light);
+  opacity: 0.6;
+  margin: 0.5rem 0 0;
+}
+
+.footer-copyright a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.footer-copyright a:hover {
+  color: var(--color-accent);
+}
+
+/* Footer links section */
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.footer-links-label,
+.footer-social-label {
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-fg-light);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.25rem;
+}
+
+/* 2x2 nav grid */
+.footer-links-grid {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  gap: 0.5rem 1.5rem;
+}
+
+.footer-links-grid a {
+  font-size: var(--text-sm);
+  color: var(--color-fg-light);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.footer-links-grid a:hover {
+  color: var(--color-fg-bold);
+}
+
+/* Social section */
+.footer-social {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+@media screen and (min-width: 900px) {
+  .footer-social {
+    align-items: flex-start;
+  }
+}
+
+/* Tone down social icons in footer */
+.site-footer-new .icons {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.5rem;
+  margin-bottom: 0;
+}
+
+.site-footer-new .icons li {
+  padding: 0;
+}
+
+.site-footer-new .icons li a {
+  width: 36px;
+  height: 36px;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  opacity: 0.7;
+  transition:
+    opacity var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+.site-footer-new .icons li a:hover {
+  opacity: 1;
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  background: transparent;
+}

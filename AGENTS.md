@@ -25,6 +25,7 @@ npm test -- ComponentName                    # Test single component
 
 ```
 app/                  → Pages, layouts, global CSS
+app/styles/           → Modular CSS (tokens, base, components, layout, pages)
 src/components/       → React components (organized by feature)
 src/data/             → Static data (resume, projects, contact)
 src/hooks/            → Custom React hooks
@@ -38,7 +39,7 @@ docs/                 → Documentation
 **Do:**
 
 - Use TypeScript strict mode, functional components with hooks
-- Style with CSS custom properties in `app/tailwind.css`
+- Style with CSS custom properties in `app/styles/` (tokens in `tokens/`, components in `components/`)
 - Keep components small and focused
 - Use existing patterns from similar components
 - Mark client components with `'use client'`
@@ -80,3 +81,7 @@ npm test -- ComponentName       # Run specific test
 - [docs/adapting-guide.md](./docs/adapting-guide.md) — Guide for forking and customizing
 - [docs/design-goals.md](./docs/design-goals.md) — Architecture principles
 - [docs/contributing.md](./docs/contributing.md) — Contribution guidelines
+
+## Maintaining This Document
+
+When creating a PR, audit this file and make small, targeted improvements based on your learnings—new patterns discovered, outdated references, or missing guidance that would have helped.

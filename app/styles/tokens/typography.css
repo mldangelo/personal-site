@@ -1,0 +1,51 @@
+/* ========================================
+   TYPOGRAPHY TOKENS
+   Font families, sizes, weights, and spacing
+   ======================================== */
+
+@theme {
+  /* ===================
+     FONT FAMILIES
+     =================== */
+  --font-sans: var(--font-source-sans), 'Source Sans Pro', Helvetica, sans-serif;
+  --font-heading: var(--font-raleway), 'Raleway', Helvetica, sans-serif;
+  --font-mono: 'Courier New', monospace;
+
+  /* ===================
+     FONT WEIGHTS
+     =================== */
+  --font-weight-normal: 400;
+  --font-weight-medium: 600;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-black: 800;
+
+  /* ===================
+     FONT SIZES (relative units)
+     =================== */
+  --text-2xs: 0.65em;
+  --text-xs: 0.75em;
+  --text-sm: 0.875em;
+  --text-base: 1em;
+  --text-md: 1.1em;
+  --text-lg: 1.3em;
+  --text-xl: 1.6em;
+  --text-2xl: 2.2em;
+  --text-3xl: 2.75em;
+}
+
+@theme inline {
+  /* ===================
+     LETTER SPACING
+     =================== */
+  --tracking-tight: 0.01em;
+  --tracking-normal: 0.02em;
+  --tracking-wide: 0.04em;
+
+  /* ===================
+     LINE HEIGHTS
+     =================== */
+  --leading-tight: 1.3;
+  --leading-normal: 1.7;
+  --leading-loose: 2;
+}

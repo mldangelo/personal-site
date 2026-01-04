@@ -1,0 +1,65 @@
+/* ========================================
+   COLOR TOKENS
+   Core color palette and semantic colors
+   ======================================== */
+
+@theme {
+  /* ===================
+     CORE PALETTE
+     =================== */
+  --color-bg: #ffffff;
+  --color-bg-alt: #f5f5f7;
+  --color-bg-offset: #f0f0f2;
+  --color-fg: #1d1d1f;
+  --color-fg-bold: #1d1d1f;
+  --color-fg-light: #58585d;
+
+  /* ===================
+     ACCENT COLORS
+     =================== */
+  --color-accent: #2e59ba;
+  --color-accent-secondary: #60a5fa;
+  --color-accent-light: color-mix(in srgb, var(--color-accent) 12%, transparent);
+  --color-accent-subtle: color-mix(in srgb, var(--color-accent) 5%, transparent);
+  --color-accent-muted: color-mix(in srgb, var(--color-accent) 3%, transparent);
+  --color-accent-underline: color-mix(in srgb, var(--color-accent) 30%, transparent);
+  --color-accent-underline-strong: color-mix(in srgb, var(--color-accent) 40%, transparent);
+  --color-accent-glow: color-mix(in srgb, var(--color-accent) 15%, transparent);
+  --color-accent-border: color-mix(in srgb, var(--color-accent) 50%, transparent);
+
+  /* ===================
+     SKILL CATEGORY COLORS
+     =================== */
+  --color-skill-1: #6968b3;
+  --color-skill-2: #37b1f5;
+  --color-skill-3: #40494e;
+  --color-skill-4: #515dd4;
+  --color-skill-5: #e47272;
+  --color-skill-6: #cc7b94;
+
+  /* ===================
+     BORDER COLORS
+     =================== */
+  --color-border: rgba(0, 0, 0, 0.1);
+  --color-border-bg: rgba(0, 0, 0, 0.06);
+  --color-border-alt: rgba(0, 0, 0, 0.15);
+
+  /* ===================
+     SURFACE TOKENS
+     =================== */
+  --color-surface-subtle: rgba(0, 0, 0, 0.03);
+  --color-surface-hover: rgba(0, 0, 0, 0.06);
+  --color-surface-active: rgba(0, 0, 0, 0.1);
+  --color-text-muted: rgba(0, 0, 0, 0.5);
+  --color-text-dim: rgba(0, 0, 0, 0.6);
+  --color-fg-muted: rgba(0, 0, 0, 0.5);
+
+  /* ===================
+     SEMANTIC COLORS
+     =================== */
+  --color-white: #fff;
+  --color-black: #000;
+  --color-overlay-light: rgba(255, 255, 255, 0.15);
+  --color-overlay-dark: rgba(0, 0, 0, 0.15);
+  --color-overlay-darker: rgba(0, 0, 0, 0.3);
+}

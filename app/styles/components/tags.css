@@ -1,0 +1,115 @@
+/* ========================================
+   TAG COMPONENTS
+   Tech tags, skill tags, and chips
+   ======================================== */
+
+/* Container for all skill groups */
+.skill-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 3.5rem;
+}
+
+/* Individual category group */
+.skill-group {
+  text-align: left;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--color-border-bg);
+}
+
+.skill-group:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+@media (max-width: 736px) {
+  .skill-group {
+    text-align: center;
+  }
+}
+
+.skill-group-title {
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-black);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  /* Use CSS custom property if set, fallback to default */
+  color: var(--skill-category-color, var(--color-fg-bold));
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 3px solid var(--color-accent);
+  display: inline-block;
+}
+
+.skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  justify-content: flex-start;
+}
+
+@media (max-width: 736px) {
+  .skill-tags {
+    justify-content: center;
+  }
+}
+
+.skill-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.6em 1.1em;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-left: 4px solid var(--tag-color, var(--color-accent));
+  border-radius: var(--radius-sm);
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-fg);
+  transition:
+    transform var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out),
+    background-color var(--duration-fast) var(--ease-out);
+}
+
+.skill-tag:hover {
+  transform: translateY(var(--lift-sm));
+  box-shadow: var(--shadow-md);
+  border-color: var(--tag-color, var(--color-accent));
+  background: var(--color-bg-alt);
+}
+
+.skill-tag-name {
+  white-space: nowrap;
+}
+
+/* Tech tags - pill style for project cards */
+.tech-tag {
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-accent);
+  background: var(--color-accent-light);
+  padding: 0.35rem 0.875rem;
+  border-radius: var(--radius-full);
+}
+
+/* Size variations - more subtle differences */
+.skill-tag--lg {
+  padding: 0.5em 1em;
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-bold);
+}
+
+.skill-tag--md {
+  padding: 0.45em 0.9em;
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.skill-tag--sm {
+  padding: 0.4em 0.8em;
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-normal);
+  opacity: 0.9;
+}
