@@ -81,3 +81,7 @@ npm test -- ComponentName       # Run specific test
 - [docs/adapting-guide.md](./docs/adapting-guide.md) — Guide for forking and customizing
 - [docs/design-goals.md](./docs/design-goals.md) — Architecture principles
 - [docs/contributing.md](./docs/contributing.md) — Contribution guidelines
+
+## Maintaining This Document
+
+When creating a PR, audit this file and make small, targeted improvements based on your learnings—new patterns discovered, outdated references, or missing guidance that would have helped.
