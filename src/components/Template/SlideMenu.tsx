@@ -122,7 +122,7 @@ export default function SlideMenu({
         aria-label="Navigation menu"
         className={`slide-menu slide-menu--${position}${isOpen ? ' slide-menu--open' : ''}`}
         aria-hidden={!isOpen}
-        inert={!isOpen ? true : undefined}
+        inert={!isOpen}
         onKeyDown={handleKeyDown}
       >
         {children}
