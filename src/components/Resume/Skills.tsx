@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useReducer } from 'react';
+import { useCallback, useMemo, useReducer } from 'react';
 
 import type { Category, Skill } from '@/data/resume/skills';
 
@@ -45,19 +45,23 @@ export default function Skills({ skills, categories }: SkillsProps) {
 
   const [buttons, dispatch] = useReducer(buttonReducer, initialButtons);
 
-  const handleChildClick = (label: string) => {
+  const handleChildClick = useCallback((label: string) => {
     dispatch({ type: 'TOGGLE_CATEGORY', label });
-  };
+  }, []);
 
-  const getButtons = () =>
-    Object.keys(buttons).map((key) => (
-      <CategoryButton
-        label={key}
-        key={key}
-        isActive={buttons[key]}
-        handleClick={handleChildClick}
-      />
-    ));
+  // Memoize button elements to avoid recreation on every render
+  const buttonElements = useMemo(
+    () =>
+      Object.keys(buttons).map((key) => (
+        <CategoryButton
+          label={key}
+          key={key}
+          isActive={buttons[key]}
+          handleClick={handleChildClick}
+        />
+      )),
+    [buttons, handleChildClick],
+  );
 
   // Get active category
   const activeCategory = Object.keys(buttons).reduce(
@@ -103,7 +107,7 @@ export default function Skills({ skills, categories }: SkillsProps) {
       <div className="title">
         <h3>Skills</h3>
       </div>
-      <div className="skill-button-container">{getButtons()}</div>
+      <div className="skill-button-container">{buttonElements}</div>
       <div className="skill-groups">
         {Object.entries(groupedSkills).map(([categoryName, categorySkills]) => {
           const category = categories.find((c) => c.name === categoryName);

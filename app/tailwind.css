@@ -16,8 +16,22 @@
   --color-fg-bold: #1d1d1f;
   --color-fg-light: #58585d;
   --color-accent: #2e59ba;
-  --color-accent-light: rgba(46, 89, 186, 0.12);
+  --color-accent-secondary: #60a5fa;
+  --color-accent-light: color-mix(in srgb, var(--color-accent) 12%, transparent);
+  --color-accent-subtle: color-mix(in srgb, var(--color-accent) 5%, transparent);
+  --color-accent-muted: color-mix(in srgb, var(--color-accent) 3%, transparent);
+  --color-accent-underline: color-mix(in srgb, var(--color-accent) 30%, transparent);
+  --color-accent-underline-strong: color-mix(in srgb, var(--color-accent) 40%, transparent);
+  --color-accent-glow: color-mix(in srgb, var(--color-accent) 15%, transparent);
   --color-accent-border: color-mix(in srgb, var(--color-accent) 50%, transparent);
+
+  /* Skill category colors */
+  --color-skill-1: #6968b3;
+  --color-skill-2: #37b1f5;
+  --color-skill-3: #40494e;
+  --color-skill-4: #515dd4;
+  --color-skill-5: #e47272;
+  --color-skill-6: #cc7b94;
   --color-border: rgba(0, 0, 0, 0.1);
   --color-border-bg: rgba(0, 0, 0, 0.06);
   --color-border-alt: rgba(0, 0, 0, 0.15);
@@ -70,10 +84,21 @@
   /* ===================
      BORDER RADIUS
      =================== */
+  --radius-xs: 4px;
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
   --radius-xl: 24px;
+  --radius-full: 999px;
+
+  /* ===================
+     SEMANTIC COLORS
+     =================== */
+  --color-white: #fff;
+  --color-black: #000;
+  --color-overlay-light: rgba(255, 255, 255, 0.15);
+  --color-overlay-dark: rgba(0, 0, 0, 0.15);
+  --color-overlay-darker: rgba(0, 0, 0, 0.3);
 }
 
 /* ========================================
@@ -114,12 +139,15 @@
   /* ===================
      TRANSITIONS
      =================== */
+  --duration-instant: 0.15s;
   --duration-fast: 0.2s;
   --duration-normal: 0.3s;
   --duration-menu: 0.4s;
+  --duration-slow: 0.6s;
   --duration-skill: 1.4s;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-menu: cubic-bezier(0.4, 0, 0.2, 1);
 
   /* ===================
      Z-INDEX SCALE
@@ -164,7 +192,7 @@
   :focus-visible {
     outline: 2px solid var(--color-accent);
     outline-offset: 3px;
-    border-radius: 4px;
+    border-radius: var(--radius-xs);
   }
 
   /* Remove default focus for mouse users */
@@ -202,7 +230,7 @@
     inset: 0;
     background: radial-gradient(
       ellipse 80% 50% at 50% 0%,
-      rgba(46, 89, 186, 0.03) 0%,
+      var(--color-accent-muted) 0%,
       transparent 60%
     );
     pointer-events: none;
@@ -251,7 +279,10 @@
   p a:not(.hero-highlight),
   li a:not(.hero-highlight),
   .blurb a:not(.hero-highlight) {
-    background-image: linear-gradient(transparent calc(100% - 1.5px), rgba(46, 89, 186, 0.3) 1.5px);
+    background-image: linear-gradient(
+      transparent calc(100% - 1.5px),
+      var(--color-accent-underline) 1.5px
+    );
     background-size: 100% 100%;
     transition:
       color var(--duration-fast) var(--ease-out),
@@ -393,8 +424,8 @@
     border-radius: var(--radius-sm);
     box-shadow:
       var(--shadow-md),
-      inset 0 1px 0 rgba(255, 255, 255, 0.15);
-    color: #fff;
+      inset 0 1px 0 var(--color-overlay-light);
+    color: var(--color-white);
     cursor: pointer;
     display: inline-flex;
     align-items: center;
@@ -419,7 +450,7 @@
     background: color-mix(in srgb, var(--color-accent) 85%, black);
     box-shadow: var(--shadow-lg);
     transform: translateY(-2px);
-    color: #fff;
+    color: var(--color-white);
   }
 
   .btn:active,
@@ -610,7 +641,7 @@
   /* Skill bar */
   .skillbar {
     background: var(--color-border-bg);
-    border-radius: 4px;
+    border-radius: var(--radius-xs);
     display: block;
     height: 2.25em;
     margin-bottom: 1em;
@@ -626,7 +657,7 @@
 
   .skillbar-title {
     background: var(--color-accent);
-    border-radius: 4px 0 0 4px;
+    border-radius: var(--radius-xs) 0 0 var(--radius-xs);
     color: var(--color-bg);
     font-size: var(--text-base);
     font-weight: var(--font-weight-medium);
@@ -640,10 +671,27 @@
 
   .skillbar-title span {
     align-items: center;
-    background: rgba(0, 0, 0, 0.15);
+    background: var(--color-overlay-dark);
     display: flex;
     height: 100%;
     padding: 0 1em;
+  }
+
+  /* Text color classes for skill bar contrast */
+  .skillbar-title--light {
+    color: var(--color-white);
+  }
+
+  .skillbar-title--light span {
+    background: rgba(0, 0, 0, 0.2);
+  }
+
+  .skillbar-title--dark {
+    color: var(--color-fg);
+  }
+
+  .skillbar-title--dark span {
+    background: rgba(255, 255, 255, 0.2);
   }
 
   .skillbar-bar {
@@ -672,7 +720,7 @@
     appearance: none;
     background-color: var(--color-bg);
     border: 1px solid var(--color-border);
-    border-radius: 999px;
+    border-radius: var(--radius-full);
     color: var(--color-fg);
     cursor: pointer;
     display: inline-block;
@@ -705,7 +753,7 @@
   .skillbutton-active {
     background-color: var(--color-accent);
     border-color: var(--color-accent);
-    color: #fff;
+    color: var(--color-white);
     box-shadow: 0 0 0 2px var(--color-accent-light);
   }
 
@@ -914,7 +962,7 @@ body.is-menu-visible .site-wrapper {
   content: '';
   position: absolute;
   inset: -3px;
-  background: linear-gradient(135deg, var(--color-accent), #60a5fa);
+  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-secondary));
   border-radius: calc(var(--radius-lg) + 3px);
   z-index: -1;
   opacity: 0;
@@ -1005,12 +1053,12 @@ body.is-menu-visible .site-wrapper {
 
 /* Slide menu overlay */
 .slide-menu-overlay {
-  background: rgba(0, 0, 0, 0.4);
+  background: var(--color-overlay-darker);
   inset: 0;
   opacity: 0;
   pointer-events: none;
   position: fixed;
-  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity var(--duration-normal) var(--ease-menu);
   z-index: var(--z-overlay);
 }
 
@@ -1030,7 +1078,7 @@ body.is-menu-visible .site-wrapper {
   padding: 2.5em 1.5em 0;
   position: fixed;
   top: 0;
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform var(--duration-normal) var(--ease-menu);
   width: 300px;
   z-index: var(--z-menu);
 }
@@ -1126,7 +1174,7 @@ body.is-menu-visible .site-wrapper {
   height: 2px;
   left: 0;
   position: absolute;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all var(--duration-normal) var(--ease-menu);
   width: 100%;
 }
 
@@ -1588,10 +1636,10 @@ body.is-menu-visible .site-wrapper {
   text-decoration: none;
   padding: 0.25rem 0.5rem;
   border: 1px solid var(--color-border);
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
   transition:
-    color 0.15s ease,
-    border-color 0.15s ease;
+    color var(--duration-instant) var(--ease-out),
+    border-color var(--duration-instant) var(--ease-out);
 }
 
 .writing-rss-link:hover {
@@ -1610,7 +1658,7 @@ body.is-menu-visible .site-wrapper {
   padding: 1.5rem 2.5rem 1.5rem 0;
   border-bottom: 1px solid var(--color-border);
   text-decoration: none;
-  transition: background-color 0.15s ease;
+  transition: background-color var(--duration-instant) var(--ease-out);
 }
 
 .writing-item:first-child {
@@ -1638,7 +1686,7 @@ body.is-menu-visible .site-wrapper {
   color: var(--color-fg);
   margin: 0 0 0.5rem 0;
   line-height: 1.4;
-  transition: color 0.15s ease;
+  transition: color var(--duration-instant) var(--ease-out);
 }
 
 .writing-description {
@@ -1656,7 +1704,7 @@ body.is-menu-visible .site-wrapper {
   font-size: 1rem;
   color: var(--color-fg-light);
   opacity: 0.5;
-  transition: opacity 0.15s ease;
+  transition: opacity var(--duration-instant) var(--ease-out);
 }
 
 .writing-item:hover .writing-external {
@@ -1789,12 +1837,12 @@ body.is-menu-visible .site-wrapper {
   font-size: 0.9em;
   background: var(--color-bg-offset);
   padding: 0.2em 0.4em;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
 }
 
 .prose pre {
   background: var(--color-bg-offset);
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   padding: 1rem;
   overflow-x: auto;
   margin: 1.5rem 0;
@@ -1815,7 +1863,7 @@ body.is-menu-visible .site-wrapper {
 .prose img {
   max-width: 100%;
   height: auto;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   margin: 1.5rem 0;
 }
 
@@ -1843,8 +1891,8 @@ body.is-menu-visible .site-wrapper {
   opacity: 0;
   transform: translateY(20px);
   transition:
-    opacity 0.6s var(--ease-out),
-    transform 0.6s var(--ease-out);
+    opacity var(--duration-slow) var(--ease-out),
+    transform var(--duration-slow) var(--ease-out);
 }
 
 .animate-on-scroll.is-visible {
@@ -1874,8 +1922,8 @@ body.is-menu-visible .site-wrapper {
   opacity: 0;
   transform: translateX(-30px);
   transition:
-    opacity 0.6s var(--ease-out),
-    transform 0.6s var(--ease-out);
+    opacity var(--duration-slow) var(--ease-out),
+    transform var(--duration-slow) var(--ease-out);
 }
 
 .animate-slide-left.is-visible {
@@ -1888,8 +1936,8 @@ body.is-menu-visible .site-wrapper {
   opacity: 0;
   transform: scale(0.95);
   transition:
-    opacity 0.5s var(--ease-out),
-    transform 0.5s var(--ease-out);
+    opacity var(--duration-menu) var(--ease-out),
+    transform var(--duration-menu) var(--ease-out);
 }
 
 .animate-scale.is-visible {
@@ -2014,7 +2062,7 @@ body.is-menu-visible .site-wrapper {
 
 /* Competency level variations */
 .skill-tag--expert {
-  background: linear-gradient(135deg, var(--color-bg) 0%, rgba(46, 89, 186, 0.05) 100%);
+  background: linear-gradient(135deg, var(--color-bg) 0%, var(--color-accent-subtle) 100%);
   font-weight: var(--font-weight-bold);
 }
 
@@ -2240,7 +2288,7 @@ body.is-menu-visible .site-wrapper {
   color: var(--color-fg-light);
   padding: 0.375rem 0.875rem;
   background: var(--color-border-bg);
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   font-weight: var(--font-weight-medium);
 }
 
@@ -2266,8 +2314,8 @@ body.is-menu-visible .site-wrapper {
   height: 700px;
   background: radial-gradient(
     circle,
-    rgba(46, 89, 186, 0.15) 0%,
-    rgba(46, 89, 186, 0.05) 40%,
+    var(--color-accent-glow) 0%,
+    var(--color-accent-subtle) 40%,
     transparent 70%
   );
   filter: blur(50px);
@@ -2492,7 +2540,7 @@ body.is-menu-visible .site-wrapper {
 .about-content a {
   color: var(--color-accent);
   text-decoration: underline;
-  text-decoration-color: rgba(46, 89, 186, 0.4);
+  text-decoration-color: var(--color-accent-underline-strong);
   text-underline-offset: 3px;
   text-decoration-thickness: 1.5px;
   transition:
@@ -2716,7 +2764,7 @@ body.is-menu-visible .site-wrapper {
   padding: 1rem 2.25rem;
   font-size: var(--text-md);
   font-weight: var(--font-weight-bold);
-  color: #fff;
+  color: var(--color-white);
   background: var(--color-accent);
   border-radius: var(--radius-md);
   text-decoration: none;
@@ -3298,6 +3346,20 @@ body.is-menu-visible .site-wrapper {
   outline-offset: 2px;
 }
 
+/* Static (non-linked) project cards */
+.project-card--static {
+  cursor: default;
+}
+
+.project-card--static:hover {
+  transform: none;
+  box-shadow: var(--shadow-md);
+}
+
+.project-card-static {
+  display: block;
+}
+
 .project-card-image {
   position: relative;
   display: block;
@@ -3319,7 +3381,7 @@ body.is-menu-visible .site-wrapper {
 .project-card-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.3) 0%, transparent 50%);
+  background: linear-gradient(to top, var(--color-overlay-darker) 0%, transparent 50%);
   pointer-events: none;
 }
 
@@ -3372,7 +3434,7 @@ body.is-menu-visible .site-wrapper {
   color: var(--color-accent);
   background: var(--color-accent-light);
   padding: 0.35rem 0.875rem;
-  border-radius: 999px;
+  border-radius: var(--radius-full);
 }
 
 .project-card-date {
@@ -3410,7 +3472,7 @@ body.is-menu-visible .site-wrapper {
 
 .button-primary {
   background: var(--color-accent);
-  color: #fff;
+  color: var(--color-white);
 }
 
 .button-primary:hover {
@@ -3442,6 +3504,13 @@ body.is-menu-visible .site-wrapper {
   --color-fg: #e5e5e5;
   --color-fg-bold: #ffffff;
   --color-fg-light: #b0b0b5;
+  --color-white: #fff;
+  --color-black: #000;
+
+  /* Overlay colors for dark mode */
+  --color-overlay-light: rgba(255, 255, 255, 0.1);
+  --color-overlay-dark: rgba(0, 0, 0, 0.3);
+  --color-overlay-darker: rgba(0, 0, 0, 0.5);
 
   /* Accent colors */
   --color-accent: #60a5fa;

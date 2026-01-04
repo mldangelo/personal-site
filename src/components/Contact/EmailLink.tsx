@@ -166,24 +166,40 @@ export default function EmailLink({ loopMessage = false }: EmailLinkProps) {
     }
   };
 
+  const emailContent = (
+    <>
+      <span className="contact-email-prefix">{displayMessage}</span>
+      <span className="contact-email-domain">@mldangelo.com</span>
+    </>
+  );
+
   return (
     <div
       className="contact-email-container"
       onMouseEnter={handlePause}
       onMouseLeave={handleResume}
     >
-      <a
-        href={isValid ? `mailto:${displayMessage}@mldangelo.com` : undefined}
-        className={`contact-email-link${isValid ? '' : ' contact-email-link--invalid'}`}
-        onClick={handleClick}
-        onKeyDown={handleKeyDown}
-        onFocus={handlePause}
-        onBlur={handleResume}
-        aria-disabled={!isValid ? true : undefined}
-      >
-        <span className="contact-email-prefix">{displayMessage}</span>
-        <span className="contact-email-domain">@mldangelo.com</span>
-      </a>
+      {isValid ? (
+        <a
+          href={`mailto:${displayMessage}@mldangelo.com`}
+          className="contact-email-link"
+          onClick={handleClick}
+          onKeyDown={handleKeyDown}
+          onFocus={handlePause}
+          onBlur={handleResume}
+        >
+          {emailContent}
+        </a>
+      ) : (
+        <span
+          className="contact-email-link contact-email-link--invalid"
+          aria-disabled="true"
+          onFocus={handlePause}
+          onBlur={handleResume}
+        >
+          {emailContent}
+        </span>
+      )}
     </div>
   );
 }

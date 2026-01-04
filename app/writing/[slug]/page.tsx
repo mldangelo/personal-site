@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import PageWrapper from '@/components/Template/PageWrapper';
 import { getPostBySlug, getPostSlugs } from '@/lib/posts';
+import { formatDate } from '@/lib/utils';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -30,16 +31,6 @@ export async function generateMetadata({
     description: post.description,
   };
 }
-
-const formatDate = (dateStr: string): string => {
-  if (!dateStr) return '';
-  const date = new Date(`${dateStr}T12:00:00`);
-  return date.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-};
 
 export default async function PostPage({ params }: PageProps) {
   const { slug } = await params;

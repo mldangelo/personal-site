@@ -43,6 +43,7 @@ docs/                 → Documentation
 - Use existing patterns from similar components
 - Mark client components with `'use client'`
 - Follow conventional commits: `feat:`, `fix:`, `chore:`, `docs:`
+- Run `npm run format` before committing (CI enforces this)
 
 **Don't:**
 
@@ -50,6 +51,7 @@ docs/                 → Documentation
 - Create god components or monolithic files
 - Hard-code colors—use CSS variables (`var(--color-*)`)
 - Skip type annotations on function parameters
+- Commit without running `npm run format` first
 
 ## Tech Stack
 
