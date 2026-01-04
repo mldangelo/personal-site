@@ -6,7 +6,7 @@ import { getPostBySlug, getPostSlugs } from '@/lib/posts';
 import { formatDate } from '@/lib/utils';
 
 interface PageProps {
-  params: Promise<{ slug: string }>;
+  params: { slug: string };
 }
 
 export async function generateStaticParams() {
@@ -17,8 +17,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
-  const { slug } = await params;
-  const post = getPostBySlug(slug);
+  const post = getPostBySlug(params.slug);
 
   if (!post) {
     return {
@@ -33,8 +32,7 @@ export async function generateMetadata({
 }
 
 export default async function PostPage({ params }: PageProps) {
-  const { slug } = await params;
-  const post = getPostBySlug(slug);
+  const post = getPostBySlug(params.slug);
 
   if (!post) {
     notFound();

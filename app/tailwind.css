@@ -152,6 +152,7 @@
   /* ===================
      Z-INDEX SCALE
      =================== */
+  --z-sticky: 100; /* Sticky elements below header (e.g., resume nav) */
   --z-header: 10000;
   --z-overlay: 10001;
   --z-menu: 10002;
@@ -186,6 +187,12 @@
       transition-duration: 0.01ms !important;
       scroll-behavior: auto !important;
     }
+
+    /* Hide heavy fixed overlays that cause repaints */
+    body::before,
+    body::after {
+      display: none;
+    }
   }
 
   /* Focus-visible styles for keyboard navigation */
@@ -200,6 +207,15 @@
     outline: none;
   }
 
+  /* Color scheme for native elements (scrollbars, form controls, etc.) */
+  html {
+    color-scheme: light;
+  }
+
+  [data-theme='dark'] {
+    color-scheme: dark;
+  }
+
   body {
     background-color: var(--color-bg-alt);
     color: var(--color-fg);
@@ -212,7 +228,7 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Subtle grain texture for depth */
+  /* Subtle grain texture for depth - GPU-accelerated layer */
   body::before {
     content: '';
     position: fixed;
@@ -221,9 +237,11 @@
     opacity: 0.018;
     pointer-events: none;
     z-index: -1;
+    transform: translateZ(0);
+    contain: strict;
   }
 
-  /* Subtle radial gradient for depth in light mode */
+  /* Subtle radial gradient for depth - GPU-accelerated layer */
   body::after {
     content: '';
     position: fixed;
@@ -235,6 +253,8 @@
     );
     pointer-events: none;
     z-index: -1;
+    transform: translateZ(0);
+    contain: strict;
   }
 
   @media (min-width: 980px) {
@@ -277,8 +297,7 @@
   /* Keep simple underline for inline content links
      Exclude .hero-highlight which uses text-decoration instead */
   p a:not(.hero-highlight),
-  li a:not(.hero-highlight),
-  .blurb a:not(.hero-highlight) {
+  li a:not(.hero-highlight) {
     background-image: linear-gradient(
       transparent calc(100% - 1.5px),
       var(--color-accent-underline) 1.5px
@@ -290,8 +309,7 @@
   }
 
   p a:not(.hero-highlight):hover,
-  li a:not(.hero-highlight):hover,
-  .blurb a:not(.hero-highlight):hover {
+  li a:not(.hero-highlight):hover {
     color: var(--color-accent);
     background-image: linear-gradient(transparent calc(100% - 1.5px), var(--color-accent) 1.5px);
   }
@@ -467,6 +485,12 @@
     outline: none;
   }
 
+  /* Primary button (explicit alias - .button is already primary-styled) */
+  .btn-primary,
+  .button-primary {
+    /* Inherits from .button - accent color is the primary style */
+  }
+
   /* Secondary/ghost button variant */
   .btn-secondary,
   .button-secondary {
@@ -482,160 +506,6 @@
     box-shadow: inset 0 0 0 1.5px var(--color-accent);
     color: var(--color-accent);
     transform: translateY(-2px);
-  }
-
-  /* Post wrapper - Main content cards */
-  .post {
-    background-color: var(--color-bg);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-md);
-    margin-bottom: var(--spacing-section);
-    padding: 2.5em;
-    position: relative;
-    transition:
-      transform var(--duration-normal) var(--ease-out),
-      box-shadow var(--duration-normal) var(--ease-out);
-  }
-
-  .post > div {
-    margin: var(--spacing-section) 0;
-  }
-
-  .post > header {
-    border-bottom: solid 1px var(--color-border);
-    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-    display: flex;
-    margin: -2.5em 0 2.5em -2.5em;
-    padding: 2.5em;
-    width: calc(100% + 5em);
-  }
-
-  .post > header .title {
-    flex: 1;
-    padding-right: 2.5em;
-  }
-
-  .post > header .title h2 {
-    font-size: var(--text-2xl);
-    font-weight: var(--font-weight-black);
-    letter-spacing: -0.02em;
-    margin: 0;
-  }
-
-  .post > header .title > p {
-    color: var(--color-fg-light);
-    font-family: var(--font-sans);
-    font-size: var(--text-sm);
-    font-weight: var(--font-weight-normal);
-    letter-spacing: var(--tracking-normal);
-    line-height: var(--leading-normal);
-    margin: 0.5em 0 0 0;
-  }
-
-  @media (max-width: 980px) {
-    .post {
-      padding: 2em;
-    }
-
-    .post > header {
-      margin: -2em 0 2em -2em;
-      padding: 2em;
-      width: calc(100% + 4em);
-    }
-
-    .post > header .title {
-      padding-right: 2em;
-    }
-  }
-
-  @media (max-width: 736px) {
-    .post {
-      padding: 1.5em;
-      border-radius: var(--radius-md);
-    }
-
-    .post > header {
-      flex-direction: column;
-      margin: -1.5em 0 1.5em -1.5em;
-      padding: 1.5em;
-      width: calc(100% + 3em);
-      border-radius: var(--radius-md) var(--radius-md) 0 0;
-    }
-
-    .post > header .title {
-      margin-bottom: 1em;
-      padding-right: 0;
-    }
-
-    .post > header .title h2 {
-      font-size: var(--text-xl);
-    }
-  }
-
-  /* Mini post (project cards) - With hover elevation */
-  .mini-post {
-    background-color: var(--color-bg);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-md);
-    display: flex;
-    flex-direction: column;
-    margin: 0 0 2em 0;
-    overflow: hidden;
-    transition:
-      transform var(--duration-normal) var(--ease-out),
-      box-shadow var(--duration-normal) var(--ease-out);
-  }
-
-  .mini-post:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-lg);
-  }
-
-  .mini-post > header {
-    min-height: 4em;
-    padding: 1.5em 1.5em 0.75em 1.5em;
-    position: relative;
-    text-align: left;
-  }
-
-  .mini-post > header h3 {
-    font-size: var(--text-base);
-    font-weight: var(--font-weight-bold);
-    letter-spacing: -0.01em;
-    margin: 0;
-  }
-
-  .mini-post > header .published {
-    color: var(--color-fg-light);
-    display: block;
-    font-family: var(--font-sans);
-    font-size: var(--text-xs);
-    font-weight: var(--font-weight-normal);
-    letter-spacing: var(--tracking-normal);
-    margin: 0.5em 0 0 0;
-  }
-
-  .mini-post .image {
-    display: block;
-    overflow: hidden;
-    text-decoration: none;
-    background-image: none !important;
-  }
-
-  .mini-post .image img {
-    height: auto;
-    transition: transform var(--duration-normal) var(--ease-out);
-    width: 100%;
-  }
-
-  .mini-post:hover .image img {
-    transform: scale(1.03);
-  }
-
-  .mini-post .description {
-    font-size: var(--text-base);
-    padding: 1.5em;
-    line-height: var(--leading-normal);
   }
 
   /* Skill bar */
@@ -656,7 +526,8 @@
   }
 
   .skillbar-title {
-    background: var(--color-accent);
+    /* Use CSS custom property if set, fallback to accent */
+    background: var(--skillbar-color, var(--color-accent));
     border-radius: var(--radius-xs) 0 0 var(--radius-xs);
     color: var(--color-bg);
     font-size: var(--text-base);
@@ -695,6 +566,8 @@
   }
 
   .skillbar-bar {
+    /* Use CSS custom property if set, fallback to accent */
+    background: var(--skillbar-color, var(--color-accent));
     height: 100%;
     position: relative;
     transition: width var(--duration-skill) ease-in-out;
@@ -909,144 +782,6 @@ body.is-menu-visible .site-wrapper {
   width: 100%;
 }
 
-/* Sidebar */
-.site-sidebar {
-  margin-right: var(--spacing-section);
-  min-width: var(--sidebar-width);
-  width: var(--sidebar-width);
-}
-
-.site-sidebar > * {
-  border-top: solid 1px var(--color-border);
-  margin: var(--spacing-section) 0 0 0;
-  padding: var(--spacing-section) 0 0 0;
-}
-
-.site-sidebar > :first-child {
-  border-top: 0;
-  margin-top: 0;
-  padding-top: 0;
-}
-
-@media (max-width: 1280px) {
-  .site-sidebar {
-    border-top: solid 1px var(--color-border);
-    margin: var(--spacing-section) 0 0 0;
-    min-width: 0;
-    padding: var(--spacing-section) 0 0 0;
-    width: 100%;
-  }
-}
-
-/* Intro section */
-.site-intro {
-  text-align: left;
-}
-
-.site-intro .logo {
-  border-radius: var(--radius-lg);
-  display: inline-block;
-  height: 9em;
-  overflow: hidden;
-  text-decoration: none;
-  width: 9em;
-  position: relative;
-  box-shadow: var(--shadow-md);
-  transition:
-    transform var(--duration-normal) var(--ease-out),
-    box-shadow var(--duration-normal) var(--ease-out);
-  background-image: none !important;
-}
-
-.site-intro .logo::before {
-  content: '';
-  position: absolute;
-  inset: -3px;
-  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-secondary));
-  border-radius: calc(var(--radius-lg) + 3px);
-  z-index: -1;
-  opacity: 0;
-  transition: opacity var(--duration-normal) var(--ease-out);
-}
-
-.site-intro .logo:hover {
-  transform: scale(1.02);
-  box-shadow: var(--shadow-lg);
-}
-
-.site-intro .logo:hover::before {
-  opacity: 1;
-}
-
-.site-intro .logo img {
-  height: 100%;
-  object-fit: cover;
-  width: 100%;
-  transition: transform var(--duration-normal) var(--ease-out);
-}
-
-.site-intro .logo:hover img {
-  transform: scale(1.05);
-}
-
-.site-intro header {
-  margin-top: 1.5em;
-}
-
-.site-intro header h2 {
-  font-size: var(--text-xl);
-  font-weight: var(--font-weight-black);
-  letter-spacing: -0.02em;
-  margin-bottom: 0.25em;
-}
-
-.site-intro header p {
-  font-size: var(--text-sm);
-  color: var(--color-fg-light);
-  letter-spacing: var(--tracking-normal);
-}
-
-/* Remove underline from email links in sidebar */
-.site-intro header p a {
-  background-image: none !important;
-  color: var(--color-fg-light);
-  transition: color var(--duration-fast) var(--ease-out);
-}
-
-.site-intro header p a:hover {
-  color: var(--color-accent);
-}
-
-/* Blurb section */
-.blurb {
-  text-align: left;
-}
-
-.blurb h2 {
-  font-size: var(--text-base);
-  margin: 0 0 1.5em 0;
-}
-
-/* Footer section in sidebar */
-.site-footer {
-  text-align: center;
-}
-
-/* Copyright */
-.copyright {
-  color: var(--color-fg-light);
-  font-size: var(--text-2xs);
-  letter-spacing: var(--tracking-tight);
-  margin: 2em 0 0 0;
-  padding: 0;
-  /* Removed: text-transform: uppercase */
-}
-
-.copyright a {
-  color: inherit;
-  text-decoration: none;
-}
-
 /* ========================================
    SLIDE MENU (native implementation)
    ======================================== */
@@ -1109,7 +844,7 @@ body.is-menu-visible .site-wrapper {
   display: none;
 }
 
-@media (max-width: 980px) {
+@media (max-width: 735px) {
   .hamburger-container {
     display: block;
   }
@@ -1497,11 +1232,6 @@ body.is-menu-visible .site-wrapper {
   color: var(--color-fg);
 }
 
-/* Hide the bullet dot separator - no longer needed with grid */
-.course-dot {
-  display: none;
-}
-
 /* ========================================
    CONTACT PAGE STYLES
    ======================================== */
@@ -1868,20 +1598,6 @@ body.is-menu-visible .site-wrapper {
 }
 
 /* ========================================
-   UTILITY CLASSES
-   ======================================== */
-
-.clearfix::before,
-.clearfix::after {
-  content: '';
-  display: table;
-}
-
-.clearfix::after {
-  clear: both;
-}
-
-/* ========================================
    SCROLL ANIMATIONS
    Fade-in effects triggered by Intersection Observer
    ======================================== */
@@ -2014,7 +1730,8 @@ body.is-menu-visible .site-wrapper {
   font-weight: var(--font-weight-black);
   text-transform: uppercase;
   letter-spacing: var(--tracking-wide);
-  color: var(--color-fg-bold);
+  /* Use CSS custom property if set, fallback to default */
+  color: var(--skill-category-color, var(--color-fg-bold));
   margin-bottom: 1.25rem;
   padding-bottom: 0.75rem;
   border-bottom: 3px solid var(--color-accent);
@@ -2060,46 +1777,8 @@ body.is-menu-visible .site-wrapper {
   background: var(--color-bg-alt);
 }
 
-/* Competency level variations */
-.skill-tag--expert {
-  background: linear-gradient(135deg, var(--color-bg) 0%, var(--color-accent-subtle) 100%);
-  font-weight: var(--font-weight-bold);
-}
-
-.skill-tag--advanced {
-  font-weight: var(--font-weight-medium);
-}
-
-.skill-tag--proficient {
-  opacity: 0.85;
-}
-
-/* Expert indicator dot */
-.skill-tag-indicator {
-  width: 6px;
-  height: 6px;
-  background: var(--tag-color, var(--color-accent));
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
 .skill-tag-name {
   white-space: nowrap;
-}
-
-/* Legacy skill category section */
-.skill-category {
-  margin-bottom: 2em;
-}
-
-.skill-category-title {
-  font-size: var(--text-sm);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-fg-light);
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-wide);
-  margin-bottom: 1em;
-  text-align: center;
 }
 
 /* ========================================
@@ -2842,7 +2521,7 @@ body.is-menu-visible .site-wrapper {
   margin-top: 1.5rem;
   position: sticky;
   top: var(--header-height);
-  z-index: 100;
+  z-index: var(--z-sticky);
   background: color-mix(in srgb, var(--color-bg-alt) 85%, transparent);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -3032,8 +2711,8 @@ body.is-menu-visible .site-wrapper {
 }
 
 .theme-toggle-placeholder {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
 }
 
 /* Hide hamburger on desktop */
@@ -3467,30 +3146,6 @@ body.is-menu-visible .site-wrapper {
 }
 
 /* ========================================
-   BUTTON VARIANTS
-   ======================================== */
-
-.button-primary {
-  background: var(--color-accent);
-  color: var(--color-white);
-}
-
-.button-primary:hover {
-  background: color-mix(in srgb, var(--color-accent) 80%, black);
-}
-
-.button-secondary {
-  background: transparent;
-  color: var(--color-fg);
-  border: 1px solid var(--color-border-alt);
-}
-
-.button-secondary:hover {
-  background: var(--color-bg-alt);
-  border-color: var(--color-fg-light);
-}
-
-/* ========================================
    DARK MODE
    Supports both system preference and manual toggle
    ======================================== */
@@ -3653,16 +3308,6 @@ body.is-menu-visible .site-wrapper {
   opacity: 0.015;
 }
 
-[data-theme='dark'] .mini-post:hover {
-  box-shadow:
-    var(--shadow-lg),
-    0 0 0 1px var(--color-border);
-}
-
-[data-theme='dark'] .post > header {
-  border-bottom-color: var(--color-border-bg);
-}
-
 [data-theme='dark'] .skillbar,
 [data-theme='dark'] code {
   background: var(--color-surface-hover);
@@ -3675,8 +3320,7 @@ body.is-menu-visible .site-wrapper {
 
 /* Link underlines */
 [data-theme='dark'] p a:not(.hero-highlight),
-[data-theme='dark'] li a:not(.hero-highlight),
-[data-theme='dark'] .blurb a:not(.hero-highlight) {
+[data-theme='dark'] li a:not(.hero-highlight) {
   background-image: linear-gradient(
     transparent calc(100% - 1.5px),
     var(--color-accent-underline) 1.5px
@@ -3684,7 +3328,6 @@ body.is-menu-visible .site-wrapper {
 }
 
 [data-theme='dark'] p a:not(.hero-highlight):hover,
-[data-theme='dark'] li a:not(.hero-highlight):hover,
-[data-theme='dark'] .blurb a:not(.hero-highlight):hover {
+[data-theme='dark'] li a:not(.hero-highlight):hover {
   background-image: linear-gradient(transparent calc(100% - 1.5px), var(--color-accent) 1.5px);
 }

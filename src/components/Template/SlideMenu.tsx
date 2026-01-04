@@ -118,10 +118,11 @@ export default function SlideMenu({
         ref={menuRef}
         id={id}
         role="dialog"
-        aria-modal={isOpen}
+        aria-modal="true"
         aria-label="Navigation menu"
         className={`slide-menu slide-menu--${position}${isOpen ? ' slide-menu--open' : ''}`}
         aria-hidden={!isOpen}
+        inert={!isOpen}
         onKeyDown={handleKeyDown}
       >
         {children}

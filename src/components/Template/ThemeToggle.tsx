@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { MoonIcon, SunIcon } from '@/components/Icons';
 
@@ -9,7 +9,7 @@ export default function ThemeToggle() {
 
   useEffect(() => {
     const stored = localStorage.getItem('theme');
-    if (stored) {
+    if (stored === 'light' || stored === 'dark') {
       setIsDark(stored === 'dark');
     } else {
       setIsDark(window.matchMedia('(prefers-color-scheme: dark)').matches);
@@ -18,7 +18,6 @@ export default function ThemeToggle() {
 
   useEffect(() => {
     if (isDark === null) return;
-
     document.documentElement.setAttribute(
       'data-theme',
       isDark ? 'dark' : 'light',
@@ -26,9 +25,10 @@ export default function ThemeToggle() {
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
   }, [isDark]);
 
-  const toggle = () => setIsDark((prev) => !prev);
+  const toggle = useCallback(() => {
+    setIsDark((prev) => !prev);
+  }, []);
 
-  // Don't render until we know the theme to avoid hydration mismatch
   if (isDark === null) {
     return <div className="theme-toggle-placeholder" />;
   }
