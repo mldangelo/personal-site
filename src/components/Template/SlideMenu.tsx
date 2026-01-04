@@ -26,7 +26,7 @@ export default function SlideMenu({
   children,
   position = 'right',
 }: SlideMenuProps) {
-  const menuRef = useRef<HTMLElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
   const previousActiveElement = useRef<HTMLElement | null>(null);
 
   // Save scroll position and lock body scroll (iOS-safe)
@@ -114,7 +114,7 @@ export default function SlideMenu({
         aria-hidden="true"
       />
       {/* Menu panel */}
-      <nav
+      <div
         ref={menuRef}
         id={id}
         role="dialog"
@@ -125,7 +125,7 @@ export default function SlideMenu({
         onKeyDown={handleKeyDown}
       >
         {children}
-      </nav>
+      </div>
     </>
   );
 }

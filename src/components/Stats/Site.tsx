@@ -67,7 +67,7 @@ export default function SiteStats() {
     return (
       <div className="stats-error">
         <p>Unable to load GitHub stats. Showing cached data.</p>
-        <Table data={data} />
+        <Table data={initialData} />
       </div>
     );
   }

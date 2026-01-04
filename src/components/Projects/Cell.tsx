@@ -3,11 +3,11 @@ import Image from 'next/image';
 
 import type { Project } from '@/data/projects';
 
-interface ProjectCardProps {
+interface CellProps {
   data: Project;
 }
 
-export default function ProjectCard({ data }: ProjectCardProps) {
+export default function Cell({ data }: CellProps) {
   const { title, subtitle, link, image, date, desc, tech, featured } = data;
 
   const CardWrapper = link ? 'a' : 'div';
