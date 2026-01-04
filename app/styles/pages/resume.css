@@ -68,7 +68,7 @@
 }
 
 .resume-page .references {
-  margin: 3rem 0 2rem;
+  margin: var(--spacing-8) 0;
 }
 
 /* Resume page specific */
@@ -102,16 +102,16 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 0.5rem;
-  margin-top: 1.5rem;
-  margin-bottom: 1rem;
+  gap: var(--spacing-2);
+  margin-top: var(--spacing-6);
+  margin-bottom: var(--spacing-4);
   position: sticky;
   top: var(--header-height);
   z-index: var(--z-sticky);
   background: color-mix(in srgb, var(--color-bg-alt) 92%, transparent);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  padding: 1rem 1.5rem;
+  padding: var(--spacing-4) var(--spacing-6);
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-border-bg);
   box-shadow: var(--shadow-sm);
@@ -120,11 +120,11 @@
 @media (max-width: 736px) {
   .resume-nav {
     top: var(--header-height-mobile);
-    gap: 0.25rem;
-    padding: 0.75rem 1rem;
+    gap: var(--spacing-1);
+    padding: var(--spacing-3) var(--spacing-4);
     border-radius: var(--radius-md);
-    margin-left: -0.5rem;
-    margin-right: -0.5rem;
+    margin-left: calc(-1 * var(--spacing-2));
+    margin-right: calc(-1 * var(--spacing-2));
   }
 }
 
@@ -164,8 +164,8 @@
 }
 
 .resume-section {
-  scroll-margin-top: calc(var(--header-height) + 6rem);
-  padding-top: 2.5rem;
+  scroll-margin-top: calc(var(--header-height) + var(--scroll-offset-resume));
+  padding-top: var(--spacing-10);
   border-top: 2px solid var(--color-border);
 }
 

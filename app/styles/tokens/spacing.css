@@ -29,6 +29,7 @@
   --spacing-element: var(--spacing-7); /* 1.75rem - between block elements */
   --spacing-section: var(--spacing-16); /* 4rem - between major sections */
   --spacing-section-sm: var(--spacing-8); /* 2rem - compressed sections */
+  --scroll-offset-resume: var(--spacing-24); /* 6rem - resume section scroll offset */
 
   /* ===================
      LAYOUT DIMENSIONS

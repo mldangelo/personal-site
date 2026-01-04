@@ -8,7 +8,7 @@ describe('References', () => {
     render(<References />);
 
     expect(
-      screen.getByText('References are available upon request'),
+      screen.getByText(/references available upon request/i),
     ).toBeInTheDocument();
   });
 
@@ -16,7 +16,7 @@ describe('References', () => {
     render(<References />);
 
     const link = screen.getByRole('link', {
-      name: /references are available upon request/i,
+      name: /get in touch/i,
     });
     expect(link).toHaveAttribute('href', '/contact');
   });
@@ -28,10 +28,10 @@ describe('References', () => {
     expect(anchor).toBeInTheDocument();
   });
 
-  it('wraps text in a heading', () => {
+  it('displays as minimal inline text', () => {
     render(<References />);
 
-    const heading = screen.getByRole('heading', { level: 3 });
-    expect(heading).toHaveTextContent('References are available upon request');
+    const paragraph = screen.getByText(/references available upon request/i);
+    expect(paragraph.tagName).toBe('P');
   });
 });

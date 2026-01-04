@@ -26,8 +26,8 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 2.5em;
+    height: 2.5em;
     border-radius: var(--radius-sm);
     color: var(--color-fg-light);
     text-decoration: none;
