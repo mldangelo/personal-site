@@ -3,6 +3,7 @@ import Link from 'next/link';
 import PageWrapper from '@/components/Template/PageWrapper';
 import writing from '@/data/writing';
 import { getAllPosts } from '@/lib/posts';
+import { formatDate } from '@/lib/utils';
 
 export const metadata: Metadata = {
   title: 'Writing',
@@ -21,17 +22,6 @@ interface UnifiedItem {
   description: string;
   isExternal: boolean;
 }
-
-const formatDate = (dateStr: string): string => {
-  if (!dateStr) return '';
-  // Parse as UTC to avoid timezone shifts
-  const date = new Date(`${dateStr}T12:00:00`);
-  return date.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-};
 
 // Extracted component to reduce duplication
 interface WritingItemProps {

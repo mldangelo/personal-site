@@ -29,8 +29,10 @@ export default function Footer() {
         </div>
 
         <div className="footer-right">
-          <nav className="footer-links">
-            <span className="footer-links-label">Explore</span>
+          <nav className="footer-links" aria-labelledby="footer-links-heading">
+            <h4 id="footer-links-heading" className="footer-links-label">
+              Explore
+            </h4>
             <div className="footer-links-grid">
               <Link href="/about">About</Link>
               <Link href="/resume">Resume</Link>
@@ -39,8 +41,13 @@ export default function Footer() {
             </div>
           </nav>
 
-          <div className="footer-social">
-            <span className="footer-social-label">Connect</span>
+          <div
+            className="footer-social"
+            aria-labelledby="footer-social-heading"
+          >
+            <h4 id="footer-social-heading" className="footer-social-label">
+              Connect
+            </h4>
             <ContactIcons />
           </div>
         </div>
