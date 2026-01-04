@@ -25,6 +25,7 @@ npm test -- ComponentName                    # Test single component
 
 ```
 app/                  → Pages, layouts, global CSS
+app/styles/           → Modular CSS (tokens, base, components, layout, pages)
 src/components/       → React components (organized by feature)
 src/data/             → Static data (resume, projects, contact)
 src/hooks/            → Custom React hooks
@@ -38,7 +39,7 @@ docs/                 → Documentation
 **Do:**
 
 - Use TypeScript strict mode, functional components with hooks
-- Style with CSS custom properties in `app/tailwind.css`
+- Style with CSS custom properties in `app/styles/` (tokens in `tokens/`, components in `components/`)
 - Keep components small and focused
 - Use existing patterns from similar components
 - Mark client components with `'use client'`
