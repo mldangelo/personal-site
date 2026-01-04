@@ -6,12 +6,11 @@ import Experience from '@/components/Resume/Experience';
 import References from '@/components/Resume/References';
 import ResumeNav from '@/components/Resume/ResumeNav';
 import Skills from '@/components/Resume/Skills';
+import PageWrapper from '@/components/Template/PageWrapper';
 import courses from '@/data/resume/courses';
 import degrees from '@/data/resume/degrees';
 import { categories, skills } from '@/data/resume/skills';
 import work from '@/data/resume/work';
-
-import PageWrapper from '../components/PageWrapper';
 
 export const metadata: Metadata = {
   title: 'Resume',

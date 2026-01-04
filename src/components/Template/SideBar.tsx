@@ -2,12 +2,11 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import React from 'react';
 
 import ContactIcons from '../Contact/ContactIcons';
 import ThemePortrait from './ThemePortrait';
 
-const SideBar: React.FC = () => {
+export default function SideBar() {
   const pathname = usePathname();
 
   return (
@@ -58,6 +57,4 @@ const SideBar: React.FC = () => {
       </section>
     </section>
   );
-};
-
-export default SideBar;
+}

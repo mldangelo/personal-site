@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 
 import Hero from '@/components/Template/Hero';
 
-import PageWrapper from './components/PageWrapper';
+import PageWrapper from '@/components/Template/PageWrapper';
 
 export const metadata: Metadata = {
   description:

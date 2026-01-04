@@ -1,10 +1,10 @@
 import Link from 'next/link';
-import React from 'react';
 
-import ContactIcons from '../Contact/ContactIcons';
+import ContactIcons from '@/components/Contact/ContactIcons';
+
 import ThemePortrait from './ThemePortrait';
 
-const Footer: React.FC = () => {
+export default function Footer() {
   return (
     <footer className="site-footer-new">
       <div className="footer-content">
@@ -47,6 +47,4 @@ const Footer: React.FC = () => {
       </div>
     </footer>
   );
-};
-
-export default Footer;
+}

@@ -1,5 +1,4 @@
 import { act, render } from '@testing-library/react';
-import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
@@ -47,25 +46,31 @@ afterEach(() => {
   vi.clearAllMocks();
 });
 
-// Test component that uses the hook
-const TestScrollComponent: React.FC<{
+interface TestScrollComponentProps {
   onRender?: (isVisible: boolean) => void;
-}> = ({ onRender }) => {
+}
+
+function TestScrollComponent({ onRender }: TestScrollComponentProps) {
   const { ref, isVisible } = useScrollAnimation<HTMLDivElement>();
   onRender?.(isVisible);
   return (
     <div ref={ref} data-testid="scroll-element" data-visible={isVisible} />
   );
-};
+}
 
-const TestStaggeredComponent: React.FC<{
+interface TestStaggeredComponentProps {
   count: number;
   onRender?: (visibleItems: boolean[]) => void;
-}> = ({ count, onRender }) => {
+}
+
+function TestStaggeredComponent({
+  count,
+  onRender,
+}: TestStaggeredComponentProps) {
   const { containerRef, visibleItems } = useStaggeredAnimation(count);
   onRender?.(visibleItems);
   return <div ref={containerRef} data-testid="stagger-container" />;
-};
+}
 
 describe('useScrollAnimation', () => {
   it('returns ref and isVisible state', () => {

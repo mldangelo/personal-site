@@ -14,6 +14,7 @@ describe('Site', () => {
 
   beforeEach(() => {
     global.fetch = vi.fn().mockResolvedValue({
+      ok: true,
       json: () => Promise.resolve(mockGitHubResponse),
     });
   });
@@ -74,12 +75,15 @@ describe('Site', () => {
 
     render(<Site />);
 
+    // Should show error message
     await waitFor(() => {
-      expect(consoleSpy).toHaveBeenCalledWith(
-        'Failed to fetch GitHub data:',
-        expect.any(Error),
-      );
+      expect(
+        screen.getByText('Unable to load GitHub stats. Showing cached data.'),
+      ).toBeInTheDocument();
     });
+
+    // Should still show the fallback table
+    expect(screen.getByRole('table')).toBeInTheDocument();
 
     consoleSpy.mockRestore();
   });

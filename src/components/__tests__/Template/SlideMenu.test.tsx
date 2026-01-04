@@ -28,39 +28,39 @@ describe('SlideMenu', () => {
   it('applies open class when isOpen is true', () => {
     render(<SlideMenu {...defaultProps} isOpen />);
 
-    const nav = screen.getByRole('navigation');
-    expect(nav).toHaveClass('slide-menu--open');
+    const menu = screen.getByRole('dialog');
+    expect(menu).toHaveClass('slide-menu--open');
   });
 
   it('does not apply open class when closed', () => {
     render(<SlideMenu {...defaultProps} isOpen={false} />);
 
-    const nav = screen.getByRole('navigation', { hidden: true });
-    expect(nav).not.toHaveClass('slide-menu--open');
+    const menu = screen.getByRole('dialog', { hidden: true });
+    expect(menu).not.toHaveClass('slide-menu--open');
   });
 
   it('applies right position by default', () => {
     render(<SlideMenu {...defaultProps} isOpen />);
 
-    const nav = screen.getByRole('navigation');
-    expect(nav).toHaveClass('slide-menu--right');
+    const menu = screen.getByRole('dialog');
+    expect(menu).toHaveClass('slide-menu--right');
   });
 
   it('applies left position when specified', () => {
     render(<SlideMenu {...defaultProps} isOpen position="left" />);
 
-    const nav = screen.getByRole('navigation');
-    expect(nav).toHaveClass('slide-menu--left');
+    const menu = screen.getByRole('dialog');
+    expect(menu).toHaveClass('slide-menu--left');
   });
 
   it('sets aria-hidden based on isOpen', () => {
     const { rerender } = render(<SlideMenu {...defaultProps} isOpen={false} />);
 
-    const nav = screen.getByRole('navigation', { hidden: true });
-    expect(nav).toHaveAttribute('aria-hidden', 'true');
+    const menu = screen.getByRole('dialog', { hidden: true });
+    expect(menu).toHaveAttribute('aria-hidden', 'true');
 
     rerender(<SlideMenu {...defaultProps} isOpen />);
-    expect(nav).toHaveAttribute('aria-hidden', 'false');
+    expect(menu).toHaveAttribute('aria-hidden', 'false');
   });
 
   it('calls onClose when overlay is clicked', () => {
@@ -122,7 +122,7 @@ describe('SlideMenu', () => {
 
     // Focus the last element and tab forward
     lastLink.focus();
-    fireEvent.keyDown(screen.getByRole('navigation'), {
+    fireEvent.keyDown(screen.getByRole('dialog'), {
       key: 'Tab',
       shiftKey: false,
     });
@@ -136,7 +136,7 @@ describe('SlideMenu', () => {
     const lastLink = screen.getByText('Link 2');
 
     // First element is focused on open, shift-tab should go to last
-    fireEvent.keyDown(screen.getByRole('navigation'), {
+    fireEvent.keyDown(screen.getByRole('dialog'), {
       key: 'Tab',
       shiftKey: true,
     });
@@ -147,7 +147,7 @@ describe('SlideMenu', () => {
   it('has correct id attribute', () => {
     render(<SlideMenu {...defaultProps} isOpen id="custom-menu" />);
 
-    const nav = screen.getByRole('navigation');
-    expect(nav).toHaveAttribute('id', 'custom-menu');
+    const menu = screen.getByRole('dialog');
+    expect(menu).toHaveAttribute('id', 'custom-menu');
   });
 });

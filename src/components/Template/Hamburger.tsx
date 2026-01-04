@@ -8,7 +8,7 @@ import SlideMenu from './SlideMenu';
 
 const MENU_ID = 'mobile-nav-menu';
 
-const Hamburger: React.FC = () => {
+export default function Hamburger() {
   const [open, setOpen] = useState(false);
 
   const toggleMenu = useCallback(() => setOpen((prev) => !prev), []);
@@ -59,6 +59,4 @@ const Hamburger: React.FC = () => {
       </SlideMenu>
     </div>
   );
-};
-
-export default Hamburger;
+}

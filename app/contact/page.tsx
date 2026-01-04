@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import ContactIcons from '@/components/Contact/ContactIcons';
 import EmailLink from '@/components/Contact/EmailLink';
 
-import PageWrapper from '../components/PageWrapper';
+import PageWrapper from '@/components/Template/PageWrapper';
 
 export const metadata: Metadata = {
   title: 'Contact',

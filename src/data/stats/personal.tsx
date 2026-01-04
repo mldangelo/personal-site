@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { StatData } from '../../components/Stats/types';
+import type { StatData } from '../../components/Stats/types';
 
-const Age: React.FC = () => {
+function Age() {
   const [age, setAge] = useState<string>('');
 
   const tick = () => {
@@ -22,7 +22,7 @@ const Age: React.FC = () => {
   }, []);
 
   return <>{age}</>;
-};
+}
 
 const data: StatData[] = [
   {

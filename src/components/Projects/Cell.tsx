@@ -1,14 +1,13 @@
 import dayjs from 'dayjs';
 import Image from 'next/image';
-import React from 'react';
 
 import type { Project } from '@/data/projects';
 
-interface CellProps {
+interface ProjectCardProps {
   data: Project;
 }
 
-const Cell: React.FC<CellProps> = ({ data }) => {
+export default function ProjectCard({ data }: ProjectCardProps) {
   const { title, subtitle, link, image, date, desc, tech, featured } = data;
 
   const CardWrapper = link ? 'a' : 'div';
@@ -42,13 +41,11 @@ const Cell: React.FC<CellProps> = ({ data }) => {
             </div>
           )}
 
-          <time className="project-card-date">
+          <time className="project-card-date" dateTime={date}>
             {dayjs(date).format('YYYY')}
           </time>
         </div>
       </CardWrapper>
     </article>
   );
-};
-
-export default Cell;
+}

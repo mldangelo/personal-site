@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import initialData from '../../data/stats/site';
 import Table from './Table';
-import { StatData } from './types';
+import type { StatData } from './types';
 
 // GitHub API response fields used by this component
 interface GitHubRepoData {
@@ -15,37 +15,62 @@ interface GitHubRepoData {
   pushed_at: string;
 }
 
-const Stats: React.FC = () => {
-  const [data, setResponseData] = useState<StatData[]>(initialData);
+type FetchStatus = 'idle' | 'loading' | 'success' | 'error';
 
-  // React 19: Simplified data fetching without unnecessary useCallback
+export default function SiteStats() {
+  const [data, setData] = useState<StatData[]>(initialData);
+  const [status, setStatus] = useState<FetchStatus>('idle');
+
   useEffect(() => {
-    const fetchData = async () => {
+    const controller = new AbortController();
+
+    async function fetchGitHubData() {
+      setStatus('loading');
+
       try {
         const res = await fetch(
           'https://api.github.com/repos/mldangelo/personal-site',
+          { signal: controller.signal },
         );
+
+        if (!res.ok) {
+          throw new Error(`GitHub API returned ${res.status}`);
+        }
+
         const resData: GitHubRepoData = await res.json();
 
-        setResponseData(
+        setData(
           initialData.map((field) => ({
             ...field,
-            // Update value if key exists in GitHub response
             value:
               field.key && field.key in resData
                 ? (resData[field.key as keyof GitHubRepoData] ?? field.value)
                 : field.value,
           })),
         );
+        setStatus('success');
       } catch (error) {
+        if (error instanceof Error && error.name === 'AbortError') {
+          return; // Ignore abort errors
+        }
         console.error('Failed to fetch GitHub data:', error);
+        setStatus('error');
       }
-    };
+    }
 
-    fetchData();
+    fetchGitHubData();
+
+    return () => controller.abort();
   }, []);
 
-  return <Table data={data} />;
-};
+  if (status === 'error') {
+    return (
+      <div className="stats-error">
+        <p>Unable to load GitHub stats. Showing cached data.</p>
+        <Table data={data} />
+      </div>
+    );
+  }
 
-export default Stats;
+  return <Table data={data} />;
+}

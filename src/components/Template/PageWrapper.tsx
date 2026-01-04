@@ -1,9 +1,9 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
-import Footer from '@/components/Template/Footer';
+import Footer from './Footer';
 
 interface PageWrapperProps {
   children: React.ReactNode;

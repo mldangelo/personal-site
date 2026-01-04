@@ -1,6 +1,6 @@
 'use client';
 
-import { type FC, type ReactNode, useCallback, useEffect, useRef } from 'react';
+import { type ReactNode, useCallback, useEffect, useRef } from 'react';
 
 // Selector for focusable elements within the menu
 const FOCUSABLE_SELECTOR =
@@ -19,13 +19,13 @@ interface SlideMenuProps {
  * Features: focus trapping, focus restoration, escape-to-close,
  * body scroll lock (iOS-safe), reduced-motion support via CSS.
  */
-const SlideMenu: FC<SlideMenuProps> = ({
+export default function SlideMenu({
   id,
   isOpen,
   onClose,
   children,
   position = 'right',
-}) => {
+}: SlideMenuProps) {
   const menuRef = useRef<HTMLElement>(null);
   const previousActiveElement = useRef<HTMLElement | null>(null);
 
@@ -117,6 +117,9 @@ const SlideMenu: FC<SlideMenuProps> = ({
       <nav
         ref={menuRef}
         id={id}
+        role="dialog"
+        aria-modal={isOpen}
+        aria-label="Navigation menu"
         className={`slide-menu slide-menu--${position}${isOpen ? ' slide-menu--open' : ''}`}
         aria-hidden={!isOpen}
         onKeyDown={handleKeyDown}
@@ -125,6 +128,4 @@ const SlideMenu: FC<SlideMenuProps> = ({
       </nav>
     </>
   );
-};
-
-export default SlideMenu;
+}

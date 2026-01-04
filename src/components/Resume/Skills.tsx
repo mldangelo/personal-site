@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo, useReducer } from 'react';
+import { useMemo, useReducer } from 'react';
 
 import type { Category, Skill } from '@/data/resume/skills';
 
@@ -12,7 +12,6 @@ interface SkillsProps {
   categories: Category[];
 }
 
-// React 19: Using useReducer for complex filter state management
 type ButtonState = Record<string, boolean>;
 
 type ButtonAction = {
@@ -20,30 +19,26 @@ type ButtonAction = {
   label: string;
 };
 
-const buttonReducer = (
-  state: ButtonState,
-  action: ButtonAction,
-): ButtonState => {
+function buttonReducer(state: ButtonState, action: ButtonAction): ButtonState {
   switch (action.type) {
     case 'TOGGLE_CATEGORY': {
-      // Toggle button that was clicked. Turn all other buttons off.
-      const newButtons = Object.keys(state).reduce(
-        (obj, key) => ({
-          ...obj,
-          [key]: action.label === key && !state[key],
-        }),
-        {} as ButtonState,
-      );
-      // Turn on 'All' button if other buttons are off
+      const newButtons: ButtonState = {};
+
+      // Toggle clicked button, turn all others off
+      for (const key of Object.keys(state)) {
+        newButtons[key] = action.label === key && !state[key];
+      }
+
+      // Turn on 'All' button if no other buttons are active
       newButtons.All = !Object.keys(state).some((key) => newButtons[key]);
       return newButtons;
     }
     default:
       return state;
   }
-};
+}
 
-const Skills: React.FC<SkillsProps> = ({ skills, categories }) => {
+export default function Skills({ skills, categories }: SkillsProps) {
   const initialButtons = Object.fromEntries(
     [['All', false]].concat(categories.map(({ name }) => [name, false])),
   );
@@ -135,6 +130,4 @@ const Skills: React.FC<SkillsProps> = ({ skills, categories }) => {
       </div>
     </div>
   );
-};
-
-export default Skills;
+}

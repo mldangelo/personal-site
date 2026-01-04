@@ -1,3 +1,4 @@
+import bundleAnalyzer from '@next/bundle-analyzer';
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
@@ -5,13 +6,11 @@ const nextConfig: NextConfig = {
 
   // Allow dev server access from local network (mobile testing, etc.)
   allowedDevOrigins: ['http://192.168.*.*:3000'],
+
   images: {
     unoptimized: true,
   },
-  sassOptions: {
-    includePaths: ['./src/static/css'],
-    silenceDeprecations: ['import'],
-  },
+
   trailingSlash: true,
 
   // Turbopack configuration (used in development)
@@ -28,8 +27,8 @@ const nextConfig: NextConfig = {
   },
 };
 
-// Bundle analyzer for production build analysis (webpack only)
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
+// Bundle analyzer for production build analysis
+const withBundleAnalyzer = bundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
 });
 

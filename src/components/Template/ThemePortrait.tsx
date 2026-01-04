@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import React from 'react';
 
 interface ThemePortraitProps {
   width: number;
@@ -11,13 +10,16 @@ interface ThemePortraitProps {
 /**
  * Theme-aware portrait component that swaps between light and dark mode images.
  * Uses CSS-based visibility toggling for instant switching without hydration mismatch.
+ *
+ * Note: Both images are loaded to enable instant theme switching without flash.
+ * This is an intentional trade-off for a better UX on theme toggle.
  */
-const ThemePortrait: React.FC<ThemePortraitProps> = ({
+export default function ThemePortrait({
   width,
   height,
   priority = false,
   className = '',
-}) => {
+}: ThemePortraitProps) {
   return (
     <span className={`theme-portrait ${className}`}>
       <Image
@@ -27,7 +29,6 @@ const ThemePortrait: React.FC<ThemePortraitProps> = ({
         height={height}
         priority={priority}
         className="theme-portrait-light"
-        loading={priority ? undefined : 'lazy'}
       />
       <Image
         src="/images/me-dark.jpg"
@@ -36,10 +37,7 @@ const ThemePortrait: React.FC<ThemePortraitProps> = ({
         height={height}
         priority={priority}
         className="theme-portrait-dark"
-        loading={priority ? undefined : 'lazy'}
       />
     </span>
   );
-};
-
-export default ThemePortrait;
+}

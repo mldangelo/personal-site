@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import Personal from '@/components/Stats/Personal';
 import Site from '@/components/Stats/Site';
 
-import PageWrapper from '../components/PageWrapper';
+import PageWrapper from '@/components/Template/PageWrapper';
 
 export const metadata: Metadata = {
   title: 'Stats',

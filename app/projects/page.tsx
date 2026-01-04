@@ -1,9 +1,8 @@
 import type { Metadata } from 'next';
 
 import Cell from '@/components/Projects/Cell';
+import PageWrapper from '@/components/Template/PageWrapper';
 import data from '@/data/projects';
-
-import PageWrapper from '../components/PageWrapper';
 
 export const metadata: Metadata = {
   title: 'Projects',

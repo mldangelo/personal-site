@@ -2,21 +2,17 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import React from 'react';
 
-import routes from '../../data/routes';
+import routes from '@/data/routes';
+
 import Hamburger from './Hamburger';
 import ThemeToggle from './ThemeToggle';
 
-// Websites Navbar, displays routes defined in 'src/data/routes'
-const Navigation: React.FC = () => {
+export default function Navigation() {
   const pathname = usePathname();
 
-  // Check if a route is active (exact match or starts with path for nested routes)
   const isActive = (path: string) => {
-    if (path === '/') {
-      return pathname === '/';
-    }
+    if (path === '/') return pathname === '/';
     return pathname?.startsWith(path);
   };
 
@@ -47,6 +43,4 @@ const Navigation: React.FC = () => {
       </div>
     </header>
   );
-};
-
-export default Navigation;
+}

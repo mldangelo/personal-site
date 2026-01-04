@@ -1,18 +1,17 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
 
 import data from '@/data/contact';
 
-const ContactIcons: React.FC = () => (
-  <ul className="icons">
-    {data.map((s) => (
-      <li key={s.label}>
-        <a href={s.link} aria-label={s.label}>
-          <FontAwesomeIcon icon={s.icon} />
-        </a>
-      </li>
-    ))}
-  </ul>
-);
-
-export default ContactIcons;
+export default function ContactIcons() {
+  return (
+    <ul className="icons">
+      {data.map((s) => (
+        <li key={s.label}>
+          <a href={s.link} aria-label={s.label}>
+            <FontAwesomeIcon icon={s.icon} />
+          </a>
+        </li>
+      ))}
+    </ul>
+  );
+}
