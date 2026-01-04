@@ -1,13 +1,13 @@
-import React, { isValidElement } from 'react';
+import { isValidElement } from 'react';
 
-import { TableRowProps } from './types';
+import type { TableRowProps } from './types';
 
-const TableRow: React.FC<TableRowProps> = ({
+export default function TableRow({
   label,
   link = null,
   value = null,
   format,
-}) => {
+}: TableRowProps) {
   // If value is a React element, render it directly
   const displayValue = isValidElement(value)
     ? value
@@ -23,6 +23,4 @@ const TableRow: React.FC<TableRowProps> = ({
       </td>
     </tr>
   );
-};
-
-export default TableRow;
+}

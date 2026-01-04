@@ -1,10 +1,8 @@
 import Markdown from 'markdown-to-jsx';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-
+import PageWrapper from '@/components/Template/PageWrapper';
 import { getPostBySlug, getPostSlugs } from '@/lib/posts';
-
-import PageWrapper from '../../components/PageWrapper';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -55,7 +53,9 @@ export default async function PostPage({ params }: PageProps) {
     <PageWrapper>
       <article className="post-page">
         <header className="post-header">
-          <time className="post-date">{formatDate(post.date)}</time>
+          <time className="post-date" dateTime={post.date}>
+            {formatDate(post.date)}
+          </time>
           <h1 className="post-title">{post.title}</h1>
           <p className="post-description">{post.description}</p>
         </header>

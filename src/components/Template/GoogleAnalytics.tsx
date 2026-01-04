@@ -1,6 +1,6 @@
 import { GoogleAnalytics as NextGoogleAnalytics } from '@next/third-parties/google';
 
-const GoogleAnalytics: React.FC = () => {
+export default function GoogleAnalytics() {
   const gaId = process.env.NEXT_PUBLIC_GA_TRACKING_ID;
 
   if (!gaId) {
@@ -8,6 +8,4 @@ const GoogleAnalytics: React.FC = () => {
   }
 
   return <NextGoogleAnalytics gaId={gaId} />;
-};
-
-export default GoogleAnalytics;
+}

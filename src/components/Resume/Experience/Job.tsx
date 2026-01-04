@@ -1,6 +1,5 @@
 import dayjs from 'dayjs';
 import Markdown from 'markdown-to-jsx';
-import React from 'react';
 
 import type { Position } from '@/data/resume/work';
 
@@ -8,7 +7,7 @@ interface JobProps {
   data: Position;
 }
 
-const Job: React.FC<JobProps> = ({ data }) => {
+export default function Job({ data }: JobProps) {
   const { name, position, url, startDate, endDate, summary, highlights } = data;
 
   return (
@@ -19,8 +18,15 @@ const Job: React.FC<JobProps> = ({ data }) => {
         </h4>
         <p className="daterange">
           {' '}
-          {dayjs(startDate).format('MMMM YYYY')} -{' '}
-          {endDate ? dayjs(endDate).format('MMMM YYYY') : 'Present'}
+          <time dateTime={startDate}>
+            {dayjs(startDate).format('MMMM YYYY')}
+          </time>{' '}
+          -{' '}
+          {endDate ? (
+            <time dateTime={endDate}>{dayjs(endDate).format('MMMM YYYY')}</time>
+          ) : (
+            'Present'
+          )}
         </p>
       </header>
       {summary ? (
@@ -53,6 +59,4 @@ const Job: React.FC<JobProps> = ({ data }) => {
       ) : null}
     </article>
   );
-};
-
-export default Job;
+}

@@ -1,4 +1,4 @@
-import React from 'react';
+import type { CSSProperties } from 'react';
 
 import type { Category, Skill } from '@/data/resume/skills';
 
@@ -7,7 +7,7 @@ interface SkillTagProps {
   categories: Category[];
 }
 
-const SkillTag: React.FC<SkillTagProps> = ({ data, categories }) => {
+export default function SkillTag({ data, categories }: SkillTagProps) {
   const { category, competency, title } = data;
 
   // Get the primary category color
@@ -29,12 +29,10 @@ const SkillTag: React.FC<SkillTagProps> = ({ data, categories }) => {
       style={
         {
           '--tag-color': categoryColor,
-        } as React.CSSProperties
+        } as CSSProperties
       }
     >
       <span className="skill-tag-name">{title}</span>
     </span>
   );
-};
-
-export default SkillTag;
+}

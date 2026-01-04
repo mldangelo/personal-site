@@ -1,10 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-
+import PageWrapper from '@/components/Template/PageWrapper';
 import writing from '@/data/writing';
 import { getAllPosts } from '@/lib/posts';
-
-import PageWrapper from '../components/PageWrapper';
 
 export const metadata: Metadata = {
   title: 'Writing',
@@ -45,7 +43,9 @@ function WritingItem({ item, showDate = true }: WritingItemProps) {
   const content = (
     <>
       {showDate && item.date && (
-        <time className="writing-date">{formatDate(item.date)}</time>
+        <time className="writing-date" dateTime={item.date}>
+          {formatDate(item.date)}
+        </time>
       )}
       <h2 className="writing-title">{item.title}</h2>
       <p className="writing-description">{item.description}</p>

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const sections = [
   { name: 'Experience', id: 'experience' },
@@ -10,7 +10,7 @@ const sections = [
   { name: 'References', id: 'references' },
 ];
 
-const ResumeNav: React.FC = () => {
+export default function ResumeNav() {
   const [activeSection, setActiveSection] = useState('experience');
 
   useEffect(() => {
@@ -45,6 +45,4 @@ const ResumeNav: React.FC = () => {
       ))}
     </nav>
   );
-};
-
-export default ResumeNav;
+}

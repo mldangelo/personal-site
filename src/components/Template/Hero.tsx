@@ -1,9 +1,8 @@
 import Link from 'next/link';
-import React from 'react';
 
 import ThemePortrait from './ThemePortrait';
 
-const Hero: React.FC = () => {
+export default function Hero() {
   return (
     <section className="hero">
       <div className="hero-content">
@@ -46,6 +45,4 @@ const Hero: React.FC = () => {
       </div>
     </section>
   );
-};
-
-export default Hero;
+}

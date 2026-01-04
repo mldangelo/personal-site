@@ -1,20 +1,17 @@
 'use client';
 
-import React, { useEffect, useReducer, useRef, useState } from 'react';
+import { useEffect, useReducer, useRef, useState } from 'react';
 
-// Validates the first half of an email address.
-const validateText = (text: string): boolean => {
-  // NOTE: Passes RFC 5322 but not tested on google's standard.
-  // eslint-disable-next-line no-useless-escape
-  const re = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))$/;
+// Validates the first half of an email address per RFC 5322
+function validateText(text: string): boolean {
+  const re = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))$/;
   return re.test(text) || text.length === 0;
-};
+}
 
-// Check for reduced motion preference
-const prefersReducedMotion = (): boolean => {
+function prefersReducedMotion(): boolean {
   if (typeof window === 'undefined') return false;
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-};
+}
 
 const messages = [
   'hi',
@@ -34,7 +31,7 @@ const messages = [
   'thanks',
 ];
 
-const useInterval = (callback: () => void, delay: number | null) => {
+function useInterval(callback: () => void, delay: number | null) {
   const savedCallback = useRef<() => void>(callback);
 
   useEffect(() => {
@@ -42,33 +39,29 @@ const useInterval = (callback: () => void, delay: number | null) => {
   }, [callback]);
 
   useEffect(() => {
-    if (delay) {
-      const id = setInterval(() => {
-        savedCallback.current?.();
-      }, delay);
-      return () => clearInterval(id);
-    }
-    return () => {}; // pass linter
-  }, [delay]);
-};
+    if (!delay) return;
 
-// React 19: Using useReducer for complex state management
-type AnimationState = {
+    const id = setInterval(() => savedCallback.current?.(), delay);
+    return () => clearInterval(id);
+  }, [delay]);
+}
+
+interface AnimationState {
   idx: number;
   message: string;
   char: number;
   isActive: boolean;
-};
+}
 
 type AnimationAction =
   | { type: 'TICK'; loopMessage: boolean; hold: number }
   | { type: 'PAUSE' }
   | { type: 'RESUME'; maxIdx: number };
 
-const animationReducer = (
+function animationReducer(
   state: AnimationState,
   action: AnimationAction,
-): AnimationState => {
+): AnimationState {
   switch (action.type) {
     case 'TICK': {
       let newIdx = state.idx;
@@ -111,13 +104,13 @@ const animationReducer = (
     default:
       return state;
   }
-};
+}
 
 interface EmailLinkProps {
   loopMessage?: boolean;
 }
 
-const EmailLink: React.FC<EmailLinkProps> = ({ loopMessage = false }) => {
+export default function EmailLink({ loopMessage = false }: EmailLinkProps) {
   const hold = 50; // ticks to wait after message is complete before rendering next message
   const delay = 50; // tick length in mS
 
@@ -193,6 +186,4 @@ const EmailLink: React.FC<EmailLinkProps> = ({ loopMessage = false }) => {
       </a>
     </div>
   );
-};
-
-export default EmailLink;
+}

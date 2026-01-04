@@ -1,5 +1,3 @@
-import React from 'react';
-
 import type { Category, Skill } from '@/data/resume/skills';
 
 interface SkillBarProps {
@@ -7,7 +5,7 @@ interface SkillBarProps {
   categories: Category[];
 }
 
-const SkillBar: React.FC<SkillBarProps> = ({ data, categories }) => {
+export default function SkillBar({ data, categories }: SkillBarProps) {
   const { category, competency, title } = data;
 
   // Get the primary category color for styling
@@ -31,6 +29,4 @@ const SkillBar: React.FC<SkillBarProps> = ({ data, categories }) => {
       <div className="skill-bar-percent">{competency} / 5</div>
     </div>
   );
-};
-
-export default SkillBar;
+}
