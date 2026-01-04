@@ -4,6 +4,7 @@ import Script from 'next/script';
 
 import GoogleAnalytics from '@/components/Template/GoogleAnalytics';
 import Navigation from '@/components/Template/Navigation';
+import ScrollToTop from '@/components/Template/ScrollToTop';
 import './tailwind.css';
 
 const sourceSans = Source_Sans_3({
@@ -86,6 +87,7 @@ export default function RootLayout({
         </Script>
       </head>
       <body>
+        <ScrollToTop />
         <div className="site-wrapper">
           <Navigation />
           {children}

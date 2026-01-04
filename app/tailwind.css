@@ -1232,8 +1232,6 @@ body.is-menu-visible .site-wrapper {
   color: var(--color-fg);
 }
 
-/* Note: .course-dot removed - was legacy bullet separator, no longer in DOM */
-
 /* ========================================
    CONTACT PAGE STYLES
    ======================================== */

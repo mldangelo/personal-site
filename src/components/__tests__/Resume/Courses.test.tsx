@@ -99,21 +99,6 @@ describe('Course', () => {
     expect(link).toHaveAttribute('href', mockCourse.link);
   });
 
-  it('renders bullet separator when not last', () => {
-    render(<Course data={mockCourse} last={false} />);
-
-    // Should have the dot separator
-    const dot = document.querySelector('.course-dot');
-    expect(dot).toBeInTheDocument();
-  });
-
-  it('does not render bullet when last', () => {
-    render(<Course data={mockCourse} last={true} />);
-
-    const dot = document.querySelector('.course-dot');
-    expect(dot).not.toBeInTheDocument();
-  });
-
   it('renders as list item', () => {
     render(<Course data={mockCourse} />);
 
