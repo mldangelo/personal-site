@@ -46,7 +46,7 @@
   },
   "overrides": [
     {
-      "includes": ["**/tailwind.css"],
+      "includes": ["**/tailwind.css", "**/styles/tokens/*.css"],
       "css": { "parser": { "tailwindDirectives": true } }
     },
     {

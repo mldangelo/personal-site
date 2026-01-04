@@ -1,0 +1,44 @@
+/* ========================================
+   LINK STYLES
+   Animated underlines and hover states
+   ======================================== */
+
+@layer base {
+  /* Modern link styling with animated underline */
+  a {
+    color: var(--color-fg);
+    text-decoration: none;
+    background-image: linear-gradient(var(--color-accent), var(--color-accent));
+    background-size: 0% 1.5px;
+    background-repeat: no-repeat;
+    background-position: left bottom;
+    transition:
+      color var(--duration-fast) var(--ease-out),
+      background-size var(--duration-normal) var(--ease-out);
+  }
+
+  a:hover {
+    color: var(--color-accent);
+    background-size: 100% 1.5px;
+  }
+
+  /* Keep simple underline for inline content links
+     Exclude .hero-highlight which uses text-decoration instead */
+  p a:not(.hero-highlight),
+  li a:not(.hero-highlight) {
+    background-image: linear-gradient(
+      transparent calc(100% - 1.5px),
+      var(--color-accent-underline) 1.5px
+    );
+    background-size: 100% 100%;
+    transition:
+      color var(--duration-fast) var(--ease-out),
+      background-image var(--duration-fast) var(--ease-out);
+  }
+
+  p a:not(.hero-highlight):hover,
+  li a:not(.hero-highlight):hover {
+    color: var(--color-accent);
+    background-image: linear-gradient(transparent calc(100% - 1.5px), var(--color-accent) 1.5px);
+  }
+}

@@ -1,0 +1,186 @@
+/* ========================================
+   DARK MODE
+   Supports both system preference and manual toggle
+   ======================================== */
+
+/* Manual dark mode toggle - token overrides */
+[data-theme='dark'] {
+  /* Core colors */
+  --color-bg: #0a0a0a;
+  --color-bg-alt: #111111;
+  --color-bg-offset: #1a1a1a;
+  --color-fg: #e5e5e5;
+  --color-fg-bold: #ffffff;
+  --color-fg-light: #b0b0b5;
+  --color-white: #fff;
+  --color-black: #000;
+
+  /* Overlay colors for dark mode */
+  --color-overlay-light: rgba(255, 255, 255, 0.1);
+  --color-overlay-dark: rgba(0, 0, 0, 0.3);
+  --color-overlay-darker: rgba(0, 0, 0, 0.5);
+
+  /* Accent colors */
+  --color-accent: #60a5fa;
+  --color-accent-light: color-mix(in srgb, var(--color-accent) 22%, transparent);
+  --color-accent-subtle: color-mix(in srgb, var(--color-accent) 15%, transparent);
+  --color-accent-hover: color-mix(in srgb, var(--color-accent) 18%, transparent);
+  --color-accent-border: color-mix(in srgb, var(--color-accent) 50%, transparent);
+  --color-accent-underline: color-mix(in srgb, var(--color-accent) 40%, transparent);
+
+  /* Borders */
+  --color-border: rgba(255, 255, 255, 0.12);
+  --color-border-bg: rgba(255, 255, 255, 0.08);
+  --color-border-alt: rgba(255, 255, 255, 0.18);
+
+  /* Semantic surface tokens (eliminates hardcoded rgba in component overrides) */
+  --color-surface-subtle: rgba(255, 255, 255, 0.04);
+  --color-surface-hover: rgba(255, 255, 255, 0.08);
+  --color-surface-active: rgba(255, 255, 255, 0.12);
+  --color-text-muted: rgba(255, 255, 255, 0.6);
+  --color-text-dim: rgba(255, 255, 255, 0.7);
+  --color-fg-muted: rgba(255, 255, 255, 0.5);
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* Dark mode component overrides using semantic tokens */
+[data-theme='dark'] .site-header {
+  background-color: color-mix(in srgb, var(--color-bg-alt) 90%, transparent);
+  border-bottom-color: var(--color-border);
+}
+
+[data-theme='dark'] .nav-link:hover {
+  background-color: var(--color-surface-active);
+}
+
+[data-theme='dark'] .nav-link.active {
+  background-color: var(--color-accent-hover);
+}
+
+[data-theme='dark'] .site-footer-new {
+  background: linear-gradient(
+    to bottom,
+    var(--color-bg-alt) 0%,
+    color-mix(in srgb, var(--color-bg-alt) 92%, black) 100%
+  );
+}
+
+/* Homepage sections */
+[data-theme='dark'] .hero-chip {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme='dark'] .home-section {
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 0%, transparent 100%);
+}
+
+[data-theme='dark'] .work-card {
+  background: var(--color-bg-alt);
+  border-color: var(--color-border);
+}
+
+[data-theme='dark'] .work-card:hover {
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Theme-aware portrait - dark mode swap */
+[data-theme='dark'] .theme-portrait-light {
+  display: none;
+}
+
+[data-theme='dark'] .theme-portrait-dark {
+  display: block;
+}
+
+/* Resume nav - dark mode uses same styles, just inherits dark tokens */
+
+/* Job cards in dark mode */
+[data-theme='dark'] .jobs-container {
+  background: var(--color-surface-subtle);
+  border-color: var(--color-border);
+}
+
+[data-theme='dark'] .jobs-container:hover {
+  border-color: var(--color-border-alt);
+}
+
+/* Course cards */
+[data-theme='dark'] .course-container a {
+  background: var(--color-surface-subtle);
+  border-color: var(--color-border);
+}
+
+[data-theme='dark'] .course-container a:hover {
+  background: var(--color-surface-hover);
+  border-color: var(--color-border-alt);
+}
+
+/* Skill buttons/tags */
+[data-theme='dark'] .skillbutton,
+[data-theme='dark'] .skill-tag {
+  background: var(--color-surface-subtle);
+  border-color: var(--color-border);
+}
+
+[data-theme='dark'] .skillbutton:hover,
+[data-theme='dark'] .skill-tag:hover {
+  background: var(--color-surface-hover);
+}
+
+/* Contact page */
+[data-theme='dark'] .contact-email-link {
+  background: color-mix(in srgb, var(--color-accent) 20%, transparent);
+}
+
+[data-theme='dark'] .contact-email-link:hover {
+  background: color-mix(in srgb, var(--color-accent) 30%, transparent);
+}
+
+[data-theme='dark'] .contact-email-link--invalid,
+[data-theme='dark'] .contact-email-link--invalid:hover {
+  background: var(--color-border-bg);
+}
+
+[data-theme='dark'] .contact-content > .icons li a:hover {
+  background: color-mix(in srgb, var(--color-accent) 20%, transparent);
+}
+
+[data-theme='dark'] .daterange,
+[data-theme='dark'] .degree-container .school {
+  color: var(--color-text-dim);
+}
+
+/* Misc dark mode overrides */
+[data-theme='dark'] body::before {
+  opacity: 0.015;
+}
+
+[data-theme='dark'] .skillbar,
+[data-theme='dark'] code {
+  background: var(--color-surface-hover);
+  border-color: var(--color-border-bg);
+}
+
+[data-theme='dark'] blockquote {
+  border-left-color: var(--color-border-alt);
+}
+
+/* Link underlines */
+[data-theme='dark'] p a:not(.hero-highlight),
+[data-theme='dark'] li a:not(.hero-highlight) {
+  background-image: linear-gradient(
+    transparent calc(100% - 1.5px),
+    var(--color-accent-underline) 1.5px
+  );
+}
+
+[data-theme='dark'] p a:not(.hero-highlight):hover,
+[data-theme='dark'] li a:not(.hero-highlight):hover {
+  background-image: linear-gradient(transparent calc(100% - 1.5px), var(--color-accent) 1.5px);
+}

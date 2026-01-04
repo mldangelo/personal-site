@@ -1,0 +1,40 @@
+/* ========================================
+   MOTION TOKENS
+   Durations, easings, and interaction values
+   ======================================== */
+
+@theme inline {
+  /* ===================
+     DURATIONS
+     =================== */
+  --duration-instant: 0.15s;
+  --duration-fast: 0.2s;
+  --duration-normal: 0.3s;
+  --duration-menu: 0.4s;
+  --duration-slow: 0.6s;
+  --duration-skill: 1.4s;
+
+  /* ===================
+     EASING FUNCTIONS
+     =================== */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-menu: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ===================
+     INTERACTION VALUES
+     Unified lift and scale for consistent hover states
+     =================== */
+  --lift-sm: -2px; /* Small elements: buttons, tags */
+  --lift-md: -4px; /* Medium elements: cards */
+  --scale-subtle: 1.02; /* Very subtle growth */
+  --scale-sm: 1.05; /* Images, avatars */
+
+  /* ===================
+     Z-INDEX SCALE
+     =================== */
+  --z-sticky: 100; /* Sticky elements below header (e.g., resume nav) */
+  --z-header: 10000;
+  --z-overlay: 10001;
+  --z-menu: 10002;
+}

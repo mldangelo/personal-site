@@ -1,0 +1,280 @@
+/* ========================================
+   HEADER LAYOUT
+   Fixed navigation with glassmorphism
+   ======================================== */
+
+/* Header - fixed navigation with glassmorphism */
+.site-header {
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: solid 1px var(--color-border);
+  display: flex;
+  height: var(--header-height);
+  justify-content: space-between;
+  left: 0;
+  line-height: var(--header-height);
+  padding: 0 1.5rem;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: var(--z-header);
+  transition: background-color var(--duration-fast) var(--ease-out);
+  box-sizing: border-box;
+}
+
+@media (max-width: 736px) {
+  .site-header {
+    height: var(--header-height-mobile);
+    line-height: var(--header-height-mobile);
+    padding: 0 1rem;
+  }
+}
+
+/* Index link in header */
+.index-link {
+  height: inherit;
+  line-height: inherit;
+}
+
+/* Wrapper - minimal padding, body handles header offset */
+.site-wrapper {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  opacity: 1;
+  padding: 0;
+  transition: opacity var(--duration-menu) ease;
+  width: 100%;
+}
+
+body.is-menu-visible .site-wrapper {
+  opacity: 0.15;
+}
+
+/* Main content */
+.site-main {
+  flex-grow: 1;
+  width: 100%;
+}
+
+/* ========================================
+   SLIDE MENU (native implementation)
+   ======================================== */
+
+/* Slide menu overlay */
+.slide-menu-overlay {
+  background: var(--color-overlay-darker);
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  position: fixed;
+  transition: opacity var(--duration-normal) var(--ease-menu);
+  z-index: var(--z-overlay);
+}
+
+.slide-menu-overlay--open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Slide menu panel */
+.slide-menu {
+  -webkit-overflow-scrolling: touch;
+  background-color: var(--color-bg);
+  bottom: 0;
+  font-size: 1.15em;
+  max-width: 80vw;
+  overflow-y: auto;
+  padding: 2.5em 1.5em 0;
+  position: fixed;
+  top: 0;
+  transition: transform var(--duration-normal) var(--ease-menu);
+  width: 300px;
+  z-index: var(--z-menu);
+}
+
+.slide-menu--right {
+  right: 0;
+  transform: translateX(100%);
+}
+
+.slide-menu--left {
+  left: 0;
+  transform: translateX(-100%);
+}
+
+.slide-menu--open {
+  transform: translateX(0);
+}
+
+.slide-menu ul {
+  color: var(--color-fg-bold);
+  font-family: var(--font-heading);
+  margin-top: 0;
+  padding: 0.8em;
+}
+
+/* Hamburger container */
+.hamburger-container {
+  display: none;
+}
+
+@media (max-width: 735px) {
+  .hamburger-container {
+    display: block;
+  }
+}
+
+/* Hamburger nav structure */
+.hamburger-container .main {
+  height: 100%;
+}
+
+.hamburger-container .main ul {
+  height: 100%;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.hamburger-container .main ul li {
+  display: block;
+  height: 100%;
+}
+
+.hamburger-container .main ul li.menu {
+  display: flex;
+  align-items: center;
+}
+
+/* Hamburger button */
+.hamburger-button {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  cursor: pointer;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  padding: 0 2em 0 1em;
+}
+
+.hamburger-button:hover {
+  box-shadow: none;
+  opacity: 0.5;
+}
+
+.hamburger-button:focus-visible .hamburger-icon span {
+  background-color: var(--color-accent);
+}
+
+/* CSS hamburger icon */
+.hamburger-icon {
+  display: block;
+  height: 14px;
+  position: relative;
+  width: 20px;
+}
+
+.hamburger-icon span {
+  background-color: var(--color-fg-bold);
+  border-radius: 2px;
+  display: block;
+  height: 2px;
+  left: 0;
+  position: absolute;
+  transition: all var(--duration-normal) var(--ease-menu);
+  width: 100%;
+}
+
+.hamburger-icon span:nth-child(1) {
+  top: 0;
+}
+
+.hamburger-icon span:nth-child(2) {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.hamburger-icon span:nth-child(3) {
+  bottom: 0;
+}
+
+/* Open state - morph to X */
+.hamburger-icon--open span:nth-child(1) {
+  top: 50%;
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.hamburger-icon--open span:nth-child(2) {
+  opacity: 0;
+  transform: translateY(-50%) scaleX(0);
+}
+
+.hamburger-icon--open span:nth-child(3) {
+  bottom: 50%;
+  transform: translateY(50%) rotate(-45deg);
+}
+
+/* Navigation list inside slide menu - modern styling */
+.hamburger-ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  list-style: none;
+  padding: 1rem 0;
+}
+
+.hamburger-ul li {
+  display: block;
+}
+
+.hamburger-ul li a {
+  display: block;
+  outline: none;
+  text-decoration: none;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+.hamburger-ul li a:hover {
+  background-color: var(--color-border-bg);
+}
+
+.hamburger-ul li a:focus-visible h3 {
+  color: var(--color-accent);
+}
+
+.hamburger-ul li a h3 {
+  margin: 0;
+  padding: 0;
+  border: none;
+  font-size: 1rem;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-fg);
+  text-transform: none;
+  letter-spacing: normal;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.hamburger-ul li a:hover h3 {
+  color: var(--color-fg-bold);
+}
+
+.hamburger-ul .index-li {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-fg-bold);
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .slide-menu-overlay,
+  .slide-menu,
+  .hamburger-icon span {
+    transition: none;
+  }
+}

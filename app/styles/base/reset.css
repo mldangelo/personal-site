@@ -1,0 +1,109 @@
+/* ========================================
+   RESET & GLOBAL STYLES
+   HTML/body normalization and accessibility
+   ======================================== */
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Respect reduced motion preference */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+
+    /* Hide heavy fixed overlays that cause repaints */
+    body::before,
+    body::after {
+      display: none;
+    }
+  }
+
+  /* Focus-visible styles for keyboard navigation */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: var(--radius-xs);
+  }
+
+  /* Remove default focus for mouse users */
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  /* Color scheme for native elements (scrollbars, form controls, etc.) */
+  html {
+    color-scheme: light;
+  }
+
+  [data-theme='dark'] {
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: var(--color-bg-alt);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    font-size: 17px;
+    font-weight: var(--font-weight-normal);
+    line-height: var(--leading-normal);
+    padding-top: var(--header-height);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Subtle grain texture for depth - GPU-accelerated layer */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    opacity: 0.018;
+    pointer-events: none;
+    z-index: -1;
+    transform: translateZ(0);
+    contain: strict;
+  }
+
+  /* Subtle radial gradient for depth - GPU-accelerated layer */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(
+      ellipse 80% 50% at 50% 0%,
+      var(--color-accent-muted) 0%,
+      transparent 60%
+    );
+    pointer-events: none;
+    z-index: -1;
+    transform: translateZ(0);
+    contain: strict;
+  }
+
+  @media (min-width: 980px) {
+    body::before {
+      opacity: 0.025;
+    }
+  }
+
+  @media (max-width: 1680px) {
+    body {
+      font-size: 16px;
+    }
+  }
+
+  @media (max-width: 736px) {
+    body {
+      font-size: 15px;
+      padding-top: var(--header-height-mobile);
+    }
+  }
+}

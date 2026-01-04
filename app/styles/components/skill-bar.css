@@ -1,0 +1,147 @@
+/* ========================================
+   SKILL BAR COMPONENT
+   Animated progress bars with labels
+   ======================================== */
+
+@layer components {
+  /* Skill bar */
+  .skillbar {
+    background: var(--color-border-bg);
+    border-radius: var(--radius-xs);
+    display: block;
+    height: 2.25em;
+    margin-bottom: 1em;
+    overflow: hidden;
+    position: relative;
+    transition: opacity var(--duration-fast) ease;
+    width: 100%;
+  }
+
+  .skillbar:hover {
+    opacity: 0.85;
+  }
+
+  .skillbar-title {
+    /* Use CSS custom property if set, fallback to accent */
+    background: var(--skillbar-color, var(--color-accent));
+    border-radius: var(--radius-xs) 0 0 var(--radius-xs);
+    color: var(--color-bg);
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-medium);
+    height: 100%;
+    left: 0;
+    min-width: 100px;
+    position: absolute;
+    top: 0;
+    z-index: 2;
+  }
+
+  .skillbar-title span {
+    align-items: center;
+    background: var(--color-overlay-dark);
+    display: flex;
+    height: 100%;
+    padding: 0 1em;
+  }
+
+  /* Text color classes for skill bar contrast */
+  .skillbar-title--light {
+    color: var(--color-white);
+  }
+
+  .skillbar-title--light span {
+    background: rgba(0, 0, 0, 0.2);
+  }
+
+  .skillbar-title--dark {
+    color: var(--color-fg);
+  }
+
+  .skillbar-title--dark span {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .skillbar-bar {
+    /* Use CSS custom property if set, fallback to accent */
+    background: var(--skillbar-color, var(--color-accent));
+    height: 100%;
+    position: relative;
+    transition: width var(--duration-skill) ease-in-out;
+    width: 0;
+  }
+
+  .skill-bar-percent {
+    align-items: center;
+    color: var(--color-fg-light);
+    display: flex;
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    height: 100%;
+    letter-spacing: var(--tracking-tight);
+    position: absolute;
+    right: 1em;
+    top: 0;
+    z-index: 1;
+  }
+
+  /* Skill buttons - modern pill style */
+  .skillbutton {
+    appearance: none;
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    color: var(--color-fg);
+    cursor: pointer;
+    display: inline-block;
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: var(--tracking-normal);
+    padding: 0.5em 1em;
+    text-transform: none;
+    transition:
+      background-color var(--duration-fast) ease,
+      border-color var(--duration-fast) ease,
+      box-shadow var(--duration-fast) ease,
+      color var(--duration-fast) ease;
+  }
+
+  .skillbutton:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    background: var(--color-accent-light);
+  }
+
+  .skillbutton:focus-visible {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 2px var(--color-accent-light);
+    color: var(--color-accent);
+    outline: none;
+  }
+
+  .skillbutton-active {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-white);
+    box-shadow: 0 0 0 2px var(--color-accent-light);
+  }
+
+  /* Skill section containers */
+  .skill-button-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5em;
+    justify-content: flex-start;
+    margin-bottom: 2em;
+  }
+
+  @media (max-width: 736px) {
+    .skill-button-container {
+      justify-content: center;
+    }
+  }
+
+  .skill-row-container {
+    margin-top: 1em;
+  }
+}
