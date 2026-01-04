@@ -22,7 +22,8 @@ Work through these steps in order for the smoothest experience.
 | Site URL        | `package.json` → `homepage`                 | Your domain or GitHub Pages URL |
 | Social links    | `src/data/contact.ts`                       | Add/remove platforms as needed  |
 | Portrait photos | `public/images/me-light.jpg`, `me-dark.jpg` | Square images, ~256×256px       |
-| Sidebar content | `src/components/Template/SideBar.tsx`       | Your name, tagline              |
+| Hero content    | `src/components/Template/Hero.tsx`          | Your name, tagline              |
+| Footer          | `src/components/Template/Footer.tsx`        | Links, copyright                |
 
 ### Step 2: About Page
 

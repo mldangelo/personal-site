@@ -1,13 +1,14 @@
-'use client';
-
-import { useEffect, useState } from 'react';
-
 import initialData from '../../data/stats/site';
 import Table from './Table';
-import type { StatData } from './types';
 
-// GitHub API response fields used by this component
-interface GitHubRepoData {
+type GitHubCacheKey =
+  | 'stargazers_count'
+  | 'subscribers_count'
+  | 'forks'
+  | 'open_issues_count'
+  | 'pushed_at';
+
+interface GitHubData {
   stargazers_count: number;
   subscribers_count: number;
   forks: number;
@@ -15,62 +16,73 @@ interface GitHubRepoData {
   pushed_at: string;
 }
 
-type FetchStatus = 'idle' | 'loading' | 'success' | 'error';
+// Static fallback values used when GitHub API is unavailable
+// Note: pushed_at is intentionally old to indicate stale data
+const FALLBACK_DATA: GitHubData = {
+  stargazers_count: 1500,
+  subscribers_count: 20,
+  forks: 900,
+  open_issues_count: 0,
+  pushed_at: '2024-01-01T00:00:00Z',
+};
 
-export default function SiteStats() {
-  const [data, setData] = useState<StatData[]>(initialData);
-  const [status, setStatus] = useState<FetchStatus>('idle');
+/**
+ * Fetch GitHub stats at build time.
+ * Uses static fallback if API is unavailable (rate limit, offline, etc.)
+ */
+async function fetchGitHubStats(): Promise<GitHubData> {
+  try {
+    const response = await fetch(
+      'https://api.github.com/repos/mldangelo/personal-site',
+      {
+        headers: { Accept: 'application/vnd.github.v3+json' },
+        next: { revalidate: false },
+      },
+    );
 
-  useEffect(() => {
-    const controller = new AbortController();
-
-    async function fetchGitHubData() {
-      setStatus('loading');
-
-      try {
-        const res = await fetch(
-          'https://api.github.com/repos/mldangelo/personal-site',
-          { signal: controller.signal },
-        );
-
-        if (!res.ok) {
-          throw new Error(`GitHub API returned ${res.status}`);
-        }
-
-        const resData: GitHubRepoData = await res.json();
-
-        setData(
-          initialData.map((field) => ({
-            ...field,
-            value:
-              field.key && field.key in resData
-                ? (resData[field.key as keyof GitHubRepoData] ?? field.value)
-                : field.value,
-          })),
-        );
-        setStatus('success');
-      } catch (error) {
-        if (error instanceof Error && error.name === 'AbortError') {
-          return; // Ignore abort errors
-        }
-        console.error('Failed to fetch GitHub data:', error);
-        setStatus('error');
-      }
+    if (!response.ok) {
+      console.warn(`GitHub API returned ${response.status}, using fallback`);
+      return FALLBACK_DATA;
     }
 
-    fetchGitHubData();
-
-    return () => controller.abort();
-  }, []);
-
-  if (status === 'error') {
-    return (
-      <div className="stats-error">
-        <p>Unable to load GitHub stats. Showing cached data.</p>
-        <Table data={initialData} />
-      </div>
-    );
+    const data = await response.json();
+    return {
+      stargazers_count: data.stargazers_count,
+      subscribers_count: data.subscribers_count,
+      forks: data.forks,
+      open_issues_count: data.open_issues_count,
+      pushed_at: data.pushed_at,
+    };
+  } catch (error) {
+    console.warn('Failed to fetch GitHub stats, using fallback:', error);
+    return FALLBACK_DATA;
   }
+}
+
+/**
+ * Site statistics component - fetches GitHub data at build time.
+ * Server component, no client-side JavaScript shipped.
+ */
+export default async function SiteStats() {
+  const githubData = await fetchGitHubStats();
+
+  // Apply formatting and resolve values - functions can't be serialized in RSC
+  const data = initialData.map((field) => {
+    const rawValue =
+      field.key && field.key in githubData
+        ? (githubData[field.key as GitHubCacheKey] ?? field.value)
+        : field.value;
+
+    // Apply format function if present, otherwise use raw value
+    const value = field.format ? field.format(rawValue) : rawValue;
+
+    // Return only serializable properties (no functions)
+    return {
+      label: field.label,
+      value,
+      link: field.link,
+    };
+  });
 
   return <Table data={data} />;
 }

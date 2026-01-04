@@ -2,6 +2,10 @@
 
 import { useEffect, useReducer, useRef, useState } from 'react';
 
+// Animation timing constants
+const ANIMATION_TICK_MS = 50; // Tick length in milliseconds
+const HOLD_TICKS_AFTER_MESSAGE = 50; // Ticks to wait after message completes
+
 // Validates the first half of an email address per RFC 5322
 function validateText(text: string): boolean {
   const re = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))$/;
@@ -111,9 +115,6 @@ interface EmailLinkProps {
 }
 
 export default function EmailLink({ loopMessage = false }: EmailLinkProps) {
-  const hold = 50; // ticks to wait after message is complete before rendering next message
-  const delay = 50; // tick length in mS
-
   // Check for reduced motion preference
   const [reducedMotion, setReducedMotion] = useState(false);
 
@@ -137,9 +138,9 @@ export default function EmailLink({ loopMessage = false }: EmailLinkProps) {
 
   useInterval(
     () => {
-      dispatch({ type: 'TICK', loopMessage, hold });
+      dispatch({ type: 'TICK', loopMessage, hold: HOLD_TICKS_AFTER_MESSAGE });
     },
-    state.isActive && !reducedMotion ? delay : null,
+    state.isActive && !reducedMotion ? ANIMATION_TICK_MS : null,
   );
 
   // Use 'hi' as default message when reduced motion or paused with empty message
@@ -194,8 +195,7 @@ export default function EmailLink({ loopMessage = false }: EmailLinkProps) {
         <span
           className="contact-email-link contact-email-link--invalid"
           aria-disabled="true"
-          onFocus={handlePause}
-          onBlur={handleResume}
+          tabIndex={-1}
         >
           {emailContent}
         </span>

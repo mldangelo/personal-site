@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { Raleway, Source_Sans_3 } from 'next/font/google';
-import React from 'react';
+import Script from 'next/script';
 
 import GoogleAnalytics from '@/components/Template/GoogleAnalytics';
 import Navigation from '@/components/Template/Navigation';
@@ -68,22 +68,6 @@ export const metadata: Metadata = {
   },
 };
 
-// Inline script to prevent theme flash on load
-const themeInitScript = `
-(function() {
-  try {
-    var theme = localStorage.getItem('theme');
-    if (theme === 'dark' || theme === 'light') {
-      document.documentElement.setAttribute('data-theme', theme);
-    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      document.documentElement.setAttribute('data-theme', 'dark');
-    } else {
-      document.documentElement.setAttribute('data-theme', 'light');
-    }
-  } catch (e) {}
-})();
-`;
-
 export default function RootLayout({
   children,
 }: {
@@ -96,7 +80,10 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+        {/* CSP-safe theme initialization - prevents flash on load */}
+        <Script id="theme-init" strategy="beforeInteractive">
+          {`(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light'){document.documentElement.setAttribute('data-theme',t)}else if(window.matchMedia('(prefers-color-scheme:dark)').matches){document.documentElement.setAttribute('data-theme','dark')}else{document.documentElement.setAttribute('data-theme','light')}}catch(e){}})();`}
+        </Script>
       </head>
       <body>
         <div className="site-wrapper">

@@ -56,16 +56,14 @@ describe('SkillBar', () => {
     expect(bar.style.width).toBe('60%');
   });
 
-  it('applies category color to title and bar', () => {
+  it('applies category color via CSS custom property', () => {
     const skill = { title: 'Python', competency: 5, category: ['Languages'] };
 
     render(<SkillBar data={skill} categories={mockCategories} />);
 
-    const title = document.querySelector('.skillbar-title') as HTMLElement;
-    const bar = document.querySelector('.skillbar-bar') as HTMLElement;
-
-    expect(title.style.background).toBe('rgb(105, 104, 179)'); // #6968b3
-    expect(bar.style.background).toBe('rgb(105, 104, 179)');
+    // Color is now passed via CSS custom property on the parent skillbar
+    const skillbar = document.querySelector('.skillbar') as HTMLElement;
+    expect(skillbar.style.getPropertyValue('--skillbar-color')).toBe('#6968b3');
   });
 
   it('clamps width between 0% and 100%', () => {

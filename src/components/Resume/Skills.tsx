@@ -1,5 +1,6 @@
 'use client';
 
+import type { CSSProperties } from 'react';
 import { useCallback, useMemo, useReducer } from 'react';
 
 import type { Category, Skill } from '@/data/resume/skills';
@@ -111,12 +112,13 @@ export default function Skills({ skills, categories }: SkillsProps) {
       <div className="skill-groups">
         {Object.entries(groupedSkills).map(([categoryName, categorySkills]) => {
           const category = categories.find((c) => c.name === categoryName);
+          // Pass color via CSS custom property for design system consistency
+          const titleStyle = {
+            '--skill-category-color': category?.color,
+          } as CSSProperties;
           return (
             <div key={categoryName} className="skill-group">
-              <h4
-                className="skill-group-title"
-                style={{ color: category?.color }}
-              >
+              <h4 className="skill-group-title" style={titleStyle}>
                 {categoryName}
               </h4>
               <div className="skill-tags">
