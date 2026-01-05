@@ -24,7 +24,7 @@ export default function PersonSchema() {
     url: SITE_URL,
     image: `${SITE_URL}/images/me.jpg`,
     jobTitle: currentJob.position,
-    email,
+    ...(email && { email }),
     sameAs: socialLinks,
     worksFor: {
       '@type': 'Organization',

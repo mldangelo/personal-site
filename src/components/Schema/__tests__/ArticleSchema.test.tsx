@@ -75,7 +75,7 @@ describe('ArticleSchema', () => {
     expect(data.author.url).toBe(SITE_URL);
   });
 
-  it('uses correct publisher from constants', () => {
+  it('uses correct publisher from constants with logo', () => {
     const { container } = render(<ArticleSchema post={mockPost} />);
 
     const script = container.querySelector(
@@ -86,6 +86,19 @@ describe('ArticleSchema', () => {
     expect(data.publisher['@type']).toBe('Person');
     expect(data.publisher.name).toBe(AUTHOR_NAME);
     expect(data.publisher.url).toBe(SITE_URL);
+    expect(data.publisher.logo['@type']).toBe('ImageObject');
+    expect(data.publisher.logo.url).toBe(`${SITE_URL}/images/me.jpg`);
+  });
+
+  it('includes image for rich search results', () => {
+    const { container } = render(<ArticleSchema post={mockPost} />);
+
+    const script = container.querySelector(
+      'script[type="application/ld+json"]',
+    );
+    const data = JSON.parse(script?.innerHTML || '{}');
+
+    expect(data.image).toBe(`${SITE_URL}/images/me.jpg`);
   });
 
   it('includes mainEntityOfPage WebPage reference', () => {
