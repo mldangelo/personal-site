@@ -111,7 +111,7 @@ Claude Code handles much of the mechanical overhead: locating relevant files, tr
 
 ### Volume
 
-Running 6 tabs in parallel lets work proceed concurrently: one agent implements a feature while another runs verification; a third reviews diffs or explores edge cases. No waiting, minimal context switching.
+Running 6 panes in parallel lets work proceed concurrently: one agent implements a feature while another runs verification; a third reviews diffs or explores edge cases. No waiting, minimal context switching.
 
 In 2025 I merged 1,000+ PRs to Promptfoo:
 
