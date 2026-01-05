@@ -45,7 +45,7 @@ The system prompt instructs the model to return HTML for links, and those snippe
 
 This is the clearest web security issue - it maps to OWASP's "Insecure Output Handling" category. But the post acknowledges this is "only" self-XSS as demonstrated. Self-XSS is widely treated as low severity unless you can demonstrate exploitation of other users. HackerOne explicitly lists "self-exploitation, such as self-XSS" as ineligible unless it affects other accounts.
 
-Could this escalate to real XSS? Yes—if chat transcripts are shown to support agents, if conversations are shared, or if payloads persist and replay in someone else's session. Those are common blind XSS patterns. But the post doesn't demonstrate that chain.
+Could this escalate to real XSS? Yes, if chat transcripts are shown to support agents, if conversations are shared, or if payloads persist and replay in someone else's session. Those are common blind XSS patterns. But the post doesn't demonstrate that chain.
 
 **4. Unverified conversation/message IDs**
 

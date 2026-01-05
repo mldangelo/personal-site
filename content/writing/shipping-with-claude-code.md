@@ -6,11 +6,11 @@ description: 'Notes from using Claude Code in parallel git worktrees: Plan Mode,
 
 ## Context
 
-I spend most of my time building [Promptfoo](https://github.com/promptfoo/promptfoo), an open-source LLM evaluation tool. I was an avid Cursor user before experimenting with Claude Code earlier in 2025, but usage picked up significantly in July. By the end of that month I was spending close to $10K in API credits—just on interactive development work, not production traffic.
+I spend most of my time building [Promptfoo](https://github.com/promptfoo/promptfoo), an open-source LLM evaluation tool. I was an avid Cursor user before experimenting with Claude Code earlier in 2025, but usage picked up significantly in July. By the end of that month I was spending close to $10K in API credits, just on interactive development work, not production traffic.
 
 ![Anthropic API costs for July 2025 showing $9,986.20 in token usage](/images/writing/api-costs-july-2025.png)
 
-Anthropic gave us a generous credit grant for Promptfoo, so this didn't actually cost us anything—but I'm grateful for their support. At that usage volume, switching to a Max subscription made sense. I now run two Max subscriptions because I hit the weekly usage limits on a single account.
+Anthropic gave us a generous credit grant for Promptfoo, so this didn't actually cost us anything, but I'm grateful for their support. At that usage volume, switching to a Max subscription made sense. I now run two Max subscriptions because I hit the weekly usage limits on a single account.
 
 Over the course of 2025, I've merged 1,000+ PRs to Promptfoo using this approach. What follows are notes on what I've learned about making parallel agents work in practice.
 
@@ -40,7 +40,7 @@ The throughput gain comes from concurrency plus verifiers, not prompt tricks.
 
 I run Claude Code with the `--dangerously-skip-permissions` flag on these projects.
 
-This is probably a bad idea. The flag disables all permission prompts for file edits and shell commands, which means Claude can modify any file or run any command without asking. I expect this will eventually cause a problem. But the friction of approving every edit and command—dozens per session—breaks the flow that makes parallel agents useful.
+This is probably a bad idea. The flag disables all permission prompts for file edits and shell commands, which means Claude can modify any file or run any command without asking. I expect this will eventually cause a problem. But the friction of approving every edit and command (dozens per session) breaks the flow that makes parallel agents useful.
 
 If you want this workflow without the risk, the official recommendation is to run it in an isolated environment (container or similar). Claude Code also offers `/sandbox` mode for filesystem and network isolation of bash commands, which is safer than bypassing permissions entirely.
 
@@ -123,7 +123,7 @@ For comparison, I had [5,396 contributions in 2024](https://github.com/mldangelo
 
 ## Using multiple models for verification
 
-I regularly check Claude's work using other models—running the Codex CLI and Gemini CLI in separate sessions.
+I regularly check Claude's work using other models: running the Codex CLI and Gemini CLI in separate sessions.
 
 Different model families seem to have different blind spots:
 
@@ -133,13 +133,13 @@ Different model families seem to have different blind spots:
 
 Claude recently refactored an authentication flow and the tests passed. Gemini pointed out that the new code changed the error messages returned to clients, which would break existing error handling in our frontend. Claude's tests hadn't covered that contract.
 
-For substantial changes—large refactors, accessibility improvements, performance work—I run a second agent as a verifier. The task isn't complete until both the implementation and verification pass in a clean worktree.
+For substantial changes (large refactors, accessibility improvements, performance work) I run a second agent as a verifier. The task isn't complete until both the implementation and verification pass in a clean worktree.
 
 ## CLAUDE.md + AGENTS.md
 
 I keep project instructions in `CLAUDE.md` files (root and relevant subdirectories). Each `CLAUDE.md` is short and mostly points to an `AGENTS.md` file with longer, task-specific guidance.
 
-The trick is to make the rules load reliably. Claude Code supports importing files from `CLAUDE.md` using `@path` syntax—literal includes, not evaluated inside code spans or fenced blocks. This lets me keep the top-level memory file small while pulling in the detailed playbook when needed. You can use `/memory` to debug what actually loaded.
+The trick is to make the rules load reliably. Claude Code supports importing files from `CLAUDE.md` using `@path` syntax: literal includes, not evaluated inside code spans or fenced blocks. This lets me keep the top-level memory file small while pulling in the detailed playbook when needed. You can use `/memory` to debug what actually loaded.
 
 I update these files whenever I see the same mistake twice. The goal isn't comprehensive documentation. It's preventing the specific failures that actually happen in this codebase.
 
@@ -179,9 +179,9 @@ Compounding mistakes happen when one session makes an error and another session 
 
 ## What's changed
 
-The surprising part isn't that I'm shipping more code—it's that I'm shipping _better_ code. The verification loops catch more bugs before they reach production. Cross-model audits surface issues I wouldn't have noticed manually. Fresh-context reviews find the kind of subtle problems that are hard to spot when you just wrote the code yourself.
+The surprising part isn't that I'm shipping more code. It's that I'm shipping _better_ code. The verification loops catch more bugs before they reach production. Cross-model audits surface issues I wouldn't have noticed manually. Fresh-context reviews find the kind of subtle problems that are hard to spot when you just wrote the code yourself.
 
-The lower friction has also changed how I work. I'll fix bugs during customer calls now. I'll keep momentum on small fixes that would have felt too tedious to context-switch into a year ago. The mechanical parts—finding files, running tests, drafting commit messages—have low enough overhead that the work stays focused on the parts that actually need thinking.
+The lower friction has also changed how I work. I'll fix bugs during customer calls now. I'll keep momentum on small fixes that would have felt too tedious to context-switch into a year ago. The mechanical parts (finding files, running tests, drafting commit messages) have low enough overhead that the work stays focused on the parts that actually need thinking.
 
 What makes this work is the convergence: native browser integration (`--chrome`), extended thinking (`ultrathink`), cross-model verification, and tight feedback loops from type checkers and tests. Individually these are useful. Together they change what's practical to build.
 
