@@ -22,9 +22,9 @@
 
   /* Accent colors */
   --color-accent: #60a5fa;
+  --color-accent-hover: #93c5fd;
   --color-accent-light: color-mix(in srgb, var(--color-accent) 22%, transparent);
   --color-accent-subtle: color-mix(in srgb, var(--color-accent) 15%, transparent);
-  --color-accent-hover: color-mix(in srgb, var(--color-accent) 18%, transparent);
   --color-accent-border: color-mix(in srgb, var(--color-accent) 50%, transparent);
   --color-accent-underline: color-mix(in srgb, var(--color-accent) 40%, transparent);
 
