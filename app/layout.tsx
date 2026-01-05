@@ -5,6 +5,7 @@ import Script from 'next/script';
 import GoogleAnalytics from '@/components/Template/GoogleAnalytics';
 import Navigation from '@/components/Template/Navigation';
 import ScrollToTop from '@/components/Template/ScrollToTop';
+import { AUTHOR_NAME, SITE_URL, TWITTER_HANDLE } from '@/lib/utils';
 import './tailwind.css';
 
 const sourceSans = Source_Sans_3({
@@ -21,40 +22,49 @@ const raleway = Raleway({
   display: 'swap',
 });
 
+const siteDescription =
+  'Co-founder & CTO building LLM security tools. Previously VP Engineering, YC alum, Stanford ICME.';
+
 export const metadata: Metadata = {
   title: {
-    default: "Michael D'Angelo",
-    template: "%s | Michael D'Angelo",
+    default: AUTHOR_NAME,
+    template: `%s | ${AUTHOR_NAME}`,
   },
-  description:
-    'Co-founder & CTO building LLM security tools. Previously VP Engineering, YC alum, Stanford ICME.',
+  description: siteDescription,
   keywords: [
-    "Michael D'Angelo",
+    AUTHOR_NAME,
     'LLM security',
     'machine learning',
     'CTO',
     'startup founder',
     'YC',
   ],
-  authors: [{ name: "Michael D'Angelo" }],
-  creator: "Michael D'Angelo",
-  metadataBase: new URL('https://mldangelo.com'),
+  authors: [{ name: AUTHOR_NAME }],
+  creator: AUTHOR_NAME,
+  metadataBase: new URL(SITE_URL),
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://mldangelo.com',
-    siteName: "Michael D'Angelo",
-    title: "Michael D'Angelo",
-    description:
-      'Co-founder & CTO building LLM security tools. Previously VP Engineering, YC alum, Stanford ICME.',
+    url: SITE_URL,
+    siteName: AUTHOR_NAME,
+    title: AUTHOR_NAME,
+    description: siteDescription,
     images: [
       {
         url: '/images/me.jpg',
         width: 1200,
         height: 630,
-        alt: "Michael D'Angelo",
+        alt: AUTHOR_NAME,
       },
     ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: TWITTER_HANDLE,
+    creator: TWITTER_HANDLE,
+    title: AUTHOR_NAME,
+    description: siteDescription,
+    images: ['/images/me.jpg'],
   },
   robots: {
     index: true,
