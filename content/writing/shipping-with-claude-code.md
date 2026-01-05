@@ -65,28 +65,9 @@ I use native Chrome integration (`claude --chrome`) for interactive web workflow
 
 Chrome mode is great for interaction; for deterministic screenshot artifacts I still use Playwright MCP. I want saved files in PRs and issue threads, and Playwright handles that workflow reliably.
 
-Known limitations: `--chrome` requires Chrome (not Brave or Arc), doesn't work on WSL, uses your real browser session with your login state, requires a visible window, and opens new tabs rather than taking over existing ones. You'll handle authentication and CAPTCHAs manually, then Claude can continue.
-
 ## Division of labor
 
-These verification layers work because Claude and I have a clear division of labor.
-
-**Agent:**
-
-- Find the right files, make edits, run verification tools
-- Navigate browser interfaces and verify UI behavior
-- Write small, focused commits with descriptive messages
-- Draft pull request descriptions and release notes
-
-**Me:**
-
-- Set the goal, constraints, and success criteria
-- Review diffs for correctness and unintended behavior changes
-- Run cross-model audits for important changes
-- Decide when something is ready to ship
-- Take responsibility for what goes into production
-
-As [Simon Willison notes](https://simonwillison.net/2025/Dec/18/code-proven-to-work/), a computer can never be held accountable. Claude does the implementation work; I own the outcome.
+These verification layers work because Claude and I have a clear division of labor. The agent finds the right files, makes edits, runs verification tools, navigates browser interfaces, and drafts commits and PR descriptions. I set the goal and constraints, review diffs for correctness and unintended behavior changes, run cross-model audits for important changes, and decide when something is ready to ship. As [Simon Willison notes](https://simonwillison.net/2025/Dec/18/code-proven-to-work/), a computer can never be held accountable. Claude does the implementation work; I own the outcome.
 
 ## Plan Mode + writing plans to files
 
@@ -116,7 +97,7 @@ In Claude Code, `ultrathink` is the keyword that allocates a per-request thinkin
 
 ### A 7-year-old Winston bug
 
-This one caught me off guard. I was debugging a logging issue in Promptfoo and asked Claude to investigate. Instead of just patching our code, Claude looked at the Winston package source and identified a bug that had been there since 2018: `logger.end()` could emit the `finish` event before the file write actually completed. You could call `logger.end()` followed by `process.exit()` and lose your last few log lines.
+I was debugging a logging issue in Promptfoo and asked Claude to investigate. Instead of patching our code, it identified a bug in the Winston package that had been there since 2018: `logger.end()` could emit the `finish` event before the file write actually completed. You could call `logger.end()` followed by `process.exit()` and lose your last few log lines.
 
 Claude asked if I wanted to open a PR upstream. It wouldn't have occurred to me to look there.
 
@@ -126,11 +107,11 @@ The fix involved adding a `_final()` hook to Winston's File transport so the str
 
 A significant portion of my work involves static analysis. At Promptfoo I've built [code scanning](https://www.promptfoo.dev/docs/code-scanning/) and [model audit](https://www.promptfoo.dev/docs/model-audit/) features. I also audit other open-source projects, which has resulted in dozens of disclosed security vulnerabilities.
 
-Claude Code handles much of the mechanical overhead: locating relevant files, tracing data flows through a codebase, drafting fixes, running verification checks. I still manually validate every change, particularly anything touching security boundaries or authentication logic.
+Claude Code handles much of the mechanical overhead: locating relevant files, tracing data flows through a codebase, drafting fixes, running verification checks. I work with agents to reproduce and verify vulnerabilities.
 
 ### Volume
 
-The four-worktree setup allows work to proceed in parallel: one agent implements a feature while another runs verification; a third reviews diffs or explores edge cases. No waiting, minimal context switching.
+Running 6 tabs in parallel lets work proceed concurrently: one agent implements a feature while another runs verification; a third reviews diffs or explores edge cases. No waiting, minimal context switching.
 
 In 2025 I merged 1,000+ PRs to Promptfoo:
 
@@ -150,7 +131,7 @@ Different model families seem to have different blind spots:
 - Codex catches edge cases and type inconsistencies that Claude misses
 - Gemini flags structural issues and suggests simpler alternatives
 
-As a concrete example: Claude recently refactored an authentication flow and the tests passed. Gemini pointed out that the new code changed the error messages returned to clients, which would break existing error handling in our frontend. Claude's tests hadn't covered that contract.
+Claude recently refactored an authentication flow and the tests passed. Gemini pointed out that the new code changed the error messages returned to clients, which would break existing error handling in our frontend. Claude's tests hadn't covered that contract.
 
 For substantial changes—large refactors, accessibility improvements, performance work—I run a second agent as a verifier. The task isn't complete until both the implementation and verification pass in a clean worktree.
 
@@ -186,57 +167,18 @@ Here's a simplified version of what's in the Promptfoo repo root:
 - All API endpoints require authentication checks
 ```
 
-## Getting started
-
-If you want to try parallel sessions with worktrees, here's the starter kit:
-
-**Create a worktree and start in Plan Mode:**
-
-```bash
-git worktree add ../promptfoo-feature-x -b feature-x
-cd ../promptfoo-feature-x
-claude --permission-mode plan
-# then: claude --chrome (when you need browser verification)
-```
-
-**More worktree operations:**
-
-```bash
-# Create multiple worktrees
-git worktree add ../project-feature-a -b feature-a
-git worktree add ../project-bugfix-b -b bugfix-b
-
-# Remove when done
-git worktree remove ../project-feature-a
-git worktree list  # See what's left
-```
-
-**Key commands for controlling Claude:**
+## Key commands
 
 - `/model` - Switch between Sonnet and Opus
 - `/config` - Toggle thinking mode
 - `ultrathink:` - Prefix a request for deeper reasoning
 - `/chrome` - Enable browser integration (or use `--chrome` flag)
 
-The pattern: one worktree per task, one Claude session per worktree. When a session finishes (Ghostty notifies me), I review the diff and either merge or ask for changes.
+## Context rot and compounding mistakes
 
-## Failure modes
+An agent with the wrong plan rarely gets better. When the initial approach is flawed, more iterations usually make things worse. The agent doubles down on the wrong abstraction, adds complexity to work around problems it created, or quietly changes behavior to make tests pass. I've learned to reset the context and try again instead of pushing through.
 
-The biggest failure modes I've seen:
-
-**Over-abstraction.** Claude often introduces unnecessary flexibility or creates abstractions that aren't needed. This is especially common when refactoring. A verification pass with a different model (Gemini or Codex) usually catches this.
-
-**Silent behavior changes.** Claude will "fix" code by changing what it does, not just how it does it. The tests pass because they weren't comprehensive enough. Fresh-context code review helps, but you still need to read the diff carefully.
-
-**Flaky tests.** When tests are non-deterministic, Claude will try dozens of approaches to make them pass, none of which actually fix the underlying issue. You have to intervene and either fix the test or isolate the flakiness.
-
-**Wrong files edited.** Despite CLAUDE.md rules, Claude occasionally edits generated files or dependencies. Git diffs catch this immediately, but it's annoying.
-
-**Compounding mistakes.** When one worktree makes a mistake and another worktree is built on top of that work, the errors compound. This is why verification passes are critical before merging.
-
-**Scope control.** How do I stop six sessions from stepping on each other? One task per worktree, no shared branches, no stacking unless a verifier worktree has passed. If two tasks touch the same files, I merge one first.
-
-The workflow helps when you can verify the work automatically (tests, types, lint, browser checks). For work that requires human judgment—API design, UX decisions, architectural tradeoffs—the agent can draft options, but you're still making the call.
+Compounding mistakes happen when one session makes an error and another session builds on that work. The second agent inherits the first agent's bad assumptions, and the errors multiply. This is why verification passes are critical before merging anything.
 
 The surprising part isn't that I'm shipping more code—it's that I'm shipping _better_ code. The verification loops catch more bugs before they reach production. Cross-model audits surface issues I wouldn't have noticed manually. Fresh-context reviews find the kind of subtle problems that are hard to spot when you just wrote the code yourself.
 
@@ -245,12 +187,6 @@ The lower friction has also changed how I work. I'll fix bugs during customer ca
 What makes this work is the convergence: native browser integration (`--chrome`), extended thinking (`ultrathink`), cross-model verification, and tight feedback loops from type checkers and tests. Individually these are useful. Together they change what's practical to build.
 
 Right now, the practical win is straightforward: parallel sessions with fast verifiers and explicit ownership beats single-session prompting.
-
-## What's next
-
-- Contract tests as a gating check before cross-model audits
-- Saved screenshot artifacts in PRs (still figuring out the Chrome integration workflow)
-- A stricter policy for when cross-model audits are required vs optional
 
 ---
 
