@@ -171,18 +171,13 @@ The AGENTS.md file has the actual rules:
 - All API endpoints require authentication checks
 ```
 
-## Key commands
-
-- `/model` - Switch between Sonnet and Opus
-- `/config` - Toggle thinking mode
-- `ultrathink:` - Prefix a request for deeper reasoning
-- `/chrome` - Enable browser integration (or use `--chrome` flag)
-
 ## Context rot and compounding mistakes
 
 An agent with the wrong plan rarely gets better. When the initial approach is flawed, more iterations usually make things worse. The agent doubles down on the wrong abstraction, adds complexity to work around problems it created, or quietly changes behavior to make tests pass. I've learned to reset the context and try again instead of pushing through.
 
 Compounding mistakes happen when one session makes an error and another session builds on that work. The second agent inherits the first agent's bad assumptions, and the errors multiply. This is why verification passes are critical before merging anything.
+
+## What's changed
 
 The surprising part isn't that I'm shipping more code—it's that I'm shipping _better_ code. The verification loops catch more bugs before they reach production. Cross-model audits surface issues I wouldn't have noticed manually. Fresh-context reviews find the kind of subtle problems that are hard to spot when you just wrote the code yourself.
 
