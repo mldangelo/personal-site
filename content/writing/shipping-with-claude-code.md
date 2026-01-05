@@ -1,152 +1,330 @@
 ---
-title: How I Use Claude Code
+title: What I learned shipping 1,000+ PRs with Claude Code
 date: '2026-01-03'
-description: How I shipped 1,000+ PRs in 2025 with parallel agents and cross-model audits.
+description: 'Notes from using Claude Code in parallel git worktrees: Plan Mode, ultrathink, verification loops, and Chrome automation.'
 ---
 
 ## Context
 
-I spend most of my time building [Promptfoo](https://github.com/promptfoo/promptfoo), an open-source LLM evaluation tool. Before I bought a Max plan, I was burning through ~$10K/month in API credits on Claude Code alone—this was my interactive development workflow, not production workloads.
+I spend most of my time building [Promptfoo](https://github.com/promptfoo/promptfoo), an open-source LLM evaluation tool. I started experimenting with Claude Code earlier in 2025, but usage picked up significantly in July. By the end of that month I was spending close to $10K in API credits—just on interactive development work, not production traffic.
 
 ![Anthropic API costs for July 2025 showing $9,986.20 in token usage](/images/writing/api-costs-july-2025.png)
 
-That spend forced me to take agent workflows seriously. Max is heavily subsidized. I have two.
+At that point, switching to a Max subscription made sense. At my usage volume, Max pricing is materially cheaper than paying API rates for interactive development. I now run two Max subscriptions because I hit the weekly usage limits on a single account.
 
-The workflow I landed on ships production changes at Promptfoo, contributes to open-source projects, and occasionally updates my personal site.
+Over the course of 2025, I've merged 1,000+ PRs to Promptfoo using this approach. For context: I merge everything via PRs, including one-line fixes and docs. The number is a proxy for reps through the workflow, not 1,000 major features. The same workflow handles open-source contributions and occasional updates to this site. What follows are notes on what I've learned about making parallel agents work in practice.
 
-This is a direct description of how I use Claude Code day to day.
+## TL;DR
 
-## My setup
+If you want to try this workflow:
 
-- **Two Max plans.** I hit the weekly limit, so I run two accounts.
-- **Ghostty with six panes + git worktrees.** Four worktrees of the Promptfoo repo, plus other repos I'm touching. Each worktree gets its own Claude Code session.
-- **Claude Code with Opus 4.5.** I use the most capable model even if it's slower. Speed matters less when you're switching between six terminals.
-- **Cross-model audits.** I regularly verify work with Codex and Gemini. Different models catch different things.
-- **CLAUDE.md and AGENTS.md files** nested throughout the repo. I update them frequently. Whenever Claude makes a repeated mistake, the fix goes into a rules file.
+- Run 2–6 parallel Claude Code sessions, each in its own git worktree
+- Treat TypeScript, tests, and lint as the agent's verification layer
+- Use `claude --chrome` for real UI testing (I still use Playwright MCP for screenshots)
+- Keep a CLAUDE.md at the repo root with build commands and common failure patterns
+- Use plan mode: write plans to files, review them before implementing
+- Specify `ultrathink` when you need deeper reasoning (security audits, architecture decisions)
+- Keep accountability human: you set goals, review diffs, and decide what ships
 
-No prompt magic. The leverage comes from parallelism and verification.
+## The setup
 
-## Running without guardrails
+Here's what I'm currently running:
 
-I run everything with `claude --dangerously-skip-permissions`.
+- **Two Max subscriptions.** I hit weekly limits on one account when I'm running multiple long sessions, so I rotate between two accounts. At my usage, Max pricing is materially cheaper than paying API rates for interactive dev.
+- **Ghostty with six panes + notifications.** Four panes are independent working copies of the same repo (git worktrees), plus two panes for other projects. I rely on Ghostty's bell/attention notifications as a scheduler: when a pane "dings," I either merge the diff or push it back with one follow-up.
+- **Four parallel worktrees.** Each task gets its own worktree so sessions don't collide, and I can review diffs in isolation.
+- **Opus 4.5 as my configured default.** Claude Code defaults to Sonnet 4.5, but I run Opus 4.5 as my personal default for this workflow because I care more about correctness than latency, and I'm usually running several sessions anyway.
+- **Plan-first workflow.** For non-trivial tasks I start in Plan Mode, write the plan to a file, review it, then switch to implementation. More on this below.
+- **Cross-model verification.** I use the Codex CLI and Gemini CLI for second opinions. I also occasionally run isolated throwaway repros in separate environments to test edge cases without touching the main codebase.
 
-I fully expect this to burn me someday. But the friction of approving every file edit and command breaks the flow that makes this workflow valuable. The speed gain is worth the risk, for me, on these repos, with version control as a safety net.
+The throughput gain comes from concurrency plus verifiers, not prompt tricks.
 
-This isn't advice. It's a tradeoff I've made with eyes open.
+## The workflow (the part that matters)
 
-## Verification makes models better
+1. Start in Plan Mode for anything non-trivial
+2. Write the plan to a file in-repo, then review it
+3. Implement in a dedicated worktree with fast checks (tsc/tests/lint)
+4. Verify in a clean worktree and in the browser
+5. Cross-model audit for changes that touch contracts, auth, or security
+6. Only then: PR + merge
 
-Models improve dramatically when they can check their own work. Every layer of verification helps:
+## On using `--dangerously-skip-permissions`
 
-- **Typed languages.** TypeScript catches errors that would otherwise reach production. The type checker is a feedback loop Claude can use mid-task.
-- **Unit tests.** Fast, specific, and Claude can run them after every change.
-- **End-to-end tests.** For web work, I use the [Playwright MCP](https://github.com/microsoft/playwright-mcp). Claude can navigate pages, take screenshots, and verify actual behavior, not just code that looks right. I keep this scoped to trusted sites and handle login flows myself.
-- **Linting and builds.** Catch formatting drift and build failures before they compound.
+I run Claude Code with the `--dangerously-skip-permissions` flag on these projects.
 
-When Claude has access to these checks, it stops guessing and starts converging. The tighter the feedback loop, the better the output.
+This is probably a bad idea. The flag disables all permission prompts for file edits and shell commands, which means Claude can modify any file or run any command without asking. I expect this will eventually cause a problem. But the friction of approving every edit and command—dozens per session—breaks the flow that makes parallel agents useful.
 
-## The split of responsibility
+If you want this workflow without the risk, the official recommendation is to run it in an isolated environment (container or similar). Claude Code also offers `/sandbox` mode for filesystem and network isolation of bash commands, which is safer than bypassing permissions entirely.
+
+For anything unfamiliar, I start in Plan Mode first, then switch to implementation. Claude Code's write boundary is scoped to the directory it's started in, which helps for file edits, but bypassing permission prompts is still "arbitrary commands without human review."
+
+For these specific repositories, with git as a safety net and the ability to quickly review diffs, I've decided the productivity gain is worth the risk. Your situation is probably different.
+
+## Tight feedback loops improve agent output
+
+I've found that models improve significantly when they can verify their own work. Each layer of verification seems to help:
+
+- **Type checkers.** TypeScript catches type errors immediately. Claude can see the tsc output, adjust, and re-run within the same task.
+- **Unit tests.** Fast, targeted feedback. Claude runs them after changes and can see exactly what broke.
+- **Linters and formatters.** Catch style drift and build failures before they accumulate across files.
+- **Browser automation.** Claude can navigate actual web pages, fill forms, and verify UI behavior. More on this below.
+
+When the agent can run `tsc` and a fast test suite, it converges in fewer iterations and I see fewer speculative edits. The tighter the feedback loop, the fewer bad guesses make it into the final diff.
+
+## Browser automation: `--chrome` for interaction, Playwright MCP for screenshots
+
+I use native Chrome integration (`claude --chrome`) for interactive web workflows: reproduce UI bugs, test forms, and inspect console/network output. It's low ceremony and stays inside my normal browser session.
+
+Chrome mode is great for interaction; for deterministic screenshot artifacts I still use Playwright MCP. I want saved files in PRs and issue threads, and Playwright handles that workflow reliably.
+
+Known limitations: `--chrome` requires Chrome (not Brave or Arc), doesn't work on WSL, uses your real browser session with your login state, requires a visible window, and opens new tabs rather than taking over existing ones. You'll handle authentication and CAPTCHAs manually, then Claude can continue.
+
+## What the agent does, what I do
+
+These verification layers work because Claude and I have a clear division of labor.
 
 **Agent:**
 
-- Find the right files, make edits, run checks
-- Open a browser and verify UI behavior
-- Write small, scoped commits
-- Draft PRs and release notes
+- Find the right files, make edits, run verification tools
+- Navigate browser interfaces and verify UI behavior
+- Write small, focused commits with descriptive messages
+- Draft pull request descriptions and release notes
 
 **Me:**
 
-- Set the goal and constraints
-- Review the diff for semantic changes
-- Run cross-model audits when it matters
-- Decide when to ship
-- Take accountability for what ships
+- Set the goal, constraints, and success criteria
+- Review diffs for correctness and unintended behavior changes
+- Run cross-model audits for important changes
+- Decide when something is ready to ship
+- Take responsibility for what goes into production
 
-A computer can never be held accountable. That's my job. Claude does the work; I own the outcome.
+As [Simon Willison notes](https://simonwillison.net/2025/Dec/18/code-proven-to-work/), a computer can never be held accountable. Claude does the implementation work; I own the outcome.
 
-## Planning and context management
+## Plan Mode + writing plans to files
 
-A few techniques that make a noticeable difference:
+For multi-file changes, I start in Plan Mode so the agent does a read-only pass: locate files, read code, and propose steps. You can toggle it with Shift+Tab, or start there with:
 
-**Plan mode.** Before implementing anything complex, I ask Claude to plan first. No code. Just read the relevant files, understand the constraints, and propose an approach. This catches bad ideas before they're half-built.
+```bash
+claude --permission-mode plan
+```
 
-**Reflection.** After a task, I ask Claude to reflect: what went well, what was harder than expected, and what would it do differently. This surfaces issues that wouldn't show up in a passing test suite.
+When the plan looks right, I switch out of Plan Mode and have it write the plan into `docs/plans/<task>.md`. Then I implement against that file like a checklist.
 
-**Working memory.** For multi-step work, I have Claude write plans and state to a markdown file. This persists across context resets and keeps the agent oriented when picking up where it left off.
+The plan file also survives context resets and makes it easier to hand a task to a different session later.
 
-**Fresh context for review.** Before opening a PR, I reset the context window and ask Claude to review the diff from scratch. An agent that just wrote the code will defend it. A fresh context provides something closer to an outside perspective.
+## Prompt templates I actually use
 
-**Audit requests.** I explicitly ask Claude to look for problems: edge cases, security issues, unnecessary complexity. "Review this" gets you a summary. "Audit this and tell me what's wrong" gets you useful criticism.
+A few prompts that get copy-pasted regularly:
 
-## Results
+**Planning:**
 
-### Fixing a 7-year-old Winston bug
+```
+Read the auth middleware in src/auth/, the user model in src/models/user.ts,
+and the current session handling. Then write a plan for adding OAuth support
+to docs/plans/oauth-implementation.md. Include: files that need changes,
+new dependencies, migration steps, and testing strategy.
+```
 
-This one surprised me. I was debugging a logging issue in Promptfoo and asked Claude to investigate. Instead of just fixing our code, it looked at the Winston package source and found a bug that had been there for seven years: `logger.end()` could emit `finish` before the file write actually completed. In practice, you could call `logger.end()` and `process.exit()` and lose log lines.
+**Verification:**
 
-Claude asked if I wanted to open a PR upstream. I wouldn't have thought to look there on my own.
+```
+Run the full test suite, check types with tsc --noEmit, run the linter,
+and build the project. Fix any failures. When everything passes, show me
+a summary of what broke and how you fixed it.
+```
 
-The fix was adding a `_final()` hook to the File transport so the stream waits for the underlying `fs.WriteStream` to finish. Claude wrote a minimal repro and regression tests, then [opened the PR](https://github.com/winstonjs/winston/pull/2594). It merged, and the fix shipped in Winston v3.19.0.
+**Cross-model audit:**
 
-### Static analysis and CVE work
+```
+ultrathink: audit this diff for: (1) behavior changes that aren't documented
+in the commit message, (2) security issues, especially around auth and input
+validation, (3) breaking changes to APIs or error messages that external
+code might depend on.
+```
 
-I spend a lot of time on static analysis. At Promptfoo I built [code scanning](https://www.promptfoo.dev/docs/code-scanning/) and [model audit](https://www.promptfoo.dev/docs/model-audit/). I also audit other open-source projects, which has led to dozens of disclosed security vulnerabilities.
+**Post-task reflection:**
 
-Claude Code reduces the overhead: finding the right files, tracing data flows, drafting fixes, running checks. I still validate every change myself, especially around security boundaries.
+```
+What went well in this implementation? What was harder than expected?
+What would you do differently? Are there edge cases the tests don't cover?
+```
+
+These prompts are specific enough to get consistent results, but I adjust them per task.
+
+## Extended thinking and when I use `ultrathink`
+
+Opus 4.5 has extended thinking enabled by default, but I still use `ultrathink` explicitly for the cases where I want the agent to slow down: security review, auth changes, and multi-step refactors.
+
+Example:
+
+```
+ultrathink: audit this diff for security issues and behavior changes
+```
+
+In Claude Code, `ultrathink` is the keyword that allocates a per-request thinking budget. Other phrases like "think hard" read like emphasis, but they don't allocate thinking tokens. This only works as described when `MAX_THINKING_TOKENS` is not set; if you've set that environment variable, it overrides the per-request `ultrathink` behavior.
+
+## Examples of what this enables
+
+### A 7-year-old Winston bug
+
+This one caught me off guard. I was debugging a logging issue in Promptfoo and asked Claude to investigate. Instead of just patching our code, Claude looked at the Winston package source and identified a bug that had been there since 2018: `logger.end()` could emit the `finish` event before the file write actually completed. You could call `logger.end()` followed by `process.exit()` and lose your last few log lines.
+
+Claude asked if I wanted to open a PR upstream. It wouldn't have occurred to me to look there.
+
+The fix involved adding a `_final()` hook to Winston's File transport so the stream waits for the underlying `fs.WriteStream` to finish flushing. Claude wrote a minimal reproduction case and regression tests, then [opened the PR](https://github.com/winstonjs/winston/pull/2594). The Winston maintainers merged it, and [the fix shipped in v3.19.0](https://github.com/winstonjs/winston/releases/tag/v3.19.0).
+
+### Static analysis and security work
+
+A significant portion of my work involves static analysis. At Promptfoo I've built [code scanning](https://www.promptfoo.dev/docs/code-scanning/) and [model audit](https://www.promptfoo.dev/docs/model-audit/) features. I also audit other open-source projects, which has resulted in dozens of disclosed security vulnerabilities.
+
+Claude Code handles much of the mechanical overhead: locating relevant files, tracing data flows through a codebase, drafting fixes, running verification checks. I still manually validate every change, particularly anything touching security boundaries or authentication logic.
 
 ### Volume
 
-I've merged 1,000+ PRs to Promptfoo in 2025. The four-worktree setup makes this possible: one agent implements while another verifies; a third reviews or explores edge cases. No blocking, no context switching.
+The four-worktree setup allows work to proceed in parallel: one agent implements a feature while another runs verification; a third reviews diffs or explores edge cases. No waiting, minimal context switching.
+
+In 2025 I merged 1,000+ PRs to Promptfoo:
 
 [![8,482 GitHub contributions in 2025](/images/writing/github-contributions-2025.png)](https://github.com/mldangelo?tab=overview&from=2025-01-01&to=2025-12-31)
 
-For comparison: I had [5,396 contributions in 2024](https://github.com/mldangelo?tab=overview&from=2024-01-01&to=2024-12-31), before these tools matured. Same person, better workflow.
+_This graph includes commits, PRs, reviews, and issue activity. I'm using it as a rough proxy for output._
 
-## Cross-model verification
+For comparison, I had [5,396 contributions in 2024](https://github.com/mldangelo?tab=overview&from=2024-01-01&to=2024-12-31), before these workflows were mature. Same person, different tooling.
 
-I regularly audit Claude's work with Codex and Gemini.
+## Using multiple models for verification
 
-Different models have different blind spots:
+I regularly check Claude's work using other models—running the Codex CLI and Gemini CLI in separate sessions.
 
-- Claude sometimes over-abstracts or adds unnecessary flexibility
-- Codex catches edge cases Claude glosses over
-- Gemini flags structural issues the others miss
+Different model families seem to have different blind spots:
 
-A second opinion from a different model family is cheap insurance.
+- Claude sometimes introduces unnecessary abstractions or adds flexibility that isn't needed
+- Codex catches edge cases and type inconsistencies that Claude misses
+- Gemini flags structural issues and suggests simpler alternatives
 
-For long-running work (refactors, accessibility cleanups, performance), a second verifier agent enforces completion. The task isn't done until the checks pass in a clean worktree.
+As a concrete example: Claude recently refactored an authentication flow and the tests passed. Gemini pointed out that the new code changed the error messages returned to clients, which would break existing error handling in our frontend. Claude's tests hadn't covered that contract.
 
-## The rules files
+For substantial changes—large refactors, accessibility improvements, performance work—I run a second agent as a verifier. The task isn't complete until both the implementation and verification pass in a clean worktree.
 
-I keep CLAUDE.md at the repo root and AGENTS.md files nested in subdirectories. Claude Code reads these automatically.
+## CLAUDE.md + AGENTS.md: capturing the mistakes that repeat
 
-The failures are predictable:
+I keep project instructions in `CLAUDE.md` files (root and relevant subdirectories). Each `CLAUDE.md` is short and mostly points to an `AGENTS.md` file with longer, task-specific guidance.
 
-- Claude runs the wrong command
-- Claude forgets formatting conventions
-- Claude edits the wrong directory
-- Claude changes behavior while "fixing" something
+The trick is to make the rules load reliably. Claude Code supports importing files from `CLAUDE.md` using `@path` syntax—literal includes, not evaluated inside code spans or fenced blocks. This lets me keep the top-level memory file small while pulling in the detailed playbook when needed. You can use `/memory` to debug what actually loaded.
 
-So the rules stay short and tactical:
+I update these files whenever I see the same mistake twice. The goal isn't comprehensive documentation. It's preventing the specific failures that actually happen in this codebase.
 
-- Exact commands for lint/type-check/test/build
-- Files not to touch without asking
-- Code style preferences
-- Where source-of-truth data lives
+### Example CLAUDE.md
 
-Whenever I see a repeated mistake, I add a rule. The trick isn't more rules. It's the few rules that prevent the mistakes you're actually seeing.
+Here's a simplified version of what's in the Promptfoo repo root:
 
-## The outcome
+```markdown
+# Promptfoo Development Guide
 
-I ship more because I verify more. The same loop handles production changes at Promptfoo, open-source contributions, and the occasional personal site update.
+@AGENTS.md
 
-I've never enjoyed coding more. I fix bugs during customer meetings. I keep going at 2am when a year ago I would have stopped. The friction is gone. What's left is the part I actually like.
+## Build Commands
+
+- Lint: `npm run lint`
+- Type check: `npm run type-check`
+- Tests: `npm test`
+- Build: `npm run build`
+
+## Critical Rules
+
+- Never edit files in `dist/` - they're generated
+- Never modify `package.json` dependencies without asking
+- Test files must end in `.test.ts` or `.test.tsx`
+- All API endpoints require authentication checks
+```
+
+## How to replicate this workflow
+
+If you want to try parallel sessions with worktrees, here's the starter kit:
+
+**Create a worktree and start in Plan Mode:**
+
+```bash
+git worktree add ../promptfoo-feature-x -b feature-x
+cd ../promptfoo-feature-x
+claude --permission-mode plan
+# then: claude --chrome (when you need browser verification)
+```
+
+**More worktree operations:**
+
+```bash
+# Create multiple worktrees
+git worktree add ../project-feature-a -b feature-a
+git worktree add ../project-bugfix-b -b bugfix-b
+
+# Remove when done
+git worktree remove ../project-feature-a
+git worktree list  # See what's left
+```
+
+**Key commands for controlling Claude:**
+
+- `/model` - Switch between Sonnet and Opus
+- `/config` - Toggle thinking mode
+- `ultrathink:` - Prefix a request for deeper reasoning
+- `/chrome` - Enable browser integration (or use `--chrome` flag)
+
+The pattern: one worktree per task, one Claude session per worktree. When a session finishes (Ghostty notifies me), I review the diff and either merge or ask for changes.
+
+## Where this workflow breaks down
+
+The biggest failure modes I've seen:
+
+**Over-abstraction.** Claude often introduces unnecessary flexibility or creates abstractions that aren't needed. This is especially common when refactoring. A verification pass with a different model (Gemini or Codex) usually catches this.
+
+**Silent behavior changes.** Claude will "fix" code by changing what it does, not just how it does it. The tests pass because they weren't comprehensive enough. Fresh-context code review helps, but you still need to read the diff carefully.
+
+**Flaky tests.** When tests are non-deterministic, Claude will try dozens of approaches to make them pass, none of which actually fix the underlying issue. You have to intervene and either fix the test or isolate the flakiness.
+
+**Wrong files edited.** Despite CLAUDE.md rules, Claude occasionally edits generated files or dependencies. Git diffs catch this immediately, but it's annoying.
+
+**Compounding mistakes.** When one worktree makes a mistake and another worktree is built on top of that work, the errors compound. This is why verification passes are critical before merging.
+
+**Scope control.** How do I stop six sessions from stepping on each other? One task per worktree, no shared branches, no stacking unless a verifier worktree has passed. If two tasks touch the same files, I merge one first.
+
+The workflow helps when you can verify the work automatically (tests, types, lint, browser checks). For work that requires human judgment—API design, UX decisions, architectural tradeoffs—the agent can draft options, but you're still making the call.
+
+## What's changed
+
+The surprising part isn't that I'm shipping more code—it's that I'm shipping _better_ code. The verification loops catch more bugs before they reach production. Cross-model audits surface issues I wouldn't have noticed manually. Fresh-context reviews find the kind of subtle problems that are hard to spot when you just wrote the code yourself.
+
+The lower friction has also changed how I work. I'll fix bugs during customer calls now. I'll keep momentum on small fixes that would have felt too tedious to context-switch into a year ago. The mechanical parts—finding files, running tests, drafting commit messages—have low enough overhead that the work stays focused on the parts that actually need thinking.
+
+What makes this work is the convergence: native browser integration (`--chrome`), extended thinking (`ultrathink`), cross-model verification, and tight feedback loops from type checkers and tests. Individually these are useful. Together they change what's practical to build.
+
+Right now, the practical win is straightforward: parallel sessions with fast verifiers and explicit ownership beats single-session prompting.
+
+## Next things I'm testing
+
+- Contract tests as a gating check before cross-model audits
+- Saved screenshot artifacts in PRs (still figuring out the Chrome integration workflow)
+- A stricter policy for when cross-model audits are required vs optional
 
 ---
 
 ## Links
 
-- [Claude Code best practices](https://www.anthropic.com/engineering/claude-code-best-practices)
-- [Promptfoo](https://github.com/promptfoo/promptfoo)
-- [Simon Willison on accountability](https://simonwillison.net/2025/Dec/18/code-proven-to-work/)
-- [Boris Cherny on AI-assisted development](https://x.com/bcherny/status/2007179832300581177)
+**Official Claude Code docs:**
+
+- [Claude Code best practices](https://www.anthropic.com/engineering/claude-code-best-practices) - Anthropic's official guide
+- [Use Claude Code with Chrome (beta)](https://code.claude.com/docs/en/chrome) - Native browser integration
+- [Common workflows](https://code.claude.com/docs/en/common-workflows) - Git worktrees and parallel sessions
+- [Model configuration](https://code.claude.com/docs/en/model-config) - Switching between Sonnet and Opus
+- [Manage Claude's memory](https://code.claude.com/docs/en/memory) - CLAUDE.md and .claude/rules
+- [Claude Code with Max plan](https://support.claude.com/en/articles/11145838-using-claude-code-with-your-pro-or-max-plan) - Usage limits and billing
+
+**Browser automation:**
+
+- [Chrome DevTools MCP](https://github.com/ChromeDevTools/chrome-devtools-mcp) - MCP server for advanced debugging
+- [Playwright MCP](https://github.com/microsoft/playwright-mcp) - Browser automation via MCP
+
+**Related:**
+
+- [Promptfoo](https://github.com/promptfoo/promptfoo) - The project where I use this workflow
+- [Simon Willison on accountability](https://simonwillison.net/2025/Dec/18/code-proven-to-work/) - Who's responsible for AI-generated code
+- [Boris Cherny on AI-assisted development](https://x.com/bcherny/status/2007179832300581177) - Productivity perspectives
