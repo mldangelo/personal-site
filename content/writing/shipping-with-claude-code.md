@@ -6,27 +6,15 @@ description: 'Notes from using Claude Code in parallel git worktrees: Plan Mode,
 
 ## Context
 
-I spend most of my time building [Promptfoo](https://github.com/promptfoo/promptfoo), an open-source LLM evaluation tool. I started experimenting with Claude Code earlier in 2025, but usage picked up significantly in July. By the end of that month I was spending close to $10K in API credits—just on interactive development work, not production traffic.
+I spend most of my time building [Promptfoo](https://github.com/promptfoo/promptfoo), an open-source LLM evaluation tool. I was an avid Cursor user before experimenting with Claude Code earlier in 2025, but usage picked up significantly in July. By the end of that month I was spending close to $10K in API credits—just on interactive development work, not production traffic.
 
 ![Anthropic API costs for July 2025 showing $9,986.20 in token usage](/images/writing/api-costs-july-2025.png)
 
-At that point, switching to a Max subscription made sense. At my usage volume, Max pricing is materially cheaper than paying API rates for interactive development. I now run two Max subscriptions because I hit the weekly usage limits on a single account.
+Anthropic gave us a generous credit grant for Promptfoo, so this didn't actually cost us anything—but I'm grateful for their support. At that usage volume, switching to a Max subscription made sense. I now run two Max subscriptions because I hit the weekly usage limits on a single account.
 
-Over the course of 2025, I've merged 1,000+ PRs to Promptfoo using this approach. For context: I merge everything via PRs, including one-line fixes and docs. The number is a proxy for reps through the workflow, not 1,000 major features. The same workflow handles open-source contributions and occasional updates to this site. What follows are notes on what I've learned about making parallel agents work in practice.
+Over the course of 2025, I've merged 1,000+ PRs to Promptfoo using this approach. What follows are notes on what I've learned about making parallel agents work in practice.
 
-## TL;DR
-
-If you want to try this workflow:
-
-- Run 2–6 parallel Claude Code sessions, each in its own git worktree
-- Treat TypeScript, tests, and lint as the agent's verification layer
-- Use `claude --chrome` for real UI testing (I still use Playwright MCP for screenshots)
-- Keep a CLAUDE.md at the repo root with build commands and common failure patterns
-- Use plan mode: write plans to files, review them before implementing
-- Specify `ultrathink` when you need deeper reasoning (security audits, architecture decisions)
-- Keep accountability human: you set goals, review diffs, and decide what ships
-
-## The setup
+## My setup
 
 Here's what I'm currently running:
 
@@ -39,7 +27,7 @@ Here's what I'm currently running:
 
 The throughput gain comes from concurrency plus verifiers, not prompt tricks.
 
-## The workflow (the part that matters)
+## The workflow
 
 1. Start in Plan Mode for anything non-trivial
 2. Write the plan to a file in-repo, then review it
@@ -60,7 +48,7 @@ For anything unfamiliar, I start in Plan Mode first, then switch to implementati
 
 For these specific repositories, with git as a safety net and the ability to quickly review diffs, I've decided the productivity gain is worth the risk. Your situation is probably different.
 
-## Tight feedback loops improve agent output
+## Verification layers
 
 I've found that models improve significantly when they can verify their own work. Each layer of verification seems to help:
 
@@ -79,7 +67,7 @@ Chrome mode is great for interaction; for deterministic screenshot artifacts I s
 
 Known limitations: `--chrome` requires Chrome (not Brave or Arc), doesn't work on WSL, uses your real browser session with your login state, requires a visible window, and opens new tabs rather than taking over existing ones. You'll handle authentication and CAPTCHAs manually, then Claude can continue.
 
-## What the agent does, what I do
+## Division of labor
 
 These verification layers work because Claude and I have a clear division of labor.
 
@@ -111,45 +99,6 @@ claude --permission-mode plan
 When the plan looks right, I switch out of Plan Mode and have it write the plan into `docs/plans/<task>.md`. Then I implement against that file like a checklist.
 
 The plan file also survives context resets and makes it easier to hand a task to a different session later.
-
-## Prompt templates I actually use
-
-A few prompts that get copy-pasted regularly:
-
-**Planning:**
-
-```
-Read the auth middleware in src/auth/, the user model in src/models/user.ts,
-and the current session handling. Then write a plan for adding OAuth support
-to docs/plans/oauth-implementation.md. Include: files that need changes,
-new dependencies, migration steps, and testing strategy.
-```
-
-**Verification:**
-
-```
-Run the full test suite, check types with tsc --noEmit, run the linter,
-and build the project. Fix any failures. When everything passes, show me
-a summary of what broke and how you fixed it.
-```
-
-**Cross-model audit:**
-
-```
-ultrathink: audit this diff for: (1) behavior changes that aren't documented
-in the commit message, (2) security issues, especially around auth and input
-validation, (3) breaking changes to APIs or error messages that external
-code might depend on.
-```
-
-**Post-task reflection:**
-
-```
-What went well in this implementation? What was harder than expected?
-What would you do differently? Are there edge cases the tests don't cover?
-```
-
-These prompts are specific enough to get consistent results, but I adjust them per task.
 
 ## Extended thinking and when I use `ultrathink`
 
@@ -205,7 +154,7 @@ As a concrete example: Claude recently refactored an authentication flow and the
 
 For substantial changes—large refactors, accessibility improvements, performance work—I run a second agent as a verifier. The task isn't complete until both the implementation and verification pass in a clean worktree.
 
-## CLAUDE.md + AGENTS.md: capturing the mistakes that repeat
+## CLAUDE.md + AGENTS.md
 
 I keep project instructions in `CLAUDE.md` files (root and relevant subdirectories). Each `CLAUDE.md` is short and mostly points to an `AGENTS.md` file with longer, task-specific guidance.
 
@@ -237,7 +186,7 @@ Here's a simplified version of what's in the Promptfoo repo root:
 - All API endpoints require authentication checks
 ```
 
-## How to replicate this workflow
+## Getting started
 
 If you want to try parallel sessions with worktrees, here's the starter kit:
 
@@ -271,7 +220,7 @@ git worktree list  # See what's left
 
 The pattern: one worktree per task, one Claude session per worktree. When a session finishes (Ghostty notifies me), I review the diff and either merge or ask for changes.
 
-## Where this workflow breaks down
+## Failure modes
 
 The biggest failure modes I've seen:
 
@@ -289,8 +238,6 @@ The biggest failure modes I've seen:
 
 The workflow helps when you can verify the work automatically (tests, types, lint, browser checks). For work that requires human judgment—API design, UX decisions, architectural tradeoffs—the agent can draft options, but you're still making the call.
 
-## What's changed
-
 The surprising part isn't that I'm shipping more code—it's that I'm shipping _better_ code. The verification loops catch more bugs before they reach production. Cross-model audits surface issues I wouldn't have noticed manually. Fresh-context reviews find the kind of subtle problems that are hard to spot when you just wrote the code yourself.
 
 The lower friction has also changed how I work. I'll fix bugs during customer calls now. I'll keep momentum on small fixes that would have felt too tedious to context-switch into a year ago. The mechanical parts—finding files, running tests, drafting commit messages—have low enough overhead that the work stays focused on the parts that actually need thinking.
@@ -299,7 +246,7 @@ What makes this work is the convergence: native browser integration (`--chrome`)
 
 Right now, the practical win is straightforward: parallel sessions with fast verifiers and explicit ownership beats single-session prompting.
 
-## Next things I'm testing
+## What's next
 
 - Contract tests as a gating check before cross-model audits
 - Saved screenshot artifacts in PRs (still figuring out the Chrome integration workflow)
