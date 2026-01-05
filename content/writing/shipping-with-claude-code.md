@@ -143,14 +143,18 @@ The trick is to make the rules load reliably. Claude Code supports importing fil
 
 I update these files whenever I see the same mistake twice. The goal isn't comprehensive documentation. It's preventing the specific failures that actually happen in this codebase.
 
-### Example CLAUDE.md
+### Example
 
-Here's a simplified version of what's in the Promptfoo repo root:
+The CLAUDE.md at the Promptfoo repo root just contains:
+
+```markdown
+@AGENTS.md
+```
+
+The AGENTS.md file has the actual rules:
 
 ```markdown
 # Promptfoo Development Guide
-
-@AGENTS.md
 
 ## Build Commands
 
