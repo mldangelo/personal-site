@@ -1,5 +1,6 @@
 import Markdown from 'markdown-to-jsx';
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { ArticleSchema } from '@/components/Schema';
 import PageWrapper from '@/components/Template/PageWrapper';
@@ -68,7 +69,29 @@ export default async function PostPage({ params }: PageProps) {
           <p className="post-description">{post.description}</p>
         </header>
         <div className="post-content prose">
-          <Markdown>{post.content}</Markdown>
+          <Markdown
+            options={{
+              overrides: {
+                img: {
+                  component: ({ alt, src }: { alt?: string; src?: string }) => (
+                    <Image
+                      src={src || ''}
+                      alt={alt || ''}
+                      width={1200}
+                      height={630}
+                      loading="lazy"
+                      style={{
+                        width: '100%',
+                        height: 'auto',
+                      }}
+                    />
+                  ),
+                },
+              },
+            }}
+          >
+            {post.content}
+          </Markdown>
         </div>
       </article>
     </PageWrapper>
