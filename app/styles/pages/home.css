@@ -109,6 +109,7 @@
   background: var(--color-border-bg);
   border-radius: var(--radius-full);
   font-weight: var(--font-weight-medium);
+  transition: background var(--duration-normal) var(--ease-out);
 }
 
 .hero-cta {
@@ -138,6 +139,7 @@
     transparent 70%
   );
   filter: blur(50px);
+  transition: opacity var(--duration-normal) var(--ease-out);
 }
 
 /* ========================================
@@ -152,6 +154,7 @@
   position: relative;
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0.015) 0%, transparent 100%);
   border-radius: var(--radius-lg);
+  transition: background var(--duration-normal) var(--ease-out);
 }
 
 /* Visual separator with gradient fade */
