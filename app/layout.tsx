@@ -13,13 +13,17 @@ const sourceSans = Source_Sans_3({
   subsets: ['latin'],
   variable: '--font-source-sans',
   display: 'swap',
+  preload: true,
+  adjustFontFallback: true,
 });
 
 const raleway = Raleway({
-  weight: ['400', '800', '900'],
+  weight: ['400', '800'],
   subsets: ['latin'],
   variable: '--font-raleway',
   display: 'swap',
+  preload: true,
+  adjustFontFallback: true,
 });
 
 const siteDescription =
