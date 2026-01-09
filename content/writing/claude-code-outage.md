@@ -9,15 +9,16 @@ On January 7, 2026, Claude Code 2.1.0 shipped. Users ran `claude` and got `Inval
 The cause was a date suffix added to a changelog header:
 
 ```markdown
-## 2.0.76              ← parses fine
-## 2.1.0 (2026-01-07)  ← crashes
+## 2.0.76 ← parses fine
+
+## 2.1.0 (2026-01-07) ← crashes
 ```
 
 The CLI parses these headings as structured data, then sorts them with [semver](https://github.com/npm/node-semver). Semver can parse `2.0.76`. It cannot parse `2.1.0 (2026-01-07)`:
 
 ```js
-semver.valid("2.0.76");             // "2.0.76"
-semver.valid("2.1.0 (2026-01-07)"); // null → crash if unhandled
+semver.valid('2.0.76'); // "2.0.76"
+semver.valid('2.1.0 (2026-01-07)'); // null → crash if unhandled
 ```
 
 The [commit that added the date](https://github.com/anthropics/claude-code/commit/870624fc1581a70590e382f263e2972b3f1e56f5) was authored by `actions-user`—GitHub Actions automation. Their release pipelines aren't in the [public workflows directory](https://github.com/anthropics/claude-code/tree/main/.github/workflows), but the commit message (`chore: Update CHANGELOG.md`) and comprehensive 120-line entry suggest an internal release automation that compiles notes from merged PRs. Somewhere in that pipeline, a date got added to the header. The [fix](https://github.com/anthropics/claude-code/commit/a19dd76dcfeb72323a80d84c12f740222c4ace91) was a one-line change: remove the date.
@@ -26,9 +27,7 @@ Automation added a human-readable flourish to a document that was being consumed
 
 If you want a one-line postmortem: **a markdown document became an API, and nobody versioned the schema.**
 
-How does a product with [$1B in annualized run-rate](https://www.anthropic.com/news/anthropic-acquires-bun-as-claude-code-reaches-usd1b-milestone) get taken down by a date in a markdown file? The [HN discussion](https://news.ycombinator.com/item?id=42636469) surfaced patterns that help explain it.
-
-## The incident
+How does a product with [$1B in annualized run-rate](https://www.anthropic.com/news/anthropic-acquires-bun-as-claude-code-reaches-usd1b-milestone) get taken down by a date in a markdown file?
 
 [Fifteen issues](https://github.com/anthropics/claude-code/issues?q=is%3Aissue+Invalid+Version+2.1.0) were filed in two hours with thousands of reactions. The largest threads—[#16682](https://github.com/anthropics/claude-code/issues/16682), [#16673](https://github.com/anthropics/claude-code/issues/16673), [#16678](https://github.com/anthropics/claude-code/issues/16678)—accumulated hundreds of comments.
 
