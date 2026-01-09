@@ -50,8 +50,6 @@ Markdown is fine as a UI artifact. It's a terrible contract. **Treat human-autho
 
 ---
 
-A date in a changelog took down a $1B product. That's a signal.
-
 A lot of developer tooling is still a Jenga stack. If your CLI fetches remote config at startup, parses human-authored docs as structured data, and doesn't validate inputs, you're one formatting change away from a global outage.
 
 ---
