@@ -18,13 +18,13 @@ The CLI parses these headings with [semver](https://github.com/npm/node-semver).
 
 How does a product with [$1B in annualized run-rate](https://www.anthropic.com/news/anthropic-acquires-bun-as-claude-code-reaches-usd1b-milestone) get taken down by a date in a markdown file?
 
-[Fifteen issues](https://github.com/anthropics/claude-code/issues?q=is%3Aissue+Invalid+Version+2.1.0) were filed in two hours. The largest threads ([#16682](https://github.com/anthropics/claude-code/issues/16682), [#16673](https://github.com/anthropics/claude-code/issues/16673), [#16678](https://github.com/anthropics/claude-code/issues/16678)) accumulated hundreds of comments and thousands of reactions.
-
-The deeper problem: the changelog is fetched remotely and cached at `~/.claude/cache/changelog.md`. A server-side edit broke new sessions across versions, including users on 2.0.x who hadn't upgraded. A local CLI should not fail to boot because a remote text file changed.
+The changelog is fetched remotely and cached at `~/.claude/cache/changelog.md`. A server-side edit broke new sessions across versions, including users on 2.0.x who hadn't upgraded. A local CLI should not fail to boot because a remote text file changed.
 
 The [revert](https://github.com/anthropics/claude-code/pull/16686) landed in two hours, but it was a data fix, not a code fix. The changelog was edited to remove the date. The client still can't handle malformed versions.
 
 The [commit that introduced the bug](https://github.com/anthropics/claude-code/commit/870624fc1581a70590e382f263e2972b3f1e56f5) came from `actions-user`. The commit message and 120-line entry suggests an internal release pipeline that compiles notes from merged PRs. Somewhere in that pipeline, a date got added to the header.
+
+[Fifteen issues](https://github.com/anthropics/claude-code/issues?q=is%3Aissue+Invalid+Version+2.1.0) were filed in two hours. The largest threads ([#16682](https://github.com/anthropics/claude-code/issues/16682), [#16673](https://github.com/anthropics/claude-code/issues/16673), [#16678](https://github.com/anthropics/claude-code/issues/16678)) accumulated hundreds of comments and thousands of reactions.
 
 **A markdown document became an API, and nobody versioned the schema.**
 
