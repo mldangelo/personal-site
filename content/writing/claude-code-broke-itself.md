@@ -28,7 +28,7 @@ The new entry:
 
 The CLI parses these headings as structured data, then sorts them with [semver](https://github.com/npm/node-semver). Semver can parse `2.0.76`. It cannot parse `2.1.0 (2026-01-07)`.
 
-The [commit that added the date](https://github.com/anthropics/claude-code/commit/870624fc1581a70590e382f263e2972b3f1e56f5) was authored by `actions-user`—GitHub Actions automation. Whatever generates their release notes decided to add a human-friendly date. The [fix](https://github.com/anthropics/claude-code/commit/a19dd76dcfeb72323a80d84c12f740222c4ace91) was a one-line change: remove the date.
+The [commit that added the date](https://github.com/anthropics/claude-code/commit/870624fc1581a70590e382f263e2972b3f1e56f5) was authored by `actions-user`—GitHub Actions automation. Their release pipelines aren't in the [public workflows directory](https://github.com/anthropics/claude-code/tree/main/.github/workflows), but the commit message (`chore: Update CHANGELOG.md`) and comprehensive 120-line entry suggest an internal release automation that compiles notes from merged PRs. Somewhere in that pipeline, a date got added to the header. The [fix](https://github.com/anthropics/claude-code/commit/a19dd76dcfeb72323a80d84c12f740222c4ace91) was a one-line change: remove the date.
 
 The irony: automation added a human-readable flourish to a document that was being consumed as machine-readable data.
 
