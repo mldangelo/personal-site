@@ -22,7 +22,7 @@ The changelog is fetched remotely and cached at `~/.claude/cache/changelog.md`. 
 
 The [revert](https://github.com/anthropics/claude-code/pull/16686) landed in two hours, but it was a data fix, not a code fix. The changelog was edited to remove the date. The client still can't handle malformed versions.
 
-The [commit that introduced the bug](https://github.com/anthropics/claude-code/commit/870624fc1581a70590e382f263e2972b3f1e56f5) came from `actions-user`. The commit message and 120-line entry suggests an internal release pipeline that compiles notes from merged PRs. Somewhere in that pipeline, a date got added to the header.
+The [commit that introduced the bug](https://github.com/anthropics/claude-code/commit/870624fc1581a70590e382f263e2972b3f1e56f5) came from `actions-user`, GitHub Actions automation. The release pipeline isn't in the [public workflows directory](https://github.com/anthropics/claude-code/tree/main/.github/workflows). Previous changelog entries like `## 2.0.76` had no dates. For 2.1.0, something in the internal automation added one.
 
 [Fifteen issues](https://github.com/anthropics/claude-code/issues?q=is%3Aissue+Invalid+Version+2.1.0) were filed in two hours. The largest threads ([#16682](https://github.com/anthropics/claude-code/issues/16682), [#16673](https://github.com/anthropics/claude-code/issues/16673), [#16678](https://github.com/anthropics/claude-code/issues/16678)) accumulated hundreds of comments and thousands of reactions.
 
