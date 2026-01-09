@@ -14,26 +14,19 @@ The immediate cause was a date suffix added to a changelog header:
 ## 2.1.0 (2026-01-07) ← crashes
 ```
 
-The CLI parses these headings as structured data, then sorts them with [semver](https://github.com/npm/node-semver). Semver can parse `2.0.76`. It cannot parse `2.1.0 (2026-01-07)`:
-
-```js
-semver.valid('2.0.76'); // "2.0.76"
-semver.valid('2.1.0 (2026-01-07)'); // null, crash on access
-```
-
-The [commit that added the date](https://github.com/anthropics/claude-code/commit/870624fc1581a70590e382f263e2972b3f1e56f5) came from `actions-user`. Their release pipelines aren't in the [public workflows directory](https://github.com/anthropics/claude-code/tree/main/.github/workflows), but the commit message (`chore: Update CHANGELOG.md`) and comprehensive 120-line entry suggests an internal release automation that compiles notes from merged PRs. Somewhere in that pipeline, a date got added to the header. The [fix](https://github.com/anthropics/claude-code/commit/a19dd76dcfeb72323a80d84c12f740222c4ace91) was a one-line change: remove the date.
-
-Automation added a human-readable flourish to a document that was being consumed as machine-readable data.
-
-If you want a one-line postmortem: **a markdown document became an API, and nobody versioned the schema.**
+The CLI parses these headings with [semver](https://github.com/npm/node-semver). Semver can parse `2.0.76`. It cannot parse `2.1.0 (2026-01-07)`.
 
 How does a product with [$1B in annualized run-rate](https://www.anthropic.com/news/anthropic-acquires-bun-as-claude-code-reaches-usd1b-milestone) get taken down by a date in a markdown file?
 
-[Fifteen issues](https://github.com/anthropics/claude-code/issues?q=is%3Aissue+Invalid+Version+2.1.0) were filed in two hours with thousands of reactions. The largest threads ([#16682](https://github.com/anthropics/claude-code/issues/16682), [#16673](https://github.com/anthropics/claude-code/issues/16673), [#16678](https://github.com/anthropics/claude-code/issues/16678)) accumulated hundreds of comments.
+[Fifteen issues](https://github.com/anthropics/claude-code/issues?q=is%3Aissue+Invalid+Version+2.1.0) were filed in two hours. The largest threads ([#16682](https://github.com/anthropics/claude-code/issues/16682), [#16673](https://github.com/anthropics/claude-code/issues/16673), [#16678](https://github.com/anthropics/claude-code/issues/16678)) accumulated hundreds of comments and thousands of reactions.
 
-The deeper problem: the changelog is fetched remotely and cached at `~/.claude/cache/changelog.md`. A server-side edit to a documentation file broke new sessions across versions, including users on 2.0.x who hadn't upgraded to anything. A local CLI should not fail to boot because a remote text file changed.
+The deeper problem: the changelog is fetched remotely and cached at `~/.claude/cache/changelog.md`. A server-side edit broke new sessions across versions, including users on 2.0.x who hadn't upgraded. A local CLI should not fail to boot because a remote text file changed.
 
-The [revert](https://github.com/anthropics/claude-code/pull/16686) landed in about two hours. But it was a data fix, not a code fix. The client wasn't patched to handle malformed versions gracefully; the changelog was just edited to remove the date. The failure mode matters more than the fix.
+The [revert](https://github.com/anthropics/claude-code/pull/16686) landed in two hours, but it was a data fix, not a code fix. The changelog was edited to remove the date. The client still can't handle malformed versions.
+
+The [commit that introduced the bug](https://github.com/anthropics/claude-code/commit/870624fc1581a70590e382f263e2972b3f1e56f5) came from `actions-user`. The commit message and 120-line entry suggests an internal release pipeline that compiles notes from merged PRs. Somewhere in that pipeline, a date got added to the header.
+
+**A markdown document became an API, and nobody versioned the schema.**
 
 ## 1. If you parse markdown, you own a data format
 
