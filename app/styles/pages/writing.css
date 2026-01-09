@@ -186,11 +186,14 @@
 .prose a {
   color: var(--color-accent);
   text-decoration: underline;
+  text-decoration-color: var(--color-accent-underline);
   text-underline-offset: 2px;
+  background-image: none; /* Reset animated underline from links.css */
 }
 
 .prose a:hover {
-  color: var(--color-accent-light);
+  color: var(--color-accent-hover);
+  text-decoration-color: var(--color-accent);
 }
 
 .prose strong {
