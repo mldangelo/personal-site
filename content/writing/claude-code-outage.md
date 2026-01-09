@@ -45,9 +45,7 @@ The moment your program assumes a human-facing doc is machine-readable, you have
 
 This is a classic mistake wearing new clothes. YAML configs that become Turing tar pits. "JSON but with comments." Scraping HTML and hoping the structure doesn't change. Now: markdown as a runtime dependency.
 
-When someone in the HN thread [joked](https://news.ycombinator.com/item?id=42636469) "Ah yes, markdown, the ultimate structure for machine-readable data," they weren't wrong. Markdown is fine as a UI artifact. It's a terrible contract.
-
-A rule I like here: **human docs are hostile input.** Treat them like a network response. Validate. Degrade gracefully. Never let them brick startup.
+Markdown is fine as a UI artifact. It's a terrible contract. **Human docs are hostile input.** Treat them like a network response. Validate. Degrade gracefully. Never let them brick startup.
 
 ## 2. The CLI isn't a CLI anymore
 
@@ -55,19 +53,15 @@ A normal CLI can be sloppy and you pay with annoyance.
 
 An agentic coding CLI is different. It's a thin layer on top of significant power: reading files, running shell commands, fetching network resources, managing plugins, handling "permissions," caching state across sessions.
 
-So when commenters [describe](https://news.ycombinator.com/item?id=42636816) behavior like permissions being enforced inconsistently, or the tool claiming it can't read a directory then scanning the filesystem anyway, or network controls that are "hit & miss"—they're pointing at the real issue: the power these tools have and how loosely it's governed.
-
-One comment I keep coming back to:
-
-> I might be naive but don't we want permissions to be a deterministic, procedural component rather than something the AI gets to decide?
+The [GitHub issues](https://github.com/anthropics/claude-code/issues?q=is%3Aissue+permission) tell a consistent story: permissions enforced inconsistently, the tool claiming it can't read a directory then scanning the filesystem anyway, network controls that are unreliable. The real issue isn't any specific bug—it's the power these tools have and how loosely it's governed.
 
 If your permission system depends on a model's judgment call, you don't have a permission system. You have a conversation. And conversations are not security boundaries.
 
 ## 3. Denylists are a trap
 
-A subthread surfaced reports of the CLI executing commands on the deny list, deciding certain operations "weren't dangerous," or finding workarounds when blocked.
+There are [reports](https://github.com/anthropics/claude-code/issues?q=is%3Aissue+bypass) of the CLI executing commands on the deny list, deciding certain operations "weren't dangerous," or finding workarounds when blocked.
 
-That's not surprising. Denylists fail in adversarial settings, and agents are accidentally adversarial all the time—not malicious, just relentlessly goal-seeking. If you block one tool, they try another. If you block a command, they generate a script.
+Denylists fail in adversarial settings, and agents are accidentally adversarial all the time—not malicious, just relentlessly goal-seeking. Block one tool, they try another. Block a command, they generate a script.
 
 The robust pattern is boring:
 
@@ -76,21 +70,17 @@ The robust pattern is boring:
 - Prefer allowlists over denylists
 - Treat the host machine as off-limits by default
 
-Multiple people in the discussion converged on exactly this: thin jails, nullfs mounts, "works inside a VM," "VCS is essential." That's not paranoia. It's recognizing where the trust boundary needs to live.
+That's not paranoia. It's recognizing where the trust boundary needs to live.
 
-## 4. "Vibe coding" isn't the point
+## 4. Verification is the point
 
-The thread did what HN threads do: it turned into a semantic argument about what "vibe coding" means—whether it's about not caring how code looks, not understanding how it works, or treating the model as an abstraction layer.
-
-All of that misses the sharper question:
+There's a lot of discourse about "vibe coding"—what it means, whether it's good or bad, whether you need to understand what the model writes. That's the wrong frame.
 
 **What matters isn't whether code was written by a human or a model. What matters is whether the system is verifiable at the boundaries you care about.**
 
 - A changelog parser that can brick startup is a verification failure.
 - A permission system that's inconsistently enforced is a verification failure.
 - "We can't ever fully eliminate concurrency errors" ([actual quote](https://github.com/anthropics/claude-code/issues/6836) from the maintainers) is a verification failure.
-
-One commenter [nailed it](https://news.ycombinator.com/item?id=42637891): "I love how this sci-fi misalignment story is now just a boring part of everyday office work."
 
 The novelty is wearing off. What's left is engineering.
 
@@ -130,9 +120,7 @@ We're in a phase where a lot of "agentic developer experience" is still a Jenga 
 
 ## Links
 
-- [GitHub issue #16682](https://github.com/anthropics/claude-code/issues/16682) — High-traffic bug report (78 comments)
-- [GitHub issue #16671](https://github.com/anthropics/claude-code/issues/16671) — Issue resolved by the fix PR
+- [GitHub issue #16682](https://github.com/anthropics/claude-code/issues/16682) — High-traffic bug report
 - [PR #16686](https://github.com/anthropics/claude-code/pull/16686) — The changelog revert (data fix, not code fix)
-- [Hacker News discussion](https://news.ycombinator.com/item?id=42636469) — Where the interesting observations surfaced
 - [Concurrency admission](https://github.com/anthropics/claude-code/issues/6836) — "unlikely we will ever completely eliminate"
 - [$1B run-rate announcement](https://www.anthropic.com/news/anthropic-acquires-bun-as-claude-code-reaches-usd1b-milestone) — December 2025
