@@ -26,9 +26,7 @@ Automation added a human-readable flourish to a document that was being consumed
 
 If you want a one-line postmortem: **a markdown document became an API, and nobody versioned the schema.**
 
-Claude Code [hit $1B in annualized run-rate](https://www.anthropic.com/news/anthropic-acquires-bun-as-claude-code-reaches-usd1b-milestone) in December 2025, six months after [crossing $500M](https://www.anthropic.com/news/anthropic-raises-series-f-at-usd183b-post-money-valuation). A documentation formatting change entered the critical path and took it down.
-
-The [HN discussion](https://news.ycombinator.com/item?id=42636469) surfaced patterns that help explain why this class of failure keeps showing up in agentic tools.
+How does a product with [$1B in annualized run-rate](https://www.anthropic.com/news/anthropic-acquires-bun-as-claude-code-reaches-usd1b-milestone) get taken down by a date in a markdown file? The [HN discussion](https://news.ycombinator.com/item?id=42636469) surfaced patterns that help explain it.
 
 ## The incident
 
