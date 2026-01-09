@@ -1,7 +1,7 @@
 ---
 title: A changelog satisfies no test cases
 date: '2026-01-08'
-description: 'A date in a markdown header took down every Claude Code installation. The bug is the boring part.'
+description: 'A date in a markdown header broke new sessions across Claude Code versions. The bug is the boring part.'
 ---
 
 On January 7, 2026, Claude Code 2.1.0 shipped. Users ran `claude` and hit:
@@ -26,7 +26,12 @@ The new entry:
 ## 2.1.0 (2026-01-07)
 ```
 
-The CLI parses these headings as structured data, then sorts them with [semver](https://github.com/npm/node-semver). Semver can parse `2.0.76`. It cannot parse `2.1.0 (2026-01-07)`.
+The CLI parses these headings as structured data, then sorts them with [semver](https://github.com/npm/node-semver). Semver can parse `2.0.76`. It cannot parse `2.1.0 (2026-01-07)`:
+
+```js
+semver.valid("2.0.76");             // "2.0.76"
+semver.valid("2.1.0 (2026-01-07)"); // null → crash if unhandled
+```
 
 The [commit that added the date](https://github.com/anthropics/claude-code/commit/870624fc1581a70590e382f263e2972b3f1e56f5) was authored by `actions-user`—GitHub Actions automation. Their release pipelines aren't in the [public workflows directory](https://github.com/anthropics/claude-code/tree/main/.github/workflows), but the commit message (`chore: Update CHANGELOG.md`) and comprehensive 120-line entry suggest an internal release automation that compiles notes from merged PRs. Somewhere in that pipeline, a date got added to the header. The [fix](https://github.com/anthropics/claude-code/commit/a19dd76dcfeb72323a80d84c12f740222c4ace91) was a one-line change: remove the date.
 
@@ -35,6 +40,8 @@ The irony: automation added a human-readable flourish to a document that was bei
 If you want a one-line postmortem: **a markdown document became an API, and nobody versioned the schema.**
 
 That's the boring part.
+
+The stakes are less boring. Claude Code [hit $1B in annualized run-rate revenue](https://www.anthropic.com/news/anthropic-acquires-bun-as-claude-code-reaches-usd1b-milestone) in December 2025, six months after [crossing $500M](https://www.anthropic.com/news/anthropic-raises-series-f-at-usd183b-post-money-valuation). Run-rate isn't actual collected revenue—it's "if this month repeated for 12 months"—but it signals how fast this tool became load-bearing infrastructure for a lot of developers. A documentation formatting change entered the critical path of program startup and took it down.
 
 The interesting part is what the [discussion](https://news.ycombinator.com/item?id=42636469) revealed about where agentic coding tools are fragile—and why this class of failure keeps showing up.
 
@@ -46,7 +53,7 @@ The interesting part is what the [discussion](https://news.ycombinator.com/item?
 - [#16673](https://github.com/anthropics/claude-code/issues/16673) — 72 comments
 - [#16678](https://github.com/anthropics/claude-code/issues/16678) — 50 comments
 
-What made it worse: the changelog is fetched remotely and cached at `~/.claude/cache/changelog.md`. A server-side edit to a documentation file bricked every client installation instantly—including users on older versions who hadn't changed anything.
+What made it worse: the changelog is fetched remotely and cached at `~/.claude/cache/changelog.md`. A server-side edit to a documentation file broke new sessions across versions—including users on 2.0.x who hadn't upgraded to anything.
 
 The [fix](https://github.com/anthropics/claude-code/pull/16686) landed in about two hours. That's good incident response. But the failure mode is worth examining.
 
@@ -145,7 +152,9 @@ We're in a phase where a lot of "agentic developer experience" is a Jenga stack,
 
 ## Links
 
-- [GitHub issue #16682](https://github.com/anthropics/claude-code/issues/16682) — Canonical bug report
+- [GitHub issue #16682](https://github.com/anthropics/claude-code/issues/16682) — High-traffic bug report (78 comments)
+- [GitHub issue #16671](https://github.com/anthropics/claude-code/issues/16671) — Issue resolved by the fix PR
 - [Fix PR #16686](https://github.com/anthropics/claude-code/pull/16686) — The one-line fix
 - [Hacker News discussion](https://news.ycombinator.com/item?id=42636469) — Where the interesting observations surfaced
 - [Concurrency admission](https://github.com/anthropics/claude-code/issues/6836) — "unlikely we will ever completely eliminate"
+- [$1B run-rate announcement](https://www.anthropic.com/news/anthropic-acquires-bun-as-claude-code-reaches-usd1b-milestone) — December 2025
