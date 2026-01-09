@@ -30,11 +30,7 @@ How does a product with [$1B in annualized run-rate](https://www.anthropic.com/n
 
 ## The incident
 
-[Fifteen issues](https://github.com/anthropics/claude-code/issues?q=is%3Aissue+Invalid+Version+2.1.0) were filed in two hours, roughly one every eight minutes. The threads accumulated over 300 comments. The larger ones:
-
-- [#16682](https://github.com/anthropics/claude-code/issues/16682) — 78 comments (became canonical)
-- [#16673](https://github.com/anthropics/claude-code/issues/16673) — 72 comments
-- [#16678](https://github.com/anthropics/claude-code/issues/16678) — 50 comments
+[Fifteen issues](https://github.com/anthropics/claude-code/issues?q=is%3Aissue+Invalid+Version+2.1.0) were filed in two hours with thousands of reactions. The largest threads—[#16682](https://github.com/anthropics/claude-code/issues/16682), [#16673](https://github.com/anthropics/claude-code/issues/16673), [#16678](https://github.com/anthropics/claude-code/issues/16678)—accumulated hundreds of comments.
 
 What made it worse is that the changelog is fetched remotely and cached at `~/.claude/cache/changelog.md`. A server-side edit to a documentation file broke new sessions across versions—including users on 2.0.x who hadn't upgraded to anything.
 

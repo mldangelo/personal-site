@@ -184,3 +184,10 @@
 [data-theme='dark'] li a:not(.hero-highlight):hover {
   background-image: linear-gradient(transparent calc(100% - 1.5px), var(--color-accent) 1.5px);
 }
+
+/* Prose links use text-decoration only, no background-image */
+[data-theme='dark'] .prose a,
+[data-theme='dark'] .prose p a,
+[data-theme='dark'] .prose li a {
+  background-image: none;
+}
