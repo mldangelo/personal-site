@@ -1,7 +1,7 @@
 ---
-title: A changelog satisfies no test cases
+title: Notes on the Claude Code 2.1.0 outage
 date: '2026-01-08'
-description: 'A date in a markdown header broke new sessions across Claude Code versions. The bug is the boring part.'
+description: 'A changelog formatting change took down Claude Code. What the incident reveals about agentic tools.'
 ---
 
 On January 7, 2026, Claude Code 2.1.0 shipped. Users ran `claude` and hit:
@@ -35,15 +35,13 @@ semver.valid("2.1.0 (2026-01-07)"); // null → crash if unhandled
 
 The [commit that added the date](https://github.com/anthropics/claude-code/commit/870624fc1581a70590e382f263e2972b3f1e56f5) was authored by `actions-user`—GitHub Actions automation. Their release pipelines aren't in the [public workflows directory](https://github.com/anthropics/claude-code/tree/main/.github/workflows), but the commit message (`chore: Update CHANGELOG.md`) and comprehensive 120-line entry suggest an internal release automation that compiles notes from merged PRs. Somewhere in that pipeline, a date got added to the header. The [fix](https://github.com/anthropics/claude-code/commit/a19dd76dcfeb72323a80d84c12f740222c4ace91) was a one-line change: remove the date.
 
-The irony: automation added a human-readable flourish to a document that was being consumed as machine-readable data.
+Automation added a human-readable flourish to a document that was being consumed as machine-readable data.
 
 If you want a one-line postmortem: **a markdown document became an API, and nobody versioned the schema.**
 
-That's the boring part.
+Claude Code [hit $1B in annualized run-rate](https://www.anthropic.com/news/anthropic-acquires-bun-as-claude-code-reaches-usd1b-milestone) in December 2025, six months after [crossing $500M](https://www.anthropic.com/news/anthropic-raises-series-f-at-usd183b-post-money-valuation). A documentation formatting change entered the critical path and took it down.
 
-The stakes are less boring. Claude Code [hit $1B in annualized run-rate](https://www.anthropic.com/news/anthropic-acquires-bun-as-claude-code-reaches-usd1b-milestone) in December 2025, six months after [crossing $500M](https://www.anthropic.com/news/anthropic-raises-series-f-at-usd183b-post-money-valuation). A documentation formatting change entered the critical path of program startup and took it down.
-
-The interesting part is what the [discussion](https://news.ycombinator.com/item?id=42636469) revealed about where agentic coding tools are fragile—and why this class of failure keeps showing up.
+The [HN discussion](https://news.ycombinator.com/item?id=42636469) surfaced patterns worth examining—why this class of failure keeps showing up in agentic tools.
 
 ## The incident
 
@@ -118,7 +116,7 @@ The novelty is wearing off. What's left is engineering.
 
 ## 5. The people who notice sharp edges aren't filing issues
 
-A subtle observation from the thread: the incentives are skewed.
+The incentives are skewed.
 
 People who don't care about deterministic permissions won't report permission bugs. People who do care often don't want to invest their time debugging AI tooling they're already skeptical of.
 
@@ -146,7 +144,7 @@ A few principles that feel non-negotiable after watching this unfold:
 
 A date in a changelog taking down a CLI is funny. But it's also a signal.
 
-We're in a phase where a lot of "agentic developer experience" is a Jenga stack, and some of the pieces are still round. If a tool can run shell commands, browse the network, and touch your filesystem, reliability and security cannot be vibes. They have to be architecture.
+We're in a phase where a lot of "agentic developer experience" is still a Jenga stack. If a tool can run shell commands, browse the network, and touch your filesystem, reliability and security cannot be vibes. They have to be architecture.
 
 ---
 
