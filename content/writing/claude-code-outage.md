@@ -4,26 +4,13 @@ date: '2026-01-08'
 description: 'A changelog formatting change took down Claude Code. What the incident reveals about agentic tools.'
 ---
 
-On January 7, 2026, Claude Code 2.1.0 shipped. Users ran `claude` and hit:
+On January 7, 2026, Claude Code 2.1.0 shipped. Users ran `claude` and got `Invalid Version: 2.1.0 (2026-01-07)`.
 
-```
-Invalid Version: 2.1.0 (2026-01-07)
-```
-
-The cause was a date added to a changelog header. Previous entries looked like this:
+The cause was a date suffix added to a changelog header:
 
 ```markdown
-## 2.0.76
-
-## 2.0.75
-
-## 2.0.74
-```
-
-The new entry:
-
-```markdown
-## 2.1.0 (2026-01-07)
+## 2.0.76              ← parses fine
+## 2.1.0 (2026-01-07)  ← crashes
 ```
 
 The CLI parses these headings as structured data, then sorts them with [semver](https://github.com/npm/node-semver). Semver can parse `2.0.76`. It cannot parse `2.1.0 (2026-01-07)`:
