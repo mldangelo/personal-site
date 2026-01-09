@@ -242,6 +242,8 @@
 .prose pre code {
   background: none;
   padding: 0;
+  border: none;
+  margin: 0;
   font-size: var(--text-sm);
 }
 
