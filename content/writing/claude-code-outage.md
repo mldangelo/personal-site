@@ -53,7 +53,7 @@ The [HN discussion](https://news.ycombinator.com/item?id=42636469) surfaced patt
 
 What made it worse is that the changelog is fetched remotely and cached at `~/.claude/cache/changelog.md`. A server-side edit to a documentation file broke new sessions across versions—including users on 2.0.x who hadn't upgraded to anything.
 
-The [fix](https://github.com/anthropics/claude-code/pull/16686) landed in about two hours—good incident response. But the failure mode matters more than the fix.
+The [revert](https://github.com/anthropics/claude-code/pull/16686) landed in about two hours—good incident response. But it was a data fix, not a code fix. The client wasn't patched to handle malformed versions gracefully; the changelog was just edited to remove the date. The failure mode matters more than the fix.
 
 ## 1. If you parse markdown, you own a data format
 
@@ -138,7 +138,7 @@ A few principles I'd consider non-negotiable:
 
 4. **Treat local config like an API.** If you support `.claude.json`-style configs, define the contract. Validate, version, and test it.
 
-5. **Smoke test the binary.** It's remarkable how many embarrassing breakages die to "run the app once in CI."
+5. **Smoke test the binary.** It's remarkable how many embarrassing breakages could be caught by running the app once in CI.
 
 ---
 
@@ -152,7 +152,7 @@ We're in a phase where a lot of "agentic developer experience" is still a Jenga 
 
 - [GitHub issue #16682](https://github.com/anthropics/claude-code/issues/16682) — High-traffic bug report (78 comments)
 - [GitHub issue #16671](https://github.com/anthropics/claude-code/issues/16671) — Issue resolved by the fix PR
-- [Fix PR #16686](https://github.com/anthropics/claude-code/pull/16686) — The one-line fix
+- [PR #16686](https://github.com/anthropics/claude-code/pull/16686) — The changelog revert (data fix, not code fix)
 - [Hacker News discussion](https://news.ycombinator.com/item?id=42636469) — Where the interesting observations surfaced
 - [Concurrency admission](https://github.com/anthropics/claude-code/issues/6836) — "unlikely we will ever completely eliminate"
 - [$1B run-rate announcement](https://www.anthropic.com/news/anthropic-acquires-bun-as-claude-code-reaches-usd1b-milestone) — December 2025
