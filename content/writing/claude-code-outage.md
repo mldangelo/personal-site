@@ -9,9 +9,9 @@ On January 7, 2026, Claude Code 2.1.0 shipped. Users ran `claude` and got `Inval
 The immediate cause was a date suffix added to a changelog header:
 
 ```markdown
-## 2.0.76 ← parses fine
-
 ## 2.1.0 (2026-01-07) ← crashes
+
+## 2.0.76 ← parses fine
 ```
 
 The CLI parses these headings with [semver](https://github.com/npm/node-semver). Semver can parse `2.0.76`. It cannot parse `2.1.0 (2026-01-07)`.
