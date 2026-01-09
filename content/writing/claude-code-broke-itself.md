@@ -41,7 +41,7 @@ If you want a one-line postmortem: **a markdown document became an API, and nobo
 
 That's the boring part.
 
-The stakes are less boring. Claude Code [hit $1B in annualized run-rate revenue](https://www.anthropic.com/news/anthropic-acquires-bun-as-claude-code-reaches-usd1b-milestone) in December 2025, six months after [crossing $500M](https://www.anthropic.com/news/anthropic-raises-series-f-at-usd183b-post-money-valuation). Run-rate isn't actual collected revenue—it's "if this month repeated for 12 months"—but it signals how fast this tool became load-bearing infrastructure for a lot of developers. A documentation formatting change entered the critical path of program startup and took it down.
+The stakes are less boring. Claude Code [hit $1B in annualized run-rate](https://www.anthropic.com/news/anthropic-acquires-bun-as-claude-code-reaches-usd1b-milestone) in December 2025, six months after [crossing $500M](https://www.anthropic.com/news/anthropic-raises-series-f-at-usd183b-post-money-valuation). A documentation formatting change entered the critical path of program startup and took it down.
 
 The interesting part is what the [discussion](https://news.ycombinator.com/item?id=42636469) revealed about where agentic coding tools are fragile—and why this class of failure keeps showing up.
 
