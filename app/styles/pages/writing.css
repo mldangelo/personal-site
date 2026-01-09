@@ -183,17 +183,22 @@
   margin: 1rem 0;
 }
 
-.prose a {
+.prose a,
+.prose p a,
+.prose li a {
   color: var(--color-accent);
   text-decoration: underline;
   text-decoration-color: var(--color-accent-underline);
   text-underline-offset: 2px;
-  background-image: none; /* Reset animated underline from links.css */
+  background-image: none;
 }
 
-.prose a:hover {
+.prose a:hover,
+.prose p a:hover,
+.prose li a:hover {
   color: var(--color-accent-hover);
   text-decoration-color: var(--color-accent);
+  background-image: none;
 }
 
 .prose strong {
