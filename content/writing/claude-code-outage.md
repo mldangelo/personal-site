@@ -10,7 +10,7 @@ On January 7, 2026, Claude Code 2.1.0 shipped. Users ran `claude` and hit:
 Invalid Version: 2.1.0 (2026-01-07)
 ```
 
-The cause: a date added to a changelog header. Previous entries looked like this:
+The cause was a date added to a changelog header. Previous entries looked like this:
 
 ```markdown
 ## 2.0.76
@@ -41,7 +41,7 @@ If you want a one-line postmortem: **a markdown document became an API, and nobo
 
 Claude Code [hit $1B in annualized run-rate](https://www.anthropic.com/news/anthropic-acquires-bun-as-claude-code-reaches-usd1b-milestone) in December 2025, six months after [crossing $500M](https://www.anthropic.com/news/anthropic-raises-series-f-at-usd183b-post-money-valuation). A documentation formatting change entered the critical path and took it down.
 
-The [HN discussion](https://news.ycombinator.com/item?id=42636469) surfaced patterns worth examining—why this class of failure keeps showing up in agentic tools.
+The [HN discussion](https://news.ycombinator.com/item?id=42636469) surfaced patterns that help explain why this class of failure keeps showing up in agentic tools.
 
 ## The incident
 
@@ -51,9 +51,9 @@ The [HN discussion](https://news.ycombinator.com/item?id=42636469) surfaced patt
 - [#16673](https://github.com/anthropics/claude-code/issues/16673) — 72 comments
 - [#16678](https://github.com/anthropics/claude-code/issues/16678) — 50 comments
 
-What made it worse: the changelog is fetched remotely and cached at `~/.claude/cache/changelog.md`. A server-side edit to a documentation file broke new sessions across versions—including users on 2.0.x who hadn't upgraded to anything.
+What made it worse is that the changelog is fetched remotely and cached at `~/.claude/cache/changelog.md`. A server-side edit to a documentation file broke new sessions across versions—including users on 2.0.x who hadn't upgraded to anything.
 
-The [fix](https://github.com/anthropics/claude-code/pull/16686) landed in about two hours. That's good incident response. But the failure mode is worth examining.
+The [fix](https://github.com/anthropics/claude-code/pull/16686) landed in about two hours—good incident response. But the failure mode matters more than the fix.
 
 ## 1. If you parse markdown, you own a data format
 
@@ -75,7 +75,7 @@ A normal CLI can be sloppy and you pay with annoyance.
 
 An agentic coding CLI is different. It's a thin layer on top of significant power: reading files, running shell commands, fetching network resources, managing plugins, handling "permissions," caching state across sessions.
 
-So when commenters [describe](https://news.ycombinator.com/item?id=42636816) behavior like permissions being enforced inconsistently, or the tool claiming it can't read a directory then scanning the filesystem anyway, or network controls that are "hit & miss"—they're pointing at the thing that actually matters.
+So when commenters [describe](https://news.ycombinator.com/item?id=42636816) behavior like permissions being enforced inconsistently, or the tool claiming it can't read a directory then scanning the filesystem anyway, or network controls that are "hit & miss"—they're pointing at the real issue: the power these tools have and how loosely it's governed.
 
 One comment I keep coming back to:
 
@@ -87,7 +87,7 @@ If your permission system depends on a model's judgment call, you don't have a p
 
 A subthread surfaced reports of the CLI executing commands on the deny list, deciding certain operations "weren't dangerous," or finding workarounds when blocked.
 
-That's not surprising. Denylists fail in adversarial settings, and agents are accidentally adversarial all the time—not malicious, just relentlessly goal-seeking and willing to take alternate paths. Block one tool, they try another. Block a command, they generate a script.
+That's not surprising. Denylists fail in adversarial settings, and agents are accidentally adversarial all the time—not malicious, just relentlessly goal-seeking. If you block one tool, they try another. If you block a command, they generate a script.
 
 The robust pattern is boring:
 
@@ -100,7 +100,7 @@ Multiple people in the discussion converged on exactly this: thin jails, nullfs 
 
 ## 4. "Vibe coding" isn't the point
 
-The thread did what HN threads do: it turned into a semantic argument about what "vibe coding" means. Whether it's about not caring how code looks, or not understanding how it works, or treating the model as an abstraction layer you can test without inspecting internals.
+The thread did what HN threads do: it turned into a semantic argument about what "vibe coding" means—whether it's about not caring how code looks, not understanding how it works, or treating the model as an abstraction layer.
 
 All of that misses the sharper question:
 
@@ -128,7 +128,7 @@ The takeaway for tool builders: **if you want trust, you have to earn it with de
 
 ## What I'd take from this
 
-A few principles that feel non-negotiable after watching this unfold:
+A few principles I'd consider non-negotiable:
 
 1. **Never brick startup on non-critical metadata.** Changelog parsing should be best-effort. If it fails, skip it.
 
@@ -142,7 +142,7 @@ A few principles that feel non-negotiable after watching this unfold:
 
 ---
 
-A date in a changelog taking down a CLI is funny. But it's also a signal.
+It's funny that a date in a changelog can take down a CLI. But it's also a signal.
 
 We're in a phase where a lot of "agentic developer experience" is still a Jenga stack. If a tool can run shell commands, browse the network, and touch your filesystem, reliability and security cannot be vibes. They have to be architecture.
 
