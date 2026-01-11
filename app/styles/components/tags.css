@@ -86,12 +86,21 @@
 
 /* Tech tags - pill style for project cards */
 .tech-tag {
-  font-size: var(--text-sm);
-  font-weight: var(--font-weight-bold);
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-medium);
   color: var(--color-accent);
   background: var(--color-accent-light);
-  padding: 0.35rem 0.875rem;
+  border: 1px solid var(--color-accent-border);
+  padding: 0.3rem 0.75rem;
   border-radius: var(--radius-full);
+  transition:
+    background var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out);
+}
+
+.project-card:hover .tech-tag {
+  background: var(--color-accent-subtle);
+  border-color: var(--color-accent);
 }
 
 /* Size variations - more subtle differences */

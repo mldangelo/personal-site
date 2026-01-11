@@ -185,6 +185,17 @@
   background-image: linear-gradient(transparent calc(100% - 1.5px), var(--color-accent) 1.5px);
 }
 
+/* Featured cards */
+[data-theme='dark'] .featured-card {
+  background: var(--color-bg-alt);
+  border-color: var(--color-border);
+}
+
+[data-theme='dark'] .featured-card:hover {
+  background: var(--color-bg-offset);
+  border-color: var(--color-accent-border);
+}
+
 /* Prose links use text-decoration only, no background-image */
 [data-theme='dark'] .prose a,
 [data-theme='dark'] .prose p a,
