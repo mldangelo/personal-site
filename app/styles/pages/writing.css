@@ -183,14 +183,22 @@
   margin: 1rem 0;
 }
 
-.prose a {
+.prose a,
+.prose p a,
+.prose li a {
   color: var(--color-accent);
   text-decoration: underline;
+  text-decoration-color: var(--color-accent-underline);
   text-underline-offset: 2px;
+  background-image: none;
 }
 
-.prose a:hover {
-  color: var(--color-accent-light);
+.prose a:hover,
+.prose p a:hover,
+.prose li a:hover {
+  color: var(--color-accent-hover);
+  text-decoration-color: var(--color-accent);
+  background-image: none;
 }
 
 .prose strong {
@@ -242,6 +250,8 @@
 .prose pre code {
   background: none;
   padding: 0;
+  border: none;
+  margin: 0;
   font-size: var(--text-sm);
 }
 

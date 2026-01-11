@@ -195,3 +195,13 @@
   background: var(--color-bg-offset);
   border-color: var(--color-accent-border);
 }
+
+/* Prose links use text-decoration only, no background-image */
+[data-theme='dark'] .prose a,
+[data-theme='dark'] .prose p a,
+[data-theme='dark'] .prose li a,
+[data-theme='dark'] .prose a:hover,
+[data-theme='dark'] .prose p a:hover,
+[data-theme='dark'] .prose li a:hover {
+  background-image: none;
+}
