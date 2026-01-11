@@ -9,7 +9,7 @@
      =================== */
   --font-sans: var(--font-source-sans), 'Source Sans Pro', Helvetica, sans-serif;
   --font-heading: var(--font-raleway), 'Raleway', Helvetica, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+  --font-mono: 'Courier New', monospace;
 
   /* ===================
      FONT WEIGHTS
