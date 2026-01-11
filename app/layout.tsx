@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Raleway, Source_Sans_3 } from 'next/font/google';
+import { Bricolage_Grotesque, DM_Sans } from 'next/font/google';
 import Script from 'next/script';
 
 import GoogleAnalytics from '@/components/Template/GoogleAnalytics';
@@ -8,19 +8,19 @@ import ScrollToTop from '@/components/Template/ScrollToTop';
 import { AUTHOR_NAME, SITE_URL, TWITTER_HANDLE } from '@/lib/utils';
 import './tailwind.css';
 
-const sourceSans = Source_Sans_3({
-  weight: ['400', '700'],
+const dmSans = DM_Sans({
+  weight: ['400', '500', '700'],
   subsets: ['latin'],
-  variable: '--font-source-sans',
+  variable: '--font-dm-sans',
   display: 'swap',
   preload: true,
   adjustFontFallback: true,
 });
 
-const raleway = Raleway({
-  weight: ['400', '800'],
+const bricolage = Bricolage_Grotesque({
+  weight: ['400', '700', '800'],
   subsets: ['latin'],
-  variable: '--font-raleway',
+  variable: '--font-bricolage',
   display: 'swap',
   preload: true,
   adjustFontFallback: true,
@@ -91,7 +91,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${sourceSans.variable} ${raleway.variable}`}
+      className={`${dmSans.variable} ${bricolage.variable}`}
       suppressHydrationWarning
     >
       <head>

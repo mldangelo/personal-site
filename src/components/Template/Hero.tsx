@@ -7,7 +7,7 @@ export default function Hero() {
     <section className="hero">
       <div className="hero-content">
         <div className="hero-avatar">
-          <ThemePortrait width={120} height={120} priority />
+          <ThemePortrait width={160} height={160} priority />
         </div>
 
         <h1 className="hero-title">

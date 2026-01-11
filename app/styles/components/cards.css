@@ -54,15 +54,7 @@
 }
 
 .projects-featured::before {
-  content: 'Featured';
-  position: absolute;
-  top: -2rem;
-  left: 0;
-  font-size: var(--text-sm);
-  font-weight: var(--font-weight-bold);
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-wide);
-  color: var(--color-accent);
+  content: none;
 }
 
 .projects-grid {
@@ -98,13 +90,17 @@
   background: var(--color-bg);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-border-bg);
+  box-shadow: var(--shadow-sm);
   transition: all var(--duration-normal) var(--ease-out);
 }
 
 .project-card:hover {
   transform: translateY(var(--lift-md));
-  box-shadow: var(--shadow-xl);
+  border-color: var(--color-accent-border);
+  box-shadow:
+    var(--shadow-xl),
+    0 0 0 1px var(--color-accent-border);
 }
 
 /* Full card link wrapper */
@@ -216,20 +212,38 @@
 
 .jobs-container {
   margin-bottom: 2rem;
-  padding: 1.75rem;
-  background: var(--color-surface-subtle);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-border-bg);
+  padding: 2rem;
+  background: var(--color-bg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  position: relative;
   transition:
     border-color var(--duration-fast) var(--ease-out),
     transform var(--duration-fast) var(--ease-out),
     box-shadow var(--duration-fast) var(--ease-out);
 }
 
+.jobs-container::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 1.5rem;
+  bottom: 1.5rem;
+  width: 3px;
+  background: linear-gradient(180deg, var(--color-accent) 0%, var(--color-accent-secondary) 100%);
+  border-radius: 2px;
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
 .jobs-container:hover {
-  border-color: var(--color-border);
-  transform: translateY(var(--lift-md));
+  border-color: var(--color-accent-border);
+  transform: translateY(var(--lift-sm));
   box-shadow: var(--shadow-lg);
+}
+
+.jobs-container:hover::before {
+  opacity: 1;
 }
 
 .jobs-container:last-child {
