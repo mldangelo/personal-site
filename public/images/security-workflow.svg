@@ -1,0 +1,219 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 780" fill="none">
+  <style>
+    .phase-header { fill: #3b82f6; }
+    .phase-header-text { fill: #ffffff; font-family: system-ui, -apple-system, sans-serif; font-weight: 700; font-size: 13px; }
+    .phase-tag { font-family: system-ui, -apple-system, sans-serif; font-size: 10px; fill: #93c5fd; }
+    .task-text { font-family: ui-monospace, monospace; font-size: 11px; }
+    .task-arrow { font-family: ui-monospace, monospace; font-size: 11px; }
+    .task-desc { font-family: system-ui, -apple-system, sans-serif; font-size: 11px; }
+    .review-text { font-family: system-ui, -apple-system, sans-serif; font-size: 10px; font-weight: 600; }
+    .review-desc { font-family: system-ui, -apple-system, sans-serif; font-size: 10px; }
+    .arrow-poly { fill: #9ca3af; }
+    .connector { stroke: #d1d5db; stroke-width: 2; }
+
+    /* Light mode */
+    .phase-body { fill: #f3f4f6; stroke: #e5e7eb; stroke-width: 1; }
+    .task-text { fill: #374151; }
+    .task-arrow { fill: #9ca3af; }
+    .task-desc { fill: #6b7280; }
+    .review-box { fill: #fef3c7; stroke: #f59e0b; stroke-width: 1; }
+    .review-text { fill: #92400e; }
+    .review-desc { fill: #a16207; }
+    .triage-header { fill: #f59e0b; }
+    .outcome-header { fill: #10b981; }
+
+    @media (prefers-color-scheme: dark) {
+      .phase-body { fill: #1f2937; stroke: #374151; }
+      .task-text { fill: #e5e7eb; }
+      .task-arrow { fill: #6b7280; }
+      .task-desc { fill: #9ca3af; }
+      .review-box { fill: #422006; stroke: #f59e0b; }
+      .review-text { fill: #fcd34d; }
+      .review-desc { fill: #fbbf24; }
+      .connector { stroke: #4b5563; }
+      .arrow-poly { fill: #6b7280; }
+    }
+  </style>
+
+  <!-- RECON PHASE -->
+  <g transform="translate(40, 15)">
+    <rect x="0" y="0" width="720" height="85" rx="8" class="phase-body"/>
+    <rect x="0" y="0" width="720" height="24" rx="8" class="phase-header"/>
+    <rect x="0" y="12" width="720" height="12" class="phase-header"/>
+    <text x="12" y="16" class="phase-header-text">RECON</text>
+    <text x="80" y="16" class="phase-tag">(agent-accelerated)</text>
+
+    <text x="15" y="42" class="task-text">Security policy</text>
+    <text x="120" y="42" class="task-arrow">→</text>
+    <text x="135" y="42" class="task-desc">scope, "won't fix" categories</text>
+
+    <text x="15" y="58" class="task-text">Past CVEs</text>
+    <text x="120" y="58" class="task-arrow">→</text>
+    <text x="135" y="58" class="task-desc">accepted patterns, severity</text>
+
+    <text x="15" y="74" class="task-text">Closed issues</text>
+    <text x="120" y="74" class="task-arrow">→</text>
+    <text x="135" y="74" class="task-desc">rejected reports, positions</text>
+
+    <text x="380" y="42" class="task-text">Candidate list</text>
+    <text x="485" y="42" class="task-arrow">→</text>
+    <text x="500" y="42" class="task-desc">prioritized targets</text>
+  </g>
+
+  <!-- REVIEW GATE 1 -->
+  <line x1="400" y1="100" x2="400" y2="112" class="connector"/>
+  <g transform="translate(175, 112)">
+    <rect x="0" y="0" width="450" height="26" rx="4" class="review-box"/>
+    <text x="12" y="17" class="review-text">REVIEW:</text>
+    <text x="70" y="17" class="review-desc">reject "won't fix" classes, no relevant code paths</text>
+  </g>
+  <line x1="400" y1="138" x2="400" y2="150" class="connector"/>
+  <polygon points="400,155 396,148 404,148" class="arrow-poly"/>
+
+  <!-- STATIC PHASE -->
+  <g transform="translate(40, 158)">
+    <rect x="0" y="0" width="720" height="85" rx="8" class="phase-body"/>
+    <rect x="0" y="0" width="720" height="24" rx="8" class="phase-header"/>
+    <rect x="0" y="12" width="720" height="12" class="phase-header"/>
+    <text x="12" y="16" class="phase-header-text">STATIC ANALYSIS</text>
+    <text x="130" y="16" class="phase-tag">(agent-accelerated)</text>
+
+    <text x="15" y="42" class="task-text">Exploit catalog</text>
+    <text x="120" y="42" class="task-arrow">→</text>
+    <text x="135" y="42" class="task-desc">threat model for project type</text>
+
+    <text x="15" y="58" class="task-text">Find guards</text>
+    <text x="120" y="58" class="task-arrow">→</text>
+    <text x="135" y="58" class="task-desc">security controls, fail-open logic</text>
+
+    <text x="15" y="74" class="task-text">Draft PoCs</text>
+    <text x="120" y="74" class="task-arrow">→</text>
+    <text x="135" y="74" class="task-desc">minimal reproduction code</text>
+
+    <text x="380" y="42" class="task-text">Hypotheses</text>
+    <text x="485" y="42" class="task-arrow">→</text>
+    <text x="500" y="42" class="task-desc">where guards might fail</text>
+  </g>
+
+  <!-- REVIEW GATE 2 -->
+  <line x1="400" y1="243" x2="400" y2="255" class="connector"/>
+  <g transform="translate(175, 255)">
+    <rect x="0" y="0" width="450" height="26" rx="4" class="review-box"/>
+    <text x="12" y="17" class="review-text">REVIEW:</text>
+    <text x="70" y="17" class="review-desc">reject solid guards, unreachable code</text>
+  </g>
+  <line x1="400" y1="281" x2="400" y2="293" class="connector"/>
+  <polygon points="400,298 396,291 404,291" class="arrow-poly"/>
+
+  <!-- DYNAMIC PHASE -->
+  <g transform="translate(40, 301)">
+    <rect x="0" y="0" width="720" height="85" rx="8" class="phase-body"/>
+    <rect x="0" y="0" width="720" height="24" rx="8" class="phase-header"/>
+    <rect x="0" y="12" width="720" height="12" class="phase-header"/>
+    <text x="12" y="16" class="phase-header-text">DYNAMIC VERIFICATION</text>
+    <text x="175" y="16" class="phase-tag">(agent-executed)</text>
+
+    <text x="15" y="42" class="task-text">Sandbox setup</text>
+    <text x="120" y="42" class="task-arrow">→</text>
+    <text x="135" y="42" class="task-desc">clean checkout, pinned deps</text>
+
+    <text x="15" y="58" class="task-text">Execute PoCs</text>
+    <text x="120" y="58" class="task-arrow">→</text>
+    <text x="135" y="58" class="task-desc">run the actual exploit</text>
+
+    <text x="15" y="74" class="task-text">Capture output</text>
+    <text x="120" y="74" class="task-arrow">→</text>
+    <text x="135" y="74" class="task-desc">errors, return values, side effects</text>
+
+    <text x="380" y="42" class="task-text">Evidence</text>
+    <text x="485" y="42" class="task-arrow">→</text>
+    <text x="500" y="42" class="task-desc">commit + command + output</text>
+  </g>
+
+  <!-- REVIEW GATE 3 -->
+  <line x1="400" y1="386" x2="400" y2="398" class="connector"/>
+  <g transform="translate(175, 398)">
+    <rect x="0" y="0" width="450" height="26" rx="4" class="review-box"/>
+    <text x="12" y="17" class="review-text">REVIEW:</text>
+    <text x="70" y="17" class="review-desc">reject false positives, impossible conditions</text>
+  </g>
+  <line x1="400" y1="424" x2="400" y2="436" class="connector"/>
+  <polygon points="400,441 396,434 404,434" class="arrow-poly"/>
+
+  <!-- TRIAGE PHASE -->
+  <g transform="translate(40, 444)">
+    <rect x="0" y="0" width="720" height="85" rx="8" class="phase-body"/>
+    <rect x="0" y="0" width="720" height="24" rx="8" class="triage-header"/>
+    <rect x="0" y="12" width="720" height="12" class="triage-header"/>
+    <text x="12" y="16" class="phase-header-text">TRIAGE</text>
+    <text x="65" y="16" class="phase-tag" style="fill: #fef3c7;">(human judgment)</text>
+
+    <text x="15" y="42" class="task-text">Vulnerability?</text>
+    <text x="120" y="42" class="task-arrow">→</text>
+    <text x="135" y="42" class="task-desc">framework violates its contract</text>
+
+    <text x="15" y="58" class="task-text">Or hazard?</text>
+    <text x="120" y="58" class="task-arrow">→</text>
+    <text x="135" y="58" class="task-desc">sharp tool, app misuse required</text>
+
+    <text x="15" y="74" class="task-text">Default config?</text>
+    <text x="120" y="74" class="task-arrow">→</text>
+    <text x="135" y="74" class="task-desc">no opt-in required</text>
+
+    <text x="380" y="42" class="task-text">CVE-worthy?</text>
+    <text x="485" y="42" class="task-arrow">→</text>
+    <text x="500" y="42" class="task-desc">passes maintainer test</text>
+  </g>
+
+  <!-- REVIEW GATE 4 -->
+  <line x1="400" y1="529" x2="400" y2="541" class="connector"/>
+  <g transform="translate(175, 541)">
+    <rect x="0" y="0" width="450" height="26" rx="4" class="review-box"/>
+    <text x="12" y="17" class="review-text">REVIEW:</text>
+    <text x="70" y="17" class="review-desc">reject hazards, opt-in + misuse combos</text>
+  </g>
+  <line x1="400" y1="567" x2="400" y2="579" class="connector"/>
+  <polygon points="400,584 396,577 404,577" class="arrow-poly"/>
+
+  <!-- REMEDIATION PHASE -->
+  <g transform="translate(40, 587)">
+    <rect x="0" y="0" width="720" height="68" rx="8" class="phase-body"/>
+    <rect x="0" y="0" width="720" height="24" rx="8" class="phase-header"/>
+    <rect x="0" y="12" width="720" height="12" class="phase-header"/>
+    <text x="12" y="16" class="phase-header-text">REMEDIATION</text>
+    <text x="115" y="16" class="phase-tag">(agent-assisted)</text>
+
+    <text x="15" y="42" class="task-text">Draft patch</text>
+    <text x="120" y="42" class="task-arrow">→</text>
+    <text x="135" y="42" class="task-desc">minimal fix, project style</text>
+
+    <text x="15" y="58" class="task-text">Write test</text>
+    <text x="120" y="58" class="task-arrow">→</text>
+    <text x="135" y="58" class="task-desc">fails before, passes after</text>
+
+    <text x="380" y="42" class="task-text">Verify</text>
+    <text x="485" y="42" class="task-arrow">→</text>
+    <text x="500" y="42" class="task-desc">fixed AND still works</text>
+  </g>
+
+  <!-- REVIEW GATE 5 -->
+  <line x1="400" y1="655" x2="400" y2="667" class="connector"/>
+  <g transform="translate(175, 667)">
+    <rect x="0" y="0" width="450" height="26" rx="4" class="review-box"/>
+    <text x="12" y="17" class="review-text">REVIEW:</text>
+    <text x="70" y="17" class="review-desc">maintainer may still reject</text>
+  </g>
+  <line x1="400" y1="693" x2="400" y2="705" class="connector"/>
+  <polygon points="400,710 396,703 404,703" class="arrow-poly"/>
+
+  <!-- DISCLOSURE PHASE -->
+  <g transform="translate(120, 713)">
+    <rect x="0" y="0" width="560" height="42" rx="8" class="phase-body"/>
+    <rect x="0" y="0" width="560" height="24" rx="8" class="outcome-header"/>
+    <rect x="0" y="12" width="560" height="12" class="outcome-header"/>
+    <text x="12" y="16" class="phase-header-text">DISCLOSURE</text>
+    <text x="105" y="16" class="phase-tag" style="fill: #a7f3d0;">(human-approved)</text>
+
+    <text x="12" y="36" class="task-desc">Write report → Submit via security policy → Coordinate timing</text>
+  </g>
+</svg>
