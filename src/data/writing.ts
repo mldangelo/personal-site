@@ -7,6 +7,13 @@ export interface WritingItem {
 
 const data: WritingItem[] = [
   {
+    title: 'Promptfoo is joining OpenAI',
+    url: 'https://www.linkedin.com/posts/michaelldangelo_today-were-announcing-that-promptfoo-will-share-7436818429187088386-_hpH',
+    date: '2026-03-09',
+    description:
+      'Announcing that Promptfoo has agreed to be acquired by OpenAI.',
+  },
+  {
     title: 'How AI Regulation Changed in 2025',
     url: 'https://www.promptfoo.dev/blog/ai-regulation-2025/',
     date: '2025-12-15',
