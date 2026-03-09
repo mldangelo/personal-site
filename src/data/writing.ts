@@ -73,11 +73,25 @@ const data: WritingItem[] = [
       'Safety protects people from harmful outputs; security protects systems from adversarial manipulation.',
   },
   {
+    title: 'Promptfoo Raises $18.4M Series A',
+    url: 'https://www.promptfoo.dev/blog/series-a-announcement/',
+    date: '2025-07-29',
+    description:
+      'Announcing our Series A led by Insight Partners with participation from a16z.',
+  },
+  {
     title: 'Evaluating political bias in LLMs',
     url: 'https://www.promptfoo.dev/blog/grok-4-political-bias/',
     date: '2025-07-24',
     description:
       'Open methodology and dataset (2,500 political statements) to measure political leaning in models.',
+  },
+  {
+    title: 'Celebrating 100,000 Users',
+    url: 'https://www.promptfoo.dev/blog/100k-users/',
+    date: '2025-06-10',
+    description:
+      "Promptfoo's journey from prompt evaluation to AI red teaming, marking 100,000 users.",
   },
   {
     title: "Testing Humanity's Last Exam with Promptfoo",
