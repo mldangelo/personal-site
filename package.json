@@ -41,7 +41,7 @@
     "tailwindcss": "^4.1.18"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.2",
+    "@biomejs/biome": "^2.4.6",
     "@next/bundle-analyzer": "^16.1.6",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
