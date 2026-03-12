@@ -7,6 +7,14 @@ export interface WritingItem {
 
 const data: WritingItem[] = [
   {
+    title:
+      "McKinsey's Lilli Looks More Like an API Security Failure Than a Model Jailbreak",
+    url: 'https://www.promptfoo.dev/blog/mckinsey-lilli-appsec-vs-ai-jailbreak/',
+    date: '2026-03-10',
+    description:
+      'Why the reported Lilli incident looks like an application-security chain reaching an AI system, not a model jailbreak.',
+  },
+  {
     title: 'Promptfoo is joining OpenAI',
     url: 'https://www.linkedin.com/posts/michaelldangelo_today-were-announcing-that-promptfoo-will-share-7436818429187088386-_hpH',
     date: '2026-03-09',
