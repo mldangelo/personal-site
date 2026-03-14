@@ -376,10 +376,6 @@
     0 0 40px rgba(96, 165, 250, 0.08);
 }
 
-[data-theme='dark'] .hero-avatar img {
-  filter: brightness(0.85);
-}
-
 [data-theme='dark'] .hero-avatar:hover {
   box-shadow:
     var(--shadow-xl),

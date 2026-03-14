@@ -90,7 +90,7 @@
 }
 
 /* Portrait - soften white background for dark mode */
-[data-theme='dark'] .footer-avatar img {
+[data-theme='dark'] .theme-portrait img {
   filter: brightness(0.85);
 }
 
