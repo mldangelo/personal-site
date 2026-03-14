@@ -30,6 +30,7 @@ src/components/       → React components (organized by feature)
 src/data/             → Static data (resume, projects, contact)
 src/hooks/            → Custom React hooks
 content/writing/      → Blog posts (Markdown with frontmatter)
+src/data/writing.ts   → External writing links shown on `/writing`
 public/images/        → Images and favicons
 docs/                 → Documentation
 ```
@@ -54,6 +55,15 @@ docs/                 → Documentation
 - Skip type annotations on function parameters
 - Commit without running `npm run format` first
 
+## Git Workflow
+
+- Create a topic branch for every task; never commit or push directly to `main`
+- Make small, frequent conventional commits as you go (e.g., `feat:`, `fix:`, `refactor:`)
+- Push to your remote branch after every commit to keep it in sync
+- Land changes on `main` by merging GitHub PRs with conventional-commit titles (deploys trigger automatically from these merges)
+- If multiple PRs need to land together, open an integration branch PR; do not locally merge into `main`
+- Treat `main` as protected: force-pushes and history rewrites require explicit user approval
+
 ## Tech Stack
 
 Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4 · Biome · Vitest
@@ -64,6 +74,7 @@ Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4 · Biome ·
 - **Static export**: `output: 'export'` for GitHub Pages—no server features
 - **Theme images**: Use `ThemePortrait` component for light/dark variants
 - **Blog posts**: Markdown files in `content/writing/` with frontmatter (title, date, description); slug derived from filename
+- **Writing page**: Add external links in `src/data/writing.ts` and keep dated entries sorted newest first; local posts still live in `content/writing/`
 
 ## Testing
 
