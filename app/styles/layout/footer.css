@@ -69,7 +69,7 @@
 .footer-avatar {
   width: 48px;
   height: 48px;
-  border-radius: var(--radius-sm);
+  border-radius: 50%;
   overflow: hidden;
   flex-shrink: 0;
   box-shadow: var(--shadow-sm);
