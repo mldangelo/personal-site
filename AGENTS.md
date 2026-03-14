@@ -57,11 +57,12 @@ docs/                 → Documentation
 
 ## Git Workflow
 
-- Create a topic branch for every task; do not commit directly on `main`
-- Land changes through GitHub PRs with conventional-commit titles
-- Do not push directly to `main`, even when merging or fixing existing PRs
-- If multiple PRs need to land together, use an integration branch PR or update the source branches; do not locally merge them into `main` and push the merge commits
-- Treat `main` as protected history: force-pushes or history rewrites require an explicit ruleset/admin step and should only happen when the user asks
+- Create a topic branch for every task; never commit or push directly to `main`
+- Make small, frequent conventional commits as you go (e.g., `feat:`, `fix:`, `refactor:`) — don't batch all changes into one big commit at the end
+- Push to your remote branch after every commit to keep it in sync
+- Land changes on `main` by merging GitHub PRs with conventional-commit titles (deploys trigger automatically from these merges)
+- If multiple PRs need to land together, open an integration branch PR; do not locally merge into `main`
+- Treat `main` as protected: force-pushes and history rewrites require explicit user approval
 
 ## Tech Stack
 
