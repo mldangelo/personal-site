@@ -58,7 +58,7 @@ docs/                 → Documentation
 ## Git Workflow
 
 - Create a topic branch for every task; never commit or push directly to `main`
-- Make small, frequent conventional commits as you go (e.g., `feat:`, `fix:`, `refactor:`) — don't batch all changes into one big commit at the end
+- Make small, frequent conventional commits as you go (e.g., `feat:`, `fix:`, `refactor:`)
 - Push to your remote branch after every commit to keep it in sync
 - Land changes on `main` by merging GitHub PRs with conventional-commit titles (deploys trigger automatically from these merges)
 - If multiple PRs need to land together, open an integration branch PR; do not locally merge into `main`
