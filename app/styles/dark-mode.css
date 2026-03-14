@@ -89,13 +89,9 @@
   box-shadow: var(--shadow-lg);
 }
 
-/* Theme-aware portrait - dark mode swap */
-[data-theme='dark'] .theme-portrait-light {
-  display: none;
-}
-
-[data-theme='dark'] .theme-portrait-dark {
-  display: block;
+/* Portrait - soften white background for dark mode */
+[data-theme='dark'] .theme-portrait img {
+  filter: brightness(0.85);
 }
 
 /* Resume nav - dark mode uses same styles, just inherits dark tokens */

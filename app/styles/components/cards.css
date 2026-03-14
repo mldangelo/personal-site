@@ -9,20 +9,11 @@
     display: block;
   }
 
-  /* Theme-aware portrait images */
+  /* Portrait image */
   .theme-portrait {
     display: inline-block;
     position: relative;
     line-height: 0;
-  }
-
-  /* Light mode: show light image, hide dark */
-  .theme-portrait-light {
-    display: block;
-  }
-
-  .theme-portrait-dark {
-    display: none;
   }
 }
 
