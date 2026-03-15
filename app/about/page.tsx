@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <PageWrapper>
+    <PageWrapper mainClassName="page-main--wide">
       <section className="about-page">
         <header className="about-header">
           <h1 className="page-title">About</h1>

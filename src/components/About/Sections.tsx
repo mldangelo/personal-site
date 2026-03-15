@@ -6,6 +6,17 @@ interface AboutContentProps {
   markdown: string;
 }
 
+interface AboutSection {
+  body: string;
+  title: string;
+}
+
+const compactSectionTitles = new Set([
+  'I Like',
+  'I Dream Of',
+  'Websites from People I Admire',
+]);
+
 function splitAboutMarkdown(markdown: string) {
   const trimmed = markdown.trim();
   const introHeading = '# Intro';
@@ -13,7 +24,7 @@ function splitAboutMarkdown(markdown: string) {
   if (!trimmed.startsWith(introHeading)) {
     return {
       intro: '',
-      body: trimmed,
+      sections: parseSections(trimmed),
     };
   }
 
@@ -23,18 +34,41 @@ function splitAboutMarkdown(markdown: string) {
   if (nextHeadingIndex === -1) {
     return {
       intro: withoutIntroHeading.trim(),
-      body: '',
+      sections: [] as AboutSection[],
     };
   }
 
   return {
     intro: withoutIntroHeading.slice(0, nextHeadingIndex).trim(),
-    body: withoutIntroHeading.slice(nextHeadingIndex + 1).trim(),
+    sections: parseSections(
+      withoutIntroHeading.slice(nextHeadingIndex + 1).trim(),
+    ),
   };
 }
 
+function parseSections(markdown: string): AboutSection[] {
+  return markdown
+    .split(/\n(?=# )/)
+    .map((section) => section.trim())
+    .filter((section) => section !== '')
+    .map((section) => {
+      const [heading, ...rest] = section.split('\n');
+
+      return {
+        title: heading.replace(/^#\s+/, '').trim(),
+        body: rest.join('\n').trim(),
+      };
+    });
+}
+
+function getSectionClassName(title: string) {
+  return compactSectionTitles.has(title)
+    ? 'about-section about-section--compact'
+    : 'about-section';
+}
+
 export default function AboutContent({ markdown }: AboutContentProps) {
-  const { intro, body } = splitAboutMarkdown(markdown);
+  const { intro, sections } = splitAboutMarkdown(markdown);
 
   return (
     <article className="about-content">
@@ -43,19 +77,15 @@ export default function AboutContent({ markdown }: AboutContentProps) {
           <Markdown>{intro}</Markdown>
         </div>
       ) : null}
-      {body ? (
-        <Markdown
-          options={{
-            overrides: {
-              h1: {
-                component: 'h2',
-              },
-            },
-          }}
+      {sections.map((section) => (
+        <section
+          key={section.title}
+          className={getSectionClassName(section.title)}
         >
-          {body}
-        </Markdown>
-      ) : null}
+          <h2>{section.title}</h2>
+          <Markdown>{section.body}</Markdown>
+        </section>
+      ))}
     </article>
   );
 }

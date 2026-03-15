@@ -8,13 +8,12 @@
    ======================================== */
 
 .about-page {
-  max-width: 48rem;
+  max-width: 52rem;
   margin: 0 auto;
 }
 
-.about-header,
-.contact-header {
-  margin-bottom: var(--spacing-7);
+.about-header {
+  margin-bottom: var(--spacing-8);
 }
 
 .about-header .page-title {
@@ -24,13 +23,17 @@
 }
 
 .about-content {
-  max-width: 44rem;
+  max-width: 46rem;
   line-height: 1.85;
 }
 
-.about-content h2 {
+.about-section {
+  margin-top: var(--spacing-12);
+}
+
+.about-section h2 {
   scroll-margin-top: calc(var(--header-height) + var(--spacing-6));
-  margin: var(--spacing-12) 0 var(--spacing-4);
+  margin: 0 0 var(--spacing-4);
   padding-top: var(--spacing-5);
   border-top: 1px solid var(--color-border);
   font-size: clamp(1.16rem, 1.3vw, 1.4rem);
@@ -38,12 +41,6 @@
   line-height: 1.2;
   letter-spacing: -0.02em;
   color: var(--color-fg-bold);
-}
-
-.about-content h2:first-child {
-  margin-top: 0;
-  padding-top: 0;
-  border-top: 0;
 }
 
 .about-content p {
@@ -97,24 +94,12 @@
 
 .contact-page {
   max-width: 880px;
-  margin: 0 auto;
-}
-
-.contact-header {
-  text-align: center;
-  margin-bottom: 3.5rem;
-}
-
-/* ========================================
-   CONTACT PAGE
-   ======================================== */
-
-.contact-page {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   min-height: calc(100vh - var(--header-height) - 16rem);
+  margin: 0 auto;
   padding: 2rem;
 }
 
@@ -249,7 +234,6 @@
 
 @media (max-width: 736px) {
   .about-content h2 {
-    margin-top: var(--spacing-8);
     padding-top: var(--spacing-4);
     font-size: 1.25rem;
   }
@@ -261,6 +245,33 @@
   .contact-email-link {
     font-size: var(--text-md);
     padding: 0.625rem 1.25rem;
+  }
+}
+
+@media (min-width: 736px) {
+  .about-section--compact ul {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--spacing-10);
+    row-gap: 0;
+  }
+
+  .about-section--compact li {
+    margin-bottom: var(--spacing-4);
+  }
+}
+
+@media (min-width: 980px) {
+  .about-header {
+    margin-bottom: var(--spacing-12);
+  }
+
+  .about-section {
+    margin-top: var(--spacing-16);
+  }
+
+  .about-section h2 {
+    margin-bottom: var(--spacing-5);
   }
 }
 
