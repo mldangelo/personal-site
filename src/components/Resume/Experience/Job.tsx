@@ -1,14 +1,8 @@
-'use client';
-
 import dayjs from 'dayjs';
-import Markdown from 'markdown-to-jsx';
-import type { ReactNode } from 'react';
 
 import type { Position } from '@/data/resume/work';
 
-function Passthrough({ children }: { children?: ReactNode }) {
-  return <>{children}</>;
-}
+import JobSummary from './JobSummary';
 
 interface JobProps {
   data: Position;
@@ -36,27 +30,7 @@ export default function Job({ data }: JobProps) {
           )}
         </p>
       </header>
-      {summary ? (
-        <Markdown
-          options={{
-            overrides: {
-              p: {
-                props: {
-                  className: 'summary',
-                },
-              },
-              code: {
-                component: Passthrough,
-              },
-              pre: {
-                component: Passthrough,
-              },
-            },
-          }}
-        >
-          {summary}
-        </Markdown>
-      ) : null}
+      {summary ? <JobSummary summary={summary} /> : null}
       {highlights ? (
         <ul className="points">
           {highlights.map((highlight) => (
