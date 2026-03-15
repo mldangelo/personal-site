@@ -1,7 +1,14 @@
+'use client';
+
 import dayjs from 'dayjs';
 import Markdown from 'markdown-to-jsx';
+import type { ReactNode } from 'react';
 
 import type { Position } from '@/data/resume/work';
+
+function Passthrough({ children }: { children?: ReactNode }) {
+  return <>{children}</>;
+}
 
 interface JobProps {
   data: Position;
@@ -39,10 +46,10 @@ export default function Job({ data }: JobProps) {
                 },
               },
               code: {
-                component: ({ children }) => <>{children}</>,
+                component: Passthrough,
               },
               pre: {
-                component: ({ children }) => <>{children}</>,
+                component: Passthrough,
               },
             },
           }}
