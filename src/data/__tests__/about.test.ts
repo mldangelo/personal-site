@@ -10,6 +10,7 @@ describe('about data', () => {
 
   it('contains the intro section', () => {
     expect(aboutMarkdown).toContain('# Intro');
+    expect(aboutMarkdown).toContain('OpenAI');
     expect(aboutMarkdown).toContain('Promptfoo');
   });
 

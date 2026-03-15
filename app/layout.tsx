@@ -27,7 +27,7 @@ const raleway = Raleway({
 });
 
 const siteDescription =
-  'Co-founder & CTO building LLM security tools. Previously VP Engineering, YC alum, Stanford ICME.';
+  'Member of the Technical Staff at OpenAI, working on Promptfoo and agent security. Previously co-founded Promptfoo, Arthena, and Matroid, and led engineering at Smile ID.';
 
 export const metadata: Metadata = {
   title: {
@@ -37,9 +37,11 @@ export const metadata: Metadata = {
   description: siteDescription,
   keywords: [
     AUTHOR_NAME,
+    'OpenAI',
+    'Promptfoo',
+    'agent security',
     'LLM security',
     'machine learning',
-    'CTO',
     'startup founder',
     'YC',
   ],

@@ -18,8 +18,12 @@ describe('Hero', () => {
     expect(heading).toHaveTextContent("Michael D'Angelo");
   });
 
-  it('renders the tagline with Promptfoo link', () => {
+  it('renders the tagline with OpenAI and promptfoo links', () => {
     render(<Hero />);
+
+    const openAiLink = screen.getByRole('link', { name: /openai/i });
+    expect(openAiLink).toHaveAttribute('href', 'https://openai.com');
+    expect(openAiLink).toHaveClass('hero-highlight');
 
     const promptfooLink = screen.getByRole('link', { name: /promptfoo/i });
     expect(promptfooLink).toHaveAttribute('href', 'https://promptfoo.dev');

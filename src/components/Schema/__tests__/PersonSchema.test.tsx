@@ -72,7 +72,18 @@ describe('PersonSchema', () => {
 
     expect(data.worksFor).toBeDefined();
     expect(data.worksFor['@type']).toBe('Organization');
-    expect(data.worksFor.name).toBeDefined();
+    expect(data.worksFor.name).toBe('OpenAI');
+  });
+
+  it('uses current role as job title', () => {
+    const { container } = render(<PersonSchema />);
+
+    const script = container.querySelector(
+      'script[type="application/ld+json"]',
+    );
+    const data = JSON.parse(script?.innerHTML || '{}');
+
+    expect(data.jobTitle).toBe('Member of the Technical Staff');
   });
 
   it('includes alumniOf schools', () => {
