@@ -3,6 +3,7 @@ import Footer from './Footer';
 interface PageWrapperProps {
   children: React.ReactNode;
   hideFooter?: boolean;
+  mainClassName?: string;
 }
 
 /**
@@ -13,10 +14,15 @@ interface PageWrapperProps {
 export default function PageWrapper({
   children,
   hideFooter = false,
+  mainClassName,
 }: PageWrapperProps) {
   return (
     <div className="page-container">
-      <main className="page-main">{children}</main>
+      <main
+        className={mainClassName ? `page-main ${mainClassName}` : 'page-main'}
+      >
+        {children}
+      </main>
       {!hideFooter && <Footer />}
     </div>
   );
