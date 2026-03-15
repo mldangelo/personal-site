@@ -12,9 +12,6 @@ export const metadata: Metadata = {
     "Learn about Michael D'Angelo - Member of the Technical Staff at OpenAI and builder across AI, security, and infrastructure.",
 };
 
-const countWords = (str: string) =>
-  str.split(/\s+/).filter((word) => word !== '').length;
-
 const slugify = (str: string) =>
   str
     .toLowerCase()
@@ -37,23 +34,15 @@ const parseSections = (markdown: string): AboutSection[] =>
     });
 
 const aboutSections = parseSections(aboutMarkdown);
-const wordCount = new Intl.NumberFormat('en-US').format(
-  countWords(aboutMarkdown),
-);
 
 export default function AboutPage() {
   return (
     <PageWrapper>
       <section className="about-page">
         <header className="about-header">
-          <p className="about-eyebrow">Field Notes</p>
           <h1 className="page-title">About Me</h1>
-          <p className="about-meta">
-            {aboutSections.length} sections · {wordCount} words
-          </p>
-          <p className="about-summary">
-            Work, history, travel, habits, and the parts of my life that do not
-            fit neatly on a resume.
+          <p className="page-subtitle about-subtitle">
+            Work, history, travel, and the things that do not fit on a resume.
           </p>
         </header>
 

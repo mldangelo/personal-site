@@ -15,49 +15,28 @@
 
 .about-header,
 .contact-header {
-  margin-bottom: var(--spacing-8);
-}
-
-.about-eyebrow {
-  margin: 0 0 var(--spacing-2);
-  font-size: var(--text-xs);
-  font-weight: var(--font-weight-bold);
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--color-accent);
+  margin-bottom: var(--spacing-7);
 }
 
 .about-header .page-title {
-  margin-bottom: var(--spacing-3);
+  margin-bottom: var(--spacing-2);
 }
 
-.about-meta {
-  margin: 0 0 var(--spacing-4);
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  font-weight: var(--font-weight-bold);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--color-fg-light);
-}
-
-.about-summary {
-  max-width: 42rem;
-  margin: 0;
+.about-subtitle {
+  max-width: 38rem;
+  margin-bottom: 0;
   font-size: var(--text-md);
   line-height: 1.7;
-  color: var(--color-fg-light);
 }
 
 .about-toc {
-  margin-bottom: var(--spacing-8);
-  padding: var(--spacing-5) 0;
-  border-top: 1px solid var(--color-border);
+  margin-bottom: var(--spacing-7);
+  padding: 0 0 var(--spacing-5);
   border-bottom: 1px solid var(--color-border);
 }
 
 .about-toc-title {
-  margin: 0 0 var(--spacing-4);
+  margin: 0 0 var(--spacing-3);
   font-size: var(--text-xs);
   font-weight: var(--font-weight-bold);
   letter-spacing: 0.14em;
@@ -67,38 +46,30 @@
 
 .about-toc-list {
   list-style: none;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--spacing-3) var(--spacing-5);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2) var(--spacing-5);
   padding: 0;
   margin: 0;
 }
 
 .about-toc-link {
   display: inline-flex;
-  align-items: baseline;
-  gap: var(--spacing-2);
+  font-size: var(--text-sm);
   color: var(--color-fg-light);
-  text-decoration: none;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 0.2em;
   transition:
     color var(--duration-fast) var(--ease-out),
     text-decoration-color var(--duration-fast) var(--ease-out);
 }
 
 .about-toc-link:hover,
-.about-toc-link:focus-visible,
-.about-toc-link[aria-current='location'] {
-  color: var(--color-accent);
+.about-toc-link:focus-visible {
+  color: var(--color-fg-bold);
+  text-decoration-color: var(--color-border-alt);
   outline: none;
-}
-
-.about-toc-index,
-.about-section-index {
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  font-weight: var(--font-weight-bold);
-  letter-spacing: 0.12em;
-  color: var(--color-accent);
 }
 
 .about-content {
@@ -107,8 +78,8 @@
 
 .about-section {
   scroll-margin-top: calc(var(--header-height) + var(--spacing-6));
-  padding-top: var(--spacing-8);
-  margin-top: var(--spacing-8);
+  padding-top: var(--spacing-7);
+  margin-top: var(--spacing-7);
   border-top: 1px solid var(--color-border);
 }
 
@@ -119,15 +90,12 @@
 }
 
 .about-section-head {
-  display: flex;
-  align-items: baseline;
-  gap: var(--spacing-3);
-  margin-bottom: var(--spacing-5);
+  margin-bottom: var(--spacing-4);
 }
 
 .about-section-title {
   margin: 0;
-  font-size: clamp(1.55rem, 2.4vw, 2rem);
+  font-size: clamp(1.45rem, 2.1vw, 1.8rem);
   font-weight: var(--font-weight-black);
   line-height: 1.1;
   color: var(--color-fg-bold);
@@ -143,8 +111,8 @@
 }
 
 .about-section--intro .about-section-body p:first-child {
-  max-width: 42rem;
-  font-size: clamp(1.1rem, 1.4vw, 1.25rem);
+  max-width: 40rem;
+  font-size: clamp(1.04rem, 1.2vw, 1.12rem);
   line-height: 1.7;
   color: var(--color-fg-bold);
 }
@@ -342,22 +310,8 @@
 }
 
 @media (max-width: 736px) {
-  .about-summary {
-    max-width: none;
-    font-size: var(--text-base);
-  }
-
   .about-toc-list {
-    grid-template-columns: 1fr 1fr;
     gap: var(--spacing-2) var(--spacing-4);
-  }
-
-  .about-toc-list li:last-child {
-    grid-column: 1 / -1;
-  }
-
-  .about-section-head {
-    align-items: center;
   }
 
   .about-section--websites-from-people-i-admire .about-section-body ul {
