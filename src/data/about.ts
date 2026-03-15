@@ -79,6 +79,7 @@ Ask me in person for other stories that I'm afraid to share with the internet.
 - [Chris Saad](https://www.chrissaad.com/)
 - [Duncan Tomlin](http://duncantomlin.com/)
 - [Ed Kearney](https://edkearney.com/)
+- [Gia Jung](http://giajung.com/)
 - [Hawley Moore](http://hawleymoore.com/)
 - [Holman Gao](https://golmansax.com/)
 - [Ian Webster](http://ianww.com/)
