@@ -1,6 +1,6 @@
 export const aboutMarkdown = `# Intro
 
-I build products, companies, and teams across AI, security, identity, infrastructure, and a few stranger corners of the world. Today I am a Member of the Technical Staff at [OpenAI](https://openai.com), where I work on [promptfoo](https://promptfoo.dev) and securing agents.
+I build products, companies, and teams across AI, security, identity, infrastructure, and space. Today I am a Member of the Technical Staff at [OpenAI](https://openai.com), where I work on [Promptfoo](https://promptfoo.dev) and securing agents.
 
 Previously, I co-founded Promptfoo, [Arthena](https://arthena.com) (acquired by Masterworks), and [Matroid](https://matroid.com), led engineering at [Smile ID](https://usesmileid.com), and helped build satellites at [Planet](https://planet.com) and [Planetary Resources](https://www.planetaryresources.com).
 

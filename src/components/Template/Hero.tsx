@@ -21,7 +21,7 @@ export default function Hero() {
           </a>
           , where I work on{' '}
           <a href="https://promptfoo.dev" className="hero-highlight">
-            promptfoo
+            Promptfoo
           </a>{' '}
           and securing agents.
           <br />

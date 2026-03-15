@@ -6,7 +6,7 @@ import PageWrapper from '@/components/Template/PageWrapper';
 
 export const metadata: Metadata = {
   description:
-    'Member of the Technical Staff at OpenAI working on promptfoo and securing agents. Previously co-founded Promptfoo and led engineering at Smile ID. YC alum, Stanford ICME.',
+    'Member of the Technical Staff at OpenAI working on Promptfoo and securing agents. Previously co-founded Promptfoo and led engineering at Smile ID. YC alum, Stanford ICME.',
 };
 
 export default function HomePage() {
