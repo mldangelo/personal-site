@@ -16,9 +16,6 @@ export default function AboutPage() {
       <section className="about-page">
         <header className="about-header">
           <h1 className="page-title">About</h1>
-          <p className="page-subtitle about-subtitle">
-            Long-form background beyond the resume.
-          </p>
         </header>
         <AboutContent markdown={aboutMarkdown} />
       </section>

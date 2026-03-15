@@ -7,29 +7,19 @@
    ABOUT PAGE
    ======================================== */
 
-.about-page,
-.contact-page {
+.about-page {
   max-width: 48rem;
   margin: 0 auto;
 }
 
 .about-header,
 .contact-header {
-  margin-bottom: var(--spacing-8);
+  margin-bottom: var(--spacing-7);
 }
 
 .about-header .page-title {
-  margin-bottom: var(--spacing-2);
-  letter-spacing: -0.04em;
-  text-wrap: balance;
-}
-
-.about-subtitle {
-  max-width: 26rem;
   margin-bottom: 0;
-  font-size: 0.98rem;
-  line-height: 1.7;
-  color: var(--color-fg-muted);
+  letter-spacing: -0.04em;
   text-wrap: balance;
 }
 
@@ -42,7 +32,7 @@
   scroll-margin-top: calc(var(--header-height) + var(--spacing-6));
   margin: var(--spacing-12) 0 var(--spacing-4);
   padding-top: var(--spacing-5);
-  border-top: 1px solid var(--color-border-bg);
+  border-top: 1px solid var(--color-border);
   font-size: clamp(1.16rem, 1.3vw, 1.4rem);
   font-weight: var(--font-weight-bold);
   line-height: 1.2;
@@ -66,7 +56,7 @@
   margin-bottom: 0;
 }
 
-.about-content p:first-of-type {
+.about-intro p {
   max-width: 41rem;
   font-size: clamp(1.04rem, 0.7vw + 0.95rem, 1.1rem);
   line-height: 1.9;
@@ -258,11 +248,6 @@
 }
 
 @media (max-width: 736px) {
-  .about-subtitle {
-    max-width: none;
-    font-size: 0.95rem;
-  }
-
   .about-content h2 {
     margin-top: var(--spacing-8);
     padding-top: var(--spacing-4);
@@ -276,12 +261,6 @@
   .contact-email-link {
     font-size: var(--text-md);
     padding: 0.625rem 1.25rem;
-  }
-}
-
-@media (min-width: 980px) {
-  .about-page {
-    max-width: 920px;
   }
 }
 
