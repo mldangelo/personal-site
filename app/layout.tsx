@@ -27,7 +27,7 @@ const raleway = Raleway({
 });
 
 const siteDescription =
-  'Co-founder & CTO building LLM security tools. Previously VP Engineering, YC alum, Stanford ICME.';
+  'Member of the Technical Staff at OpenAI working on promptfoo and securing agents. Founder, engineering leader, YC alum, Stanford ICME.';
 
 export const metadata: Metadata = {
   title: {
@@ -37,6 +37,8 @@ export const metadata: Metadata = {
   description: siteDescription,
   keywords: [
     AUTHOR_NAME,
+    'OpenAI',
+    'agent security',
     'LLM security',
     'machine learning',
     'CTO',

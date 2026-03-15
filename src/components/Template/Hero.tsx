@@ -15,13 +15,17 @@ export default function Hero() {
         </h1>
 
         <p className="hero-tagline">
-          Co-founder & CTO at{' '}
-          <a href="https://promptfoo.dev" className="hero-highlight">
-            Promptfoo
+          Member of the Technical Staff at{' '}
+          <a href="https://openai.com" className="hero-highlight">
+            OpenAI
           </a>
-          , the most widely adopted open-source LLM security platform.
+          , where I work on{' '}
+          <a href="https://promptfoo.dev" className="hero-highlight">
+            promptfoo
+          </a>{' '}
+          and securing agents.
           <br />
-          Building AI products for over a decade.
+          Previously co-founded, scaled, and sold Promptfoo to OpenAI.
         </p>
 
         <div className="hero-chips">

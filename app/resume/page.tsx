@@ -15,7 +15,7 @@ import work from '@/data/resume/work';
 export const metadata: Metadata = {
   title: 'Resume',
   description:
-    "Michael D'Angelo's Resume. Promptfoo, Smile ID, Arthena, Matroid, Stanford ICME, YC alum.",
+    "Michael D'Angelo's Resume. OpenAI, Promptfoo, Smile ID, Arthena, Matroid, Stanford ICME, YC alum.",
 };
 
 export default function ResumePage() {
@@ -26,9 +26,11 @@ export default function ResumePage() {
           <h1 className="resume-title">Resume</h1>
           <p className="resume-summary">
             Engineering leader with 10+ years building products at the
-            intersection of machine learning and security. Currently CTO &
-            Co-founder at Promptfoo, building open-source LLM security tools.
-            Stanford MS, YC alum, previously VP Engineering.
+            intersection of machine learning, security, identity, and
+            infrastructure. Currently Member of the Technical Staff at OpenAI,
+            where I work on promptfoo and securing agents. Previously co-founded
+            Promptfoo, which we built into an AI security platform and sold to
+            OpenAI. Stanford MS, YC alum, previously VP Engineering.
           </p>
         </header>
 

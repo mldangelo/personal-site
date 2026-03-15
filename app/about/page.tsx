@@ -7,7 +7,7 @@ import { aboutMarkdown } from '@/data/about';
 export const metadata: Metadata = {
   title: 'About',
   description:
-    "Learn about Michael D'Angelo - Co-founder & CTO building LLM security tools.",
+    "Learn about Michael D'Angelo - builder, founder, and engineer across AI, security, identity, and infrastructure.",
 };
 
 const countWords = (str: string) =>
