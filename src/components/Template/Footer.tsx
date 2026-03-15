@@ -14,7 +14,7 @@ export default function Footer() {
           </Link>
           <div className="footer-info">
             <h3>Michael D&apos;Angelo</h3>
-            <p className="footer-role">CTO & Co-founder</p>
+            <p className="footer-role">Member of Technical Staff, OpenAI</p>
             <p className="footer-copyright">
               &copy; {new Date().getFullYear()} ·{' '}
               <a
