@@ -27,7 +27,7 @@ const raleway = Raleway({
 });
 
 const siteDescription =
-  'Member of the Technical Staff at OpenAI working on Promptfoo and securing agents. Founder, engineering leader, YC alum, Stanford ICME.';
+  'Builder across AI, security, infrastructure, and space. Currently Member of the Technical Staff at OpenAI. Founder, engineering leader, YC alum, Stanford ICME.';
 
 export const metadata: Metadata = {
   title: {
