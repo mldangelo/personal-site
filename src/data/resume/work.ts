@@ -19,10 +19,6 @@ const work: Position[] = [
     startDate: '2026-03-09',
     summary: `Building evaluation, red-teaming, and hardening infrastructure for AI systems
     at OpenAI, with a focus on Promptfoo and agent security.`,
-    highlights: [
-      'Work on Promptfoo inside OpenAI.',
-      'Focus on evaluation, red-teaming, and hardening workflows for agents and AI systems.',
-    ],
   },
   {
     name: 'Promptfoo',
@@ -35,11 +31,11 @@ const work: Position[] = [
     monthly active users, and teams at more than 25% of the Fortune 500 before selling the company to OpenAI.`,
     highlights: [
       'Owned company-wide technical strategy and product roadmap across open-source adoption, commercial product, and research investments.',
-      'Co-led the company through its sale to OpenAI in March 2026.',
       'Helped turn Promptfoo from an open-source eval tool into an enterprise AI security product used by large companies and frontier labs.',
       'Built and scaled the company from founding to 23 people across engineering, GTM, and operations.',
       'Led technical due diligence and fundraising through $23.4M in venture financing from Insight Partners and Andreessen Horowitz.',
       'Led development of core evaluation framework, vulnerability scanning, static analysis, and automated red-teaming capabilities.',
+      'Co-led the company through its sale to OpenAI in March 2026.',
     ],
   },
   {

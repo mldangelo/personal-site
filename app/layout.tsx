@@ -27,7 +27,7 @@ const raleway = Raleway({
 });
 
 const siteDescription =
-  'Builder across AI, security, infrastructure, and space. Currently Member of the Technical Staff at OpenAI. Founder, engineering leader, YC alum, Stanford ICME.';
+  'Member of the Technical Staff at OpenAI, working on Promptfoo and agent security. Previously co-founded Promptfoo, Arthena, and Matroid, and led engineering at Smile ID.';
 
 export const metadata: Metadata = {
   title: {
