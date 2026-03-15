@@ -23,7 +23,7 @@ export default function Hero() {
           <a href="https://promptfoo.dev" className="hero-highlight">
             Promptfoo
           </a>{' '}
-          and securing agents.
+          and agent security.
           <br />
           Previously co-founded, scaled, and sold Promptfoo to OpenAI.
         </p>
