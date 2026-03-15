@@ -43,26 +43,22 @@ const wordCount = new Intl.NumberFormat('en-US').format(
 
 export default function AboutPage() {
   return (
-    <PageWrapper mainClassName="about-main">
+    <PageWrapper>
       <section className="about-page">
-        <div className="about-shell">
-          <aside className="about-rail">
-            <header className="about-header">
-              <p className="about-eyebrow">Field Notes</p>
-              <h1 className="page-title">About Me</h1>
-              <p className="page-subtitle">
-                {aboutSections.length} sections · {wordCount} words
-              </p>
-              <p className="about-summary">
-                Work, history, travel, habits, and the parts of my life that do
-                not fit neatly on a resume.
-              </p>
-            </header>
-            <AboutTableOfContents sections={aboutSections} />
-          </aside>
+        <header className="about-header">
+          <p className="about-eyebrow">Field Notes</p>
+          <h1 className="page-title">About Me</h1>
+          <p className="about-meta">
+            {aboutSections.length} sections · {wordCount} words
+          </p>
+          <p className="about-summary">
+            Work, history, travel, habits, and the parts of my life that do not
+            fit neatly on a resume.
+          </p>
+        </header>
 
-          <AboutSections sections={aboutSections} />
-        </div>
+        <AboutTableOfContents sections={aboutSections} />
+        <AboutSections sections={aboutSections} />
       </section>
     </PageWrapper>
   );

@@ -7,102 +7,19 @@
    ABOUT PAGE
    ======================================== */
 
-.page-main.about-main {
-  max-width: 1120px;
-  padding-inline: clamp(1rem, 2.5vw, 2rem);
-}
-
-.about-page {
-  position: relative;
-  isolation: isolate;
+.about-page,
+.contact-page {
+  max-width: 880px;
   margin: 0 auto;
 }
 
-.about-page::before,
-.about-page::after {
-  content: '';
-  position: absolute;
-  inset: auto;
-  pointer-events: none;
-  z-index: -1;
-  filter: blur(12px);
-}
-
-.about-page::before {
-  top: -2rem;
-  left: clamp(-5rem, -6vw, -2rem);
-  width: min(32rem, 46vw);
-  height: 18rem;
-  background: radial-gradient(
-    circle,
-    color-mix(in srgb, var(--color-accent) 12%, transparent),
-    transparent 68%
-  );
-}
-
-.about-page::after {
-  right: clamp(-6rem, -8vw, -2rem);
-  top: 20rem;
-  width: min(24rem, 38vw);
-  height: 20rem;
-  background: radial-gradient(
-    circle,
-    color-mix(in srgb, var(--color-accent-secondary) 10%, transparent),
-    transparent 72%
-  );
-}
-
-.about-shell {
-  display: grid;
-  gap: var(--spacing-8);
-  align-items: start;
-}
-
-.about-rail {
-  display: grid;
-  gap: var(--spacing-6);
-}
-
-.about-header {
-  position: relative;
-  overflow: hidden;
-  margin: 0;
-  padding: clamp(var(--spacing-6), 2vw, var(--spacing-8));
-  text-align: left;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-xl);
-  background:
-    radial-gradient(
-      circle at top right,
-      color-mix(in srgb, var(--color-accent) 14%, transparent),
-      transparent 42%
-    ),
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--color-accent) 6%, transparent),
-      transparent 70%
-    ),
-    var(--color-bg);
-  box-shadow: var(--shadow-sm);
-}
-
-.about-header::after {
-  content: '';
-  position: absolute;
-  left: 38%;
-  right: -10%;
-  bottom: 0;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    color-mix(in srgb, var(--color-accent) 35%, transparent) 35%,
-    transparent
-  );
+.about-header,
+.contact-header {
+  margin-bottom: var(--spacing-8);
 }
 
 .about-eyebrow {
-  margin: 0 0 var(--spacing-3);
+  margin: 0 0 var(--spacing-2);
   font-size: var(--text-xs);
   font-weight: var(--font-weight-bold);
   letter-spacing: 0.16em;
@@ -112,13 +29,11 @@
 
 .about-header .page-title {
   margin-bottom: var(--spacing-3);
-  font-size: clamp(2.7rem, 4vw, 4.2rem);
-  line-height: 0.95;
-  letter-spacing: -0.03em;
 }
 
-.about-header .page-subtitle {
-  margin-bottom: var(--spacing-5);
+.about-meta {
+  margin: 0 0 var(--spacing-4);
+  font-family: var(--font-mono);
   font-size: var(--text-xs);
   font-weight: var(--font-weight-bold);
   letter-spacing: 0.14em;
@@ -127,19 +42,18 @@
 }
 
 .about-summary {
-  max-width: 28rem;
+  max-width: 42rem;
   margin: 0;
   font-size: var(--text-md);
-  line-height: 1.6;
+  line-height: 1.7;
   color: var(--color-fg-light);
 }
 
 .about-toc {
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-5);
-  background: color-mix(in srgb, var(--color-bg-alt) 84%, transparent);
-  box-shadow: var(--shadow-sm);
+  margin-bottom: var(--spacing-8);
+  padding: var(--spacing-5) 0;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .about-toc-title {
@@ -153,48 +67,29 @@
 
 .about-toc-list {
   list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--spacing-3) var(--spacing-5);
   padding: 0;
   margin: 0;
-  display: grid;
-  gap: var(--spacing-2);
 }
 
 .about-toc-link {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  align-items: center;
-  gap: var(--spacing-3);
-  width: 100%;
-  padding: 0.7rem 0.8rem;
-  border: 1px solid transparent;
-  border-radius: var(--radius-md);
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--spacing-2);
   color: var(--color-fg-light);
   text-decoration: none;
   transition:
     color var(--duration-fast) var(--ease-out),
-    background-color var(--duration-fast) var(--ease-out),
-    border-color var(--duration-fast) var(--ease-out),
-    transform var(--duration-fast) var(--ease-out);
+    text-decoration-color var(--duration-fast) var(--ease-out);
 }
 
-.about-toc-link:hover {
-  color: var(--color-fg-bold);
-  background: var(--color-accent-subtle);
-  border-color: var(--color-accent-border);
-  transform: translateX(2px);
-}
-
+.about-toc-link:hover,
 .about-toc-link:focus-visible,
 .about-toc-link[aria-current='location'] {
-  color: var(--color-fg-bold);
-  background: color-mix(in srgb, var(--color-accent) 10%, var(--color-bg));
-  border-color: var(--color-accent-border);
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-accent) 8%, transparent);
+  color: var(--color-accent);
   outline: none;
-}
-
-.about-toc-link[aria-current='location'] {
-  transform: translateX(2px);
 }
 
 .about-toc-index,
@@ -206,43 +101,21 @@
   color: var(--color-accent);
 }
 
-.about-toc-link[aria-current='location'] .about-toc-index {
-  color: color-mix(in srgb, var(--color-accent) 88%, white);
-}
-
 .about-content {
-  display: grid;
-  gap: var(--spacing-6);
+  line-height: 1.8;
 }
 
 .about-section {
   scroll-margin-top: calc(var(--header-height) + var(--spacing-6));
-  padding: clamp(var(--spacing-6), 2vw, var(--spacing-8));
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-xl);
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--color-bg-alt) 72%, transparent),
-      transparent 22%
-    ),
-    var(--color-bg);
-  box-shadow: var(--shadow-sm);
+  padding-top: var(--spacing-8);
+  margin-top: var(--spacing-8);
+  border-top: 1px solid var(--color-border);
 }
 
-.about-section--intro {
-  background:
-    linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--color-accent) 8%, transparent),
-      transparent 42%
-    ),
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--color-bg-alt) 72%, transparent),
-      transparent 24%
-    ),
-    var(--color-bg);
+.about-section:first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
 }
 
 .about-section-head {
@@ -250,21 +123,14 @@
   align-items: baseline;
   gap: var(--spacing-3);
   margin-bottom: var(--spacing-5);
-  padding-bottom: var(--spacing-4);
-  border-bottom: 1px solid var(--color-border);
 }
 
 .about-section-title {
   margin: 0;
   font-size: clamp(1.55rem, 2.4vw, 2rem);
   font-weight: var(--font-weight-black);
-  line-height: 1.05;
-  letter-spacing: -0.02em;
+  line-height: 1.1;
   color: var(--color-fg-bold);
-}
-
-.about-section-body {
-  line-height: 1.8;
 }
 
 .about-section-body p {
@@ -277,19 +143,19 @@
 }
 
 .about-section--intro .about-section-body p:first-child {
-  max-width: 44rem;
-  font-size: clamp(1.15rem, 1.45vw, 1.35rem);
-  line-height: 1.65;
+  max-width: 42rem;
+  font-size: clamp(1.1rem, 1.4vw, 1.25rem);
+  line-height: 1.7;
   color: var(--color-fg-bold);
 }
 
 .about-section-body ul {
-  margin: var(--spacing-5) 0 0;
-  padding-left: var(--spacing-6);
+  margin: var(--spacing-5) 0;
+  padding-left: 1.75rem;
 }
 
 .about-section-body li {
-  margin-bottom: var(--spacing-4);
+  margin-bottom: 1rem;
   color: var(--color-fg);
   line-height: 1.7;
 }
@@ -312,39 +178,6 @@
 .about-section-body a:hover {
   text-decoration-color: var(--color-accent);
   color: color-mix(in srgb, var(--color-accent) 85%, black);
-}
-
-.about-section--some-history .about-section-body ul {
-  list-style: none;
-  padding-left: 0;
-  margin-top: 0;
-}
-
-.about-section--some-history .about-section-body li {
-  position: relative;
-  margin: 0;
-  padding: 0 0 var(--spacing-5) var(--spacing-6);
-  border-left: 1px solid var(--color-border);
-}
-
-.about-section--some-history .about-section-body li:last-child {
-  padding-bottom: 0;
-}
-
-.about-section--some-history .about-section-body li::before {
-  content: '';
-  position: absolute;
-  left: -0.42rem;
-  top: 0.3rem;
-  width: 0.8rem;
-  height: 0.8rem;
-  border: 2px solid var(--color-accent);
-  border-radius: 50%;
-  background: var(--color-bg);
-}
-
-.about-section--some-history .about-section-body li::marker {
-  content: '';
 }
 
 .about-section--websites-from-people-i-admire .about-section-body ul {
@@ -509,80 +342,18 @@
 }
 
 @media (max-width: 736px) {
-  .page-main.about-main {
-    padding-inline: 1rem;
-  }
-
-  .about-shell {
-    gap: var(--spacing-6);
-  }
-
-  .about-rail {
-    gap: var(--spacing-4);
-  }
-
-  .about-header {
-    padding: var(--spacing-5);
-  }
-
-  .about-header .page-title {
-    font-size: clamp(2.2rem, 11vw, 3rem);
-  }
-
   .about-summary {
     max-width: none;
     font-size: var(--text-base);
   }
 
-  .about-toc {
-    padding: 0;
-    border: 0;
-    background: transparent;
-    box-shadow: none;
-  }
-
-  .about-toc-title {
-    margin-bottom: var(--spacing-3);
-    padding-inline: var(--spacing-1);
-  }
-
   .about-toc-list {
-    display: flex;
-    gap: var(--spacing-2);
-    overflow-x: auto;
-    padding-inline: var(--spacing-1);
-    padding-bottom: var(--spacing-1);
-    scroll-padding-inline: var(--spacing-1);
-    scroll-snap-type: x proximity;
-    scrollbar-width: none;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-2) var(--spacing-4);
   }
 
-  .about-toc-list::-webkit-scrollbar {
-    display: none;
-  }
-
-  .about-toc-list li {
-    flex: 0 0 auto;
-  }
-
-  .about-toc-link {
-    display: inline-flex;
-    grid-template-columns: none;
-    gap: var(--spacing-2);
-    white-space: nowrap;
-    padding: 0.7rem 0.85rem;
-    border-color: var(--color-border);
-    background: color-mix(in srgb, var(--color-bg-alt) 84%, transparent);
-    scroll-snap-align: start;
-  }
-
-  .about-toc-link:hover,
-  .about-toc-link[aria-current='location'] {
-    transform: none;
-  }
-
-  .about-toc-index {
-    display: none;
+  .about-toc-list li:last-child {
+    grid-column: 1 / -1;
   }
 
   .about-section-head {
@@ -604,13 +375,8 @@
 }
 
 @media (min-width: 980px) {
-  .about-shell {
-    grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
-  }
-
-  .about-rail {
-    position: sticky;
-    top: calc(var(--header-height) + var(--spacing-6));
+  .about-page {
+    max-width: 920px;
   }
 }
 
