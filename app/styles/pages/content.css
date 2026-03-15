@@ -234,6 +234,7 @@
 
 @media (max-width: 736px) {
   .about-section h2 {
+    scroll-margin-top: calc(var(--header-height-mobile) + var(--spacing-6));
     padding-top: var(--spacing-4);
     font-size: 1.25rem;
   }

@@ -1,10 +1,13 @@
 import Link from 'next/link';
 
 import ContactIcons from '@/components/Contact/ContactIcons';
+import work from '@/data/resume/work';
 
 import ThemePortrait from './ThemePortrait';
 
 export default function Footer() {
+  const currentRole = `${work[0].position} at ${work[0].name}`;
+
   return (
     <footer className="site-footer-new">
       <div className="footer-content">
@@ -14,7 +17,7 @@ export default function Footer() {
           </Link>
           <div className="footer-info">
             <h3>Michael D&apos;Angelo</h3>
-            <p className="footer-role">Member of Technical Staff, OpenAI</p>
+            <p className="footer-role">{currentRole}</p>
             <p className="footer-copyright">
               &copy; {new Date().getFullYear()} ·{' '}
               <a
