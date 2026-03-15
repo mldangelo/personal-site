@@ -15,9 +15,9 @@ export default function AboutPage() {
     <PageWrapper>
       <section className="about-page">
         <header className="about-header">
-          <h1 className="page-title">About Me</h1>
+          <h1 className="page-title">About</h1>
           <p className="page-subtitle about-subtitle">
-            Work, history, travel, and the things that do not fit on a resume.
+            Long-form background beyond the resume.
           </p>
         </header>
         <AboutContent markdown={aboutMarkdown} />
