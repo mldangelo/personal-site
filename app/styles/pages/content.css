@@ -66,7 +66,7 @@
 }
 
 .about-content li {
-  margin-bottom: 0.8rem;
+  margin-bottom: 0.65rem;
   color: var(--color-fg);
   line-height: 1.75;
   text-wrap: pretty;
@@ -233,7 +233,7 @@
 }
 
 @media (max-width: 736px) {
-  .about-content h2 {
+  .about-section h2 {
     padding-top: var(--spacing-4);
     font-size: 1.25rem;
   }
@@ -250,14 +250,22 @@
 
 @media (min-width: 736px) {
   .about-section--compact ul {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    columns: 2;
     column-gap: var(--spacing-10);
-    row-gap: 0;
   }
 
   .about-section--compact li {
-    margin-bottom: var(--spacing-4);
+    break-inside: avoid;
+  }
+
+  .about-section--links ul {
+    columns: 3;
+    column-gap: var(--spacing-8);
+  }
+
+  .about-section--links li {
+    margin-bottom: 0.5rem;
+    break-inside: avoid;
   }
 }
 

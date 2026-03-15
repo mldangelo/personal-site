@@ -11,11 +11,12 @@ interface AboutSection {
   title: string;
 }
 
-const compactSectionTitles = new Set([
-  'I Like',
-  'I Dream Of',
-  'Websites from People I Admire',
-]);
+const sectionVariants: Record<string, string> = {
+  'Fun Facts': 'about-section--compact',
+  'I Like': 'about-section--compact',
+  'I Dream Of': 'about-section--compact',
+  'Websites from People I Admire': 'about-section--links',
+};
 
 function splitAboutMarkdown(markdown: string) {
   const trimmed = markdown.trim();
@@ -62,9 +63,8 @@ function parseSections(markdown: string): AboutSection[] {
 }
 
 function getSectionClassName(title: string) {
-  return compactSectionTitles.has(title)
-    ? 'about-section about-section--compact'
-    : 'about-section';
+  const variant = sectionVariants[title];
+  return variant ? `about-section ${variant}` : 'about-section';
 }
 
 export default function AboutContent({ markdown }: AboutContentProps) {
