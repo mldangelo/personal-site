@@ -49,4 +49,29 @@ Lead paragraph.
     expect(sections[0]).toHaveClass('about-section--compact');
     expect(sections[1]).toHaveClass('about-section--links');
   });
+
+  it('adds stable heading ids for deep links', () => {
+    render(
+      <AboutContent
+        markdown={`# Intro
+
+Lead paragraph.
+
+# Some History
+
+- Built a thing.
+
+# Travel / Geography
+
+- Went somewhere.`}
+      />,
+    );
+
+    expect(
+      screen.getByRole('heading', { name: 'Some History' }),
+    ).toHaveAttribute('id', 'some-history');
+    expect(
+      screen.getByRole('heading', { name: 'Travel / Geography' }),
+    ).toHaveAttribute('id', 'travel-geography');
+  });
 });

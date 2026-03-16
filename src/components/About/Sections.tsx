@@ -67,6 +67,14 @@ function getSectionClassName(title: string) {
   return variant ? `about-section ${variant}` : 'about-section';
 }
 
+function getSectionId(title: string) {
+  return title
+    .toLowerCase()
+    .replace(/&/g, ' and ')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
 export default function AboutContent({ markdown }: AboutContentProps) {
   const { intro, sections } = splitAboutMarkdown(markdown);
 
@@ -82,7 +90,7 @@ export default function AboutContent({ markdown }: AboutContentProps) {
           key={section.title}
           className={getSectionClassName(section.title)}
         >
-          <h2>{section.title}</h2>
+          <h2 id={getSectionId(section.title)}>{section.title}</h2>
           <Markdown>{section.body}</Markdown>
         </section>
       ))}
