@@ -5,7 +5,7 @@ import { AUTHOR_NAME, SITE_URL, TWITTER_HANDLE } from './utils';
 interface PageMetadataOptions {
   title: string;
   description: string;
-  path: `/${string}`;
+  path?: `/${string}`;
 }
 
 export function createPageMetadata({
@@ -13,7 +13,7 @@ export function createPageMetadata({
   description,
   path,
 }: PageMetadataOptions): Metadata {
-  const absoluteUrl = `${SITE_URL}${path}`;
+  const absoluteUrl = path ? new URL(path, SITE_URL).toString() : undefined;
   const pageTitle = `${title} | ${AUTHOR_NAME}`;
 
   return {
@@ -22,10 +22,10 @@ export function createPageMetadata({
     openGraph: {
       type: 'website',
       locale: 'en_US',
-      url: absoluteUrl,
       siteName: AUTHOR_NAME,
       title: pageTitle,
       description,
+      ...(absoluteUrl ? { url: absoluteUrl } : {}),
       images: [
         {
           url: '/images/me.jpg',
