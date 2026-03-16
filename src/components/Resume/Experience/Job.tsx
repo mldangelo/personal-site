@@ -1,7 +1,8 @@
 import dayjs from 'dayjs';
-import Markdown from 'markdown-to-jsx';
 
 import type { Position } from '@/data/resume/work';
+
+import JobSummary from './JobSummary';
 
 interface JobProps {
   data: Position;
@@ -29,27 +30,7 @@ export default function Job({ data }: JobProps) {
           )}
         </p>
       </header>
-      {summary ? (
-        <Markdown
-          options={{
-            overrides: {
-              p: {
-                props: {
-                  className: 'summary',
-                },
-              },
-              code: {
-                component: ({ children }) => <>{children}</>,
-              },
-              pre: {
-                component: ({ children }) => <>{children}</>,
-              },
-            },
-          }}
-        >
-          {summary}
-        </Markdown>
-      ) : null}
+      {summary ? <JobSummary summary={summary} /> : null}
       {highlights ? (
         <ul className="points">
           {highlights.map((highlight) => (
