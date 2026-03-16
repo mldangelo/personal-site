@@ -31,7 +31,7 @@ export async function GET() {
   const internalPosts = getAllPosts();
   const internalItems: FeedItem[] = internalPosts.map((post) => ({
     title: post.title,
-    url: `${SITE_URL}/writing/${post.slug}`,
+    url: `${SITE_URL}/writing/${post.slug}/`,
     date: post.date,
     description: post.description,
   }));
@@ -68,7 +68,7 @@ export async function GET() {
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Michael D'Angelo - Writing</title>
-    <link>${SITE_URL}/writing</link>
+    <link>${SITE_URL}/writing/</link>
     <description>Articles on AI security, LLM red teaming, and trust &amp; safety by Michael D'Angelo.</description>
     <language>en-us</language>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
