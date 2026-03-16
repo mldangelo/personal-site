@@ -57,7 +57,7 @@ describe('ArticleSchema', () => {
     );
     const data = JSON.parse(script?.innerHTML || '{}');
 
-    const expectedUrl = `${SITE_URL}/writing/${mockPost.slug}`;
+    const expectedUrl = `${SITE_URL}/writing/${mockPost.slug}/`;
     expect(data.url).toBe(expectedUrl);
     expect(data.mainEntityOfPage['@id']).toBe(expectedUrl);
   });

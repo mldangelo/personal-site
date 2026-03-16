@@ -7,7 +7,7 @@ interface ArticleSchemaProps {
 }
 
 export default function ArticleSchema({ post }: ArticleSchemaProps) {
-  const articleUrl = `${SITE_URL}/writing/${post.slug}`;
+  const articleUrl = `${SITE_URL}/writing/${post.slug}/`;
 
   const authorImage = `${SITE_URL}/images/me.jpg`;
 

@@ -28,7 +28,7 @@ export async function generateMetadata({
     };
   }
 
-  const url = `${SITE_URL}/writing/${post.slug}`;
+  const url = `${SITE_URL}/writing/${post.slug}/`;
 
   return {
     title: post.title,
