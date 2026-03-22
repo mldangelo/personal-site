@@ -8,7 +8,7 @@ export default function ThemeToggle() {
   const [isDark, setIsDark] = useState<boolean | null>(null);
 
   useEffect(() => {
-    const stored = localStorage.getItem('theme');
+    const stored = window.localStorage.getItem('theme');
     if (stored === 'light' || stored === 'dark') {
       setIsDark(stored === 'dark');
     } else {
@@ -22,7 +22,7 @@ export default function ThemeToggle() {
       'data-theme',
       isDark ? 'dark' : 'light',
     );
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    window.localStorage.setItem('theme', isDark ? 'dark' : 'light');
   }, [isDark]);
 
   const toggle = useCallback(() => {

@@ -8,7 +8,7 @@
     "url": "https://github.com/mldangelo/personal-site.git"
   },
   "engines": {
-    "node": ">=20.x"
+    "node": "^20.19.0 || ^22.13.0 || >=24.0.0"
   },
   "scripts": {
     "dev": "next dev --turbopack",
@@ -50,7 +50,7 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.4",
     "@vitest/coverage-v8": "^4.0.18",
-    "jsdom": "^28.1.0",
+    "jsdom": "^29.0.0",
     "prettier": "^3.8.1",
     "typescript": "^5.9.3",
     "vitest": "^4.0.18"
