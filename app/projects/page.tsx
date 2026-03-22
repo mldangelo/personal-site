@@ -3,12 +3,14 @@ import type { Metadata } from 'next';
 import Cell from '@/components/Projects/Cell';
 import PageWrapper from '@/components/Template/PageWrapper';
 import data from '@/data/projects';
+import { createPageMetadata } from '@/lib/metadata';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: 'Archive',
   description:
     "Early projects and experiments from Michael D'Angelo (2015 and earlier).",
-};
+  path: '/projects/',
+});
 
 export default function ProjectsPage() {
   const featuredProjects = data.filter((p) => p.featured);

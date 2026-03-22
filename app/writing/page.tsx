@@ -2,12 +2,17 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import PageWrapper from '@/components/Template/PageWrapper';
 import writing from '@/data/writing';
+import { createPageMetadata } from '@/lib/metadata';
 import { getAllPosts } from '@/lib/posts';
 import { formatDate } from '@/lib/utils';
 
 export const metadata: Metadata = {
-  title: 'Writing',
-  description: 'Articles on AI security, LLM red teaming, and trust & safety.',
+  ...createPageMetadata({
+    title: 'Writing',
+    description:
+      'Articles on AI security, LLM red teaming, and trust & safety.',
+    path: '/writing/',
+  }),
   alternates: {
     types: {
       'application/rss+xml': '/feed.xml',
