@@ -1,6 +1,6 @@
 import { cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
-import { afterAll, afterEach, beforeAll, vi } from 'vitest';
+import { afterAll, afterEach, beforeAll, beforeEach, vi } from 'vitest';
 
 // Clean up DOM after each test
 afterEach(() => {
@@ -56,6 +56,43 @@ global.ResizeObserver = vi.fn().mockImplementation(() => ({
 Object.defineProperty(window, 'scrollTo', {
   value: vi.fn(),
   writable: true,
+});
+
+function createStorageMock() {
+  let storage = new Map<string, string>();
+
+  return {
+    clear: vi.fn(() => {
+      storage = new Map<string, string>();
+    }),
+    getItem: vi.fn((key: string) => storage.get(key) ?? null),
+    key: vi.fn((index: number) => Array.from(storage.keys())[index] ?? null),
+    removeItem: vi.fn((key: string) => {
+      storage.delete(key);
+    }),
+    setItem: vi.fn((key: string, value: string) => {
+      storage.set(key, String(value));
+    }),
+    get length() {
+      return storage.size;
+    },
+  };
+}
+
+const localStorageMock = createStorageMock();
+
+Object.defineProperty(window, 'localStorage', {
+  configurable: true,
+  value: localStorageMock,
+});
+
+Object.defineProperty(globalThis, 'localStorage', {
+  configurable: true,
+  value: localStorageMock,
+});
+
+beforeEach(() => {
+  window.localStorage.clear();
 });
 
 // Suppress console errors in tests unless needed

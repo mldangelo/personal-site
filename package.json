@@ -8,7 +8,7 @@
     "url": "https://github.com/mldangelo/personal-site.git"
   },
   "engines": {
-    "node": ">=20.x"
+    "node": ">=20.19.0"
   },
   "scripts": {
     "dev": "next dev --turbopack",

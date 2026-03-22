@@ -29,7 +29,7 @@ npm install
 npm run dev
 ```
 
-Requires [GitHub CLI](https://cli.github.com/) and Node.js 20+ ([nvm](https://github.com/nvm-sh/nvm) recommended).
+Requires [GitHub CLI](https://cli.github.com/) and Node.js 20.19+ ([nvm](https://github.com/nvm-sh/nvm) recommended).
 
 ### Option 2: GitHub Codespaces
 

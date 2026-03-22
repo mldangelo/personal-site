@@ -12,6 +12,7 @@ vi.mock('next/navigation', () => ({
 describe('Navigation', () => {
   beforeEach(() => {
     mockPathname.mockReturnValue('/');
+    window.localStorage.clear();
 
     // Mock matchMedia for ThemeToggle
     Object.defineProperty(window, 'matchMedia', {
