@@ -27,6 +27,43 @@
   line-height: 1.85;
 }
 
+.about-section-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+  margin: var(--spacing-8) 0 var(--spacing-6);
+  padding: var(--spacing-4);
+  border: 1px solid var(--color-border-bg);
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--color-bg-alt) 92%, transparent);
+  box-shadow: var(--shadow-sm);
+}
+
+.about-content .about-section-nav-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 0.85rem;
+  border-radius: var(--radius-sm);
+  color: var(--color-fg-light);
+  background: transparent;
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+.about-content .about-section-nav-link:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-fg-bold);
+}
+
+.about-section-nav-link:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
 .about-section {
   margin-top: var(--spacing-12);
 }
@@ -41,6 +78,40 @@
   line-height: 1.2;
   letter-spacing: -0.02em;
   color: var(--color-fg-bold);
+}
+
+.about-content .about-section-heading-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.about-content .about-section-heading-link:hover,
+.about-content .about-section-heading-link:focus-visible {
+  color: var(--color-fg-bold);
+  text-decoration: none;
+}
+
+.about-section-heading-link:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
+  border-radius: var(--radius-xs);
+}
+
+.about-section-heading-hash {
+  opacity: 0;
+  color: var(--color-fg-muted);
+  transform: translateY(-1px);
+  transition:
+    opacity var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+.about-section:hover .about-section-heading-hash,
+.about-content .about-section-heading-link:focus-visible .about-section-heading-hash {
+  opacity: 1;
 }
 
 .about-content p {
@@ -233,6 +304,12 @@
 }
 
 @media (max-width: 736px) {
+  .about-section-nav {
+    margin: var(--spacing-6) 0 var(--spacing-5);
+    padding: var(--spacing-3);
+    border-radius: var(--radius-md);
+  }
+
   .about-section h2 {
     scroll-margin-top: calc(var(--header-height-mobile) + var(--spacing-6));
     padding-top: var(--spacing-4);

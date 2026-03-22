@@ -1,12 +1,19 @@
 'use client';
 
 import Markdown from 'markdown-to-jsx';
+import { createUniqueHeadingIds } from '@/lib/anchors';
 
 interface AboutContentProps {
   markdown: string;
 }
 
 interface AboutSection {
+  body: string;
+  id: string;
+  title: string;
+}
+
+interface ParsedAboutSection {
   body: string;
   title: string;
 }
@@ -48,7 +55,7 @@ function splitAboutMarkdown(markdown: string) {
 }
 
 function parseSections(markdown: string): AboutSection[] {
-  return markdown
+  const sections: ParsedAboutSection[] = markdown
     .split(/\n(?=# )/)
     .map((section) => section.trim())
     .filter((section) => section !== '')
@@ -60,6 +67,15 @@ function parseSections(markdown: string): AboutSection[] {
         body: rest.join('\n').trim(),
       };
     });
+
+  const sectionIds = createUniqueHeadingIds(
+    sections.map((section) => section.title),
+  );
+
+  return sections.map((section, index) => ({
+    ...section,
+    id: sectionIds[index] ?? 'section',
+  }));
 }
 
 function getSectionClassName(title: string) {
@@ -77,12 +93,32 @@ export default function AboutContent({ markdown }: AboutContentProps) {
           <Markdown>{intro}</Markdown>
         </div>
       ) : null}
+      {sections.length > 0 ? (
+        <nav className="about-section-nav" aria-label="About sections">
+          {sections.map((section) => (
+            <a
+              key={section.id}
+              href={`#${section.id}`}
+              className="about-section-nav-link"
+            >
+              {section.title}
+            </a>
+          ))}
+        </nav>
+      ) : null}
       {sections.map((section) => (
         <section
-          key={section.title}
+          key={section.id}
           className={getSectionClassName(section.title)}
         >
-          <h2>{section.title}</h2>
+          <h2 id={section.id}>
+            <a href={`#${section.id}`} className="about-section-heading-link">
+              <span>{section.title}</span>
+              <span className="about-section-heading-hash" aria-hidden="true">
+                #
+              </span>
+            </a>
+          </h2>
           <Markdown>{section.body}</Markdown>
         </section>
       ))}
