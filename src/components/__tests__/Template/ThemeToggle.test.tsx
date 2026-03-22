@@ -5,7 +5,7 @@ import ThemeToggle from '../../Template/ThemeToggle';
 
 describe('ThemeToggle', () => {
   beforeEach(() => {
-    localStorage.clear();
+    window.localStorage.clear();
     Object.defineProperty(window, 'matchMedia', {
       writable: true,
       value: vi.fn().mockImplementation((query) => ({
@@ -59,7 +59,7 @@ describe('ThemeToggle', () => {
   });
 
   it('respects localStorage preference', async () => {
-    localStorage.setItem('theme', 'light');
+    window.localStorage.setItem('theme', 'light');
     render(<ThemeToggle />);
 
     await waitFor(() => {
@@ -71,7 +71,7 @@ describe('ThemeToggle', () => {
   });
 
   it('toggles theme on click', async () => {
-    localStorage.setItem('theme', 'dark');
+    window.localStorage.setItem('theme', 'dark');
     render(<ThemeToggle />);
 
     await waitFor(() => {
@@ -88,12 +88,12 @@ describe('ThemeToggle', () => {
         'aria-label',
         'Switch to dark mode',
       );
-      expect(localStorage.getItem('theme')).toBe('light');
+      expect(window.localStorage.getItem('theme')).toBe('light');
     });
   });
 
   it('updates document data-theme attribute', async () => {
-    localStorage.setItem('theme', 'dark');
+    window.localStorage.setItem('theme', 'dark');
     render(<ThemeToggle />);
 
     await waitFor(() => {
