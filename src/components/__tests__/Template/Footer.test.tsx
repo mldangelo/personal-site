@@ -11,15 +11,6 @@ describe('Footer', () => {
     expect(footer).toBeInTheDocument();
   });
 
-  it('displays the name and role', () => {
-    render(<Footer />);
-
-    expect(screen.getByText("Michael D'Angelo")).toBeInTheDocument();
-    expect(
-      screen.getByText('Member of the Technical Staff at OpenAI'),
-    ).toBeInTheDocument();
-  });
-
   it('displays the current year in copyright', () => {
     render(<Footer />);
 
@@ -29,40 +20,21 @@ describe('Footer', () => {
     ).toBeInTheDocument();
   });
 
-  it('renders navigation links', () => {
+  it('renders source code link', () => {
     render(<Footer />);
 
-    expect(screen.getByRole('link', { name: /about/i })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: /source/i })).toHaveAttribute(
       'href',
-      '/about',
-    );
-    expect(screen.getByRole('link', { name: /resume/i })).toHaveAttribute(
-      'href',
-      '/resume',
-    );
-    expect(screen.getByRole('link', { name: /projects/i })).toHaveAttribute(
-      'href',
-      '/projects',
-    );
-    expect(screen.getByRole('link', { name: /contact/i })).toHaveAttribute(
-      'href',
-      '/contact',
+      'https://github.com/mldangelo/personal-site',
     );
   });
 
-  it('renders contact icons section', () => {
+  it('renders contact icons', () => {
     render(<Footer />);
 
-    // Contact icons are rendered via ContactIcons component
-    const socialSection = document.querySelector('.footer-social');
-    expect(socialSection).toBeInTheDocument();
-    expect(screen.getByText('Connect')).toBeInTheDocument();
-  });
-
-  it('has link to home from avatar', () => {
-    render(<Footer />);
-
-    const avatarLink = document.querySelector('.footer-avatar');
-    expect(avatarLink).toHaveAttribute('href', '/');
+    // ContactIcons renders social links
+    const footer = screen.getByRole('contentinfo');
+    const icons = footer.querySelector('.icons');
+    expect(icons).toBeInTheDocument();
   });
 });

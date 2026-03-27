@@ -17,7 +17,7 @@ export default function ProjectsPage() {
   const otherProjects = data.filter((p) => !p.featured);
 
   return (
-    <PageWrapper>
+    <PageWrapper mainClassName="page-main--wide">
       <section className="projects-page">
         <header className="projects-header">
           <h1 className="page-title">Archive</h1>

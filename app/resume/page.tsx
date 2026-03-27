@@ -22,7 +22,7 @@ export const metadata: Metadata = createPageMetadata({
 
 export default function ResumePage() {
   return (
-    <PageWrapper>
+    <PageWrapper mainClassName="page-main--wide">
       <section className="resume-page">
         <header className="resume-header">
           <h1 className="resume-title">Resume</h1>

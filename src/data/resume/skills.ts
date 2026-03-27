@@ -125,30 +125,20 @@ const skills: Skill[] = [
 ].map((skill) => ({ ...skill, category: skill.category.sort() }));
 
 /**
- * Category colors with pre-computed text contrast.
- * Uses CSS custom properties defined in tailwind.css for runtime styling,
- * with textColor pre-computed from the hex values for accessibility.
- *
- * Hex values from tailwind.css @theme block:
- * --color-skill-1: #6968b3, --color-skill-2: #37b1f5, --color-skill-3: #40494e
- * --color-skill-4: #515dd4, --color-skill-5: #e47272, --color-skill-6: #cc7b94
+ * Category colors — unified accent color for a cleaner look.
+ * All categories use the same accent color for visual consistency.
  */
 const CATEGORY_COLORS: { color: string; textColor: 'dark' | 'light' }[] = [
-  { color: 'var(--color-skill-1)', textColor: 'light' }, // #6968b3 - dark bg
-  { color: 'var(--color-skill-2)', textColor: 'dark' }, // #37b1f5 - light bg
-  { color: 'var(--color-skill-3)', textColor: 'light' }, // #40494e - dark bg
-  { color: 'var(--color-skill-4)', textColor: 'light' }, // #515dd4 - dark bg
-  { color: 'var(--color-skill-5)', textColor: 'dark' }, // #e47272 - light bg
-  { color: 'var(--color-skill-6)', textColor: 'dark' }, // #cc7b94 - light bg
+  { color: 'var(--color-accent)', textColor: 'dark' },
+  { color: 'var(--color-accent)', textColor: 'dark' },
+  { color: 'var(--color-accent)', textColor: 'dark' },
+  { color: 'var(--color-accent)', textColor: 'dark' },
+  { color: 'var(--color-accent)', textColor: 'dark' },
+  { color: 'var(--color-accent)', textColor: 'dark' },
 ];
 
-// Fallback colors for categories beyond the predefined set (with pre-computed contrast)
 const FALLBACK_COLORS: { color: string; textColor: 'dark' | 'light' }[] = [
-  { color: '#3896e2', textColor: 'dark' },
-  { color: '#c3423f', textColor: 'light' },
-  { color: '#d75858', textColor: 'light' },
-  { color: '#747fff', textColor: 'light' },
-  { color: '#64cb7b', textColor: 'dark' },
+  { color: 'var(--color-accent)', textColor: 'dark' },
 ];
 
 /**

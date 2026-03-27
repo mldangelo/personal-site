@@ -8,7 +8,7 @@
    ======================================== */
 
 .about-page {
-  max-width: 52rem;
+  max-width: 100%;
   margin: 0 auto;
 }
 
@@ -30,13 +30,11 @@
 .about-section-nav {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--spacing-2);
-  margin: var(--spacing-8) 0 var(--spacing-6);
-  padding: var(--spacing-4);
-  border: 1px solid var(--color-border-bg);
-  border-radius: var(--radius-lg);
-  background: color-mix(in srgb, var(--color-bg-alt) 92%, transparent);
-  box-shadow: var(--shadow-sm);
+  gap: var(--spacing-1);
+  margin: var(--spacing-6) 0 var(--spacing-4);
+  padding: 0;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--spacing-3);
 }
 
 .about-content .about-section-nav-link {
@@ -159,12 +157,12 @@
 }
 
 .about-content a:hover {
-  text-decoration-color: var(--color-accent-underline-strong);
+  text-decoration-color: var(--color-accent-underline);
   color: var(--color-fg-bold);
 }
 
 .contact-page {
-  max-width: 880px;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -216,8 +214,6 @@
 
 .contact-email-link:hover {
   background: color-mix(in srgb, var(--color-accent-light) 70%, var(--color-accent) 30%);
-  transform: translateY(var(--lift-sm));
-  box-shadow: var(--shadow-md);
 }
 
 .contact-email-prefix {
@@ -305,9 +301,7 @@
 
 @media (max-width: 736px) {
   .about-section-nav {
-    margin: var(--spacing-6) 0 var(--spacing-5);
-    padding: var(--spacing-3);
-    border-radius: var(--radius-md);
+    margin: var(--spacing-4) 0 var(--spacing-3);
   }
 
   .about-section h2 {
@@ -429,7 +423,7 @@
 
 /* Stats page layout */
 .stats-page {
-  max-width: 640px;
+  max-width: 100%;
   margin: 0 auto;
 }
 
@@ -541,8 +535,6 @@
 
 .not-found-button:hover {
   background: var(--color-fg-bold);
-  transform: translateY(var(--lift-sm));
-  box-shadow: var(--shadow-lg);
 }
 
 /* Secondary button style for Contact Me */
@@ -568,5 +560,4 @@
   color: var(--color-accent);
   border-color: var(--color-accent);
   background: var(--color-accent-light);
-  transform: translateY(var(--lift-sm));
 }

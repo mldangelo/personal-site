@@ -30,16 +30,6 @@ describe('Hero', () => {
     expect(promptfooLink).toHaveClass('hero-highlight');
   });
 
-  it('displays hero chips for credentials', () => {
-    render(<Hero />);
-
-    expect(screen.getByText('YC Alum')).toBeInTheDocument();
-    expect(screen.getByText('Stanford ICME')).toBeInTheDocument();
-    expect(
-      screen.getByText('Co-founded Arthena & Matroid'),
-    ).toBeInTheDocument();
-  });
-
   it('renders CTA buttons with correct links', () => {
     render(<Hero />);
 
@@ -50,13 +40,5 @@ describe('Hero', () => {
     const resumeButton = screen.getByRole('link', { name: /view resume/i });
     expect(resumeButton).toHaveAttribute('href', '/resume');
     expect(resumeButton).toHaveClass('button-secondary');
-  });
-
-  it('has decorative background elements', () => {
-    render(<Hero />);
-
-    const bg = document.querySelector('.hero-bg');
-    expect(bg).toBeInTheDocument();
-    expect(bg).toHaveAttribute('aria-hidden', 'true');
   });
 });

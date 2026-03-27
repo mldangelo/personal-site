@@ -7,7 +7,7 @@ export default function Hero() {
     <section className="hero">
       <div className="hero-content">
         <div className="hero-avatar">
-          <ThemePortrait width={160} height={160} priority />
+          <ThemePortrait width={112} height={112} priority />
         </div>
 
         <h1 className="hero-title">
@@ -28,12 +28,6 @@ export default function Hero() {
           Previously co-founded, scaled, and sold Promptfoo to OpenAI.
         </p>
 
-        <div className="hero-chips">
-          <span className="hero-chip">YC Alum</span>
-          <span className="hero-chip">Stanford ICME</span>
-          <span className="hero-chip">Co-founded Arthena & Matroid</span>
-        </div>
-
         <div className="hero-cta">
           <Link href="/about" className="button button-primary">
             About Me
@@ -42,10 +36,6 @@ export default function Hero() {
             View Resume
           </Link>
         </div>
-      </div>
-
-      <div className="hero-bg" aria-hidden="true">
-        <div className="hero-gradient" />
       </div>
     </section>
   );
