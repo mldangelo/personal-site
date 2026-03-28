@@ -31,7 +31,7 @@ describe('Navigation', () => {
 
   it('renders the logo link to home', () => {
     render(<Navigation />);
-    const logo = screen.getByRole('link', { name: /md/i });
+    const logo = screen.getByRole('link', { name: /michael d'angelo/i });
     expect(logo).toHaveAttribute('href', '/');
   });
 

@@ -14,13 +14,13 @@
 .page-main {
   flex: 1;
   width: 100%;
-  max-width: 800px;
+  max-width: 680px;
   margin: 0 auto;
   padding: 2rem 1.5rem;
 }
 
 .page-main--wide {
-  max-width: 56rem;
+  max-width: 880px;
 }
 
 @media screen and (min-width: 736px) {
@@ -31,15 +31,16 @@
 
 /* Page header styles */
 .page-title {
-  font-size: var(--text-3xl);
-  font-weight: var(--font-weight-black);
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-weight: var(--font-weight-semibold);
   margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
 }
 
 .page-subtitle {
-  font-size: var(--text-lg);
+  font-size: var(--text-base);
   color: var(--color-fg-light);
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 /* Link anchor offset for fixed header */

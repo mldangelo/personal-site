@@ -29,16 +29,12 @@
 }
 
 .skill-group-title {
-  font-size: var(--text-lg);
-  font-weight: var(--font-weight-black);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-semibold);
   text-transform: uppercase;
   letter-spacing: var(--tracking-wide);
-  /* Use CSS custom property if set, fallback to default */
-  color: var(--skill-category-color, var(--color-fg-bold));
-  margin-bottom: 1.25rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 3px solid var(--color-accent);
-  display: inline-block;
+  color: var(--color-fg-light);
+  margin-bottom: 1rem;
 }
 
 .skill-tags {
@@ -61,23 +57,11 @@
   padding: 0.6em 1.1em;
   background: var(--color-bg);
   border: 1px solid var(--color-border);
-  border-left: 4px solid var(--tag-color, var(--color-accent));
+  border-left: 3px solid var(--tag-color, var(--color-accent));
   border-radius: var(--radius-sm);
   font-size: var(--text-base);
   font-weight: var(--font-weight-medium);
   color: var(--color-fg);
-  transition:
-    transform var(--duration-fast) var(--ease-out),
-    box-shadow var(--duration-fast) var(--ease-out),
-    border-color var(--duration-fast) var(--ease-out),
-    background-color var(--duration-fast) var(--ease-out);
-}
-
-.skill-tag:hover {
-  transform: translateY(var(--lift-sm));
-  box-shadow: var(--shadow-md);
-  border-color: var(--tag-color, var(--color-accent));
-  background: var(--color-bg-alt);
 }
 
 .skill-tag-name {
@@ -99,7 +83,7 @@
 }
 
 .project-card:hover .tech-tag {
-  background: var(--color-accent-subtle);
+  background: var(--color-accent-light);
   border-color: var(--color-accent);
 }
 

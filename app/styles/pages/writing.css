@@ -4,9 +4,9 @@
    ======================================== */
 
 .writing-page {
-  max-width: 700px;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 2rem 1rem;
+  padding: 0;
 }
 
 .writing-header {
@@ -21,21 +21,15 @@
 }
 
 .writing-rss-link {
-  font-size: var(--text-sm);
-  font-weight: var(--font-weight-medium);
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-normal);
   color: var(--color-fg-light);
   text-decoration: none;
-  padding: 0.25rem 0.5rem;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-xs);
-  transition:
-    color var(--duration-instant) var(--ease-out),
-    border-color var(--duration-instant) var(--ease-out);
+  transition: color var(--duration-fast) var(--ease-out);
 }
 
 .writing-rss-link:hover {
-  color: var(--color-accent);
-  border-color: var(--color-accent);
+  color: var(--color-fg);
 }
 
 .writing-list {
@@ -46,18 +40,18 @@
 .writing-item {
   display: block;
   position: relative;
-  padding: 1.5rem 2.5rem 1.5rem 0;
+  padding: 1.25rem 2rem 1.25rem 0;
   border-bottom: 1px solid var(--color-border);
   text-decoration: none;
-  transition: background-color var(--duration-instant) var(--ease-out);
+  transition: opacity var(--duration-fast) var(--ease-out);
 }
 
 .writing-item:first-child {
-  border-top: 1px solid var(--color-border);
+  padding-top: 0;
 }
 
 .writing-item:hover {
-  background-color: var(--color-bg-alt);
+  opacity: 0.7;
 }
 
 .writing-item:hover .writing-title {
@@ -72,12 +66,12 @@
 }
 
 .writing-title {
-  font-size: var(--text-lg);
-  font-weight: var(--font-weight-semibold);
+  font-size: var(--text-md);
+  font-weight: var(--font-weight-medium);
   color: var(--color-fg);
-  margin: 0 0 0.5rem 0;
+  margin: 0 0 0.25rem 0;
   line-height: 1.4;
-  transition: color var(--duration-instant) var(--ease-out);
+  transition: color var(--duration-fast) var(--ease-out);
 }
 
 .writing-description {
@@ -118,9 +112,9 @@
    ======================================== */
 
 .post-page {
-  max-width: 700px;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0;
 }
 
 .post-header {
@@ -190,7 +184,7 @@
   text-decoration: underline;
   text-decoration-color: var(--color-accent-underline);
   text-underline-offset: 2px;
-  background-image: none;
+  text-decoration-thickness: 1px;
 }
 
 .prose a:hover,
@@ -198,7 +192,6 @@
 .prose li a:hover {
   color: var(--color-accent-hover);
   text-decoration-color: var(--color-accent);
-  background-image: none;
 }
 
 .prose strong {
