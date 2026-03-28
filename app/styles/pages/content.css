@@ -361,6 +361,18 @@
   }
 }
 
+/* Contact form */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  margin-bottom: 2em;
+}
+
+.inline-container {
+  width: 100%;
+}
+
 /* ========================================
    STATS PAGE
    ======================================== */
