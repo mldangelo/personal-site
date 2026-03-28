@@ -3,13 +3,8 @@
    Project cards, job cards, and card patterns
    ======================================== */
 
-/* Cell container for project cards */
+/* Portrait image */
 @layer components {
-  .cell-container {
-    display: block;
-  }
-
-  /* Portrait image */
   .theme-portrait {
     display: inline-block;
     position: relative;
@@ -42,10 +37,6 @@
 .projects-featured {
   margin-bottom: 4rem;
   position: relative;
-}
-
-.projects-featured::before {
-  content: none;
 }
 
 .projects-grid {
@@ -116,8 +107,7 @@
 }
 
 .project-card--static:hover {
-  transform: none;
-  box-shadow: var(--shadow-md);
+  border-color: var(--color-border-bg);
 }
 
 .project-card-static {
@@ -142,13 +132,6 @@
   transform: scale(var(--scale-sm));
 }
 
-.project-card-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, var(--color-overlay-darker) 0%, transparent 50%);
-  pointer-events: none;
-}
-
 .project-card-content {
   padding: 1.5rem;
 }
@@ -161,15 +144,6 @@
   font-size: var(--text-xl);
   font-weight: var(--font-weight-black);
   margin-bottom: 0.35rem;
-}
-
-.project-card-title a {
-  color: var(--color-fg-bold);
-  text-decoration: none;
-}
-
-.project-card-title a:hover {
-  color: var(--color-accent);
 }
 
 .project-card-subtitle {

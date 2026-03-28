@@ -51,15 +51,12 @@
   --color-surface-subtle: rgba(0, 0, 0, 0.03);
   --color-surface-hover: rgba(0, 0, 0, 0.06);
   --color-surface-active: rgba(0, 0, 0, 0.1);
-  --color-text-muted: rgba(0, 0, 0, 0.5);
-  --color-text-dim: rgba(0, 0, 0, 0.6);
   --color-fg-muted: rgba(0, 0, 0, 0.5);
 
   /* ===================
      SEMANTIC COLORS
      =================== */
   --color-white: #fff;
-  --color-black: #000;
   --color-overlay-light: rgba(255, 255, 255, 0.15);
   --color-overlay-dark: rgba(0, 0, 0, 0.15);
   --color-overlay-darker: rgba(0, 0, 0, 0.3);
