@@ -1,6 +1,5 @@
 /* ========================================
    LINK STYLES
-   Clean underlines with text-decoration
    ======================================== */
 
 @layer base {
@@ -11,21 +10,21 @@
   }
 
   a:hover {
-    color: var(--color-accent);
+    color: var(--color-fg-bold);
   }
 
   /* Inline content links — subtle underline */
-  p a:not(.hero-highlight),
-  li a:not(.hero-highlight) {
+  p a,
+  li a {
     text-decoration: underline;
     text-decoration-color: var(--color-accent-underline);
     text-underline-offset: 2px;
     text-decoration-thickness: 1px;
   }
 
-  p a:not(.hero-highlight):hover,
-  li a:not(.hero-highlight):hover {
-    color: var(--color-accent);
-    text-decoration-color: var(--color-accent);
+  p a:hover,
+  li a:hover {
+    color: var(--color-fg-bold);
+    text-decoration-color: var(--color-fg-bold);
   }
 }
