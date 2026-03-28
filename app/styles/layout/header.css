@@ -32,12 +32,6 @@
   }
 }
 
-/* Index link in header */
-.index-link {
-  height: inherit;
-  line-height: inherit;
-}
-
 /* Wrapper - minimal padding, body handles header offset */
 .site-wrapper {
   display: block;
@@ -47,10 +41,6 @@
   padding: 0;
   transition: opacity var(--duration-menu) ease;
   width: 100%;
-}
-
-body.is-menu-visible .site-wrapper {
-  opacity: 0.15;
 }
 
 /* Main content */
