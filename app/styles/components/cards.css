@@ -26,8 +26,7 @@
 }
 
 .projects-header {
-  text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
 }
 
 .projects-section-title {
@@ -186,16 +185,17 @@
    ======================================== */
 
 .jobs-container {
-  margin-bottom: 1.5rem;
-  padding: 1.5rem;
-  background: var(--color-bg);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-border);
+  margin-bottom: 0;
+  padding: 1.5rem 0;
+  background: none;
+  border-radius: 0;
+  border: none;
+  border-bottom: 1px solid var(--color-border);
   position: relative;
 }
 
 .jobs-container:last-child {
-  margin-bottom: 0;
+  border-bottom: none;
 }
 
 .jobs-container header h4 {
@@ -301,17 +301,15 @@
 
 .course-container a {
   display: block;
-  padding: 1rem 1.25rem;
-  background: var(--color-surface-subtle);
-  border: 1px solid var(--color-border-bg);
-  border-radius: var(--radius-md);
+  padding: 0.75rem 0;
+  background: none;
+  border: none;
+  border-radius: 0;
   text-decoration: none;
-  transition: all var(--duration-fast) var(--ease-out);
 }
 
 .course-container a:hover {
-  border-color: var(--color-border);
-  background: var(--color-surface-hover);
+  opacity: 0.7;
 }
 
 .courses .course-number {

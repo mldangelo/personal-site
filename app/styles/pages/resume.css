@@ -22,7 +22,7 @@
 .resume-page .skills .title,
 .resume-page .courses .title,
 .resume-page .references .title {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
 }
 
 .resume-page .education .title h3,
@@ -75,30 +75,28 @@
 }
 
 .resume-header {
-  text-align: center;
   margin-bottom: 2rem;
 }
 
 .resume-title {
-  font-size: var(--text-2xl);
-  font-weight: var(--font-weight-bold);
-  letter-spacing: var(--tracking-tight);
-  margin-bottom: 1rem;
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.02em;
+  margin-bottom: 0.75rem;
   color: var(--color-fg-bold);
 }
 
 .resume-summary {
-  font-size: var(--text-lg);
+  font-size: var(--text-base);
   line-height: 1.7;
-  color: var(--color-fg);
-  max-width: 640px;
-  margin: 0 auto;
+  color: var(--color-fg-light);
+  max-width: 560px;
 }
 
 .resume-nav {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start;
   gap: var(--spacing-1);
   margin-top: var(--spacing-4);
   margin-bottom: var(--spacing-4);

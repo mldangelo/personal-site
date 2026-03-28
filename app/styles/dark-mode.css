@@ -1,10 +1,9 @@
 /* ========================================
    DARK MODE
-   Token overrides + minimal component adjustments
+   Token overrides only — components inherit
    ======================================== */
 
 [data-theme='dark'] {
-  /* Core colors */
   --color-bg: #0a0a0a;
   --color-bg-alt: #111111;
   --color-bg-offset: #1a1a1a;
@@ -12,24 +11,20 @@
   --color-fg-bold: #ffffff;
   --color-fg-light: #a0a0a5;
 
-  /* Overlays */
   --color-overlay-light: rgba(255, 255, 255, 0.1);
   --color-overlay-dark: rgba(0, 0, 0, 0.3);
   --color-overlay-darker: rgba(0, 0, 0, 0.5);
 
-  /* Accent */
   --color-accent: #60a5fa;
   --color-accent-hover: #93c5fd;
   --color-accent-light: color-mix(in srgb, var(--color-accent) 15%, transparent);
   --color-accent-border: color-mix(in srgb, var(--color-accent) 40%, transparent);
   --color-accent-underline: color-mix(in srgb, var(--color-accent) 40%, transparent);
 
-  /* Borders */
   --color-border: rgba(255, 255, 255, 0.1);
   --color-border-bg: rgba(255, 255, 255, 0.06);
   --color-border-alt: rgba(255, 255, 255, 0.18);
 
-  /* Surfaces */
   --color-surface-subtle: rgba(255, 255, 255, 0.04);
   --color-surface-hover: rgba(255, 255, 255, 0.08);
   --color-surface-active: rgba(255, 255, 255, 0.12);
@@ -37,7 +32,6 @@
   --color-text-dim: rgba(255, 255, 255, 0.7);
   --color-fg-muted: rgba(255, 255, 255, 0.5);
 
-  /* Shadows */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.5);
@@ -47,17 +41,6 @@
 /* Portrait - soften for dark backgrounds */
 [data-theme='dark'] .theme-portrait img {
   filter: brightness(0.85);
-}
-
-/* Cards inherit dark tokens automatically, minimal overrides needed */
-[data-theme='dark'] .jobs-container,
-[data-theme='dark'] .work-card {
-  background: var(--color-bg-alt);
-}
-
-[data-theme='dark'] .course-container a,
-[data-theme='dark'] .skill-tag {
-  background: var(--color-surface-subtle);
 }
 
 [data-theme='dark'] .contact-email-link {

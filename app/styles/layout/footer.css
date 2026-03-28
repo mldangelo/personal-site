@@ -1,71 +1,15 @@
 /* ========================================
    FOOTER LAYOUT
-   Minimal single-row footer
    ======================================== */
 
 .site-footer {
   border-top: 1px solid var(--color-border);
-  padding: 2rem 1.5rem;
+  padding: 1.5rem;
   margin-top: auto;
 }
 
-.footer-content {
-  max-width: 880px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-}
-
-@media screen and (min-width: 736px) {
-  .footer-content {
-    flex-direction: row;
-    justify-content: space-between;
-  }
-}
-
 .footer-copyright {
-  font-size: var(--text-sm);
+  font-size: var(--text-xs);
   color: var(--color-fg-light);
   margin: 0;
-}
-
-.footer-copyright a {
-  color: inherit;
-  text-decoration: none;
-  transition: color var(--duration-fast) var(--ease-out);
-}
-
-.footer-copyright a:hover {
-  color: var(--color-accent);
-}
-
-/* Tone down social icons in footer */
-.site-footer .icons {
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 0.5rem;
-  margin-bottom: 0;
-}
-
-.site-footer .icons li {
-  padding: 0;
-}
-
-.site-footer .icons li a {
-  width: 32px;
-  height: 32px;
-  background: transparent;
-  border: none;
-  opacity: 0.5;
-  transition:
-    opacity var(--duration-fast) var(--ease-out),
-    color var(--duration-fast) var(--ease-out);
-}
-
-.site-footer .icons li a:hover {
-  opacity: 1;
-  color: var(--color-accent);
-  background: transparent;
 }

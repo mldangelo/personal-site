@@ -31,16 +31,16 @@
 
 /* Page header styles */
 .page-title {
-  font-size: var(--text-2xl);
-  font-weight: var(--font-weight-bold);
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-weight: var(--font-weight-semibold);
   margin-bottom: 0.5rem;
-  letter-spacing: var(--tracking-tight);
+  letter-spacing: -0.02em;
 }
 
 .page-subtitle {
-  font-size: var(--text-lg);
+  font-size: var(--text-base);
   color: var(--color-fg-light);
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 /* Link anchor offset for fixed header */
