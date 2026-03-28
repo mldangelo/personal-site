@@ -23,7 +23,6 @@
   /* ===================
      FONT SIZES (relative units)
      =================== */
-  --text-2xs: 0.65em;
   --text-xs: 0.75em;
   --text-sm: 0.875em;
   --text-base: 1em;
@@ -47,5 +46,4 @@
      =================== */
   --leading-tight: 1.3;
   --leading-normal: 1.7;
-  --leading-loose: 2;
 }
