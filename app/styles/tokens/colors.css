@@ -1,44 +1,44 @@
 /* ========================================
    COLOR TOKENS
-   Core color palette and semantic colors
+   Warm, refined palette
    ======================================== */
 
 @theme {
   /* ===================
      CORE PALETTE
      =================== */
-  --color-bg: #ffffff;
-  --color-bg-alt: #f8f8fa;
-  --color-bg-offset: #f0f0f2;
-  --color-fg: #1d1d1f;
-  --color-fg-bold: #1d1d1f;
-  --color-fg-light: #6b6b70;
+  --color-bg: #fafafa;
+  --color-bg-alt: #f4f4f5;
+  --color-bg-offset: #ebebed;
+  --color-fg: #1a1a1a;
+  --color-fg-bold: #0a0a0a;
+  --color-fg-light: #71717a;
 
   /* ===================
-     ACCENT COLORS (minimal set)
+     ACCENT COLORS
      =================== */
-  --color-accent: #2563eb;
-  --color-accent-hover: #1d4ed8;
-  --color-accent-light: color-mix(in srgb, var(--color-accent) 10%, transparent);
-  --color-accent-border: color-mix(in srgb, var(--color-accent) 30%, transparent);
-  --color-accent-underline: color-mix(in srgb, var(--color-accent) 30%, transparent);
+  --color-accent: #18181b;
+  --color-accent-hover: #3f3f46;
+  --color-accent-light: rgba(24, 24, 27, 0.06);
+  --color-accent-border: rgba(24, 24, 27, 0.2);
+  --color-accent-underline: rgba(24, 24, 27, 0.25);
 
   /* ===================
      BORDER COLORS
      =================== */
-  --color-border: rgba(0, 0, 0, 0.08);
-  --color-border-bg: rgba(0, 0, 0, 0.05);
-  --color-border-alt: rgba(0, 0, 0, 0.15);
+  --color-border: rgba(0, 0, 0, 0.06);
+  --color-border-bg: rgba(0, 0, 0, 0.04);
+  --color-border-alt: rgba(0, 0, 0, 0.12);
 
   /* ===================
      SURFACE TOKENS
      =================== */
-  --color-surface-subtle: rgba(0, 0, 0, 0.03);
-  --color-surface-hover: rgba(0, 0, 0, 0.06);
-  --color-surface-active: rgba(0, 0, 0, 0.1);
-  --color-text-muted: rgba(0, 0, 0, 0.5);
-  --color-text-dim: rgba(0, 0, 0, 0.6);
-  --color-fg-muted: rgba(0, 0, 0, 0.5);
+  --color-surface-subtle: rgba(0, 0, 0, 0.02);
+  --color-surface-hover: rgba(0, 0, 0, 0.04);
+  --color-surface-active: rgba(0, 0, 0, 0.08);
+  --color-text-muted: rgba(0, 0, 0, 0.45);
+  --color-text-dim: rgba(0, 0, 0, 0.55);
+  --color-fg-muted: rgba(0, 0, 0, 0.45);
 
   /* ===================
      SEMANTIC COLORS

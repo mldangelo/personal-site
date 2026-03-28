@@ -6,17 +6,22 @@ import Hero from '../../Template/Hero';
 describe('Hero', () => {
   it('renders the hero section', () => {
     render(<Hero />);
-    const heroSection = document.querySelector('.hero');
-    expect(heroSection).toBeInTheDocument();
+    expect(document.querySelector('.hero')).toBeInTheDocument();
   });
 
-  it('displays the name as heading', () => {
+  it('displays the name', () => {
     render(<Hero />);
-    const heading = screen.getByRole('heading', { level: 1 });
-    expect(heading).toHaveTextContent("Michael D'Angelo");
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
+      "Michael D'Angelo",
+    );
   });
 
-  it('renders the tagline with links', () => {
+  it('renders avatar', () => {
+    render(<Hero />);
+    expect(document.querySelector('.hero-avatar')).toBeInTheDocument();
+  });
+
+  it('renders links', () => {
     render(<Hero />);
     expect(screen.getByRole('link', { name: /openai/i })).toHaveAttribute(
       'href',
