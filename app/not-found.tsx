@@ -17,10 +17,13 @@ export default function NotFound() {
           The page you&apos;re looking for doesn&apos;t exist or has been moved.
         </p>
         <div className="not-found-actions">
-          <Link href="/" className="not-found-button">
+          <Link href="/" className="button button-primary not-found-button">
             Go Home
           </Link>
-          <Link href="/contact" className="not-found-link">
+          <Link
+            href="/contact"
+            className="button button-secondary not-found-link"
+          >
             Contact Me
           </Link>
         </div>

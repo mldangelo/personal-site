@@ -7,38 +7,39 @@
   /* ===================
      FONT FAMILIES
      =================== */
-  --font-sans: var(--font-source-sans), 'Source Sans Pro', Helvetica, sans-serif;
-  --font-heading: var(--font-raleway), 'Raleway', Helvetica, sans-serif;
+  --font-sans: var(--font-inter), 'Inter', system-ui, -apple-system, sans-serif;
+  --font-heading: var(--font-inter), 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: 'Courier New', monospace;
 
   /* ===================
      FONT WEIGHTS
      =================== */
   --font-weight-normal: 400;
-  --font-weight-medium: 600;
+  --font-weight-medium: 500;
   --font-weight-semibold: 600;
-  --font-weight-bold: 700;
-  --font-weight-black: 800;
+  --font-weight-bold: 600;
+  --font-weight-black: 700;
 
   /* ===================
-     FONT SIZES (relative units)
+     FONT SIZES (rem for predictability)
      =================== */
-  --text-xs: 0.75em;
-  --text-sm: 0.875em;
-  --text-base: 1em;
-  --text-md: 1.1em;
-  --text-lg: 1.3em;
-  --text-xl: 1.6em;
-  --text-2xl: 2.2em;
-  --text-3xl: 2.75em;
+  --text-2xs: 0.6875rem;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-md: 1.0625rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 2rem;
+  --text-3xl: 2.5rem;
 }
 
 @theme inline {
   /* ===================
      LETTER SPACING
      =================== */
-  --tracking-tight: 0.01em;
-  --tracking-normal: 0.02em;
+  --tracking-tight: -0.01em;
+  --tracking-normal: 0em;
   --tracking-wide: 0.04em;
 
   /* ===================
@@ -46,4 +47,5 @@
      =================== */
   --leading-tight: 1.3;
   --leading-normal: 1.7;
+  --leading-loose: 2;
 }

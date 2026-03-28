@@ -125,18 +125,53 @@ const skills: Skill[] = [
 ].map((skill) => ({ ...skill, category: skill.category.sort() }));
 
 /**
- * Build categories from skills, all using the accent color token.
+ * Category colors — unified accent color for a cleaner look.
+ * All categories use the same accent color for visual consistency.
+ */
+const CATEGORY_COLORS: { color: string; textColor: 'dark' | 'light' }[] = [
+  { color: 'var(--color-accent)', textColor: 'dark' },
+  { color: 'var(--color-accent)', textColor: 'dark' },
+  { color: 'var(--color-accent)', textColor: 'dark' },
+  { color: 'var(--color-accent)', textColor: 'dark' },
+  { color: 'var(--color-accent)', textColor: 'dark' },
+  { color: 'var(--color-accent)', textColor: 'dark' },
+];
+
+const FALLBACK_COLORS: { color: string; textColor: 'dark' | 'light' }[] = [
+  { color: 'var(--color-accent)', textColor: 'dark' },
+];
+
+/**
+ * Build categories from skills with type-safe color assignment.
+ * Logs a warning in development if there are more categories than colors.
  */
 function buildCategories(skillsList: Skill[]): Category[] {
   const uniqueCategories = Array.from(
     new Set(skillsList.flatMap(({ category }) => category)),
   ).sort();
 
-  return uniqueCategories.map((category) => ({
-    name: category,
-    color: 'var(--color-accent)',
-    textColor: 'dark' as const,
-  }));
+  const allColors = [...CATEGORY_COLORS, ...FALLBACK_COLORS];
+
+  if (
+    process.env.NODE_ENV === 'development' &&
+    uniqueCategories.length > allColors.length
+  ) {
+    console.warn(
+      `[skills.ts] Warning: ${uniqueCategories.length} categories but only ${allColors.length} colors defined`,
+    );
+  }
+
+  return uniqueCategories.map((category, index) => {
+    const colorConfig = allColors[index] ?? {
+      color: '#888888',
+      textColor: 'light' as const,
+    };
+    return {
+      name: category,
+      color: colorConfig.color,
+      textColor: colorConfig.textColor,
+    };
+  });
 }
 
 const categories: Category[] = buildCategories(skills);
