@@ -13,9 +13,19 @@ export interface Category {
 
 const skills: Skill[] = [
   {
+    title: 'Python',
+    competency: 4,
+    category: ['Languages'],
+  },
+  {
     title: 'TypeScript',
     competency: 4,
     category: ['Languages', 'Web Development'],
+  },
+  {
+    title: 'Adobe Photoshop',
+    competency: 4,
+    category: ['Design'],
   },
   {
     title: 'JavaScript',

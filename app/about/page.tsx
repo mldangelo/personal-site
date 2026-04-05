@@ -8,7 +8,7 @@ import { createPageMetadata } from '@/lib/metadata';
 export const metadata: Metadata = createPageMetadata({
   title: 'About',
   description:
-    'Learn about Elia Christ — software developer, portfolio, and background.',
+    'Learn about Eliakim Chris Omari — independent developer, portfolio, and background.',
   path: '/about/',
 });
 

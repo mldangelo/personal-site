@@ -8,7 +8,7 @@ import { createPageMetadata } from '@/lib/metadata';
 
 export const metadata: Metadata = createPageMetadata({
   title: 'Stats',
-  description: 'Some statistics about Elia Christ and eliachrist.com.',
+  description: 'Some statistics about Eliakim Chris Omari and eliachrist.com.',
   path: '/stats/',
 });
 

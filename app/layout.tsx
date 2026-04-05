@@ -27,7 +27,7 @@ const raleway = Raleway({
 });
 
 const siteDescription =
-  'Elia Christ — software developer. Portfolio, resume, and writing.';
+  'Eliakim Chris Omari — independent developer. Python, TypeScript, design. Portfolio, resume, and writing.';
 
 export const metadata: Metadata = {
   title: {
@@ -37,11 +37,11 @@ export const metadata: Metadata = {
   description: siteDescription,
   keywords: [
     AUTHOR_NAME,
-    'software engineer',
-    'web development',
+    'independent developer',
+    'Python',
     'TypeScript',
-    'React',
-    'Next.js',
+    'Adobe Photoshop',
+    'web development',
   ],
   authors: [{ name: AUTHOR_NAME }],
   creator: AUTHOR_NAME,

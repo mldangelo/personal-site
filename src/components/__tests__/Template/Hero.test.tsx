@@ -15,7 +15,7 @@ describe('Hero', () => {
     render(<Hero />);
 
     const heading = screen.getByRole('heading', { level: 1 });
-    expect(heading).toHaveTextContent('Elia Christ');
+    expect(heading).toHaveTextContent('Eliakim Chris Omari');
   });
 
   it('renders the tagline with a contact link', () => {
@@ -29,9 +29,9 @@ describe('Hero', () => {
   it('displays hero chips', () => {
     render(<Hero />);
 
+    expect(screen.getByText('Python')).toBeInTheDocument();
     expect(screen.getByText('TypeScript')).toBeInTheDocument();
-    expect(screen.getByText('Next.js')).toBeInTheDocument();
-    expect(screen.getByText('Static export')).toBeInTheDocument();
+    expect(screen.getByText('Adobe Photoshop')).toBeInTheDocument();
   });
 
   it('renders CTA buttons with correct links', () => {

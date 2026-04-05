@@ -15,7 +15,7 @@ import { createPageMetadata } from '@/lib/metadata';
 
 export const metadata: Metadata = createPageMetadata({
   title: 'Resume',
-  description: "Elia Christ's resume — software developer.",
+  description: "Eliakim Chris Omari's resume — independent developer.",
   path: '/resume/',
 });
 
@@ -26,9 +26,9 @@ export default function ResumePage() {
         <header className="resume-header">
           <h1 className="resume-title">Resume</h1>
           <p className="resume-summary">
-            Software developer focused on the web—typed interfaces, solid
-            tooling, and shipping incrementally. Edit this summary and the
-            sections below in <code>src/data/resume/</code>.
+            Independent developer working with Python, TypeScript, and Adobe
+            Photoshop—shipping incrementally and keeping the resume in sync in{' '}
+            <code>src/data/resume/</code>.
           </p>
         </header>
 

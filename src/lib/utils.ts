@@ -4,11 +4,11 @@
 
 // Site configuration
 export const SITE_URL = 'https://eliachrist.com';
-export const AUTHOR_NAME = 'Elia Christ';
+export const AUTHOR_NAME = 'Eliakim Chris Omari';
 /** Public contact email (shown on /contact and in schema). */
 export const CONTACT_EMAIL = 'code.eliachrist@gmail.com';
-/** Set when you have an X/Twitter handle; used in metadata only when non-empty. */
-export const TWITTER_HANDLE = '';
+/** X/Twitter handle for metadata (no @ in card text is fine; site/creator expect @handle). */
+export const TWITTER_HANDLE = '@eliachrist';
 
 // Image dimension constants
 export const AVATAR_SIZE = {

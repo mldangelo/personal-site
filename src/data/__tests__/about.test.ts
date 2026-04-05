@@ -10,18 +10,18 @@ describe('about data', () => {
 
   it('contains the intro section', () => {
     expect(aboutMarkdown).toContain('# Intro');
-    expect(aboutMarkdown).toContain('Elia Christ');
-    expect(aboutMarkdown).toContain('software developer');
+    expect(aboutMarkdown).toContain('Eliakim Chris Omari');
+    expect(aboutMarkdown).toContain('independent');
   });
 
   it('contains the history section', () => {
     expect(aboutMarkdown).toContain('# Some History');
-    expect(aboutMarkdown).toContain('Next.js');
+    expect(aboutMarkdown).toContain('Python');
   });
 
   it('contains the likes section', () => {
     expect(aboutMarkdown).toContain('# I Like');
-    expect(aboutMarkdown).toContain('TypeScript');
+    expect(aboutMarkdown).toContain('Readable code');
   });
 
   it('contains the travel section', () => {

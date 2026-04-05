@@ -7,7 +7,7 @@ import { createPageMetadata } from '@/lib/metadata';
 
 export const metadata: Metadata = createPageMetadata({
   title: 'Archive',
-  description: 'Selected projects and experiments by Elia Christ.',
+  description: 'Selected projects and experiments by Eliakim Chris Omari.',
   path: '/projects/',
 });
 

@@ -11,12 +11,13 @@ export default function Hero() {
         </div>
 
         <h1 className="hero-title">
-          <span className="hero-name">Elia Christ</span>
+          <span className="hero-name">Eliakim Chris Omari</span>
         </h1>
 
         <p className="hero-tagline">
-          I build software for the web—typed, tested, and easy to ship. This
-          site is my portfolio, resume, and writing in one place.
+          Independent developer working across code and design—Python,
+          TypeScript, and Adobe Photoshop. This site is my portfolio, resume,
+          and writing in one place.
           <br />
           Reach me anytime via the{' '}
           <Link href="/contact" className="hero-highlight">
@@ -26,9 +27,9 @@ export default function Hero() {
         </p>
 
         <div className="hero-chips">
+          <span className="hero-chip">Python</span>
           <span className="hero-chip">TypeScript</span>
-          <span className="hero-chip">Next.js</span>
-          <span className="hero-chip">Static export</span>
+          <span className="hero-chip">Adobe Photoshop</span>
         </div>
 
         <div className="hero-cta">

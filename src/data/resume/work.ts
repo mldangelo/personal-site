@@ -17,8 +17,8 @@ const work: Position[] = [
     position: 'Software developer',
     url: 'https://eliachrist.com',
     startDate: '2020-01-01',
-    summary: `Building on the web with TypeScript and React. Replace this entry in
-    src/data/resume/work.ts with your roles and employers.`,
+    summary: `Independent work across Python, TypeScript, and Adobe Photoshop—replace
+    this entry in src/data/resume/work.ts with your roles and employers.`,
   },
 ];
 
