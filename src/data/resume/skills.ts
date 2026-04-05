@@ -12,115 +12,35 @@ export interface Category {
 }
 
 const skills: Skill[] = [
-  // Languages
-  {
-    title: 'Python',
-    competency: 5,
-    category: ['Languages', 'ML Engineering'],
-  },
   {
     title: 'TypeScript',
-    competency: 5,
+    competency: 4,
     category: ['Languages', 'Web Development'],
   },
   {
-    title: 'SQL',
+    title: 'JavaScript',
     competency: 4,
-    category: ['Languages', 'Databases'],
-  },
-  // AI & LLM
-  {
-    title: 'AI Agents',
-    competency: 5,
-    category: ['ML Engineering'],
+    category: ['Languages', 'Web Development'],
   },
   {
-    title: 'LLM Evaluation',
-    competency: 5,
-    category: ['ML Engineering'],
-  },
-  {
-    title: 'AI Red-teaming',
-    competency: 5,
-    category: ['ML Engineering'],
-  },
-  {
-    title: 'LLM APIs',
-    competency: 5,
-    category: ['ML Engineering'],
-  },
-  {
-    title: 'RAG',
-    competency: 4,
-    category: ['ML Engineering'],
-  },
-  {
-    title: 'Prompt Engineering',
-    competency: 4,
-    category: ['ML Engineering'],
-  },
-  {
-    title: 'Vector Databases',
-    competency: 4,
-    category: ['ML Engineering', 'Databases'],
-  },
-  {
-    title: 'PyTorch',
-    competency: 4,
-    category: ['ML Engineering'],
-  },
-  {
-    title: 'Pandas',
-    competency: 5,
-    category: ['ML Engineering', 'Data Engineering'],
-  },
-  // Web Development
-  {
-    title: 'Node.js',
-    competency: 5,
-    category: ['Web Development'],
-  },
-  {
-    title: 'FastAPI',
+    title: 'React',
     competency: 4,
     category: ['Web Development'],
   },
   {
     title: 'Next.js',
+    competency: 4,
+    category: ['Web Development'],
+  },
+  {
+    title: 'Node.js',
     competency: 3,
     category: ['Web Development'],
   },
-  // Databases
   {
-    title: 'PostgreSQL',
+    title: 'CSS',
     competency: 4,
-    category: ['Databases'],
-  },
-  {
-    title: 'Redis',
-    competency: 3,
-    category: ['Databases'],
-  },
-  // Infrastructure
-  {
-    title: 'AWS',
-    competency: 4,
-    category: ['Infrastructure'],
-  },
-  {
-    title: 'Docker',
-    competency: 4,
-    category: ['Infrastructure'],
-  },
-  {
-    title: 'Kubernetes',
-    competency: 3,
-    category: ['Infrastructure'],
-  },
-  {
-    title: 'Observability',
-    competency: 4,
-    category: ['Infrastructure', 'ML Engineering'],
+    category: ['Web Development'],
   },
 ].map((skill) => ({ ...skill, category: skill.category.sort() }));
 

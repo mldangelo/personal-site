@@ -15,7 +15,7 @@ describe('createHeadingId', () => {
     ['Some History', 'some-history'],
     ['Travel / Geography', 'travel-geography'],
     ['Research & Development', 'research-and-development'],
-    ["Michael's Notes", 'michaels-notes'],
+    ["Elia's Notes", 'elias-notes'],
     ['Café Crème', 'cafe-creme'],
   ])('creates stable ids for %s', (title, expected) => {
     expect(createHeadingId(title)).toBe(expected);
