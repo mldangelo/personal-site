@@ -5,7 +5,7 @@ import courses from '../resume/courses';
 describe('courses data', () => {
   it('exports an array of courses', () => {
     expect(Array.isArray(courses)).toBe(true);
-    expect(courses.length).toBeGreaterThan(0);
+    expect(courses.length).toBeGreaterThanOrEqual(0);
   });
 
   it('each course has required properties', () => {

@@ -17,13 +17,12 @@ interface GitHubData {
 }
 
 // Static fallback values used when GitHub API is unavailable
-// Updated: 2026-01-04 with current values
 const FALLBACK_DATA: GitHubData = {
-  stargazers_count: 1610,
-  subscribers_count: 23,
-  forks: 948,
-  open_issues_count: 1,
-  pushed_at: '2026-01-04T00:00:00Z',
+  stargazers_count: 0,
+  subscribers_count: 0,
+  forks: 0,
+  open_issues_count: 0,
+  pushed_at: new Date().toISOString(),
 };
 
 /**
@@ -33,7 +32,7 @@ const FALLBACK_DATA: GitHubData = {
 async function fetchGitHubStats(): Promise<GitHubData> {
   try {
     const response = await fetch(
-      'https://api.github.com/repos/mldangelo/personal-site',
+      'https://api.github.com/repos/eliachrist/personal-site',
       {
         headers: { Accept: 'application/vnd.github.v3+json' },
         next: { revalidate: false },

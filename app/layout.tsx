@@ -27,7 +27,7 @@ const raleway = Raleway({
 });
 
 const siteDescription =
-  'Member of the Technical Staff at OpenAI, working on Promptfoo and agent security. Previously co-founded Promptfoo, Arthena, and Matroid, and led engineering at Smile ID.';
+  'Eliakim Chris Omari — independent developer. Python, TypeScript, design. Portfolio, resume, and writing.';
 
 export const metadata: Metadata = {
   title: {
@@ -37,13 +37,11 @@ export const metadata: Metadata = {
   description: siteDescription,
   keywords: [
     AUTHOR_NAME,
-    'OpenAI',
-    'Promptfoo',
-    'agent security',
-    'LLM security',
-    'machine learning',
-    'startup founder',
-    'YC',
+    'independent developer',
+    'Python',
+    'TypeScript',
+    'Adobe Photoshop',
+    'web development',
   ],
   authors: [{ name: AUTHOR_NAME }],
   creator: AUTHOR_NAME,
@@ -66,8 +64,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    site: TWITTER_HANDLE,
-    creator: TWITTER_HANDLE,
+    ...(TWITTER_HANDLE
+      ? { site: TWITTER_HANDLE, creator: TWITTER_HANDLE }
+      : {}),
     title: AUTHOR_NAME,
     description: siteDescription,
     images: ['/images/me.jpg'],

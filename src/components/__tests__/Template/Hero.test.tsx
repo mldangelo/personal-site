@@ -15,29 +15,23 @@ describe('Hero', () => {
     render(<Hero />);
 
     const heading = screen.getByRole('heading', { level: 1 });
-    expect(heading).toHaveTextContent("Michael D'Angelo");
+    expect(heading).toHaveTextContent('Eliakim Chris Omari');
   });
 
-  it('renders the tagline with OpenAI and promptfoo links', () => {
+  it('renders the tagline with a contact link', () => {
     render(<Hero />);
 
-    const openAiLink = screen.getByRole('link', { name: /openai/i });
-    expect(openAiLink).toHaveAttribute('href', 'https://openai.com');
-    expect(openAiLink).toHaveClass('hero-highlight');
-
-    const promptfooLink = screen.getByRole('link', { name: /promptfoo/i });
-    expect(promptfooLink).toHaveAttribute('href', 'https://promptfoo.dev');
-    expect(promptfooLink).toHaveClass('hero-highlight');
+    const contactLink = screen.getByRole('link', { name: /contact page/i });
+    expect(contactLink).toHaveAttribute('href', '/contact');
+    expect(contactLink).toHaveClass('hero-highlight');
   });
 
-  it('displays hero chips for credentials', () => {
+  it('displays hero chips', () => {
     render(<Hero />);
 
-    expect(screen.getByText('YC Alum')).toBeInTheDocument();
-    expect(screen.getByText('Stanford ICME')).toBeInTheDocument();
-    expect(
-      screen.getByText('Co-founded Arthena & Matroid'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('Python')).toBeInTheDocument();
+    expect(screen.getByText('TypeScript')).toBeInTheDocument();
+    expect(screen.getByText('Adobe Photoshop')).toBeInTheDocument();
   });
 
   it('renders CTA buttons with correct links', () => {

@@ -30,17 +30,16 @@ describe('personal stats data', () => {
 
     expect(ageStat).toBeDefined();
     expect(ageStat!.label).toBe('Current age');
-    // Age value is a React element
     expect(ageStat!.value).toBeDefined();
   });
 
-  it('has a countries visited stat', () => {
+  it('has a countries visited stat without a link', () => {
     const countriesStat = data.find((s) => s.key === 'countries');
 
     expect(countriesStat).toBeDefined();
     expect(countriesStat!.label).toBe('Countries visited');
-    expect(countriesStat!.value).toBe(53);
-    expect(countriesStat!.link).toContain('google.com/maps');
+    expect(countriesStat!.value).toBe(0);
+    expect(countriesStat!.link).toBeUndefined();
   });
 
   it('has a current location stat', () => {
@@ -48,7 +47,7 @@ describe('personal stats data', () => {
 
     expect(locationStat).toBeDefined();
     expect(locationStat!.label).toBe('Current city');
-    expect(locationStat!.value).toBe('New York, NY');
+    expect(locationStat!.value).toBe('—');
   });
 
   it('Age component renders and updates', () => {
@@ -57,12 +56,10 @@ describe('personal stats data', () => {
 
     render(<AgeComponent />);
 
-    // Advance timer to trigger age calculation
     act(() => {
       vi.advanceTimersByTime(50);
     });
 
-    // The age should be a number with decimal places
     const textContent = document.body.textContent || '';
     expect(textContent).toMatch(/\d+\.\d+/);
   });

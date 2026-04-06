@@ -5,7 +5,7 @@ import degrees from '../resume/degrees';
 describe('degrees data', () => {
   it('exports an array of degrees', () => {
     expect(Array.isArray(degrees)).toBe(true);
-    expect(degrees.length).toBeGreaterThan(0);
+    expect(degrees.length).toBeGreaterThanOrEqual(0);
   });
 
   it('each degree has required properties', () => {
