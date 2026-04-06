@@ -15,9 +15,8 @@ export default function Hero() {
         </h1>
 
         <p className="hero-tagline">
-          Independent developer working across code and design—Python,
-          TypeScript, and Adobe Photoshop. This site is my portfolio, resume,
-          and writing in one place.
+          Independent self-taught developer (Starting university in September 2026 hopefully) working across code and design : Python,
+          TypeScript, and Adobe Photoshop. 
           <br />
           Reach me anytime via the{' '}
           <Link href="/contact" className="hero-highlight">
@@ -30,6 +29,7 @@ export default function Hero() {
           <span className="hero-chip">Python</span>
           <span className="hero-chip">TypeScript</span>
           <span className="hero-chip">Adobe Photoshop</span>
+          <span className="hero-chip">Audacity</span>
         </div>
 
         <div className="hero-cta">

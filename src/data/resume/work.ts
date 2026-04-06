@@ -13,12 +13,11 @@ export interface Position {
 
 const work: Position[] = [
   {
-    name: 'Independent',
-    position: 'Software developer',
+    name: 'independent',
+    position: 'Software engeneering',
     url: 'https://eliachrist.com',
-    startDate: '2020-01-01',
-    summary: `Independent work across Python, TypeScript, and Adobe Photoshop—replace
-    this entry in src/data/resume/work.ts with your roles and employers.`,
+    startDate: '2023-12-01',
+    summary: ``,
   },
 ];
 

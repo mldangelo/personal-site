@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import type { StatData } from '../../components/Stats/types';
 
 /** Birth date for age calculation (ISO format). Update in src/data/stats/personal.tsx. */
-const BIRTH_DATE = '1995-01-01T12:00:00';
+const BIRTH_DATE = '2003-12-04T12:00:00';
 
 /** Milliseconds in an average year (accounting for leap years) */
 const MS_PER_YEAR = 1000 * 60 * 60 * 24 * 365.2421897;
@@ -46,12 +46,12 @@ const data: StatData[] = [
   {
     key: 'countries',
     label: 'Countries visited',
-    value: 0,
+    value: 5,
   },
   {
     key: 'location',
     label: 'Current city',
-    value: '—',
+    value: 'Helsinki',
   },
 ];
 

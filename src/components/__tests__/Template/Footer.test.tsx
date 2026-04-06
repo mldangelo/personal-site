@@ -16,7 +16,7 @@ describe('Footer', () => {
 
     expect(screen.getByText('Eliakim Chris Omari')).toBeInTheDocument();
     expect(
-      screen.getByText('Software developer at Independent'),
+      screen.getByText('Software developer'),
     ).toBeInTheDocument();
   });
 

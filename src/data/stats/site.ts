@@ -38,13 +38,13 @@ const data: StatData[] = [
   {
     label: 'Last updated at',
     key: 'pushed_at',
-    link: 'https://github.com/eliachrist/personal-site/commits',
+    link: 'https://github.com/magnificentelia/personal-site/commits',
     format: (x: unknown) => dayjs(x as string).format('MMMM DD, YYYY'),
   },
   {
     label: 'Lines of TypeScript powering this website',
     value: '—',
-    link: 'https://github.com/eliachrist/personal-site/graphs/contributors',
+    link: 'https://github.com/magnificentelia/personal-site/graphs/contributors',
   },
 ];
 
