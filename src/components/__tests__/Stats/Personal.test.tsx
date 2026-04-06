@@ -28,39 +28,35 @@ describe('Personal', () => {
     render(<Personal />);
 
     expect(screen.getByText('Countries visited')).toBeInTheDocument();
-    expect(screen.getByText('53')).toBeInTheDocument();
+    expect(screen.getByText('0')).toBeInTheDocument();
   });
 
   it('displays current city', () => {
     render(<Personal />);
 
     expect(screen.getByText('Current city')).toBeInTheDocument();
-    expect(screen.getByText('New York, NY')).toBeInTheDocument();
+    expect(screen.getByText('—')).toBeInTheDocument();
   });
 
-  it('has a link for countries visited', () => {
+  it('does not link countries visited when no map URL is set', () => {
     render(<Personal />);
 
-    const link = screen.getByRole('link', { name: /53/i });
-    expect(link).toHaveAttribute(
-      'href',
-      'https://www.google.com/maps/d/embed?mid=1iBBTscqateQ93pWFVfHCUZXoDu8&z=2',
-    );
+    const row = screen.getByText('Countries visited').closest('tr');
+    const valueCell = row?.querySelector('.stat-table-value');
+    const link = valueCell?.querySelector('a');
+    expect(link).toBeNull();
   });
 
   it('updates age over time', async () => {
     render(<Personal />);
 
-    // Get initial age text
     const ageCell = screen.getByText('Current age').closest('tr');
     expect(ageCell).toBeInTheDocument();
 
-    // Advance timer to trigger age update
     act(() => {
       vi.advanceTimersByTime(50);
     });
 
-    // Age should still be displayed (value changes but component renders)
     expect(screen.getByText('Current age')).toBeInTheDocument();
   });
 });

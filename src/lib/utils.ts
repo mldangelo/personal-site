@@ -3,9 +3,12 @@
  */
 
 // Site configuration
-export const SITE_URL = 'https://mldangelo.com';
-export const AUTHOR_NAME = "Michael D'Angelo";
-export const TWITTER_HANDLE = '@dangelosaurus';
+export const SITE_URL = 'https://eliachrist.com';
+export const AUTHOR_NAME = 'Eliakim Chris Omari';
+/** Public contact email (shown on /contact and in schema). */
+export const CONTACT_EMAIL = 'code.eliachrist@gmail.com';
+/** X/Twitter handle for metadata (no @ in card text is fine; site/creator expect @handle). */
+export const TWITTER_HANDLE = '@eliachrist';
 
 // Image dimension constants
 export const AVATAR_SIZE = {

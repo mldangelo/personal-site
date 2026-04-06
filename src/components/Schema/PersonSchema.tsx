@@ -31,11 +31,13 @@ export default function PersonSchema() {
       name: currentJob.name,
       url: currentJob.url,
     },
-    alumniOf: degrees.map((degree) => ({
-      '@type': 'CollegeOrUniversity',
-      name: degree.school,
-      url: degree.link,
-    })),
+    ...(degrees.length > 0 && {
+      alumniOf: degrees.map((degree) => ({
+        '@type': 'CollegeOrUniversity',
+        name: degree.school,
+        url: degree.link,
+      })),
+    }),
   };
 
   return <JsonLd data={personData} />;

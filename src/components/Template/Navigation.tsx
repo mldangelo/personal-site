@@ -19,7 +19,7 @@ export default function Navigation() {
   return (
     <header className="site-header">
       <Link href="/" className="site-logo">
-        <span className="logo-text">MD</span>
+        <span className="logo-text">ECO</span>
       </Link>
 
       <nav className="nav-links">
