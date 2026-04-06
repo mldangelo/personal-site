@@ -17,17 +17,17 @@ export interface ContactItem {
 /** Update handles in URLs if yours differ from @eliachrist / in/eliachrist. */
 const data: ContactItem[] = [
   {
-    link: 'https://www.linkedin.com/in/eliachrist',
+    link: 'https://www.linkedin.com/in/eliakim-omari-0a9579241/',
     label: 'LinkedIn',
     icon: faLinkedinIn,
   },
   {
-    link: 'https://github.com/eliachrist',
+    link: 'https://github.com/magnificentcode',
     label: 'Github',
     icon: faGithub,
   },
   {
-    link: 'https://www.instagram.com/eliachrist/',
+    link: 'https://www.instagram.com/_eliachristt/',
     label: 'Instagram',
     icon: faInstagram,
   },
