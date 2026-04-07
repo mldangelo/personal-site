@@ -166,8 +166,8 @@
   top: 35%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 1200px;
-  height: 800px;
+  width: 60%;
+  height: 75%;
   background: radial-gradient(
     ellipse 100% 100% at 50% 50%,
     var(--color-accent-light) 0%,
