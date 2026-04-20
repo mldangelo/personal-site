@@ -1,236 +1,195 @@
 ---
 title: Why I Mostly Switched From Claude Code to the Codex Desktop App
 date: '2026-04-19'
-description: 'Why I mostly switched from Claude Code to the Codex desktop app: worktrees, tabs, automations, long-running sessions, background QA, and supervised computer use.'
+description: 'Why I mostly switched from Claude Code to the Codex desktop app: visible threads, isolated worktrees, queued follow-ups, automations, and tighter review loops.'
 draft: true
 ---
 
-## Context
+I now start most coding sessions with agents in the Codex desktop app instead of Claude Code.
 
-A few months ago I wrote about [shipping 1,000+ PRs with Claude Code](/writing/shipping-with-claude-code/).
+A few months ago, I wrote about [shipping with Claude Code](/writing/shipping-with-claude-code/). That workflow relied on multiple Ghostty panes, several git worktrees, Claude doing implementation, Codex and Gemini checking work, browser automation for UI testing, and a fair amount of manual coordination.
 
-Disclosure: Anthropic provides me with a complimentary Claude Code Max account, which I appreciate. I also work at OpenAI. So this is not a neutral market survey. It is a note about how my workflow changed.
+Disclosure: Anthropic provides me with a complimentary Claude Code Max account, which I appreciate. I also work at OpenAI. This is not a neutral market survey. It is a report on how my own workflow changed.
 
-At the time, my setup was basically a small agentic factory: Ghostty panes, multiple git worktrees, Plan Mode, Claude doing implementation, Codex and Gemini checking work, browser automation for UI testing, and a lot of manual coordination.
+Claude Code is still an excellent tool. I still use it, and I would switch again if another product fit my workflow better.
 
-It worked. It worked well enough that I changed how I build software.
+I mostly switched because the Codex desktop app reduced the amount of manual coordination in my day. That change mattered more to me than model differences did.
 
-What changed for me on April 16, 2026 was not that Codex became a smarter text box. It was that OpenAI finally shipped the environment I had been faking by hand.
+## What changed
 
-I have almost completely switched to the Codex desktop app.
+The Codex app launched before April 16. That date matters to me because the April 16 update was the point where I started using it as my default workspace instead of as a secondary tool.
 
-Not because Claude Code is bad. Claude Code is still excellent, and this whole space changes weekly. I switched because the Codex app matches how I actually work now: multiple tasks in parallel, isolated worktrees, long-running threads, terminals, diffs, screenshots, browser state, automations, and review in one place.
+By April 16, more of the workflow I had been assembling by hand was available in one place: threads, worktrees, diffs, terminals, automations, local browser previews, screenshots, and supervised computer use.
 
-The model matters, but the application layer is what made me switch.
+Once I had more than one agent working at a time, the main problem became keeping track of what was happening.
 
-Part of the motivation was also that the last month made some of the hidden costs of agentic coding harder to ignore. Claude users spent a lot of time talking about quota burn, cache behavior, outages, and restrictions around third-party harnesses. None of that makes Claude Code unimportant or suddenly bad. It does make reliability, legibility, and product surface more important than they looked a few months ago.
+Which branch is this task on? Did it already run tests? Which diff am I reviewing? Is that screenshot from the current attempt or the previous one? Did I already tell the agent about the edge case I care about? Which thread is blocked, and which one is still making progress?
 
-If I am going to build my day around agents, I do not just need the model to be smart. I need to understand what it is doing, where it is working, how much context it is carrying, what branch it touched, how to review it, and whether I can keep it running without constantly watching the quota meter.
+The desktop app helped because it made each task easier to inspect without rebuilding the whole picture every time I switched context.
 
-On a normal day I might have one thread fixing a bug, another reviewing a PR, another trying a UI change in a worktree, and another running tests. The important change is that each thread keeps its own context and can keep moving while I do something else.
+On a typical day, I might have one worktree fixing a flaky test, one thread reviewing an open PR, one trying a UI change against a local server, and one clicking through the app to check whether the change actually works. I move between them, review diffs, look at screenshots, approve commands, and stop the ones that are no longer on the right track.
+
+That is the main reason I mostly switched.
 
 > Screenshot placeholder: Codex desktop app with multiple active threads and worktrees visible at once.
 
-## Why the app changed the workflow
+## State and boundaries
 
-I used to think of Codex as something I would call from the terminal, often as a verifier.
+What the app does best is keep parallel work visible and separated.
 
-That pattern still works. Different model families still have different blind spots, and I still like getting a second opinion on important changes.
+Threads keep the work visible. Worktrees keep it isolated. Diffs, terminals, screenshots, and previews make it reviewable.
 
-But the desktop app changed the role Codex plays in my day. I keep Codex open now the way I used to keep my terminal open.
+You can reproduce some of this with terminal panes and discipline. I did. The tradeoff is that more of the coordination stays in your head: which pane matters, which branch belongs to which task, which verification step already ran, and which follow-up still has to be sent.
 
-It is not just a place to type prompts. It is a workspace for running agents.
+In the app, a task includes a thread, a worktree, a diff, a terminal history, and a verification trail.
 
-OpenAI described the Codex app as a command center for agents. That is close enough to how I use it. Built-in worktrees, multiple threads, automations, diffs, terminals, and browser state are workflow primitives, not cosmetic features.
+Whether the interface uses tabs is secondary. What matters is that agent state stays visible enough that I can run several tasks at once.
 
-That distinction matters. A better model in a workflow I cannot manage is less useful than a slightly worse model inside a system that actually fits how I work.
+Queued follow-ups are part of this too. If I notice a correction while a thread is still working, I can queue the instruction and keep moving. That is a small feature, but it reduces interruptions. It means I do not have to stop what I am doing just to steer an agent in the moment.
 
-The practical change was not "Codex got smarter." It was that Codex became easier to operate over long sessions.
+This is also why I care less than I used to about isolated model comparisons. In my workflow, a model inside a system I can inspect and review is more useful than one inside a system I cannot manage easily.
 
-Threads, terminals, diffs, browser state, screenshots, artifacts, and worktrees make the system easier to inspect and resume. That lowers the coordination cost.
+> Screenshot placeholder: single Codex thread showing terminal output, diff, and verification context together.
 
-## Tabs make parallel agents manageable
+## Worktrees as a unit of work
 
-Tabs sound like a small detail, but they solve a real coordination problem.
+Worktrees were already central to my Claude Code setup. They let me run multiple tasks against the same repository without constant interference.
 
-The hard part of agentic coding is not only model quality. It is state management.
+What changed in Codex was that the app made worktrees easier to create, inspect, and keep associated with a specific thread.
 
-What is each agent doing? Which branch is it on? Did it run tests? Is it blocked? What files did it touch? Do I need to look at a diff, a terminal, a browser, or an artifact?
+That changed how I think about agent tasks.
 
-You can manage all of this in terminal panes. I did. But when you do, you are the orchestration layer.
+Before handing something to an agent, I usually ask whether it is a good worktree.
 
-The Codex app lowers that overhead. A thread becomes a visible unit of work. I can glance at it, resume it, redirect it, inspect the diff, check the terminal output, or let it keep running while I move to something else.
-
-That sounds small until you are juggling five tasks and two of them have been alive for hours.
-
-It also reduces context rebuild. I try to keep the important rules and conventions in the repo so I can switch tools without losing my mind, but there is still real value in not having to reconstruct the last week of decisions every time I come back to a task.
-
-This is why the app matters more to me than benchmark discourse. A slightly better model in a worse workflow often loses.
-
-> Screenshot placeholder: single Codex thread showing terminal output, diff, and browser state together.
-
-## Worktrees make parallel agents practical
-
-The other major unlock is built-in worktree support.
-
-In my Claude Code setup, worktrees were one of the reasons the workflow worked at all. They let me run multiple agents against the same repo without constantly stepping on myself. The cost was that I had to manage the boundaries manually.
-
-Codex makes worktrees feel first-class.
-
-Each task gets a boundary. Boundaries make delegation safer. Safer delegation means I am willing to run more agents at once.
-
-It also changes how I frame tasks.
-
-I no longer think, "Can I ask the agent to do this?" I think, "Is this a good worktree?"
-
-A good worktree has:
+For me, a good worktree has four properties:
 
 - a clear goal
 - a reviewable diff
-- a concrete way to verify the result
+- a concrete verification step
+- a rollback path if the experiment is wrong
 
-That verification might be a test, a screenshot, a local server, a repro, or a PR comment. The more concrete the finish line, the better Codex tends to do.
+If I cannot describe the diff, the verification step, and the rollback path, the task is usually not ready yet.
 
-## Long-running sessions changed my expectations
+The other useful property is that a worktree is disposable. That makes it easier to experiment. The agent can try something, I can inspect the result, and I can discard it if the approach was wrong without contaminating other work.
 
-The most surprising change has been how long I can keep Codex productively running on a task.
+That sounds basic, but it changes how aggressively I use agents. Isolation helps. Cheap discard helps more.
 
-I have had sessions that lasted something like 12 hours. Not one giant prompt where it solved everything, but a long-running implementation thread: inspect, change, run, fail, retry, check UI, summarize, continue.
+## Operational concerns
 
-That changes how I prompt.
+Some of the decision was operational.
 
-For short sessions, I tend to over-specify. For longer sessions, I give Codex the objective, the constraints, and the definition of done. Then I steer.
+Anthropic changed how Claude subscriptions interact with some third-party harnesses, Opus 4.7 introduced tokenizer changes that can increase token usage for the same input, and Claude had several visible incidents in April affecting Claude.ai, Claude Code, and API availability. Those are normal kinds of issues for a fast-moving product category, and none of them make Claude Code unimportant or suddenly bad.
 
-The interaction starts to look less like request-and-response and more like delegation with review loops.
+They also made me less comfortable relying on product behavior that is hard to see directly.
 
-Long-running tasks are more useful when the app keeps the session alive and easy to resume while other work is happening.
+When agents become part of the daily workflow, quota behavior, cache behavior, permissions, branch isolation, resumability, and review surfaces stop being side details. They become part of the tool.
 
-## Automations are where this gets bigger than coding
+Every serious AI product is going to have limits, outages, pricing changes, and odd edge cases.
 
-The feature I think people are underestimating is automations.
+Once I started building my day around agents, I cared much more about how the product exposed state, boundaries, and review loops. The surrounding workspace mattered more to me than it had a few months earlier.
 
-Automations turn recurring work into an inbox. That is a much bigger deal than "run this command every morning."
+## Long-running threads
 
-The obvious use cases are engineering chores:
+Longer threads have been more usable for me in Codex.
 
-- check flaky tests
-- summarize PRs that need review
-- scan for regressions
-- run dependency updates in a clean worktree
-- verify whether a branch still passes
-- flag docs that drifted
+I have had threads stay useful for much of a day. What mattered was that I could come back to the same thread repeatedly without reconstructing the task from scratch each time.
 
-Those are useful. The more interesting category is mixed work: the tasks that cross code, docs, terminals, browser state, and human workflows.
+In practice, those long sessions were repeated cycles of implementation, test failure, patching, UI verification, summarization, and another pass.
 
-Automations are the first feature that made Codex feel useful to me outside of one-off coding sessions.
+That changed how I prompt. For shorter tasks, I still tend to over-specify. For longer ones, I usually give Codex the objective, the constraints, and the definition of done, then steer as needed.
 
-If the agent can work across those surfaces and report back cleanly, it becomes easier to hand recurring chores to the system instead of remembering to run them myself.
+The thread becomes less like a single exchange and more like a running implementation log.
 
-> Screenshot placeholder: Codex automation or inbox view showing recurring tasks and findings.
+## Voice input
 
-## Voice makes context cheap
+Voice input mattered more than I expected.
 
-I did not expect voice input to matter much.
+The main benefit is that voice lowers the cost of adding context. Speed is secondary.
 
-The bottleneck with agents is often not that I do not know what I want. It is that typing all the context feels expensive, so I under-specify the task.
+When I type everything, I often omit details I actually care about: what we already tried, why the previous attempt failed, what behavior matters most, what I expect to break, and how I intend to verify the result.
 
-I skip the weird edge case. I forget to mention the failed attempt from an hour ago. I do not explain the product reason behind the change.
+With voice, I am more likely to include those details first and clean up the transcription second. That usually produces better instructions.
 
-Voice makes that context cheaper to provide.
+## Automations
 
-I can say the messy version first:
+I use automations mainly for recurring checks that I want returned as an inbox.
 
-- here is what we tried
-- here is why it failed
-- here is the behavior I actually want
-- here is the thing I am worried you will break
-- here is how to verify it
+The first automations I care about are ordinary tasks:
 
-Then I can clean up the transcript before sending.
+- tell me which PRs are stuck
+- check whether this branch still passes
+- look for regressions in the flows I keep forgetting to test
+- flag docs or issues that drifted
 
-That is not just faster prompting. It is usually better prompting, because I include context I would otherwise omit.
+That is exactly why they are useful.
 
-## Computer use is most useful for background QA
+The Codex app can run those checks in the current project or in a separate worktree and send findings back to Triage. That makes the agent feel less like a prompt-driven assistant and more like a system for recurring maintenance work.
 
-Computer use is useful, but easy to misuse if you get sloppy with permissions.
+This matters because a lot of useful engineering work is repetitive, easy to defer, and easy to forget.
 
-It also makes the product broader than a coding tool.
+> Screenshot placeholder: Codex automation or Triage view showing recurring tasks and findings.
 
-Browser automation was already useful. Computer use is different. It can operate the messy interfaces that are usually too annoying to automate and too repetitive to justify writing a custom tool for.
+## Computer use
 
-The most practical use case for me is background QA.
+Computer use is useful, and it needs the most caution.
 
-One thread can implement in a worktree while another clicks through the app like a user, checks regressions, and comes back with screenshots and notes. That was one of the first moments where computer use seemed operationally useful rather than just novel.
+For local previews and public pages, the in-app browser is useful. For signed-in workflows, existing browser profiles, or GUI-only tasks, the more relevant feature is supervised computer use operating the real app with real permissions.
 
-One of the strangest useful things I have done with Codex was helping triage roughly 3,000 LinkedIn connections.
+The developer use case that stands out most for me is background QA. One thread can make a change in a worktree while another clicks through the app, checks a flow, and comes back with screenshots and notes. That is a straightforward improvement in how I split work.
 
-Not to blast automated messages. Not to spam people. Just to work through a bad human interface and help sort signal from noise.
+More broadly, computer use helps with a category of tasks that sits in an awkward middle ground: too annoying to do manually, not worth building software for. Large repetitive cleanup inside bad web UIs, testing flows that do not justify a custom integration, and extracting signal from awkward interfaces all fit that category.
 
-That kind of task usually dies in the gap between "too annoying to do manually" and "not worth building software for." Computer use helps with that class of work.
+The caveat is security.
 
-It can click through the real UI, inspect what is on screen, summarize, categorize, and keep going while I supervise.
+Once an agent can read, browse, and act, ordinary content becomes part of the attack surface. A PDF, a spreadsheet, a PR description, a browser tab, or an email thread can all affect an agent that has tools. Signed-in pages are effectively your account. Desktop access expands the blast radius.
 
-That last part matters.
-
-The skeptical reaction to desktop control is correct. The more useful the agent becomes, the more dangerous sloppy permissions become. Signed-in browser pages are your account. Desktop access expands the attack surface. Sensitive workflows need supervision and scope.
-
-The deeper problem is not just "what if the model makes a mistake." Once an agent can read, browse, and act, ordinary content becomes part of the attack surface. A PDF, a spreadsheet, a docs page, a PR description, a browser tab, or an email thread can all shape an agent that has tools.
-
-That does not weaken the case for Codex. It just means the workable version is supervised, scoped, and review-heavy.
+The feature is usable under supervision, with clear scope and review.
 
 > Screenshot placeholder: background QA or computer-use thread returning screenshots and notes after a test pass.
 
 ## Why I switched
 
-The important comparison is not "Codex is objectively better than Claude Code."
+I am describing my own workflow, not making a universal claim that Codex is better than Claude Code.
 
-I do not think that is a stable claim. Frontier model quality moves too fast, and there are still tasks where Claude feels stronger.
+For my workflow, Codex is now the better workspace.
 
-Claude got me into the agentic coding workflow. Codex made that workflow feel more dependable and inspectable.
+The difference comes from a combination of features:
 
-I also do not have any real vendor loyalty here. If someone else gives me a better version of this environment six weeks from now, I will switch again.
+- visible threads
+- isolated worktrees
+- integrated diffs and terminal output
+- queued follow-ups
+- local previews and screenshots
+- recurring checks through automations
+- supervised computer use for QA and other GUI-only work
+- longer threads that are easier to resume
 
-The claim I am actually making is narrower:
+That combination reduced the amount of manual coordination I was doing every day.
 
-Codex is good enough as a model, and better enough as a workspace, that switching became rational for me.
+Claude Code was where I first built this workflow. Codex is where I now run most of it.
 
-Claude Code helped me discover that parallel worktrees plus fast verification loops could radically increase throughput. The Codex app took the same operating model and made it native:
+## What did not change
 
-- tabs keep the work visible
-- worktrees keep the work isolated
-- terminals and diffs keep the work reviewable
-- voice makes context cheap
-- automations turn chores into an inbox
-- background computer use makes verification and UI work parallel
-- computer use more broadly opens workflows that were previously too awkward to automate
-- long-running threads make the agent feel persistent instead of disposable
+Responsibility did not change.
 
-That combination matters more to me than any single benchmark result.
+The agent still does implementation. I still do review, judgment, prioritization, and taste.
 
-## The real win is leverage, not autonomy
+The "autonomous employee" framing is not especially useful for how I work. What works better for me is a more ordinary pattern: bounded tasks, review loops, several active threads, and a human who still owns the outcome.
 
-The online debate around coding agents often collapses into the wrong question.
+For me, the value of the current generation of tools is that they let me attempt more work in parallel without losing track of what is happening.
 
-People ask whether the model is autonomous enough, smart enough, or trustworthy enough to replace the human. I do not think that is the most useful frame.
-
-The more useful frame is leverage.
-
-Codex lets me safely run more useful work in parallel. It handles more of the tedious coordination layer. It lowers the cost of delegation. It widens the set of tasks that are worth attempting.
-
-But I still own the outcome.
-
-That part did not change from my Claude Code workflow. The agent does implementation. I do review, judgment, prioritization, and taste.
-
-That is also why I do not find the "autonomous employee" framing very interesting. The working pattern is closer to pair programming at scale: multiple agents, bounded tasks, tight verification loops, human accountability.
-
-The best AI coding tool is no longer just the model that writes the best function. It is the system that lets me safely run the most useful work in parallel.
-
-Right now, for me, that is the Codex desktop app.
+Right now, the Codex desktop app does that better for me than Claude Code does.
 
 ---
 
 ## Sources
 
-- [Codex for (almost) everything](https://openai.com/index/codex-for-almost-everything/) - OpenAI's April 16, 2026 product update covering computer use, automations, memory, in-app browser support, SSH, PR review, and additional plugins
-- [Introducing the Codex app](https://openai.com/index/introducing-the-codex-app/) - OpenAI's launch post for the desktop app, including worktrees, parallel threads, automations, and the "command center for agents" framing
-- [Using Codex with your ChatGPT plan](https://help.openai.com/en/articles/11369540) - OpenAI help documentation covering app availability, worktrees, automations, git functionality, and plan details
+- [Introducing the Codex app](https://openai.com/index/introducing-the-codex-app/) - OpenAI's February 2, 2026 launch post for the desktop app, with a March 4 update noting Windows availability
+- [Codex for (almost) everything](https://openai.com/index/codex-for-almost-everything/) - OpenAI's April 16, 2026 product update covering broader computer use, more plugins, PR review, memory preview, SSH, multiple terminals, and the expanded workspace direction
+- [Codex app features](https://developers.openai.com/codex/app/features) - official features documentation for threads, worktrees, diffs, terminals, voice dictation, the in-app browser, and computer use
+- [Codex app automations](https://developers.openai.com/codex/app/automations) - official automations documentation covering recurring tasks, worktree execution, and Triage
+- [Codex app computer use](https://developers.openai.com/codex/app/computer-use) - official computer use documentation, permissions, and safety guidance
+- [Tell HN: Anthropic no longer allowing Claude Code subscriptions to use OpenClaw](https://news.ycombinator.com/item?id=47633396) - public discussion of the third-party harness policy change
+- [Pro Max 5x quota exhausted in 1.5 hours despite moderate usage](https://news.ycombinator.com/item?id=47739260) - public discussion of quota burn and cache behavior
+- [Introducing Claude Opus 4.7](https://www.anthropic.com/news/claude-opus-4-7) - Anthropic's release notes on tokenizer and effort-level changes
+- [Claude status](https://status.claude.com/) - incident history for Claude.ai, Claude Code, and API availability
