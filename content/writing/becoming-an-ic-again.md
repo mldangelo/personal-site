@@ -1,209 +1,59 @@
 ---
-title: 'Becoming an IC again'
+title: 'OpenAI, one month in'
 date: '2026-04-19'
-description: 'Why returning to individual contributor work at OpenAI feels less like a step back and more like stepping into a new operating model.'
+description: 'One month after Promptfoo was acquired by OpenAI, what has changed in my work, how Promptfoo is doing, and why I am more optimistic about coding agents and evaluation.'
 draft: true
 ---
 
-In March, Promptfoo was acquired by OpenAI, and I started my first month there.
+It has been about a month since Promptfoo was acquired by OpenAI and I started working there.
 
-Promptfoo was a short company. We started it in mid-2024 and, less than two years later, I found myself starting over in a very different role.
+The main change has been scope. I am back in an individual contributor role for the first time in more than a decade, and I am still working on the same core problem that led me to start Promptfoo: helping teams build and evaluate AI systems with enough rigor for real deployments.
 
-For the first time in more than a decade, I am an individual contributor again.
+Promptfoo was a short company by startup standards. We started it in mid-2024. Less than two years later, I was starting a new role inside a much larger organization. The work itself was substantial, and it continues inside a larger system.
 
-That has been the biggest surprise of my first month at OpenAI. Not that the company is impressive. I expected that. Not that the mission matters. That part was obvious too.
+## Promptfoo one month in
 
-The surprise is that becoming an IC again does not feel like stepping back.
+A month in, Promptfoo continues to grow.
 
-It feels like getting closer to the frontier at exactly the moment IC work itself is being redefined.
+One month in, the project is above 20,000 GitHub stars and above 700,000 downloads per month. Those are useful indicators because they answer the immediate concern many people have after an acquisition: does the product continue to matter, and does development continue?
 
-## Promptfoo was short, but it was total
+Development has continued, and I have started spending more time on Promptfoo again, especially around coding-agent evals, red teaming, and coding harnesses. That work follows directly from the original product. Promptfoo began as an evaluation tool and grew into a broader platform for AI security, red teaming, and governance. Coding agents make those concerns concrete. Once an agent can read files, use tools, edit code, run tests, and operate in a semi-open environment, a plausible answer is only one part of the evaluation target.
 
-Even though Promptfoo was short, it was total.
+That work requires a harness, a repeatable environment, and a clear record of what task was assigned, what tools were available, what the agent attempted, what it changed, how success was measured, and where it failed. It also requires a realistic way to test adversarial behavior. That is why coding-agent evals and red teaming matter to me. They are a direct extension of the original Promptfoo thesis as models become agents.
 
-For most of the last twenty months, it was my default context: the repo, the product, the customer calls, the roadmap, the support queue, the security work, the fundraising, the hiring plan, the weird edge cases, and the thing I checked first thing in the morning and last thing at night.
+## Returning to IC work
 
-That is the strange thing about startups. Duration and intensity are not the same variable.
+The biggest personal change has been returning to individual contributor work. As a founder, especially a technical founder, your role expands until it includes almost everything: product decisions, customer conversations, engineering management, hiring, fundraising, incident response, security reviews, roadmap debates, and the long tail of operational work that accumulates around any growing company.
 
-Now I am at OpenAI, but I am still working on the same underlying problem: helping teams build, evaluate, red-team, and ship AI systems more safely. The surface area changed. The scale changed. The number of people and systems involved changed. The core problem did not.
+There are obvious upsides to that breadth, but it also means a smaller fraction of your week is spent directly building. In the last month, a larger share of my time has gone back to reading code, writing code, running evals, reviewing outputs, and working directly on artifacts. That feels different from founder work. It also feels like a substantial source of leverage.
 
-That continuity matters more to me than the title change.
+Management is still often treated as the default progression for ambitious technical people, and IC work is still often treated as a narrower path. That framing fits the present moment poorly. The leverage available to strong ICs is increasing quickly in environments where agents, tooling, and evaluation infrastructure are all improving at the same time.
 
-## The founder-to-IC transition only looks smaller if you measure leverage by headcount
+## What has changed about IC work
 
-For most of my career, leverage meant people.
+In my own workflow, I can attempt more in a day than I could even a year ago.
 
-If you wanted to do more, you hired more. You built a team, divided work, added process, and absorbed the coordination tax that came with it. That model still matters, and always will for some problems.
+The change comes from the ability to operate multiple threads of work in parallel, isolate tasks in separate worktrees, ask one system to implement and another to review, use browser and terminal tools to verify behavior, and build tighter loops between intent, execution, and evaluation. OpenAI's recent Codex product work reflects that change directly. The public announcements about the Codex app and the April 16 product update described a setup built around parallel agents, worktrees, automation, PR review, multiple terminals, browser-based workflows, and memory. Whatever toolchain becomes standard, technical work is becoming more concurrent and more reviewable.
 
-But it is no longer the only serious path to leverage.
+In this workflow, effectiveness depends more on structuring tasks, constraining environments, defining success criteria, and evaluating output. Manual work and judgment remain important. The review and evaluation loop occupies a larger share of the job than it used to.
 
-As a founder, especially a technical founder, your job expands until it includes everything. You write code, review PRs, talk to users, debug incidents, explain the roadmap, think about pricing, handle security reviews, answer support, and make sure the company is spending time on the right things.
+I have felt that directly in my own workflow. A month into this role, I am writing code regularly, and I am also spending significant time on eval design, failure analysis, review, and verification. That mix is new for me, and I do not expect it to be temporary.
 
-Some of that is energizing. Some of it is just entropy with a calendar invite.
+## Why I am more optimistic now
 
-Being an IC again is narrower. In theory, that should feel smaller.
+After a month there, I am more optimistic than I was before joining.
 
-It does not.
+The near-term change I see is that experienced engineers can do more as several systems improve together. The models are improving. The surrounding tools are improving. Evaluation workflows are improving. The environments in which agents can be tested are improving. The number of serious attempts a single person can make in a day is increasing. Those changes compound.
 
-It feels sharper.
+Hiring is another signal. We are hiring across several areas, which reflects the amount of work ahead.
 
-I spend more of my time close to the artifact: reading code, writing code, testing agents, running evals, reviewing outputs, and tightening feedback loops. I have fewer things to route and more things to make.
-
-There is a kind of clarity that comes from being directly responsible for something that either works or does not. Not a strategy doc. Not a hiring plan. Not an org chart. A thing.
-
-I had forgotten how satisfying that is.
-
-## Founder mode without the founder title
-
-What survives after the founder title goes away?
-
-You lose authority. You lose the final call. You lose ownership over the whole map.
-
-But you can keep the useful reflexes.
-
-You can still go deep instead of staying abstract.
-
-You can still talk to users.
-
-You can still notice when something feels off.
-
-You can still care about the boring edge case.
-
-You can still fix the small broken thing instead of scheduling the meeting about the broken thing.
-
-You can still own the outcome, even when you do not own the org chart.
-
-That is the part of founder mode I want to keep.
-
-After an acquisition, the job is not to recreate the startup inside a bigger company. The job is to carry over the parts that mattered: ownership, urgency, customer obsession, and willingness to get into the details.
-
-Founder mode without the founder title is just high-agency IC work.
-
-Right now, that kind of IC work is getting much more powerful.
-
-## ICs are getting leverage that used to require teams
-
-This is the thing I keep coming back to.
-
-Founders used to get leverage primarily by hiring people.
-
-Now the highest-leverage ICs are starting to get leverage by directing agents, tools, worktrees, evals, and feedback loops.
-
-That is not a metaphor. It is increasingly the day-to-day operating model.
-
-OpenAI's public Codex updates describe the change pretty clearly. The [Codex app announcement](https://openai.com/index/introducing-the-codex-app/) framed it as a command center for multiple agents, with built-in worktrees, skills, and automations. The [April 16 product update](https://openai.com/index/codex-for-almost-everything/) pushed that further: PR review, multiple terminals, an in-app browser, background computer use, memory, and more ways to carry work forward over time.
-
-That is not "autocomplete, but a bit better."
-
-It is a different operating model for technical work.
-
-One thread can investigate a bug. Another can try a refactor in a clean worktree. Another can review a diff from fresh context. Another can run tests, inspect logs, or work through a dead end in parallel. The work becomes less linear.
-
-The scarce resource is no longer how quickly I can turn thoughts into code.
-
-The scarce resource is judgment: what to delegate, how much context to provide, what success looks like, what to verify, when to trust the output, and when to throw it away and start over.
-
-AI coding does not make engineering disappear.
-
-It changes the bottleneck from typing speed to judgment density.
-
-## Tokens are the new cloud spend
-
-Earlier this year I wrote about [spending close to $10K in API credits in a month on interactive development work](/writing/shipping-with-claude-code/). At the time, that still felt mildly absurd.
-
-Now it feels normal.
-
-I have started thinking about tokens the way I used to think about cloud compute: not as a novelty, but as a resource you spend to get work done. Sometimes you waste it. Sometimes you underinvest because you are stuck in an old mental model. Sometimes the right answer is to spend more because the bottleneck is not cost, it is iteration speed.
-
-The unit that matters is not tokens.
-
-The unit that matters is verified progress.
-
-Did the agent find the bug?
-
-Did it run the tests?
-
-Did it compare approaches?
-
-Did it generate a useful reproduction?
-
-Did it help me understand a system faster than I could have alone?
-
-That is the metric I care about.
-
-## This makes evals and security more important, not less
-
-Working inside OpenAI has only reinforced something I already believed at Promptfoo: as agents become more capable, evaluation and security become more central.
-
-The old question was, "Did the model answer correctly?"
-
-That is no longer enough.
-
-Now the questions look more like this:
-
-- What tools did it use?
-- What data did it access?
-- What actions did it take?
-- What policy was it following?
-- What changed in the environment?
-- Could the behavior be reproduced?
-- Would we have caught the failure before deployment?
-
-As models move from generating text to taking actions, those questions stop being edge cases. They become the job.
-
-That is why this transition feels less like leaving Promptfoo behind and more like continuing the same mission in a larger system. The more connected and capable agents become, the more important it is to test them systematically, understand their behavior, and make failures legible before they become incidents.
-
-Integration, at its best, is not assimilation. It is amplification.
-
-## Why I am more bullish now
-
-I have been close to AI progress for a while. Promptfoo only existed because teams were already shipping AI systems faster than their testing and governance practices could keep up.
-
-But this month changed my intuition anyway.
-
-I am more bullish now because the compounding is no longer only happening at the model layer.
-
-The models are improving.
-
-The tools around them are improving.
-
-The workflows are improving.
-
-The feedback loops are improving.
-
-And the number of serious attempts one person can make in a day is increasing.
-
-That last point feels underrated.
-
-A lot of progress comes from being able to try more things with real rigor. Not random flailing. Serious attempts. Agents increase that number. Imperfectly, and not safely by default, but materially.
-
-I do not think the story is "AI replaces all engineers."
-
-I think the near-term story is more interesting than that.
-
-The best ICs get much more leverage.
-
-Engineering shifts toward judgment, verification, and system design.
-
-Small teams can attack problems that used to require much larger organizations.
-
-And the people closest to the work may feel the shift before the org chart does.
-
-Managers get dashboards.
-
-ICs get agents.
+I see the Promptfoo acquisition as a scale change. The questions that mattered before still matter now, and they now matter across a broader range of products and workflows. As coding agents become more capable, the need for better evaluation, better harnesses, and better security practices will increase with them.
 
 ## One month in
 
-I am still early. I am still learning the company, the systems, the people, and the places where I can be most useful.
+A month is a short window, and I am still learning where I can be most useful. It is long enough to see a few patterns. Promptfoo continues to grow. I am spending more time building again. Coding-agent evaluation has moved closer to the center of the work. The practical surface area of IC work continues to expand.
 
-But I already know this: becoming an IC again was the right move.
-
-I thought it might feel like stepping back.
-
-Instead, it feels like getting closer to the work at the exact moment the work is changing.
-
-That feels like a good sign.
+That is enough to make me more optimistic than I was a month ago.
 
 ---
 
