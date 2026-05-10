@@ -11,13 +11,13 @@ A few months ago, I wrote about [shipping with Claude Code](/writing/shipping-wi
 
 Disclosure: I work at OpenAI, and I have shipped a few small PRs into Codex. I am writing here in a personal capacity. Anthropic provides me with a complimentary Claude Code Max account, and I am genuinely grateful for it.
 
-Claude Code is still an excellent tool. I still use it for some tasks. The category is moving quickly, and this is a snapshot of my workflow in May 2026.
+Claude Code is still an excellent tool. I still use it daily for some tasks. The category is moving quickly, and this is a snapshot of my workflow in May 2026.
 
 I mostly switched because Codex now gives me one place for the pieces I use every day: threads, worktrees, diffs, terminals, browser checks, queued follow-ups, automations, and voice input. The app is closer to a developer workspace than a chat window.
 
-I've used the app enough to judge the daily friction. Over the last month, my coding-agent usage has averaged more than 2 billion tokens per day. I use that as a workflow-volume signal rather than an API-spend estimate. At that volume, small workflow issues show up quickly. Task state, approvals, review surfaces, and resumable threads become daily concerns.
+I've used the app enough to judge the daily friction. Over the last month, my coding-agent usage has averaged more than 2B tokens per day. I use that as a workflow-volume signal rather than an API-spend estimate. At that volume, small workflow issues show up quickly. Task state, approvals, review surfaces, and resumable threads become daily concerns.
 
-Part of that volume comes from how I have Codex configured. The Codex docs say `agents.max_threads` defaults to `6`; I set mine to `48`. `agents.max_depth` defaults to `1`; I set mine to `3`. That is an aggressive setup, and it increases token use and the risk of noisy fan-out. Defaults exist for a reason; copying this setup casually would be expensive and noisy. It matches how I want to use the tool: many bounded checks running in parallel, with enough visibility that I can still review what happened.
+Part of that volume comes from how I have Codex configured. The Codex docs say `agents.max_threads` defaults to `6`; I set mine to `48`. `agents.max_depth` defaults to `1`; I set mine to `3`. Do not do this unless you have effectively unlimited tokens. It burns through context quickly, creates noisy fan-out, and makes weak task boundaries expensive. I use it because my work pattern is many bounded checks running in parallel, with enough visibility that I can still review what happened.
 
 ## How the workflow changed
 
