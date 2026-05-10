@@ -41,7 +41,7 @@ A single thread is the basic unit: prompt, work summary, changed files, and revi
 
 In daily use, the app keeps parallel work visible and separated.
 
-Threads, worktrees, diffs, terminals, screenshots, and previews give each task visible state and reviewable output.
+Threads make work visible. Worktrees keep it isolated. Diffs, terminals, screenshots, and previews make it reviewable.
 
 I reproduced some of this with terminal panes, naming conventions, and manual notes. The tradeoff is that more of the coordination stays in your head: which pane matters, which branch belongs to which task, which verification step already ran, and which follow-up still has to be sent.
 
@@ -57,11 +57,9 @@ Queued follow-ups are part of this too. If I notice a correction while a thread 
 
 Worktrees were already central to my Claude Code setup. They let me run multiple tasks against the same repository without constant interference.
 
-What changed in Codex was that the app made worktrees easier to create, inspect, and keep associated with a specific thread.
+What changed in Codex was that the app made worktrees easier to create, inspect, and keep associated with a specific thread. That changed how I scope agent tasks.
 
-It changed how I scope agent tasks.
-
-Before handing something to an agent, I usually ask whether it is a good worktree.
+Before handing something to an agent, I usually ask whether the task is a good worktree.
 
 For me, a good worktree has four properties:
 
