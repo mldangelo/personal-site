@@ -5,21 +5,21 @@ description: 'Why the Codex desktop app became my default coding-agent workspace
 draft: true
 ---
 
-I start most coding sessions with agents in the Codex desktop app now.
+I now start most coding sessions in the Codex desktop app.
 
-A few months ago, I wrote about [shipping with Claude Code](/writing/shipping-with-claude-code/). That workflow relied on multiple Ghostty panes, several git worktrees, Claude doing implementation, Codex and Gemini checking work, browser automation for UI testing, and a fair amount of manual coordination. It worked. I was the coordination layer.
+A few months ago, I wrote about [shipping with Claude Code](/writing/shipping-with-claude-code/). That post has the prior setup: multiple Ghostty panes, several git worktrees, Claude doing implementation, Codex and Gemini checking work, browser automation for UI testing, and a fair amount of manual coordination. It worked. I was the coordination layer.
 
-Disclosure: Anthropic provides me with a complimentary Claude Code Max account, and I am genuinely grateful for it. I also work at OpenAI, and I have shipped a few small PRs into Codex.
+Disclosure: I work at OpenAI, and I have shipped a few small PRs into Codex. I am writing here in a personal capacity. Anthropic provides me with a complimentary Claude Code Max account, and I am genuinely grateful for it.
 
-Claude Code is still an excellent tool. I still use it for some tasks. The category is moving quickly, and my tooling may change again.
+Claude Code is still an excellent tool. I still use it for some tasks. The category is moving quickly, and this is a snapshot of my workflow in May 2026.
 
 I mostly switched because Codex now gives me one place for the pieces I use every day: threads, worktrees, diffs, terminals, browser checks, queued follow-ups, automations, and voice input. The app is closer to a developer workspace than a chat window.
 
-I have enough repetition now to judge daily friction. Over the last month, my coding-agent usage has averaged more than 2 billion tokens per day. At that volume, small workflow issues show up quickly. Task state, approvals, review surfaces, and resumable threads become daily concerns.
+I've used the app enough to judge the daily friction. Over the last month, my coding-agent usage has averaged more than 2 billion tokens per day. I use that as a workflow-volume signal rather than an API-spend estimate. At that volume, small workflow issues show up quickly. Task state, approvals, review surfaces, and resumable threads become daily concerns.
 
-Part of that volume comes from how I have Codex configured. The Codex docs say `agents.max_threads` defaults to `6`; I set mine to `48`. `agents.max_depth` defaults to `1`; I set mine to `3`. That is an aggressive setup, and it increases token use and the risk of noisy fan-out. It also matches how I want to use the tool: many bounded checks running in parallel, with enough visibility that I can still review what happened.
+Part of that volume comes from how I have Codex configured. The Codex docs say `agents.max_threads` defaults to `6`; I set mine to `48`. `agents.max_depth` defaults to `1`; I set mine to `3`. That is an aggressive setup, and it increases token use and the risk of noisy fan-out. Defaults exist for a reason; copying this setup casually would be expensive and noisy. It matches how I want to use the tool: many bounded checks running in parallel, with enough visibility that I can still review what happened.
 
-## Recent updates
+## How the workflow changed
 
 The Codex app shipped on February 2, 2026. The April 16 update was when enough of my workflow fit inside the app that I started treating it as my default workspace.
 
@@ -36,6 +36,8 @@ On a typical day, I might have one worktree fixing a flaky test, one thread revi
 A single thread is the basic unit: prompt, work summary, changed files, and review action.
 
 ![Codex thread showing a completed dark mode change and review action](/images/writing/codex-desktop-app-post/codex-app-overview.webp)
+
+The screenshots in this post are official product images. My own workspaces contain private code, accounts, and internal context, and they are messier than the product renders.
 
 ## State and boundaries
 
@@ -72,19 +74,25 @@ If I cannot describe the diff, the verification step, and the rollback path, the
 
 The other useful property is that a worktree is disposable. The agent can try something, I can inspect the result, and I can discard it if the approach was wrong without contaminating other work.
 
-## Operational concerns
+## Limits and rough edges
 
-The Claude-related part of the decision was operational.
+Some of the decision was operational.
 
-Anthropic changed how Claude subscriptions interact with some third-party harnesses, Opus 4.7 introduced tokenizer changes that can increase token usage for the same input, and Claude had several visible incidents in April affecting Claude.ai, Claude Code, and API availability. Tools that ship this quickly are going to have limits, outages, pricing changes, and odd edge cases.
+April made the Claude Code tradeoffs more visible to me: quota behavior, third-party harness policy, tokenizer changes, and incidents all became part of the developer experience. Anthropic also raised Claude Code limits on May 6, which is good for users.
 
-That story also changed while I was drafting. On May 6, Anthropic announced higher Claude Code limits, including doubled five-hour limits for Pro, Max, Team, and seat-based Enterprise plans, along with the removal of peak-hour reductions for Pro and Max. That is good for users. It also reinforces the broader point: limits, capacity, and routing are now part of the developer experience.
+Codex has its own rough edges. High subagent counts can waste tokens quickly. Background work can fan out into noisy checks. Browser and computer use require careful permissions. The desktop app also has more moving parts than a terminal-first tool, so I spend more time thinking about which surface should own a task.
 
 When agents become part of the daily workflow, quota behavior, cache behavior, permissions, branch isolation, resumability, and review surfaces affect whether I can use the tool for hours without babysitting it.
 
 Once I started building my day around agents, I cared much more about how the product exposed state, boundaries, and review loops. The surrounding workspace mattered more to me than it had a few months earlier.
 
-GPT-5.5 matters here because of token efficiency. OpenAI says GPT-5.5 uses significantly fewer tokens to complete the same Codex tasks and is now the recommended choice for most Codex tasks when it appears in the model picker. I have not independently benchmarked that claim. For heavy agent use, token efficiency shows up in cost, latency, and limits.
+GPT-5.5 matters here because of token efficiency. OpenAI says GPT-5.5 uses significantly fewer tokens on the same Codex tasks, and the Codex docs recommend it for most tasks when it is available. I have not independently benchmarked that claim. For heavy agent use, token efficiency shows up in cost, latency, and limits.
+
+## Where Claude Code still fits
+
+I still reach for Claude Code for second opinions, terminal-first work, and workflows I already built around Claude-specific commands and project memory. Its Plan Mode remains a useful discipline for larger changes: read first, write a plan, then implement against that plan. I also still like Claude's Chrome workflow for quick interactive browser checks.
+
+The conclusion is narrow: Claude Code helped me build the workflow. Codex currently gives me a better place to operate most of it.
 
 ## Long-running threads
 
@@ -127,13 +135,13 @@ A lot of useful engineering work is repetitive, easy to defer, and easy to forge
 
 ## Browser and computer use
 
-Browser and computer use are useful, and they need the most caution.
+Browser and computer use are useful. They need the most caution.
 
 I use a combination of three surfaces:
 
 - the in-app browser for local previews, file-backed pages, and public pages
 - the Chrome extension for signed-in browser workflows where Codex needs my active browser profile
-- supervised computer use for broader GUI-only tasks outside the browser
+- supervised computer use for GUI-only tasks outside the browser
 
 That distinction matters. Local QA should usually stay inside the in-app browser. Logged-in websites need tighter website approvals, allowlists, and blocklists. Desktop tasks need the most caution because they operate the real app with real permissions.
 
@@ -145,11 +153,11 @@ Outside QA, computer use helps with tasks that sit in an awkward middle ground: 
 
 The main caveat is security.
 
-Once an agent can read, browse, and act, ordinary content becomes part of the attack surface. A PDF, a spreadsheet, a PR description, a browser tab, or an email thread can all affect an agent that has tools. Signed-in pages are effectively your account. Desktop access expands the blast radius.
+Once an agent can read, browse, and act, ordinary content becomes part of the attack surface. The threat model is prompt injection through normal content: a PDF, a spreadsheet, a PR description, a browser tab, or an email thread can all affect an agent that has tools. Signed-in pages are effectively your account. Desktop access expands the blast radius.
 
 The feature is useful under supervision, with clear scope and review. The safety work around sandboxing, approvals, network rules, and telemetry matters because these tools are becoming part of real development workflows rather than occasional experiments.
 
-## Where Codex is now my default
+## Codex as my default
 
 Codex is now where I start most implementation, review, and browser-checking work. The practical difference is the combination of:
 
@@ -163,7 +171,7 @@ Codex is now where I start most implementation, review, and browser-checking wor
 
 Together, these changes reduced the amount of manual coordination I was doing every day.
 
-I still use Claude Code for second opinions and for workflows I already built around it. Codex is where I now run most of the day-to-day agent work.
+Codex is where I now run most of the day-to-day agent work.
 
 ## Responsibility
 
