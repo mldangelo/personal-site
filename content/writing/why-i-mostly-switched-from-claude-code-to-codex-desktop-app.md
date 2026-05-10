@@ -173,11 +173,11 @@ Together, these changes reduced the amount of manual coordination I was doing ev
 
 Codex is where I now run most of the day-to-day agent work.
 
-## Responsibility
+## Review
 
-The responsibility model stays the same. Agents can implement, test, and summarize; I still own the review and the decision to ship.
+Agents can implement, test, and summarize. I still review the diff, check behavior changes, and decide what ships.
 
-The more agents I run, the more I want deterministic structure around them: tests, scripts, worktrees, reviewable diffs, and explicit approval boundaries.
+The more agents I run, the more structure I want around them: tests, scripts, worktrees, reviewable diffs, and explicit approval boundaries.
 
 The value is practical. Codex lets me attempt more work in parallel without losing track of what is happening.
 
