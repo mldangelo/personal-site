@@ -82,7 +82,7 @@ The Claude-related part of the decision was operational.
 
 Anthropic changed how Claude subscriptions interact with some third-party harnesses, Opus 4.7 introduced tokenizer changes that can increase token usage for the same input, and Claude had several visible incidents in April affecting Claude.ai, Claude Code, and API availability. Tools that ship this quickly are going to have limits, outages, pricing changes, and odd edge cases.
 
-My conclusion from those changes is narrow: operational details matter more once agents become part of the workday.
+That story also changed while I was drafting. On May 6, Anthropic announced higher Claude Code limits, including doubled five-hour limits for Pro, Max, Team, and seat-based Enterprise plans, along with the removal of peak-hour reductions for Pro and Max. That is good for users. It also reinforces the broader point: limits, capacity, and routing are now part of the developer experience.
 
 When agents become part of the daily workflow, quota behavior, cache behavior, permissions, branch isolation, resumability, and review surfaces affect whether I can use the tool for hours without babysitting it.
 
@@ -129,11 +129,17 @@ A lot of useful engineering work is repetitive, easy to defer, and easy to forge
 
 ![Codex automation setup for recurring background checks](/images/writing/codex-desktop-app-post/codex-automations.webp)
 
-## Computer use
+## Browser and computer use
 
-Computer use is useful, and it needs the most caution.
+Browser and computer use are useful, and they need the most caution.
 
-For local previews and public pages, the in-app browser is useful. For signed-in browser workflows, the Chrome extension is the more precise tool because it can use the active browser profile while asking for website access. For broader GUI-only tasks, supervised computer use can operate the real app with real permissions.
+I use a combination of three surfaces:
+
+- the in-app browser for local previews, file-backed pages, and public pages
+- the Chrome extension for signed-in browser workflows where Codex needs my active browser profile
+- supervised computer use for broader GUI-only tasks that are not cleanly browser-native
+
+That distinction matters. Local QA should usually stay inside the in-app browser. Logged-in websites need tighter website approvals, allowlists, and blocklists. Desktop tasks need the most caution because they operate the real app with real permissions.
 
 The developer use case I use most is background QA. One thread can make a change in a worktree while another clicks through the app, checks a flow, and comes back with screenshots and notes. That gives me a second pass without stopping implementation.
 
@@ -157,9 +163,8 @@ The difference comes from a combination of features:
 - isolated worktrees
 - integrated diffs and terminal output
 - queued follow-ups
-- local previews and screenshots
+- the in-app browser, Chrome extension, and supervised computer use for different browser and GUI workflows
 - recurring checks through automations
-- supervised computer use for QA and other GUI-only work
 - longer threads that are easier to resume
 
 Together, these changes reduced the amount of manual coordination I was doing every day.
@@ -173,6 +178,8 @@ Responsibility stays with me.
 The agent still does implementation. I still do review, judgment, prioritization, and taste.
 
 My working pattern is ordinary: bounded tasks, review loops, several active threads, and a human who still owns the outcome.
+
+The more agents I run, the more I want deterministic structure around them: tests, scripts, worktrees, reviewable diffs, and explicit approval boundaries.
 
 The value is practical. I can attempt more work in parallel without losing track of what is happening.
 
@@ -192,6 +199,7 @@ Right now, the Codex desktop app is where I prefer to run that work.
 - [Codex Chrome extension](https://developers.openai.com/codex/app/chrome-extension) - official documentation for using Chrome with Codex, including website approvals, allowlists, blocklists, browser history, and data handling
 - [Subagents](https://developers.openai.com/codex/subagents) - official documentation for `agents.max_threads`, `agents.max_depth`, defaults, and token-use cautions
 - [Running Codex safely at OpenAI](https://openai.com/index/running-codex-safely/) - OpenAI's May 8, 2026 write-up on sandboxing, approvals, network policy, managed configuration, and agent-native telemetry
+- [Higher usage limits for Claude and a compute deal with SpaceX](https://www.anthropic.com/news/higher-limits-spacex) - Anthropic's May 6, 2026 announcement of higher Claude Code and Opus API limits
 - [Tell HN: Anthropic no longer allowing Claude Code subscriptions to use OpenClaw](https://news.ycombinator.com/item?id=47633396) - public discussion of the third-party harness policy change
 - [Pro Max 5x quota exhausted in 1.5 hours despite moderate usage](https://news.ycombinator.com/item?id=47739260) - public discussion of quota burn and cache behavior
 - [Introducing Claude Opus 4.7](https://www.anthropic.com/news/claude-opus-4-7) - Anthropic's release notes on tokenizer and effort-level changes
