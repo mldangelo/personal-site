@@ -15,19 +15,17 @@ Claude Code is still an excellent tool. I still use it for some tasks. The categ
 
 I mostly switched because Codex now gives me one place for the pieces I use every day: threads, worktrees, diffs, terminals, browser checks, queued follow-ups, automations, and voice input. The app is closer to a developer workspace than a chat window.
 
-I have enough repetition now to judge daily friction. Over the last month, my coding-agent usage has averaged more than 1 billion tokens per day. I include that number because it changes what I notice. At that volume, small issues show up quickly. Task state, approvals, review surfaces, and resumable threads become daily concerns.
+I have enough repetition now to judge daily friction. Over the last month, my coding-agent usage has averaged more than 1 billion tokens per day. At that volume, small workflow issues show up quickly. Task state, approvals, review surfaces, and resumable threads become daily concerns.
 
 Part of that volume comes from how I have Codex configured. The Codex docs say `agents.max_threads` defaults to `6`; I set mine to `48`. `agents.max_depth` defaults to `1`; I set mine to `3`. That is an aggressive setup, and it increases token use and the risk of noisy fan-out. It also matches how I want to use the tool: many bounded checks running in parallel, with enough visibility that I can still review what happened.
 
 ## Recent updates
 
-The Codex app launched before April 16. The April 16 update added enough of the pieces I use every day that I started treating it as my default workspace.
+The Codex app launched before April 16. That update was when enough of my workflow fit inside the app that I started treating it as my default workspace.
 
-After that update, I could keep more of the work in one place: threads, worktrees, diffs, terminals, automations, local browser previews, screenshots, and supervised computer use.
+The relevant pieces were threads, worktrees, diffs, terminals, automations, local browser previews, screenshots, and supervised computer use.
 
-A week later, the April 23 Codex changelog added three things relevant to my workflow: GPT-5.5 in Codex, browser use for local development servers and file-backed pages, and automatic review for eligible approval prompts before they run.
-
-The early May updates continued in the same direction. The May 7 changelog added Codex for Chrome, which lets Codex work with signed-in browser state while keeping website access behind approvals, allowlists, and blocklists. The May 8 CLI release added a simpler `codex remote-control` entrypoint, paged thread views for app-server clients, plugin-sharing improvements, and fixes around turn diffs and thread resume/fork behavior. OpenAI also published a May 8 safety post about sandboxing, approvals, network policy, managed configuration, and agent-native telemetry.
+The later April and early May updates filled in more of the same workflow: GPT-5.5 in Codex, browser use for local development servers and file-backed pages, automatic review for eligible approval prompts, Codex for Chrome, and CLI/app-server improvements around remote control, paged thread views, plugin sharing, turn diffs, and thread resume/fork behavior. OpenAI also published a safety post covering sandboxing, approvals, network policy, managed configuration, and telemetry.
 
 Once I had more than one agent working at a time, the main overhead was orientation: reconstructing which branch each task was on, whether tests had already run, which diff I was reviewing, which screenshot was current, and whether I had already told the agent about an edge case.
 
@@ -43,7 +41,7 @@ In daily use, the app keeps parallel work visible and separated.
 
 Threads keep the work visible. Worktrees keep it isolated. Diffs, terminals, screenshots, and previews make it reviewable.
 
-You can reproduce some of this with terminal panes and discipline. I did. The tradeoff is that more of the coordination stays in your head: which pane matters, which branch belongs to which task, which verification step already ran, and which follow-up still has to be sent.
+I reproduced some of this with terminal panes, naming conventions, and manual notes. The tradeoff is that more of the coordination stays in your head: which pane matters, which branch belongs to which task, which verification step already ran, and which follow-up still has to be sent.
 
 In the app, a task includes a thread, a worktree, a diff, a terminal history, and a verification trail.
 
@@ -74,7 +72,7 @@ If I cannot describe the diff, the verification step, and the rollback path, the
 
 The other useful property is that a worktree is disposable. That makes it easier to experiment. The agent can try something, I can inspect the result, and I can discard it if the approach was wrong without contaminating other work.
 
-Isolation helps. Cheap discard helps more.
+The ability to discard a bad attempt cheaply is the important part.
 
 ## Operational concerns
 
@@ -88,7 +86,7 @@ When agents become part of the daily workflow, quota behavior, cache behavior, p
 
 Once I started building my day around agents, I cared much more about how the product exposed state, boundaries, and review loops. The surrounding workspace mattered more to me than it had a few months earlier.
 
-GPT-5.5 matters here because of token efficiency. OpenAI says GPT-5.5 uses significantly fewer tokens to complete the same Codex tasks and is now the recommended choice for most Codex tasks when it appears in the model picker. I have not independently benchmarked that claim. At billion-token-per-day coding volume, token efficiency shows up in cost, latency, and limits.
+GPT-5.5 matters here because of token efficiency. OpenAI says GPT-5.5 uses significantly fewer tokens to complete the same Codex tasks and is now the recommended choice for most Codex tasks when it appears in the model picker. I have not independently benchmarked that claim. For heavy agent use, token efficiency shows up in cost, latency, and limits.
 
 ## Long-running threads
 
@@ -152,8 +150,6 @@ Once an agent can read, browse, and act, ordinary content becomes part of the at
 The feature is useful under supervision, with clear scope and review. The safety work around sandboxing, approvals, network rules, and telemetry matters because these tools are becoming part of real development workflows rather than occasional experiments.
 
 ## Why I switched
-
-I am describing the workflow I use every day rather than ranking models for everyone.
 
 For my workflow, Codex is now the better workspace.
 
