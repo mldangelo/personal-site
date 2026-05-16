@@ -31,7 +31,7 @@
     "@fortawesome/free-regular-svg-icons": "^7.2.0",
     "@fortawesome/react-fontawesome": "^3.2.0",
     "@next/third-parties": "^16.2.0",
-    "@tailwindcss/postcss": "^4.2.2",
+    "@tailwindcss/postcss": "^4.2.4",
     "dayjs": "^1.11.20",
     "gray-matter": "^4.0.3",
     "markdown-to-jsx": "^9.7.13",
