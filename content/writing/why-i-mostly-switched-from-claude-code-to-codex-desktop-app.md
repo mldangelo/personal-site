@@ -2,7 +2,6 @@
 title: Why I Mostly Switched From Claude Code to the Codex Desktop App
 date: '2026-05-10'
 description: 'Why the Codex desktop app became my default coding-agent workspace: worktrees, threads, voice input, browser checks, automations, and reviewable boundaries.'
-draft: true
 ---
 
 I now start most coding sessions in the Codex desktop app.
