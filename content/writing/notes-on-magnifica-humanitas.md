@@ -1,7 +1,7 @@
 ---
 title: Notes on Magnifica Humanitas
 date: '2026-05-25'
-description: 'Pope Leo XIV's first encyclical treats AI as a social technology: labor, property, truth, war, and the common good.'
+description: "Pope Leo XIV's first encyclical treats AI as a social technology across labor, property, truth, war, and the common good."
 ---
 
 _Disclosure: I work at OpenAI. The opinions in this piece are my own._
