@@ -8,15 +8,15 @@ _Disclosure: I work at OpenAI. The opinions in this piece are my own._
 
 Pope Leo XIV published his first encyclical on May 25, 2026. He chose to write about artificial intelligence.
 
-The document was signed ten days earlier, on the 135th anniversary of [_Rerum Novarum_](https://www.vatican.va/content/leo-xiii/en/encyclicals/documents/hf_l-xiii_enc_15051891_rerum-novarum.html), Leo XIII's 1891 encyclical on industrial capitalism, private property, and worker dignity. That anniversary tells us how Leo wants the document read. He places AI in the lineage of the industrial social question: a transformation of labor, property, power, and human dignity.
+The document was signed ten days earlier, on the 135th anniversary of [_Rerum Novarum_](https://www.vatican.va/content/leo-xiii/en/encyclicals/documents/hf_l-xiii_enc_15051891_rerum-novarum.html), Leo XIII's 1891 encyclical on industrial capitalism, private property, and worker dignity. Leo places AI in that lineage: a transformation of labor, property, power, and human dignity.
 
 [_Magnifica Humanitas_](https://www.vatican.va/content/leo-xiv/en/encyclicals/documents/20260515-magnifica-humanitas.html) reads AI through the older language of Catholic social teaching: labor, property, truth, war, education, human dignity, and the common good. It presents AI as a social technology, one that can reshape work, schools, media, military doctrine, and the terms on which people participate in public life. Model behavior is only one layer of the problem Leo describes.
 
 The Vatican operates on different terrain from a legislature, cloud provider, military customer, or frontier lab. It names categories, convenes actors, and makes certain claims about technology harder to describe as neutral. From outside the Church, the document can look almost like a policy intervention. From inside it, the claim is stronger: AI has become a matter for social doctrine.
 
-That is why the setting of the launch mattered. [Vatican News listed Christopher Olah](https://www.vaticannews.va/en/pope/news/2026-05/pope-leo-xiv-first-encyclical-magnifica-humanitas.html), an Anthropic co-founder and interpretability researcher, among the speakers at the May 25 presentation. Olah's presence put a major AI lab beside a document warning about the private concentration of technological power.
+At the May 25 presentation, [Vatican News listed Christopher Olah](https://www.vaticannews.va/en/pope/news/2026-05/pope-leo-xiv-first-encyclical-magnifica-humanitas.html), an Anthropic co-founder and interpretability researcher, among the speakers. Olah's presence put a major AI lab beside a document warning about the private concentration of technological power.
 
-A cynical reading is that Anthropic gained proximity to Vatican moral authority. The scene also worked the other way: Anthropic stood inside the critique.
+A cynical reading is that Anthropic gained proximity to Vatican moral authority. Anthropic also stood inside the critique.
 
 Olah works on technical opacity: what advanced AI systems are doing internally. Leo's encyclical asks a social version of the same question. What institutions are we building around systems their builders only partly understand?
 
