@@ -7,6 +7,10 @@ export const SITE_URL = 'https://mldangelo.com';
 export const AUTHOR_NAME = "Michael D'Angelo";
 export const TWITTER_HANDLE = '@dangelosaurus';
 
+// Canonical one-line bio, shared across page metadata, OpenGraph, and JSON-LD.
+export const SITE_DESCRIPTION =
+  'Member of the Technical Staff at OpenAI, working on Promptfoo and agent security. Previously co-founded Promptfoo, Arthena, and Matroid, and led engineering at Smile ID.';
+
 // Image dimension constants
 export const AVATAR_SIZE = {
   hero: 120,

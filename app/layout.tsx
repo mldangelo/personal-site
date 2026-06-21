@@ -2,10 +2,16 @@ import type { Metadata } from 'next';
 import { Raleway, Source_Sans_3 } from 'next/font/google';
 import Script from 'next/script';
 
+import { SiteSchema } from '@/components/Schema';
 import GoogleAnalytics from '@/components/Template/GoogleAnalytics';
 import Navigation from '@/components/Template/Navigation';
 import ScrollToTop from '@/components/Template/ScrollToTop';
-import { AUTHOR_NAME, SITE_URL, TWITTER_HANDLE } from '@/lib/utils';
+import {
+  AUTHOR_NAME,
+  SITE_DESCRIPTION,
+  SITE_URL,
+  TWITTER_HANDLE,
+} from '@/lib/utils';
 import './tailwind.css';
 
 const sourceSans = Source_Sans_3({
@@ -26,15 +32,12 @@ const raleway = Raleway({
   adjustFontFallback: true,
 });
 
-const siteDescription =
-  'Member of the Technical Staff at OpenAI, working on Promptfoo and agent security. Previously co-founded Promptfoo, Arthena, and Matroid, and led engineering at Smile ID.';
-
 export const metadata: Metadata = {
   title: {
     default: AUTHOR_NAME,
     template: `%s | ${AUTHOR_NAME}`,
   },
-  description: siteDescription,
+  description: SITE_DESCRIPTION,
   keywords: [
     AUTHOR_NAME,
     'OpenAI',
@@ -54,7 +57,7 @@ export const metadata: Metadata = {
     url: SITE_URL,
     siteName: AUTHOR_NAME,
     title: AUTHOR_NAME,
-    description: siteDescription,
+    description: SITE_DESCRIPTION,
     images: [
       {
         url: '/images/me.jpg',
@@ -69,7 +72,7 @@ export const metadata: Metadata = {
     site: TWITTER_HANDLE,
     creator: TWITTER_HANDLE,
     title: AUTHOR_NAME,
-    description: siteDescription,
+    description: SITE_DESCRIPTION,
     images: ['/images/me.jpg'],
   },
   robots: {
@@ -101,6 +104,7 @@ export default function RootLayout({
         <Script id="theme-init" strategy="beforeInteractive">
           {`(function(){try{var t=window.localStorage.getItem('theme');if(t==='dark'||t==='light'){document.documentElement.setAttribute('data-theme',t)}else if(window.matchMedia('(prefers-color-scheme:dark)').matches){document.documentElement.setAttribute('data-theme','dark')}else{document.documentElement.setAttribute('data-theme','light')}}catch(e){}})();`}
         </Script>
+        <SiteSchema />
       </head>
       <body>
         <ScrollToTop />
