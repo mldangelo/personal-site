@@ -62,11 +62,9 @@ describe('categories data', () => {
     for (const category of categories) {
       expect(category).toHaveProperty('name');
       expect(category).toHaveProperty('color');
-      expect(category).toHaveProperty('textColor');
 
       expect(typeof category.name).toBe('string');
       expect(typeof category.color).toBe('string');
-      expect(['dark', 'light']).toContain(category.textColor);
     }
   });
 

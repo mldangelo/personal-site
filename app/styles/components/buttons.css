@@ -5,11 +5,9 @@
 
 @layer components {
   /* Button - Modern solid style with hover lift */
-  .btn,
   .button {
     appearance: none;
     background: var(--color-accent);
-    background-image: none !important;
     border: 0;
     border-radius: var(--radius-sm);
     box-shadow:
@@ -35,7 +33,6 @@
       background-color var(--duration-fast) var(--ease-out);
   }
 
-  .btn:hover,
   .button:hover {
     background: color-mix(in srgb, var(--color-accent) 85%, black);
     box-shadow: var(--shadow-lg);
@@ -43,13 +40,11 @@
     color: var(--color-white);
   }
 
-  .btn:active,
   .button:active {
     transform: translateY(0);
     box-shadow: var(--shadow-sm);
   }
 
-  .btn:focus-visible,
   .button:focus-visible {
     box-shadow:
       var(--shadow-md),
@@ -57,14 +52,7 @@
     outline: none;
   }
 
-  /* Primary button (explicit alias - .button is already primary-styled) */
-  .btn-primary,
-  .button-primary {
-    /* Inherits from .button - accent color is the primary style */
-  }
-
   /* Secondary/ghost button variant */
-  .btn-secondary,
   .button-secondary {
     background: transparent;
     box-shadow: inset 0 0 0 1.5px var(--color-border-alt);
@@ -72,7 +60,6 @@
     font-weight: var(--font-weight-medium);
   }
 
-  .btn-secondary:hover,
   .button-secondary:hover {
     background: var(--color-accent-light);
     box-shadow: inset 0 0 0 1.5px var(--color-accent);

@@ -1,89 +1,9 @@
 /* ========================================
-   SKILL BAR COMPONENT
-   Animated progress bars with labels
+   SKILL CONTROLS
+   Filter buttons and skill layout helpers
    ======================================== */
 
 @layer components {
-  /* Skill bar */
-  .skillbar {
-    background: var(--color-border-bg);
-    border-radius: var(--radius-xs);
-    display: block;
-    height: 2.25em;
-    margin-bottom: 1em;
-    overflow: hidden;
-    position: relative;
-    transition: opacity var(--duration-fast) ease;
-    width: 100%;
-  }
-
-  .skillbar:hover {
-    opacity: 0.85;
-  }
-
-  .skillbar-title {
-    /* Use CSS custom property if set, fallback to accent */
-    background: var(--skillbar-color, var(--color-accent));
-    border-radius: var(--radius-xs) 0 0 var(--radius-xs);
-    color: var(--color-bg);
-    font-size: var(--text-base);
-    font-weight: var(--font-weight-medium);
-    height: 100%;
-    left: 0;
-    min-width: 100px;
-    position: absolute;
-    top: 0;
-    z-index: 2;
-  }
-
-  .skillbar-title span {
-    align-items: center;
-    background: var(--color-overlay-dark);
-    display: flex;
-    height: 100%;
-    padding: 0 1em;
-  }
-
-  /* Text color classes for skill bar contrast */
-  .skillbar-title--light {
-    color: var(--color-white);
-  }
-
-  .skillbar-title--light span {
-    background: rgba(0, 0, 0, 0.2);
-  }
-
-  .skillbar-title--dark {
-    color: var(--color-fg);
-  }
-
-  .skillbar-title--dark span {
-    background: rgba(255, 255, 255, 0.2);
-  }
-
-  .skillbar-bar {
-    /* Use CSS custom property if set, fallback to accent */
-    background: var(--skillbar-color, var(--color-accent));
-    height: 100%;
-    position: relative;
-    transition: width var(--duration-skill) ease-in-out;
-    width: 0;
-  }
-
-  .skill-bar-percent {
-    align-items: center;
-    color: var(--color-fg-light);
-    display: flex;
-    font-family: var(--font-heading);
-    font-size: var(--text-sm);
-    height: 100%;
-    letter-spacing: var(--tracking-tight);
-    position: absolute;
-    right: 1em;
-    top: 0;
-    z-index: 1;
-  }
-
   /* Skill buttons - modern pill style */
   .skillbutton {
     appearance: none;
@@ -139,9 +59,5 @@
     .skill-button-container {
       justify-content: center;
     }
-  }
-
-  .skill-row-container {
-    margin-top: 1em;
   }
 }

@@ -13,7 +13,6 @@
   --color-fg-bold: #ffffff;
   --color-fg-light: #b0b0b5;
   --color-white: #fff;
-  --color-black: #000;
 
   /* Overlay colors for dark mode */
   --color-overlay-light: rgba(255, 255, 255, 0.1);
@@ -37,8 +36,6 @@
   --color-surface-subtle: rgba(255, 255, 255, 0.04);
   --color-surface-hover: rgba(255, 255, 255, 0.08);
   --color-surface-active: rgba(255, 255, 255, 0.12);
-  --color-text-muted: rgba(255, 255, 255, 0.6);
-  --color-text-dim: rgba(255, 255, 255, 0.7);
   --color-fg-muted: rgba(255, 255, 255, 0.5);
 
   /* Shadows */
@@ -124,6 +121,10 @@
   border-color: var(--color-border);
 }
 
+[data-theme='dark'] .skill-tag {
+  border-left-color: var(--tag-color, var(--color-accent));
+}
+
 [data-theme='dark'] .skillbutton:hover,
 [data-theme='dark'] .skill-tag:hover {
   background: var(--color-surface-hover);
@@ -149,7 +150,7 @@
 
 [data-theme='dark'] .daterange,
 [data-theme='dark'] .degree-container .school {
-  color: var(--color-text-dim);
+  color: var(--color-fg-light);
 }
 
 /* Misc dark mode overrides */
@@ -157,7 +158,6 @@
   opacity: 0.015;
 }
 
-[data-theme='dark'] .skillbar,
 [data-theme='dark'] code {
   background: var(--color-surface-hover);
   border-color: var(--color-border-bg);

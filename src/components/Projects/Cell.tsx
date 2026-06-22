@@ -23,7 +23,6 @@ export default function Cell({ data }: CellProps) {
           height={PROJECT_IMAGE.height}
           sizes="(max-width: 600px) 100vw, 50vw"
         />
-        <div className="project-card-overlay" />
       </div>
 
       <div className="project-card-content">
@@ -53,7 +52,7 @@ export default function Cell({ data }: CellProps) {
 
   return (
     <article
-      className={`project-card ${featured ? 'project-card--featured' : ''} ${!hasLink ? 'project-card--static' : ''}`}
+      className={`project-card ${featured ? 'project-card--featured' : ''} ${hasLink ? 'project-card--linked' : 'project-card--static'}`}
     >
       {hasLink ? (
         <a href={link} className="project-card-link">
