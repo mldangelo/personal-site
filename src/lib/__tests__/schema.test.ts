@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 import type { Post } from '@/lib/posts';
@@ -16,7 +18,60 @@ import {
   webPageNode,
   websiteNode,
 } from '@/lib/schema';
-import { AUTHOR_NAME, SITE_URL } from '@/lib/utils';
+import {
+  AUTHOR_NAME,
+  SITE_IMAGE_DIMENSIONS,
+  SITE_IMAGE_PATH,
+  SITE_URL,
+} from '@/lib/utils';
+
+const START_OF_FRAME_MARKERS = new Set([
+  0xc0, 0xc1, 0xc2, 0xc3, 0xc5, 0xc6, 0xc7, 0xc9, 0xca, 0xcb, 0xcd, 0xce, 0xcf,
+]);
+
+function readJpegDimensions(filePath: string) {
+  const buffer = fs.readFileSync(filePath);
+
+  if (buffer[0] !== 0xff || buffer[1] !== 0xd8) {
+    throw new Error(`Expected a JPEG file at ${filePath}`);
+  }
+
+  let offset = 2;
+
+  while (offset < buffer.length) {
+    if (buffer[offset] !== 0xff) {
+      throw new Error(`Invalid JPEG marker at byte ${offset}`);
+    }
+
+    while (buffer[offset] === 0xff) {
+      offset += 1;
+    }
+
+    const marker = buffer[offset];
+    offset += 1;
+
+    if (marker === 0xd9 || marker === 0xda) {
+      break;
+    }
+
+    if (marker === 0x01 || (marker >= 0xd0 && marker <= 0xd7)) {
+      continue;
+    }
+
+    const length = buffer.readUInt16BE(offset);
+
+    if (START_OF_FRAME_MARKERS.has(marker)) {
+      return {
+        height: buffer.readUInt16BE(offset + 3),
+        width: buffer.readUInt16BE(offset + 5),
+      };
+    }
+
+    offset += length;
+  }
+
+  throw new Error(`Could not find JPEG dimensions for ${filePath}`);
+}
 
 const mockPost: Post = {
   slug: 'test-article',
@@ -45,6 +100,8 @@ describe('personNode', () => {
     const image = node.image as Record<string, unknown>;
     expect(image['@type']).toBe('ImageObject');
     expect(image.url).toBe(`${SITE_URL}/images/me.jpg`);
+    expect(image.width).toBe(SITE_IMAGE_DIMENSIONS.width);
+    expect(image.height).toBe(SITE_IMAGE_DIMENSIONS.height);
     expect(Array.isArray(node.sameAs)).toBe(true);
     expect((node.sameAs as string[]).length).toBeGreaterThan(0);
   });
@@ -144,8 +201,8 @@ describe('blogPostingNode', () => {
     const image = blogPostingNode(mockPost).image as Record<string, unknown>;
     expect(image['@type']).toBe('ImageObject');
     expect(image.url).toBe(`${SITE_URL}/images/me.jpg`);
-    expect(image.width).toBe(1200);
-    expect(image.height).toBe(630);
+    expect(image.width).toBe(SITE_IMAGE_DIMENSIONS.width);
+    expect(image.height).toBe(SITE_IMAGE_DIMENSIONS.height);
   });
 });
 
@@ -184,5 +241,17 @@ describe('buildGraph', () => {
     expect(nodes).toHaveLength(2);
     expect(nodes[0]['@id']).toBe(WEBSITE_ID);
     expect(nodes[1]['@id']).toBe(PERSON_ID);
+  });
+});
+
+describe('site image metadata', () => {
+  it('keeps declared image dimensions in sync with the public asset', () => {
+    const imagePath = path.join(
+      process.cwd(),
+      'public',
+      SITE_IMAGE_PATH.replace(/^\//, ''),
+    );
+
+    expect(SITE_IMAGE_DIMENSIONS).toEqual(readJpegDimensions(imagePath));
   });
 });

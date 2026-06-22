@@ -9,6 +9,8 @@ import ScrollToTop from '@/components/Template/ScrollToTop';
 import {
   AUTHOR_NAME,
   SITE_DESCRIPTION,
+  SITE_IMAGE_DIMENSIONS,
+  SITE_IMAGE_PATH,
   SITE_URL,
   TWITTER_HANDLE,
 } from '@/lib/utils';
@@ -60,9 +62,9 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
     images: [
       {
-        url: '/images/me.jpg',
-        width: 1200,
-        height: 630,
+        url: SITE_IMAGE_PATH,
+        width: SITE_IMAGE_DIMENSIONS.width,
+        height: SITE_IMAGE_DIMENSIONS.height,
         alt: AUTHOR_NAME,
       },
     ],
@@ -73,7 +75,7 @@ export const metadata: Metadata = {
     creator: TWITTER_HANDLE,
     title: AUTHOR_NAME,
     description: SITE_DESCRIPTION,
-    images: ['/images/me.jpg'],
+    images: [SITE_IMAGE_PATH],
   },
   robots: {
     index: true,

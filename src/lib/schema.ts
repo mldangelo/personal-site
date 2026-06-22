@@ -2,7 +2,13 @@ import contact from '@/data/contact';
 import degrees from '@/data/resume/degrees';
 import work from '@/data/resume/work';
 import type { Post } from '@/lib/posts';
-import { AUTHOR_NAME, SITE_DESCRIPTION, SITE_URL } from '@/lib/utils';
+import {
+  AUTHOR_NAME,
+  SITE_DESCRIPTION,
+  SITE_IMAGE_DIMENSIONS,
+  SITE_IMAGE_PATH,
+  SITE_URL,
+} from '@/lib/utils';
 
 export { SITE_URL } from '@/lib/utils';
 
@@ -21,7 +27,7 @@ export const WEBSITE_ID = `${SITE_URL}/#website`;
 export const BLOG_ID = `${SITE_URL}/writing/#blog`;
 
 export const SITE_LANGUAGE = 'en-US';
-export const SITE_IMAGE = `${SITE_URL}/images/me.jpg`;
+export const SITE_IMAGE = `${SITE_URL}${SITE_IMAGE_PATH}`;
 export const HOME_URL = `${SITE_URL}/`;
 
 // Shared so the /writing metadata and the Blog node stay in sync.
@@ -73,6 +79,8 @@ export function personNode(): SchemaNode {
       '@type': 'ImageObject',
       '@id': `${SITE_URL}/#person-image`,
       url: SITE_IMAGE,
+      width: SITE_IMAGE_DIMENSIONS.width,
+      height: SITE_IMAGE_DIMENSIONS.height,
       caption: AUTHOR_NAME,
     },
     description: SITE_DESCRIPTION,
@@ -110,6 +118,8 @@ export function websiteNode(): SchemaNode {
       '@type': 'ImageObject',
       '@id': `${SITE_URL}/#website-image`,
       url: SITE_IMAGE,
+      width: SITE_IMAGE_DIMENSIONS.width,
+      height: SITE_IMAGE_DIMENSIONS.height,
       caption: AUTHOR_NAME,
     },
   };
@@ -216,8 +226,8 @@ export function blogPostingNode(post: Post): SchemaNode {
       '@type': 'ImageObject',
       '@id': `${url}#blogposting-image`,
       url: SITE_IMAGE,
-      width: 1200,
-      height: 630,
+      width: SITE_IMAGE_DIMENSIONS.width,
+      height: SITE_IMAGE_DIMENSIONS.height,
     },
   };
 }
