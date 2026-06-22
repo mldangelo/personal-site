@@ -8,7 +8,7 @@ I now start most coding sessions in the Codex desktop app.
 
 A few months ago, I wrote about [shipping with Claude Code](/writing/shipping-with-claude-code/). That post describes the setup I had then: multiple Ghostty panes, several git worktrees, Claude doing implementation, Codex and Gemini checking the work, browser automation for UI testing, and a fair amount of manual coordination. It worked. I was the coordination layer.
 
-Disclosure: I work at OpenAI, and I have shipped a few small PRs into Codex. I am writing here in a personal capacity. Anthropic provides me with a complimentary Claude Code Max account, and I am grateful for it. Claude Code is still an excellent tool, and I still use it daily for some tasks. The category is moving quickly, and this is a snapshot of my setup as of late spring 2026.
+Disclosure: I work at OpenAI, and I have shipped a few small PRs into Codex. I am writing here in a personal capacity. Anthropic provides me with a complimentary Claude Code Max account, and I am grateful for it. Claude Code is still an excellent tool, and I still use it daily for some tasks. The category is moving quickly, and this is where my setup stands as of June 2026.
 
 I mostly switched because Codex now gives me one place for the pieces I use every day: threads, worktrees, diffs, terminals, browser checks, queued follow-ups, automations, and voice input. It feels more like a developer workspace than a chat window, and at the volume I work, having all of it in one window cuts a lot of day-to-day friction.
 
@@ -76,6 +76,8 @@ Codex has its own rough edges. High subagent counts burn tokens fast, background
 
 I still reach for Claude Code for second opinions, for terminal-first work, and for the workflows I'd already built around its commands and project memory. Plan Mode is still a good discipline on bigger changes: read first, write the plan, then build against it. And I still like Claude's Chrome workflow for quick interactive checks.
 
+The Claude side has moved since I started writing this, too. On June 9, Anthropic shipped [Claude Fable 5](https://www.anthropic.com/news/claude-fable-5-mythos-5), the public release of its Mythos line and its strongest model yet on software-engineering benchmarks, easily good enough to make me re-run this comparison. Three days later, a US export-control directive forced Anthropic to [suspend Fable 5 and Mythos 5](https://www.anthropic.com/news/fable-mythos-access) for every foreign national, and they've been offline since. Claude Code itself still runs fine on Opus 4.8; it's the frontier model that's out of reach right now. I won't read anything grand into that. I pick tools I can actually rely on, and day-to-day availability counts for about as much as a benchmark score.
+
 ## Where this nets out
 
 So the claim is a modest one. Claude Code helped me build this workflow; Codex is currently a better place to run most of it. No single feature tipped the balance. It was getting the threads, worktrees, diffs, follow-ups, browser surfaces, and automations into one place, with sessions I can actually resume. The result is that I hand-coordinate far less than I used to.
@@ -100,4 +102,6 @@ None of this replaces the part I keep for myself. Agents can write the code, run
 - [Tell HN: Anthropic no longer allowing Claude Code subscriptions to use OpenClaw](https://news.ycombinator.com/item?id=47633396) - public discussion of the third-party harness policy change
 - [Pro Max 5x quota exhausted in 1.5 hours despite moderate usage](https://news.ycombinator.com/item?id=47739260) - public discussion of quota burn and cache behavior
 - [Introducing Claude Opus 4.7](https://www.anthropic.com/news/claude-opus-4-7) - Anthropic's release notes on tokenizer and effort-level changes
+- [Introducing Claude Fable 5 and Claude Mythos 5](https://www.anthropic.com/news/claude-fable-5-mythos-5) - Anthropic's June 9, 2026 release of Fable 5, the public version of its Mythos line, with state-of-the-art software-engineering benchmarks and built-in safeguards
+- [Statement on the US government directive to suspend access to Fable 5 and Mythos 5](https://www.anthropic.com/news/fable-mythos-access) - Anthropic's June 12, 2026 notice that a US export-control directive forced it to disable both models for all foreign nationals; Opus 4.8 and earlier models were unaffected
 - [Claude status](https://status.claude.com/) - incident history for Claude.ai, Claude Code, and API availability
