@@ -1,9 +1,15 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { ArticleSchema } from '@/components/Schema';
+import { SchemaGraph } from '@/components/Schema';
 import PageWrapper from '@/components/Template/PageWrapper';
 import PostContent from '@/components/Writing/PostContent';
 import { getPostBySlug, getPostSlugs } from '@/lib/posts';
+import {
+  blogPostingNode,
+  breadcrumbNode,
+  HOME_URL,
+  webPageNode,
+} from '@/lib/schema';
 import { AUTHOR_NAME, formatDate, SITE_URL } from '@/lib/utils';
 
 interface PageProps {
@@ -56,9 +62,27 @@ export default async function PostPage({ params }: PageProps) {
     notFound();
   }
 
+  const postUrl = `${SITE_URL}/writing/${post.slug}/`;
+  const writingUrl = `${SITE_URL}/writing/`;
+
   return (
     <PageWrapper>
-      <ArticleSchema post={post} />
+      <SchemaGraph
+        nodes={[
+          webPageNode({
+            url: postUrl,
+            name: post.title,
+            description: post.description,
+            hasBreadcrumb: true,
+          }),
+          blogPostingNode(post),
+          breadcrumbNode(postUrl, [
+            { name: 'Home', url: HOME_URL },
+            { name: 'Writing', url: writingUrl },
+            { name: post.title, url: postUrl },
+          ]),
+        ]}
+      />
       <article className="post-page">
         <header className="post-header">
           <time className="post-date" dateTime={post.date}>

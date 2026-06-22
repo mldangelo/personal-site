@@ -1,16 +1,26 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { SchemaGraph } from '@/components/Schema';
 import PageWrapper from '@/components/Template/PageWrapper';
 import writing from '@/data/writing';
 import { createPageMetadata } from '@/lib/metadata';
 import { getAllPosts } from '@/lib/posts';
+import {
+  blogNode,
+  breadcrumbNode,
+  collectionPageNode,
+  HOME_URL,
+  SITE_URL,
+  WRITING_DESCRIPTION,
+} from '@/lib/schema';
 import { formatDate } from '@/lib/utils';
+
+const WRITING_URL = `${SITE_URL}/writing/`;
 
 export const metadata: Metadata = {
   ...createPageMetadata({
     title: 'Writing',
-    description:
-      'Articles on AI security, LLM red teaming, and trust & safety.',
+    description: WRITING_DESCRIPTION,
     path: '/writing/',
   }),
   alternates: {
@@ -96,8 +106,26 @@ export default function WritingPage() {
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   const undated = allItems.filter((item) => !item.date);
 
+  // Newest dated entry across internal posts and external articles.
+  const latestPostDate = dated[0]?.date;
+
   return (
     <PageWrapper>
+      <SchemaGraph
+        nodes={[
+          collectionPageNode({
+            url: WRITING_URL,
+            name: 'Writing',
+            description: WRITING_DESCRIPTION,
+            hasBreadcrumb: true,
+          }),
+          blogNode(latestPostDate),
+          breadcrumbNode(WRITING_URL, [
+            { name: 'Home', url: HOME_URL },
+            { name: 'Writing', url: WRITING_URL },
+          ]),
+        ]}
+      />
       <article className="writing-page">
         <header className="writing-header">
           <div className="writing-header-row">
