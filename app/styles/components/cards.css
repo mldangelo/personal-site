@@ -77,7 +77,7 @@
   transition: all var(--duration-normal) var(--ease-out);
 }
 
-.project-card:hover {
+.project-card--linked:hover {
   transform: translateY(var(--lift-md));
   border-color: var(--color-accent-border);
   box-shadow:
@@ -106,10 +106,6 @@
   cursor: default;
 }
 
-.project-card--static:hover {
-  border-color: var(--color-border-bg);
-}
-
 .project-card-static {
   display: block;
 }
@@ -128,7 +124,7 @@
   transition: transform var(--duration-normal) var(--ease-out);
 }
 
-.project-card:hover .project-card-image img {
+.project-card--linked:hover .project-card-image img {
   transform: scale(var(--scale-sm));
 }
 

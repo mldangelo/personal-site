@@ -29,16 +29,6 @@
   --color-accent-border: color-mix(in srgb, var(--color-accent) 50%, transparent);
 
   /* ===================
-     SKILL CATEGORY COLORS
-     =================== */
-  --color-skill-1: #6968b3;
-  --color-skill-2: #37b1f5;
-  --color-skill-3: #40494e;
-  --color-skill-4: #515dd4;
-  --color-skill-5: #e47272;
-  --color-skill-6: #cc7b94;
-
-  /* ===================
      BORDER COLORS
      =================== */
   --color-border: rgba(0, 0, 0, 0.1);

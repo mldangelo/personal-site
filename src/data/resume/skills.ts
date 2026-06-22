@@ -7,8 +7,6 @@ export interface Skill {
 export interface Category {
   name: string;
   color: string;
-  /** Pre-computed text color for contrast - 'dark' for light backgrounds, 'light' for dark */
-  textColor: 'dark' | 'light';
 }
 
 const skills: Skill[] = [
@@ -135,7 +133,6 @@ function buildCategories(skillsList: Skill[]): Category[] {
   return uniqueCategories.map((category) => ({
     name: category,
     color: 'var(--color-accent)',
-    textColor: 'dark' as const,
   }));
 }
 

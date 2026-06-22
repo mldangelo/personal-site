@@ -98,7 +98,7 @@
     border-color var(--duration-fast) var(--ease-out);
 }
 
-.project-card:hover .tech-tag {
+.project-card--linked:hover .tech-tag {
   background: var(--color-accent-subtle);
   border-color: var(--color-accent);
 }
