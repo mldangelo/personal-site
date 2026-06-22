@@ -14,9 +14,7 @@ export default function HomePage() {
   return (
     <PageWrapper>
       <SchemaGraph
-        nodes={[
-          profilePageNode({ url: HOME_URL, name: `About ${AUTHOR_NAME}` }),
-        ]}
+        nodes={[profilePageNode({ url: HOME_URL, name: AUTHOR_NAME })]}
       />
       <Hero />
     </PageWrapper>
