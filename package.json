@@ -35,7 +35,7 @@
     "dayjs": "^1.11.21",
     "gray-matter": "^4.0.3",
     "markdown-to-jsx": "^9.8.2",
-    "next": "^16.2.6",
+    "next": "^16.2.10",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "tailwindcss": "^4.3.0"
