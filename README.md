@@ -1,49 +1,22 @@
-# Personal Website Template
+# Gabriel Dias — Personal Website
 
-[![Build Status](https://img.shields.io/github/actions/workflow/status/mldangelo/personal-site/node.js.yml?branch=main)](https://github.com/mldangelo/personal-site/actions)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/gabzzz-dias/personal-site/node.js.yml?branch=main)](https://github.com/gabzzz-dias/personal-site/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
-[![GitHub Stars](https://img.shields.io/github/stars/mldangelo/personal-site?style=social)](https://github.com/mldangelo/personal-site/stargazers)
-[![GitHub Forks](https://img.shields.io/github/forks/mldangelo/personal-site?style=social)](https://github.com/mldangelo/personal-site/network/members)
 
-A free, open-source portfolio website template built with [Next.js](https://nextjs.org/), [React](https://react.dev/), [TypeScript](https://www.typescriptlang.org/), and [Tailwind CSS](https://tailwindcss.com/). Fork it and make it your own in under an hour.
+My personal portfolio site, built with [Next.js](https://nextjs.org/), [React](https://react.dev/), [TypeScript](https://www.typescriptlang.org/), and [Tailwind CSS](https://tailwindcss.com/).
 
-**[See it live →](https://mldangelo.com)**
+**[See it live →](https://gabriel-dias.vercel.app)**
 
-## Why This Template?
-
-- **Zero setup required.** Fork, open in GitHub Codespaces, and start editing.
-- **Modern tech stack.** Next.js 16, React 19, TypeScript, Tailwind CSS v4.
-- **Free hosting.** Deploys automatically to GitHub Pages.
-- **Dark mode.** System preference detection with manual toggle.
-- **Blog ready.** Markdown posts with RSS feed (optional).
-- **AI-friendly.** Works great with GitHub Copilot, Claude, and Cursor.
-
-## Get Started
-
-### Option 1: Local Development
+## Development
 
 ```bash
-gh repo fork mldangelo/personal-site --clone
+git clone https://github.com/gabzzz-dias/personal-site.git
 cd personal-site
 npm install
 npm run dev
 ```
 
-Requires [GitHub CLI](https://cli.github.com/) and Node.js 20+ ([nvm](https://github.com/nvm-sh/nvm) recommended).
-
-### Option 2: GitHub Codespaces
-
-1. Click **Fork** at the top of this page
-2. In your fork, click **Code** → **Codespaces** → **Create codespace**
-3. Run `npm run dev`
-
-No local setup needed. Everything runs in your browser.
-
-## Customize It
-
-Follow the **[adapting guide](./docs/adapting-guide.md)** for a step-by-step checklist.
-
-**Pro tip:** Open the adapting guide in Copilot Chat or your favorite AI assistant and ask it to help you customize each section.
+Requires Node.js 20+ ([nvm](https://github.com/nvm-sh/nvm) recommended).
 
 ## Commands
 
@@ -56,14 +29,8 @@ npm test         # Run tests
 
 ## Deploy
 
-Push to `main` and GitHub Pages deploys automatically. See the [adapting guide](./docs/adapting-guide.md#deployment) for custom domain setup.
+Deploys automatically to [Vercel](https://vercel.com) on every push to `main`.
 
-## Contributing
+## Credits
 
-Contributions welcome! If you find a bug or want to improve something, please open a PR.
-
-See [contributing guide](./docs/contributing.md) and [design goals](./docs/design-goals.md).
-
-## License
-
-[MIT](./LICENSE). Use it however you want.
+Built on top of the open-source [personal-site](https://github.com/mldangelo/personal-site) template by Michael D'Angelo, used under the [MIT license](./LICENSE).
