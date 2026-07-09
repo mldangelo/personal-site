@@ -2,6 +2,12 @@
 
 import { useEffect, useReducer, useRef, useState } from 'react';
 
+import contact from '@/data/contact';
+
+const emailItem = contact.find((item) => item.link.startsWith('mailto:'));
+const REAL_EMAIL = emailItem ? emailItem.link.replace('mailto:', '') : '';
+const REAL_EMAIL_DOMAIN = REAL_EMAIL.split('@')[1] ?? '';
+
 // Animation timing constants
 const ANIMATION_TICK_MS = 50; // Tick length in milliseconds
 const HOLD_TICKS_AFTER_MESSAGE = 50; // Ticks to wait after message completes
@@ -170,7 +176,7 @@ export default function EmailLink({ loopMessage = false }: EmailLinkProps) {
   const emailContent = (
     <>
       <span className="contact-email-prefix">{displayMessage}</span>
-      <span className="contact-email-domain">@mldangelo.com</span>
+      <span className="contact-email-domain">@{REAL_EMAIL_DOMAIN}</span>
     </>
   );
 
@@ -182,7 +188,7 @@ export default function EmailLink({ loopMessage = false }: EmailLinkProps) {
     >
       {isValid ? (
         <a
-          href={`mailto:${displayMessage}@mldangelo.com`}
+          href={`mailto:${REAL_EMAIL}`}
           className="contact-email-link"
           onClick={handleClick}
           onKeyDown={handleKeyDown}

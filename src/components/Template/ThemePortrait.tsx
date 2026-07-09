@@ -23,7 +23,7 @@ export default function ThemePortrait({
       {/* biome-ignore lint/performance/noImgElement: Using native img to avoid next/image runtime overhead for static export */}
       <img
         src="/images/me.jpg"
-        alt="Michael D'Angelo"
+        alt="Gabriel Dias"
         width={width}
         height={height}
         loading={priority ? 'eager' : 'lazy'}

@@ -43,8 +43,9 @@ export function createPageMetadata({
     },
     twitter: {
       card: 'summary_large_image',
-      site: TWITTER_HANDLE,
-      creator: TWITTER_HANDLE,
+      ...(TWITTER_HANDLE
+        ? { site: TWITTER_HANDLE, creator: TWITTER_HANDLE }
+        : {}),
       title: pageTitle,
       description,
       images: [SITE_IMAGE_PATH],

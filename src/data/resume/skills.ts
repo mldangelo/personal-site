@@ -12,65 +12,29 @@ export interface Category {
 const skills: Skill[] = [
   // Languages
   {
-    title: 'Python',
-    competency: 5,
-    category: ['Languages', 'ML Engineering'],
-  },
-  {
     title: 'TypeScript',
     competency: 5,
     category: ['Languages', 'Web Development'],
   },
   {
-    title: 'SQL',
-    competency: 4,
-    category: ['Languages', 'Databases'],
-  },
-  // AI & LLM
-  {
-    title: 'AI Agents',
+    title: 'JavaScript',
     competency: 5,
-    category: ['ML Engineering'],
+    category: ['Languages', 'Web Development'],
   },
   {
-    title: 'LLM Evaluation',
-    competency: 5,
-    category: ['ML Engineering'],
+    title: 'Python',
+    competency: 3,
+    category: ['Languages'],
   },
   {
-    title: 'AI Red-teaming',
-    competency: 5,
-    category: ['ML Engineering'],
+    title: 'Java',
+    competency: 3,
+    category: ['Languages'],
   },
   {
-    title: 'LLM APIs',
-    competency: 5,
-    category: ['ML Engineering'],
-  },
-  {
-    title: 'RAG',
-    competency: 4,
-    category: ['ML Engineering'],
-  },
-  {
-    title: 'Prompt Engineering',
-    competency: 4,
-    category: ['ML Engineering'],
-  },
-  {
-    title: 'Vector Databases',
-    competency: 4,
-    category: ['ML Engineering', 'Databases'],
-  },
-  {
-    title: 'PyTorch',
-    competency: 4,
-    category: ['ML Engineering'],
-  },
-  {
-    title: 'Pandas',
-    competency: 5,
-    category: ['ML Engineering', 'Data Engineering'],
+    title: 'Kotlin',
+    competency: 3,
+    category: ['Languages'],
   },
   // Web Development
   {
@@ -79,7 +43,12 @@ const skills: Skill[] = [
     category: ['Web Development'],
   },
   {
-    title: 'FastAPI',
+    title: 'Express',
+    competency: 4,
+    category: ['Web Development'],
+  },
+  {
+    title: 'React',
     competency: 4,
     category: ['Web Development'],
   },
@@ -88,37 +57,44 @@ const skills: Skill[] = [
     competency: 3,
     category: ['Web Development'],
   },
+  {
+    title: 'Angular',
+    competency: 2,
+    category: ['Web Development'],
+  },
+  // Mobile
+  {
+    title: 'React Native',
+    competency: 3,
+    category: ['Mobile', 'Web Development'],
+  },
   // Databases
   {
-    title: 'PostgreSQL',
-    competency: 4,
+    title: 'MongoDB',
+    competency: 3,
     category: ['Databases'],
   },
   {
-    title: 'Redis',
+    title: 'SQL Server',
     competency: 3,
     category: ['Databases'],
   },
   // Infrastructure
   {
     title: 'AWS',
-    competency: 4,
-    category: ['Infrastructure'],
-  },
-  {
-    title: 'Docker',
-    competency: 4,
-    category: ['Infrastructure'],
-  },
-  {
-    title: 'Kubernetes',
     competency: 3,
     category: ['Infrastructure'],
   },
   {
-    title: 'Observability',
+    title: 'Heroku',
+    competency: 3,
+    category: ['Infrastructure'],
+  },
+  // Methodologies
+  {
+    title: 'Scrum',
     competency: 4,
-    category: ['Infrastructure', 'ML Engineering'],
+    category: ['Methodologies'],
   },
 ].map((skill) => ({ ...skill, category: skill.category.sort() }));
 

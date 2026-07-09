@@ -12,12 +12,10 @@ describe('work data', () => {
     for (const job of work) {
       expect(job).toHaveProperty('name');
       expect(job).toHaveProperty('position');
-      expect(job).toHaveProperty('url');
       expect(job).toHaveProperty('startDate');
 
       expect(typeof job.name).toBe('string');
       expect(typeof job.position).toBe('string');
-      expect(typeof job.url).toBe('string');
       expect(typeof job.startDate).toBe('string');
     }
   });
@@ -48,11 +46,13 @@ describe('work data', () => {
     }
   });
 
-  it('urls are valid', () => {
+  it('urls are valid when present', () => {
     const urlRegex = /^https?:\/\/.+/;
 
     for (const job of work) {
-      expect(job.url).toMatch(urlRegex);
+      if (job.url) {
+        expect(job.url).toMatch(urlRegex);
+      }
     }
   });
 

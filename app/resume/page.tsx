@@ -16,7 +16,7 @@ import { createPageMetadata } from '@/lib/metadata';
 export const metadata: Metadata = createPageMetadata({
   title: 'Resume',
   description:
-    "Michael D'Angelo's Resume. OpenAI, Promptfoo, Smile ID, Arthena, Matroid, Stanford ICME, YC alum.",
+    "Gabriel Dias' Resume. Fullstack Software Engineer specializing in Node.js and TypeScript.",
   path: '/resume/',
 });
 
@@ -27,12 +27,12 @@ export default function ResumePage() {
         <header className="resume-header">
           <h1 className="resume-title">Resume</h1>
           <p className="resume-summary">
-            Engineering leader with 15+ years building products across AI,
-            security, and infrastructure. Currently Member of the Technical
-            Staff at OpenAI, where I work on Promptfoo and agent security.
-            Previously co-founded Promptfoo, built it into an AI security
-            platform, and sold it to OpenAI. Stanford MS, YC alum, previously VP
-            Engineering.
+            Fullstack Software Engineer with professional experience across
+            Node.js, TypeScript, Python, Java, Kotlin, and React Native.
+            Currently a Software Engineer at DrakkarOS, based in Oslo, Norway.
+            Previously led development of contactless payment systems for urban
+            mobility at FastProBR. Pursuing a B.S. in Computer Software
+            Engineering at Universidade Cruzeiro do Sul.
           </p>
         </header>
 

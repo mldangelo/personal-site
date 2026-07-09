@@ -1,6 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
+import work from '@/data/resume/work';
+
 import Footer from '../../Template/Footer';
 
 describe('Footer', () => {
@@ -14,9 +16,9 @@ describe('Footer', () => {
   it('displays the name and role', () => {
     render(<Footer />);
 
-    expect(screen.getByText("Michael D'Angelo")).toBeInTheDocument();
+    expect(screen.getByText('Gabriel Dias')).toBeInTheDocument();
     expect(
-      screen.getByText('Member of the Technical Staff at OpenAI'),
+      screen.getByText(`${work[0].position} at ${work[0].name}`),
     ).toBeInTheDocument();
   });
 

@@ -2,9 +2,27 @@ import { render, screen, waitFor, within } from '@testing-library/react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 
-import { aboutMarkdown } from '@/data/about';
 import { createHeadingId } from '@/lib/anchors';
 import AboutContent from '../Sections';
+
+// A multi-section fixture, independent of the real (single-section) about
+// data, used to exercise the section nav / deep-link behavior end to end.
+const MULTI_SECTION_MARKDOWN = `# Intro
+
+Lead paragraph.
+
+# Some History
+
+- Built a thing.
+
+# Travel / Geography
+
+- Went somewhere.
+
+# Fun Facts
+
+- A fact.
+`;
 
 function getActualSectionTitles(markdown: string) {
   return Array.from(markdown.matchAll(/^# (.+)$/gm))
@@ -84,9 +102,11 @@ Lead paragraph.
     ).toHaveAttribute('id', 'travel-geography');
   });
 
-  it('renders section navigation and self-links for the real about markdown', () => {
-    const sectionTitles = getActualSectionTitles(aboutMarkdown);
-    const { container } = render(<AboutContent markdown={aboutMarkdown} />);
+  it('renders section navigation and self-links for a multi-section document', () => {
+    const sectionTitles = getActualSectionTitles(MULTI_SECTION_MARKDOWN);
+    const { container } = render(
+      <AboutContent markdown={MULTI_SECTION_MARKDOWN} />,
+    );
     const nav = screen.getByRole('navigation', { name: 'About sections' });
 
     expect(within(nav).getAllByRole('link')).toHaveLength(sectionTitles.length);
@@ -108,7 +128,7 @@ Lead paragraph.
 
   it('renders matching hash links and heading ids into static markup', () => {
     const html = renderToStaticMarkup(
-      <AboutContent markdown={aboutMarkdown} />,
+      <AboutContent markdown={MULTI_SECTION_MARKDOWN} />,
     );
 
     expect(html).toContain('href="#some-history"');
@@ -120,7 +140,7 @@ Lead paragraph.
   it('supports same-page hash navigation from section links', async () => {
     window.history.replaceState({}, '', '/about/');
 
-    render(<AboutContent markdown={aboutMarkdown} />);
+    render(<AboutContent markdown={MULTI_SECTION_MARKDOWN} />);
 
     const nav = screen.getByRole('navigation', { name: 'About sections' });
     const navLink = within(nav).getByRole('link', {

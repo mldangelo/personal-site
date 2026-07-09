@@ -97,4 +97,15 @@ describe('Job', () => {
     const article = document.querySelector('article.jobs-container');
     expect(article).toBeInTheDocument();
   });
+
+  it('renders company name as plain text when url is missing', () => {
+    const jobWithoutUrl = { ...mockJob, url: undefined };
+
+    render(<Job data={jobWithoutUrl} />);
+
+    expect(screen.queryByRole('link')).not.toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 4 })).toHaveTextContent(
+      'Acme Corp',
+    );
+  });
 });

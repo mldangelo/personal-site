@@ -1,7 +1,37 @@
 import { describe, expect, it } from 'vitest';
 
-import { aboutMarkdown } from '@/data/about';
 import { createHeadingId, createUniqueHeadingIds } from '../anchors';
+
+// A multi-section fixture, independent of the real (single-section) about
+// data, used to exercise bulk heading id generation.
+const MULTI_SECTION_MARKDOWN = `# Intro
+
+Lead paragraph.
+
+# Some History
+
+- Built a thing.
+
+# I Like
+
+- Running.
+
+# Travel / Geography
+
+- Went somewhere.
+
+# Fun Facts
+
+- A fact.
+
+# I Dream Of
+
+- Something.
+
+# Websites from People I Admire
+
+- [Example](https://example.com)
+`;
 
 function getAboutSectionTitles(markdown: string): string[] {
   return Array.from(
@@ -25,9 +55,9 @@ describe('createHeadingId', () => {
     expect(createHeadingId('!!!')).toBe('section');
   });
 
-  it('keeps the real about section ids stable', () => {
+  it('keeps section ids stable across a multi-section document', () => {
     expect(
-      getAboutSectionTitles(aboutMarkdown).map((title) => [
+      getAboutSectionTitles(MULTI_SECTION_MARKDOWN).map((title) => [
         title,
         createHeadingId(title),
       ]),
@@ -59,8 +89,10 @@ describe('createUniqueHeadingIds', () => {
     ]);
   });
 
-  it('produces unique, non-empty ids for the real about headings', () => {
-    const ids = createUniqueHeadingIds(getAboutSectionTitles(aboutMarkdown));
+  it('produces unique, non-empty ids for a multi-section document', () => {
+    const ids = createUniqueHeadingIds(
+      getAboutSectionTitles(MULTI_SECTION_MARKDOWN),
+    );
 
     expect(ids.every((id) => id.length > 0)).toBe(true);
     expect(new Set(ids).size).toBe(ids.length);
