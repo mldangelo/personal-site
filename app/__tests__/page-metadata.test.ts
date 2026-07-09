@@ -6,8 +6,6 @@ import { metadata as contactMetadata } from '../contact/page';
 import { metadata as notFoundMetadata } from '../not-found';
 import { metadata as projectsMetadata } from '../projects/page';
 import { metadata as resumeMetadata } from '../resume/page';
-import { metadata as statsMetadata } from '../stats/page';
-import { metadata as writingMetadata } from '../writing/page';
 
 describe('page metadata', () => {
   it.each([
@@ -15,8 +13,6 @@ describe('page metadata', () => {
     ['contact', contactMetadata, `${SITE_URL}/contact/`],
     ['archive', projectsMetadata, `${SITE_URL}/projects/`],
     ['resume', resumeMetadata, `${SITE_URL}/resume/`],
-    ['stats', statsMetadata, `${SITE_URL}/stats/`],
-    ['writing', writingMetadata, `${SITE_URL}/writing/`],
   ])('sets page-specific open graph metadata for %s', (_, metadata, url) => {
     expect(metadata.openGraph?.url).toBe(url);
     expect(metadata.openGraph?.description).toBe(metadata.description);
@@ -30,8 +26,6 @@ describe('page metadata', () => {
     ['contact', contactMetadata],
     ['archive', projectsMetadata],
     ['resume', resumeMetadata],
-    ['stats', statsMetadata],
-    ['writing', writingMetadata],
   ])('sets page-specific twitter metadata for %s', (_, metadata) => {
     expect(metadata.twitter?.description).toBe(metadata.description);
     expect(metadata.twitter?.title).toBe(`${metadata.title} | ${AUTHOR_NAME}`);
@@ -50,12 +44,6 @@ describe('page metadata', () => {
     );
     expect(notFoundMetadata.twitter?.title).toBe(
       `${notFoundMetadata.title} | ${AUTHOR_NAME}`,
-    );
-  });
-
-  it('preserves the writing rss alternate', () => {
-    expect(writingMetadata.alternates?.types?.['application/rss+xml']).toBe(
-      '/feed.xml',
     );
   });
 });
