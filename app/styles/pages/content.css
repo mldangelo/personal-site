@@ -1,6 +1,6 @@
 /* ========================================
    CONTENT PAGE STYLES
-   About, Contact, Stats, and Not Found pages
+   About, Contact, and Not Found pages
    ======================================== */
 
 /* ========================================
@@ -359,97 +359,6 @@
   .about-section h2 {
     margin-bottom: var(--spacing-5);
   }
-}
-
-/* ========================================
-   STATS PAGE
-   ======================================== */
-
-.stat-table {
-  border-collapse: separate;
-  border-spacing: 0;
-  width: 100%;
-  background: transparent;
-}
-
-.stat-table tr {
-  background: transparent;
-}
-
-.stat-table tr:not(:last-child) {
-  border-bottom: 1px solid var(--color-border-bg);
-}
-
-.stat-table td {
-  font-family: var(--font-sans);
-  font-weight: var(--font-weight-normal);
-  padding: 0.875rem 0;
-  color: var(--color-fg);
-  background: transparent;
-}
-
-.stat-table td:last-child {
-  text-align: right;
-  font-weight: var(--font-weight-bold);
-  color: var(--color-fg-bold);
-}
-
-.stat-table td:last-child a {
-  color: var(--color-accent);
-}
-
-.stat-table-label {
-  width: 70%;
-}
-
-/* Screen reader only - visually hidden but accessible */
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
-}
-
-/* Stats page layout */
-.stats-page {
-  max-width: 640px;
-  margin: 0 auto;
-}
-
-.stats-header {
-  text-align: center;
-  margin-bottom: 3rem;
-}
-
-.stats-title {
-  font-size: clamp(2rem, 5vw, 3rem);
-  font-weight: var(--font-weight-black);
-  letter-spacing: var(--tracking-tight);
-  margin-bottom: 0.5rem;
-  color: var(--color-fg-bold);
-}
-
-.stats-subtitle {
-  font-size: var(--text-lg);
-  color: var(--color-fg-light);
-}
-
-.stats-content {
-  display: flex;
-  flex-direction: column;
-  gap: 3rem;
-}
-
-.stats-section-title {
-  font-size: var(--text-lg);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-fg-bold);
-  margin-bottom: 1rem;
 }
 
 /* ========================================

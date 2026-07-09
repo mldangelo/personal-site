@@ -2,11 +2,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
-import type { Post } from '@/lib/posts';
+import work from '@/data/resume/work';
 import {
-  BLOG_ID,
-  blogNode,
-  blogPostingNode,
   breadcrumbNode,
   buildGraph,
   collectionPageNode,
@@ -73,14 +70,6 @@ function readJpegDimensions(filePath: string) {
   throw new Error(`Could not find JPEG dimensions for ${filePath}`);
 }
 
-const mockPost: Post = {
-  slug: 'test-article',
-  title: 'Test Article Title',
-  date: '2024-01-15',
-  description: 'This is a test article description',
-  content: 'Article content here',
-};
-
 describe('personNode', () => {
   it('is a Person with a stable @id', () => {
     const node = personNode();
@@ -90,9 +79,10 @@ describe('personNode', () => {
 
   it('uses author name and split given/family names', () => {
     const node = personNode();
+    const [givenName, ...familyParts] = AUTHOR_NAME.split(' ');
     expect(node.name).toBe(AUTHOR_NAME);
-    expect(node.givenName).toBe('Michael');
-    expect(node.familyName).toBe("D'Angelo");
+    expect(node.givenName).toBe(givenName);
+    expect(node.familyName).toBe(familyParts.join(' '));
   });
 
   it('exposes an ImageObject and social sameAs links', () => {
@@ -110,7 +100,7 @@ describe('personNode', () => {
     const node = personNode();
     const worksFor = node.worksFor as Record<string, unknown>;
     expect(worksFor['@type']).toBe('Organization');
-    expect(worksFor.name).toBe('OpenAI');
+    expect(worksFor.name).toBe(work[0].name);
     const alumniOf = node.alumniOf as Record<string, unknown>[];
     expect(alumniOf[0]['@type']).toBe('CollegeOrUniversity');
   });
@@ -153,63 +143,18 @@ describe('profilePageNode', () => {
 describe('collectionPageNode', () => {
   it('is a CollectionPage that is about the Person', () => {
     const node = collectionPageNode({
-      url: `${SITE_URL}/writing/`,
-      name: 'Writing',
+      url: `${SITE_URL}/projects/`,
+      name: 'Projects',
     });
     expect(node['@type']).toBe('CollectionPage');
     expect((node.about as Record<string, unknown>)['@id']).toBe(PERSON_ID);
   });
 });
 
-describe('blogNode', () => {
-  it('is a Blog linking the WebSite, its page, and the Person publisher', () => {
-    const node = blogNode('2024-01-15');
-    expect(node['@type']).toBe('Blog');
-    expect(node['@id']).toBe(BLOG_ID);
-    expect((node.isPartOf as Record<string, unknown>)['@id']).toBe(WEBSITE_ID);
-    expect((node.mainEntityOfPage as Record<string, unknown>)['@id']).toBe(
-      `${SITE_URL}/writing/#webpage`,
-    );
-    expect((node.publisher as Record<string, unknown>)['@id']).toBe(PERSON_ID);
-    expect(node.dateModified).toBe('2024-01-15');
-  });
-
-  it('omits dateModified when not provided', () => {
-    expect(blogNode().dateModified).toBeUndefined();
-  });
-});
-
-describe('blogPostingNode', () => {
-  it('is a BlogPosting wired to the Person, Blog, and its WebPage', () => {
-    const node = blogPostingNode(mockPost);
-    const url = `${SITE_URL}/writing/${mockPost.slug}/`;
-    expect(node['@type']).toBe('BlogPosting');
-    expect(node['@id']).toBe(`${url}#blogposting`);
-    expect(node.headline).toBe(mockPost.title);
-    expect(node.description).toBe(mockPost.description);
-    expect(node.datePublished).toBe(mockPost.date);
-    expect(node.dateModified).toBe(mockPost.date);
-    expect((node.author as Record<string, unknown>)['@id']).toBe(PERSON_ID);
-    expect((node.publisher as Record<string, unknown>)['@id']).toBe(PERSON_ID);
-    expect((node.isPartOf as Record<string, unknown>)['@id']).toBe(BLOG_ID);
-    expect((node.mainEntityOfPage as Record<string, unknown>)['@id']).toBe(
-      `${url}#webpage`,
-    );
-  });
-
-  it('uses an ImageObject mirroring the OG image with dimensions', () => {
-    const image = blogPostingNode(mockPost).image as Record<string, unknown>;
-    expect(image['@type']).toBe('ImageObject');
-    expect(image.url).toBe(`${SITE_URL}/images/me.jpg`);
-    expect(image.width).toBe(SITE_IMAGE_DIMENSIONS.width);
-    expect(image.height).toBe(SITE_IMAGE_DIMENSIONS.height);
-  });
-});
-
 describe('webPageNode', () => {
   it('is a WebPage linked to the site', () => {
-    const url = `${SITE_URL}/writing/test-article/`;
-    const node = webPageNode({ url, name: 'Test Article Title' });
+    const url = `${SITE_URL}/contact/`;
+    const node = webPageNode({ url, name: 'Contact' });
     expect(node['@type']).toBe('WebPage');
     expect(node['@id']).toBe(`${url}#webpage`);
     expect((node.isPartOf as Record<string, unknown>)['@id']).toBe(WEBSITE_ID);
@@ -218,10 +163,10 @@ describe('webPageNode', () => {
 
 describe('breadcrumbNode', () => {
   it('builds an ordered BreadcrumbList anchored to the page', () => {
-    const url = `${SITE_URL}/writing/`;
+    const url = `${SITE_URL}/projects/`;
     const node = breadcrumbNode(url, [
       { name: 'Home', url: HOME_URL },
-      { name: 'Writing', url },
+      { name: 'Projects', url },
     ]);
     expect(node['@type']).toBe('BreadcrumbList');
     expect(node['@id']).toBe(`${url}#breadcrumb`);
