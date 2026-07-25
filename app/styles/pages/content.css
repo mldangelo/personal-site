@@ -27,36 +27,40 @@
   line-height: 1.85;
 }
 
+/* Section index — mono labels on a rule, matching the resume. */
 .about-section-nav {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--spacing-2);
-  margin: var(--spacing-8) 0 var(--spacing-6);
-  padding: var(--spacing-4);
-  border: 1px solid var(--color-border-bg);
-  border-radius: var(--radius-lg);
-  background: color-mix(in srgb, var(--color-bg-alt) 92%, transparent);
-  box-shadow: var(--shadow-sm);
+  gap: 0.5rem 1.5rem;
+  margin: var(--spacing-10) 0 var(--spacing-6);
+  padding: 0.75rem 0;
+  border-top: var(--rule) solid var(--color-border);
+  border-bottom: var(--rule) solid var(--color-border);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 .about-content .about-section-nav-link {
   display: inline-flex;
   align-items: center;
-  padding: 0.5rem 0.85rem;
-  border-radius: var(--radius-sm);
+  padding: 0;
+  border-radius: 0;
   color: var(--color-fg-light);
   background: transparent;
-  font-size: var(--text-sm);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
   font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
   text-decoration: none;
-  transition:
-    background-color var(--duration-fast) var(--ease-out),
-    color var(--duration-fast) var(--ease-out);
+  transition: color var(--duration-fast) var(--ease-out);
 }
 
 .about-content .about-section-nav-link:hover {
-  background: var(--color-surface-hover);
+  background: transparent;
   color: var(--color-fg-bold);
+  text-decoration: none;
 }
 
 .about-section-nav-link:focus-visible {
@@ -70,13 +74,14 @@
 
 .about-section h2 {
   scroll-margin-top: calc(var(--header-height) + var(--spacing-6));
-  margin: 0 0 var(--spacing-4);
+  margin: 0 0 var(--spacing-5);
   padding-top: var(--spacing-5);
-  border-top: 1px solid var(--color-border);
-  font-size: clamp(1.16rem, 1.3vw, 1.4rem);
+  border-top: var(--rule) solid var(--color-fg-bold);
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
   font-weight: var(--font-weight-bold);
-  line-height: 1.2;
-  letter-spacing: -0.02em;
+  line-height: 1.15;
+  letter-spacing: var(--tracking-display);
   color: var(--color-fg-bold);
 }
 
@@ -145,6 +150,58 @@
 
 .about-content li::marker {
   color: var(--color-fg-muted);
+}
+
+/* ========================================
+   ABOUT — LOG SECTIONS
+   The history and travel lists are a chronological record, so they
+   are set as log entries hanging off a spine rather than as bullets.
+   ======================================== */
+
+.about-section--log ul {
+  position: relative;
+  list-style: none;
+  margin: var(--spacing-5) 0 var(--spacing-6);
+  padding-left: 1.75rem;
+}
+
+/* The spine, fading out at the tail so the record reads as open-ended. */
+.about-section--log ul::before {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 0.65em;
+  bottom: 0.4em;
+  width: var(--rule);
+  background: linear-gradient(
+    to bottom,
+    var(--color-border) 0%,
+    var(--color-border) 88%,
+    transparent 100%
+  );
+}
+
+.about-section--log li {
+  position: relative;
+  margin-bottom: 1.1rem;
+}
+
+/* One tick per entry. */
+.about-section--log li::before {
+  content: '';
+  position: absolute;
+  left: -1.75rem;
+  top: 0.65em;
+  width: 7px;
+  height: 7px;
+  border: var(--rule) solid var(--color-fg-light);
+  background: var(--color-bg-alt);
+  border-radius: var(--radius-full);
+}
+
+.about-section--log li:hover::before {
+  border-color: var(--color-signal-mark);
+  background: var(--color-signal-mark);
 }
 
 .about-content a {
@@ -365,41 +422,59 @@
    STATS PAGE
    ======================================== */
 
+/* Readings, not a spreadsheet: the label annotates in mono and the
+   value is set large enough to be read off at a glance. */
 .stat-table {
   border-collapse: separate;
   border-spacing: 0;
   width: 100%;
   background: transparent;
+  border-top: var(--rule) solid var(--color-fg-bold);
 }
 
 .stat-table tr {
   background: transparent;
 }
 
-.stat-table tr:not(:last-child) {
-  border-bottom: 1px solid var(--color-border-bg);
-}
-
 .stat-table td {
-  font-family: var(--font-sans);
-  font-weight: var(--font-weight-normal);
-  padding: 0.875rem 0;
+  padding: 1rem 0;
   color: var(--color-fg);
   background: transparent;
-}
-
-.stat-table td:last-child {
-  text-align: right;
-  font-weight: var(--font-weight-bold);
-  color: var(--color-fg-bold);
-}
-
-.stat-table td:last-child a {
-  color: var(--color-accent);
+  border-bottom: var(--rule) solid var(--color-border);
+  vertical-align: baseline;
 }
 
 .stat-table-label {
-  width: 70%;
+  width: 60%;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--color-fg-light);
+}
+
+.stat-table-value {
+  text-align: right;
+  font-family: var(--font-mono);
+  font-size: var(--text-md);
+  font-weight: var(--font-weight-medium);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-fg-bold);
+}
+
+.stat-table-value a {
+  color: var(--color-accent);
+  background-image: none;
+}
+
+.stat-table-value a:hover {
+  color: var(--color-accent-hover);
+}
+
+/* The live reading — the same rule as the hero: amber means it moves. */
+.stat-live {
+  color: var(--color-signal);
 }
 
 /* Screen reader only - visually hidden but accessible */
@@ -417,39 +492,44 @@
 
 /* Stats page layout */
 .stats-page {
-  max-width: 640px;
-  margin: 0 auto;
+  max-width: 680px;
+  margin: 0;
 }
 
 .stats-header {
-  text-align: center;
+  text-align: left;
   margin-bottom: 3rem;
 }
 
 .stats-title {
-  font-size: clamp(2rem, 5vw, 3rem);
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
   font-weight: var(--font-weight-black);
-  letter-spacing: var(--tracking-tight);
+  letter-spacing: var(--tracking-display);
   margin-bottom: 0.5rem;
   color: var(--color-fg-bold);
 }
 
 .stats-subtitle {
-  font-size: var(--text-lg);
+  font-size: var(--text-md);
   color: var(--color-fg-light);
+  margin: 0;
 }
 
 .stats-content {
   display: flex;
   flex-direction: column;
-  gap: 3rem;
+  gap: 3.5rem;
 }
 
 .stats-section-title {
-  font-size: var(--text-lg);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-fg-bold);
-  margin-bottom: 1rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--color-fg-light);
+  margin-bottom: 0.75rem;
 }
 
 /* ========================================

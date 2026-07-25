@@ -18,7 +18,14 @@ interface ParsedAboutSection {
   title: string;
 }
 
+/**
+ * Sections whose lists are chronological get the log treatment: entries
+ * hang off a spine with a tick each, the same device the resume uses.
+ * The rest stay as plain lists, because order carries no meaning there.
+ */
 const sectionVariants: Record<string, string> = {
+  'Some History': 'about-section--log',
+  'Travel / Geography': 'about-section--log',
   'Fun Facts': 'about-section--compact',
   'I Like': 'about-section--compact',
   'I Dream Of': 'about-section--compact',
