@@ -2,11 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-import {
-  AGE_UPDATE_INTERVAL,
-  ageAt,
-  agePlaceholder,
-} from '@/lib/telemetry';
+import { AGE_UPDATE_INTERVAL, ageAt, agePlaceholder } from '@/lib/telemetry';
 
 /**
  * A live age readout, advancing every {@link AGE_UPDATE_INTERVAL} ms.

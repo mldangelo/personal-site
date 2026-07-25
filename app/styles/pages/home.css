@@ -293,6 +293,22 @@
     font-size: var(--text-md);
   }
 
+  /* Stacked, the dividers would strand at the start of a wrapped
+     line, so the spec line becomes a plain list. */
+  .hero-chips {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
+  }
+
+  .hero-chip {
+    padding-left: 0;
+  }
+
+  .hero-chip::before {
+    display: none;
+  }
+
   .telemetry-cell {
     padding: 1rem 1rem 1.125rem;
   }
