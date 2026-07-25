@@ -1,5 +1,9 @@
 import type { Metadata } from 'next';
-import { Raleway, Source_Sans_3 } from 'next/font/google';
+import {
+  Bricolage_Grotesque,
+  JetBrains_Mono,
+  Newsreader,
+} from 'next/font/google';
 import Script from 'next/script';
 
 import { SiteSchema } from '@/components/Schema';
@@ -16,19 +20,29 @@ import {
 } from '@/lib/utils';
 import './tailwind.css';
 
-const sourceSans = Source_Sans_3({
-  weight: ['400', '700'],
+/** Display: names, headings, and the hero. Variable weight + optical size. */
+const bricolage = Bricolage_Grotesque({
   subsets: ['latin'],
-  variable: '--font-source-sans',
+  variable: '--font-bricolage',
   display: 'swap',
   preload: true,
   adjustFontFallback: true,
 });
 
-const raleway = Raleway({
-  weight: ['400', '800'],
+/** Body: prose and long-form reading. */
+const newsreader = Newsreader({
   subsets: ['latin'],
-  variable: '--font-raleway',
+  style: ['normal', 'italic'],
+  variable: '--font-newsreader',
+  display: 'swap',
+  preload: true,
+  adjustFontFallback: true,
+});
+
+/** Mono: data, labels, dates, and every measured value. */
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-jetbrains',
   display: 'swap',
   preload: true,
   adjustFontFallback: true,
@@ -98,7 +112,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${sourceSans.variable} ${raleway.variable}`}
+      className={`${bricolage.variable} ${newsreader.variable} ${jetbrainsMono.variable}`}
       suppressHydrationWarning
     >
       <head>

@@ -1,23 +1,36 @@
 /* ========================================
    EFFECT TOKENS
-   Shadows, border radii, and overlays
+   Instruments sit flat on the panel. Structure comes from
+   hairlines and precise corners, not from float and blur.
    ======================================== */
 
 @theme {
   /* ===================
      SHADOWS
+     Deliberately shallow. Depth is carried by rules and
+     surface value, so shadow only separates true overlays.
      =================== */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.12);
-  --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.15);
+  --shadow-sm: 0 1px 0 rgba(14, 17, 22, 0.04);
+  --shadow-md: 0 1px 2px rgba(14, 17, 22, 0.05);
+  --shadow-lg: 0 8px 24px rgba(14, 17, 22, 0.1);
+  --shadow-xl: 0 18px 48px rgba(14, 17, 22, 0.14);
 
   /* ===================
      BORDER RADIUS
+     Near-square. `--radius-full` survives for the theme
+     toggle and status dots, where a circle is the point.
      =================== */
-  --radius-xs: 4px;
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
+  --radius-xs: 1px;
+  --radius-sm: 2px;
+  --radius-md: 3px;
+  --radius-lg: 4px;
   --radius-full: 999px;
+
+  /* ===================
+     RULES
+     One hairline weight, used everywhere, so the grid
+     reads as a single drawn system.
+     =================== */
+  --rule: 1px;
+  --rule-strong: 2px;
 }

@@ -22,11 +22,12 @@
   h5,
   h6 {
     color: var(--color-fg-bold);
-    font-family: var(--font-heading);
+    font-family: var(--font-display);
     font-weight: var(--font-weight-bold);
     letter-spacing: var(--tracking-tight);
     line-height: var(--leading-tight);
-    margin: 0 0 0.75em 0;
+    margin: 0 0 0.6em 0;
+    text-wrap: balance;
   }
 
   h1 a,
@@ -50,10 +51,14 @@
 
   h1 {
     font-size: var(--text-3xl);
+    font-weight: var(--font-weight-black);
+    letter-spacing: var(--tracking-display);
   }
 
   h2 {
     font-size: var(--text-2xl);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: var(--tracking-display);
   }
 
   h3 {
@@ -74,15 +79,17 @@
 
   p {
     margin: 0 0 var(--spacing-element) 0;
+    text-wrap: pretty;
   }
 
   code {
-    background: var(--color-border-bg);
-    border: solid 1px var(--color-border);
+    background: var(--color-surface-subtle);
+    border: var(--rule) solid var(--color-border);
+    border-radius: var(--radius-xs);
     font-family: var(--font-mono);
-    font-size: var(--text-md);
-    margin: 0 0.25em;
-    padding: 0.25em 0.65em;
+    font-size: 0.875em;
+    margin: 0 0.15em;
+    padding: 0.15em 0.4em;
   }
 
   ul {

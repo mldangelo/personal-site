@@ -1,47 +1,64 @@
 /* ========================================
-   COLOR TOKENS
-   Core color palette and semantic colors
+   COLOR TOKENS — "Ground Station"
+   Warm neutral paper, ultramarine structure,
+   amber reserved for live instrument readouts.
    ======================================== */
 
 @theme {
   /* ===================
      CORE PALETTE
+     --color-bg     = raised surface (cards, header)
+     --color-bg-alt = page background
      =================== */
-  --color-bg: #ffffff;
-  --color-bg-alt: #f5f5f7;
-  --color-bg-offset: #f0f0f2;
-  --color-fg: #1d1d1f;
-  --color-fg-bold: #1d1d1f;
-  --color-fg-light: #58585d;
+  --color-bg: #fcfbf9;
+  --color-bg-alt: #f2f1ec;
+  --color-bg-offset: #e7e5dd;
+  --color-fg: #23272e;
+  --color-fg-bold: #0e1116;
+  --color-fg-light: #545a63;
 
   /* ===================
-     ACCENT COLORS
+     ACCENT — ultramarine
+     Structure, links, active state.
      =================== */
-  --color-accent: #2e59ba;
-  --color-accent-secondary: #60a5fa;
-  --color-accent-hover: #2e59ba;
+  --color-accent: #1b2fbf;
+  --color-accent-secondary: #8098ff;
+  --color-accent-hover: #16249c;
   --color-accent-light: color-mix(in srgb, var(--color-accent) 12%, transparent);
-  --color-accent-subtle: color-mix(in srgb, var(--color-accent) 5%, transparent);
+  --color-accent-subtle: color-mix(in srgb, var(--color-accent) 6%, transparent);
   --color-accent-muted: color-mix(in srgb, var(--color-accent) 3%, transparent);
-  --color-accent-underline: color-mix(in srgb, var(--color-accent) 30%, transparent);
-  --color-accent-underline-strong: color-mix(in srgb, var(--color-accent) 40%, transparent);
+  --color-accent-underline: color-mix(in srgb, var(--color-accent) 32%, transparent);
+  --color-accent-underline-strong: color-mix(in srgb, var(--color-accent) 45%, transparent);
   --color-accent-glow: color-mix(in srgb, var(--color-accent) 15%, transparent);
-  --color-accent-border: color-mix(in srgb, var(--color-accent) 50%, transparent);
+  --color-accent-border: color-mix(in srgb, var(--color-accent) 45%, transparent);
+
+  /* ===================
+     SIGNAL — amber
+     Reserved for live/measured values and the
+     current-position marker. Never decorative.
+     --color-signal      text-safe on page bg (AA)
+     --color-signal-mark graphic use only (ticks, dots, rules)
+     =================== */
+  --color-signal: #9a5600;
+  --color-signal-mark: #e8930c;
+  --color-signal-light: color-mix(in srgb, var(--color-signal-mark) 16%, transparent);
 
   /* ===================
      BORDER COLORS
+     Hairlines do the structural work here, so they are
+     tinted with the ink rather than pure black.
      =================== */
-  --color-border: rgba(0, 0, 0, 0.1);
-  --color-border-bg: rgba(0, 0, 0, 0.06);
-  --color-border-alt: rgba(0, 0, 0, 0.15);
+  --color-border: rgba(35, 39, 46, 0.14);
+  --color-border-bg: rgba(35, 39, 46, 0.08);
+  --color-border-alt: rgba(35, 39, 46, 0.24);
 
   /* ===================
      SURFACE TOKENS
      =================== */
-  --color-surface-subtle: rgba(0, 0, 0, 0.03);
-  --color-surface-hover: rgba(0, 0, 0, 0.06);
-  --color-surface-active: rgba(0, 0, 0, 0.1);
-  --color-fg-muted: rgba(0, 0, 0, 0.5);
+  --color-surface-subtle: rgba(35, 39, 46, 0.035);
+  --color-surface-hover: rgba(35, 39, 46, 0.06);
+  --color-surface-active: rgba(35, 39, 46, 0.1);
+  --color-fg-muted: rgba(35, 39, 46, 0.55);
 
   /* ===================
      SEMANTIC COLORS
@@ -49,5 +66,5 @@
   --color-white: #fff;
   --color-overlay-light: rgba(255, 255, 255, 0.15);
   --color-overlay-dark: rgba(0, 0, 0, 0.15);
-  --color-overlay-darker: rgba(0, 0, 0, 0.3);
+  --color-overlay-darker: rgba(14, 17, 22, 0.45);
 }
