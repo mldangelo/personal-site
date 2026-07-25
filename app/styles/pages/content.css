@@ -558,36 +558,34 @@
   max-width: 480px;
 }
 
+/* A 404 is a status code, so it is reported as one: mono, plain,
+   and no more prominent than the sentence explaining it. */
 .not-found-code {
   display: block;
-  font-family: var(--font-heading);
-  font-size: clamp(6rem, 20vw, 10rem);
-  font-weight: var(--font-weight-black);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-label);
+  color: var(--color-signal);
   line-height: 1;
-  background: linear-gradient(
-    135deg,
-    var(--color-accent) 0%,
-    color-mix(in srgb, var(--color-accent) 60%, var(--color-fg)) 100%
-  );
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  opacity: 0.9;
-  margin-bottom: 1rem;
+  background: none;
+  -webkit-text-fill-color: currentcolor;
+  margin-bottom: 1.25rem;
 }
 
 .not-found-title {
+  font-family: var(--font-display);
   font-size: var(--text-2xl);
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--font-weight-black);
   color: var(--color-fg-bold);
   margin-bottom: 0.75rem;
-  letter-spacing: var(--tracking-tight);
+  letter-spacing: var(--tracking-display);
 }
 
 .not-found-message {
-  font-size: var(--text-lg);
+  font-size: var(--text-md);
   color: var(--color-fg-light);
-  line-height: var(--leading-normal);
+  line-height: var(--leading-snug);
   margin-bottom: 2rem;
 }
 
@@ -599,51 +597,49 @@
   flex-wrap: wrap;
 }
 
-.not-found-button {
-  display: inline-flex;
-  align-items: center;
-  padding: 1rem 2.25rem;
-  font-size: var(--text-md);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-white);
-  background: var(--color-accent);
-  border-radius: var(--radius-md);
-  text-decoration: none;
-  box-shadow: var(--shadow-md);
-  transition:
-    background-color var(--duration-fast) var(--ease-out),
-    transform var(--duration-fast) var(--ease-out),
-    box-shadow var(--duration-fast) var(--ease-out);
-}
-
-.not-found-button:hover {
-  background: var(--color-fg-bold);
-  transform: translateY(var(--lift-sm));
-  box-shadow: var(--shadow-lg);
-}
-
-/* Secondary button style for Contact Me */
+/* Matches the site's switches rather than defining a second button style. */
+.not-found-button,
 .not-found-link {
   display: inline-flex;
   align-items: center;
-  padding: 1rem 2.25rem;
-  font-size: var(--text-md);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-fg);
-  background: transparent;
-  border: 2px solid var(--color-border-alt);
-  border-radius: var(--radius-md);
+  justify-content: center;
+  height: 2.875rem;
+  padding: 0 1.75rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  border-radius: var(--radius-sm);
   text-decoration: none;
+  background-image: none;
+  box-shadow: none;
   transition:
-    color var(--duration-fast) var(--ease-out),
-    border-color var(--duration-fast) var(--ease-out),
     background-color var(--duration-fast) var(--ease-out),
-    transform var(--duration-fast) var(--ease-out);
+    border-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+.not-found-button {
+  color: var(--color-white);
+  background: var(--color-accent);
+  border: var(--rule) solid var(--color-accent);
+}
+
+.not-found-button:hover {
+  color: var(--color-white);
+  background: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+}
+
+.not-found-link {
+  color: var(--color-fg-bold);
+  background: transparent;
+  border: var(--rule) solid var(--color-border-alt);
 }
 
 .not-found-link:hover {
-  color: var(--color-accent);
-  border-color: var(--color-accent);
-  background: var(--color-accent-light);
-  transform: translateY(var(--lift-sm));
+  color: var(--color-fg-bold);
+  border-color: var(--color-fg-bold);
+  background: transparent;
 }
