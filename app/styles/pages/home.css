@@ -4,104 +4,63 @@
    ======================================== */
 
 /* ========================================
-   HERO SECTION
+   HERO
+   Asymmetric: type holds the left, portrait anchors the right,
+   and the readout strip runs the full measure beneath both.
    ======================================== */
 
 .hero {
   position: relative;
-  padding: 6rem 2rem 5rem;
-  text-align: center;
+  padding: 3rem 0 0;
+  text-align: left;
 }
 
-.hero-content {
+.hero-grid {
   position: relative;
   z-index: 1;
-  max-width: 680px;
-  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 3.5rem;
+  align-items: start;
+  padding-bottom: 4rem;
 }
 
-/* Portrait */
-.hero-avatar {
-  width: 160px;
-  height: 160px;
-  margin: 0 auto 2.5rem;
-  border-radius: 50%;
-  position: relative;
-  box-shadow:
-    var(--shadow-xl),
-    0 0 0 1px var(--color-border);
-  transition:
-    transform var(--duration-normal) var(--ease-out),
-    box-shadow var(--duration-normal) var(--ease-out);
-}
-
-.hero-avatar::before {
-  content: '';
-  position: absolute;
-  inset: -4px;
-  background: linear-gradient(
-    135deg,
-    var(--color-accent-light) 0%,
-    transparent 50%,
-    var(--color-accent-subtle) 100%
-  );
-  border-radius: 50%;
-  z-index: -1;
-  opacity: 0;
-  transition: opacity var(--duration-normal) var(--ease-out);
-}
-
-.hero-avatar:hover {
-  transform: scale(1.03) translateY(-2px);
-  box-shadow:
-    var(--shadow-xl),
-    0 0 0 1px var(--color-accent-border);
-}
-
-.hero-avatar:hover::before {
-  opacity: 1;
-}
-
-.hero-avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50%;
+.hero-primary {
+  min-width: 0;
 }
 
 /* Name */
 .hero-title {
-  margin-bottom: 1.25rem;
+  margin: 0 0 1.75rem;
 }
 
 .hero-name {
   display: block;
-  font-family: var(--font-heading);
-  font-size: clamp(2.5rem, 7vw, 4rem);
+  max-width: 12ch;
+  font-family: var(--font-display);
+  font-size: var(--text-display);
   font-weight: var(--font-weight-black);
-  letter-spacing: -0.03em;
-  line-height: 1.05;
+  letter-spacing: var(--tracking-display);
+  line-height: var(--leading-display);
   color: var(--color-fg-bold);
+  text-wrap: balance;
 }
 
-/* Tagline */
+/* Tagline — set in the body serif at reading size, measure-constrained. */
 .hero-tagline {
-  font-size: var(--text-xl);
+  font-family: var(--font-body);
+  font-size: var(--text-lg);
   color: var(--color-fg);
-  max-width: 560px;
-  margin: 0 auto 2rem;
-  line-height: 1.65;
+  max-width: 46ch;
+  margin: 0 0 2rem;
+  line-height: var(--leading-snug);
   font-weight: var(--font-weight-normal);
-}
-
-.hero-tagline br {
-  display: block;
-  margin-top: 0.5rem;
+  text-wrap: pretty;
 }
 
 .hero-highlight {
   color: var(--color-accent);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-medium);
   text-decoration: none;
   background-image: linear-gradient(
     transparent calc(100% - 2px),
@@ -109,101 +68,235 @@
   );
   background-size: 100% 100%;
   transition:
-    background-size var(--duration-fast) var(--ease-out),
+    background-image var(--duration-fast) var(--ease-out),
     color var(--duration-fast) var(--ease-out);
 }
 
 .hero-highlight:hover {
+  color: var(--color-accent-hover);
   background-image: linear-gradient(transparent calc(100% - 2px), var(--color-accent) 2px);
 }
 
-/* Credential chips */
+/* Credentials — a spec line, not pills. Divided by hairlines so it
+   reads as annotation attached to the name above it. */
 .hero-chips {
   display: flex;
-  gap: 0.625rem;
-  justify-content: center;
   flex-wrap: wrap;
-  margin-bottom: 2.25rem;
+  align-items: center;
+  gap: 0 1rem;
+  list-style: none;
+  margin: 0 0 2.25rem;
+  padding: 0;
 }
 
 .hero-chip {
-  font-size: var(--text-sm);
+  position: relative;
+  padding: 0 0 0 1rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
   font-weight: var(--font-weight-medium);
-  color: var(--color-fg);
-  padding: 0.5rem 1rem;
-  background: var(--color-bg-alt);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-full);
-  transition:
-    background var(--duration-fast) var(--ease-out),
-    border-color var(--duration-fast) var(--ease-out),
-    transform var(--duration-fast) var(--ease-out);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--color-fg-light);
+  white-space: nowrap;
 }
 
-.hero-chip:hover {
-  background: var(--color-accent-subtle);
-  border-color: var(--color-accent-border);
-  transform: translateY(-1px);
+.hero-chip::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: var(--rule);
+  height: 0.85em;
+  transform: translateY(-50%);
+  background: var(--color-border-alt);
 }
 
-/* CTA buttons */
+.hero-chip:first-child {
+  padding-left: 0;
+}
+
+.hero-chip:first-child::before {
+  display: none;
+}
+
+/* CTA */
 .hero-cta {
   display: flex;
-  gap: 1rem;
-  justify-content: center;
+  gap: 0.75rem;
   flex-wrap: wrap;
 }
 
-/* Background */
+/* Portrait — squared off. A circular avatar is the one shape this
+   layout cannot use without reading as a profile card. */
+.hero-portrait {
+  position: relative;
+  width: 320px;
+  max-width: 100%;
+  border: var(--rule) solid var(--color-border);
+  background: var(--color-bg);
+  padding: 0.5rem;
+}
+
+.hero-portrait .theme-portrait,
+.hero-portrait img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* The source portrait sits on a white field. Multiply drops that field
+   into the paper so the frame holds a photograph, not a white tile. */
+.hero-portrait img {
+  filter: grayscale(1) contrast(1.05);
+  mix-blend-mode: multiply;
+  transition: filter var(--duration-normal) var(--ease-out);
+}
+
+.hero-portrait:hover img {
+  filter: grayscale(0) contrast(1);
+}
+
+[data-theme='dark'] .hero-portrait img {
+  mix-blend-mode: normal;
+  filter: grayscale(1) brightness(0.82) contrast(1.05);
+}
+
+[data-theme='dark'] .hero-portrait:hover img {
+  filter: grayscale(0) brightness(0.9) contrast(1);
+}
+
+/* ========================================
+   TELEMETRY — the signature element
+   Four measured values, hairline-divided. Only the live one
+   is allowed to carry the signal colour.
+   ======================================== */
+
+.telemetry {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0;
+  border-top: var(--rule) solid var(--color-fg-bold);
+  border-bottom: var(--rule) solid var(--color-border);
+}
+
+.telemetry-cell {
+  position: relative;
+  padding: 1.25rem 1.5rem 1.375rem;
+  min-width: 0;
+}
+
+.telemetry-cell + .telemetry-cell {
+  border-left: var(--rule) solid var(--color-border);
+}
+
+.telemetry-cell:first-child {
+  padding-left: 0;
+}
+
+.telemetry-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--color-fg-light);
+  margin-bottom: 0.625rem;
+}
+
+.telemetry-value {
+  display: block;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-fg-bold);
+  line-height: 1.2;
+}
+
+.telemetry-number {
+  font-variant-numeric: tabular-nums;
+}
+
+/* The one live reading on the page. */
+.telemetry-value--live {
+  color: var(--color-signal);
+}
+
+@media (max-width: 900px) {
+  .telemetry {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .telemetry-cell:nth-child(3) {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .telemetry-cell:nth-child(n + 3) {
+    border-top: var(--rule) solid var(--color-border);
+  }
+}
+
+/* ========================================
+   HERO BACKGROUND
+   A faint ruled field, drawn to the same hairline weight as
+   everything else. Replaces the accent-coloured blur.
+   ======================================== */
+
 .hero-bg {
   position: absolute;
   inset: 0;
-  overflow: hidden;
   overflow: clip;
   pointer-events: none;
+  z-index: 0;
+  background-image:
+    linear-gradient(to right, var(--color-border-bg) var(--rule), transparent var(--rule)),
+    linear-gradient(to bottom, var(--color-border-bg) var(--rule), transparent var(--rule));
+  background-size: 96px 96px;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), transparent 55%);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), transparent 55%);
 }
 
-.hero-gradient {
-  position: absolute;
-  top: 35%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 1200px;
-  height: 800px;
-  background: radial-gradient(
-    ellipse 100% 100% at 50% 50%,
-    var(--color-accent-light) 0%,
-    var(--color-accent-subtle) 15%,
-    color-mix(in srgb, var(--color-accent) 3%, transparent) 30%,
-    transparent 45%
-  );
-  filter: blur(100px);
-  opacity: 0.6;
-}
+/* ========================================
+   HERO — RESPONSIVE
+   ======================================== */
 
-/* Mobile */
-@media (max-width: 640px) {
+@media (max-width: 860px) {
   .hero {
-    padding: 4rem 1.5rem 3.5rem;
+    padding-top: 3rem;
   }
 
-  .hero-avatar {
-    width: 140px;
-    height: 140px;
-    margin-bottom: 2rem;
+  .hero-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2.5rem;
+    padding-bottom: 3rem;
   }
 
+  .hero-portrait {
+    order: -1;
+    width: 180px;
+  }
+
+  .hero-name {
+    max-width: none;
+  }
+}
+
+@media (max-width: 640px) {
   .hero-tagline {
-    font-size: var(--text-lg);
+    font-size: var(--text-md);
   }
 
-  .hero-chips {
-    gap: 0.5rem;
+  .telemetry-cell {
+    padding: 1rem 1rem 1.125rem;
   }
 
-  .hero-chip {
-    font-size: var(--text-xs);
-    padding: 0.4rem 0.875rem;
+  .telemetry-cell:nth-child(odd) {
+    padding-left: 0;
   }
 }
 
@@ -212,30 +305,15 @@
    ======================================== */
 
 .home-section {
-  text-align: center;
-  padding: 5rem 2rem;
-  margin: 0 auto;
-  max-width: 700px;
   position: relative;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.015) 0%, transparent 100%);
-  border-radius: var(--radius-lg);
-  transition: background var(--duration-normal) var(--ease-out);
-}
-
-/* Visual separator with gradient fade */
-.home-section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 160px;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
-  border-radius: 1px;
+  padding: 4rem 0;
+  margin: 0 auto;
+  max-width: 100%;
+  border-top: var(--rule) solid var(--color-border);
 }
 
 .section-title {
+  font-family: var(--font-display);
   font-size: var(--text-xl);
   font-weight: var(--font-weight-bold);
   margin-bottom: 1.5rem;
@@ -248,8 +326,8 @@
 
 .section-desc {
   color: var(--color-fg);
-  max-width: 540px;
-  margin: 0 auto;
+  max-width: 62ch;
+  margin: 0;
   line-height: var(--leading-normal);
   font-size: var(--text-md);
 }
@@ -262,9 +340,8 @@
 
 /* Impact list */
 .impact-list {
-  text-align: left;
-  max-width: 600px;
-  margin: 0 auto;
+  max-width: 62ch;
+  margin: 0;
   list-style: none;
   padding: 0;
 }
@@ -281,47 +358,42 @@
   content: '';
   position: absolute;
   left: 0;
-  top: 0.6em;
-  width: 6px;
-  height: 6px;
+  top: 0.7em;
+  width: 8px;
+  height: var(--rule-strong);
   background: var(--color-accent);
-  border-radius: 50%;
 }
 
 .impact-list li strong {
   color: var(--color-fg-bold);
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--font-weight-semibold);
 }
 
 /* Work grid */
 .work-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1.25rem;
-  max-width: 800px;
-  margin: 0 auto;
+  gap: 0;
+  margin: 0;
+  border-top: var(--rule) solid var(--color-border);
 }
 
 .work-card {
   text-align: left;
-  padding: 1.5rem;
-  background: var(--color-bg);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  padding: 1.75rem 1.5rem;
+  background: transparent;
+  border-bottom: var(--rule) solid var(--color-border);
+  border-right: var(--rule) solid var(--color-border);
   text-decoration: none;
-  transition:
-    border-color var(--duration-fast) var(--ease-out),
-    box-shadow var(--duration-fast) var(--ease-out),
-    transform var(--duration-fast) var(--ease-out);
+  transition: background-color var(--duration-fast) var(--ease-out);
 }
 
 .work-card:hover {
-  border-color: var(--color-accent);
-  box-shadow: var(--shadow-md);
-  transform: translateY(var(--lift-sm));
+  background: var(--color-surface-subtle);
 }
 
 .work-card-title {
+  font-family: var(--font-display);
   font-size: var(--text-md);
   font-weight: var(--font-weight-bold);
   color: var(--color-fg-bold);
@@ -332,19 +404,22 @@
   font-size: var(--text-sm);
   color: var(--color-fg-light);
   margin: 0 0 1rem;
-  line-height: var(--leading-normal);
+  line-height: var(--leading-snug);
 }
 
 .work-card-link {
-  font-size: var(--text-sm);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
   color: var(--color-accent);
   font-weight: var(--font-weight-medium);
 }
 
 /* Simple home CTA */
 .home-cta {
-  text-align: center;
-  padding: 3rem 2rem 5rem;
+  padding: 3rem 0 4rem;
+  border-top: var(--rule) solid var(--color-border);
 }
 
 .home-cta p {
@@ -355,52 +430,10 @@
 
 @media (max-width: 736px) {
   .home-section {
-    padding: 3rem 1.5rem;
+    padding: 3rem 0;
   }
 
   .work-grid {
     grid-template-columns: 1fr;
   }
-
-  .impact-list li {
-    padding-left: 1.25rem;
-  }
-}
-
-/* ========================================
-   DARK MODE
-   ======================================== */
-
-[data-theme='dark'] .hero-avatar {
-  box-shadow:
-    var(--shadow-xl),
-    0 0 0 1px var(--color-border),
-    0 0 40px rgba(96, 165, 250, 0.08);
-}
-
-[data-theme='dark'] .hero-avatar:hover {
-  box-shadow:
-    var(--shadow-xl),
-    0 0 0 1px var(--color-accent-border),
-    0 0 50px rgba(96, 165, 250, 0.12);
-}
-
-[data-theme='dark'] .hero-chip {
-  background: var(--color-bg-offset);
-}
-
-[data-theme='dark'] .hero-gradient {
-  opacity: 0.3;
-}
-
-[data-theme='dark'] .home-section {
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 0%, transparent 100%);
-}
-
-[data-theme='dark'] .work-card {
-  background: var(--color-bg-alt);
-}
-
-[data-theme='dark'] .work-card:hover {
-  background: var(--color-bg-offset);
 }

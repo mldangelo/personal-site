@@ -23,6 +23,12 @@
   max-width: 56rem;
 }
 
+/* The hero grid needs room for a full-measure readout strip
+   alongside a 320px portrait. */
+.page-main--hero {
+  max-width: 70rem;
+}
+
 @media screen and (min-width: 736px) {
   .page-main {
     padding: 3rem 2rem;

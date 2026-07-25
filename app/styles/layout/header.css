@@ -3,18 +3,19 @@
    Fixed navigation with glassmorphism
    ======================================== */
 
-/* Header - fixed navigation with glassmorphism */
+/* Header — a fixed instrument bezel. Held by a hairline rule
+   rather than by blur and saturation. */
 .site-header {
   align-items: center;
-  background-color: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border-bottom: solid 1px var(--color-border);
+  background-color: color-mix(in srgb, var(--color-bg-alt) 88%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: var(--rule) solid var(--color-border);
   display: flex;
   height: var(--header-height);
   justify-content: space-between;
   left: 0;
-  line-height: var(--header-height);
+  line-height: 1;
   padding: 0 1.5rem;
   position: fixed;
   top: 0;

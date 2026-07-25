@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   return (
-    <PageWrapper>
+    <PageWrapper mainClassName="page-main--hero">
       <SchemaGraph
         nodes={[profilePageNode({ url: HOME_URL, name: AUTHOR_NAME })]}
       />
