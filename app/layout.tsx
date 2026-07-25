@@ -12,9 +12,9 @@ import Navigation from '@/components/Template/Navigation';
 import ScrollToTop from '@/components/Template/ScrollToTop';
 import {
   AUTHOR_NAME,
+  SHARE_IMAGE_DIMENSIONS,
+  SHARE_IMAGE_PATH,
   SITE_DESCRIPTION,
-  SITE_IMAGE_DIMENSIONS,
-  SITE_IMAGE_PATH,
   SITE_URL,
   TWITTER_HANDLE,
 } from '@/lib/utils';
@@ -76,9 +76,9 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
     images: [
       {
-        url: SITE_IMAGE_PATH,
-        width: SITE_IMAGE_DIMENSIONS.width,
-        height: SITE_IMAGE_DIMENSIONS.height,
+        url: SHARE_IMAGE_PATH,
+        width: SHARE_IMAGE_DIMENSIONS.width,
+        height: SHARE_IMAGE_DIMENSIONS.height,
         alt: AUTHOR_NAME,
       },
     ],
@@ -89,7 +89,7 @@ export const metadata: Metadata = {
     creator: TWITTER_HANDLE,
     title: AUTHOR_NAME,
     description: SITE_DESCRIPTION,
-    images: [SITE_IMAGE_PATH],
+    images: [SHARE_IMAGE_PATH],
   },
   robots: {
     index: true,

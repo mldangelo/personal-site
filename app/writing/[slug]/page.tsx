@@ -10,7 +10,13 @@ import {
   HOME_URL,
   webPageNode,
 } from '@/lib/schema';
-import { AUTHOR_NAME, formatDate, SITE_URL } from '@/lib/utils';
+import {
+  AUTHOR_NAME,
+  formatDate,
+  SHARE_IMAGE_DIMENSIONS,
+  SHARE_IMAGE_PATH,
+  SITE_URL,
+} from '@/lib/utils';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -35,6 +41,9 @@ export async function generateMetadata({
 
   const url = `${SITE_URL}/writing/${post.slug}/`;
 
+  // Declaring `openGraph` here replaces the inherited object wholesale, so the
+  // share image has to be repeated — without it, posts shipped with no
+  // og:image at all.
   return {
     title: post.title,
     description: post.description,
@@ -45,11 +54,20 @@ export async function generateMetadata({
       url,
       publishedTime: post.date,
       authors: [AUTHOR_NAME],
+      images: [
+        {
+          url: SHARE_IMAGE_PATH,
+          width: SHARE_IMAGE_DIMENSIONS.width,
+          height: SHARE_IMAGE_DIMENSIONS.height,
+          alt: `${AUTHOR_NAME} — ${post.title}`,
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
       title: post.title,
       description: post.description,
+      images: [SHARE_IMAGE_PATH],
     },
   };
 }

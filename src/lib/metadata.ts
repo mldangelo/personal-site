@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 
 import {
   AUTHOR_NAME,
-  SITE_IMAGE_DIMENSIONS,
-  SITE_IMAGE_PATH,
+  SHARE_IMAGE_DIMENSIONS,
+  SHARE_IMAGE_PATH,
   SITE_URL,
   TWITTER_HANDLE,
 } from './utils';
@@ -22,6 +22,9 @@ export function createPageMetadata({
   const absoluteUrl = path ? new URL(path, SITE_URL).toString() : undefined;
   const pageTitle = `${title} | ${AUTHOR_NAME}`;
 
+  // Images are set explicitly on every page: a route-level `openGraph` object
+  // replaces the inherited one entirely, so anything left implicit here simply
+  // disappears from subpages.
   return {
     title,
     description,
@@ -34,10 +37,10 @@ export function createPageMetadata({
       ...(absoluteUrl ? { url: absoluteUrl } : {}),
       images: [
         {
-          url: SITE_IMAGE_PATH,
-          width: SITE_IMAGE_DIMENSIONS.width,
-          height: SITE_IMAGE_DIMENSIONS.height,
-          alt: AUTHOR_NAME,
+          url: SHARE_IMAGE_PATH,
+          width: SHARE_IMAGE_DIMENSIONS.width,
+          height: SHARE_IMAGE_DIMENSIONS.height,
+          alt: `${AUTHOR_NAME} — ${title}`,
         },
       ],
     },
@@ -47,7 +50,7 @@ export function createPageMetadata({
       creator: TWITTER_HANDLE,
       title: pageTitle,
       description,
-      images: [SITE_IMAGE_PATH],
+      images: [SHARE_IMAGE_PATH],
     },
   };
 }

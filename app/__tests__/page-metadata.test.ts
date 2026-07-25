@@ -1,12 +1,14 @@
 import { describe, expect, it } from 'vitest';
 
-import { AUTHOR_NAME, SITE_URL } from '@/lib/utils';
+import { getPostSlugs } from '@/lib/posts';
+import { AUTHOR_NAME, SHARE_IMAGE_PATH, SITE_URL } from '@/lib/utils';
 import { metadata as aboutMetadata } from '../about/page';
 import { metadata as contactMetadata } from '../contact/page';
 import { metadata as notFoundMetadata } from '../not-found';
 import { metadata as projectsMetadata } from '../projects/page';
 import { metadata as resumeMetadata } from '../resume/page';
 import { metadata as statsMetadata } from '../stats/page';
+import { generateMetadata as generatePostMetadata } from '../writing/[slug]/page';
 import { metadata as writingMetadata } from '../writing/page';
 
 describe('page metadata', () => {
@@ -35,6 +37,41 @@ describe('page metadata', () => {
   ])('sets page-specific twitter metadata for %s', (_, metadata) => {
     expect(metadata.twitter?.description).toBe(metadata.description);
     expect(metadata.twitter?.title).toBe(`${metadata.title} | ${AUTHOR_NAME}`);
+  });
+
+  /**
+   * A route-level `openGraph` object replaces the inherited one entirely, so
+   * every page that declares one must repeat the share image. Blog posts
+   * shipped without an og:image for exactly this reason.
+   */
+  it.each([
+    ['about', aboutMetadata],
+    ['contact', contactMetadata],
+    ['archive', projectsMetadata],
+    ['resume', resumeMetadata],
+    ['stats', statsMetadata],
+    ['writing', writingMetadata],
+    ['404', notFoundMetadata],
+  ])('declares the share card on %s', (_, metadata) => {
+    const ogImages = metadata.openGraph?.images;
+    expect(JSON.stringify(ogImages)).toContain(SHARE_IMAGE_PATH);
+    expect(JSON.stringify(metadata.twitter?.images)).toContain(
+      SHARE_IMAGE_PATH,
+    );
+  });
+
+  it('declares the share card on blog posts', async () => {
+    const [slug] = getPostSlugs();
+    const metadata = await generatePostMetadata({
+      params: Promise.resolve({ slug }),
+    });
+
+    expect(JSON.stringify(metadata.openGraph?.images)).toContain(
+      SHARE_IMAGE_PATH,
+    );
+    expect(JSON.stringify(metadata.twitter?.images)).toContain(
+      SHARE_IMAGE_PATH,
+    );
   });
 
   it('overrides 404 share metadata without inventing a canonical url', () => {
