@@ -42,3 +42,6 @@
 
 /* Theme Overrides */
 @import './styles/dark-mode.css';
+
+/* Print — must come last so it can override both themes */
+@import './styles/print.css';

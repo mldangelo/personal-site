@@ -253,6 +253,10 @@
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
+  /* Without these the gutter stretches to the full row height and a
+     wrapped range strands its second date next to the bullets. */
+  align-content: flex-start;
+  align-self: start;
   gap: 0 0.4em;
   margin: 0;
   padding-top: 0.35em;
