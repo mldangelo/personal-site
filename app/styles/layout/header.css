@@ -73,12 +73,12 @@
 /* Slide menu panel */
 .slide-menu {
   -webkit-overflow-scrolling: touch;
-  background-color: var(--color-bg);
+  background-color: var(--color-bg-alt);
+  border-left: var(--rule) solid var(--color-fg-bold);
   bottom: 0;
-  font-size: 1.15em;
-  max-width: 80vw;
+  max-width: 82vw;
   overflow-y: auto;
-  padding: 2.5em 1.5em 0;
+  padding: 1.5rem 1.5rem 0;
   position: fixed;
   top: 0;
   transition: transform var(--duration-normal) var(--ease-menu);
@@ -102,9 +102,8 @@
 
 .slide-menu ul {
   color: var(--color-fg-bold);
-  font-family: var(--font-heading);
   margin-top: 0;
-  padding: 0.8em;
+  padding: 0;
 }
 
 /* Hamburger container */
@@ -210,54 +209,73 @@
   transform: translateY(50%) rotate(-45deg);
 }
 
-/* Navigation list inside slide menu - modern styling */
+/* Mobile navigation — the same mono annotation as the desktop nav,
+   stacked and hairline-divided. */
 .hamburger-ul {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0;
   list-style: none;
-  padding: 1rem 0;
+  margin: 0;
+  padding: 0;
 }
 
 .hamburger-ul li {
   display: block;
+  border-bottom: var(--rule) solid var(--color-border);
 }
 
+.hamburger-ul li:first-child {
+  border-top: var(--rule) solid var(--color-border);
+}
+
+/* Base `li a` paints an accent underline across the full width.
+   The desktop nav opts out the same way; without this the menu is
+   the only place on the site showing that rule. */
 .hamburger-ul li a {
   display: block;
   outline: none;
   text-decoration: none;
-  padding: 0.75rem 1rem;
-  border-radius: var(--radius-sm);
+  background-image: none;
+  padding: 0.9rem 0;
+  border-radius: 0;
   transition: background-color var(--duration-fast) var(--ease-out);
 }
 
 .hamburger-ul li a:hover {
-  background-color: var(--color-border-bg);
-}
-
-.hamburger-ul li a:focus-visible h3 {
-  color: var(--color-accent);
+  background-color: transparent;
 }
 
 .hamburger-ul li a h3 {
   margin: 0;
   padding: 0;
   border: none;
-  font-size: 1rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
   font-weight: var(--font-weight-medium);
-  color: var(--color-fg);
-  text-transform: none;
-  letter-spacing: normal;
+  color: var(--color-fg-light);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-label);
   transition: color var(--duration-fast) var(--ease-out);
 }
 
-.hamburger-ul li a:hover h3 {
+.hamburger-ul li a:hover h3,
+.hamburger-ul li a:focus-visible h3 {
   color: var(--color-fg-bold);
 }
 
-.hamburger-ul .index-li {
-  font-weight: var(--font-weight-bold);
+/* The index entry is the person's name, not a section label,
+   so it is set in display type and sits above the rule. */
+.hamburger-ul li:has(.index-li) {
+  border-bottom-color: var(--color-fg-bold);
+}
+
+.hamburger-ul li a h3.index-li {
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  font-weight: var(--font-weight-black);
+  letter-spacing: var(--tracking-display);
+  text-transform: none;
   color: var(--color-fg-bold);
 }
 

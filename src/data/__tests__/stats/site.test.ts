@@ -65,11 +65,14 @@ describe('site stats data', () => {
     expect(formatted).toBe('January 15, 2024');
   });
 
-  it('has lines of code stat', () => {
+  it('declares the lines-of-code stat without hardcoding a count', () => {
     const locStat = data.find((s) => s.label.includes('Lines of TypeScript'));
 
     expect(locStat).toBeDefined();
-    expect(locStat!.value).toBeDefined();
     expect(locStat!.link).toContain('github.com');
+    // Resolved at build time from the working tree by Site.tsx. A literal
+    // here is what let the old figure drift by nearly 2,000 lines.
+    expect(locStat!.key).toBe('source_lines');
+    expect(locStat!.value).toBeUndefined();
   });
 });

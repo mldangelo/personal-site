@@ -10,9 +10,24 @@ import {
 } from '../../../lib/telemetry';
 import Telemetry from '../../Template/Telemetry';
 
+/** Stubs matchMedia so the hook can read a reduced-motion preference. */
+function setReducedMotion(matches: boolean) {
+  Object.defineProperty(window, 'matchMedia', {
+    writable: true,
+    configurable: true,
+    value: (query: string) => ({
+      matches,
+      media: query,
+      addEventListener: () => {},
+      removeEventListener: () => {},
+    }),
+  });
+}
+
 describe('Telemetry', () => {
   beforeEach(() => {
     vi.useFakeTimers();
+    setReducedMotion(false);
   });
 
   afterEach(() => {
@@ -61,6 +76,23 @@ describe('Telemetry', () => {
     expect(
       container.querySelector('.telemetry-value--live')?.textContent,
     ).toMatch(/^\d+\.\d+$/);
+  });
+
+  it('takes a single reading under prefers-reduced-motion instead of animating', () => {
+    setReducedMotion(true);
+    const { container } = render(<Telemetry />);
+    const live = () =>
+      container.querySelector('.telemetry-value--live')?.textContent;
+
+    // The reading is still real and still accurate — it just holds still.
+    expect(live()).toMatch(/^\d+\.\d+$/);
+    const settled = live();
+
+    act(() => {
+      vi.advanceTimersByTime(5000);
+    });
+
+    expect(live()).toBe(settled);
   });
 
   it('marks only the age as live, so the signal colour stays meaningful', () => {

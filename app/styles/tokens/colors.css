@@ -26,10 +26,7 @@
   --color-accent-hover: #16249c;
   --color-accent-light: color-mix(in srgb, var(--color-accent) 12%, transparent);
   --color-accent-subtle: color-mix(in srgb, var(--color-accent) 6%, transparent);
-  --color-accent-muted: color-mix(in srgb, var(--color-accent) 3%, transparent);
   --color-accent-underline: color-mix(in srgb, var(--color-accent) 32%, transparent);
-  --color-accent-underline-strong: color-mix(in srgb, var(--color-accent) 45%, transparent);
-  --color-accent-glow: color-mix(in srgb, var(--color-accent) 15%, transparent);
   --color-accent-border: color-mix(in srgb, var(--color-accent) 45%, transparent);
 
   /* ===================
@@ -64,7 +61,5 @@
      SEMANTIC COLORS
      =================== */
   --color-white: #fff;
-  --color-overlay-light: rgba(255, 255, 255, 0.15);
-  --color-overlay-dark: rgba(0, 0, 0, 0.15);
   --color-overlay-darker: rgba(14, 17, 22, 0.45);
 }

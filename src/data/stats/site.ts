@@ -42,8 +42,11 @@ const data: StatData[] = [
     format: (x: unknown) => dayjs(x as string).format('MMMM DD, YYYY'),
   },
   {
+    // Counted from the working tree at build time by `Site.tsx`; see
+    // `src/lib/loc.ts`. Do not hardcode a number here — the previous one
+    // drifted by nearly 2,000 lines before anyone noticed.
     label: 'Lines of TypeScript powering this website',
-    value: '2272',
+    key: 'source_lines',
     link: 'https://github.com/mldangelo/personal-site/graphs/contributors',
   },
 ];
