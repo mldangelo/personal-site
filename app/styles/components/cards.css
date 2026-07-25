@@ -168,90 +168,216 @@
 }
 
 /* ========================================
-   JOB CARDS
+   EXPERIENCE SPINE
+   One continuous rule down the page with a dated tick per role.
+   Replaces the stack of identical cards, in which a current role
+   and a 2013 internship carried exactly the same weight.
    ======================================== */
 
-.jobs-container {
-  margin-bottom: 2rem;
-  padding: 2rem;
-  background: var(--color-bg);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--color-border);
+.experience-spine {
   position: relative;
-  transition:
-    border-color var(--duration-fast) var(--ease-out),
-    transform var(--duration-fast) var(--ease-out),
-    box-shadow var(--duration-fast) var(--ease-out);
 }
 
+.jobs-container {
+  position: relative;
+  display: grid;
+  grid-template-columns: 11rem minmax(0, 1fr);
+  gap: 0 2.5rem;
+  padding: 0 0 3rem;
+  background: none;
+  border: 0;
+  border-radius: 0;
+}
+
+/* The spine itself: drawn by each entry so it runs unbroken,
+   and stopped short on the last one. */
 .jobs-container::before {
   content: '';
   position: absolute;
-  left: 0;
-  top: 1.5rem;
-  bottom: 1.5rem;
-  width: 3px;
-  background: linear-gradient(180deg, var(--color-accent) 0%, var(--color-accent-secondary) 100%);
-  border-radius: 2px;
-  opacity: 0;
-  transition: opacity var(--duration-fast) var(--ease-out);
-}
-
-.jobs-container:hover {
-  border-color: var(--color-accent-border);
-  transform: translateY(var(--lift-sm));
-  box-shadow: var(--shadow-lg);
-}
-
-.jobs-container:hover::before {
-  opacity: 1;
+  left: calc(11rem + 1.25rem);
+  top: 0.6rem;
+  bottom: 0;
+  width: var(--rule);
+  background: var(--color-border);
 }
 
 .jobs-container:last-child {
-  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.jobs-container:last-child::before {
+  bottom: auto;
+  height: 100%;
+  background: linear-gradient(to bottom, var(--color-border), transparent);
+}
+
+/* Tick marking this role's position on the spine. */
+.job-marker {
+  position: absolute;
+  left: calc(11rem + 1.25rem);
+  top: 0.6rem;
+  width: 7px;
+  height: 7px;
+  transform: translate(-50%, -50%) translateY(0.35em);
+  border: var(--rule-strong) solid var(--color-fg-light);
+  background: var(--color-bg-alt);
+  border-radius: var(--radius-full);
+}
+
+/* Only a role still in progress lights up. */
+.jobs-container--current .job-marker {
+  border-color: var(--color-signal-mark);
+  background: var(--color-signal-mark);
+  width: 9px;
+  height: 9px;
+}
+
+.job-body {
+  min-width: 0;
+}
+
+/* Dates sit in the gutter, in mono, so the column scans as a
+   timeline rather than as a caption under each heading. */
+.daterange {
+  grid-column: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 0.4em;
+  margin: 0;
+  padding-top: 0.35em;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-fg-light);
+  line-height: 1.5;
+}
+
+.daterange-sep {
+  color: var(--color-border-alt);
+}
+
+.daterange-present {
+  color: var(--color-signal);
+  font-weight: var(--font-weight-medium);
 }
 
 .jobs-container header h4 {
-  font-size: var(--text-xl);
-  font-weight: var(--font-weight-black);
-  margin-bottom: 0.35rem;
-  line-height: 1.3;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--tracking-tight);
+  margin-bottom: 0.75rem;
+  line-height: 1.15;
 }
 
-.jobs-container header h4 a {
+.jobs-container header h4 a.job-company {
   color: var(--color-fg-bold);
   text-decoration: none;
+  background-image: none;
+  width: fit-content;
 }
 
-.jobs-container header h4 a:hover {
+.jobs-container header h4 a.job-company:hover {
   color: var(--color-accent);
 }
 
-.jobs-container .role {
-  display: block;
+.job-position {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
   font-weight: var(--font-weight-medium);
-  color: var(--color-fg);
-  font-size: var(--text-md);
-  margin-top: 0.25rem;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--color-fg-light);
 }
 
 .jobs-container .points {
   margin-top: 1rem;
+  margin-bottom: 0;
+  list-style: none;
+  padding-left: 0;
 }
 
 .jobs-container .points li {
+  position: relative;
   font-size: var(--text-base);
-  line-height: 1.7;
+  line-height: var(--leading-normal);
   margin-bottom: 0.6rem;
-  padding: 0;
+  padding-left: 1.25rem;
   color: var(--color-fg-light);
 }
 
-.daterange {
+.jobs-container .points li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.72em;
+  width: 7px;
+  height: var(--rule);
+  background: var(--color-border-alt);
+}
+
+/* Lead — the current headline role, set largest. */
+.jobs-container--lead header h4 {
+  font-size: var(--text-2xl);
+  font-weight: var(--font-weight-black);
+  letter-spacing: var(--tracking-display);
+}
+
+.jobs-container--lead .summary {
+  font-size: var(--text-lg);
+  color: var(--color-fg);
+}
+
+/* Early — internships and student-era work, stepped down so a
+   decade of history stays on the page without competing. */
+.jobs-container--early {
+  padding-bottom: 2rem;
+}
+
+.jobs-container--early header h4 {
+  font-size: var(--text-md);
+  margin-bottom: 0.5rem;
+}
+
+.jobs-container--early .summary,
+.jobs-container--early .points li {
   font-size: var(--text-sm);
-  letter-spacing: var(--tracking-tight);
-  color: var(--color-fg-light);
-  margin-bottom: 0.5em;
+  line-height: var(--leading-snug);
+  margin-bottom: 0.4rem;
+}
+
+.jobs-container--early .job-marker {
+  width: 5px;
+  height: 5px;
+  border-width: var(--rule);
+}
+
+@media (max-width: 760px) {
+  .jobs-container {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.5rem;
+    padding-left: 1.5rem;
+  }
+
+  .jobs-container::before,
+  .jobs-container:last-child::before {
+    left: 0;
+  }
+
+  .job-marker {
+    left: 0;
+    transform: translate(-50%, -50%) translateY(0.5em);
+  }
+
+  .daterange {
+    padding-top: 0;
+  }
 }
 
 .summary {
@@ -308,38 +434,51 @@
    COURSE CARDS
    ======================================== */
 
+/* Courses read as a catalogue listing: a mono course code in the
+   gutter and the title beside it, ruled rather than boxed. */
 .course-container {
   display: block;
 }
 
 .course-container a {
-  display: block;
-  padding: 1rem 1.25rem;
-  background: var(--color-surface-subtle);
-  border: 1px solid var(--color-border-bg);
-  border-radius: var(--radius-md);
+  display: grid;
+  grid-template-columns: 5.5rem minmax(0, 1fr);
+  gap: 0 1rem;
+  align-items: baseline;
+  padding: 0.75rem 0;
+  background: transparent;
+  background-image: none;
+  border: 0;
+  border-bottom: var(--rule) solid var(--color-border);
+  border-radius: 0;
   text-decoration: none;
-  transition: all var(--duration-fast) var(--ease-out);
+  transition: background-color var(--duration-fast) var(--ease-out);
 }
 
 .course-container a:hover {
-  border-color: var(--color-border);
-  background: var(--color-surface-hover);
-  transform: translateY(var(--lift-sm));
+  background: var(--color-surface-subtle);
 }
 
 .courses .course-number {
   display: block;
-  font-size: var(--text-sm);
-  font-weight: var(--font-weight-bold);
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-fg-light);
+}
+
+.course-container a:hover .course-number {
   color: var(--color-accent);
-  margin-bottom: 0.25rem;
 }
 
 .courses .course-name {
   display: block;
-  font-family: var(--font-sans);
+  margin: 0;
+  font-family: var(--font-body);
   font-size: var(--text-base);
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--font-weight-normal);
   color: var(--color-fg);
+  line-height: var(--leading-snug);
 }
