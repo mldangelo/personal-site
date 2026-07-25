@@ -159,49 +159,101 @@
    ======================================== */
 
 .about-section--log ul {
-  position: relative;
   list-style: none;
   margin: var(--spacing-5) 0 var(--spacing-6);
-  padding-left: 1.75rem;
+  padding-left: 0;
 }
 
-/* The spine, fading out at the tail so the record reads as open-ended. */
-.about-section--log ul::before {
+/* Same gutter-then-spine-then-body arrangement as the resume, so the two
+   records on the site read as one device. */
+.about-section--log .log-entry {
+  position: relative;
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr);
+  gap: 0 1.75rem;
+  margin-bottom: 1.1rem;
+  padding-left: 0;
+}
+
+/* Drawn per entry so the spine runs unbroken through the margin gaps. */
+.about-section--log .log-entry::before {
   content: '';
   position: absolute;
-  left: 4px;
-  top: 0.65em;
-  bottom: 0.4em;
+  left: calc(4.5rem + 0.875rem);
+  top: 0;
+  bottom: -1.1rem;
   width: var(--rule);
-  background: linear-gradient(
-    to bottom,
-    var(--color-border) 0%,
-    var(--color-border) 88%,
-    transparent 100%
-  );
+  background: var(--color-border);
 }
 
-.about-section--log li {
-  position: relative;
-  margin-bottom: 1.1rem;
+/* The record is open-ended, so the last segment fades rather than stops. */
+.about-section--log .log-entry:last-child::before {
+  bottom: auto;
+  height: 2.5em;
+  background: linear-gradient(to bottom, var(--color-border), transparent);
 }
 
 /* One tick per entry. */
-.about-section--log li::before {
+.about-section--log .log-entry::after {
   content: '';
   position: absolute;
-  left: -1.75rem;
-  top: 0.65em;
+  left: calc(4.5rem + 0.875rem);
+  top: 0.68em;
   width: 7px;
   height: 7px;
+  transform: translate(-50%, -50%);
   border: var(--rule) solid var(--color-fg-light);
   background: var(--color-bg-alt);
   border-radius: var(--radius-full);
 }
 
-.about-section--log li:hover::before {
+.about-section--log .log-entry:hover::after {
   border-color: var(--color-signal-mark);
   background: var(--color-signal-mark);
+}
+
+/* Empty for entries that carry no marker; the column still holds so the
+   spine stays straight down the list. */
+.log-entry-marker {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-fg-light);
+  text-align: right;
+  padding-top: 0.4em;
+  line-height: 1.4;
+}
+
+.log-entry-body {
+  min-width: 0;
+}
+
+@media (max-width: 640px) {
+  .about-section--log .log-entry {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.2rem;
+    padding-left: 1.5rem;
+  }
+
+  .about-section--log .log-entry::before,
+  .about-section--log .log-entry:last-child::before {
+    left: 0;
+  }
+
+  .about-section--log .log-entry::after {
+    left: 0;
+  }
+
+  .log-entry-marker {
+    text-align: left;
+    padding-top: 0;
+  }
+
+  .log-entry-marker:empty {
+    display: none;
+  }
 }
 
 .about-content a {
