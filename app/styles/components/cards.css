@@ -21,17 +21,20 @@
 }
 
 .projects-header {
-  text-align: center;
+  text-align: left;
   margin-bottom: 3rem;
 }
 
 .projects-section-title {
-  font-size: var(--text-sm);
-  font-weight: var(--font-weight-bold);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-weight: var(--font-weight-medium);
   color: var(--color-fg-light);
   text-transform: uppercase;
-  letter-spacing: var(--tracking-wide);
-  margin-bottom: 1.5rem;
+  letter-spacing: var(--tracking-label);
+  margin-bottom: 1.25rem;
+  padding-top: 0.875rem;
+  border-top: var(--rule) solid var(--color-fg-bold);
 }
 
 .projects-featured {
@@ -53,9 +56,6 @@
 
 .projects-grid--featured .project-card {
   grid-column: 1 / -1;
-  box-shadow:
-    var(--shadow-lg),
-    0 0 0 2px var(--color-accent-light);
 }
 
 @media screen and (min-width: 600px) {
@@ -69,20 +69,16 @@
 }
 
 .project-card {
-  background: var(--color-bg);
-  border-radius: var(--radius-lg);
+  background: transparent;
+  border-radius: 0;
   overflow: hidden;
-  border: 1px solid var(--color-border-bg);
-  box-shadow: var(--shadow-sm);
-  transition: all var(--duration-normal) var(--ease-out);
+  border: var(--rule) solid var(--color-border);
+  box-shadow: none;
+  transition: border-color var(--duration-fast) var(--ease-out);
 }
 
 .project-card--linked:hover {
-  transform: translateY(var(--lift-md));
-  border-color: var(--color-accent-border);
-  box-shadow:
-    var(--shadow-xl),
-    0 0 0 1px var(--color-accent-border);
+  border-color: var(--color-fg-bold);
 }
 
 /* Full card link wrapper */
@@ -117,15 +113,21 @@
   overflow: hidden;
 }
 
+/* Archive imagery is held back in greyscale and only develops on
+   hover, so a page of screenshots does not shout over the resume. */
 .project-card-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform var(--duration-normal) var(--ease-out);
+  filter: grayscale(1) contrast(1.05);
+  transition:
+    filter var(--duration-normal) var(--ease-out),
+    transform var(--duration-normal) var(--ease-out);
 }
 
 .project-card--linked:hover .project-card-image img {
-  transform: scale(var(--scale-sm));
+  filter: grayscale(0) contrast(1);
+  transform: scale(1.02);
 }
 
 .project-card-content {
@@ -137,13 +139,18 @@
 }
 
 .project-card-title {
-  font-size: var(--text-xl);
-  font-weight: var(--font-weight-black);
-  margin-bottom: 0.35rem;
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--tracking-tight);
+  margin-bottom: 0.4rem;
 }
 
 .project-card-subtitle {
-  font-size: var(--text-sm);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
   color: var(--color-fg-light);
   font-weight: var(--font-weight-medium);
 }
@@ -163,7 +170,10 @@
 }
 
 .project-card-date {
-  font-size: var(--text-xs);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--tracking-wide);
   color: var(--color-fg-light);
 }
 

@@ -254,27 +254,32 @@
   margin-bottom: 0.75rem;
 }
 
+/* The address is the page's one instruction, so it is set as a
+   readout in mono rather than dressed up as a tinted button. */
 .contact-email-link {
   display: inline-flex;
   align-items: baseline;
-  padding: 0.75rem 1.5rem;
-  font-size: var(--text-lg);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-accent);
-  background: var(--color-accent-light);
-  border-radius: var(--radius-md);
+  padding: 0.875rem 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-xl);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-fg-bold);
+  background: transparent;
+  background-image: none;
+  border-radius: 0;
+  border-bottom: var(--rule-strong) solid var(--color-accent);
   text-decoration: none;
   white-space: nowrap;
   transition:
-    background-color var(--duration-fast) var(--ease-out),
-    transform var(--duration-fast) var(--ease-out),
-    box-shadow var(--duration-fast) var(--ease-out);
+    color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out);
 }
 
 .contact-email-link:hover {
-  background: color-mix(in srgb, var(--color-accent-light) 70%, var(--color-accent) 30%);
-  transform: translateY(var(--lift-sm));
-  box-shadow: var(--shadow-md);
+  background: transparent;
+  color: var(--color-accent);
+  border-bottom-color: var(--color-accent-hover);
 }
 
 .contact-email-prefix {
@@ -287,12 +292,14 @@
 
 /* Invalid email state - grayed out */
 .contact-email-link--invalid {
-  background: var(--color-border-bg);
+  background: transparent;
+  border-bottom-color: var(--color-border-alt);
   cursor: default;
 }
 
 .contact-email-link--invalid:hover {
-  background: var(--color-border-bg);
+  background: transparent;
+  border-bottom-color: var(--color-border-alt);
   transform: none;
   box-shadow: none;
 }
@@ -303,7 +310,9 @@
 }
 
 .contact-hint {
-  font-size: var(--text-sm);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide);
   color: var(--color-fg-light);
   margin: 0;
 }

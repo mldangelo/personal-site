@@ -31,15 +31,14 @@
     border-radius: var(--radius-sm);
     color: var(--color-fg-light);
     text-decoration: none;
+    background-image: none;
     transition:
       color var(--duration-fast) var(--ease-out),
-      background-color var(--duration-fast) var(--ease-out),
-      transform var(--duration-fast) var(--ease-out);
+      background-color var(--duration-fast) var(--ease-out);
   }
 
   .icons li a:hover {
-    background-color: var(--color-accent-light);
-    color: var(--color-accent);
-    transform: translateY(var(--lift-sm));
+    background-color: var(--color-surface-hover);
+    color: var(--color-fg-bold);
   }
 }
