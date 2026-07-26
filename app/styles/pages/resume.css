@@ -110,7 +110,10 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
-  gap: 0 1.75rem;
+  /* Row gap matters: the links wrap below ~375px, and the active indicator
+     used to be positioned relative to the bar rather than the link, so it
+     drew straight through the second row. */
+  gap: 0.5rem 1.75rem;
   margin-top: var(--spacing-8);
   margin-bottom: var(--spacing-4);
   position: sticky;
@@ -156,12 +159,13 @@
   color: var(--color-accent);
 }
 
+/* Anchored to the link itself, so a wrapped row underlines its own item. */
 .resume-nav-link.active::after {
   content: '';
   position: absolute;
   left: 0;
   right: 0;
-  bottom: -0.75rem;
+  bottom: 0;
   height: var(--rule-strong);
   background: var(--color-accent);
 }

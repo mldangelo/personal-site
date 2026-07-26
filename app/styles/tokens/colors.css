@@ -24,9 +24,17 @@
   --color-accent: #1b2fbf;
   --color-accent-secondary: #8098ff;
   --color-accent-hover: #16249c;
+
+  /* Filled controls need their own pair. A link accent is tuned for contrast
+     against the page; reusing it as a button background put white text on it,
+     which fails badly once the accent lightens for dark mode. */
+  --color-accent-fill: var(--color-accent);
+  --color-accent-fill-hover: var(--color-accent-hover);
+  --color-on-accent: #ffffff;
   --color-accent-light: color-mix(in srgb, var(--color-accent) 12%, transparent);
   --color-accent-subtle: color-mix(in srgb, var(--color-accent) 6%, transparent);
   --color-accent-underline: color-mix(in srgb, var(--color-accent) 32%, transparent);
+  --color-accent-underline-strong: color-mix(in srgb, var(--color-accent) 55%, transparent);
   --color-accent-border: color-mix(in srgb, var(--color-accent) 45%, transparent);
 
   /* ===================

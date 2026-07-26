@@ -129,14 +129,35 @@
      gutter already does that work, and hairlines cost toner. */
   .jobs-container::before,
   .job-marker,
-  .about-section--log ul::before,
-  .about-section--log li::before {
+  .about-section--log .log-entry::before,
+  .about-section--log .log-entry::after {
     display: none;
   }
 
   .about-section--log ul {
     padding-left: 1.1rem;
     list-style: disc;
+  }
+
+  /* The entries are grid containers on screen; restore list semantics so the
+     disc markers above actually render. */
+  .about-section--log .log-entry {
+    display: list-item;
+    padding-left: 0;
+  }
+
+  .log-entry-marker {
+    text-align: left;
+    padding-top: 0;
+    margin-right: 0.5em;
+  }
+
+  .log-entry-marker:empty {
+    display: none;
+  }
+
+  .log-entry-body {
+    display: inline;
   }
 
   .jobs-container--lead header h4 {
@@ -171,9 +192,15 @@
     page-break-after: avoid;
   }
 
-  /* Filter controls do nothing on paper; every skill prints. */
+  /* Filter controls do nothing on paper, and every skill prints regardless
+     of what is selected on screen — the groups stay in the DOM precisely so
+     this override can reach them. */
   .skill-button-container {
     display: none;
+  }
+
+  .skill-group[hidden] {
+    display: block !important;
   }
 
   .skill-tag,

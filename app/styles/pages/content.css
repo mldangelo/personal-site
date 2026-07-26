@@ -310,7 +310,10 @@
    readout in mono rather than dressed up as a tinted button. */
 .contact-email-link {
   display: inline-flex;
+  flex-wrap: wrap;
   align-items: baseline;
+  justify-content: center;
+  max-width: 100%;
   padding: 0.875rem 0;
   font-family: var(--font-mono);
   font-size: var(--text-xl);
@@ -322,10 +325,19 @@
   border-radius: 0;
   border-bottom: var(--rule-strong) solid var(--color-accent);
   text-decoration: none;
-  white-space: nowrap;
+  /* The animated alias runs long — "you-can-email-me-at-literally-anything!"
+     pushed 438px of content into a 320px viewport. It has to be allowed to
+     break, mid-token if necessary. */
+  overflow-wrap: anywhere;
   transition:
     color var(--duration-fast) var(--ease-out),
     border-color var(--duration-fast) var(--ease-out);
+}
+
+@media (max-width: 480px) {
+  .contact-email-link {
+    font-size: var(--text-md);
+  }
 }
 
 .contact-email-link:hover {
@@ -673,15 +685,15 @@
 }
 
 .not-found-button {
-  color: var(--color-white);
-  background: var(--color-accent);
-  border: var(--rule) solid var(--color-accent);
+  color: var(--color-on-accent);
+  background: var(--color-accent-fill);
+  border: var(--rule) solid var(--color-accent-fill);
 }
 
 .not-found-button:hover {
-  color: var(--color-white);
-  background: var(--color-accent-hover);
-  border-color: var(--color-accent-hover);
+  color: var(--color-on-accent);
+  background: var(--color-accent-fill-hover);
+  border-color: var(--color-accent-fill-hover);
 }
 
 .not-found-link {

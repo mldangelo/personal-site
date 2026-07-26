@@ -21,10 +21,18 @@
   --color-overlay-dark: rgba(0, 0, 0, 0.3);
   --color-overlay-darker: rgba(0, 0, 0, 0.6);
 
-  /* Accent — ultramarine lifted to hold contrast on ink */
+  /* Accent — ultramarine lifted to hold contrast on ink.
+     This value is for text and rules on the page background; it is far too
+     light to sit behind white text (2.67:1), so filled controls keep a deep
+     fill and light text of their own. */
   --color-accent: #8098ff;
   --color-accent-secondary: #1b2fbf;
   --color-accent-hover: #a3b3ff;
+
+  /* #2a3ad4 behind #f2f4f7 is 7.2:1; hover holds at 5.8:1. */
+  --color-accent-fill: #2a3ad4;
+  --color-accent-fill-hover: #3d4ce0;
+  --color-on-accent: #f2f4f7;
   --color-accent-light: color-mix(in srgb, var(--color-accent) 18%, transparent);
   --color-accent-subtle: color-mix(in srgb, var(--color-accent) 10%, transparent);
   --color-accent-muted: color-mix(in srgb, var(--color-accent) 5%, transparent);

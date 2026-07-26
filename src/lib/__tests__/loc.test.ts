@@ -7,13 +7,18 @@ import { countSourceLines } from '../loc';
 
 let root: string;
 
+/** Writes `lines` lines with no trailing newline. */
 function write(relativePath: string, lines: number) {
-  const full = join(root, relativePath);
-  mkdirSync(join(full, '..'), { recursive: true });
-  writeFileSync(
-    full,
+  writeRaw(
+    relativePath,
     Array.from({ length: lines }, () => 'const a = 1;').join('\n'),
   );
+}
+
+function writeRaw(relativePath: string, contents: string) {
+  const full = join(root, relativePath);
+  mkdirSync(join(full, '..'), { recursive: true });
+  writeFileSync(full, contents);
 }
 
 describe('countSourceLines', () => {
@@ -23,6 +28,32 @@ describe('countSourceLines', () => {
 
   afterEach(() => {
     rmSync(root, { recursive: true, force: true });
+  });
+
+  it('does not count the empty segment after a trailing newline', () => {
+    // Nearly every source file ends in a newline, so this was inflating the
+    // published figure by one per file.
+    writeRaw('src/a.ts', 'one\ntwo\nthree\n');
+
+    expect(countSourceLines(root)).toBe(3);
+  });
+
+  it('counts a file with no trailing newline the same way', () => {
+    writeRaw('src/a.ts', 'one\ntwo\nthree');
+
+    expect(countSourceLines(root)).toBe(3);
+  });
+
+  it('counts an empty file as zero lines', () => {
+    writeRaw('src/empty.ts', '');
+
+    expect(countSourceLines(root)).toBe(0);
+  });
+
+  it('counts a file that is only a newline as one line', () => {
+    writeRaw('src/blank.ts', '\n');
+
+    expect(countSourceLines(root)).toBe(1);
   });
 
   it('counts TypeScript across both source roots', () => {

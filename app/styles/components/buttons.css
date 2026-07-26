@@ -8,11 +8,11 @@
      and it depresses rather than floats. */
   .button {
     appearance: none;
-    background: var(--color-accent);
-    border: var(--rule) solid var(--color-accent);
+    background: var(--color-accent-fill);
+    border: var(--rule) solid var(--color-accent-fill);
     border-radius: var(--radius-sm);
     box-shadow: none;
-    color: var(--color-white);
+    color: var(--color-on-accent);
     cursor: pointer;
     display: inline-flex;
     align-items: center;
@@ -35,13 +35,13 @@
   }
 
   .button:hover {
-    background: var(--color-accent-hover);
-    border-color: var(--color-accent-hover);
-    color: var(--color-white);
+    background: var(--color-accent-fill-hover);
+    border-color: var(--color-accent-fill-hover);
+    color: var(--color-on-accent);
   }
 
   .button:active {
-    background: var(--color-accent-hover);
+    background: var(--color-accent-fill-hover);
     transform: translateY(1px);
   }
 

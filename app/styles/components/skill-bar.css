@@ -37,15 +37,15 @@
   }
 
   .skillbutton-active {
-    background-color: var(--color-accent);
-    border-color: var(--color-accent);
-    color: var(--color-white);
+    background-color: var(--color-accent-fill);
+    border-color: var(--color-accent-fill);
+    color: var(--color-on-accent);
   }
 
   .skillbutton-active:hover {
-    background-color: var(--color-accent-hover);
-    border-color: var(--color-accent-hover);
-    color: var(--color-white);
+    background-color: var(--color-accent-fill-hover);
+    border-color: var(--color-accent-fill-hover);
+    color: var(--color-on-accent);
   }
 
   /* Skill section containers */

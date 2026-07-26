@@ -9,6 +9,25 @@ function isTestFile(name: string): boolean {
   return /\.(test|spec)\.tsx?$/.test(name) || name.startsWith('vitest.');
 }
 
+/**
+ * Lines in a file's contents.
+ *
+ * A file ending in a newline — which nearly every source file does — yields an
+ * empty final segment from `split`. Counting that segment inflated the figure
+ * by one per file, or 71 phantom lines across this repository.
+ */
+function countLines(contents: string): number {
+  if (contents === '') {
+    return 0;
+  }
+
+  const segments = contents.split('\n');
+
+  return segments[segments.length - 1] === ''
+    ? segments.length - 1
+    : segments.length;
+}
+
 function countLinesIn(dir: string): number {
   let total = 0;
 
@@ -23,7 +42,7 @@ function countLinesIn(dir: string): number {
     }
 
     if (SOURCE_EXTENSIONS.has(extname(entry)) && !isTestFile(entry)) {
-      total += readFileSync(path, 'utf8').split('\n').length;
+      total += countLines(readFileSync(path, 'utf8'));
     }
   }
 

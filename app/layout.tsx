@@ -91,12 +91,12 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
     images: [SHARE_IMAGE_PATH],
   },
+  // Only the snippet/preview hints are declared globally. `index, follow` is
+  // already the default, and emitting it here meant every page that sets
+  // `noindex` — the 404, the legacy post route — shipped with contradictory
+  // robots tags that a crawler is free to resolve either way.
   robots: {
-    index: true,
-    follow: true,
     googleBot: {
-      index: true,
-      follow: true,
       'max-video-preview': -1,
       'max-image-preview': 'large',
       'max-snippet': -1,
