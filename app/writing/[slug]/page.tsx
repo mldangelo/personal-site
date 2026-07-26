@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { SchemaGraph } from '@/components/Schema';
 import PageWrapper from '@/components/Template/PageWrapper';
 import PostContent from '@/components/Writing/PostContent';
+import { readPostImageSizes } from '@/lib/imageSize';
 import { sharedOpenGraph, sharedTwitter } from '@/lib/metadata';
 import { getPostBySlug, getPostSlugs } from '@/lib/posts';
 import {
@@ -98,7 +99,10 @@ export default async function PostPage({ params }: PageProps) {
           <p className="post-description">{post.description}</p>
         </header>
         <div className="post-content prose">
-          <PostContent content={post.content} />
+          <PostContent
+            content={post.content}
+            imageSizes={readPostImageSizes(post.content)}
+          />
         </div>
       </article>
     </PageWrapper>

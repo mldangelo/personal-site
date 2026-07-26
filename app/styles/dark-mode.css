@@ -36,6 +36,9 @@
   --color-signal: #f0a202;
   --color-signal-mark: #f0a202;
 
+  /* 3:1 against the dark page, matching the light-mode control border. */
+  --color-control-border: #8b929c;
+
   /* Borders */
   --color-border: rgba(255, 255, 255, 0.12);
   --color-border-bg: rgba(255, 255, 255, 0.07);

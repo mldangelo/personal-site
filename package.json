@@ -24,7 +24,8 @@
     "test:ui": "vitest --ui",
     "predeploy": "npm run build",
     "analyze": "ANALYZE=true npm run build",
-    "og": "node scripts/generate-og.mjs"
+    "og": "node scripts/generate-og.mjs",
+    "verify-export": "node scripts/verify-export.mjs"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^7.3.0",

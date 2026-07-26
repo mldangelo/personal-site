@@ -50,6 +50,11 @@
      =================== */
   --color-border: rgba(35, 39, 46, 0.14);
   --color-border-bg: rgba(35, 39, 46, 0.08);
+
+  /* Structural hairlines are meant to be quiet and sit near 1.5:1, which is
+     fine for dividing content but not for the only visible edge of a
+     control. Interactive boundaries use this instead, at 3:1 against paper. */
+  --color-control-border: #767b83;
   --color-border-alt: rgba(35, 39, 46, 0.24);
 
   /* ===================

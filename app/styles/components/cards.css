@@ -125,9 +125,18 @@
     transform var(--duration-normal) var(--ease-out);
 }
 
-.project-card--linked:hover .project-card-image img {
+.project-card--linked:hover .project-card-image img,
+.project-card--linked:focus-within .project-card-image img {
   filter: grayscale(0) contrast(1);
   transform: scale(1.02);
+}
+
+/* Without a pointer there is no hover to reveal the developed image, so
+   touch users would only ever see greyscale. */
+@media (hover: none) {
+  .project-card-image img {
+    filter: none;
+  }
 }
 
 .project-card-content {
@@ -469,7 +478,8 @@
   transition: background-color var(--duration-fast) var(--ease-out);
 }
 
-.course-container a:hover {
+.course-container a:hover,
+.course-container a:focus-visible {
   background: var(--color-surface-subtle);
 }
 
@@ -483,7 +493,8 @@
   color: var(--color-fg-light);
 }
 
-.course-container a:hover .course-number {
+.course-container a:hover .course-number,
+.course-container a:focus-visible .course-number {
   color: var(--color-accent);
 }
 

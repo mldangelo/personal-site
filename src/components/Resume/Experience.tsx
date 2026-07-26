@@ -18,17 +18,32 @@ const STUDENT_ERA_BEFORE = 2013;
  * decade of work at one uniform weight, which is how the previous card stack
  * lost its hierarchy.
  */
-export function tierFor(job: Position, index: number): JobTier {
-  if (index === 0) {
-    return 'lead';
-  }
+/**
+ * Year from an ISO date, read from the string rather than parsed.
+ *
+ * `new Date('2013-01-01')` is UTC midnight, which `getFullYear()` renders as
+ * 2012 anywhere west of Greenwich — so the student-era boundary moved with
+ * the reader's timezone.
+ */
+function isoYear(date: string): number {
+  return Number.parseInt(date.slice(0, 4), 10);
+}
 
+export function tierFor(job: Position, index: number): JobTier {
+  // An internship is never the lead, even if it is the newest entry.
   if (/intern/i.test(job.position)) {
     return 'early';
   }
 
-  if (job.endDate && new Date(job.endDate).getFullYear() < STUDENT_ERA_BEFORE) {
+  if (job.endDate && isoYear(job.endDate) < STUDENT_ERA_BEFORE) {
     return 'early';
+  }
+
+  // The data is authored newest-first, so index 0 is the current headline
+  // role. Guarded by the checks above so reordering cannot promote a
+  // student-era entry to lead.
+  if (index === 0) {
+    return 'lead';
   }
 
   return 'primary';

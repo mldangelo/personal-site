@@ -105,7 +105,9 @@
   border-radius: var(--radius-sm);
   color: var(--color-fg);
   cursor: pointer;
-  transition: all var(--duration-fast) var(--ease-out);
+  transition:
+    color var(--duration-fast) var(--ease-out),
+    background-color var(--duration-fast) var(--ease-out);
 }
 
 .theme-toggle:hover {

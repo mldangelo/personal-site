@@ -9,6 +9,7 @@ import Script from 'next/script';
 import { SiteSchema } from '@/components/Schema';
 import GoogleAnalytics from '@/components/Template/GoogleAnalytics';
 import Navigation from '@/components/Template/Navigation';
+import { MAIN_CONTENT_ID } from '@/components/Template/PageWrapper';
 import ScrollToTop from '@/components/Template/ScrollToTop';
 import { sharedOpenGraph, sharedTwitter } from '@/lib/metadata';
 import { AUTHOR_NAME, SITE_DESCRIPTION, SITE_URL } from '@/lib/utils';
@@ -109,6 +110,12 @@ export default function RootLayout({
         <SiteSchema />
       </head>
       <body>
+        {/* First focusable element on the page. The About and Resume pages
+            are thousands of pixels long, so tabbing past the nav to reach
+            content is otherwise the only route in. */}
+        <a href={`#${MAIN_CONTENT_ID}`} className="skip-link">
+          Skip to content
+        </a>
         <ScrollToTop />
         <div className="site-wrapper">
           <Navigation />

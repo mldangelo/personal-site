@@ -1,15 +1,18 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import routes from '../../data/routes';
+import { isActiveRoute } from '../../lib/routes';
 import SlideMenu from './SlideMenu';
 
 const MENU_ID = 'mobile-nav-menu';
 
 export default function Hamburger() {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
@@ -33,13 +36,26 @@ export default function Hamburger() {
         <span aria-hidden="true">×</span>
       </button>
       <ul className="hamburger-ul">
-        {routes.map((l) => (
-          <li key={l.label}>
-            <Link href={l.path} onClick={closeMenu}>
-              <h3 className={l.index ? 'index-li' : undefined}>{l.label}</h3>
-            </Link>
-          </li>
-        ))}
+        {routes.map((l) => {
+          const active = isActiveRoute(pathname, l.path);
+
+          return (
+            <li key={l.label}>
+              {/* Navigation labels, not document sections — these were <h3>,
+                  which put six phantom headings into the outline. */}
+              <Link
+                href={l.path}
+                onClick={closeMenu}
+                className={active ? 'active' : undefined}
+                aria-current={active ? 'page' : undefined}
+              >
+                <span className={l.index ? 'index-li' : undefined}>
+                  {l.label}
+                </span>
+              </Link>
+            </li>
+          );
+        })}
       </ul>
     </SlideMenu>
   );

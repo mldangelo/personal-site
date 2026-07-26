@@ -53,7 +53,7 @@
   /* Secondary — the same switch, unlit. */
   .button-secondary {
     background: transparent;
-    border-color: var(--color-border-alt);
+    border-color: var(--color-control-border);
     color: var(--color-fg-bold);
   }
 

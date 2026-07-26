@@ -9,31 +9,44 @@ import { SITE_URL } from '@/lib/utils';
 const NEW_SLUG = 'why-i-mostly-switched-from-claude-code-to-codex-desktop-app';
 const NEW_PATH = `/writing/${NEW_SLUG}/`;
 
+const TITLE = 'Post URL updated';
+const DESCRIPTION = 'This post moved to a new URL.';
+
 /**
  * A stub kept only so an old shared URL does not 404.
  *
- * It carries `noindex` and a canonical pointing at the replacement: without
- * its own metadata it inherited the homepage title, description, and og:url,
- * and shipped indexable.
+ * It carries `noindex` — without its own metadata it inherited the homepage
+ * title, description, and og:url, and shipped indexable.
+ *
+ * The canonical and og:url are emitted only once the replacement is actually
+ * published. It is a draft today and therefore absent from the export, so
+ * pointing at it unconditionally advertised a canonical target that returns
+ * 404 — worse for a crawler than declaring none at all.
  */
-export const metadata: Metadata = {
-  title: 'Post URL updated',
-  description: 'This post moved to a new URL.',
-  alternates: { canonical: `${SITE_URL}${NEW_PATH}` },
-  robots: { index: false, follow: true },
-  openGraph: {
-    ...sharedOpenGraph,
-    type: 'article',
-    title: 'Post URL updated',
-    description: 'This post moved to a new URL.',
-    url: `${SITE_URL}${NEW_PATH}`,
-  },
-  twitter: {
-    ...sharedTwitter,
-    title: 'Post URL updated',
-    description: 'This post moved to a new URL.',
-  },
-};
+export function generateMetadata(): Metadata {
+  const replacementUrl = getPostBySlug(NEW_SLUG)
+    ? `${SITE_URL}${NEW_PATH}`
+    : undefined;
+
+  return {
+    title: TITLE,
+    description: DESCRIPTION,
+    robots: { index: false, follow: true },
+    ...(replacementUrl ? { alternates: { canonical: replacementUrl } } : {}),
+    openGraph: {
+      ...sharedOpenGraph,
+      type: 'article',
+      title: TITLE,
+      description: DESCRIPTION,
+      ...(replacementUrl ? { url: replacementUrl } : {}),
+    },
+    twitter: {
+      ...sharedTwitter,
+      title: TITLE,
+      description: DESCRIPTION,
+    },
+  };
+}
 
 export default function LegacyPostSlugPage() {
   // The replacement is a draft, so it does not exist in a production export.

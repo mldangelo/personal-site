@@ -11,7 +11,9 @@ import courses from '@/data/resume/courses';
 import degrees from '@/data/resume/degrees';
 import { categories, skills } from '@/data/resume/skills';
 import work from '@/data/resume/work';
+import profile from '@/data/profile.json';
 import { createPageMetadata } from '@/lib/metadata';
+import { SITE_URL } from '@/lib/utils';
 
 export const metadata: Metadata = createPageMetadata({
   title: 'Resume',
@@ -34,6 +36,16 @@ export default function ResumePage() {
             platform, and sold it to OpenAI. Stanford MS, YC alum, previously VP
             Engineering.
           </p>
+          {/* Print-only, but real markup rather than CSS `content`, so it is
+              selectable, linkable, and reads from the shared profile. The
+              screen layout carries these in the footer, which print hides. */}
+          <address className="resume-print-contact">
+            <a href={`${SITE_URL}/`}>{SITE_URL.replace(/^https?:\/\//, '')}</a>
+            <span aria-hidden="true"> · </span>
+            <a href={`mailto:${profile.email}`}>{profile.email}</a>
+            <span aria-hidden="true"> · </span>
+            <a href="https://github.com/mldangelo">github.com/mldangelo</a>
+          </address>
         </header>
 
         <ResumeNav />

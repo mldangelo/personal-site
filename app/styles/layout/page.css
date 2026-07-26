@@ -3,11 +3,20 @@
    Page containers and section layouts
    ======================================== */
 
-/* Page container - flex column for sticky footer */
+/* Page container - flex column for sticky footer.
+   The header is fixed and body carries matching top padding, so a full 100vh
+   here made every short page exactly one header taller than the viewport and
+   scroll by 64px for nothing. dvh also tracks mobile browser chrome. */
 .page-container {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: calc(100dvh - var(--header-height));
+}
+
+@media (max-width: 736px) {
+  .page-container {
+    min-height: calc(100dvh - var(--header-height-mobile));
+  }
 }
 
 /* Main content area */

@@ -150,6 +150,13 @@ jobs:
           fi
           echo "Static export successful. Found $(find out -type f | wc -l) files."
 
+      # Checks the generated HTML itself: leaked drafts, contradictory robots,
+      # duplicate ids, canonicals pointing at missing routes, absent share
+      # images, and broken internal links. None of these are visible to the
+      # component tests.
+      - name: Verify export
+        run: npm run verify-export
+
       - name: Upload build artifacts
         if: matrix.os == 'ubuntu-latest' && matrix.node-version == '22.x'
         uses: actions/upload-artifact@v4

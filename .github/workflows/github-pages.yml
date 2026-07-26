@@ -70,6 +70,19 @@ jobs:
           # Use environment variable for GA tracking ID
           NEXT_PUBLIC_GA_TRACKING_ID: ${{ vars.NEXT_PUBLIC_GA_TRACKING_ID }}
 
+      # This workflow builds and publishes independently of CI, so without
+      # these it could deploy a build that fails lint, types, or tests. A
+      # draft post shipped publicly indexable once because the only gate was
+      # "does out/ exist" — which is also why `verify-export` runs below.
+      - name: Lint
+        run: npm run lint
+
+      - name: Type check
+        run: npm run type-check
+
+      - name: Test
+        run: npm test
+
       - name: Verify build output
         run: |
           if [ ! -d "out" ]; then
@@ -78,6 +91,9 @@ jobs:
           fi
           echo "Build successful. Generated $(find out -type f | wc -l) files."
           du -sh out/
+
+      - name: Verify export
+        run: npm run verify-export
           
       - name: Ensure .nojekyll exists in output
         run: |

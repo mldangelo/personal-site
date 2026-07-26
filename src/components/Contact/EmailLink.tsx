@@ -2,6 +2,7 @@
 
 import { useEffect, useReducer, useRef } from 'react';
 
+import profile from '@/data/profile.json';
 import usePrefersReducedMotion from '@/hooks/usePrefersReducedMotion';
 
 // Animation timing constants
@@ -9,8 +10,8 @@ const ANIMATION_TICK_MS = 50; // Tick length in milliseconds
 const HOLD_TICKS_AFTER_MESSAGE = 50; // Ticks to wait after message completes
 
 /** The address the link always resolves to, whatever the animation shows. */
-const CONTACT_DOMAIN = 'mldangelo.com';
-const CONTACT_ADDRESS = `hi@${CONTACT_DOMAIN}`;
+const CONTACT_ADDRESS = profile.email;
+const CONTACT_DOMAIN = CONTACT_ADDRESS.split('@')[1];
 
 const messages = [
   'hi',

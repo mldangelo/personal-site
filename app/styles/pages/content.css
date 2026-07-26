@@ -502,6 +502,10 @@
   background: transparent;
 }
 
+/* Both cells, not just `td`. Labels became `th[scope="row"]` for screen
+   readers, which dropped them out of this rule and left half-width row
+   rules and mismatched alignment. */
+.stat-table th,
 .stat-table td {
   padding: 1rem 0;
   color: var(--color-fg);
@@ -510,14 +514,15 @@
   vertical-align: baseline;
 }
 
+/* A row label is the information, not annotation about it, so it sits at
+   the interactive/readable size rather than the 11px annotation size. */
 .stat-table-label {
   width: 60%;
   text-align: left;
-  font-weight: var(--font-weight-medium);
   font-family: var(--font-mono);
-  font-size: var(--text-2xs);
+  font-size: var(--text-ui);
   font-weight: var(--font-weight-medium);
-  letter-spacing: var(--tracking-label);
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: var(--color-fg-light);
 }

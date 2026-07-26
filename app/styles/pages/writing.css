@@ -30,7 +30,7 @@
   text-decoration: none;
   background-image: none;
   padding: 0.35rem 0.6rem;
-  border: var(--rule) solid var(--color-border);
+  border: var(--rule) solid var(--color-control-border);
   border-radius: var(--radius-sm);
   transition:
     color var(--duration-instant) var(--ease-out),
@@ -65,11 +65,13 @@
   border-top: var(--rule) solid var(--color-fg-bold);
 }
 
-.writing-item:hover {
+.writing-item:hover,
+.writing-item:focus-visible {
   background-color: var(--color-surface-subtle);
 }
 
-.writing-item:hover .writing-title {
+.writing-item:hover .writing-title,
+.writing-item:focus-visible .writing-title {
   color: var(--color-accent);
 }
 
@@ -144,7 +146,8 @@
   transition: opacity var(--duration-instant) var(--ease-out);
 }
 
-.writing-item:hover .writing-external {
+.writing-item:hover .writing-external,
+.writing-item:focus-visible .writing-external {
   opacity: 1;
   color: var(--color-accent);
 }

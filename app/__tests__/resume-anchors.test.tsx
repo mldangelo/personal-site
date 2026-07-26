@@ -58,8 +58,9 @@ describe('resume section anchors', () => {
 
   it('opens each section with a level-2 heading', () => {
     // h1 is the page title, so sections are h2 and entries within them h3.
-    // The old markup jumped straight from h1 to h3.
-    expect(html.match(/<h2[ >]/g)).toHaveLength(4);
+    // The old markup jumped straight from h1 to h3. Counted against the
+    // section list rather than a literal, so adding one cannot drift.
+    expect(html.match(/<h2[ >]/g)).toHaveLength(SECTIONS.length);
     expect(html).not.toMatch(/<h4[ >]/);
   });
 });

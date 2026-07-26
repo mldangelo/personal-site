@@ -157,6 +157,12 @@
   filter: grayscale(0) contrast(1);
 }
 
+@media (hover: none) {
+  .hero-portrait img {
+    filter: none;
+  }
+}
+
 /* On ink the portrait must not out-shout the name, so the white
    field is pulled well down rather than multiplied away. */
 [data-theme='dark'] .hero-portrait img {
@@ -267,14 +273,33 @@
    HERO — RESPONSIVE
    ======================================== */
 
-@media (max-width: 860px) {
+/* Tablet — keep two columns, just narrower.
+   Collapsing straight to a stack at 860px left a 180px portrait alone at the
+   far left with several hundred pixels of dead space beside it before the
+   name resumed below. */
+@media (max-width: 940px) and (min-width: 641px) {
+  .hero-grid {
+    gap: 2.5rem;
+  }
+
+  .hero-portrait {
+    width: 220px;
+  }
+
+  .hero-name {
+    max-width: 10ch;
+  }
+}
+
+/* Stacked — below this the two columns genuinely stop fitting. */
+@media (max-width: 640px) {
   .hero {
     padding-top: 3rem;
   }
 
   .hero-grid {
     grid-template-columns: minmax(0, 1fr);
-    gap: 2.5rem;
+    gap: 2rem;
     padding-bottom: 3rem;
   }
 
@@ -286,9 +311,7 @@
   .hero-name {
     max-width: none;
   }
-}
 
-@media (max-width: 640px) {
   .hero-tagline {
     font-size: var(--text-md);
   }

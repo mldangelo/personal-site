@@ -2,6 +2,7 @@ import Link from 'next/link';
 
 import ContactIcons from '@/components/Contact/ContactIcons';
 import work from '@/data/resume/work';
+import routes from '@/data/routes';
 
 import ThemePortrait from './ThemePortrait';
 
@@ -32,15 +33,22 @@ export default function Footer() {
         </div>
 
         <div className="footer-right">
+          {/* Driven from the same route registry as the header, which had
+              drifted: the footer was missing Writing and Stats entirely.
+              These are group labels, not document sections, so they are
+              spans rather than headings. */}
           <nav className="footer-links" aria-labelledby="footer-links-heading">
-            <h4 id="footer-links-heading" className="footer-links-label">
+            <span id="footer-links-heading" className="footer-links-label">
               Explore
-            </h4>
+            </span>
             <div className="footer-links-grid">
-              <Link href="/about">About</Link>
-              <Link href="/resume">Resume</Link>
-              <Link href="/projects">Archive</Link>
-              <Link href="/contact">Contact</Link>
+              {routes
+                .filter((route) => !route.index)
+                .map((route) => (
+                  <Link key={route.path} href={route.path}>
+                    {route.label}
+                  </Link>
+                ))}
             </div>
           </nav>
 
@@ -48,9 +56,9 @@ export default function Footer() {
             className="footer-social"
             aria-labelledby="footer-social-heading"
           >
-            <h4 id="footer-social-heading" className="footer-social-label">
+            <span id="footer-social-heading" className="footer-social-label">
               Connect
-            </h4>
+            </span>
             <ContactIcons />
           </div>
         </div>

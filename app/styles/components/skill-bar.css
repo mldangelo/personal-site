@@ -8,7 +8,7 @@
   .skillbutton {
     appearance: none;
     background-color: transparent;
-    border: var(--rule) solid var(--color-border);
+    border: var(--rule) solid var(--color-control-border);
     border-radius: var(--radius-sm);
     color: var(--color-fg-light);
     cursor: pointer;

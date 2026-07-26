@@ -76,16 +76,12 @@
     min-height: 0;
   }
 
-  /* Contact details belong on a printed resume, and the screen layout
-     puts them only in the footer we just removed. */
-  .resume-header::after {
-    content: 'mldangelo.com · hi@mldangelo.com · github.com/mldangelo';
+  /* Contact details belong on a printed resume, and the screen layout puts
+     them only in the footer this hides. Rendered as real markup by
+     ResumeContact rather than CSS content, so it is selectable and stays in
+     step with the shared profile. */
+  .resume-print-contact {
     display: block;
-    margin-top: 0.5rem;
-    font-family: var(--font-mono);
-    font-size: 8.5pt;
-    letter-spacing: 0.04em;
-    color: #333;
   }
 
   .resume-title,
