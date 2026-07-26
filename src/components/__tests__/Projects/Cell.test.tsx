@@ -18,6 +18,9 @@ describe('Cell', () => {
     const link = screen.getByRole('link', { name: mockProject.title });
     expect(link).toHaveAttribute('href', mockProject.link);
     expect(link).toHaveClass('project-card-link');
+    expect(
+      document.querySelector('.project-card-affordance'),
+    ).toHaveTextContent('↗');
   });
 
   it('renders project description', () => {
@@ -36,5 +39,15 @@ describe('Cell', () => {
     expect(image).toBeInTheDocument();
     expect(image).toHaveAttribute('alt', '');
     expect(image).toHaveAttribute('src', expect.stringContaining('test.jpg'));
+  });
+
+  it('does not imply that a static archive card is clickable', () => {
+    render(<Cell data={{ ...mockProject, link: undefined }} />);
+
+    expect(screen.queryByRole('link')).not.toBeInTheDocument();
+    expect(document.querySelector('.project-card--static')).toBeInTheDocument();
+    expect(
+      document.querySelector('.project-card-affordance'),
+    ).not.toBeInTheDocument();
   });
 });

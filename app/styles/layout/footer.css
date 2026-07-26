@@ -7,19 +7,28 @@
 .site-footer-new {
   background: transparent;
   border-top: var(--rule) solid var(--color-fg-bold);
-  padding: 2.5rem 1.5rem 2rem;
+  padding: 2.5rem 0 2rem;
   margin-top: auto;
 }
 
 /* Footer content - 2-column signature card layout */
 .footer-content {
-  max-width: 900px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: var(--measure-page);
+  padding-inline: 2rem;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   gap: 2.5rem;
   align-items: center;
   text-align: center;
+}
+
+@media screen and (max-width: 735px) {
+  .footer-content {
+    padding-inline: 1.5rem;
+  }
 }
 
 @media screen and (min-width: 900px) {

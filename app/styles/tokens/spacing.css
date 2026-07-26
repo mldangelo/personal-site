@@ -32,4 +32,10 @@
      =================== */
   --header-height: 4rem;
   --header-height-mobile: 3.5rem;
+
+  /* Three page measures keep routes aligned without forcing component-sized
+     details (portraits, status messages, controls) into page-level tokens. */
+  --measure-wide: 70rem; /* Hero and other split compositions */
+  --measure-page: 56rem; /* Default pages, lists, resume, and footer */
+  --measure-read: 40rem; /* Continuous prose and compact data views */
 }

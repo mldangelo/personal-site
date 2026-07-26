@@ -25,7 +25,7 @@ export const metadata: Metadata = createPageMetadata({
 
 export default function AboutPage() {
   return (
-    <PageWrapper mainClassName="page-main--wide">
+    <PageWrapper>
       <SchemaGraph
         nodes={[
           profilePageNode({

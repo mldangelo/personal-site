@@ -111,6 +111,7 @@
   display: block;
   aspect-ratio: 16/10;
   overflow: hidden;
+  background: var(--color-surface-subtle);
 }
 
 /* Archive imagery is held back in greyscale and only develops on
@@ -118,17 +119,14 @@
 .project-card-image img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   filter: grayscale(1) contrast(1.05);
-  transition:
-    filter var(--duration-normal) var(--ease-out),
-    transform var(--duration-normal) var(--ease-out);
+  transition: filter var(--duration-normal) var(--ease-out);
 }
 
 .project-card--linked:hover .project-card-image img,
 .project-card--linked:focus-within .project-card-image img {
   filter: grayscale(0) contrast(1);
-  transform: scale(1.02);
 }
 
 /* Without a pointer there is no hover to reveal the developed image, so
@@ -144,7 +142,31 @@
 }
 
 .project-card-header {
+  position: relative;
   margin-bottom: 0.875rem;
+}
+
+.project-card--linked .project-card-header {
+  padding-right: 2rem;
+}
+
+.project-card-affordance {
+  position: absolute;
+  top: 0.15rem;
+  right: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-ui);
+  color: var(--color-accent);
+  opacity: 0.65;
+  transition:
+    opacity var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
+}
+
+.project-card--linked:hover .project-card-affordance,
+.project-card--linked:focus-within .project-card-affordance {
+  opacity: 1;
+  transform: translate(1px, -1px);
 }
 
 .project-card-title {
@@ -345,9 +367,19 @@
   background: var(--color-border-alt);
 }
 
-/* Lead — the current headline role, set largest. */
+/* Lead — hierarchy through breathing room and a measured size step, rather
+   than making the first company twice as loud as the rest of the history. */
+.jobs-container--lead {
+  padding-top: 1.5rem;
+  padding-bottom: 4.5rem;
+}
+
+.jobs-container--lead .job-marker {
+  top: calc(1.5rem + 0.6rem);
+}
+
 .jobs-container--lead header h3 {
-  font-size: var(--text-2xl);
+  font-size: var(--text-xl);
   font-weight: var(--font-weight-black);
   letter-spacing: var(--tracking-display);
 }
@@ -400,6 +432,15 @@
 
   .daterange {
     padding-top: 0;
+  }
+
+  .jobs-container--lead {
+    padding-top: 1rem;
+    padding-bottom: 3.5rem;
+  }
+
+  .jobs-container--lead .job-marker {
+    top: calc(1rem + 0.6rem);
   }
 }
 
@@ -467,12 +508,12 @@
   display: grid;
   grid-template-columns: 5.5rem minmax(0, 1fr);
   gap: 0 1rem;
-  align-items: baseline;
-  padding: 0.75rem 0;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0.3rem 0;
   background: transparent;
   background-image: none;
   border: 0;
-  border-bottom: var(--rule) solid var(--color-border);
   border-radius: 0;
   text-decoration: none;
   transition: background-color var(--duration-fast) var(--ease-out);
@@ -487,7 +528,7 @@
   display: block;
   margin: 0;
   font-family: var(--font-mono);
-  font-size: var(--text-2xs);
+  font-size: var(--text-xs);
   font-weight: var(--font-weight-medium);
   letter-spacing: var(--tracking-wide);
   color: var(--color-fg-light);
@@ -502,7 +543,7 @@
   display: block;
   margin: 0;
   font-family: var(--font-body);
-  font-size: var(--text-base);
+  font-size: var(--text-sm);
   font-weight: var(--font-weight-normal);
   color: var(--color-fg);
   line-height: var(--leading-snug);

@@ -64,7 +64,6 @@
   list-style: none;
   padding: 0;
   margin: 0;
-  border-top: var(--rule) solid var(--color-border);
 }
 
 @media (max-width: 736px) {
@@ -79,7 +78,7 @@
 
 /* Resume page specific */
 .resume-page {
-  max-width: 880px;
+  max-width: var(--measure-page);
   margin: 0 auto;
 }
 
@@ -119,9 +118,7 @@
   position: sticky;
   top: var(--header-height);
   z-index: var(--z-sticky);
-  background: color-mix(in srgb, var(--color-bg-alt) 94%, transparent);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: var(--color-bg-alt);
   padding: 0.75rem 0;
   border-top: var(--rule) solid var(--color-border);
   border-bottom: var(--rule) solid var(--color-border);

@@ -47,9 +47,9 @@ const PATTERNS: Array<{
 /**
  * Splits a leading temporal marker off a log entry.
  *
- * Returns `null` when the entry does not open with one — most entries do not,
- * and those keep their full text with an empty gutter rather than being
- * reworded to fit the pattern.
+ * Returns `null` when the entry does not open with one. Those entries keep
+ * their full text with an empty gutter rather than being reworded to fit the
+ * pattern.
  */
 export function extractLogMarker(text: string): LogMarker | null {
   for (const { pattern, label } of PATTERNS) {

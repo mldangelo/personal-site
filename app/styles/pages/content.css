@@ -8,7 +8,7 @@
    ======================================== */
 
 .about-page {
-  max-width: 52rem;
+  max-width: var(--measure-page);
   margin: 0 auto;
 }
 
@@ -23,12 +23,15 @@
 }
 
 .about-content {
-  max-width: 46rem;
-  line-height: 1.85;
+  max-width: var(--measure-read);
+  line-height: 1.7;
 }
 
 /* Section index — mono labels on a rule, matching the resume. */
 .about-section-nav {
+  position: sticky;
+  top: var(--header-height);
+  z-index: var(--z-sticky);
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem 1.5rem;
@@ -37,11 +40,12 @@
   border-top: var(--rule) solid var(--color-border);
   border-bottom: var(--rule) solid var(--color-border);
   border-radius: 0;
-  background: transparent;
+  background: var(--color-bg-alt);
   box-shadow: none;
 }
 
 .about-content .about-section-nav-link {
+  flex: none;
   display: inline-flex;
   align-items: center;
   padding: 0;
@@ -54,6 +58,7 @@
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;
   text-decoration: none;
+  white-space: nowrap;
   transition: color var(--duration-fast) var(--ease-out);
 }
 
@@ -73,7 +78,7 @@
 }
 
 .about-section h2 {
-  scroll-margin-top: calc(var(--header-height) + var(--spacing-6));
+  scroll-margin-top: calc(var(--header-height) + 5.5rem);
   margin: 0 0 var(--spacing-5);
   padding-top: var(--spacing-5);
   border-top: var(--rule) solid var(--color-fg-bold);
@@ -130,9 +135,9 @@
 }
 
 .about-intro p {
-  max-width: 41rem;
+  max-width: var(--measure-read);
   font-size: clamp(1.04rem, 0.7vw + 0.95rem, 1.1rem);
-  line-height: 1.9;
+  line-height: 1.7;
   color: var(--color-fg-bold);
 }
 
@@ -276,7 +281,7 @@
 
 .contact-page {
   width: 100%;
-  max-width: 880px;
+  max-width: var(--measure-page);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -325,9 +330,10 @@
   max-width: 100%;
   padding: 0.875rem 0;
   font-family: var(--font-mono);
-  font-size: var(--text-xl);
+  font-size: clamp(var(--text-xl), 4vw, var(--text-3xl));
   font-weight: var(--font-weight-medium);
   letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
   color: var(--color-fg-bold);
   background: transparent;
   background-image: none;
@@ -341,12 +347,6 @@
   transition:
     color var(--duration-fast) var(--ease-out),
     border-color var(--duration-fast) var(--ease-out);
-}
-
-@media (max-width: 480px) {
-  .contact-email-link {
-    font-size: var(--text-md);
-  }
 }
 
 .contact-email-link:hover {
@@ -434,20 +434,23 @@
 
 @media (max-width: 736px) {
   .about-section-nav {
+    top: var(--header-height-mobile);
+    flex-wrap: nowrap;
+    overflow-x: auto;
     margin: var(--spacing-6) 0 var(--spacing-5);
-    padding: var(--spacing-3);
-    border-radius: var(--radius-md);
+    padding: var(--spacing-3) 0;
+    border-radius: 0;
+    scrollbar-width: thin;
   }
 
   .about-section h2 {
-    scroll-margin-top: calc(var(--header-height-mobile) + var(--spacing-6));
+    scroll-margin-top: calc(var(--header-height-mobile) + 4.5rem);
     padding-top: var(--spacing-4);
     font-size: 1.25rem;
   }
 
   .contact-email-link {
-    font-size: var(--text-md);
-    padding: 0.625rem 1.25rem;
+    padding: 0.625rem 0;
   }
 }
 
@@ -458,6 +461,9 @@
   }
 
   .about-section--compact li {
+    font-size: var(--text-base);
+    line-height: 1.5;
+    margin-bottom: 0.35rem;
     break-inside: avoid;
   }
 
@@ -518,7 +524,7 @@
 /* A row label is the information, not annotation about it, so it sits at
    the interactive/readable size rather than the 11px annotation size. */
 .stat-table-label {
-  width: 60%;
+  width: 40%;
   text-align: left;
   font-family: var(--font-mono);
   font-size: var(--text-ui);
@@ -529,12 +535,15 @@
 }
 
 .stat-table-value {
+  width: 60%;
   text-align: right;
   font-family: var(--font-mono);
-  font-size: var(--text-md);
+  font-size: var(--text-2xl);
   font-weight: var(--font-weight-medium);
   font-variant-numeric: tabular-nums;
   color: var(--color-fg-bold);
+  line-height: var(--leading-tight);
+  white-space: nowrap;
 }
 
 .stat-table-value a {
@@ -575,7 +584,7 @@
 
 /* Stats page layout */
 .stats-page {
-  max-width: 680px;
+  max-width: var(--measure-read);
   margin: 0;
 }
 
@@ -613,6 +622,24 @@
   text-transform: uppercase;
   color: var(--color-fg-light);
   margin-bottom: 0.75rem;
+}
+
+@media (max-width: 640px) {
+  .stat-table-value {
+    font-size: clamp(var(--text-md), 4vw, var(--text-xl));
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-email-link {
+    font-size: var(--text-lg);
+  }
+
+  .stat-table-value {
+    font-size: var(--text-md);
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
 }
 
 /* ========================================

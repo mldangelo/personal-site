@@ -20,6 +20,14 @@ export default function Hero() {
             <span className="hero-name">{profile.name}</span>
           </h1>
 
+          <ul className="hero-chips">
+            {CREDENTIALS.map((credential) => (
+              <li className="hero-chip" key={credential}>
+                {credential}
+              </li>
+            ))}
+          </ul>
+
           <p className="hero-tagline">
             {profile.role} at{' '}
             <a href="https://openai.com" className="hero-highlight">
@@ -33,20 +41,13 @@ export default function Hero() {
             Promptfoo to OpenAI.
           </p>
 
-          <ul className="hero-chips">
-            {CREDENTIALS.map((credential) => (
-              <li className="hero-chip" key={credential}>
-                {credential}
-              </li>
-            ))}
-          </ul>
-
           <div className="hero-cta">
             <Link href="/about" className="button">
               About Me
             </Link>
-            <Link href="/resume" className="button button-secondary">
+            <Link href="/resume" className="hero-resume-link">
               View Resume
+              <span aria-hidden="true">→</span>
             </Link>
           </div>
         </div>

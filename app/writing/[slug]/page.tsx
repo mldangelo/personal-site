@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { SchemaGraph } from '@/components/Schema';
 import PageWrapper from '@/components/Template/PageWrapper';
 import PostContent from '@/components/Writing/PostContent';
+import ReadingProgress from '@/components/Writing/ReadingProgress';
 import {
   type ImageSize,
   readImageSize,
@@ -139,6 +140,7 @@ export default async function PostPage({ params }: PageProps) {
         ]}
       />
       <article className="post-page">
+        <ReadingProgress />
         <header className="post-header">
           <time className="post-date" dateTime={post.date}>
             {formatDate(post.date)}

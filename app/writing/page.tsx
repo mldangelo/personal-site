@@ -35,31 +35,45 @@ export const metadata: Metadata = {
 };
 
 interface WritingItemProps {
+  featured?: boolean;
   item: Item;
   showDate?: boolean;
 }
 
-function WritingItem({ item, showDate = true }: WritingItemProps) {
+function WritingItem({
+  featured = false,
+  item,
+  showDate = true,
+}: WritingItemProps) {
   const content = (
     <>
-      {showDate && item.date && (
-        <time className="writing-date" dateTime={item.date}>
-          {formatDate(item.date)}
-        </time>
-      )}
+      <div className="writing-meta">
+        {showDate && item.date && (
+          <time className="writing-date" dateTime={item.date}>
+            {formatDate(item.date)}
+          </time>
+        )}
+        {item.isExternal && (
+          <span className="writing-source">
+            {item.source}
+            <span className="writing-external" aria-hidden="true">
+              ↗
+            </span>
+          </span>
+        )}
+      </div>
       <h3 className="writing-title">{item.title}</h3>
       <p className="writing-description">{item.description}</p>
       {item.isExternal && (
-        <>
-          <span className="writing-external" aria-hidden="true">
-            ↗
-          </span>
-          {/* The arrow is decorative, so the warning has to be spoken. */}
-          <span className="sr-only"> (opens in a new tab)</span>
-        </>
+        // The arrow is decorative, so the warning has to be spoken.
+        <span className="sr-only"> (opens in a new tab)</span>
       )}
     </>
   );
+
+  const className = ['writing-item', featured ? 'writing-item--featured' : '']
+    .filter(Boolean)
+    .join(' ');
 
   if (item.isExternal) {
     return (
@@ -67,7 +81,7 @@ function WritingItem({ item, showDate = true }: WritingItemProps) {
         href={item.url}
         target="_blank"
         rel="noopener noreferrer"
-        className="writing-item"
+        className={className}
       >
         {content}
       </a>
@@ -75,7 +89,7 @@ function WritingItem({ item, showDate = true }: WritingItemProps) {
   }
 
   return (
-    <Link href={item.url} className="writing-item">
+    <Link href={item.url} className={className}>
       {content}
     </Link>
   );
@@ -87,7 +101,8 @@ export default function WritingPage() {
   const external = allItems.filter((item) => item.isExternal && item.date);
   const guides = allItems.filter((item) => item.isExternal && !item.date);
 
-  const latestPostDate = allItems.find((item) => item.date)?.date;
+  const latestDatedItem = allItems.find((item) => item.date);
+  const latestPostDate = latestDatedItem?.date;
 
   return (
     <PageWrapper>
@@ -127,7 +142,11 @@ export default function WritingPage() {
           </h2>
           <div className="writing-list">
             {internal.map((item) => (
-              <WritingItem key={item.url} item={item} />
+              <WritingItem
+                key={item.url}
+                item={item}
+                featured={item.url === latestDatedItem?.url}
+              />
             ))}
           </div>
         </section>
@@ -138,7 +157,11 @@ export default function WritingPage() {
           </h2>
           <div className="writing-list">
             {external.map((item) => (
-              <WritingItem key={item.url} item={item} />
+              <WritingItem
+                key={item.url}
+                item={item}
+                featured={item.url === latestDatedItem?.url}
+              />
             ))}
           </div>
         </section>

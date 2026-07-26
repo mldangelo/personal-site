@@ -20,7 +20,7 @@
   z-index: 1;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: 3.5rem;
+  gap: 3rem;
   align-items: start;
   padding-bottom: 4rem;
 }
@@ -31,7 +31,7 @@
 
 /* Name */
 .hero-title {
-  margin: 0 0 1.75rem;
+  margin: 0 0 0.875rem;
 }
 
 .hero-name {
@@ -77,15 +77,15 @@
   background-image: linear-gradient(transparent calc(100% - 2px), var(--color-accent) 2px);
 }
 
-/* Credentials — a spec line, not pills. Divided by hairlines so it
-   reads as annotation attached to the name above it. */
+/* Credentials — a spec line, not pills. It sits directly under the name so
+   it reads as identity annotation rather than interrupting the narrative. */
 .hero-chips {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0 1rem;
   list-style: none;
-  margin: 0 0 2.25rem;
+  margin: 0 0 1.75rem;
   padding: 0;
 }
 
@@ -123,15 +123,48 @@
 /* CTA */
 .hero-cta {
   display: flex;
+  align-items: center;
   gap: 0.75rem;
   flex-wrap: wrap;
+}
+
+.hero-resume-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.25rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-ui);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--color-fg-bold);
+  text-decoration: underline;
+  text-decoration-color: var(--color-border-alt);
+  text-underline-offset: 0.3rem;
+  background-image: none;
+  transition:
+    color var(--duration-fast) var(--ease-out),
+    text-decoration-color var(--duration-fast) var(--ease-out);
+}
+
+.hero-resume-link:hover {
+  color: var(--color-accent);
+  text-decoration-color: var(--color-accent);
+  background-image: none;
+}
+
+.hero-resume-link:focus-visible {
+  outline: var(--rule-strong) solid var(--color-accent);
+  outline-offset: 2px;
 }
 
 /* Portrait — squared off. A circular avatar is the one shape this
    layout cannot use without reading as a profile card. */
 .hero-portrait {
   position: relative;
-  width: 320px;
+  width: 280px;
   max-width: 100%;
   border: var(--rule) solid var(--color-border);
   background: var(--color-bg);
@@ -192,7 +225,7 @@
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   margin: 0;
-  border-top: var(--rule) solid var(--color-fg-bold);
+  border-top: var(--rule) solid var(--color-border-alt);
   border-bottom: var(--rule) solid var(--color-border);
 }
 

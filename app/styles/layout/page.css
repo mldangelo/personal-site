@@ -23,19 +23,15 @@
 .page-main {
   flex: 1;
   width: 100%;
-  max-width: 800px;
+  max-width: var(--measure-page);
   margin: 0 auto;
   padding: 2rem 1.5rem;
 }
 
-.page-main--wide {
-  max-width: 56rem;
-}
-
 /* The hero grid needs room for a full-measure readout strip
-   alongside a 320px portrait. */
+   alongside its portrait. */
 .page-main--hero {
-  max-width: 70rem;
+  max-width: var(--measure-wide);
 }
 
 @media screen and (min-width: 736px) {

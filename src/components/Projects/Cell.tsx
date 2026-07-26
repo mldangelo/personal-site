@@ -28,6 +28,11 @@ export default function Cell({ data }: CellProps) {
       <div className="project-card-content">
         <header className="project-card-header">
           <h3 className="project-card-title">{title}</h3>
+          {hasLink && (
+            <span className="project-card-affordance" aria-hidden="true">
+              ↗
+            </span>
+          )}
           {subtitle && <p className="project-card-subtitle">{subtitle}</p>}
         </header>
 

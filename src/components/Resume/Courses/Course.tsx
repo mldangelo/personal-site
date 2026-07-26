@@ -8,8 +8,8 @@ export default function Course({ data }: CourseProps) {
   return (
     <li className="course-container">
       <a href={data.link}>
-        <h3 className="course-number">{data.number}:</h3>
-        <p className="course-name">{data.title}</p>
+        <span className="course-number">{data.number}:</span>
+        <span className="course-name">{data.title}</span>
       </a>
     </li>
   );

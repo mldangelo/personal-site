@@ -52,6 +52,7 @@
   .slide-menu-overlay,
   .hamburger-container,
   .theme-toggle,
+  .reading-progress,
   .resume-nav,
   .hero-bg,
   .writing-rss-link,
@@ -61,7 +62,6 @@
   }
 
   .page-main,
-  .page-main--wide,
   .page-main--hero,
   .resume-page,
   .about-page,
@@ -180,6 +180,10 @@
   .summary,
   .jobs-container--lead .summary {
     font-size: 10pt;
+  }
+
+  .stat-table-value {
+    font-size: 14pt;
   }
 
   /* Section headers should not be stranded at the foot of a page. */

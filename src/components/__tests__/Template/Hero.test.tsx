@@ -40,7 +40,7 @@ describe('Hero', () => {
     ).toBeInTheDocument();
   });
 
-  it('renders CTA buttons with correct links', () => {
+  it('renders one primary CTA and one quieter resume link', () => {
     render(<Hero />);
 
     const aboutButton = screen.getByRole('link', { name: /about me/i });
@@ -49,7 +49,8 @@ describe('Hero', () => {
 
     const resumeButton = screen.getByRole('link', { name: /view resume/i });
     expect(resumeButton).toHaveAttribute('href', '/resume');
-    expect(resumeButton).toHaveClass('button-secondary');
+    expect(resumeButton).toHaveClass('hero-resume-link');
+    expect(resumeButton).not.toHaveClass('button');
   });
 
   it('has decorative background elements', () => {
