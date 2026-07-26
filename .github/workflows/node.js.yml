@@ -230,7 +230,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Download validated build
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: build-output
           path: out
