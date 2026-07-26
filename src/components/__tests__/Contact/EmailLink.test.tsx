@@ -131,18 +131,42 @@ describe('EmailLink', () => {
     expect(link.getAttribute('href')).toBe('mailto:hi@mldangelo.com');
   });
 
-  it('has invalid class when email prefix is invalid', async () => {
+  /**
+   * Three of the joke aliases are not valid email local-parts, including
+   * "but not this :(  ". Those used to replace the anchor with an
+   * aria-disabled, unfocusable span, leaving the contact page with no way to
+   * reach anyone for roughly a fifth of the animation cycle.
+   */
+  it('keeps a working email link through the entire animation cycle', () => {
+    render(<EmailLink loopMessage />);
+
+    for (let elapsed = 0; elapsed < 60_000; elapsed += 250) {
+      act(() => {
+        vi.advanceTimersByTime(250);
+      });
+
+      const link = screen.getByRole('link');
+      expect(link).toHaveAttribute('href', 'mailto:hi@mldangelo.com');
+      expect(link).not.toHaveAttribute('aria-disabled');
+    }
+  });
+
+  it('names the link by its real destination, not the animated alias', () => {
     render(<EmailLink />);
 
-    // Run through messages until we hit an invalid one
-    // "but not this :(  " contains invalid characters
     act(() => {
-      vi.advanceTimersByTime(50 * 200); // Advance through several messages
+      vi.advanceTimersByTime(50 * 200);
     });
 
-    // Check if link has container (component should still render)
-    const container = document.querySelector('.contact-email-container');
-    expect(container).toBeInTheDocument();
+    // The alias changes ~20x/second; an accessible name that mutated with it
+    // would be unusable, so the visible text is decorative.
+    expect(
+      screen.getByRole('link', { name: 'Email hi@mldangelo.com' }),
+    ).toBeInTheDocument();
+    expect(document.querySelector('.contact-email-prefix')).toHaveAttribute(
+      'aria-hidden',
+      'true',
+    );
   });
 
   it('loops messages when loopMessage is true', async () => {

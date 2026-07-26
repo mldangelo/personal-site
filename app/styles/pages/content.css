@@ -366,25 +366,6 @@
   color: var(--color-fg-bold);
 }
 
-/* Invalid email state - grayed out */
-.contact-email-link--invalid {
-  background: transparent;
-  border-bottom-color: var(--color-border-alt);
-  cursor: default;
-}
-
-.contact-email-link--invalid:hover {
-  background: transparent;
-  border-bottom-color: var(--color-border-alt);
-  transform: none;
-  box-shadow: none;
-}
-
-.contact-email-link--invalid .contact-email-prefix,
-.contact-email-link--invalid .contact-email-domain {
-  color: var(--color-fg-light);
-}
-
 .contact-hint {
   font-family: var(--font-mono);
   font-size: var(--text-2xs);

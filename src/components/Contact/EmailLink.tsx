@@ -8,11 +8,9 @@ import usePrefersReducedMotion from '@/hooks/usePrefersReducedMotion';
 const ANIMATION_TICK_MS = 50; // Tick length in milliseconds
 const HOLD_TICKS_AFTER_MESSAGE = 50; // Ticks to wait after message completes
 
-// Validates the first half of an email address per RFC 5322
-function validateText(text: string): boolean {
-  const re = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))$/;
-  return re.test(text) || text.length === 0;
-}
+/** The address the link always resolves to, whatever the animation shows. */
+const CONTACT_DOMAIN = 'mldangelo.com';
+const CONTACT_ADDRESS = `hi@${CONTACT_DOMAIN}`;
 
 const messages = [
   'hi',
@@ -138,7 +136,6 @@ export default function EmailLink({ loopMessage = false }: EmailLinkProps) {
   // Use 'hi' as default message when reduced motion or paused with empty message
   const displayMessage =
     reducedMotion || state.message === '' ? 'hi' : state.message;
-  const isValid = validateText(displayMessage);
 
   const handlePause = () => dispatch({ type: 'PAUSE' });
   const handleResume = () => {
@@ -147,51 +144,33 @@ export default function EmailLink({ loopMessage = false }: EmailLinkProps) {
     }
   };
 
-  const handleClick = (e: React.MouseEvent) => {
-    if (!isValid) {
-      e.preventDefault();
-    }
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (!isValid && (e.key === 'Enter' || e.key === ' ')) {
-      e.preventDefault();
-    }
-  };
-
-  const emailContent = (
-    <>
-      <span className="contact-email-prefix">{displayMessage}</span>
-      <span className="contact-email-domain">@mldangelo.com</span>
-    </>
-  );
-
   return (
     <div
       className="contact-email-container"
       onMouseEnter={handlePause}
       onMouseLeave={handleResume}
     >
-      {isValid ? (
-        <a
-          href={`mailto:${displayMessage}@mldangelo.com`}
-          className="contact-email-link"
-          onClick={handleClick}
-          onKeyDown={handleKeyDown}
-          onFocus={handlePause}
-          onBlur={handleResume}
-        >
-          {emailContent}
-        </a>
-      ) : (
-        <span
-          className="contact-email-link contact-email-link--invalid"
-          aria-disabled="true"
-          tabIndex={-1}
-        >
-          {emailContent}
+      {/* Always a real link to a real address.
+          The animation cycles through joke aliases, three of which are not
+          valid local-parts ("but not this :(  " among them). Those used to
+          swap the anchor for an aria-disabled, unfocusable <span>, so for
+          roughly a fifth of the cycle the contact page offered no way to
+          reach anyone. The gag is now purely visual: the shown alias is
+          decorative and the destination never changes. */}
+      <a
+        href={`mailto:${CONTACT_ADDRESS}`}
+        className="contact-email-link"
+        onFocus={handlePause}
+        onBlur={handleResume}
+      >
+        <span className="sr-only">Email {CONTACT_ADDRESS}</span>
+        <span className="contact-email-prefix" aria-hidden="true">
+          {displayMessage}
         </span>
-      )}
+        <span className="contact-email-domain" aria-hidden="true">
+          @{CONTACT_DOMAIN}
+        </span>
+      </a>
     </div>
   );
 }
