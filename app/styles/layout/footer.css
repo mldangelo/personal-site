@@ -175,9 +175,17 @@
 /* Tone down social icons in footer */
 .site-footer-new .icons {
   display: flex;
-  flex-wrap: nowrap;
-  gap: 0.5rem;
+  /* Wraps rather than forcing a 400px row into a 320px viewport. */
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 0.25rem;
   margin-bottom: 0;
+}
+
+@media screen and (max-width: 899px) {
+  .site-footer-new .icons {
+    justify-content: center;
+  }
 }
 
 .site-footer-new .icons li {

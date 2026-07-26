@@ -68,13 +68,6 @@ describe('Courses', () => {
     // And within Stanford, sorted by number
     expect(items.length).toBe(3);
   });
-
-  it('has anchor link for navigation', () => {
-    render(<Courses data={mockCourses} />);
-
-    const anchor = document.getElementById('courses');
-    expect(anchor).toBeInTheDocument();
-  });
 });
 
 describe('Course', () => {

@@ -44,13 +44,18 @@ jobs:
           # Automatically inject basePath in Next.js config
           static_site_generator: next
 
+      # `.next/cache` is deliberately not restored. It holds Next's fetch
+      # cache, and the build fetches GitHub stats with `revalidate: false`
+      # (required, since `output: 'export'` needs every route static). With
+      # restore-keys matching across source changes, a warm fetch cache could
+      # pin the stats page to stale figures indefinitely. The compile step
+      # takes ~1s, so there is nothing worth caching here.
       - name: Cache dependencies
         uses: actions/cache@v4
         with:
           path: |
             ~/.npm
             node_modules
-            .next/cache
           key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-

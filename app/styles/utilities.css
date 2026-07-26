@@ -12,6 +12,20 @@
   navigation: auto;
 }
 
+/* The global reduced-motion reset in base/reset.css matches `*`, which does
+   not reach the view-transition pseudo-elements — navigation kept its 300ms
+   cross-fade for people who asked for no motion. */
+@media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
+  }
+}
+
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation-duration: 0.3s;

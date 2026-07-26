@@ -26,9 +26,12 @@ export default function Job({ data, tier = 'primary' }: JobProps) {
 
       <p className="daterange">
         <time dateTime={startDate}>{dayjs(startDate).format('MMMM YYYY')}</time>
+        {/* The dash is decorative, so a screen reader would otherwise run the
+            dates together as "March 2026 Present". */}
         <span className="daterange-sep" aria-hidden="true">
           –
         </span>
+        <span className="sr-only"> to </span>
         {endDate ? (
           <time dateTime={endDate}>{dayjs(endDate).format('MMMM YYYY')}</time>
         ) : (
@@ -38,12 +41,12 @@ export default function Job({ data, tier = 'primary' }: JobProps) {
 
       <div className="job-body">
         <header>
-          <h4>
+          <h3>
             <a href={url} className="job-company">
               {name}
             </a>
             <span className="job-position">{position}</span>
-          </h4>
+          </h3>
         </header>
         {summary ? <JobSummary summary={summary} /> : null}
         {highlights ? (

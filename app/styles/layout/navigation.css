@@ -38,7 +38,7 @@
   position: relative;
   padding: 0.5rem 0;
   font-family: var(--font-mono);
-  font-size: var(--text-2xs);
+  font-size: var(--text-ui);
   font-weight: var(--font-weight-medium);
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;

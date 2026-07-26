@@ -2,21 +2,27 @@
 
 import { useEffect, useState } from 'react';
 
-import { AGE_UPDATE_INTERVAL, ageAt, agePlaceholder } from '@/lib/telemetry';
+import { ageAt, ageIntervalFor, agePlaceholder } from '@/lib/telemetry';
 
 const REDUCED_MOTION = '(prefers-reduced-motion: reduce)';
 
 /**
- * A live age readout, advancing every {@link AGE_UPDATE_INTERVAL} ms.
+ * A live age readout.
  *
  * Returns a fixed-width placeholder until the first client tick so server and
  * client markup agree and the readout does not reflow on hydration.
  *
- * Under `prefers-reduced-motion` the reading is taken once and left to stand.
- * Digits changing forty times a second is precisely the motion that setting
- * asks us to avoid, and this readout sits above the fold on the homepage — so
- * the value stays accurate, it just stops animating. The listener means
- * toggling the OS setting takes effect without a reload.
+ * Three things keep this from being wasteful or unpleasant:
+ *
+ * - Cadence is derived from `precision`, so the timer fires roughly when the
+ *   last displayed digit actually changes rather than at a fixed 25ms.
+ * - Under `prefers-reduced-motion` the reading is taken once and left to
+ *   stand. Digits changing several times a second is precisely the motion
+ *   that setting asks us to avoid, and this readout is above the fold.
+ * - Ticking pauses while the tab is hidden, and resyncs on return.
+ *
+ * The listeners mean both the OS preference and tab visibility take effect
+ * without a reload.
  */
 export default function useLiveAge(precision: number): string {
   const [age, setAge] = useState(() => agePlaceholder(precision));
@@ -27,24 +33,33 @@ export default function useLiveAge(precision: number): string {
     // jsdom and older browsers may not implement matchMedia; a missing
     // preference is treated as "no preference", matching the rest of the site.
     const media = window.matchMedia?.(REDUCED_MOTION);
+    const interval = ageIntervalFor(precision);
     let timer: ReturnType<typeof setInterval> | undefined;
 
-    const start = () => {
+    const stop = () => {
       clearInterval(timer);
       timer = undefined;
-      tick();
-
-      if (!media?.matches) {
-        timer = setInterval(tick, AGE_UPDATE_INTERVAL);
-      }
     };
 
-    start();
-    media?.addEventListener?.('change', start);
+    const sync = () => {
+      stop();
+      tick();
+
+      if (media?.matches || document.hidden) {
+        return;
+      }
+
+      timer = setInterval(tick, interval);
+    };
+
+    sync();
+    media?.addEventListener?.('change', sync);
+    document.addEventListener('visibilitychange', sync);
 
     return () => {
-      clearInterval(timer);
-      media?.removeEventListener?.('change', start);
+      stop();
+      media?.removeEventListener?.('change', sync);
+      document.removeEventListener('visibilitychange', sync);
     };
   }, [precision]);
 

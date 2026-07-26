@@ -17,13 +17,18 @@ import { formatDate } from '@/lib/utils';
 
 const WRITING_URL = `${SITE_URL}/writing/`;
 
+const writingMetadata = createPageMetadata({
+  title: 'Writing',
+  description: WRITING_DESCRIPTION,
+  path: '/writing/',
+});
+
 export const metadata: Metadata = {
-  ...createPageMetadata({
-    title: 'Writing',
-    description: WRITING_DESCRIPTION,
-    path: '/writing/',
-  }),
+  ...writingMetadata,
+  // Spread rather than replace: `alternates` also carries the canonical, and
+  // overwriting the whole object dropped it from this page.
   alternates: {
+    ...writingMetadata.alternates,
     types: {
       'application/rss+xml': '/feed.xml',
     },
@@ -55,9 +60,13 @@ function WritingItem({ item, showDate = true }: WritingItemProps) {
       <h2 className="writing-title">{item.title}</h2>
       <p className="writing-description">{item.description}</p>
       {item.isExternal && (
-        <span className="writing-external" aria-hidden="true">
-          ↗
-        </span>
+        <>
+          <span className="writing-external" aria-hidden="true">
+            ↗
+          </span>
+          {/* The arrow is decorative, so the warning has to be spoken. */}
+          <span className="sr-only"> (opens in a new tab)</span>
+        </>
       )}
     </>
   );

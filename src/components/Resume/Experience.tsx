@@ -37,9 +37,8 @@ export function tierFor(job: Position, index: number): JobTier {
 export default function Experience({ data }: ExperienceProps) {
   return (
     <div className="experience">
-      <div className="link-to" id="experience" />
       <div className="title">
-        <h3>Experience</h3>
+        <h2>Experience</h2>
       </div>
       <div className="experience-spine">
         {data.map((job, index) => (

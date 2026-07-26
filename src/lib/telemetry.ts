@@ -1,24 +1,34 @@
+import profile from '@/data/profile.json';
+
 /**
  * Telemetry — the measured values the site reports about itself.
  *
- * These are the numbers the hero readout and the stats page both draw from,
- * so a value is defined once and can never disagree with itself across pages.
+ * The facts live in `src/data/profile.json` so that the OG generator, which
+ * runs as a plain Node script and cannot import TypeScript, reads exactly the
+ * same values. They were previously restated in `scripts/generate-og.mjs`,
+ * where they could drift from the site without anything noticing.
  */
 
-/** Birth date used for the live age readout (ISO format, local time). */
-export const BIRTH_DATE = '1990-02-05T09:24:00';
+/**
+ * Birth instant, with an explicit offset.
+ *
+ * Without one this parsed as local time, so the readout shifted by hours
+ * depending on where the visitor was — the whole point of the figure is that
+ * it is the same measurement for everyone. -05:00 is Buffalo, NY in February.
+ */
+export const BIRTH_DATE = profile.birthDate;
 
 /** Milliseconds in an average year, accounting for leap years. */
 export const MS_PER_YEAR = 1000 * 60 * 60 * 24 * 365.2421897;
 
 /** Year the first computer arrived in the bedroom. See `src/data/about.ts`. */
-export const COMPUTING_SINCE = 1993;
+export const COMPUTING_SINCE = profile.computingSince;
 
 /** Countries visited to date. */
-export const COUNTRIES_VISITED = 53;
+export const COUNTRIES_VISITED = profile.countriesVisited;
 
 /** Current home city. */
-export const CURRENT_CITY = 'New York, NY';
+export const CURRENT_CITY = profile.currentCity;
 
 /** Decimal places used by the stats page — absurd precision, on purpose. */
 export const AGE_PRECISION_FULL = 11;
@@ -26,8 +36,22 @@ export const AGE_PRECISION_FULL = 11;
 /** Decimal places used by the hero readout, sized to fit its column. */
 export const AGE_PRECISION_HERO = 8;
 
-/** How often the age readout advances, in milliseconds. */
-export const AGE_UPDATE_INTERVAL = 25;
+/** Fastest the readout is allowed to advance, in milliseconds. */
+export const AGE_MIN_INTERVAL = 25;
+
+/**
+ * How often a readout at `precision` decimal places actually changes.
+ *
+ * The last displayed digit is worth `MS_PER_YEAR / 10^precision` ms, so at
+ * eight decimals the value only moves about every 316ms. Ticking at a fixed
+ * 25ms scheduled roughly twelve React renders per visible change, all of them
+ * painting an identical string.
+ */
+export function ageIntervalFor(precision: number): number {
+  const msPerDigit = MS_PER_YEAR / 10 ** precision;
+
+  return Math.max(AGE_MIN_INTERVAL, Math.floor(msPerDigit));
+}
 
 /**
  * Age in years at a given instant, fixed to `precision` decimal places.

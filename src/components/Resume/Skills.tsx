@@ -70,9 +70,8 @@ export default function Skills({ skills, categories }: SkillsProps) {
 
   return (
     <div className="skills">
-      <div className="link-to" id="skills" />
       <div className="title">
-        <h3>Skills</h3>
+        <h2>Skills</h2>
       </div>
       <div className="skill-button-container">{buttonElements}</div>
       <div className="skill-groups">
@@ -91,9 +90,9 @@ export default function Skills({ skills, categories }: SkillsProps) {
               data-filtered={isVisible ? undefined : 'true'}
               hidden={!isVisible}
             >
-              <h4 className="skill-group-title" style={titleStyle}>
+              <h3 className="skill-group-title" style={titleStyle}>
                 {category.name}
-              </h4>
+              </h3>
               <div className="skill-tags">
                 {categorySkills.map((skill) => (
                   <SkillTag

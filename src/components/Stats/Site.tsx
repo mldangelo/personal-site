@@ -36,6 +36,13 @@ const FALLBACK_DATA: GitHubData = {
 /**
  * Fetch GitHub stats at build time.
  * Uses static fallback if API is unavailable (rate limit, offline, etc.)
+ *
+ * `revalidate: false` is required, not preferred: `output: 'export'` needs
+ * every route statically renderable, and an uncached fetch forces the route
+ * dynamic — which makes this fall back on every single build.
+ *
+ * The staleness risk that implies is handled where it actually lives: the
+ * Pages workflow does not restore `.next/cache`, so each deploy refetches.
  */
 async function fetchGitHubStats(): Promise<GitHubData> {
   try {

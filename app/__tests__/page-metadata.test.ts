@@ -60,6 +60,41 @@ describe('page metadata', () => {
     );
   });
 
+  /**
+   * `alternates` carries the canonical, and like `openGraph` it is replaced
+   * rather than merged — the writing index lost its canonical by declaring
+   * RSS types on top of it.
+   */
+  it.each([
+    ['about', aboutMetadata, `${SITE_URL}/about/`],
+    ['contact', contactMetadata, `${SITE_URL}/contact/`],
+    ['archive', projectsMetadata, `${SITE_URL}/projects/`],
+    ['resume', resumeMetadata, `${SITE_URL}/resume/`],
+    ['stats', statsMetadata, `${SITE_URL}/stats/`],
+    ['writing', writingMetadata, `${SITE_URL}/writing/`],
+  ])('declares a canonical url for %s', (_, metadata, url) => {
+    expect(metadata.alternates?.canonical).toBe(url);
+  });
+
+  it('omits the canonical on 404, which has no stable url', () => {
+    expect(notFoundMetadata.alternates?.canonical).toBeUndefined();
+  });
+
+  it('keeps the RSS alternate alongside the canonical on the writing index', () => {
+    expect(writingMetadata.alternates?.types).toEqual({
+      'application/rss+xml': '/feed.xml',
+    });
+  });
+
+  it('declares a canonical url for blog posts', async () => {
+    const [slug] = getPostSlugs();
+    const metadata = await generatePostMetadata({
+      params: Promise.resolve({ slug }),
+    });
+
+    expect(metadata.alternates?.canonical).toBe(`${SITE_URL}/writing/${slug}/`);
+  });
+
   it('declares the share card on blog posts', async () => {
     const [slug] = getPostSlugs();
     const metadata = await generatePostMetadata({

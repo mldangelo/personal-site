@@ -96,7 +96,9 @@ describe('Site', () => {
       screen.getByText('Number of people watching this repository'),
     ).toBeInTheDocument();
     expect(screen.getByText('Number of forks')).toBeInTheDocument();
-    expect(screen.getByText('Open github issues')).toBeInTheDocument();
+    expect(
+      screen.getByText('Open github issues and pull requests'),
+    ).toBeInTheDocument();
     expect(screen.getByText('Last updated at')).toBeInTheDocument();
   });
 

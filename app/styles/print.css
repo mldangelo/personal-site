@@ -160,11 +160,11 @@
     display: inline;
   }
 
-  .jobs-container--lead header h4 {
+  .jobs-container--lead header h3 {
     font-size: 14pt;
   }
 
-  .jobs-container header h4 {
+  .jobs-container header h3 {
     font-size: 12pt;
     margin-bottom: 0.35rem;
   }
@@ -185,7 +185,7 @@
     break-before: auto;
   }
 
-  .resume-page .title h3,
+  .resume-page .title h2,
   .about-section h2,
   .stats-section-title {
     break-after: avoid;

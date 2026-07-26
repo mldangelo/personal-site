@@ -47,9 +47,3 @@
   color: var(--color-fg-light);
   margin-bottom: 2rem;
 }
-
-/* Link anchor offset for fixed header */
-.link-to {
-  position: relative;
-  top: -4.5em;
-}

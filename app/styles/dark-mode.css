@@ -70,60 +70,20 @@
   background: var(--color-bg-alt);
 }
 
-/* Portrait - soften white background for dark mode */
-[data-theme='dark'] .theme-portrait img {
+/* Portrait — soften the white field for dark mode.
+   Scoped with :where() so it carries zero specificity and cannot override
+   the per-context treatments in home.css and footer.css. Unscoped, this rule
+   won on source order and silently reduced the hero portrait to
+   brightness(0.85), discarding its greyscale entirely. */
+[data-theme='dark'] :where(.theme-portrait) img {
   filter: brightness(0.85);
 }
 
-/* Course cards */
-[data-theme='dark'] .course-container a {
-  background: var(--color-surface-subtle);
-  border-color: var(--color-border);
-}
-
-[data-theme='dark'] .course-container a:hover {
-  background: var(--color-surface-hover);
-  border-color: var(--color-border-alt);
-}
-
-/* Skill buttons/tags */
-[data-theme='dark'] .skillbutton,
-[data-theme='dark'] .skill-tag {
-  background: var(--color-surface-subtle);
-  border-color: var(--color-border);
-}
-
-[data-theme='dark'] .skill-tag {
-  border-left-color: var(--tag-color, var(--color-accent));
-}
-
-[data-theme='dark'] .skillbutton:hover,
-[data-theme='dark'] .skill-tag:hover {
-  background: var(--color-surface-hover);
-}
-
-/* Contact page */
-[data-theme='dark'] .contact-email-link {
-  background: color-mix(in srgb, var(--color-accent) 20%, transparent);
-}
-
-[data-theme='dark'] .contact-email-link:hover {
-  background: color-mix(in srgb, var(--color-accent) 30%, transparent);
-}
-
-[data-theme='dark'] .contact-email-link--invalid,
-[data-theme='dark'] .contact-email-link--invalid:hover {
-  background: var(--color-border-bg);
-}
-
-[data-theme='dark'] .contact-content > .icons li a:hover {
-  background: color-mix(in srgb, var(--color-accent) 20%, transparent);
-}
-
-[data-theme='dark'] .daterange,
-[data-theme='dark'] .degree-container .school {
-  color: var(--color-fg-light);
-}
+/* Course rows, skill tags, and the contact readout are all transparent and
+   hairline-bounded in the base styles now, and the tokens above already carry
+   their dark values. The filled backgrounds and heavy tag borders that used
+   to live here contradicted that, so they are gone rather than re-tuned.
+   `.daterange` and `.school` likewise inherit --color-fg-light directly. */
 
 /* Misc dark mode overrides */
 [data-theme='dark'] body::before {

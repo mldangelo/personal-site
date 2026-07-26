@@ -14,7 +14,7 @@
  * the design or the facts on it change, so builds stay deterministic and do
  * not depend on Google Fonts being reachable from CI.
  */
-import { writeFile } from 'node:fs/promises';
+import { readFile, writeFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { join } from 'node:path';
 import { createElement as h } from 'react';
@@ -22,6 +22,12 @@ import { createElement as h } from 'react';
 // `next/og` ships as CommonJS with no ESM export condition, so it has to be
 // required rather than imported.
 const { ImageResponse } = createRequire(import.meta.url)('next/og');
+
+// The same file `src/lib/telemetry.ts` reads, so the card cannot state
+// different facts from the page it represents.
+const profile = JSON.parse(
+  await readFile(join(process.cwd(), 'src/data/profile.json'), 'utf8'),
+);
 
 const OUTPUT = join(process.cwd(), 'public', 'og.png');
 const SIZE = { width: 1200, height: 630 };
@@ -41,10 +47,12 @@ const HAIRLINE = 'rgba(35, 39, 46, 0.18)';
  * means something while that stays true.
  */
 const READOUT = [
-  { label: 'Countries visited', value: '53' },
-  { label: 'Computing since', value: '1993' },
-  { label: 'Based in', value: 'New York, NY' },
+  { label: 'Countries visited', value: String(profile.countriesVisited) },
+  { label: 'Computing since', value: String(profile.computingSince) },
+  { label: 'Based in', value: profile.currentCity },
 ];
+
+const [FIRST_NAME, ...REST_OF_NAME] = profile.name.split(' ');
 
 /**
  * Fetches a font from Google as TTF, which is what satori accepts.
@@ -137,8 +145,8 @@ function card() {
             flexDirection: 'column',
           },
         },
-        h('span', {}, 'Michael'),
-        h('span', {}, 'D’Angelo'),
+        h('span', {}, FIRST_NAME),
+        h('span', {}, REST_OF_NAME.join(' ').replace("'", '’')),
       ),
       h(
         'div',
@@ -152,8 +160,10 @@ function card() {
             display: 'flex',
           },
         },
-        h('span', { style: { color: ULTRAMARINE } }, 'OpenAI'),
-        h('span', {}, ' — agent security, evals, and red-teaming'),
+        h('span', { style: { color: ULTRAMARINE } }, profile.employer),
+        // Satori collapses a leading space in a flex child, so the gap before
+        // the em dash is set as spacing rather than as whitespace.
+        h('span', { style: { marginLeft: '0.5em' } }, `— ${profile.focus}`),
       ),
     ),
     h(

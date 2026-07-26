@@ -33,7 +33,11 @@
   /* ===================
      FONT SIZES (rem — absolute, so nesting never compounds)
      =================== */
-  --text-2xs: 0.6875rem; /* 11px — mono labels */
+  /* 11px is fine for genuinely secondary annotation, but it is too small for
+     anything you have to hit or read at a glance, so interactive elements
+     use --text-ui instead. */
+  --text-2xs: 0.6875rem; /* 11px — secondary annotation only */
+  --text-ui: 0.8125rem; /* 13px — nav, buttons, filters, section indexes */
   --text-xs: 0.75rem; /* 12px */
   --text-sm: 0.875rem; /* 14px */
   --text-base: 1rem; /* 16px */

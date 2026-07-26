@@ -49,7 +49,7 @@
   color: var(--color-fg-light);
   background: transparent;
   font-family: var(--font-mono);
-  font-size: var(--text-2xs);
+  font-size: var(--text-ui);
   font-weight: var(--font-weight-medium);
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;
@@ -207,9 +207,11 @@
   border-radius: var(--radius-full);
 }
 
+/* Ink, not amber: hovering an entry is not a live value, and spending the
+   signal colour on decoration is what stops it meaning anything elsewhere. */
 .about-section--log .log-entry:hover::after {
-  border-color: var(--color-signal-mark);
-  background: var(--color-signal-mark);
+  border-color: var(--color-fg-bold);
+  background: var(--color-fg-bold);
 }
 
 /* Empty for entries that carry no marker; the column still holds so the
@@ -280,7 +282,11 @@
   justify-content: center;
   min-height: calc(100vh - var(--header-height) - 16rem);
   margin: 0 auto;
-  padding: 2rem;
+  padding: 2rem 1rem;
+}
+
+.contact-content {
+  max-width: 100%;
 }
 
 .contact-header {
@@ -344,6 +350,15 @@
   background: transparent;
   color: var(--color-accent);
   border-bottom-color: var(--color-accent-hover);
+}
+
+/* Flex items default to min-width:auto and refuse to shrink below their
+   content, so the wrapping allowed on the link above never reached the long
+   animated alias. Both halves have to opt in individually. */
+.contact-email-prefix,
+.contact-email-domain {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .contact-email-prefix {
@@ -519,6 +534,8 @@
 
 .stat-table-label {
   width: 60%;
+  text-align: left;
+  font-weight: var(--font-weight-medium);
   font-family: var(--font-mono);
   font-size: var(--text-2xs);
   font-weight: var(--font-weight-medium);
@@ -630,7 +647,9 @@
   font-size: var(--text-2xs);
   font-weight: var(--font-weight-medium);
   letter-spacing: var(--tracking-label);
-  color: var(--color-signal);
+  /* A 404 is a static fact, not a live reading, so it stays in the
+     secondary ink rather than borrowing the signal colour. */
+  color: var(--color-fg-light);
   line-height: 1;
   background: none;
   -webkit-text-fill-color: currentcolor;
@@ -670,7 +689,7 @@
   height: 2.875rem;
   padding: 0 1.75rem;
   font-family: var(--font-mono);
-  font-size: var(--text-2xs);
+  font-size: var(--text-ui);
   font-weight: var(--font-weight-medium);
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;

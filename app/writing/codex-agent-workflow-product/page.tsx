@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 import PageWrapper from '@/components/Template/PageWrapper';
+import { sharedOpenGraph, sharedTwitter } from '@/lib/metadata';
 import { getPostBySlug } from '@/lib/posts';
 import { SITE_URL } from '@/lib/utils';
 
@@ -21,10 +22,16 @@ export const metadata: Metadata = {
   alternates: { canonical: `${SITE_URL}${NEW_PATH}` },
   robots: { index: false, follow: true },
   openGraph: {
+    ...sharedOpenGraph,
     type: 'article',
     title: 'Post URL updated',
     description: 'This post moved to a new URL.',
     url: `${SITE_URL}${NEW_PATH}`,
+  },
+  twitter: {
+    ...sharedTwitter,
+    title: 'Post URL updated',
+    description: 'This post moved to a new URL.',
   },
 };
 

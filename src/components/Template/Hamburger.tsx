@@ -22,6 +22,16 @@ export default function Hamburger() {
 
   const slideMenu = (
     <SlideMenu id={MENU_ID} isOpen={open} onClose={closeMenu} position="right">
+      {/* The trap keeps focus inside the dialog, so it needs a way out that
+          is not the Escape key alone. */}
+      <button
+        type="button"
+        className="slide-menu-close"
+        onClick={closeMenu}
+        aria-label="Close navigation menu"
+      >
+        <span aria-hidden="true">×</span>
+      </button>
       <ul className="hamburger-ul">
         {routes.map((l) => (
           <li key={l.label}>

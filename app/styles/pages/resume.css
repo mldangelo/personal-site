@@ -28,11 +28,11 @@
   text-align: left;
 }
 
-.resume-page .education .title h3,
-.resume-page .experience .title h3,
-.resume-page .skills .title h3,
-.resume-page .courses .title h3,
-.resume-page .references .title h3 {
+.resume-page .education .title h2,
+.resume-page .experience .title h2,
+.resume-page .skills .title h2,
+.resume-page .courses .title h2,
+.resume-page .references .title h2 {
   font-family: var(--font-mono);
   font-size: var(--text-2xs);
   font-weight: var(--font-weight-medium);
@@ -138,7 +138,7 @@
   position: relative;
   padding: 0.25rem 0;
   font-family: var(--font-mono);
-  font-size: var(--text-2xs);
+  font-size: var(--text-ui);
   font-weight: var(--font-weight-medium);
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;

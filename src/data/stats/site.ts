@@ -15,7 +15,7 @@ const data: StatData[] = [
   {
     label: 'Number of people watching this repository',
     key: 'subscribers_count',
-    link: 'https://github.com/mldangelo/personal-site/stargazers',
+    link: 'https://github.com/mldangelo/personal-site/watchers',
   },
   {
     label: 'Number of forks',
@@ -31,7 +31,9 @@ const data: StatData[] = [
     value: '0', // enforced via github workflow
   },
   {
-    label: 'Open github issues',
+    // GitHub's open_issues_count includes open pull requests, so the label
+    // says what the number actually counts rather than overstating issues.
+    label: 'Open github issues and pull requests',
     key: 'open_issues_count',
     link: 'https://github.com/mldangelo/personal-site/issues',
   },

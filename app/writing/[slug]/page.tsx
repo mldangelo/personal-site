@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { SchemaGraph } from '@/components/Schema';
 import PageWrapper from '@/components/Template/PageWrapper';
 import PostContent from '@/components/Writing/PostContent';
+import { sharedOpenGraph, sharedTwitter } from '@/lib/metadata';
 import { getPostBySlug, getPostSlugs } from '@/lib/posts';
 import {
   blogPostingNode,
@@ -41,33 +42,26 @@ export async function generateMetadata({
 
   const url = `${SITE_URL}/writing/${post.slug}/`;
 
-  // Declaring `openGraph` here replaces the inherited object wholesale, so the
-  // share image has to be repeated — without it, posts shipped with no
-  // og:image at all.
+  // Spreading the shared blocks matters: a route-level `openGraph` replaces
+  // the inherited one, so anything omitted here — images, siteName, locale,
+  // twitter:site — simply disappears from post pages.
   return {
     title: post.title,
     description: post.description,
+    alternates: { canonical: url },
     openGraph: {
+      ...sharedOpenGraph,
       type: 'article',
       title: post.title,
       description: post.description,
       url,
       publishedTime: post.date,
       authors: [AUTHOR_NAME],
-      images: [
-        {
-          url: SHARE_IMAGE_PATH,
-          width: SHARE_IMAGE_DIMENSIONS.width,
-          height: SHARE_IMAGE_DIMENSIONS.height,
-          alt: `${AUTHOR_NAME} — ${post.title}`,
-        },
-      ],
     },
     twitter: {
-      card: 'summary_large_image',
+      ...sharedTwitter,
       title: post.title,
       description: post.description,
-      images: [SHARE_IMAGE_PATH],
     },
   };
 }

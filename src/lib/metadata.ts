@@ -14,6 +14,40 @@ interface PageMetadataOptions {
   path?: `/${string}`;
 }
 
+/**
+ * The share card is a fixed design that does not render the page title, so
+ * the alt text describes the card rather than claiming the title appears in
+ * the image.
+ */
+export const SHARE_IMAGE_ALT = `${AUTHOR_NAME} — Member of the Technical Staff at OpenAI`;
+
+/**
+ * The OpenGraph and Twitter blocks every page needs.
+ *
+ * A route-level `openGraph` object replaces the inherited one wholesale
+ * rather than merging, so anything omitted here vanishes from that page.
+ * Callers that build their own metadata (blog posts) should spread these.
+ */
+export const sharedOpenGraph: Metadata['openGraph'] = {
+  locale: 'en_US',
+  siteName: AUTHOR_NAME,
+  images: [
+    {
+      url: SHARE_IMAGE_PATH,
+      width: SHARE_IMAGE_DIMENSIONS.width,
+      height: SHARE_IMAGE_DIMENSIONS.height,
+      alt: SHARE_IMAGE_ALT,
+    },
+  ],
+};
+
+export const sharedTwitter: Metadata['twitter'] = {
+  card: 'summary_large_image',
+  site: TWITTER_HANDLE,
+  creator: TWITTER_HANDLE,
+  images: [SHARE_IMAGE_PATH],
+};
+
 export function createPageMetadata({
   title,
   description,
@@ -22,35 +56,23 @@ export function createPageMetadata({
   const absoluteUrl = path ? new URL(path, SITE_URL).toString() : undefined;
   const pageTitle = `${title} | ${AUTHOR_NAME}`;
 
-  // Images are set explicitly on every page: a route-level `openGraph` object
-  // replaces the inherited one entirely, so anything left implicit here simply
-  // disappears from subpages.
   return {
     title,
     description,
+    // Canonical is emitted wherever the page has a stable URL. `not-found`
+    // passes no path, because a 404 has no canonical route in a static export.
+    ...(absoluteUrl ? { alternates: { canonical: absoluteUrl } } : {}),
     openGraph: {
+      ...sharedOpenGraph,
       type: 'website',
-      locale: 'en_US',
-      siteName: AUTHOR_NAME,
       title: pageTitle,
       description,
       ...(absoluteUrl ? { url: absoluteUrl } : {}),
-      images: [
-        {
-          url: SHARE_IMAGE_PATH,
-          width: SHARE_IMAGE_DIMENSIONS.width,
-          height: SHARE_IMAGE_DIMENSIONS.height,
-          alt: `${AUTHOR_NAME} — ${title}`,
-        },
-      ],
     },
     twitter: {
-      card: 'summary_large_image',
-      site: TWITTER_HANDLE,
-      creator: TWITTER_HANDLE,
+      ...sharedTwitter,
       title: pageTitle,
       description,
-      images: [SHARE_IMAGE_PATH],
     },
   };
 }
