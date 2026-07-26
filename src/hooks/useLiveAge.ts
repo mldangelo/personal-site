@@ -33,9 +33,17 @@ export default function useLiveAge(precision: number): string {
     const sync = () => {
       clearInterval(timer);
       timer = undefined;
+
+      // A visibility change to hidden should only stop work. Taking one last
+      // reading here creates a race at the display precision boundary and
+      // contradicts the promise that the value holds still while hidden.
+      if (document.hidden) {
+        return;
+      }
+
       tick();
 
-      if (prefersReducedMotion || document.hidden) {
+      if (prefersReducedMotion) {
         return;
       }
 
