@@ -7,10 +7,14 @@ on:
     branches: [main]
   workflow_dispatch:
 
-# Cancel in-progress runs for the same workflow and branch
+permissions:
+  contents: read
+
+# Supersede stale PR runs, but never cancel a main run that may already be
+# deploying. The Pages job below serializes main deployments.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
   # Shared job for installing dependencies with caching
@@ -25,15 +29,15 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version-file: ".nvmrc"
-          cache: "npm"
+          node-version-file: '.nvmrc'
+          cache: 'npm'
 
       - name: Cache node_modules
         id: cache-node-modules
         uses: actions/cache@v4
         with:
           path: node_modules
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json', '.nvmrc') }}
           restore-keys: |
             ${{ runner.os }}-node-modules-
 
@@ -54,14 +58,14 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version-file: ".nvmrc"
-          cache: "npm"
+          node-version-file: '.nvmrc'
+          cache: 'npm'
 
       - name: Restore node_modules
         uses: actions/cache@v4
         with:
           path: node_modules
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json', '.nvmrc') }}
 
       - name: Type Check
         run: npm run type-check
@@ -71,6 +75,9 @@ jobs:
 
       - name: Format Check
         run: npm run format:check
+
+      - name: Verify generated share card
+        run: npm run og:check
 
   # Run tests
   test:
@@ -85,14 +92,14 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version-file: ".nvmrc"
-          cache: "npm"
+          node-version-file: '.nvmrc'
+          cache: 'npm'
 
       - name: Restore node_modules
         uses: actions/cache@v4
         with:
           path: node_modules
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json', '.nvmrc') }}
 
       - name: Run tests
         run: npm run test:coverage
@@ -111,6 +118,9 @@ jobs:
     needs: install
     runs-on: ${{ matrix.os }}
     timeout-minutes: 10
+    permissions:
+      contents: read
+      pages: write
     strategy:
       fail-fast: false
       matrix:
@@ -130,16 +140,29 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "npm"
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
 
+      # This matrix entry becomes the deployment candidate on main. Pages
+      # configuration has to run before Next builds so repository-site forks
+      # receive their basePath in generated links and assets.
+      - name: Configure GitHub Pages build
+        if: >-
+          matrix.os == 'ubuntu-latest' &&
+          matrix.node-version == '22.x' &&
+          github.ref == 'refs/heads/main'
+        uses: actions/configure-pages@v5
+        with:
+          static_site_generator: next
+
       - name: Build
         run: npm run build
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_ENV: production
-          NEXT_PUBLIC_GA_TRACKING_ID: ${{ vars.NEXT_PUBLIC_GA_TRACKING_ID || 'G-XXXXXXXXXX' }}
+          NEXT_PUBLIC_GA_TRACKING_ID: ${{ vars.NEXT_PUBLIC_GA_TRACKING_ID }}
 
       - name: Verify static export
         shell: bash
@@ -150,12 +173,22 @@ jobs:
           fi
           echo "Static export successful. Found $(find out -type f | wc -l) files."
 
+      # Checks generated HTML/XML itself: leaked drafts, robots, duplicate ids,
+      # fragment and route targets, canonical/share metadata, local images, and
+      # sitemap/RSS integrity. None of these are visible to component tests.
+      - name: Verify export
+        run: npm run verify-export
+
       - name: Upload build artifacts
-        if: matrix.os == 'ubuntu-latest' && matrix.node-version == '22.x'
+        if: >-
+          matrix.os == 'ubuntu-latest' &&
+          matrix.node-version == '22.x' &&
+          github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v4
         with:
           name: build-output
           path: out/
+          include-hidden-files: true
           retention-days: 7
 
   # Summary job to ensure all checks pass
@@ -174,3 +207,39 @@ jobs:
             exit 1
           fi
           echo "All CI checks passed!"
+
+  # Publish exactly the Linux/Node 22 artifact that passed the complete CI
+  # graph. Manual runs are intentionally deployable only from main.
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: ci-success
+    if: >-
+      github.ref == 'refs/heads/main' &&
+      (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Download validated build
+        uses: actions/download-artifact@v4
+        with:
+          name: build-output
+          path: out
+
+      - name: Package GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: out
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

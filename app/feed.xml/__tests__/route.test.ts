@@ -22,4 +22,13 @@ describe('feed.xml route', () => {
     expect(xml).toContain(`${SITE_URL}/feed.xml`);
     expect(xml).not.toContain(`${SITE_URL}/feed.xml/`);
   });
+
+  it('derives lastBuildDate from content rather than the build clock', async () => {
+    const response = await GET();
+    const xml = await response.text();
+
+    expect(xml).toContain(
+      '<lastBuildDate>Tue, 10 Mar 2026 12:00:00 GMT</lastBuildDate>',
+    );
+  });
 });

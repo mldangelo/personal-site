@@ -1,49 +1,66 @@
 /* ========================================
    TYPOGRAPHY TOKENS
-   Font families, sizes, weights, and spacing
+   Three voices:
+     display — Bricolage Grotesque, names and headings
+     body    — Newsreader, prose and reading
+     mono    — JetBrains Mono, data, labels, measurements
    ======================================== */
 
 @theme {
   /* ===================
      FONT FAMILIES
      =================== */
-  --font-sans: var(--font-source-sans), 'Source Sans Pro', Helvetica, sans-serif;
-  --font-heading: var(--font-raleway), 'Raleway', Helvetica, sans-serif;
-  --font-mono: 'Courier New', monospace;
+  --font-display: var(--font-bricolage), 'Helvetica Neue', sans-serif;
+  --font-body: var(--font-newsreader), Georgia, serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, 'SF Mono', monospace;
 
   /* ===================
      FONT WEIGHTS
+     All three families are variable, so every step below
+     renders as a real weight rather than a synthesized one.
      =================== */
   --font-weight-normal: 400;
-  --font-weight-medium: 600;
+  --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
   --font-weight-black: 800;
 
   /* ===================
-     FONT SIZES (relative units)
+     FONT SIZES (rem — absolute, so nesting never compounds)
      =================== */
-  --text-xs: 0.75em;
-  --text-sm: 0.875em;
-  --text-base: 1em;
-  --text-md: 1.1em;
-  --text-lg: 1.3em;
-  --text-xl: 1.6em;
-  --text-2xl: 2.2em;
-  --text-3xl: 2.75em;
+  /* 11px is fine for genuinely secondary annotation, but it is too small for
+     anything you have to hit or read at a glance, so interactive elements
+     use --text-ui instead. */
+  --text-2xs: 0.6875rem; /* 11px — secondary annotation only */
+  --text-ui: 0.8125rem; /* 13px — nav, buttons, filters, section indexes */
+  --text-xs: 0.75rem; /* 12px */
+  --text-sm: 0.875rem; /* 14px */
+  --text-base: 1rem; /* 16px */
+  --text-md: 1.125rem; /* 18px */
+  --text-lg: 1.375rem; /* 22px */
+  --text-xl: 1.75rem; /* 28px */
+  --text-2xl: 2.25rem; /* 36px */
+  --text-3xl: 3rem; /* 48px */
+  --text-display: clamp(3rem, 9vw, 5.75rem);
 }
 
 @theme inline {
   /* ===================
      LETTER SPACING
+     Display is set tight; mono labels are set wide so they
+     read as instrument annotation rather than as copy.
      =================== */
-  --tracking-tight: 0.01em;
-  --tracking-normal: 0.02em;
-  --tracking-wide: 0.04em;
+  --tracking-display: -0.035em;
+  --tracking-tight: -0.015em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.02em;
+  --tracking-label: 0.14em;
 
   /* ===================
      LINE HEIGHTS
      =================== */
-  --leading-tight: 1.3;
-  --leading-normal: 1.7;
+  --leading-display: 0.92;
+  --leading-tight: 1.15;
+  --leading-snug: 1.4;
+  --leading-normal: 1.65;
 }

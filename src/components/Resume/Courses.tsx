@@ -7,7 +7,9 @@ interface CoursesProps {
 }
 
 function getRows(courses: CourseType[]) {
-  return courses
+  // Copy first: `sort` mutates in place, and this receives the imported
+  // module array, so rendering was reordering shared data as a side effect.
+  return [...courses]
     .sort((a, b) => {
       let ret = 0;
       if (a.university > b.university) ret = -1;
@@ -22,9 +24,8 @@ function getRows(courses: CourseType[]) {
 export default function Courses({ data }: CoursesProps) {
   return (
     <div className="courses">
-      <div className="link-to" id="courses" />
       <div className="title">
-        <h3>Selected Courses</h3>
+        <h2>Selected Courses</h2>
       </div>
       <ul className="course-list">{getRows(data)}</ul>
     </div>

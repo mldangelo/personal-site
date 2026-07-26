@@ -18,8 +18,8 @@ describe('Hero', () => {
     expect(heading).toHaveTextContent("Michael D'Angelo");
   });
 
-  it('renders the tagline with OpenAI and promptfoo links', () => {
-    render(<Hero />);
+  it('describes the current work and Promptfoo joining OpenAI', () => {
+    const { container } = render(<Hero />);
 
     const openAiLink = screen.getByRole('link', { name: /openai/i });
     expect(openAiLink).toHaveAttribute('href', 'https://openai.com');
@@ -28,19 +28,34 @@ describe('Hero', () => {
     const promptfooLink = screen.getByRole('link', { name: /promptfoo/i });
     expect(promptfooLink).toHaveAttribute('href', 'https://promptfoo.dev');
     expect(promptfooLink).toHaveClass('hero-highlight');
+
+    const codexSecurityLink = screen.getByRole('link', {
+      name: 'Codex Security',
+    });
+    expect(codexSecurityLink).toHaveAttribute(
+      'href',
+      'https://openai.com/index/codex-security-now-in-research-preview/',
+    );
+    expect(codexSecurityLink).toHaveClass('hero-highlight');
+
+    expect(container.querySelector('.hero-tagline')).toHaveTextContent(
+      "I'm a Member of the Technical Staff at OpenAI, working on Promptfoo and Codex Security. I help secure AI systems and use AI to find software vulnerabilities. I co-founded Promptfoo before it joined OpenAI in 2026.",
+    );
   });
 
-  it('displays hero chips for credentials', () => {
-    render(<Hero />);
+  it('keeps personal stats and incomplete credential lists off the homepage', () => {
+    const { container } = render(<Hero />);
 
-    expect(screen.getByText('YC Alum')).toBeInTheDocument();
-    expect(screen.getByText('Stanford ICME')).toBeInTheDocument();
-    expect(
-      screen.getByText('Co-founded Arthena & Matroid'),
-    ).toBeInTheDocument();
+    expect(container.querySelector('.telemetry')).not.toBeInTheDocument();
+    expect(container.querySelector('.hero-chips')).not.toBeInTheDocument();
+    expect(screen.queryByText('Countries visited')).not.toBeInTheDocument();
+    expect(screen.queryByText('Computing since')).not.toBeInTheDocument();
+    expect(screen.queryByText('Based in')).not.toBeInTheDocument();
+    expect(screen.queryByText('YC Alum')).not.toBeInTheDocument();
+    expect(screen.queryByText('Stanford ICME')).not.toBeInTheDocument();
   });
 
-  it('renders CTA buttons with correct links', () => {
+  it('renders one primary CTA and one quieter resume link', () => {
     render(<Hero />);
 
     const aboutButton = screen.getByRole('link', { name: /about me/i });
@@ -49,7 +64,8 @@ describe('Hero', () => {
 
     const resumeButton = screen.getByRole('link', { name: /view resume/i });
     expect(resumeButton).toHaveAttribute('href', '/resume');
-    expect(resumeButton).toHaveClass('button-secondary');
+    expect(resumeButton).toHaveClass('hero-resume-link');
+    expect(resumeButton).not.toHaveClass('button');
   });
 
   it('has decorative background elements', () => {

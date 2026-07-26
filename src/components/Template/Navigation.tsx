@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 import routes from '@/data/routes';
+import { isActiveRoute } from '@/lib/routes';
+import { AUTHOR_NAME } from '@/lib/utils';
 
 import Hamburger from './Hamburger';
 import ThemeToggle from './ThemeToggle';
@@ -11,26 +13,23 @@ import ThemeToggle from './ThemeToggle';
 export default function Navigation() {
   const pathname = usePathname();
 
-  const isActive = (path: string) => {
-    if (path === '/') return pathname === '/';
-    return pathname?.startsWith(path);
-  };
-
   return (
     <header className="site-header">
-      <Link href="/" className="site-logo">
+      <Link href="/" className="site-logo" aria-label={`${AUTHOR_NAME} — home`}>
         <span className="logo-text">MD</span>
       </Link>
 
-      <nav className="nav-links">
+      <nav className="nav-links" aria-label="Primary">
         {routes
-          .filter((l) => !l.index)
+          .filter((l) => !l.index && l.primary !== false)
           .map((l) => (
             <Link
               key={l.label}
               href={l.path}
-              className={`nav-link ${isActive(l.path) ? 'active' : ''}`}
-              aria-current={isActive(l.path) ? 'page' : undefined}
+              className={`nav-link ${isActiveRoute(pathname, l.path) ? 'active' : ''}`}
+              aria-current={
+                isActiveRoute(pathname, l.path) ? 'page' : undefined
+              }
             >
               {l.label}
             </Link>

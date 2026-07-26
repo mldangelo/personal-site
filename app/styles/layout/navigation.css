@@ -6,20 +6,29 @@
 .site-logo {
   display: flex;
   align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  gap: 0.5rem;
   text-decoration: none;
+  background-image: none;
 }
 
 .logo-text {
-  font-family: var(--font-heading);
+  font-family: var(--font-display);
   font-size: var(--text-lg);
   font-weight: var(--font-weight-black);
   color: var(--color-fg-bold);
-  letter-spacing: var(--tracking-tight);
+  letter-spacing: var(--tracking-display);
+  line-height: 1;
 }
 
+/* Nav labels are instrument annotation, not prose:
+   mono, uppercase, wide-tracked, and small. */
 .nav-links {
   display: none;
-  gap: 0.625rem;
+  gap: 1.75rem;
+  align-items: center;
 }
 
 @media screen and (min-width: 736px) {
@@ -30,58 +39,55 @@
 
 .nav-link {
   position: relative;
-  padding: 0.75rem 1.125rem;
-  font-size: 1.0625rem;
-  font-weight: var(--font-weight-bold);
-  color: var(--color-fg-bold);
+  padding: 0.5rem 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-ui);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--color-fg-light);
   text-decoration: none;
-  border-radius: var(--radius-sm);
-  letter-spacing: 0.01em;
-  transition:
-    color var(--duration-fast) var(--ease-out),
-    background-color var(--duration-fast) var(--ease-out),
-    transform var(--duration-fast) var(--ease-out);
+  background-image: none;
+  line-height: 1;
+  transition: color var(--duration-fast) var(--ease-out);
 }
 
+/* The rule under an active item is the same hairline weight used
+   everywhere else, so navigation reads as part of the drawn grid. */
 .nav-link::after {
   content: '';
   position: absolute;
-  bottom: 0.375rem;
-  left: 0.5rem;
-  right: 0.5rem;
-  height: 2.5px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--rule-strong);
   background: var(--color-accent);
-  border-radius: 2px;
   transform: scaleX(0);
+  transform-origin: left;
   transition: transform var(--duration-fast) var(--ease-out);
 }
 
-.nav-link:hover {
-  color: var(--color-accent);
-  background-color: var(--color-border-bg);
-  transform: scale(var(--scale-subtle));
+.nav-link:hover,
+.nav-link:focus-visible {
+  color: var(--color-fg-bold);
 }
 
-.nav-link:hover::after {
-  transform: scaleX(1);
-}
-
-.nav-link.active {
-  color: var(--color-accent);
-  background-color: var(--color-accent-light);
-}
-
-.nav-link.active::after {
+.nav-link:hover::after,
+.nav-link:focus-visible::after {
   transform: scaleX(1);
 }
 
 .nav-link:focus-visible {
-  color: var(--color-accent);
-  background-color: var(--color-border-bg);
-  outline: none;
+  color: var(--color-fg-bold);
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
 }
 
-.nav-link:focus-visible::after {
+.nav-link.active {
+  color: var(--color-accent);
+}
+
+.nav-link.active::after {
   transform: scaleX(1);
 }
 
@@ -104,7 +110,9 @@
   border-radius: var(--radius-sm);
   color: var(--color-fg);
   cursor: pointer;
-  transition: all var(--duration-fast) var(--ease-out);
+  transition:
+    color var(--duration-fast) var(--ease-out),
+    background-color var(--duration-fast) var(--ease-out);
 }
 
 .theme-toggle:hover {

@@ -8,7 +8,7 @@
    ======================================== */
 
 .about-page {
-  max-width: 52rem;
+  max-width: var(--measure-page);
   margin: 0 auto;
 }
 
@@ -23,40 +23,49 @@
 }
 
 .about-content {
-  max-width: 46rem;
-  line-height: 1.85;
+  max-width: var(--measure-read);
+  line-height: 1.7;
 }
 
+/* Section index — mono labels on a rule, matching the resume. */
 .about-section-nav {
+  position: sticky;
+  top: var(--header-height);
+  z-index: var(--z-sticky);
   display: flex;
   flex-wrap: wrap;
-  gap: var(--spacing-2);
-  margin: var(--spacing-8) 0 var(--spacing-6);
-  padding: var(--spacing-4);
-  border: 1px solid var(--color-border-bg);
-  border-radius: var(--radius-lg);
-  background: color-mix(in srgb, var(--color-bg-alt) 92%, transparent);
-  box-shadow: var(--shadow-sm);
+  gap: 0.5rem 1.5rem;
+  margin: var(--spacing-10) 0 var(--spacing-6);
+  padding: 0.75rem 0;
+  border-top: var(--rule) solid var(--color-border);
+  border-bottom: var(--rule) solid var(--color-border);
+  border-radius: 0;
+  background: var(--color-bg-alt);
+  box-shadow: none;
 }
 
 .about-content .about-section-nav-link {
+  flex: none;
   display: inline-flex;
   align-items: center;
-  padding: 0.5rem 0.85rem;
-  border-radius: var(--radius-sm);
+  padding: 0;
+  border-radius: 0;
   color: var(--color-fg-light);
   background: transparent;
-  font-size: var(--text-sm);
+  font-family: var(--font-mono);
+  font-size: var(--text-ui);
   font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
   text-decoration: none;
-  transition:
-    background-color var(--duration-fast) var(--ease-out),
-    color var(--duration-fast) var(--ease-out);
+  white-space: nowrap;
+  transition: color var(--duration-fast) var(--ease-out);
 }
 
 .about-content .about-section-nav-link:hover {
-  background: var(--color-surface-hover);
+  background: transparent;
   color: var(--color-fg-bold);
+  text-decoration: none;
 }
 
 .about-section-nav-link:focus-visible {
@@ -69,14 +78,15 @@
 }
 
 .about-section h2 {
-  scroll-margin-top: calc(var(--header-height) + var(--spacing-6));
-  margin: 0 0 var(--spacing-4);
+  scroll-margin-top: calc(var(--header-height) + 5.5rem);
+  margin: 0 0 var(--spacing-5);
   padding-top: var(--spacing-5);
-  border-top: 1px solid var(--color-border);
-  font-size: clamp(1.16rem, 1.3vw, 1.4rem);
+  border-top: var(--rule) solid var(--color-fg-bold);
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
   font-weight: var(--font-weight-bold);
-  line-height: 1.2;
-  letter-spacing: -0.02em;
+  line-height: 1.15;
+  letter-spacing: var(--tracking-display);
   color: var(--color-fg-bold);
 }
 
@@ -125,9 +135,9 @@
 }
 
 .about-intro p {
-  max-width: 41rem;
+  max-width: var(--measure-read);
   font-size: clamp(1.04rem, 0.7vw + 0.95rem, 1.1rem);
-  line-height: 1.9;
+  line-height: 1.7;
   color: var(--color-fg-bold);
 }
 
@@ -147,6 +157,112 @@
   color: var(--color-fg-muted);
 }
 
+/* ========================================
+   ABOUT — LOG SECTIONS
+   The history and travel lists are a chronological record, so they
+   are set as log entries hanging off a spine rather than as bullets.
+   ======================================== */
+
+.about-section--log ul {
+  list-style: none;
+  margin: var(--spacing-5) 0 var(--spacing-6);
+  padding-left: 0;
+}
+
+/* Same gutter-then-spine-then-body arrangement as the resume, so the two
+   records on the site read as one device. */
+.about-section--log .log-entry {
+  position: relative;
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr);
+  gap: 0 1.75rem;
+  margin-bottom: 1.1rem;
+  padding-left: 0;
+}
+
+/* Drawn per entry so the spine runs unbroken through the margin gaps. */
+.about-section--log .log-entry::before {
+  content: '';
+  position: absolute;
+  left: calc(4.5rem + 0.875rem);
+  top: 0;
+  bottom: -1.1rem;
+  width: var(--rule);
+  background: var(--color-border);
+}
+
+/* The record is open-ended, so the last segment fades rather than stops. */
+.about-section--log .log-entry:last-child::before {
+  bottom: auto;
+  height: 2.5em;
+  background: linear-gradient(to bottom, var(--color-border), transparent);
+}
+
+/* One tick per entry. */
+.about-section--log .log-entry::after {
+  content: '';
+  position: absolute;
+  left: calc(4.5rem + 0.875rem);
+  top: 0.68em;
+  width: 7px;
+  height: 7px;
+  transform: translate(-50%, -50%);
+  border: var(--rule) solid var(--color-fg-light);
+  background: var(--color-bg-alt);
+  border-radius: var(--radius-full);
+}
+
+/* Ink, not amber: hovering an entry is not a live value, and spending the
+   signal colour on decoration is what stops it meaning anything elsewhere. */
+.about-section--log .log-entry:hover::after {
+  border-color: var(--color-fg-bold);
+  background: var(--color-fg-bold);
+}
+
+/* Empty for entries that carry no marker; the column still holds so the
+   spine stays straight down the list. */
+.log-entry-marker {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-fg-light);
+  text-align: right;
+  padding-top: 0.4em;
+  line-height: 1.4;
+}
+
+.log-entry-body {
+  min-width: 0;
+}
+
+@media (max-width: 640px) {
+  .about-section--log .log-entry {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.2rem;
+    padding-left: 1.5rem;
+  }
+
+  .about-section--log .log-entry::before,
+  .about-section--log .log-entry:last-child::before {
+    left: 0;
+  }
+
+  .about-section--log .log-entry::after {
+    left: 0;
+  }
+
+  .log-entry-marker {
+    text-align: left;
+    padding-top: 0;
+  }
+
+  .log-entry-marker:empty {
+    display: none;
+  }
+}
+
 .about-content a {
   color: inherit;
   text-decoration: underline;
@@ -164,14 +280,20 @@
 }
 
 .contact-page {
-  max-width: 880px;
+  width: 100%;
+  max-width: var(--measure-page);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: calc(100vh - var(--header-height) - 16rem);
   margin: 0 auto;
-  padding: 2rem;
+  padding: 2rem 1rem;
+}
+
+.page-main--contact {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .contact-header {
@@ -184,6 +306,7 @@
 }
 
 .contact-content {
+  max-width: 100%;
   text-align: center;
 }
 
@@ -197,27 +320,48 @@
   margin-bottom: 0.75rem;
 }
 
+/* The address is the page's one instruction, so it is set as a
+   readout in mono rather than dressed up as a tinted button. */
 .contact-email-link {
   display: inline-flex;
+  flex-wrap: wrap;
   align-items: baseline;
-  padding: 0.75rem 1.5rem;
-  font-size: var(--text-lg);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-accent);
-  background: var(--color-accent-light);
-  border-radius: var(--radius-md);
+  justify-content: center;
+  max-width: 100%;
+  padding: 0.875rem 0;
+  font-family: var(--font-mono);
+  font-size: clamp(var(--text-xl), 4vw, var(--text-3xl));
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+  color: var(--color-fg-bold);
+  background: transparent;
+  background-image: none;
+  border-radius: 0;
+  border-bottom: var(--rule-strong) solid var(--color-accent);
   text-decoration: none;
-  white-space: nowrap;
+  /* The animated alias runs long — "you-can-email-me-at-literally-anything!"
+     pushed 438px of content into a 320px viewport. It has to be allowed to
+     break, mid-token if necessary. */
+  overflow-wrap: anywhere;
   transition:
-    background-color var(--duration-fast) var(--ease-out),
-    transform var(--duration-fast) var(--ease-out),
-    box-shadow var(--duration-fast) var(--ease-out);
+    color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out);
 }
 
 .contact-email-link:hover {
-  background: color-mix(in srgb, var(--color-accent-light) 70%, var(--color-accent) 30%);
-  transform: translateY(var(--lift-sm));
-  box-shadow: var(--shadow-md);
+  background: transparent;
+  color: var(--color-accent);
+  border-bottom-color: var(--color-accent-hover);
+}
+
+/* Flex items default to min-width:auto and refuse to shrink below their
+   content, so the wrapping allowed on the link above never reached the long
+   animated alias. Both halves have to opt in individually. */
+.contact-email-prefix,
+.contact-email-domain {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .contact-email-prefix {
@@ -228,25 +372,10 @@
   color: var(--color-fg-bold);
 }
 
-/* Invalid email state - grayed out */
-.contact-email-link--invalid {
-  background: var(--color-border-bg);
-  cursor: default;
-}
-
-.contact-email-link--invalid:hover {
-  background: var(--color-border-bg);
-  transform: none;
-  box-shadow: none;
-}
-
-.contact-email-link--invalid .contact-email-prefix,
-.contact-email-link--invalid .contact-email-domain {
-  color: var(--color-fg-light);
-}
-
 .contact-hint {
-  font-size: var(--text-sm);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide);
   color: var(--color-fg-light);
   margin: 0;
 }
@@ -305,24 +434,23 @@
 
 @media (max-width: 736px) {
   .about-section-nav {
+    top: var(--header-height-mobile);
+    flex-wrap: nowrap;
+    overflow-x: auto;
     margin: var(--spacing-6) 0 var(--spacing-5);
-    padding: var(--spacing-3);
-    border-radius: var(--radius-md);
+    padding: var(--spacing-3) 0;
+    border-radius: 0;
+    scrollbar-width: thin;
   }
 
   .about-section h2 {
-    scroll-margin-top: calc(var(--header-height-mobile) + var(--spacing-6));
+    scroll-margin-top: calc(var(--header-height-mobile) + 4.5rem);
     padding-top: var(--spacing-4);
     font-size: 1.25rem;
   }
 
-  .contact-page {
-    min-height: calc(100vh - var(--header-height-mobile) - 12rem);
-  }
-
   .contact-email-link {
-    font-size: var(--text-md);
-    padding: 0.625rem 1.25rem;
+    padding: 0.625rem 0;
   }
 }
 
@@ -333,6 +461,9 @@
   }
 
   .about-section--compact li {
+    font-size: var(--text-base);
+    line-height: 1.5;
+    margin-bottom: 0.35rem;
     break-inside: avoid;
   }
 
@@ -365,41 +496,77 @@
    STATS PAGE
    ======================================== */
 
+/* Readings, not a spreadsheet: the label annotates in mono and the
+   value is set large enough to be read off at a glance. */
 .stat-table {
   border-collapse: separate;
   border-spacing: 0;
   width: 100%;
   background: transparent;
+  border-top: var(--rule) solid var(--color-fg-bold);
 }
 
 .stat-table tr {
   background: transparent;
 }
 
-.stat-table tr:not(:last-child) {
-  border-bottom: 1px solid var(--color-border-bg);
-}
-
+/* Both cells, not just `td`. Labels became `th[scope="row"]` for screen
+   readers, which dropped them out of this rule and left half-width row
+   rules and mismatched alignment. */
+.stat-table th,
 .stat-table td {
-  font-family: var(--font-sans);
-  font-weight: var(--font-weight-normal);
-  padding: 0.875rem 0;
-  color: var(--color-fg);
+  padding: 1rem 0;
   background: transparent;
+  border-bottom: var(--rule) solid var(--color-border);
+  vertical-align: baseline;
 }
 
-.stat-table td:last-child {
-  text-align: right;
-  font-weight: var(--font-weight-bold);
-  color: var(--color-fg-bold);
-}
-
-.stat-table td:last-child a {
-  color: var(--color-accent);
-}
-
+/* A row label is the information, not annotation about it, so it sits at
+   the interactive/readable size rather than the 11px annotation size. */
 .stat-table-label {
-  width: 70%;
+  width: 40%;
+  text-align: left;
+  font-family: var(--font-mono);
+  font-size: var(--text-ui);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-fg-light);
+}
+
+.stat-table-value {
+  width: 60%;
+  text-align: right;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xl);
+  font-weight: var(--font-weight-medium);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-fg-bold);
+  line-height: var(--leading-tight);
+  white-space: nowrap;
+}
+
+.stat-table-value a {
+  color: var(--color-accent);
+  background-image: none;
+}
+
+.stat-table-value a:hover {
+  color: var(--color-accent-hover);
+}
+
+/* The live reading — the same rule as the hero: amber means it moves. */
+.stat-live {
+  color: var(--color-signal);
+}
+
+.stats-source-note {
+  margin: 0.75rem 0 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-fg-light);
 }
 
 /* Screen reader only - visually hidden but accessible */
@@ -417,39 +584,62 @@
 
 /* Stats page layout */
 .stats-page {
-  max-width: 640px;
-  margin: 0 auto;
+  max-width: var(--measure-read);
+  margin: 0;
 }
 
 .stats-header {
-  text-align: center;
+  text-align: left;
   margin-bottom: 3rem;
 }
 
 .stats-title {
-  font-size: clamp(2rem, 5vw, 3rem);
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
   font-weight: var(--font-weight-black);
-  letter-spacing: var(--tracking-tight);
+  letter-spacing: var(--tracking-display);
   margin-bottom: 0.5rem;
   color: var(--color-fg-bold);
 }
 
 .stats-subtitle {
-  font-size: var(--text-lg);
+  font-size: var(--text-md);
   color: var(--color-fg-light);
+  margin: 0;
 }
 
 .stats-content {
   display: flex;
   flex-direction: column;
-  gap: 3rem;
+  gap: 3.5rem;
 }
 
 .stats-section-title {
-  font-size: var(--text-lg);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-fg-bold);
-  margin-bottom: 1rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--color-fg-light);
+  margin-bottom: 0.75rem;
+}
+
+@media (max-width: 640px) {
+  .stat-table-value {
+    font-size: clamp(var(--text-md), 4vw, var(--text-xl));
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-email-link {
+    font-size: var(--text-lg);
+  }
+
+  .stat-table-value {
+    font-size: var(--text-md);
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
 }
 
 /* ========================================
@@ -469,36 +659,36 @@
   max-width: 480px;
 }
 
+/* A 404 is a status code, so it is reported as one: mono, plain,
+   and no more prominent than the sentence explaining it. */
 .not-found-code {
   display: block;
-  font-family: var(--font-heading);
-  font-size: clamp(6rem, 20vw, 10rem);
-  font-weight: var(--font-weight-black);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-label);
+  /* A 404 is a static fact, not a live reading, so it stays in the
+     secondary ink rather than borrowing the signal colour. */
+  color: var(--color-fg-light);
   line-height: 1;
-  background: linear-gradient(
-    135deg,
-    var(--color-accent) 0%,
-    color-mix(in srgb, var(--color-accent) 60%, var(--color-fg)) 100%
-  );
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  opacity: 0.9;
-  margin-bottom: 1rem;
+  background: none;
+  -webkit-text-fill-color: currentcolor;
+  margin-bottom: 1.25rem;
 }
 
 .not-found-title {
+  font-family: var(--font-display);
   font-size: var(--text-2xl);
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--font-weight-black);
   color: var(--color-fg-bold);
   margin-bottom: 0.75rem;
-  letter-spacing: var(--tracking-tight);
+  letter-spacing: var(--tracking-display);
 }
 
 .not-found-message {
-  font-size: var(--text-lg);
+  font-size: var(--text-md);
   color: var(--color-fg-light);
-  line-height: var(--leading-normal);
+  line-height: var(--leading-snug);
   margin-bottom: 2rem;
 }
 
@@ -508,53 +698,4 @@
   justify-content: center;
   gap: 1rem;
   flex-wrap: wrap;
-}
-
-.not-found-button {
-  display: inline-flex;
-  align-items: center;
-  padding: 1rem 2.25rem;
-  font-size: var(--text-md);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-white);
-  background: var(--color-accent);
-  border-radius: var(--radius-md);
-  text-decoration: none;
-  box-shadow: var(--shadow-md);
-  transition:
-    background-color var(--duration-fast) var(--ease-out),
-    transform var(--duration-fast) var(--ease-out),
-    box-shadow var(--duration-fast) var(--ease-out);
-}
-
-.not-found-button:hover {
-  background: var(--color-fg-bold);
-  transform: translateY(var(--lift-sm));
-  box-shadow: var(--shadow-lg);
-}
-
-/* Secondary button style for Contact Me */
-.not-found-link {
-  display: inline-flex;
-  align-items: center;
-  padding: 1rem 2.25rem;
-  font-size: var(--text-md);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-fg);
-  background: transparent;
-  border: 2px solid var(--color-border-alt);
-  border-radius: var(--radius-md);
-  text-decoration: none;
-  transition:
-    color var(--duration-fast) var(--ease-out),
-    border-color var(--duration-fast) var(--ease-out),
-    background-color var(--duration-fast) var(--ease-out),
-    transform var(--duration-fast) var(--ease-out);
-}
-
-.not-found-link:hover {
-  color: var(--color-accent);
-  border-color: var(--color-accent);
-  background: var(--color-accent-light);
-  transform: translateY(var(--lift-sm));
 }

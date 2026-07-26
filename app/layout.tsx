@@ -1,38 +1,15 @@
 import type { Metadata } from 'next';
-import { Raleway, Source_Sans_3 } from 'next/font/google';
 import Script from 'next/script';
 
 import { SiteSchema } from '@/components/Schema';
 import GoogleAnalytics from '@/components/Template/GoogleAnalytics';
 import Navigation from '@/components/Template/Navigation';
+import { MAIN_CONTENT_ID } from '@/components/Template/PageWrapper';
 import ScrollToTop from '@/components/Template/ScrollToTop';
-import {
-  AUTHOR_NAME,
-  SITE_DESCRIPTION,
-  SITE_IMAGE_DIMENSIONS,
-  SITE_IMAGE_PATH,
-  SITE_URL,
-  TWITTER_HANDLE,
-} from '@/lib/utils';
+import { sharedOpenGraph, sharedTwitter } from '@/lib/metadata';
+import { AUTHOR_NAME, SITE_DESCRIPTION, SITE_URL } from '@/lib/utils';
+import { bricolage, jetbrainsMono, newsreader } from './fonts';
 import './tailwind.css';
-
-const sourceSans = Source_Sans_3({
-  weight: ['400', '700'],
-  subsets: ['latin'],
-  variable: '--font-source-sans',
-  display: 'swap',
-  preload: true,
-  adjustFontFallback: true,
-});
-
-const raleway = Raleway({
-  weight: ['400', '800'],
-  subsets: ['latin'],
-  variable: '--font-raleway',
-  display: 'swap',
-  preload: true,
-  adjustFontFallback: true,
-});
 
 export const metadata: Metadata = {
   title: {
@@ -44,7 +21,9 @@ export const metadata: Metadata = {
     AUTHOR_NAME,
     'OpenAI',
     'Promptfoo',
-    'agent security',
+    'Codex Security',
+    'AI security',
+    'application security',
     'LLM security',
     'machine learning',
     'startup founder',
@@ -53,36 +32,28 @@ export const metadata: Metadata = {
   authors: [{ name: AUTHOR_NAME }],
   creator: AUTHOR_NAME,
   metadataBase: new URL(SITE_URL),
+  // The root is the origin of the share metadata, so it uses the same shared
+  // blocks as every other page. Hand-writing them here is what left the
+  // homepage advertising a different og:image:alt from the rest of the site
+  // for the identical image.
   openGraph: {
+    ...sharedOpenGraph,
     type: 'website',
-    locale: 'en_US',
     url: `${SITE_URL}/`,
-    siteName: AUTHOR_NAME,
     title: AUTHOR_NAME,
     description: SITE_DESCRIPTION,
-    images: [
-      {
-        url: SITE_IMAGE_PATH,
-        width: SITE_IMAGE_DIMENSIONS.width,
-        height: SITE_IMAGE_DIMENSIONS.height,
-        alt: AUTHOR_NAME,
-      },
-    ],
   },
   twitter: {
-    card: 'summary_large_image',
-    site: TWITTER_HANDLE,
-    creator: TWITTER_HANDLE,
+    ...sharedTwitter,
     title: AUTHOR_NAME,
     description: SITE_DESCRIPTION,
-    images: [SITE_IMAGE_PATH],
   },
+  // Only the snippet/preview hints are declared globally. `index, follow` is
+  // already the default, and emitting it here meant every page that sets
+  // `noindex` — the 404, the legacy post route — shipped with contradictory
+  // robots tags that a crawler is free to resolve either way.
   robots: {
-    index: true,
-    follow: true,
     googleBot: {
-      index: true,
-      follow: true,
       'max-video-preview': -1,
       'max-image-preview': 'large',
       'max-snippet': -1,
@@ -98,7 +69,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${sourceSans.variable} ${raleway.variable}`}
+      className={`${bricolage.variable} ${newsreader.variable} ${jetbrainsMono.variable}`}
       suppressHydrationWarning
     >
       <head>
@@ -109,6 +80,12 @@ export default function RootLayout({
         <SiteSchema />
       </head>
       <body>
+        {/* First focusable element on the page. The About and Resume pages
+            are thousands of pixels long, so tabbing past the nav to reach
+            content is otherwise the only route in. */}
+        <a href={`#${MAIN_CONTENT_ID}`} className="skip-link">
+          Skip to content
+        </a>
         <ScrollToTop />
         <div className="site-wrapper">
           <Navigation />

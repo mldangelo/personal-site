@@ -44,13 +44,6 @@ describe('Education', () => {
     const mitLink = screen.getByRole('link', { name: /mit/i });
     expect(mitLink).toHaveAttribute('href', 'https://mit.edu');
   });
-
-  it('has anchor link for navigation', () => {
-    render(<Education data={mockDegrees} />);
-
-    const anchor = document.getElementById('education');
-    expect(anchor).toBeInTheDocument();
-  });
 });
 
 describe('Degree', () => {
@@ -64,7 +57,7 @@ describe('Degree', () => {
   it('renders degree title', () => {
     render(<Degree data={mockDegree} />);
 
-    expect(screen.getByRole('heading', { level: 4 })).toHaveTextContent(
+    expect(screen.getByRole('heading', { level: 3 })).toHaveTextContent(
       'M.S. Computer Science',
     );
   });

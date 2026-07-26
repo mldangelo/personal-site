@@ -3,7 +3,14 @@ import { notFound } from 'next/navigation';
 import { SchemaGraph } from '@/components/Schema';
 import PageWrapper from '@/components/Template/PageWrapper';
 import PostContent from '@/components/Writing/PostContent';
-import { getPostBySlug, getPostSlugs } from '@/lib/posts';
+import ReadingProgress from '@/components/Writing/ReadingProgress';
+import {
+  type ImageSize,
+  readImageSize,
+  readPostImageSizes,
+} from '@/lib/imageSize';
+import { sharedOpenGraph, sharedTwitter } from '@/lib/metadata';
+import { getPostBySlug, getPostSlugs, type Post } from '@/lib/posts';
 import {
   blogPostingNode,
   breadcrumbNode,
@@ -14,6 +21,23 @@ import { AUTHOR_NAME, formatDate, SITE_URL } from '@/lib/utils';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
+}
+
+interface PostImage extends ImageSize {
+  alt: string;
+  url: string;
+}
+
+function getPostImage(post: Post): PostImage | undefined {
+  if (!post.image || !post.imageAlt) {
+    return undefined;
+  }
+
+  return {
+    ...readImageSize(post.image),
+    alt: post.imageAlt,
+    url: new URL(post.image, SITE_URL).toString(),
+  };
 }
 
 export function generateStaticParams() {
@@ -34,22 +58,52 @@ export async function generateMetadata({
   }
 
   const url = `${SITE_URL}/writing/${post.slug}/`;
+  const image = getPostImage(post);
 
+  // Spreading the shared blocks matters: a route-level `openGraph` replaces
+  // the inherited one, so anything omitted here — images, siteName, locale,
+  // twitter:site — simply disappears from post pages.
   return {
     title: post.title,
     description: post.description,
+    alternates: { canonical: url },
     openGraph: {
+      ...sharedOpenGraph,
       type: 'article',
       title: post.title,
       description: post.description,
       url,
       publishedTime: post.date,
       authors: [AUTHOR_NAME],
+      ...(image
+        ? {
+            images: [
+              {
+                url: image.url,
+                width: image.width,
+                height: image.height,
+                alt: image.alt,
+              },
+            ],
+          }
+        : {}),
     },
     twitter: {
-      card: 'summary_large_image',
+      ...sharedTwitter,
       title: post.title,
       description: post.description,
+      ...(image
+        ? {
+            images: [
+              {
+                url: image.url,
+                width: image.width,
+                height: image.height,
+                alt: image.alt,
+              },
+            ],
+          }
+        : {}),
     },
   };
 }
@@ -64,6 +118,8 @@ export default async function PostPage({ params }: PageProps) {
 
   const postUrl = `${SITE_URL}/writing/${post.slug}/`;
   const writingUrl = `${SITE_URL}/writing/`;
+  const imageSizes = readPostImageSizes(post.content);
+  const postImage = getPostImage(post);
 
   return (
     <PageWrapper>
@@ -75,7 +131,7 @@ export default async function PostPage({ params }: PageProps) {
             description: post.description,
             hasBreadcrumb: true,
           }),
-          blogPostingNode(post),
+          blogPostingNode(post, postImage),
           breadcrumbNode(postUrl, [
             { name: 'Home', url: HOME_URL },
             { name: 'Writing', url: writingUrl },
@@ -84,6 +140,7 @@ export default async function PostPage({ params }: PageProps) {
         ]}
       />
       <article className="post-page">
+        <ReadingProgress />
         <header className="post-header">
           <time className="post-date" dateTime={post.date}>
             {formatDate(post.date)}
@@ -92,7 +149,7 @@ export default async function PostPage({ params }: PageProps) {
           <p className="post-description">{post.description}</p>
         </header>
         <div className="post-content prose">
-          <PostContent content={post.content} />
+          <PostContent content={post.content} imageSizes={imageSizes} />
         </div>
       </article>
     </PageWrapper>

@@ -15,7 +15,7 @@ const data: StatData[] = [
   {
     label: 'Number of people watching this repository',
     key: 'subscribers_count',
-    link: 'https://github.com/mldangelo/personal-site/stargazers',
+    link: 'https://github.com/mldangelo/personal-site/watchers',
   },
   {
     label: 'Number of forks',
@@ -31,9 +31,11 @@ const data: StatData[] = [
     value: '0', // enforced via github workflow
   },
   {
-    label: 'Open github issues',
+    // GitHub's open_issues_count includes open pull requests, so the label
+    // says what the number actually counts rather than overstating issues.
+    label: 'Open github issues and pull requests',
     key: 'open_issues_count',
-    link: 'https://github.com/mldangelo/personal-site/issues',
+    link: 'https://github.com/search?q=repo%3Amldangelo%2Fpersonal-site+is%3Aopen&type=issues',
   },
   {
     label: 'Last updated at',
@@ -42,8 +44,11 @@ const data: StatData[] = [
     format: (x: unknown) => dayjs(x as string).format('MMMM DD, YYYY'),
   },
   {
+    // Counted from the working tree at build time by `Site.tsx`; see
+    // `src/lib/loc.ts`. Do not hardcode a number here — the previous one
+    // drifted by nearly 2,000 lines before anyone noticed.
     label: 'Lines of TypeScript powering this website',
-    value: '2272',
+    key: 'source_lines',
     link: 'https://github.com/mldangelo/personal-site/graphs/contributors',
   },
 ];

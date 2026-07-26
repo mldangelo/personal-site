@@ -20,6 +20,12 @@ describe('Footer', () => {
     ).toBeInTheDocument();
   });
 
+  it('does not introduce unrelated headings into the page outline', () => {
+    render(<Footer />);
+
+    expect(screen.queryByRole('heading')).not.toBeInTheDocument();
+  });
+
   it('displays the current year in copyright', () => {
     render(<Footer />);
 
@@ -40,7 +46,9 @@ describe('Footer', () => {
       'href',
       '/resume',
     );
-    expect(screen.getByRole('link', { name: /projects/i })).toHaveAttribute(
+    // Labelled "Archive" to match the nav and the page's own heading;
+    // the route stays /projects.
+    expect(screen.getByRole('link', { name: /archive/i })).toHaveAttribute(
       'href',
       '/projects',
     );

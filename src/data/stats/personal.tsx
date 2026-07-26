@@ -1,40 +1,19 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import useLiveAge from '@/hooks/useLiveAge';
+import {
+  AGE_PRECISION_FULL,
+  COUNTRIES_VISITED,
+  CURRENT_CITY,
+} from '@/lib/telemetry';
 
 import type { StatData } from '../../components/Stats/types';
 
-/** Birth date for age calculation (ISO format) */
-const BIRTH_DATE = '1990-02-05T09:24:00';
-
-/** Milliseconds in an average year (accounting for leap years) */
-const MS_PER_YEAR = 1000 * 60 * 60 * 24 * 365.2421897;
-
-/** Update interval for age display in ms */
-const AGE_UPDATE_INTERVAL = 25;
-
-/** Number of decimal places for age display */
-const AGE_PRECISION = 11;
-
+/** The stats page reports age at deliberately absurd precision. */
 function Age() {
-  const [age, setAge] = useState<string>('');
+  const age = useLiveAge(AGE_PRECISION_FULL);
 
-  const tick = () => {
-    const birthTime = new Date(BIRTH_DATE);
-    setAge(
-      ((Date.now() - birthTime.getTime()) / MS_PER_YEAR).toFixed(AGE_PRECISION),
-    );
-  };
-
-  useEffect(() => {
-    tick(); // Initial tick
-    const timer = setInterval(() => tick(), AGE_UPDATE_INTERVAL);
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
-
-  return <>{age}</>;
+  return <span className="stat-live">{age}</span>;
 }
 
 const data: StatData[] = [
@@ -46,13 +25,13 @@ const data: StatData[] = [
   {
     key: 'countries',
     label: 'Countries visited',
-    value: 53,
+    value: COUNTRIES_VISITED,
     link: 'https://www.google.com/maps/d/embed?mid=1iBBTscqateQ93pWFVfHCUZXoDu8&z=2',
   },
   {
     key: 'location',
     label: 'Current city',
-    value: 'New York, NY',
+    value: CURRENT_CITY,
   },
 ];
 
