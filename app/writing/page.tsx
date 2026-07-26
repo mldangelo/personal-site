@@ -2,9 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { SchemaGraph } from '@/components/Schema';
 import PageWrapper from '@/components/Template/PageWrapper';
-import writing from '@/data/writing';
 import { createPageMetadata } from '@/lib/metadata';
-import { getAllPosts } from '@/lib/posts';
 import {
   blogNode,
   breadcrumbNode,
@@ -14,6 +12,7 @@ import {
   WRITING_DESCRIPTION,
 } from '@/lib/schema';
 import { formatDate } from '@/lib/utils';
+import { getWritingItems, type WritingItem as Item } from '@/lib/writing';
 
 const WRITING_URL = `${SITE_URL}/writing/`;
 
@@ -35,17 +34,8 @@ export const metadata: Metadata = {
   },
 };
 
-interface UnifiedItem {
-  title: string;
-  url: string;
-  date: string;
-  description: string;
-  isExternal: boolean;
-}
-
-// Extracted component to reduce duplication
 interface WritingItemProps {
-  item: UnifiedItem;
+  item: Item;
   showDate?: boolean;
 }
 
@@ -57,7 +47,7 @@ function WritingItem({ item, showDate = true }: WritingItemProps) {
           {formatDate(item.date)}
         </time>
       )}
-      <h2 className="writing-title">{item.title}</h2>
+      <h3 className="writing-title">{item.title}</h3>
       <p className="writing-description">{item.description}</p>
       {item.isExternal && (
         <>
@@ -92,31 +82,12 @@ function WritingItem({ item, showDate = true }: WritingItemProps) {
 }
 
 export default function WritingPage() {
-  // Get internal posts from markdown files
-  const internalPosts = getAllPosts();
-  const internalItems: UnifiedItem[] = internalPosts.map((post) => ({
-    title: post.title,
-    url: `/writing/${post.slug}`,
-    date: post.date,
-    description: post.description,
-    isExternal: false,
-  }));
+  const allItems = getWritingItems();
+  const internal = allItems.filter((item) => !item.isExternal);
+  const external = allItems.filter((item) => item.isExternal && item.date);
+  const guides = allItems.filter((item) => item.isExternal && !item.date);
 
-  // Get external articles from data file
-  const externalItems: UnifiedItem[] = writing.map((item) => ({
-    ...item,
-    isExternal: true,
-  }));
-
-  // Merge and sort all items
-  const allItems = [...internalItems, ...externalItems];
-  const dated = allItems
-    .filter((item) => item.date)
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-  const undated = allItems.filter((item) => !item.date);
-
-  // Newest dated entry across internal posts and external articles.
-  const latestPostDate = dated[0]?.date;
+  const latestPostDate = allItems.find((item) => item.date)?.date;
 
   return (
     <PageWrapper>
@@ -150,20 +121,40 @@ export default function WritingPage() {
           </div>
         </header>
 
-        <div className="writing-list">
-          {dated.map((item) => (
-            <WritingItem key={item.url} item={item} />
-          ))}
+        <section className="writing-group" aria-labelledby="writing-here">
+          <h2 id="writing-here" className="writing-section-label">
+            Essays on this site
+          </h2>
+          <div className="writing-list">
+            {internal.map((item) => (
+              <WritingItem key={item.url} item={item} />
+            ))}
+          </div>
+        </section>
 
-          {undated.length > 0 && (
-            <>
-              <div className="writing-section-label">Guides</div>
-              {undated.map((item) => (
+        <section className="writing-group" aria-labelledby="writing-elsewhere">
+          <h2 id="writing-elsewhere" className="writing-section-label">
+            Selected writing elsewhere
+          </h2>
+          <div className="writing-list">
+            {external.map((item) => (
+              <WritingItem key={item.url} item={item} />
+            ))}
+          </div>
+        </section>
+
+        {guides.length > 0 && (
+          <section className="writing-group" aria-labelledby="writing-guides">
+            <h2 id="writing-guides" className="writing-section-label">
+              Guides
+            </h2>
+            <div className="writing-list">
+              {guides.map((item) => (
                 <WritingItem key={item.url} item={item} showDate={false} />
               ))}
-            </>
-          )}
-        </div>
+            </div>
+          </section>
+        )}
       </article>
     </PageWrapper>
   );

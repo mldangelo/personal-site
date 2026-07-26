@@ -1,7 +1,9 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-
+import profile from '../../../data/profile.json';
 import EmailLink from '../../Contact/EmailLink';
+
+const [localPart, domain] = profile.email.split('@');
 
 describe('EmailLink', () => {
   beforeEach(() => {
@@ -29,7 +31,7 @@ describe('EmailLink', () => {
   it('renders the email domain', () => {
     render(<EmailLink />);
 
-    expect(screen.getByText('@mldangelo.com')).toBeInTheDocument();
+    expect(screen.getByText(`@${domain}`)).toBeInTheDocument();
   });
 
   it('renders as a link element', () => {
@@ -47,9 +49,9 @@ describe('EmailLink', () => {
       await Promise.resolve();
     });
 
-    // Initial state shows 'hi' as default (accessibility: never show empty)
+    // Initial state shows the real local-part (accessibility: never show empty)
     const prefix = document.querySelector('.contact-email-prefix');
-    expect(prefix?.textContent).toBe('hi');
+    expect(prefix?.textContent).toBe(localPart);
 
     // Advance through multiple messages to verify animation works
     // Each message takes ~50 chars + 50 hold ticks at 50ms each
@@ -128,7 +130,7 @@ describe('EmailLink', () => {
     });
 
     const link = screen.getByRole('link');
-    expect(link.getAttribute('href')).toBe('mailto:hi@mldangelo.com');
+    expect(link.getAttribute('href')).toBe(`mailto:${profile.email}`);
   });
 
   /**
@@ -146,7 +148,7 @@ describe('EmailLink', () => {
       });
 
       const link = screen.getByRole('link');
-      expect(link).toHaveAttribute('href', 'mailto:hi@mldangelo.com');
+      expect(link).toHaveAttribute('href', `mailto:${profile.email}`);
       expect(link).not.toHaveAttribute('aria-disabled');
     }
   });
@@ -161,7 +163,7 @@ describe('EmailLink', () => {
     // The alias changes ~20x/second; an accessible name that mutated with it
     // would be unusable, so the visible text is decorative.
     expect(
-      screen.getByRole('link', { name: 'Email hi@mldangelo.com' }),
+      screen.getByRole('link', { name: `Email ${profile.email}` }),
     ).toBeInTheDocument();
     expect(document.querySelector('.contact-email-prefix')).toHaveAttribute(
       'aria-hidden',

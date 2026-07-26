@@ -91,7 +91,8 @@
     border-color var(--duration-fast) var(--ease-out);
 }
 
-.project-card--linked:hover .tech-tag {
+.project-card--linked:hover .tech-tag,
+.project-card--linked:focus-within .tech-tag {
   color: var(--color-fg);
   border-color: var(--color-border-alt);
 }

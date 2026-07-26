@@ -10,9 +10,9 @@
   /* ===================
      FONT FAMILIES
      =================== */
-  --font-display: var(--font-bricolage), 'Bricolage Grotesque', 'Helvetica Neue', sans-serif;
-  --font-body: var(--font-newsreader), 'Newsreader', Georgia, serif;
-  --font-mono: var(--font-jetbrains), 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
+  --font-display: var(--font-bricolage), 'Helvetica Neue', sans-serif;
+  --font-body: var(--font-newsreader), Georgia, serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, 'SF Mono', monospace;
 
   /* ===================
      FONT WEIGHTS

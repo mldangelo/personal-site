@@ -1,5 +1,7 @@
 import Link from 'next/link';
 
+import profile from '@/data/profile.json';
+
 import Telemetry from './Telemetry';
 import ThemePortrait from './ThemePortrait';
 
@@ -15,13 +17,13 @@ export default function Hero() {
       <div className="hero-grid">
         <div className="hero-primary">
           <h1 className="hero-title">
-            <span className="hero-name">Michael D&apos;Angelo</span>
+            <span className="hero-name">{profile.name}</span>
           </h1>
 
           <p className="hero-tagline">
-            Member of the Technical Staff at{' '}
+            {profile.role} at{' '}
             <a href="https://openai.com" className="hero-highlight">
-              OpenAI
+              {profile.employer}
             </a>
             , where I work on{' '}
             <a href="https://promptfoo.dev" className="hero-highlight">

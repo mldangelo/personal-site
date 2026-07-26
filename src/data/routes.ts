@@ -2,6 +2,7 @@ export interface Route {
   label: string;
   path: string;
   index?: boolean;
+  primary?: boolean;
 }
 
 const routes: Route[] = [
@@ -25,6 +26,7 @@ const routes: Route[] = [
   {
     label: 'Stats',
     path: '/stats',
+    primary: false,
   },
   {
     label: 'Contact',
@@ -33,6 +35,7 @@ const routes: Route[] = [
   {
     label: 'Archive',
     path: '/projects',
+    primary: false,
   },
 ];
 

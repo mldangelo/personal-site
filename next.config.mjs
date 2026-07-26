@@ -1,7 +1,7 @@
 import bundleAnalyzer from '@next/bundle-analyzer';
-import type { NextConfig } from 'next';
 
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   output: 'export',
 
   // Allow dev server access from local network (mobile testing, etc.)
@@ -27,9 +27,11 @@ const nextConfig: NextConfig = {
   },
 };
 
-// Bundle analyzer for production build analysis
-const withBundleAnalyzer = bundleAnalyzer({
-  enabled: process.env.ANALYZE === 'true',
-});
+// Keep the default export as a direct config identifier. GitHub's
+// configure-pages action edits this object before repository-site builds to
+// inject their basePath; it cannot see through a wrapping function call.
+if (process.env.ANALYZE === 'true') {
+  Object.assign(nextConfig, bundleAnalyzer({ enabled: true })(nextConfig));
+}
 
-export default withBundleAnalyzer(nextConfig);
+export default nextConfig;

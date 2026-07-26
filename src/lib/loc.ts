@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync, statSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { extname, join } from 'node:path';
 
 const SOURCE_ROOTS = ['app', 'src'];
@@ -63,10 +63,7 @@ function countLinesIn(dir: string): number {
  */
 export function countSourceLines(cwd: string = process.cwd()): number {
   return SOURCE_ROOTS.reduce((total, root) => {
-    try {
-      return total + countLinesIn(join(cwd, root));
-    } catch {
-      return total;
-    }
+    const rootPath = join(cwd, root);
+    return existsSync(rootPath) ? total + countLinesIn(rootPath) : total;
   }, 0);
 }

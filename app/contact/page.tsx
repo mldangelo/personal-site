@@ -2,19 +2,19 @@ import type { Metadata } from 'next';
 
 import ContactIcons from '@/components/Contact/ContactIcons';
 import EmailLink from '@/components/Contact/EmailLink';
-
 import PageWrapper from '@/components/Template/PageWrapper';
+import profile from '@/data/profile.json';
 import { createPageMetadata } from '@/lib/metadata';
 
 export const metadata: Metadata = createPageMetadata({
   title: 'Contact',
-  description: "Contact Michael D'Angelo via email @ hi@mldangelo.com",
+  description: `Contact ${profile.name} via email at ${profile.email}.`,
   path: '/contact/',
 });
 
 export default function ContactPage() {
   return (
-    <PageWrapper>
+    <PageWrapper hideFooter mainClassName="page-main--contact">
       <section className="contact-page">
         <header className="contact-header">
           <h1 className="page-title">Get in Touch</h1>
@@ -30,7 +30,7 @@ export default function ContactPage() {
             <span>or find me on</span>
           </div>
 
-          <ContactIcons />
+          <ContactIcons includeEmail={false} />
         </div>
       </section>
     </PageWrapper>

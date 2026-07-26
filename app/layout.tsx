@@ -1,9 +1,4 @@
 import type { Metadata } from 'next';
-import {
-  Bricolage_Grotesque,
-  JetBrains_Mono,
-  Newsreader,
-} from 'next/font/google';
 import Script from 'next/script';
 
 import { SiteSchema } from '@/components/Schema';
@@ -13,35 +8,8 @@ import { MAIN_CONTENT_ID } from '@/components/Template/PageWrapper';
 import ScrollToTop from '@/components/Template/ScrollToTop';
 import { sharedOpenGraph, sharedTwitter } from '@/lib/metadata';
 import { AUTHOR_NAME, SITE_DESCRIPTION, SITE_URL } from '@/lib/utils';
+import { bricolage, jetbrainsMono, newsreader } from './fonts';
 import './tailwind.css';
-
-/** Display: names, headings, and the hero. Variable weight + optical size. */
-const bricolage = Bricolage_Grotesque({
-  subsets: ['latin'],
-  variable: '--font-bricolage',
-  display: 'swap',
-  preload: true,
-  adjustFontFallback: true,
-});
-
-/** Body: prose and long-form reading. */
-const newsreader = Newsreader({
-  subsets: ['latin'],
-  style: ['normal', 'italic'],
-  variable: '--font-newsreader',
-  display: 'swap',
-  preload: true,
-  adjustFontFallback: true,
-});
-
-/** Mono: data, labels, dates, and every measured value. */
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ['latin'],
-  variable: '--font-jetbrains',
-  display: 'swap',
-  preload: true,
-  adjustFontFallback: true,
-});
 
 export const metadata: Metadata = {
   title: {

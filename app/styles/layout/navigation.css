@@ -5,7 +5,10 @@
 
 .site-logo {
   display: flex;
-  align-items: baseline;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
   gap: 0.5rem;
   text-decoration: none;
   background-image: none;
@@ -75,7 +78,9 @@
 }
 
 .nav-link:focus-visible {
-  outline: none;
+  color: var(--color-fg-bold);
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
 }
 
 .nav-link.active {

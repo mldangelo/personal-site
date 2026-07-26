@@ -64,4 +64,12 @@ describe('routes', () => {
       expect(route.label.trim().length).toBeGreaterThan(0);
     }
   });
+
+  it('keeps secondary destinations out of the primary navigation', () => {
+    const secondaryPaths = routes
+      .filter((route) => route.primary === false)
+      .map((route) => route.path);
+
+    expect(secondaryPaths).toEqual(['/stats', '/projects']);
+  });
 });

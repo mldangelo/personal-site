@@ -32,7 +32,8 @@
 
 /* The main region takes focus programmatically via the skip link; it should
    not draw a ring for that. */
-.page-main:focus {
+.page-main:focus,
+.not-found-page:focus {
   outline: none;
 }
 

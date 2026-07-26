@@ -4,6 +4,8 @@ import work from '@/data/resume/work';
 import type { Post } from '@/lib/posts';
 import {
   AUTHOR_NAME,
+  SHARE_IMAGE_DIMENSIONS,
+  SHARE_IMAGE_PATH,
   SITE_DESCRIPTION,
   SITE_IMAGE_DIMENSIONS,
   SITE_IMAGE_PATH,
@@ -150,6 +152,13 @@ interface PageNodeOptions {
   hasBreadcrumb?: boolean;
 }
 
+export interface ArticleImage {
+  url: string;
+  width: number;
+  height: number;
+  alt?: string;
+}
+
 function baseWebPage(
   type: string,
   { url, name, description, hasBreadcrumb }: PageNodeOptions,
@@ -206,8 +215,16 @@ export function blogNode(dateModified?: string): SchemaNode {
 }
 
 /** A BlogPosting for an individual post. */
-export function blogPostingNode(post: Post): SchemaNode {
+export function blogPostingNode(
+  post: Post,
+  articleImage?: ArticleImage,
+): SchemaNode {
   const url = `${SITE_URL}/writing/${post.slug}/`;
+  const image = articleImage ?? {
+    url: `${SITE_URL}${SHARE_IMAGE_PATH}`,
+    width: SHARE_IMAGE_DIMENSIONS.width,
+    height: SHARE_IMAGE_DIMENSIONS.height,
+  };
 
   return {
     '@type': 'BlogPosting',
@@ -225,9 +242,10 @@ export function blogPostingNode(post: Post): SchemaNode {
     image: {
       '@type': 'ImageObject',
       '@id': `${url}#blogposting-image`,
-      url: SITE_IMAGE,
-      width: SITE_IMAGE_DIMENSIONS.width,
-      height: SITE_IMAGE_DIMENSIONS.height,
+      url: image.url,
+      width: image.width,
+      height: image.height,
+      ...(image.alt ? { caption: image.alt } : {}),
     },
   };
 }

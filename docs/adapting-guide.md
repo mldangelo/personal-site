@@ -1,14 +1,19 @@
 # Adapting This Website
 
-Fork this repo and make it your own personal site. You can have it running in 30 minutes.
+Fork this repository as a starting point for your own personal site. The code
+is designed to be adapted, but the content and visual identity are intentionally
+specific; budget time for a full rebrand rather than treating it as a generic
+fill-in-the-blanks theme.
 
-> **Using an AI assistant?** This guide works great with Claude, Cursor, Copilot, etc. Just point your AI to this file and ask it to help you customize the site.
+An AI assistant can help with the mechanical edits, but use the checklist below
+to verify that facts, routes, metadata, images, and generated assets stay in
+sync.
 
 ## Before You Start
 
 1. Fork and clone the repository
-2. Run `npm install` then `npm run dev`
-3. Open http://localhost:3000 to see the site
+2. Run `npm ci` then `npm run dev`
+3. Open [http://localhost:3000](http://localhost:3000) to see the site
 4. Keep the dev server running—changes appear instantly
 
 ## Customization Checklist
@@ -17,13 +22,16 @@ Work through these steps in order for the smoothest experience.
 
 ### Step 1: Identity & Contact
 
-| What to change  | File                                        | Notes                           |
-| --------------- | ------------------------------------------- | ------------------------------- |
-| Site URL        | `package.json` → `homepage`                 | Your domain or GitHub Pages URL |
-| Social links    | `src/data/contact.ts`                       | Add/remove platforms as needed  |
-| Portrait photos | `public/images/me-light.jpg`, `me-dark.jpg` | Square images, ~256×256px       |
-| Hero content    | `src/components/Template/Hero.tsx`          | Your name, tagline              |
-| Footer          | `src/components/Template/Footer.tsx`        | Links, copyright                |
+| What to change          | File                                    | Notes                                                 |
+| ----------------------- | --------------------------------------- | ----------------------------------------------------- |
+| Profile facts and email | `src/data/profile.json`                 | Shared by contact links, telemetry, metadata, and OG  |
+| Site URL and author     | `src/lib/utils.ts`, `package.json`      | Keep `SITE_URL` and `homepage` aligned                |
+| Social links            | `src/data/contact.ts`                   | Add or remove platforms as needed                     |
+| Portrait                | `public/images/me.jpg`                  | Use a square image; the current asset is 1024×1024px  |
+| Homepage copy           | `src/components/Template/Hero.tsx`      | Name, role, tagline, credentials, and calls to action |
+| Footer                  | `src/components/Template/Footer.tsx`    | Identity, source link, and copyright                  |
+| Resume introduction     | `app/resume/page.tsx`                   | Keep this summary aligned with the homepage           |
+| SEO defaults            | `app/layout.tsx`, `src/lib/metadata.ts` | Keywords and shared page-card metadata                |
 
 ### Step 2: About Page
 
@@ -49,9 +57,9 @@ Work through these steps in order for the smoothest experience.
 
 ### Step 5: Blog/Writing (Optional)
 
-The site includes a blog at `/writing` with RSS feed. You can use it, customize it, or remove it entirely.
+The site includes a blog at `/writing/` with an RSS feed. You can use it, customize it, or remove it entirely.
 
-**To add posts**, create Markdown files in `content/writing/`. The filename becomes the URL slug (e.g., `my-post.md` → `/writing/my-post`).
+**To add posts**, create Markdown files in `content/writing/`. The filename becomes the URL slug (for example, `my-post.md` becomes `/writing/my-post/`).
 
 ```markdown
 ---
@@ -73,27 +81,48 @@ Then remove the "Writing" link from `src/data/routes.ts`.
 
 ### Step 6: Branding & Theme
 
-| What to change      | File                                       |
-| ------------------- | ------------------------------------------ |
-| Colors (light/dark) | `app/tailwind.css` → CSS custom properties |
-| Favicon             | `public/images/favicon/`                   |
-| Site metadata/SEO   | `app/layout.tsx`                           |
+| What to change      | File                                 |
+| ------------------- | ------------------------------------ |
+| Colors (light/dark) | `app/styles/tokens/colors.css`       |
+| Type scale          | `app/styles/tokens/typography.css`   |
+| Font families       | `app/fonts.ts`                       |
+| Favicon             | `public/images/favicon/`             |
+| Site metadata/SEO   | `app/layout.tsx`, `src/lib/utils.ts` |
+| Share card          | `scripts/generate-og.mjs`            |
+
+After changing the profile or share-card design, run `npm run og` and commit
+both `public/og.png` and `public/og.meta.json`. The metadata file binds the
+committed image to the generator and profile inputs, so omitting either file
+will fail CI.
 
 ### Step 7: Final Cleanup
 
-Search the codebase for "Michael" or "mldangelo" to find any remaining references to change.
+Search the authored files for the existing name and handle to find any remaining references:
 
 ```bash
-grep -r "Michael" src/
-grep -r "mldangelo" .
+rg -n "Michael|mldangelo" . \
+  -g '!node_modules/**' -g '!.next/**' -g '!out/**' \
+  -g '!coverage/**' -g '!.git/**'
+```
+
+Then format and validate the finished site:
+
+```bash
+npm run format
+npm run lint
+npm run type-check
+npm test
+npm run og:check
+npm run build
+npm run verify-export
 ```
 
 ## Deployment
 
 ### GitHub Pages (Recommended)
 
-1. Update `homepage` in `package.json` with your URL
-2. Set your domain in `public/CNAME` (e.g., `yoursite.com`)
+1. Update `SITE_URL` in `src/lib/utils.ts` and `homepage` in `package.json`
+2. Set your domain in `public/CNAME` (for example, `yoursite.com`)
 3. In your repo settings, enable GitHub Pages with source: GitHub Actions
 4. Push to `main`—it deploys automatically
 
@@ -132,7 +161,7 @@ import { faYoutube } from '@fortawesome/free-brands-svg-icons/faYoutube';
 
 ### Change theme colors
 
-Edit `app/tailwind.css`. Find `:root` (light mode) and `[data-theme="dark"]` (dark mode) sections and modify the `--color-*` variables.
+Edit `app/styles/tokens/colors.css`. Its `:root` and `[data-theme='dark']` blocks define the semantic `--color-*` variables used throughout the site. Keep links on `--color-accent`, filled controls on `--color-accent-fill`, and reserve `--color-signal` for live values.
 
 ### Add Google Analytics
 
@@ -146,13 +175,13 @@ Edit `app/tailwind.css`. Find `:root` (light mode) and `[data-theme="dark"]` (da
 | Port 3000 in use           | `npm run dev -- -p 3001`                                   |
 | Styles not updating        | Hard refresh: Cmd+Shift+R (Mac) or Ctrl+Shift+R (Windows)  |
 | Images not appearing       | Use `/images/...` not `public/images/...` in code          |
-| Build failing              | Run `npm run type-check` to find errors                    |
+| Build failing              | Run `npm run lint`, `npm run type-check`, and `npm test`   |
 | CSS 404 or wrong path      | Check `homepage` in `package.json` matches your deploy URL |
 | Git line endings (Windows) | `git config core.autocrlf input`                           |
 
 ## Getting Help
 
 - Open an issue: https://github.com/mldangelo/personal-site/issues
-- Email: help@mldangelo.com
+- Email: hi@mldangelo.com
 
 If you find bugs or unclear instructions, please submit a PR—contributions help everyone.

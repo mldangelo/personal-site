@@ -20,6 +20,12 @@ describe('Footer', () => {
     ).toBeInTheDocument();
   });
 
+  it('does not introduce unrelated headings into the page outline', () => {
+    render(<Footer />);
+
+    expect(screen.queryByRole('heading')).not.toBeInTheDocument();
+  });
+
   it('displays the current year in copyright', () => {
     render(<Footer />);
 

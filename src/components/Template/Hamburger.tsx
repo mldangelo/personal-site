@@ -36,26 +36,28 @@ export default function Hamburger() {
         <span aria-hidden="true">×</span>
       </button>
       <ul className="hamburger-ul">
-        {routes.map((l) => {
-          const active = isActiveRoute(pathname, l.path);
+        {routes
+          .filter((l) => l.primary !== false)
+          .map((l) => {
+            const active = isActiveRoute(pathname, l.path);
 
-          return (
-            <li key={l.label}>
-              {/* Navigation labels, not document sections — these were <h3>,
+            return (
+              <li key={l.label}>
+                {/* Navigation labels, not document sections — these were <h3>,
                   which put six phantom headings into the outline. */}
-              <Link
-                href={l.path}
-                onClick={closeMenu}
-                className={active ? 'active' : undefined}
-                aria-current={active ? 'page' : undefined}
-              >
-                <span className={l.index ? 'index-li' : undefined}>
-                  {l.label}
-                </span>
-              </Link>
-            </li>
-          );
-        })}
+                <Link
+                  href={l.path}
+                  onClick={closeMenu}
+                  className={active ? 'active' : undefined}
+                  aria-current={active ? 'page' : undefined}
+                >
+                  <span className={l.index ? 'index-li' : undefined}>
+                    {l.label}
+                  </span>
+                </Link>
+              </li>
+            );
+          })}
       </ul>
     </SlideMenu>
   );
@@ -63,7 +65,7 @@ export default function Hamburger() {
   return (
     <>
       <div className="hamburger-container">
-        <nav className="main" id="hamburger-nav">
+        <div className="main" id="hamburger-nav">
           <ul>
             <li className="menu">
               <button
@@ -87,7 +89,7 @@ export default function Hamburger() {
               </button>
             </li>
           </ul>
-        </nav>
+        </div>
       </div>
       {mounted && createPortal(slideMenu, document.body)}
     </>

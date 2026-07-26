@@ -8,5 +8,6 @@ export function isActiveRoute(pathname: string | null, path: string): boolean {
   if (!pathname) return false;
   if (path === '/') return pathname === '/';
 
-  return pathname.startsWith(path);
+  const route = path.replace(/\/+$/, '');
+  return pathname === route || pathname.startsWith(`${route}/`);
 }

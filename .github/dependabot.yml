@@ -3,12 +3,16 @@
 
 version: 2
 updates:
-  - package-ecosystem: "npm"
-    directory: "/" # Location of package manifest
+  - package-ecosystem: 'npm'
+    directory: '/' # Location of package manifest
     schedule:
-      interval: "weekly"
+      interval: 'weekly'
     groups:
       react:
         patterns:
-          - "react"
-          - "react-dom"
+          - 'react'
+          - 'react-dom'
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'

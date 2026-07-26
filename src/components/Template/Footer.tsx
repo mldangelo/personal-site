@@ -3,6 +3,7 @@ import Link from 'next/link';
 import ContactIcons from '@/components/Contact/ContactIcons';
 import work from '@/data/resume/work';
 import routes from '@/data/routes';
+import { AUTHOR_NAME } from '@/lib/utils';
 
 import ThemePortrait from './ThemePortrait';
 
@@ -17,7 +18,7 @@ export default function Footer() {
             <ThemePortrait width={80} height={80} />
           </Link>
           <div className="footer-info">
-            <h3>Michael D&apos;Angelo</h3>
+            <span className="footer-name">{AUTHOR_NAME}</span>
             <p className="footer-role">{currentRole}</p>
             <p className="footer-copyright">
               &copy; {new Date().getFullYear()} ·{' '}
@@ -27,6 +28,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
               >
                 Source
+                <span className="sr-only"> (opens in new tab)</span>
               </a>
             </p>
           </div>

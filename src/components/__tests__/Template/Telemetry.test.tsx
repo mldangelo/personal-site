@@ -1,4 +1,4 @@
-import { act, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
@@ -93,6 +93,38 @@ describe('Telemetry', () => {
     });
 
     expect(live()).toBe(settled);
+  });
+
+  it('pauses while hidden and resynchronizes when the page returns', () => {
+    Object.defineProperty(document, 'hidden', {
+      configurable: true,
+      value: false,
+    });
+    const { container } = render(<Telemetry />);
+    const live = () =>
+      container.querySelector('.telemetry-value--live')?.textContent;
+
+    act(() => {
+      vi.advanceTimersByTime(400);
+    });
+    const beforeHide = live();
+
+    Object.defineProperty(document, 'hidden', {
+      configurable: true,
+      value: true,
+    });
+    fireEvent(document, new Event('visibilitychange'));
+    act(() => {
+      vi.advanceTimersByTime(2000);
+    });
+    expect(live()).toBe(beforeHide);
+
+    Object.defineProperty(document, 'hidden', {
+      configurable: true,
+      value: false,
+    });
+    fireEvent(document, new Event('visibilitychange'));
+    expect(live()).not.toBe(beforeHide);
   });
 
   it('marks only the age as live, so the signal colour stays meaningful', () => {

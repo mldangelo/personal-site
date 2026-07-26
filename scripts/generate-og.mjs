@@ -14,6 +14,7 @@
  * the design or the facts on it change, so builds stay deterministic and do
  * not depend on Google Fonts being reachable from CI.
  */
+import { createHash } from 'node:crypto';
 import { readFile, writeFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { join } from 'node:path';
@@ -30,7 +31,22 @@ const profile = JSON.parse(
 );
 
 const OUTPUT = join(process.cwd(), 'public', 'og.png');
+const METADATA_OUTPUT = join(process.cwd(), 'public', 'og.meta.json');
 const SIZE = { width: 1200, height: 630 };
+const PROFILE_SNAPSHOT = {
+  name: profile.name,
+  employer: profile.employer,
+  focus: profile.focus,
+  countriesVisited: profile.countriesVisited,
+  computingSince: profile.computingSince,
+  currentCity: profile.currentCity,
+};
+const generatorSource = await readFile(new URL(import.meta.url), 'utf8');
+const generatorDigest = createHash('sha256')
+  .update(generatorSource)
+  .update('\0')
+  .update(JSON.stringify(PROFILE_SNAPSHOT))
+  .digest('hex');
 
 const INK = '#0e1116';
 const PAPER = '#f2f1ec';
@@ -186,7 +202,26 @@ const response = new ImageResponse(card(), {
     { name: 'Mono', data: mono, weight: 500, style: 'normal' },
   ],
 });
+const image = Buffer.from(await response.arrayBuffer());
+const imageDigest = createHash('sha256').update(image).digest('hex');
 
-await writeFile(OUTPUT, Buffer.from(await response.arrayBuffer()));
+await Promise.all([
+  writeFile(OUTPUT, image),
+  writeFile(
+    METADATA_OUTPUT,
+    `${JSON.stringify(
+      {
+        size: SIZE,
+        profile: PROFILE_SNAPSHOT,
+        generatorDigest,
+        imageDigest,
+      },
+      null,
+      2,
+    )}\n`,
+  ),
+]);
 
-console.log(`Wrote ${OUTPUT} (${SIZE.width}x${SIZE.height})`);
+console.log(
+  `Wrote ${OUTPUT} (${SIZE.width}x${SIZE.height}) and ${METADATA_OUTPUT}`,
+);

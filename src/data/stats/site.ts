@@ -35,7 +35,7 @@ const data: StatData[] = [
     // says what the number actually counts rather than overstating issues.
     label: 'Open github issues and pull requests',
     key: 'open_issues_count',
-    link: 'https://github.com/mldangelo/personal-site/issues',
+    link: 'https://github.com/search?q=repo%3Amldangelo%2Fpersonal-site+is%3Aopen&type=issues',
   },
   {
     label: 'Last updated at',

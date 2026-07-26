@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  AGE_MIN_INTERVAL,
   AGE_PRECISION_FULL,
   AGE_PRECISION_HERO,
   ageAt,
+  ageIntervalFor,
   agePlaceholder,
   BIRTH_DATE,
   MS_PER_YEAR,
@@ -36,6 +38,18 @@ describe('ageAt', () => {
     const now = birthTime + MS_PER_YEAR * 12.345;
 
     expect(ageAt(now, 6)).toBe(ageAt(now, 6));
+  });
+});
+
+describe('ageIntervalFor', () => {
+  it('matches the cadence to the displayed precision', () => {
+    expect(ageIntervalFor(AGE_PRECISION_HERO)).toBeGreaterThan(300);
+    expect(ageIntervalFor(AGE_PRECISION_HERO)).toBeLessThan(320);
+  });
+
+  it('never schedules faster than the minimum interval', () => {
+    expect(ageIntervalFor(AGE_PRECISION_FULL)).toBe(AGE_MIN_INTERVAL);
+    expect(ageIntervalFor(20)).toBe(AGE_MIN_INTERVAL);
   });
 });
 

@@ -13,8 +13,12 @@ interface PostContentProps {
   imageSizes?: Record<string, { width: number; height: number }>;
 }
 
-/** Falls back to a 16:9 box only for an image we could not measure. */
+/** Remote/data images cannot be inspected from the repository at build time. */
 const FALLBACK_SIZE = { width: 1200, height: 675 };
+
+function isRootLocalImage(src: string): boolean {
+  return src.startsWith('/') && !src.startsWith('//');
+}
 
 export default function PostContent({
   content,
@@ -30,7 +34,13 @@ export default function PostContent({
                 return null;
               }
 
-              const { width, height } = imageSizes[src] ?? FALLBACK_SIZE;
+              const measuredSize = imageSizes[src];
+              if (isRootLocalImage(src) && !measuredSize) {
+                throw new Error(
+                  `Missing measured dimensions for local article image: ${src}`,
+                );
+              }
+              const { width, height } = measuredSize ?? FALLBACK_SIZE;
 
               return (
                 <Image

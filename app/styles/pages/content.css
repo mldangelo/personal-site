@@ -275,14 +275,20 @@
 }
 
 .contact-page {
+  width: 100%;
   max-width: 880px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: calc(100vh - var(--header-height) - 16rem);
   margin: 0 auto;
   padding: 2rem 1rem;
+}
+
+.page-main--contact {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .contact-header {
@@ -439,10 +445,6 @@
     font-size: 1.25rem;
   }
 
-  .contact-page {
-    min-height: calc(100vh - var(--header-height-mobile) - 12rem);
-  }
-
   .contact-email-link {
     font-size: var(--text-md);
     padding: 0.625rem 1.25rem;
@@ -508,7 +510,6 @@
 .stat-table th,
 .stat-table td {
   padding: 1rem 0;
-  color: var(--color-fg);
   background: transparent;
   border-bottom: var(--rule) solid var(--color-border);
   vertical-align: baseline;
@@ -548,6 +549,15 @@
 /* The live reading — the same rule as the hero: amber means it moves. */
 .stat-live {
   color: var(--color-signal);
+}
+
+.stats-source-note {
+  margin: 0.75rem 0 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-fg-light);
 }
 
 /* Screen reader only - visually hidden but accessible */

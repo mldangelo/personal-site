@@ -1,0 +1,16 @@
+{
+  "size": {
+    "width": 1200,
+    "height": 630
+  },
+  "profile": {
+    "name": "Michael D'Angelo",
+    "employer": "OpenAI",
+    "focus": "agent security, evals, and red-teaming",
+    "countriesVisited": 53,
+    "computingSince": 1993,
+    "currentCity": "New York, NY"
+  },
+  "generatorDigest": "72f560bb486cc0e9757b7a8d49d84f7272a456d6135298a56559100e5852ab47",
+  "imageDigest": "093ccb6031d2938ba0e3c621ce37460f47fd988d7414a4a4fe8fad03be992195"
+}

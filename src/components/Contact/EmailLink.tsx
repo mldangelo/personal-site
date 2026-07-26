@@ -11,10 +11,10 @@ const HOLD_TICKS_AFTER_MESSAGE = 50; // Ticks to wait after message completes
 
 /** The address the link always resolves to, whatever the animation shows. */
 const CONTACT_ADDRESS = profile.email;
-const CONTACT_DOMAIN = CONTACT_ADDRESS.split('@')[1];
+const [CONTACT_LOCAL_PART, CONTACT_DOMAIN] = CONTACT_ADDRESS.split('@');
 
 const messages = [
-  'hi',
+  CONTACT_LOCAL_PART,
   'hello',
   'hola',
   'you-can-email-me-at-literally-anything! Really',
@@ -134,9 +134,9 @@ export default function EmailLink({ loopMessage = false }: EmailLinkProps) {
     state.isActive && !reducedMotion ? ANIMATION_TICK_MS : null,
   );
 
-  // Use 'hi' as default message when reduced motion or paused with empty message
+  // Keep the initial/static label in step with the profile's real local-part.
   const displayMessage =
-    reducedMotion || state.message === '' ? 'hi' : state.message;
+    reducedMotion || state.message === '' ? CONTACT_LOCAL_PART : state.message;
 
   const handlePause = () => dispatch({ type: 'PAUSE' });
   const handleResume = () => {

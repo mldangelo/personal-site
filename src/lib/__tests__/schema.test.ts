@@ -20,6 +20,8 @@ import {
 } from '@/lib/schema';
 import {
   AUTHOR_NAME,
+  SHARE_IMAGE_DIMENSIONS,
+  SHARE_IMAGE_PATH,
   SITE_IMAGE_DIMENSIONS,
   SITE_IMAGE_PATH,
   SITE_URL,
@@ -200,9 +202,23 @@ describe('blogPostingNode', () => {
   it('uses an ImageObject mirroring the OG image with dimensions', () => {
     const image = blogPostingNode(mockPost).image as Record<string, unknown>;
     expect(image['@type']).toBe('ImageObject');
-    expect(image.url).toBe(`${SITE_URL}/images/me.jpg`);
-    expect(image.width).toBe(SITE_IMAGE_DIMENSIONS.width);
-    expect(image.height).toBe(SITE_IMAGE_DIMENSIONS.height);
+    expect(image.url).toBe(`${SITE_URL}${SHARE_IMAGE_PATH}`);
+    expect(image.width).toBe(SHARE_IMAGE_DIMENSIONS.width);
+    expect(image.height).toBe(SHARE_IMAGE_DIMENSIONS.height);
+  });
+
+  it('accepts a representative article image and caption', () => {
+    const image = blogPostingNode(mockPost, {
+      url: `${SITE_URL}/images/writing/example.png`,
+      width: 1117,
+      height: 812,
+      alt: 'A representative screenshot',
+    }).image as Record<string, unknown>;
+
+    expect(image.url).toBe(`${SITE_URL}/images/writing/example.png`);
+    expect(image.width).toBe(1117);
+    expect(image.height).toBe(812);
+    expect(image.caption).toBe('A representative screenshot');
   });
 });
 

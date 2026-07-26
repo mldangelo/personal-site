@@ -47,6 +47,10 @@
   flex-direction: column;
 }
 
+.writing-group + .writing-group {
+  margin-top: 2.75rem;
+}
+
 /* Posts are dated entries, so the date sits in a gutter beside the
    title rather than as a caption above it. */
 .writing-item {
@@ -153,13 +157,14 @@
 }
 
 .writing-section-label {
+  margin: 0;
   font-family: var(--font-mono);
-  font-size: var(--text-2xs);
+  font-size: var(--text-ui);
   font-weight: var(--font-weight-medium);
   text-transform: uppercase;
   letter-spacing: var(--tracking-label);
   color: var(--color-fg-light);
-  padding: 2rem 0 0.75rem;
+  padding: 0 0 0.75rem;
 }
 
 /* ========================================
@@ -290,7 +295,13 @@
   padding-left: 1.25rem;
   margin: 1.5rem 0;
   color: var(--color-fg-light);
+  font-family: var(--font-newsreader-italic), var(--font-body);
   font-style: italic;
+}
+
+.prose em,
+.prose i {
+  font-family: var(--font-newsreader-italic), var(--font-body);
 }
 
 .prose code {

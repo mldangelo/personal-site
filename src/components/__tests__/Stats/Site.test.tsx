@@ -110,5 +110,19 @@ describe('Site', () => {
 
     // Should still render with fallback data
     expect(screen.getByRole('table')).toBeInTheDocument();
+    expect(screen.getByText(/approximate github readings/i)).toHaveAttribute(
+      'data-source',
+      'fallback',
+    );
+  });
+
+  it('labels live GitHub readings with their provenance', async () => {
+    const Component = await Site();
+    render(Component);
+
+    expect(screen.getByText(/fetched at build time/i)).toHaveAttribute(
+      'data-source',
+      'github',
+    );
   });
 });

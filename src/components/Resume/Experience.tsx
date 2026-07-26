@@ -10,15 +10,6 @@ interface ExperienceProps {
 const STUDENT_ERA_BEFORE = 2013;
 
 /**
- * How much weight a role should carry on the spine.
- *
- * The distinction encodes something true rather than decorative: the newest
- * role leads, internships and student-era work read as the tail of the
- * timeline, and everything else sits between. Without it the page renders a
- * decade of work at one uniform weight, which is how the previous card stack
- * lost its hierarchy.
- */
-/**
  * Year from an ISO date, read from the string rather than parsed.
  *
  * `new Date('2013-01-01')` is UTC midnight, which `getFullYear()` renders as
@@ -29,20 +20,30 @@ function isoYear(date: string): number {
   return Number.parseInt(date.slice(0, 4), 10);
 }
 
-export function tierFor(job: Position, index: number): JobTier {
-  // An internship is never the lead, even if it is the newest entry.
+function isEarlyCareer(job: Position): boolean {
   if (/intern/i.test(job.position)) {
-    return 'early';
+    return true;
   }
 
-  if (job.endDate && isoYear(job.endDate) < STUDENT_ERA_BEFORE) {
-    return 'early';
-  }
+  return Boolean(job.endDate && isoYear(job.endDate) < STUDENT_ERA_BEFORE);
+}
 
-  // The data is authored newest-first, so index 0 is the current headline
-  // role. Guarded by the checks above so reordering cannot promote a
-  // student-era entry to lead.
-  if (index === 0) {
+/**
+ * How much weight a role should carry on the spine.
+ *
+ * The lead is derived from the newest substantive start date, not array
+ * position. This keeps reordering the source data from silently changing the
+ * visual hierarchy while still letting ongoing side roles remain primary.
+ */
+export function tierFor(job: Position, positions: Position[]): JobTier {
+  if (isEarlyCareer(job)) return 'early';
+
+  const newestStartDate = positions
+    .filter((position) => !isEarlyCareer(position))
+    .map((position) => position.startDate)
+    .sort((a, b) => b.localeCompare(a))[0];
+
+  if (job.startDate === newestStartDate) {
     return 'lead';
   }
 
@@ -56,11 +57,11 @@ export default function Experience({ data }: ExperienceProps) {
         <h2>Experience</h2>
       </div>
       <div className="experience-spine">
-        {data.map((job, index) => (
+        {data.map((job) => (
           <Job
             data={job}
             key={`${job.name}-${job.position}`}
-            tier={tierFor(job, index)}
+            tier={tierFor(job, data)}
           />
         ))}
       </div>

@@ -2,9 +2,11 @@
  * Shared utility functions and constants
  */
 
+import profile from '@/data/profile.json';
+
 // Site configuration
 export const SITE_URL = 'https://mldangelo.com';
-export const AUTHOR_NAME = "Michael D'Angelo";
+export const AUTHOR_NAME = profile.name;
 export const TWITTER_HANDLE = '@dangelosaurus';
 /**
  * The portrait. Used for JSON-LD `image`, where the value should be a picture

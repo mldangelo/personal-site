@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
+import profile from '@/data/profile.json';
 import { getPostSlugs } from '@/lib/posts';
 import { AUTHOR_NAME, SHARE_IMAGE_PATH, SITE_URL } from '@/lib/utils';
 import { metadata as aboutMetadata } from '../about/page';
@@ -12,6 +13,10 @@ import { generateMetadata as generatePostMetadata } from '../writing/[slug]/page
 import { metadata as writingMetadata } from '../writing/page';
 
 describe('page metadata', () => {
+  it('builds the contact description from the shared profile email', () => {
+    expect(contactMetadata.description).toContain(profile.email);
+  });
+
   it.each([
     ['about', aboutMetadata, `${SITE_URL}/about/`],
     ['contact', contactMetadata, `${SITE_URL}/contact/`],

@@ -82,6 +82,18 @@
      step with the shared profile. */
   .resume-print-contact {
     display: block;
+    margin-top: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 8.5pt;
+    font-style: normal;
+    letter-spacing: 0.04em;
+    color: #333;
+  }
+
+  .resume-print-contact a {
+    color: inherit;
+    text-decoration: none;
+    background-image: none;
   }
 
   .resume-title,

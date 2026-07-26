@@ -15,7 +15,7 @@ describe('Cell', () => {
 
   it('renders project as a clickable card with link', () => {
     render(<Cell data={mockProject} />);
-    const link = screen.getByRole('link');
+    const link = screen.getByRole('link', { name: mockProject.title });
     expect(link).toHaveAttribute('href', mockProject.link);
     expect(link).toHaveClass('project-card-link');
   });
@@ -30,10 +30,11 @@ describe('Cell', () => {
     expect(screen.getByText('2023')).toBeInTheDocument();
   });
 
-  it('renders project image with alt text', () => {
+  it('treats the thumbnail as decorative beside its matching heading', () => {
     render(<Cell data={mockProject} />);
-    const image = screen.getByAltText(mockProject.title);
+    const image = document.querySelector('.project-card-image img');
     expect(image).toBeInTheDocument();
+    expect(image).toHaveAttribute('alt', '');
     expect(image).toHaveAttribute('src', expect.stringContaining('test.jpg'));
   });
 });
