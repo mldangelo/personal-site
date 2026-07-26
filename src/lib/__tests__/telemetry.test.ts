@@ -3,13 +3,14 @@ import { describe, expect, it } from 'vitest';
 import {
   AGE_MIN_INTERVAL,
   AGE_PRECISION_FULL,
-  AGE_PRECISION_HERO,
   ageAt,
   ageIntervalFor,
   agePlaceholder,
   BIRTH_DATE,
   MS_PER_YEAR,
 } from '../telemetry';
+
+const COMPACT_PRECISION = 8;
 
 describe('ageAt', () => {
   const birthTime = new Date(BIRTH_DATE).getTime();
@@ -26,8 +27,8 @@ describe('ageAt', () => {
     const now = birthTime + MS_PER_YEAR * 36.5;
 
     expect(ageAt(now, 0)).toBe('37');
-    expect(ageAt(now, AGE_PRECISION_HERO).split('.')[1]).toHaveLength(
-      AGE_PRECISION_HERO,
+    expect(ageAt(now, COMPACT_PRECISION).split('.')[1]).toHaveLength(
+      COMPACT_PRECISION,
     );
     expect(ageAt(now, AGE_PRECISION_FULL).split('.')[1]).toHaveLength(
       AGE_PRECISION_FULL,
@@ -43,8 +44,8 @@ describe('ageAt', () => {
 
 describe('ageIntervalFor', () => {
   it('matches the cadence to the displayed precision', () => {
-    expect(ageIntervalFor(AGE_PRECISION_HERO)).toBeGreaterThan(300);
-    expect(ageIntervalFor(AGE_PRECISION_HERO)).toBeLessThan(320);
+    expect(ageIntervalFor(COMPACT_PRECISION)).toBeGreaterThan(300);
+    expect(ageIntervalFor(COMPACT_PRECISION)).toBeLessThan(320);
   });
 
   it('never schedules faster than the minimum interval', () => {
@@ -56,9 +57,9 @@ describe('ageIntervalFor', () => {
 describe('agePlaceholder', () => {
   it('matches the width of a real reading so the layout cannot shift', () => {
     const birthTime = new Date(BIRTH_DATE).getTime();
-    const reading = ageAt(birthTime + MS_PER_YEAR * 36, AGE_PRECISION_HERO);
+    const reading = ageAt(birthTime + MS_PER_YEAR * 36, COMPACT_PRECISION);
 
-    expect(agePlaceholder(AGE_PRECISION_HERO)).toHaveLength(reading.length);
+    expect(agePlaceholder(COMPACT_PRECISION)).toHaveLength(reading.length);
   });
 
   it('contains no digits, so it cannot be mistaken for a value', () => {

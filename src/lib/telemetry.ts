@@ -1,12 +1,11 @@
 import profile from '@/data/profile.json';
 
 /**
- * Telemetry — the measured values the site reports about itself.
+ * Measured values shown on the stats page.
  *
  * The facts live in `src/data/profile.json` so that the OG generator, which
  * runs as a plain Node script and cannot import TypeScript, reads exactly the
- * same values. They were previously restated in `scripts/generate-og.mjs`,
- * where they could drift from the site without anything noticing.
+ * same values.
  */
 
 /**
@@ -32,9 +31,6 @@ export const CURRENT_CITY = profile.currentCity;
 
 /** Decimal places used by the stats page — absurd precision, on purpose. */
 export const AGE_PRECISION_FULL = 11;
-
-/** Decimal places used by the hero readout, sized to fit its column. */
-export const AGE_PRECISION_HERO = 8;
 
 /** Fastest the readout is allowed to advance, in milliseconds. */
 export const AGE_MIN_INTERVAL = 25;

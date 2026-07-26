@@ -9,10 +9,7 @@ import {
 
 import type { StatData } from '../../components/Stats/types';
 
-/**
- * The stats page reports age at full precision. The hero readout uses the
- * same clock at a shorter precision — see `src/lib/telemetry.ts`.
- */
+/** The stats page reports age at deliberately absurd precision. */
 function Age() {
   const age = useLiveAge(AGE_PRECISION_FULL);
 

@@ -17,8 +17,8 @@ const work: Position[] = [
     position: 'Member of the Technical Staff',
     url: 'https://openai.com',
     startDate: '2026-03-09',
-    summary: `Building evaluation, red-teaming, and hardening infrastructure for AI systems
-    at OpenAI, with a focus on Promptfoo and agent security.`,
+    summary: `Building Promptfoo and <a href='https://openai.com/index/codex-security-now-in-research-preview/'>Codex Security</a>
+    at OpenAI, with a focus on securing AI systems and applying AI to software security.`,
   },
   {
     name: 'Promptfoo',
@@ -27,11 +27,11 @@ const work: Position[] = [
     startDate: '2024-07-01',
     endDate: '2026-03-09',
     summary: `Promptfoo started as a developer-first eval tool and grew into a platform
-    for AI security, red-teaming, and compliance. We scaled it to more than 350,000 developers, 130,000
-    monthly active users, and teams at more than 25% of the Fortune 500 before selling the company to OpenAI.`,
+    for AI security, red-teaming, and compliance. It reached more than 350,000 developers, 130,000
+    monthly active users, and teams at more than 25% of the Fortune 500 before joining OpenAI in 2026.`,
     highlights: [
       'Owned company-wide technical strategy and product roadmap across open-source adoption, commercial product, and research investments.',
-      'Co-led the company through its sale to OpenAI in March 2026.',
+      'Co-led Promptfoo through its acquisition by OpenAI in March 2026.',
       'Helped turn Promptfoo from an open-source eval tool into an enterprise AI security product used by large companies and frontier labs.',
       'Built and scaled the company from founding to 23 people across engineering, GTM, and operations.',
       'Led technical due diligence and fundraising through $23.4M in venture financing from Insight Partners and Andreessen Horowitz.',

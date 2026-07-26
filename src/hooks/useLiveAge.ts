@@ -18,7 +18,7 @@ import usePrefersReducedMotion from './usePrefersReducedMotion';
  *   last displayed digit actually changes rather than at a fixed 25ms.
  * - Under reduced motion the reading is taken once and left to stand. Digits
  *   changing several times a second is precisely the motion that setting asks
- *   us to avoid, and this readout is above the fold.
+ *   us to avoid.
  * - Ticking pauses while the tab is hidden, and resyncs on return.
  */
 export default function useLiveAge(precision: number): string {

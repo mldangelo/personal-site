@@ -5,8 +5,7 @@
 
 /* ========================================
    HERO
-   Asymmetric: type holds the left, portrait anchors the right,
-   and the readout strip runs the full measure beneath both.
+   Asymmetric: type holds the left and the portrait anchors the right.
    ======================================== */
 
 .hero {
@@ -22,7 +21,6 @@
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 3rem;
   align-items: start;
-  padding-bottom: 4rem;
 }
 
 .hero-primary {
@@ -31,7 +29,7 @@
 
 /* Name */
 .hero-title {
-  margin: 0 0 0.875rem;
+  margin: 0 0 1.25rem;
 }
 
 .hero-name {
@@ -75,49 +73,6 @@
 .hero-highlight:hover {
   color: var(--color-accent-hover);
   background-image: linear-gradient(transparent calc(100% - 2px), var(--color-accent) 2px);
-}
-
-/* Credentials — a spec line, not pills. It sits directly under the name so
-   it reads as identity annotation rather than interrupting the narrative. */
-.hero-chips {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0 1rem;
-  list-style: none;
-  margin: 0 0 1.75rem;
-  padding: 0;
-}
-
-.hero-chip {
-  position: relative;
-  padding: 0 0 0 1rem;
-  font-family: var(--font-mono);
-  font-size: var(--text-2xs);
-  font-weight: var(--font-weight-medium);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
-  color: var(--color-fg-light);
-  white-space: nowrap;
-}
-
-.hero-chip::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 50%;
-  width: var(--rule);
-  height: 0.85em;
-  transform: translateY(-50%);
-  background: var(--color-border-alt);
-}
-
-.hero-chip:first-child {
-  padding-left: 0;
-}
-
-.hero-chip:first-child::before {
-  display: none;
 }
 
 /* CTA */
@@ -214,81 +169,6 @@
 }
 
 /* ========================================
-   TELEMETRY — the signature element
-   Four measured values, hairline-divided. Only the live one
-   is allowed to carry the signal colour.
-   ======================================== */
-
-.telemetry {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  margin: 0;
-  border-top: var(--rule) solid var(--color-border-alt);
-  border-bottom: var(--rule) solid var(--color-border);
-}
-
-.telemetry-cell {
-  position: relative;
-  padding: 1.25rem 1.5rem 1.375rem;
-  min-width: 0;
-}
-
-.telemetry-cell + .telemetry-cell {
-  border-left: var(--rule) solid var(--color-border);
-}
-
-.telemetry-cell:first-child {
-  padding-left: 0;
-}
-
-.telemetry-label {
-  display: block;
-  font-family: var(--font-mono);
-  font-size: var(--text-2xs);
-  font-weight: var(--font-weight-medium);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
-  color: var(--color-fg-light);
-  margin-bottom: 0.625rem;
-}
-
-.telemetry-value {
-  display: block;
-  margin: 0;
-  font-family: var(--font-mono);
-  font-size: var(--text-base);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-fg-bold);
-  line-height: 1.2;
-}
-
-.telemetry-number {
-  font-variant-numeric: tabular-nums;
-}
-
-/* The one live reading on the page. */
-.telemetry-value--live {
-  color: var(--color-signal);
-}
-
-@media (max-width: 900px) {
-  .telemetry {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .telemetry-cell:nth-child(3) {
-    padding-left: 0;
-    border-left: 0;
-  }
-
-  .telemetry-cell:nth-child(n + 3) {
-    border-top: var(--rule) solid var(--color-border);
-  }
-}
-
-/* ========================================
    HERO BACKGROUND
    A faint ruled field, drawn to the same hairline weight as
    everything else. Replaces the accent-coloured blur.
@@ -339,7 +219,6 @@
   .hero-grid {
     grid-template-columns: minmax(0, 1fr);
     gap: 2rem;
-    padding-bottom: 3rem;
   }
 
   .hero-portrait {
@@ -353,30 +232,6 @@
 
   .hero-tagline {
     font-size: var(--text-md);
-  }
-
-  /* Stacked, the dividers would strand at the start of a wrapped
-     line, so the spec line becomes a plain list. */
-  .hero-chips {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.35rem;
-  }
-
-  .hero-chip {
-    padding-left: 0;
-  }
-
-  .hero-chip::before {
-    display: none;
-  }
-
-  .telemetry-cell {
-    padding: 1rem 1rem 1.125rem;
-  }
-
-  .telemetry-cell:nth-child(odd) {
-    padding-left: 0;
   }
 }
 

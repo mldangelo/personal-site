@@ -30,11 +30,11 @@ export default function ResumePage() {
           <h1 className="resume-title">Resume</h1>
           <p className="resume-summary">
             Engineering leader with 15+ years building products across AI,
-            security, and infrastructure. Currently Member of the Technical
-            Staff at OpenAI, where I work on Promptfoo and agent security.
-            Previously co-founded Promptfoo, built it into an AI security
-            platform, and sold it to OpenAI. Stanford MS, YC alum, previously VP
-            Engineering.
+            security, and infrastructure. I&apos;m currently a Member of the
+            Technical Staff at OpenAI, working on Promptfoo and Codex Security.
+            I help secure AI systems and use AI to find software
+            vulnerabilities. I co-founded Promptfoo before it joined OpenAI in
+            2026. Stanford MS, YC alum, previously VP Engineering.
           </p>
           {/* Print-only, but real markup rather than CSS `content`, so it is
               selectable, linkable, and reads from the shared profile. The

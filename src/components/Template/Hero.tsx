@@ -2,14 +2,7 @@ import Link from 'next/link';
 
 import profile from '@/data/profile.json';
 
-import Telemetry from './Telemetry';
 import ThemePortrait from './ThemePortrait';
-
-const CREDENTIALS = [
-  'YC Alum',
-  'Stanford ICME',
-  'Co-founded Arthena & Matroid',
-];
 
 export default function Hero() {
   return (
@@ -20,25 +13,25 @@ export default function Hero() {
             <span className="hero-name">{profile.name}</span>
           </h1>
 
-          <ul className="hero-chips">
-            {CREDENTIALS.map((credential) => (
-              <li className="hero-chip" key={credential}>
-                {credential}
-              </li>
-            ))}
-          </ul>
-
           <p className="hero-tagline">
-            {profile.role} at{' '}
+            I&apos;m a {profile.role} at{' '}
             <a href="https://openai.com" className="hero-highlight">
               {profile.employer}
             </a>
-            , where I work on{' '}
+            , working on{' '}
             <a href="https://promptfoo.dev" className="hero-highlight">
               Promptfoo
             </a>{' '}
-            and agent security. Previously co-founded, scaled, and sold
-            Promptfoo to OpenAI.
+            and{' '}
+            <a
+              href="https://openai.com/index/codex-security-now-in-research-preview/"
+              className="hero-highlight"
+            >
+              Codex Security
+            </a>
+            . I help secure AI systems and use AI to find software
+            vulnerabilities. I co-founded Promptfoo before it joined OpenAI in
+            2026.
           </p>
 
           <div className="hero-cta">
@@ -56,8 +49,6 @@ export default function Hero() {
           <ThemePortrait width={320} height={320} priority />
         </div>
       </div>
-
-      <Telemetry />
 
       <div className="hero-bg" aria-hidden="true" />
     </section>

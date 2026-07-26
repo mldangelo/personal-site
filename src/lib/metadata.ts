@@ -19,7 +19,7 @@ interface PageMetadataOptions {
  * The share card is a fixed design that does not render the page title, so
  * the alt text describes the card rather than claiming the title appears in
  * the image. Role and employer come from the profile so they change in one
- * place — the same reason `telemetry.ts` and the OG script read that file.
+ * place, just as the stats page and OG script read shared profile facts.
  */
 export const SHARE_IMAGE_ALT = `${AUTHOR_NAME} — ${profile.role} at ${profile.employer}`;
 

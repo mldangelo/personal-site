@@ -24,8 +24,8 @@ import { createElement as h } from 'react';
 // required rather than imported.
 const { ImageResponse } = createRequire(import.meta.url)('next/og');
 
-// The same file `src/lib/telemetry.ts` reads, so the card cannot state
-// different facts from the page it represents.
+// The stats page reads the same profile file, so the card cannot silently
+// drift from the public facts elsewhere on the site.
 const profile = JSON.parse(
   await readFile(join(process.cwd(), 'src/data/profile.json'), 'utf8'),
 );
@@ -55,7 +55,7 @@ const ULTRAMARINE = '#1b2fbf';
 const HAIRLINE = 'rgba(35, 39, 46, 0.18)';
 
 /**
- * The card reports the same static facts as the homepage readout strip.
+ * The card reports selected static profile facts.
  *
  * The live age is deliberately absent: the card is baked ahead of time, so a
  * ticking value would be frozen and quietly wrong. For the same reason the
