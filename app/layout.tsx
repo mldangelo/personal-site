@@ -10,14 +10,8 @@ import { SiteSchema } from '@/components/Schema';
 import GoogleAnalytics from '@/components/Template/GoogleAnalytics';
 import Navigation from '@/components/Template/Navigation';
 import ScrollToTop from '@/components/Template/ScrollToTop';
-import {
-  AUTHOR_NAME,
-  SHARE_IMAGE_DIMENSIONS,
-  SHARE_IMAGE_PATH,
-  SITE_DESCRIPTION,
-  SITE_URL,
-  TWITTER_HANDLE,
-} from '@/lib/utils';
+import { sharedOpenGraph, sharedTwitter } from '@/lib/metadata';
+import { AUTHOR_NAME, SITE_DESCRIPTION, SITE_URL } from '@/lib/utils';
 import './tailwind.css';
 
 /** Display: names, headings, and the hero. Variable weight + optical size. */
@@ -67,29 +61,21 @@ export const metadata: Metadata = {
   authors: [{ name: AUTHOR_NAME }],
   creator: AUTHOR_NAME,
   metadataBase: new URL(SITE_URL),
+  // The root is the origin of the share metadata, so it uses the same shared
+  // blocks as every other page. Hand-writing them here is what left the
+  // homepage advertising a different og:image:alt from the rest of the site
+  // for the identical image.
   openGraph: {
+    ...sharedOpenGraph,
     type: 'website',
-    locale: 'en_US',
     url: `${SITE_URL}/`,
-    siteName: AUTHOR_NAME,
     title: AUTHOR_NAME,
     description: SITE_DESCRIPTION,
-    images: [
-      {
-        url: SHARE_IMAGE_PATH,
-        width: SHARE_IMAGE_DIMENSIONS.width,
-        height: SHARE_IMAGE_DIMENSIONS.height,
-        alt: AUTHOR_NAME,
-      },
-    ],
   },
   twitter: {
-    card: 'summary_large_image',
-    site: TWITTER_HANDLE,
-    creator: TWITTER_HANDLE,
+    ...sharedTwitter,
     title: AUTHOR_NAME,
     description: SITE_DESCRIPTION,
-    images: [SHARE_IMAGE_PATH],
   },
   // Only the snippet/preview hints are declared globally. `index, follow` is
   // already the default, and emitting it here meant every page that sets

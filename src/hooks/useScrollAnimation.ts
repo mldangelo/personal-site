@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react';
 
+import usePrefersReducedMotion from './usePrefersReducedMotion';
+
 interface UseScrollAnimationOptions {
   threshold?: number;
   rootMargin?: string;
@@ -23,15 +25,13 @@ export function useScrollAnimation<T extends HTMLElement = HTMLDivElement>(
 
   const ref = useRef<T>(null);
   const [isVisible, setIsVisible] = useState(false);
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
     const element = ref.current;
     if (!element) return;
 
-    // Check for reduced motion preference
-    const prefersReducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)',
-    ).matches;
+    // Reveal immediately rather than on scroll when motion is unwelcome.
     if (prefersReducedMotion) {
       setIsVisible(true);
       return;
@@ -56,7 +56,7 @@ export function useScrollAnimation<T extends HTMLElement = HTMLDivElement>(
     return () => {
       observer.unobserve(element);
     };
-  }, [threshold, rootMargin, triggerOnce]);
+  }, [threshold, rootMargin, triggerOnce, prefersReducedMotion]);
 
   return { ref, isVisible };
 }
@@ -70,14 +70,13 @@ export function useStaggeredAnimation(itemCount: number, baseDelay = 100) {
   );
   const containerRef = useRef<HTMLDivElement>(null);
   const timeoutIds = useRef<NodeJS.Timeout[]>([]);
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
-    const prefersReducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)',
-    ).matches;
+    // Show everything at once rather than staggering it in.
     if (prefersReducedMotion) {
       setVisibleItems(new Array(itemCount).fill(true));
       return;
@@ -111,7 +110,7 @@ export function useStaggeredAnimation(itemCount: number, baseDelay = 100) {
       timeoutIds.current.forEach((id) => clearTimeout(id));
       timeoutIds.current = [];
     };
-  }, [itemCount, baseDelay]);
+  }, [itemCount, baseDelay, prefersReducedMotion]);
 
   return { containerRef, visibleItems };
 }

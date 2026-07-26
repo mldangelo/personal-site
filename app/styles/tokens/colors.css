@@ -12,7 +12,6 @@
      =================== */
   --color-bg: #fcfbf9;
   --color-bg-alt: #f2f1ec;
-  --color-bg-offset: #e7e5dd;
   --color-fg: #23272e;
   --color-fg-bold: #0e1116;
   --color-fg-light: #545a63;
@@ -22,7 +21,6 @@
      Structure, links, active state.
      =================== */
   --color-accent: #1b2fbf;
-  --color-accent-secondary: #8098ff;
   --color-accent-hover: #16249c;
 
   /* Filled controls need their own pair. A link accent is tuned for contrast
@@ -32,10 +30,8 @@
   --color-accent-fill-hover: var(--color-accent-hover);
   --color-on-accent: #ffffff;
   --color-accent-light: color-mix(in srgb, var(--color-accent) 12%, transparent);
-  --color-accent-subtle: color-mix(in srgb, var(--color-accent) 6%, transparent);
   --color-accent-underline: color-mix(in srgb, var(--color-accent) 32%, transparent);
   --color-accent-underline-strong: color-mix(in srgb, var(--color-accent) 55%, transparent);
-  --color-accent-border: color-mix(in srgb, var(--color-accent) 45%, transparent);
 
   /* ===================
      SIGNAL — amber
@@ -46,7 +42,6 @@
      =================== */
   --color-signal: #9a5600;
   --color-signal-mark: #e8930c;
-  --color-signal-light: color-mix(in srgb, var(--color-signal-mark) 16%, transparent);
 
   /* ===================
      BORDER COLORS
@@ -62,12 +57,10 @@
      =================== */
   --color-surface-subtle: rgba(35, 39, 46, 0.035);
   --color-surface-hover: rgba(35, 39, 46, 0.06);
-  --color-surface-active: rgba(35, 39, 46, 0.1);
   --color-fg-muted: rgba(35, 39, 46, 0.55);
 
   /* ===================
      SEMANTIC COLORS
      =================== */
-  --color-white: #fff;
   --color-overlay-darker: rgba(14, 17, 22, 0.45);
 }

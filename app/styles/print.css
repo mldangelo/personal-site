@@ -14,7 +14,6 @@
   [data-theme='light'] {
     --color-bg: #fff;
     --color-bg-alt: #fff;
-    --color-bg-offset: #fff;
     --color-fg: #000;
     --color-fg-bold: #000;
     --color-fg-light: #333;
@@ -27,10 +26,6 @@
     --color-border-bg: rgba(0, 0, 0, 0.18);
     --color-surface-subtle: transparent;
     --color-surface-hover: transparent;
-    --shadow-sm: none;
-    --shadow-md: none;
-    --shadow-lg: none;
-    --shadow-xl: none;
   }
 
   @page {

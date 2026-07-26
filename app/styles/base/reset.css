@@ -88,23 +88,11 @@
 
   /* Every measured value on the site is set in mono with
      tabular figures so digits never shift as they change. */
-  .mono,
   time,
   code,
   kbd,
   samp {
     font-family: var(--font-mono);
     font-variant-numeric: tabular-nums;
-  }
-
-  /* Instrument annotation: the small wide-tracked labels that
-     name a value. Used by telemetry, section eyebrows, and nav. */
-  .label {
-    font-family: var(--font-mono);
-    font-size: var(--text-2xs);
-    font-weight: var(--font-weight-medium);
-    letter-spacing: var(--tracking-label);
-    text-transform: uppercase;
-    color: var(--color-fg-light);
   }
 }

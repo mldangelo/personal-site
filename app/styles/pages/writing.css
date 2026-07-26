@@ -61,23 +61,6 @@
   transition: background-color var(--duration-instant) var(--ease-out);
 }
 
-/* Placed explicitly: entries in the Guides group carry no date, and
-   the columns must still line up across the whole list. */
-.writing-date {
-  grid-column: 1;
-  grid-row: 1 / span 2;
-}
-
-.writing-title {
-  grid-column: 2;
-  grid-row: 1;
-}
-
-.writing-description {
-  grid-column: 2;
-  grid-row: 2;
-}
-
 .writing-item:first-child {
   border-top: var(--rule) solid var(--color-fg-bold);
 }
@@ -90,7 +73,11 @@
   color: var(--color-accent);
 }
 
+/* Grid placement is explicit: entries in the Guides group carry no date,
+   and the columns must still line up across the whole list. */
 .writing-date {
+  grid-column: 1;
+  grid-row: 1 / span 2;
   display: block;
   font-family: var(--font-mono);
   font-size: var(--text-2xs);
@@ -98,11 +85,12 @@
   letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: var(--color-fg-light);
-  margin-bottom: 0;
   padding-top: 0.4em;
 }
 
 .writing-title {
+  grid-column: 2;
+  grid-row: 1;
   font-family: var(--font-display);
   font-size: var(--text-md);
   font-weight: var(--font-weight-bold);
@@ -114,6 +102,8 @@
 }
 
 .writing-description {
+  grid-column: 2;
+  grid-row: 2;
   font-size: var(--text-sm);
   color: var(--color-fg-light);
   margin: 0;

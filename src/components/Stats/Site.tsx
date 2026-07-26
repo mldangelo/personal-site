@@ -78,11 +78,15 @@ async function fetchGitHubStats(): Promise<GitHubData> {
  * Server component, no client-side JavaScript shipped.
  */
 export default async function SiteStats() {
-  const githubData = await fetchGitHubStats();
+  // Started before the walk so the directory scan happens during the network
+  // round trip rather than after it. The Pages build deliberately runs this
+  // fetch uncached every time, so the two costs would otherwise stack.
+  const githubStats = fetchGitHubStats();
 
   // Measured from the working tree rather than typed in, so the figure
   // cannot drift away from the code it describes.
   const sourceLines = countSourceLines();
+  const githubData = await githubStats;
 
   // Apply formatting and resolve values - functions can't be serialized in RSC
   const data = initialData.map((field) => {

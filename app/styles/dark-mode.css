@@ -10,15 +10,11 @@
   /* Core colors */
   --color-bg: #14171c;
   --color-bg-alt: #0d1015;
-  --color-bg-offset: #1c2027;
   --color-fg: #d8dbe0;
   --color-fg-bold: #f2f4f7;
   --color-fg-light: #949aa4;
-  --color-white: #fff;
 
   /* Overlay colors for dark mode */
-  --color-overlay-light: rgba(255, 255, 255, 0.1);
-  --color-overlay-dark: rgba(0, 0, 0, 0.3);
   --color-overlay-darker: rgba(0, 0, 0, 0.6);
 
   /* Accent — ultramarine lifted to hold contrast on ink.
@@ -26,7 +22,6 @@
      light to sit behind white text (2.67:1), so filled controls keep a deep
      fill and light text of their own. */
   --color-accent: #8098ff;
-  --color-accent-secondary: #1b2fbf;
   --color-accent-hover: #a3b3ff;
 
   /* #2a3ad4 behind #f2f4f7 is 7.2:1; hover holds at 5.8:1. */
@@ -34,16 +29,12 @@
   --color-accent-fill-hover: #3d4ce0;
   --color-on-accent: #f2f4f7;
   --color-accent-light: color-mix(in srgb, var(--color-accent) 18%, transparent);
-  --color-accent-subtle: color-mix(in srgb, var(--color-accent) 10%, transparent);
-  --color-accent-muted: color-mix(in srgb, var(--color-accent) 5%, transparent);
-  --color-accent-border: color-mix(in srgb, var(--color-accent) 45%, transparent);
   --color-accent-underline: color-mix(in srgb, var(--color-accent) 40%, transparent);
   --color-accent-underline-strong: color-mix(in srgb, var(--color-accent) 55%, transparent);
 
   /* Signal — amber needs no correction against ink */
   --color-signal: #f0a202;
   --color-signal-mark: #f0a202;
-  --color-signal-light: color-mix(in srgb, var(--color-signal-mark) 18%, transparent);
 
   /* Borders */
   --color-border: rgba(255, 255, 255, 0.12);
@@ -53,14 +44,9 @@
   /* Semantic surface tokens */
   --color-surface-subtle: rgba(255, 255, 255, 0.04);
   --color-surface-hover: rgba(255, 255, 255, 0.07);
-  --color-surface-active: rgba(255, 255, 255, 0.11);
   --color-fg-muted: rgba(255, 255, 255, 0.5);
 
   /* Shadows */
-  --shadow-sm: 0 1px 0 rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 1px 2px rgba(0, 0, 0, 0.5);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.55);
-  --shadow-xl: 0 18px 48px rgba(0, 0, 0, 0.6);
 }
 
 /* Header, navigation, hero, and the experience spine read their
@@ -99,26 +85,22 @@
   border-left-color: var(--color-border-alt);
 }
 
-/* Link underlines */
-[data-theme='dark'] p a:not(.hero-highlight),
-[data-theme='dark'] li a:not(.hero-highlight) {
+/* Link underlines — scoped to `p` to match base/links.css */
+[data-theme='dark'] p a:not(.hero-highlight) {
   background-image: linear-gradient(
     transparent calc(100% - 1.5px),
     var(--color-accent-underline) 1.5px
   );
 }
 
-[data-theme='dark'] p a:not(.hero-highlight):hover,
-[data-theme='dark'] li a:not(.hero-highlight):hover {
+[data-theme='dark'] p a:not(.hero-highlight):hover {
   background-image: linear-gradient(transparent calc(100% - 1.5px), var(--color-accent) 1.5px);
 }
 
 /* Prose links use text-decoration only, no background-image */
 [data-theme='dark'] .prose a,
 [data-theme='dark'] .prose p a,
-[data-theme='dark'] .prose li a,
 [data-theme='dark'] .prose a:hover,
-[data-theme='dark'] .prose p a:hover,
-[data-theme='dark'] .prose li a:hover {
+[data-theme='dark'] .prose p a:hover {
   background-image: none;
 }

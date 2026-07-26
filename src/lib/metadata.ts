@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 
+import profile from '@/data/profile.json';
 import {
   AUTHOR_NAME,
   SHARE_IMAGE_DIMENSIONS,
@@ -17,9 +18,10 @@ interface PageMetadataOptions {
 /**
  * The share card is a fixed design that does not render the page title, so
  * the alt text describes the card rather than claiming the title appears in
- * the image.
+ * the image. Role and employer come from the profile so they change in one
+ * place — the same reason `telemetry.ts` and the OG script read that file.
  */
-export const SHARE_IMAGE_ALT = `${AUTHOR_NAME} — Member of the Technical Staff at OpenAI`;
+export const SHARE_IMAGE_ALT = `${AUTHOR_NAME} — ${profile.role} at ${profile.employer}`;
 
 /**
  * The OpenGraph and Twitter blocks every page needs.

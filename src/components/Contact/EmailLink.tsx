@@ -1,6 +1,8 @@
 'use client';
 
-import { useEffect, useReducer, useRef, useState } from 'react';
+import { useEffect, useReducer, useRef } from 'react';
+
+import usePrefersReducedMotion from '@/hooks/usePrefersReducedMotion';
 
 // Animation timing constants
 const ANIMATION_TICK_MS = 50; // Tick length in milliseconds
@@ -10,11 +12,6 @@ const HOLD_TICKS_AFTER_MESSAGE = 50; // Ticks to wait after message completes
 function validateText(text: string): boolean {
   const re = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))$/;
   return re.test(text) || text.length === 0;
-}
-
-function prefersReducedMotion(): boolean {
-  if (typeof window === 'undefined') return false;
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
 const messages = [
@@ -115,12 +112,7 @@ interface EmailLinkProps {
 }
 
 export default function EmailLink({ loopMessage = false }: EmailLinkProps) {
-  // Check for reduced motion preference
-  const [reducedMotion, setReducedMotion] = useState(false);
-
-  useEffect(() => {
-    setReducedMotion(prefersReducedMotion());
-  }, []);
+  const reducedMotion = usePrefersReducedMotion();
 
   const [state, dispatch] = useReducer(animationReducer, {
     idx: 0,

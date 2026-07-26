@@ -11,13 +11,7 @@ import {
   HOME_URL,
   webPageNode,
 } from '@/lib/schema';
-import {
-  AUTHOR_NAME,
-  formatDate,
-  SHARE_IMAGE_DIMENSIONS,
-  SHARE_IMAGE_PATH,
-  SITE_URL,
-} from '@/lib/utils';
+import { AUTHOR_NAME, formatDate, SITE_URL } from '@/lib/utils';
 
 interface PageProps {
   params: Promise<{ slug: string }>;

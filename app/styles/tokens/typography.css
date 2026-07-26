@@ -14,11 +14,6 @@
   --font-body: var(--font-newsreader), 'Newsreader', Georgia, serif;
   --font-mono: var(--font-jetbrains), 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
 
-  /* Aliases so any remaining `--font-sans` / `--font-heading`
-     reference resolves to a real face, not a system fallback. */
-  --font-sans: var(--font-body);
-  --font-heading: var(--font-display);
-
   /* ===================
      FONT WEIGHTS
      All three families are variable, so every step below

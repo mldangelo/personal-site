@@ -11,20 +11,12 @@
   --duration-fast: 0.2s;
   --duration-normal: 0.3s;
   --duration-menu: 0.4s;
-  --duration-slow: 0.6s;
 
   /* ===================
      EASING FUNCTIONS
      =================== */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-menu: cubic-bezier(0.4, 0, 0.2, 1);
-
-  /* ===================
-     INTERACTION VALUES
-     Hover states change colour and rule weight rather than lifting
-     or scaling, so only the smallest nudge survives.
-     =================== */
-  --lift-sm: -2px;
 
   /* ===================
      Z-INDEX SCALE

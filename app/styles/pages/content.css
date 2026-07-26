@@ -285,10 +285,6 @@
   padding: 2rem 1rem;
 }
 
-.contact-content {
-  max-width: 100%;
-}
-
 .contact-header {
   text-align: center;
   margin-bottom: 2.5rem;
@@ -299,6 +295,7 @@
 }
 
 .contact-content {
+  max-width: 100%;
   text-align: center;
 }
 
@@ -678,51 +675,4 @@
   justify-content: center;
   gap: 1rem;
   flex-wrap: wrap;
-}
-
-/* Matches the site's switches rather than defining a second button style. */
-.not-found-button,
-.not-found-link {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 2.875rem;
-  padding: 0 1.75rem;
-  font-family: var(--font-mono);
-  font-size: var(--text-ui);
-  font-weight: var(--font-weight-medium);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
-  border-radius: var(--radius-sm);
-  text-decoration: none;
-  background-image: none;
-  box-shadow: none;
-  transition:
-    background-color var(--duration-fast) var(--ease-out),
-    border-color var(--duration-fast) var(--ease-out),
-    color var(--duration-fast) var(--ease-out);
-}
-
-.not-found-button {
-  color: var(--color-on-accent);
-  background: var(--color-accent-fill);
-  border: var(--rule) solid var(--color-accent-fill);
-}
-
-.not-found-button:hover {
-  color: var(--color-on-accent);
-  background: var(--color-accent-fill-hover);
-  border-color: var(--color-accent-fill-hover);
-}
-
-.not-found-link {
-  color: var(--color-fg-bold);
-  background: transparent;
-  border: var(--rule) solid var(--color-border-alt);
-}
-
-.not-found-link:hover {
-  color: var(--color-fg-bold);
-  border-color: var(--color-fg-bold);
-  background: transparent;
 }

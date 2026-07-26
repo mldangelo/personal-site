@@ -1,6 +1,5 @@
 'use client';
 
-import type { CSSProperties } from 'react';
 import { useCallback, useMemo, useState } from 'react';
 
 import type { Category, Skill } from '@/data/resume/skills';
@@ -78,21 +77,14 @@ export default function Skills({ skills, categories }: SkillsProps) {
         {groupedSkills.map(({ category, skills: categorySkills }) => {
           const isVisible =
             activeCategory === ALL_CATEGORY || activeCategory === category.name;
-          // Pass color via CSS custom property for design system consistency
-          const titleStyle = {
-            '--skill-category-color': category.color,
-          } as CSSProperties;
 
           return (
             <div
               key={category.name}
               className="skill-group"
-              data-filtered={isVisible ? undefined : 'true'}
               hidden={!isVisible}
             >
-              <h3 className="skill-group-title" style={titleStyle}>
-                {category.name}
-              </h3>
+              <h3 className="skill-group-title">{category.name}</h3>
               <div className="skill-tags">
                 {categorySkills.map((skill) => (
                   <SkillTag
