@@ -10,7 +10,7 @@
  * Run with `npm run verify-export` after `npm run build`.
  */
 import { readdirSync, readFileSync, statSync } from 'node:fs';
-import { join, relative, resolve } from 'node:path';
+import { basename, join, relative, resolve, sep } from 'node:path';
 
 const OUT = resolve(process.cwd(), 'out');
 const CONTENT = resolve(process.cwd(), 'content/writing');
@@ -39,17 +39,22 @@ if (pages.length === 0) {
 
 const attr = (html, re) => [...html.matchAll(re)].map((m) => m[1]);
 
+/** URLs always use forward slashes; `relative` uses the platform separator. */
+const toUrlPath = (p) => p.split(sep).join('/');
+
 /** Slugs marked `draft: true` must not appear in the export at all. */
 const draftSlugs = walk(CONTENT, (name) => name.endsWith('.md'))
   .filter((path) => /^draft:\s*true\s*$/m.test(readFileSync(path, 'utf8')))
-  .map((path) => path.split('/').pop().replace(/\.md$/, ''));
+  .map((path) => basename(path, '.md'));
 
 const exportedPaths = new Set(
-  pages.map((p) => `/${relative(OUT, p).replace(/index\.html$/, '')}`),
+  pages.map(
+    (p) => `/${toUrlPath(relative(OUT, p)).replace(/index\.html$/, '')}`,
+  ),
 );
 
 for (const page of pages) {
-  const rel = relative(OUT, page);
+  const rel = toUrlPath(relative(OUT, page));
   const html = readFileSync(page, 'utf8');
 
   // A draft must not be exported under any route.

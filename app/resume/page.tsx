@@ -7,11 +7,11 @@ import References from '@/components/Resume/References';
 import ResumeNav from '@/components/Resume/ResumeNav';
 import Skills from '@/components/Resume/Skills';
 import PageWrapper from '@/components/Template/PageWrapper';
+import profile from '@/data/profile.json';
 import courses from '@/data/resume/courses';
 import degrees from '@/data/resume/degrees';
 import { categories, skills } from '@/data/resume/skills';
 import work from '@/data/resume/work';
-import profile from '@/data/profile.json';
 import { createPageMetadata } from '@/lib/metadata';
 import { SITE_URL } from '@/lib/utils';
 
