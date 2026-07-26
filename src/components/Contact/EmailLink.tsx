@@ -58,41 +58,58 @@ type AnimationAction =
   | { type: 'PAUSE' }
   | { type: 'RESUME'; maxIdx: number };
 
+/**
+ * The opening frame of a message.
+ *
+ * Advancing used to reset to zero characters, so `message` was `''` for one
+ * tick at every boundary — and the render fell back to the static address,
+ * flashing it fifteen times a cycle. A message now begins already showing its
+ * first character, so the prefix is never empty mid-animation.
+ */
+function startOf(idx: number): AnimationState {
+  return {
+    idx,
+    message: messages[idx].slice(0, 1),
+    char: 2,
+    isActive: true,
+  };
+}
+
 function animationReducer(
   state: AnimationState,
   action: AnimationAction,
 ): AnimationState {
   switch (action.type) {
     case 'TICK': {
-      let newIdx = state.idx;
-      let newChar = state.char;
-
-      if (state.char - action.hold >= messages[state.idx].length) {
-        newIdx += 1;
-        newChar = 0;
+      if (state.idx >= messages.length) {
+        return state;
       }
 
-      if (newIdx === messages.length) {
-        if (action.loopMessage) {
-          return {
-            idx: 0,
-            message: '',
-            char: 0,
-            isActive: true,
-          };
-        }
+      const finished = state.char - action.hold >= messages[state.idx].length;
+
+      if (!finished) {
         return {
           ...state,
-          isActive: false,
+          message: messages[state.idx].slice(0, state.char),
+          char: state.char + 1,
+          isActive: true,
         };
       }
 
-      return {
-        idx: newIdx,
-        message: messages[newIdx].slice(0, newChar),
-        char: newChar + 1,
-        isActive: true,
-      };
+      const nextIdx = state.idx + 1;
+
+      if (nextIdx === messages.length) {
+        if (action.loopMessage) {
+          return startOf(0);
+        }
+
+        // Completion is recorded in `idx`, not only in `isActive`. Leaving it
+        // on the last message meant RESUME's `idx < maxIdx` test passed, so a
+        // finished animation re-armed its interval on every mouse-out.
+        return { ...state, idx: messages.length, isActive: false };
+      }
+
+      return startOf(nextIdx);
     }
     case 'PAUSE':
       return { ...state, isActive: false };
@@ -113,10 +130,12 @@ interface EmailLinkProps {
 export default function EmailLink({ loopMessage = false }: EmailLinkProps) {
   const reducedMotion = usePrefersReducedMotion();
 
+  // Opens on the real local part, already complete, so the first thing anyone
+  // sees is the actual address — and it holds there before the cycle starts.
   const [state, dispatch] = useReducer(animationReducer, {
     idx: 0,
-    message: '',
-    char: 0,
+    message: CONTACT_LOCAL_PART,
+    char: messages[0].length,
     isActive: true,
   });
 
@@ -134,9 +153,9 @@ export default function EmailLink({ loopMessage = false }: EmailLinkProps) {
     state.isActive && !reducedMotion ? ANIMATION_TICK_MS : null,
   );
 
-  // Keep the initial/static label in step with the profile's real local-part.
-  const displayMessage =
-    reducedMotion || state.message === '' ? CONTACT_LOCAL_PART : state.message;
+  // The reducer never yields an empty prefix, so the only reason to override
+  // it is reduced motion, where the real address should simply stand.
+  const displayMessage = reducedMotion ? CONTACT_LOCAL_PART : state.message;
 
   const handlePause = () => dispatch({ type: 'PAUSE' });
   const handleResume = () => {

@@ -64,6 +64,70 @@ describe('EmailLink', () => {
     expect(prefix).toBeInTheDocument();
   });
 
+  /**
+   * Advancing used to reset to zero characters, leaving `message` empty for a
+   * tick. The render fell back to the static local part, so the prefix snapped
+   * back to the real address for one frame at every one of the fifteen message
+   * boundaries — a visible flicker on the deployed page.
+   */
+  it('never blanks or snaps back to the address mid-animation', () => {
+    render(<EmailLink loopMessage />);
+    const prefix = () =>
+      document.querySelector('.contact-email-prefix')?.textContent ?? '';
+
+    let previous = prefix();
+
+    // Two full cycles, so the loop wrap is covered as well as every boundary.
+    for (let elapsed = 0; elapsed < 120_000; elapsed += 50) {
+      act(() => {
+        vi.advanceTimersByTime(50);
+      });
+
+      const shown = prefix();
+
+      // The blank frame itself.
+      expect(shown).not.toBe('');
+
+      // The flash is a *jump* to the complete address from some other alias
+      // already several characters long. Looping re-types the address
+      // legitimately, but that grows "h" -> "hi", so the previous frame is a
+      // single character and this guard leaves it alone.
+      if (previous.length > 1 && previous !== localPart) {
+        expect(shown).not.toBe(localPart);
+      }
+
+      previous = shown;
+    }
+  });
+
+  it('stays settled once the animation completes', () => {
+    const { container } = render(<EmailLink />);
+
+    act(() => {
+      vi.advanceTimersByTime(120_000);
+    });
+
+    const settled = document.querySelector(
+      '.contact-email-prefix',
+    )?.textContent;
+
+    // A finished animation recorded completion only in `isActive`, so RESUME's
+    // `idx < maxIdx` check passed and every mouse-out re-armed the interval.
+    const wrapper = container.querySelector(
+      '.contact-email-container',
+    ) as HTMLElement;
+    fireEvent.mouseEnter(wrapper);
+    fireEvent.mouseLeave(wrapper);
+
+    act(() => {
+      vi.advanceTimersByTime(5_000);
+    });
+
+    expect(document.querySelector('.contact-email-prefix')?.textContent).toBe(
+      settled,
+    );
+  });
+
   it('pauses animation on mouse enter', async () => {
     render(<EmailLink />);
 
