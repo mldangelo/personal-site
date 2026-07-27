@@ -4,6 +4,7 @@ import AboutContent from '@/components/About/Sections';
 import { SchemaGraph } from '@/components/Schema';
 import PageWrapper from '@/components/Template/PageWrapper';
 import { aboutMarkdown } from '@/data/about';
+import profile from '@/data/profile.json';
 import { createPageMetadata } from '@/lib/metadata';
 import {
   breadcrumbNode,
@@ -11,11 +12,11 @@ import {
   profilePageNode,
   SITE_URL,
 } from '@/lib/schema';
+import { AUTHOR_NAME } from '@/lib/utils';
 
 const ABOUT_URL = `${SITE_URL}/about/`;
 
-const ABOUT_DESCRIPTION =
-  "Learn about Michael D'Angelo - Member of the Technical Staff at OpenAI and builder across AI, security, and infrastructure.";
+const ABOUT_DESCRIPTION = `Learn about ${AUTHOR_NAME} - ${profile.role} at ${profile.employer} and builder across AI, security, and infrastructure.`;
 
 export const metadata: Metadata = createPageMetadata({
   title: 'About',

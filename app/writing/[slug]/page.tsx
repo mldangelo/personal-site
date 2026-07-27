@@ -60,6 +60,21 @@ export async function generateMetadata({
   const url = `${SITE_URL}/writing/${post.slug}/`;
   const image = getPostImage(post);
 
+  // Built once and spread into both cards, so the two can never disagree about
+  // the article image.
+  const articleImage = image
+    ? {
+        images: [
+          {
+            url: image.url,
+            width: image.width,
+            height: image.height,
+            alt: image.alt,
+          },
+        ],
+      }
+    : {};
+
   // Spreading the shared blocks matters: a route-level `openGraph` replaces
   // the inherited one, so anything omitted here — images, siteName, locale,
   // twitter:site — simply disappears from post pages.
@@ -75,35 +90,13 @@ export async function generateMetadata({
       url,
       publishedTime: post.date,
       authors: [AUTHOR_NAME],
-      ...(image
-        ? {
-            images: [
-              {
-                url: image.url,
-                width: image.width,
-                height: image.height,
-                alt: image.alt,
-              },
-            ],
-          }
-        : {}),
+      ...articleImage,
     },
     twitter: {
       ...sharedTwitter,
       title: post.title,
       description: post.description,
-      ...(image
-        ? {
-            images: [
-              {
-                url: image.url,
-                width: image.width,
-                height: image.height,
-                alt: image.alt,
-              },
-            ],
-          }
-        : {}),
+      ...articleImage,
     },
   };
 }

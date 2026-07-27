@@ -2,21 +2,6 @@
    RESUME PAGE STYLES
    ======================================== */
 
-.resume-page .link-container {
-  padding-top: 1em;
-}
-
-.resume-page .link-container h4 {
-  border-bottom: none;
-  display: inline-flex;
-  text-decoration: none;
-}
-
-.resume-page .link-container h4 a {
-  margin: 0;
-  padding: 0 0.5em;
-}
-
 /* Section headers sit left, under a heavy rule — the same device
    that opens the readout strip on the home page. */
 .resume-page .education .title,

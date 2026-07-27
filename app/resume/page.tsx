@@ -13,12 +13,11 @@ import degrees from '@/data/resume/degrees';
 import { categories, skills } from '@/data/resume/skills';
 import work from '@/data/resume/work';
 import { createPageMetadata } from '@/lib/metadata';
-import { SITE_URL } from '@/lib/utils';
+import { AUTHOR_NAME, SITE_URL } from '@/lib/utils';
 
 export const metadata: Metadata = createPageMetadata({
   title: 'Resume',
-  description:
-    "Michael D'Angelo's Resume. OpenAI, Promptfoo, Smile ID, Arthena, Matroid, Stanford ICME, YC alum.",
+  description: `${AUTHOR_NAME}'s Resume. OpenAI, Promptfoo, Smile ID, Arthena, Matroid, Stanford ICME, YC alum.`,
   path: '/resume/',
 });
 

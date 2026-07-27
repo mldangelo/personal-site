@@ -200,21 +200,47 @@ export function getPostSlugs(): string[] {
  *
  * Returning null for a draft is what makes the route `notFound()` rather than
  * render it, so a direct URL cannot reach unpublished writing in production.
+ * Resolving against `getAllPosts` rather than re-reading the file keeps this on
+ * the same `isPublished` path as every other reader, and means a slug never
+ * reaches the filesystem.
  */
 export function getPostBySlug(slug: string): Post | null {
-  const post = readPost(slug);
-
-  if (!post || !isPublished(post)) {
+  if (!isSafeSlug(slug)) {
     return null;
   }
 
-  return post;
+  return getAllPosts().find((post) => post.slug === slug) ?? null;
 }
 
-export function getAllPosts(): Post[] {
+function readPublishedPosts(): Post[] {
   return readAllSlugs()
     .map(readPost)
     .filter((post): post is Post => post !== null)
     .filter(isPublished)
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+}
+
+/**
+ * Parsed posts, held for the life of the process.
+ *
+ * A static export reaches this from four independent entry points — the
+ * sitemap, the feed, the writing index, and `generateStaticParams` — and then
+ * twice more per post route, once in `generateMetadata` and once in the page.
+ * Uncached, each of those re-walked the directory and re-parsed every file.
+ *
+ * Skipped under `next dev` so edits to a post appear without a restart, which
+ * is also the mode where drafts are visible.
+ */
+let cachedPosts: Post[] | undefined;
+
+export function getAllPosts(): Post[] {
+  if (process.env.NODE_ENV === 'development') {
+    return readPublishedPosts();
+  }
+
+  cachedPosts ??= readPublishedPosts();
+
+  // Copy: callers have historically sorted the array they were handed, and a
+  // shared reference would make that reorder everyone else's view.
+  return [...cachedPosts];
 }
