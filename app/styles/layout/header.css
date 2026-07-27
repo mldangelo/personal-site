@@ -59,7 +59,7 @@
   box-sizing: border-box;
 }
 
-@media (max-width: 736px) {
+@media (max-width: 735px) {
   .site-header {
     height: var(--header-height-mobile);
     line-height: var(--header-height-mobile);

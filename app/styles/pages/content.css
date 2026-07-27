@@ -432,7 +432,7 @@
   color: var(--color-accent);
 }
 
-@media (max-width: 736px) {
+@media (max-width: 735px) {
   .about-section-nav {
     top: var(--header-height-mobile);
     flex-wrap: nowrap;

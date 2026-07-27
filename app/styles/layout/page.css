@@ -13,7 +13,7 @@
   min-height: calc(100dvh - var(--header-height));
 }
 
-@media (max-width: 736px) {
+@media (max-width: 735px) {
   .page-container {
     min-height: calc(100dvh - var(--header-height-mobile));
   }

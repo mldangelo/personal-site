@@ -79,7 +79,7 @@
     }
   }
 
-  @media (max-width: 736px) {
+  @media (max-width: 735px) {
     body {
       font-size: var(--text-base);
       padding-top: var(--header-height-mobile);
