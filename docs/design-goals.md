@@ -1,65 +1,47 @@
 # Design Goals
 
-This project attempts to follow these design principles. Feedback and discussion around these are encouraged. Please feel free to submit an issue or get in touch.
+These principles guide changes to the site.
 
-## Simple
+## Easy to fork
 
-1. Someone learning web development should be able to clone this repo and start making it their own within a few minutes.
-2. Does not require reading a large amount of documentation.
+A new contributor should be able to clone the repository, start the site, and
+find the main content without learning the internals of Next.js. Fork-specific
+settings should be documented, searchable, and kept in as few places as
+practical.
 
-## Fast
+## Fast by default
 
-1. Follows [JAMStack best practices](https://jamstack.org/best-practices/). Everything that can be pre-rendered should be pre-rendered.
-1. Time to interact should be very fast (< 250 ms). Optimized for small bundle sizes.
+The production site is a static export, so routes must remain statically
+renderable. Keep client-side JavaScript and third-party code modest. Measure
+performance before adding complexity intended to improve it.
 
-## Good Developer Experience
+## Easy to change
 
-1. Modular
-   - It should be relatively straight forward to replace the content in this repository or to add a new feature.
-   - Good separation of concerns. Components keep track of their own state. Props are not over-utilized.
-   - Limited vertical depth (changes should be relatively self encapsulated).
-   - Correct abstractions. The Next.js build system is complex, but developers don't need to understand its internals to use this project.
-1. Good Documentation
-   - Comments exist and have an appropriate level of detail.
-   - Code should be readable.
-1. Lean
-   - Projects bloat over time. Actively prune for old and dead code.
-   - New features that affect the entire project should be carefully considered.
-   - Buy, don't build. Don't reinvent the wheel. Use popular npm libraries when possible. The exception is a dependency that would be larger than the problem: reading the dimensions out of an image header is a few dozen lines, and `src/lib/imageSize.ts` is deliberately cheaper than the library it replaces.
-1. Limited horizontal fragmentation
-   - Linter to prevent easy PR nits & to prevent developers from wasting time thinking about code style.
-   - Preferred React Style - functional components with TypeScript for type safety.
-   - Consistent file structure based on current best practices.
-   - Similar features are built similarly. Code reads like an assembly line, not a layer cake.
+- Keep components and data files focused.
+- Put similar features in similar places.
+- Prefer readable code over clever abstractions.
+- Automate formatting and routine checks.
+- Remove dead code and stale documentation.
+- Add a dependency when it is maintained and clearly cheaper than owning the
+  equivalent code.
 
-## Stable
+## Stable for forks
 
-1. Use _Boring_ technologies
-   - TypeScript for type safety while maintaining readability. Limited experimental features.
-   - Prefer popular and well maintained npm packages.
-1. Maintainable
-   - Easy setup.
-   - It should be easy to deploy any version of this site.
-   - Limited external dependencies (ie no missing headers for external libraries).
-   - Dependencies are kept up to date (currently uses dependabot).
-1. Good tests.
-1. Stable API - This project has been forked close to a thousand times. It should be easy for those forks to adopt changes in main.
+Prefer mature tools, explicit types, and repeatable builds. Test published
+content, metadata, accessibility-sensitive behavior, and static deployment.
+When a change affects fork configuration or public routes, document the
+migration.
 
-## Visual Design
+## Visual design
 
-The site's visual system is documented alongside the code it governs, in the
-design-system entries of [AGENTS.md](../AGENTS.md): three deliberate type roles,
-structure carried by hairlines rather than shadow and float, and an accent
-colour reserved for structure and links with a separate signal colour held back
-for values that are genuinely live.
+The visual system uses display type for headings, serif type for prose, and
+monospace type for labels and data. Hairlines and spacing establish structure.
+Ultramarine handles links, structure, and controls. Amber is reserved for live
+or in-progress values.
 
-The principles on this page are about how the code is organized; those entries
-are about how the site looks and why. Changing one rarely means changing the
-other.
+The implementation lives in [`app/styles/tokens/`](../app/styles/tokens/).
 
 ## References
 
-For further reading, please review
-
-- React's [Design Principles](https://legacy.reactjs.org/docs/design-principles.html).
-- [Thinking in React](https://react.dev/learn/thinking-in-react).
+- [Thinking in React](https://react.dev/learn/thinking-in-react)
+- [Rules of React](https://react.dev/reference/rules)

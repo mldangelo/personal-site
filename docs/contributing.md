@@ -1,61 +1,55 @@
-# How to Contribute
+# Contributing
 
-Contributions are encouraged. Please feel free to get in touch (I will happily pair program with you), take a look at the [roadmap](./roadmap.md), or open a PR.
+Bug fixes and focused improvements are welcome. Before starting a larger
+change, open an issue so the approach can be discussed.
 
 ## Guidelines
 
-Here are a few recommendations to land PRs quickly.
-
-- Small PRs are better than large PRs. If you do two unrelated things, split your changes into two PRs.
+- Keep each pull request focused. Split unrelated changes.
 - Review the [design goals](./design-goals.md).
-- Respect the [Contributor Covenant](https://www.contributor-covenant.org/).
+- Follow the [Contributor Covenant](https://www.contributor-covenant.org/).
 
-## Setup
+## Set up the project
 
-You need Node.js 22.13 or newer. `nvm use` selects the version in `.nvmrc`,
-which is what CI and the deployed build run.
-
-Work on a topic branch rather than `main`, and title commits with a
-[conventional commit](https://www.conventionalcommits.org/) prefix—`feat:`,
-`fix:`, `chore:`, `docs:`. PR titles use the same prefixes, because merges to
-`main` deploy automatically.
-
-## Before You Open a PR
-
-Run the same checks CI runs:
+With [nvm](https://github.com/nvm-sh/nvm) installed:
 
 ```bash
-npm run format        # must run first — format:check is a hard CI gate
+nvm install
+npm ci
+```
+
+The version in `.nvmrc` is used for development and deployment. Other version
+managers can use any release accepted by `engines.node` in `package.json`.
+
+Create a topic branch rather than committing to `main`. Use a
+[Conventional Commit](https://www.conventionalcommits.org/) prefix such as
+`feat:`, `fix:`, `refactor:`, `docs:`, or `chore:`. Use the same format for the
+pull request title so the merged history stays consistent.
+
+## Validate the change
+
+Run the local equivalents of the checks CI runs:
+
+```bash
+npm run format
 npm run lint
 npm run type-check
 npm test
+npm run og:check
 npm run build
 npm run verify-export
-npm run og:check      # only if you changed the profile or share-card generator
 ```
 
-`npm run format` is the step people forget, and it is the most common reason an
-otherwise good PR shows a red check.
+`npm run verify-export` reads the files produced by `npm run build`, so keep
+that order. Add or update tests when behavior changes.
 
-[AGENTS.md](../AGENTS.md) documents the constraints that are easy to trip
-over—metadata inheritance, draft isolation, the static-export rules, and the
-design system. It is worth skimming before a first PR.
+## Open the pull request
 
-## Preparing a Pull Request
+In the description:
 
-1. Write a good summary in your PR description.
-   - Concisely explain your changes.
-   - Justify why your changes are important.
-   - Explain how to test your change (if not obvious).
-1. Make sure everything runs.
-1. Write tests (if appropriate).
-1. Self review your branch.
-   - Lint your code.
-   - Add comments where appropriate and if things are unclear. Comments should help ensure others not familiar with the problem you're solving will understand your code months or years from now.
-   - Minimize perceptual changes in files that are not relevant to your feature. Remove any extra white-spaces in other files that were added by mistake.
-   - Remove anything unnecessary. Remove extra print statements, commented out blocks of code, unused variables, etc.
-   - Check your spelling.
+- Explain what changed and why.
+- Describe how you verified it.
+- Call out any visual, compatibility, or follow-up work.
 
-## References
-
-- https://github.com/google/eng-practices (Recommended Reading)
+Before requesting review, inspect the complete diff. Remove unrelated
+formatting changes, debugging code, stale comments, and unused files.

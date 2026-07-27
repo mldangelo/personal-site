@@ -1,140 +1,151 @@
 # Adapting This Website
 
-Fork this repository as a starting point for your own personal site. The code
-is designed to be adapted, but the content and visual identity are intentionally
-specific; budget time for a full rebrand rather than treating it as a generic
-fill-in-the-blanks theme.
+This repository can be a starting point for another personal site, but it is
+not a blank theme. Forks need to replace the content, identity, links, metadata,
+and generated assets.
 
-An AI assistant can help with the mechanical edits, but use the checklist below
-to verify that facts, routes, metadata, images, and generated assets stay in
-sync.
+## Before you start
 
-## Before You Start
+With [nvm](https://github.com/nvm-sh/nvm) installed:
 
-You need Node.js 22.13 or newer. The repository develops on the version pinned
-in `.nvmrc`, which is also what CI and the deployed build use; with
-[nvm](https://github.com/nvm-sh/nvm) installed, `nvm use` selects it.
+```bash
+git clone https://github.com/YOUR-USER/personal-site.git
+cd personal-site
+nvm install
+npm ci
+npm run dev
+```
 
-1. Fork and clone the repository
-2. Run `nvm use` (or otherwise switch to Node 22.13+)
-3. Run `npm ci` then `npm run dev`
-4. Open [http://localhost:3000](http://localhost:3000) to see the site
-5. Keep the dev server running—changes appear instantly
+Open [http://localhost:3000](http://localhost:3000). If you use another version
+manager, choose a release accepted by `engines.node` in `package.json`.
 
-## Customization Checklist
+## Replace the content
 
-Work through these steps in order for the smoothest experience.
+### Identity and contact details
 
-### Step 1: Identity & Contact
+Start with the shared data, then update hard-coded text and links.
 
-| What to change          | File                                    | Notes                                                |
-| ----------------------- | --------------------------------------- | ---------------------------------------------------- |
-| Profile facts and email | `src/data/profile.json`                 | Shared by contact links, stats, metadata, and OG     |
-| Site URL and author     | `src/lib/utils.ts`, `package.json`      | Keep `SITE_URL` and `homepage` aligned               |
-| Social links            | `src/data/contact.ts`                   | Add or remove platforms as needed                    |
-| Portrait                | `public/images/me.jpg`                  | Use a square image; the current asset is 1024×1024px |
-| Homepage copy           | `src/components/Template/Hero.tsx`      | Name, role, tagline, and calls to action             |
-| Footer                  | `src/components/Template/Footer.tsx`    | Identity, source link, and copyright                 |
-| Resume introduction     | `app/resume/page.tsx`                   | Keep this summary aligned with the homepage          |
-| SEO defaults            | `app/layout.tsx`, `src/lib/metadata.ts` | Keywords and shared page-card metadata               |
+| Content                                                        | Location                                                            |
+| -------------------------------------------------------------- | ------------------------------------------------------------------- |
+| Name, role, employer, location, email, and personal statistics | `src/data/profile.json`                                             |
+| Canonical URL, social handle, descriptions, and image settings | `src/lib/utils.ts`                                                  |
+| Social links                                                   | `src/data/contact.ts`                                               |
+| Homepage biography and employer links                          | `src/components/Template/Hero.tsx`                                  |
+| Logo initials                                                  | `src/components/Template/Navigation.tsx`                            |
+| Footer source link                                             | `src/components/Template/Footer.tsx`                                |
+| Portrait and its alt text                                      | `public/images/me.jpg`, `src/components/Template/ThemePortrait.tsx` |
+| Favicon files and web app name                                 | `public/images/favicon/`                                            |
+| Sitemap URL for crawlers                                       | `public/robots.txt`                                                 |
+| RSS title and description                                      | `app/feed.xml/route.ts`                                             |
+| Repository statistics and GitHub API URL                       | `src/components/Stats/Site.tsx`, `src/data/stats/site.ts`           |
+| Countries map                                                  | `src/data/stats/personal.tsx`                                       |
 
-### Step 2: About Page
+Page titles and descriptions also contain personal copy. Check `app/layout.tsx`
+and the `page.tsx` files under `app/`. Structured data is assembled in
+`src/lib/schema.ts`.
 
-| What to change         | File                |
-| ---------------------- | ------------------- |
-| Bio, intro, everything | `src/data/about.ts` |
+### About, résumé, and projects
 
-### Step 3: Resume
+| Content        | Location                     |
+| -------------- | ---------------------------- |
+| About page     | `src/data/about.ts`          |
+| Work history   | `src/data/resume/work.ts`    |
+| Education      | `src/data/resume/degrees.ts` |
+| Skills         | `src/data/resume/skills.ts`  |
+| Courses        | `src/data/resume/courses.ts` |
+| Projects       | `src/data/projects.ts`       |
+| Project images | `public/images/projects/`    |
 
-| What to change      | File                         |
-| ------------------- | ---------------------------- |
-| Work experience     | `src/data/resume/work.ts`    |
-| Education           | `src/data/resume/degrees.ts` |
-| Skills & categories | `src/data/resume/skills.ts`  |
-| Courses (optional)  | `src/data/resume/courses.ts` |
+Keep current role details consistent across the profile, homepage, résumé, and
+page metadata.
 
-### Step 4: Projects
+### Writing
 
-| What to change  | File                      |
-| --------------- | ------------------------- |
-| Project entries | `src/data/projects.ts`    |
-| Project images  | `public/images/projects/` |
+Writing comes from two places:
 
-### Step 5: Blog/Writing
+- Markdown posts in `content/writing/`
+- External articles in `src/data/writing.ts`
 
-The site includes a blog at `/writing/` with an RSS feed.
+Both sources appear on `/writing/`. Dated entries can also appear on the
+homepage and in the RSS feed.
 
-**To add posts**, create Markdown files in `content/writing/`. The filename becomes the URL slug (for example, `my-post.md` becomes `/writing/my-post/`).
+To add a local post, create a Markdown file. Its filename becomes the URL slug,
+so `my-post.md` becomes `/writing/my-post/`. Use lowercase letters and numbers
+separated by single hyphens.
 
 ```markdown
 ---
 title: 'Your Post Title'
 date: '2026-01-15'
-description: 'A brief description for previews and SEO.'
-image: /images/writing/optional-share-image.png
-imageAlt: 'Describes the image for screen readers and as a fallback'
-draft: true
+description: 'A short description for previews and search results.'
 ---
 
-Your content here...
+Your content here.
 ```
 
-Only `title`, `date`, and `description` are required. `image` and `imageAlt`
-set the post's share card and travel together—an image without alt text is an
-accessibility gap. `draft: true` keeps a post visible in development and out of
-the production export entirely, including the sitemap and feed.
+The required fields are `title`, `date`, and `description`. Set `draft: true`
+to show a post during development without including it in the production
+export. An optional `image` must be a root-relative path under `public/` and
+must be paired with `imageAlt`.
 
-**Keep at least one published post.** With an empty `content/writing/`,
-`generateStaticParams()` returns nothing and the static export fails with
-`Page "/writing/[slug]" is missing "generateStaticParams()"`—an error that
-never mentions posts. Replace the example posts rather than emptying the
-directory.
+Keep at least one published post. The static export cannot build the dynamic
+post route when `generateStaticParams()` has no published slugs.
 
-**To hide the blog** without removing it, delete the `/writing` entry from
-`src/data/routes.ts`. The routes still build and remain reachable by URL, but
-they leave the navigation.
+Removing the Writing link from `src/data/routes.ts` only hides it from
+navigation. The homepage still promotes writing, and the routes remain
+available by URL.
 
-**Removing the blog outright is a refactor, not a delete.** The content is
-woven into the homepage, sitemap, schema, and export verifier, so budget real
-time for it. Expect to touch:
-
-| Area         | Files                                                                                                      |
-| ------------ | ---------------------------------------------------------------------------------------------------------- |
-| Routes       | `app/writing/`, `app/feed.xml/`, `content/writing/`                                                        |
-| Data loaders | `src/lib/posts.ts`, `src/lib/writing.ts`, `src/data/writing.ts`                                            |
-| Consumers    | `app/page.tsx` (the "Latest writing" section), `app/sitemap.ts`, `src/lib/schema.ts`, `src/data/routes.ts` |
-| Verification | `scripts/verify-export.mjs`, plus the tests covering each of the above                                     |
-
-Unless you specifically need those routes gone, hiding the blog is the cheaper
-and far less error-prone option.
-
-### Step 6: Branding & Theme
-
-| What to change      | File                                 |
-| ------------------- | ------------------------------------ |
-| Colors (light/dark) | `app/styles/tokens/colors.css`       |
-| Type scale          | `app/styles/tokens/typography.css`   |
-| Font families       | `app/fonts.ts`                       |
-| Favicon             | `public/images/favicon/`             |
-| Site metadata/SEO   | `app/layout.tsx`, `src/lib/utils.ts` |
-| Share card          | `scripts/generate-og.mjs`            |
-
-After changing the profile or share-card design, run `npm run og` and commit
-both `public/og.png` and `public/og.meta.json`. The metadata file binds the
-committed image to the generator and profile inputs, so omitting either file
-will fail CI.
-
-### Step 7: Final Cleanup
-
-Search the authored files for the existing name and handle to find any remaining references:
+To remove writing completely, first find every consumer:
 
 ```bash
-rg -n "Michael|mldangelo" . \
-  -g '!node_modules/**' -g '!.next/**' -g '!out/**' \
-  -g '!coverage/**' -g '!.git/**'
+rg -n -i "writing|feed\\.xml|getWritingItems|getAllPosts" app src scripts
 ```
 
-Then format and validate the finished site:
+Expect to remove or update the writing routes, feed, content loaders, homepage
+section, sitemap, schema, export verifier, styles, and tests. Run a production
+build after the refactor.
+
+## Replace the visual identity
+
+| Setting                    | Location                                |
+| -------------------------- | --------------------------------------- |
+| Light and dark colors      | `app/styles/tokens/colors.css`          |
+| Type scale                 | `app/styles/tokens/typography.css`      |
+| Font files and assignments | `app/fonts.ts`                          |
+| Favicon                    | `public/images/favicon/`                |
+| Default metadata           | `app/layout.tsx`, `src/lib/metadata.ts` |
+| Share-card generator       | `scripts/generate-og.mjs`               |
+
+After changing profile fields used on the share card or changing its design,
+run:
+
+```bash
+npm run og
+npm run og:check
+```
+
+Commit both `public/og.png` and `public/og.meta.json`.
+
+## Search for upstream details
+
+Search for the current name, domain, handle, employer, and repository before
+publishing:
+
+```bash
+rg -n -i "Michael|mldangelo|dangelosaurus|mldangelo\\.com|OpenAI|Promptfoo" \
+  app content public scripts src package.json README.md
+```
+
+Repeat the search with any other upstream names or URLs you find. This catches
+details in page descriptions, tests, images, and links that a checklist can
+miss.
+
+Some tests assert the site's public content. Search for the old exact text and
+update those expectations when the corresponding content changes. Do not
+weaken structural checks for metadata, canonical URLs, draft isolation,
+accessibility, or export integrity.
+
+Run the full validation suite:
 
 ```bash
 npm run format
@@ -146,87 +157,85 @@ npm run build
 npm run verify-export
 ```
 
-**Some tests assert this site's specific content, so replacing it will fail
-them.** That is expected, not a sign you broke something—update the
-expectations to match your own content:
-
-| If you change             | Update                                                                                                         |
-| ------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| The posts                 | `app/__tests__/content-ia.test.tsx`, `app/writing/[slug]/page.test.ts`, `app/feed.xml/__tests__/route.test.ts` |
-| The navigation routes     | `src/components/__tests__/Template/Navigation.test.tsx`                                                        |
-| Profile, résumé, projects | the matching suites under `src/data/__tests__/`                                                                |
-
-Tests that assert structure rather than content—metadata completeness, canonical
-URLs, draft isolation, duplicate IDs—should keep passing. If one of those fails,
-it is worth reading closely.
-
 ## Deployment
 
-### GitHub Pages (Recommended)
+### GitHub Pages
 
-1. Update `SITE_URL` in `src/lib/utils.ts` and `homepage` in `package.json`
-2. Set your domain in `public/CNAME` (for example, `yoursite.com`)
-3. In your repo settings, enable GitHub Pages with source: GitHub Actions
-4. Push to `main`—it deploys automatically
+1. Set `SITE_URL` in `src/lib/utils.ts` to the final public URL without a
+   trailing slash.
+2. Set `homepage` in `package.json` to the same URL with a trailing slash.
+3. In **Settings > Pages**, choose **GitHub Actions** as the source.
+4. Push to `main`.
 
-### Custom Domain
+The site works as written at a root URL, such as a custom domain or a
+`YOUR-USER.github.io` user site. A project site at
+`https://YOUR-USER.github.io/personal-site/` needs more work. The workflow
+injects Next's `basePath`, but raw asset paths and absolute URLs created by the
+application still assume a root deployment. Updating `SITE_URL` and `homepage`
+alone is not enough for that case.
 
-1. Purchase a domain from Squarespace Domains, Cloudflare, or Namecheap
-2. Add your domain to `public/CNAME`:
-   ```bash
-   echo "yourdomain.com" > public/CNAME
-   ```
-3. Configure DNS per [GitHub's documentation](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site)
+### Custom domain
 
-### Other Hosts
+Add the domain in **Settings > Pages**, then configure its DNS records using
+[GitHub's custom-domain guide](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site).
+Update `SITE_URL` and `homepage` to the custom URL.
 
-Run `npm run build` and upload the `out/` directory to any static host (Vercel, Netlify, S3, etc.).
+This repository publishes through a custom GitHub Actions workflow. GitHub
+ignores `public/CNAME` for this publishing method, so delete the upstream file
+from your fork.
 
-## Common Tasks
+### Other static hosts
+
+Run `npm run build` and deploy the generated `out/` directory to the host's
+root. A subpath deployment also needs a matching Next `basePath` and an audit of
+raw asset and absolute URL construction. `SITE_URL` alone does not configure
+that path.
+
+## Common changes
 
 ### Remove a page
 
-Delete its folder from `app/` and remove the link from `src/data/routes.ts`.
+Deleting a route folder does not remove its other references. Search for its
+path, label, component names, and data imports first. Update navigation,
+`app/sitemap.ts`, schema, styles, and tests as applicable.
 
-```bash
-rm -rf app/stats  # removes the /stats page
-```
+### Add a social link
 
-### Add a social icon
-
-In `src/data/contact.ts`, import from Font Awesome and add to the array:
+In `src/data/contact.ts`, import a Font Awesome icon and add an item:
 
 ```typescript
 import { faYoutube } from '@fortawesome/free-brands-svg-icons/faYoutube';
-// Add to data array:
+
 { link: 'https://youtube.com/@you', label: 'YouTube', icon: faYoutube },
 ```
 
 ### Change theme colors
 
-Edit `app/styles/tokens/colors.css`. Its `:root` and `[data-theme='dark']` blocks define the semantic `--color-*` variables used throughout the site. Keep links on `--color-accent`, filled controls on `--color-accent-fill`, and reserve `--color-signal` for live values.
+Edit the `:root` and `[data-theme='dark']` blocks in
+`app/styles/tokens/colors.css`. Use `--color-accent` for links,
+`--color-accent-fill` for filled controls, and `--color-signal` only for live
+values.
 
 ### Add Google Analytics
 
-1. Create `.env.local` from the example: `cp .env.example .env.local`
-2. Add your GA4 measurement ID: `NEXT_PUBLIC_GA_TRACKING_ID=G-XXXXXXX`
+Copy `.env.example` to `.env.local` and set:
+
+```text
+NEXT_PUBLIC_GA_TRACKING_ID=G-XXXXXXX
+```
 
 ## Troubleshooting
 
-| Problem                            | Solution                                                                                                                                                                            |
-| ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Port 3000 in use                   | `npm run dev -- -p 3001`                                                                                                                                                            |
-| Styles not updating                | Hard refresh: Cmd+Shift+R (Mac) or Ctrl+Shift+R (Windows)                                                                                                                           |
-| Images not appearing               | Use `/images/...` not `public/images/...` in code                                                                                                                                   |
-| Build failing                      | Run `npm run lint`, `npm run type-check`, and `npm test`                                                                                                                            |
-| `npm ci` refuses to install        | You are on Node older than 22.13; run `nvm use`                                                                                                                                     |
-| `missing "generateStaticParams()"` | `content/writing/` has no published posts—keep at least one                                                                                                                         |
-| Assets 404 on a project site       | Repository sites are served from `/<repo>/`. The Pages workflow injects that basePath via `actions/configure-pages`; a custom domain in `public/CNAME` serves from the root instead |
-| Git line endings (Windows)         | `git config core.autocrlf input`                                                                                                                                                    |
+| Problem                                 | Check                                                                                 |
+| --------------------------------------- | ------------------------------------------------------------------------------------- |
+| `EBADENGINE` warning or install failure | Run `nvm install`, then retry `npm ci`                                                |
+| Port 3000 is in use                     | Run `npm run dev -- -p 3001`                                                          |
+| Images do not appear                    | Use a URL such as `/images/photo.jpg`, not `public/images/photo.jpg`                  |
+| `missing "generateStaticParams()"`      | Keep at least one published Markdown post                                             |
+| Assets return 404 on a project site     | Review the repository subpath limitation in the [GitHub Pages section](#github-pages) |
+| The export verifier fails               | Run `npm run build` first, then inspect the named file or route                       |
 
-## Getting Help
+## Getting help
 
-- Open an issue: https://github.com/mldangelo/personal-site/issues
-- Email: hi@mldangelo.com
-
-If you find bugs or unclear instructions, please submit a PR—contributions help everyone.
+Open an [issue](https://github.com/mldangelo/personal-site/issues) when the
+instructions are unclear or appear to be wrong.
