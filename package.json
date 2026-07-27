@@ -61,6 +61,10 @@
     "typescript": "^7.0.2",
     "vitest": "^4.1.7"
   },
+  "overrides": {
+    "postcss": "^8.5.23",
+    "sharp": "^0.35.3"
+  },
   "browserslist": {
     "production": [
       ">0.2%",
