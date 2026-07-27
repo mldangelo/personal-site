@@ -6,8 +6,8 @@ This site has been a work in progress since 2014, evolving to reflect current be
 
 **Design**
 
-- "Ground Station" visual system: three deliberate type roles, structure carried
-  by hairlines rather than shadow, and a signal colour reserved for live values
+- Rebuilt the visual system: three deliberate type roles, structure carried by
+  hairlines rather than shadow, and a signal colour reserved for live values
   (see the design-system notes in [AGENTS.md](../AGENTS.md))
 - Self-hosted variable fonts via Fontsource, removing the Google Fonts build
   dependency while keeping metric-adjusted fallbacks

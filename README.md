@@ -11,9 +11,9 @@ portfolio, résumé, archive, and writing site built with
 [TypeScript](https://www.typescriptlang.org/), and
 [Tailwind CSS](https://tailwindcss.com/).
 
-The architecture is reusable and MIT-licensed, but the content and “Ground
-Station” visual system are personal. Fork it as a starting point, not as a
-one-hour fill-in-the-blanks theme.
+The architecture is reusable and MIT-licensed, but the content and visual
+system are personal. Fork it as a starting point, not as a one-hour
+fill-in-the-blanks theme.
 
 **[Visit the live site →](https://mldangelo.com)**
 

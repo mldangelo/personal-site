@@ -47,14 +47,14 @@ This project attempts to follow these design principles. Feedback and discussion
 
 ## Visual Design
 
-The site's visual system is called "Ground Station." It is documented alongside
-the code it governs, in the design-system entries of [AGENTS.md](../AGENTS.md):
-three deliberate type roles, structure carried by hairlines rather than shadow
-and float, and an accent colour reserved for structure and links with a separate
-signal colour held back for values that are genuinely live.
+The site's visual system is documented alongside the code it governs, in the
+design-system entries of [AGENTS.md](../AGENTS.md): three deliberate type roles,
+structure carried by hairlines rather than shadow and float, and an accent
+colour reserved for structure and links with a separate signal colour held back
+for values that are genuinely live.
 
-The principles on this page are about how the code is organized. Ground Station
-is about how the site looks and why. Changing one rarely means changing the
+The principles on this page are about how the code is organized; those entries
+are about how the site looks and why. Changing one rarely means changing the
 other.
 
 ## References
