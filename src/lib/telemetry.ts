@@ -43,14 +43,13 @@ export const AGE_MIN_INTERVAL = 25;
  * 25ms scheduled roughly twelve React renders per visible change, all of them
  * painting an identical string.
  *
- * Note that this derivation only bites below about nine decimals. At
+ * This derivation only bites below about nine decimals. At
  * `AGE_PRECISION_FULL` the last digit turns over every ~0.32ms, so the floor
- * always wins and `/stats` repaints 40 times a second for as long as it is the
- * visible tab. Nothing is painting a duplicate string — the digits really are
- * changing — but no reader can follow an eleventh decimal at 40Hz, so the rate
- * buys nothing above a slower one. Raising `AGE_MIN_INTERVAL` is the knob;
- * it trades a cost nobody sees against a flourish that is the point of the
- * readout, which is why it has been left alone rather than quietly tuned.
+ * always wins and the timer runs at `AGE_MIN_INTERVAL` — 40 ticks a second,
+ * every one of them a genuinely different string. That cadence is deliberate;
+ * the blur is the point of the readout. It is affordable because `useLiveAge`
+ * assigns the reading to a text node rather than routing it through React
+ * state, so the cost of a tick is one `textContent` write and nothing else.
  */
 export function ageIntervalFor(precision: number): number {
   const msPerDigit = MS_PER_YEAR / 10 ** precision;
