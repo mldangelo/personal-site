@@ -6,10 +6,9 @@
 @theme inline {
   /* ===================
      SPACING SCALE
-     Base unit: 4px (0.25rem)
+     Base unit: 4px (0.25rem). Curated rather than exhaustive — steps are
+     added when something needs them, not kept on the chance it might.
      =================== */
-  --spacing-1: 0.25rem; /* 4px */
-  --spacing-2: 0.5rem; /* 8px */
   --spacing-3: 0.75rem; /* 12px */
   --spacing-4: 1rem; /* 16px */
   --spacing-5: 1.25rem; /* 20px */

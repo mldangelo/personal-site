@@ -51,7 +51,7 @@
   margin: 0;
 }
 
-@media (max-width: 736px) {
+@media (max-width: 735px) {
   .resume-page .courses .course-list {
     grid-template-columns: 1fr;
   }
@@ -109,7 +109,7 @@
   border-bottom: var(--rule) solid var(--color-border);
 }
 
-@media (max-width: 736px) {
+@media (max-width: 735px) {
   .resume-nav {
     top: var(--header-height-mobile);
     gap: 0 1rem;
