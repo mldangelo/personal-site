@@ -11,10 +11,15 @@ sync.
 
 ## Before You Start
 
+You need Node.js 22.13 or newer. The repository develops on the version pinned
+in `.nvmrc`, which is also what CI and the deployed build use; with
+[nvm](https://github.com/nvm-sh/nvm) installed, `nvm use` selects it.
+
 1. Fork and clone the repository
-2. Run `npm ci` then `npm run dev`
-3. Open [http://localhost:3000](http://localhost:3000) to see the site
-4. Keep the dev server running—changes appear instantly
+2. Run `nvm use` (or otherwise switch to Node 22.13+)
+3. Run `npm ci` then `npm run dev`
+4. Open [http://localhost:3000](http://localhost:3000) to see the site
+5. Keep the dev server running—changes appear instantly
 
 ## Customization Checklist
 
@@ -55,9 +60,9 @@ Work through these steps in order for the smoothest experience.
 | Project entries | `src/data/projects.ts`    |
 | Project images  | `public/images/projects/` |
 
-### Step 5: Blog/Writing (Optional)
+### Step 5: Blog/Writing
 
-The site includes a blog at `/writing/` with an RSS feed. You can use it, customize it, or remove it entirely.
+The site includes a blog at `/writing/` with an RSS feed.
 
 **To add posts**, create Markdown files in `content/writing/`. The filename becomes the URL slug (for example, `my-post.md` becomes `/writing/my-post/`).
 
@@ -66,18 +71,42 @@ The site includes a blog at `/writing/` with an RSS feed. You can use it, custom
 title: 'Your Post Title'
 date: '2026-01-15'
 description: 'A brief description for previews and SEO.'
+image: /images/writing/optional-share-image.png
+imageAlt: 'Describes the image for screen readers and as a fallback'
+draft: true
 ---
 
 Your content here...
 ```
 
-**To disable the blog entirely:**
+Only `title`, `date`, and `description` are required. `image` and `imageAlt`
+set the post's share card and travel together—an image without alt text is an
+accessibility gap. `draft: true` keeps a post visible in development and out of
+the production export entirely, including the sitemap and feed.
 
-```bash
-rm -rf app/writing app/feed.xml content/writing
-```
+**Keep at least one published post.** With an empty `content/writing/`,
+`generateStaticParams()` returns nothing and the static export fails with
+`Page "/writing/[slug]" is missing "generateStaticParams()"`—an error that
+never mentions posts. Replace the example posts rather than emptying the
+directory.
 
-Then remove the "Writing" link from `src/data/routes.ts`.
+**To hide the blog** without removing it, delete the `/writing` entry from
+`src/data/routes.ts`. The routes still build and remain reachable by URL, but
+they leave the navigation.
+
+**Removing the blog outright is a refactor, not a delete.** The content is
+woven into the homepage, sitemap, schema, and export verifier, so budget real
+time for it. Expect to touch:
+
+| Area         | Files                                                                                                      |
+| ------------ | ---------------------------------------------------------------------------------------------------------- |
+| Routes       | `app/writing/`, `app/feed.xml/`, `content/writing/`                                                        |
+| Data loaders | `src/lib/posts.ts`, `src/lib/writing.ts`, `src/data/writing.ts`                                            |
+| Consumers    | `app/page.tsx` (the "Latest writing" section), `app/sitemap.ts`, `src/lib/schema.ts`, `src/data/routes.ts` |
+| Verification | `scripts/verify-export.mjs`, plus the tests covering each of the above                                     |
+
+Unless you specifically need those routes gone, hiding the blog is the cheaper
+and far less error-prone option.
 
 ### Step 6: Branding & Theme
 
@@ -116,6 +145,20 @@ npm run og:check
 npm run build
 npm run verify-export
 ```
+
+**Some tests assert this site's specific content, so replacing it will fail
+them.** That is expected, not a sign you broke something—update the
+expectations to match your own content:
+
+| If you change             | Update                                                                                                         |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| The posts                 | `app/__tests__/content-ia.test.tsx`, `app/writing/[slug]/page.test.ts`, `app/feed.xml/__tests__/route.test.ts` |
+| The navigation routes     | `src/components/__tests__/Template/Navigation.test.tsx`                                                        |
+| Profile, résumé, projects | the matching suites under `src/data/__tests__/`                                                                |
+
+Tests that assert structure rather than content—metadata completeness, canonical
+URLs, draft isolation, duplicate IDs—should keep passing. If one of those fails,
+it is worth reading closely.
 
 ## Deployment
 
@@ -170,14 +213,16 @@ Edit `app/styles/tokens/colors.css`. Its `:root` and `[data-theme='dark']` block
 
 ## Troubleshooting
 
-| Problem                    | Solution                                                   |
-| -------------------------- | ---------------------------------------------------------- |
-| Port 3000 in use           | `npm run dev -- -p 3001`                                   |
-| Styles not updating        | Hard refresh: Cmd+Shift+R (Mac) or Ctrl+Shift+R (Windows)  |
-| Images not appearing       | Use `/images/...` not `public/images/...` in code          |
-| Build failing              | Run `npm run lint`, `npm run type-check`, and `npm test`   |
-| CSS 404 or wrong path      | Check `homepage` in `package.json` matches your deploy URL |
-| Git line endings (Windows) | `git config core.autocrlf input`                           |
+| Problem                            | Solution                                                                                                                                                                            |
+| ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Port 3000 in use                   | `npm run dev -- -p 3001`                                                                                                                                                            |
+| Styles not updating                | Hard refresh: Cmd+Shift+R (Mac) or Ctrl+Shift+R (Windows)                                                                                                                           |
+| Images not appearing               | Use `/images/...` not `public/images/...` in code                                                                                                                                   |
+| Build failing                      | Run `npm run lint`, `npm run type-check`, and `npm test`                                                                                                                            |
+| `npm ci` refuses to install        | You are on Node older than 22.13; run `nvm use`                                                                                                                                     |
+| `missing "generateStaticParams()"` | `content/writing/` has no published posts—keep at least one                                                                                                                         |
+| Assets 404 on a project site       | Repository sites are served from `/<repo>/`. The Pages workflow injects that basePath via `actions/configure-pages`; a custom domain in `public/CNAME` serves from the root instead |
+| Git line endings (Windows)         | `git config core.autocrlf input`                                                                                                                                                    |
 
 ## Getting Help
 

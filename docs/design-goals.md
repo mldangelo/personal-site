@@ -1,6 +1,6 @@
 # Design Goals
 
-This projects attempts to follow these design principles. Feedback and discussion around these are encouraged. Please feel free to submit an issue or get in touch.
+This project attempts to follow these design principles. Feedback and discussion around these are encouraged. Please feel free to submit an issue or get in touch.
 
 ## Simple
 
@@ -18,14 +18,14 @@ This projects attempts to follow these design principles. Feedback and discussio
    - It should be relatively straight forward to replace the content in this repository or to add a new feature.
    - Good separation of concerns. Components keep track of their own state. Props are not over-utilized.
    - Limited vertical depth (changes should be relatively self encapsulated).
-   - Correct abstractions. - Next.js build system is complex, but developers don't need to understand the internals to use this project.
+   - Correct abstractions. The Next.js build system is complex, but developers don't need to understand its internals to use this project.
 1. Good Documentation
    - Comments exist and have an appropriate level of detail.
    - Code should be readable.
 1. Lean
    - Projects bloat over time. Actively prune for old and dead code.
    - New features that affect the entire project should be carefully considered.
-   - Buy, don't build. Don't reinvent the wheel. Use popular npm libraries when possible.
+   - Buy, don't build. Don't reinvent the wheel. Use popular npm libraries when possible. The exception is a dependency that would be larger than the problem: reading the dimensions out of an image header is a few dozen lines, and `src/lib/imageSize.ts` is deliberately cheaper than the library it replaces.
 1. Limited horizontal fragmentation
    - Linter to prevent easy PR nits & to prevent developers from wasting time thinking about code style.
    - Preferred React Style - functional components with TypeScript for type safety.
@@ -43,10 +43,23 @@ This projects attempts to follow these design principles. Feedback and discussio
    - Limited external dependencies (ie no missing headers for external libraries).
    - Dependencies are kept up to date (currently uses dependabot).
 1. Good tests.
-1. Stable API - This project has been forked > 100 times. It should be easy for those forks adopt changes in main.
+1. Stable API - This project has been forked close to a thousand times. It should be easy for those forks to adopt changes in main.
+
+## Visual Design
+
+The site's visual system is called "Ground Station." It is documented alongside
+the code it governs, in the design-system entries of [AGENTS.md](../AGENTS.md):
+three deliberate type roles, structure carried by hairlines rather than shadow
+and float, and an accent colour reserved for structure and links with a separate
+signal colour held back for values that are genuinely live.
+
+The principles on this page are about how the code is organized. Ground Station
+is about how the site looks and why. Changing one rarely means changing the
+other.
 
 ## References
 
 For further reading, please review
 
-- React's [Design Principles](https://react.dev/learn/thinking-in-react).
+- React's [Design Principles](https://legacy.reactjs.org/docs/design-principles.html).
+- [Thinking in React](https://react.dev/learn/thinking-in-react).

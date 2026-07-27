@@ -39,7 +39,9 @@ npm ci
 npm run dev
 ```
 
-Requires [GitHub CLI](https://cli.github.com/) and Node.js 20+ ([nvm](https://github.com/nvm-sh/nvm) recommended).
+Requires [GitHub CLI](https://cli.github.com/) and Node.js 22.13 or newer.
+[nvm](https://github.com/nvm-sh/nvm) is recommended—`nvm use` picks up the
+version in `.nvmrc`, which is what CI and the deployed build run.
 
 ### Option 2: GitHub Codespaces
 
@@ -66,12 +68,18 @@ npm run type-check      # Run TypeScript
 npm test                # Run Vitest
 npm run build           # Build the production static export
 npm run verify-export   # Inspect the generated HTML and XML
+npm run og              # Regenerate the share card
+npm run og:check        # Verify the committed share card is current
 ```
+
+CI runs `lint`, `format:check`, `type-check`, `og:check`, the test suite, and
+`verify-export` against every build. Running `npm run format` before committing
+is the one step people forget—the format check is a hard gate.
 
 ## Deploy
 
-Pushes to `main` deploy the same Linux/Node 22 export artifact that passed the
-full CI graph. See the
+Pushes to `main` deploy the same Linux export artifact that passed the full CI
+graph, built on the Node version in `.nvmrc`. See the
 [adapting guide](./docs/adapting-guide.md#deployment) for domain setup.
 
 ## Contributing
