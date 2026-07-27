@@ -2,13 +2,19 @@ import { act, fireEvent, render, screen } from '@testing-library/react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { ageAt } from '@/lib/telemetry';
+import { ageAt, agePlaceholder } from '@/lib/telemetry';
 import useLiveAge from '../useLiveAge';
 
 const TEST_PRECISION = 8;
 
 function LiveAge({ precision = TEST_PRECISION }: { precision?: number }) {
-  return <span data-testid="live-age">{useLiveAge(precision)}</span>;
+  const ref = useLiveAge<HTMLSpanElement>(precision);
+
+  return (
+    <span data-testid="live-age" ref={ref}>
+      {agePlaceholder(precision)}
+    </span>
+  );
 }
 
 /** Stubs matchMedia so the hook can read a reduced-motion preference. */
@@ -106,6 +112,38 @@ describe('useLiveAge', () => {
     });
     fireEvent(document, new Event('visibilitychange'));
     expect(screen.getByTestId('live-age').textContent).not.toBe(beforeHide);
+  });
+
+  it('advances the readout without re-rendering React', () => {
+    // The whole point of writing to the text node directly. At the precision
+    // the stats page uses the timer runs at the 25ms floor, so routing this
+    // through state meant 40 React renders a second.
+    let renders = 0;
+
+    function Counted() {
+      renders += 1;
+      const ref = useLiveAge<HTMLSpanElement>(TEST_PRECISION);
+
+      return (
+        <span data-testid="live-age" ref={ref}>
+          {agePlaceholder(TEST_PRECISION)}
+        </span>
+      );
+    }
+
+    render(<Counted />);
+    const rendersAfterMount = renders;
+    const firstReading = screen.getByTestId('live-age').textContent;
+
+    act(() => {
+      vi.advanceTimersByTime(5000);
+    });
+
+    // The reading moved...
+    expect(screen.getByTestId('live-age')).toHaveTextContent(/^\d+\.\d+$/);
+    expect(screen.getByTestId('live-age').textContent).not.toBe(firstReading);
+    // ...and React never rendered again to make that happen.
+    expect(renders).toBe(rendersAfterMount);
   });
 
   it('stops ticking when unmounted', () => {
