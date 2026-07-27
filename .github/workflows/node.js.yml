@@ -153,7 +153,7 @@ jobs:
           matrix.os == 'ubuntu-latest' &&
           matrix.node-version == '22.x' &&
           github.ref == 'refs/heads/main'
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
         with:
           static_site_generator: next
 
