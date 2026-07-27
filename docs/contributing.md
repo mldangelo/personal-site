@@ -8,6 +8,8 @@ change, open an issue so the approach can be discussed.
 - Keep each pull request focused. Split unrelated changes.
 - Review the [design goals](./design-goals.md).
 - Follow the [Contributor Covenant](https://www.contributor-covenant.org/).
+- If you use a coding agent, have it read [AGENTS.md](../AGENTS.md) and give it
+  a focused task.
 
 ## Set up the project
 
@@ -28,7 +30,8 @@ pull request title so the merged history stays consistent.
 
 ## Validate the change
 
-Run the local equivalents of the checks CI runs:
+Ask your coding agent to run the local equivalents of the checks CI runs, or
+run them yourself:
 
 ```bash
 npm run format
@@ -51,5 +54,7 @@ In the description:
 - Describe how you verified it.
 - Call out any visual, compatibility, or follow-up work.
 
-Before requesting review, inspect the complete diff. Remove unrelated
-formatting changes, debugging code, stale comments, and unused files.
+Before requesting review, inspect the complete diff yourself and confirm any
+validation results reported by a coding agent. Remove unrelated formatting
+changes, debugging code, stale comments, and unused files. State which checks
+you did not run.

@@ -26,7 +26,17 @@ are personal, so a fork needs a full rebrand.
 
 ## Get started
 
-### Option 1: Local development
+### With a coding agent
+
+Open your fork in a coding agent and ask:
+
+```text
+Read AGENTS.md, use the Node version in .nvmrc, install the locked
+dependencies, and start the development server. Do not change the site yet.
+Tell me the local URL and report any setup failure with its exact output.
+```
+
+### Manual setup
 
 With [GitHub CLI](https://cli.github.com/) and
 [nvm](https://github.com/nvm-sh/nvm) installed:
@@ -42,7 +52,7 @@ npm run dev
 If you use another version manager, choose a release accepted by `engines.node`
 in `package.json`.
 
-### Option 2: GitHub Codespaces
+### GitHub Codespaces
 
 1. Click **Fork** at the top of this page.
 2. In your fork, click **Code**, choose **Codespaces**, then create a codespace.
@@ -54,13 +64,29 @@ npm ci
 npm run dev
 ```
 
-No local tool installation is required.
+Codespaces provides the tools, so you do not need to install them locally.
 
-## Adapt it
+## Adapt it with a coding agent
 
-The **[adapting guide](./docs/adapting-guide.md)** lists the content, links,
-metadata, images, and styles a fork should replace. Finish by searching for
-upstream details and reviewing a production build.
+When you are ready to customize the site, give the agent your résumé, profile
+details, links, images, and intended site URL. Try:
+
+```text
+Read AGENTS.md and docs/adapting-guide.md, set up the repository, then rebrand
+this fork for [NAME] with the details and assets I provide. Work on a topic
+branch and preserve the current routes and design unless I say otherwise.
+Inventory the existing posts, external writing, résumé, and projects before
+changing the shared identity. Do not relabel that content as mine. Ask whether
+unmatched personal content should keep its original attribution, be replaced,
+or be removed. Use the guide's reference map to update every identity surface
+and generated asset. Search for remaining upstream details and run the full
+validation suite. Do not commit, push, merge, change GitHub settings, create
+secrets, or modify DNS. Report the external steps that remain.
+```
+
+The **[adapting guide](./docs/adapting-guide.md)** has focused prompts for
+writing, feature removal, visual changes, and deployment, plus a map of the
+files an agent should inspect.
 
 ## Commands
 
@@ -82,7 +108,8 @@ build, and the exported site on every pull request.
 ## Deploy
 
 Pushes to `main` deploy the same static build that CI validates. See the
-[adapting guide](./docs/adapting-guide.md#deployment) for URL and domain setup.
+[adapting guide](./docs/adapting-guide.md#deployment-reference) for URL and
+domain setup.
 
 ## Contributing
 
