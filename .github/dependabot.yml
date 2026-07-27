@@ -12,7 +12,22 @@ updates:
         patterns:
           - 'react'
           - 'react-dom'
+      # Each package carries its own copy of fontawesome-common-types, whose
+      # IconName union grows every release. Bumped singly, the copies diverge
+      # and IconDefinition stops being assignable — type-check fails.
+      fontawesome:
+        patterns:
+          - '@fortawesome/*'
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
       interval: 'weekly'
+    groups:
+      # Producer/consumer pairs on the path that publishes the site. A
+      # half-bumped pair fails only at deploy time, after CI reports success.
+      pages-artifacts:
+        patterns:
+          - 'actions/upload-artifact'
+          - 'actions/download-artifact'
+          - 'actions/upload-pages-artifact'
+          - 'actions/deploy-pages'

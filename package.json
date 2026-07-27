@@ -8,7 +8,7 @@
     "url": "https://github.com/mldangelo/personal-site.git"
   },
   "engines": {
-    "node": "^20.19.0 || ^22.13.0 || >=24.0.0"
+    "node": "^22.13.0 || >=24.0.0"
   },
   "scripts": {
     "dev": "next dev --turbopack",
@@ -37,28 +37,28 @@
     "@fortawesome/free-regular-svg-icons": "^7.3.1",
     "@fortawesome/react-fontawesome": "^3.5.0",
     "@next/third-parties": "^16.2.12",
-    "@tailwindcss/postcss": "^4.3.2",
+    "@tailwindcss/postcss": "^4.3.3",
     "dayjs": "^1.11.21",
     "gray-matter": "^4.0.3",
     "markdown-to-jsx": "^9.9.0",
-    "next": "^16.2.11",
+    "next": "^16.2.12",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "tailwindcss": "^4.3.0"
+    "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.15",
-    "@next/bundle-analyzer": "^16.2.6",
+    "@biomejs/biome": "^2.5.5",
+    "@next/bundle-analyzer": "^16.2.12",
     "@testing-library/jest-dom": "^7.0.0",
     "@testing-library/react": "^16.3.2",
-    "@types/node": "^25.4.0",
+    "@types/node": "^26.1.1",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^6.0.3",
+    "@vitejs/plugin-react": "^6.0.4",
     "@vitest/coverage-v8": "^4.1.10",
     "jsdom": "^29.1.1",
-    "prettier": "^3.8.3",
-    "typescript": "^6.0.3",
+    "prettier": "^3.9.6",
+    "typescript": "^7.0.2",
     "vitest": "^4.1.7"
   },
   "browserslist": {

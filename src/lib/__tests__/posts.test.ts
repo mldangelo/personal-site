@@ -51,12 +51,10 @@ describe('validatePostFrontmatter', () => {
 });
 
 describe('getPostBySlug', () => {
-  it.each([
-    '../package',
-    'UPPERCASE',
-    'trailing-',
-    'two--hyphens',
-  ])('rejects an unsafe or noncanonical slug: %s', (slug) => {
-    expect(getPostBySlug(slug)).toBeNull();
-  });
+  it.each(['../package', 'UPPERCASE', 'trailing-', 'two--hyphens'])(
+    'rejects an unsafe or noncanonical slug: %s',
+    (slug) => {
+      expect(getPostBySlug(slug)).toBeNull();
+    },
+  );
 });

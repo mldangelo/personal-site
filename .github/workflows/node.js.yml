@@ -10,6 +10,13 @@ on:
 permissions:
   contents: read
 
+env:
+  # The single build-matrix leg whose output is deployed. Named once so the
+  # Pages-configure gate and the artifact-upload gate cannot drift apart —
+  # they are a pair, and a mismatch produces a green CI run with nothing to
+  # deploy. Must stay in step with .nvmrc; the build job asserts that.
+  DEPLOY_NODE: '26.x'
+
 # Supersede stale PR runs, but never cancel a main run that may already be
 # deploying. The Pages job below serializes main deployments.
 concurrency:
@@ -124,14 +131,17 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version: [20.x, 22.x]
+        # The floor declared in package.json engines, and the version .nvmrc
+        # pins for development and the rest of CI.
+        node-version: [22.x, 26.x]
         os: [ubuntu-latest, windows-latest, macos-latest]
         exclude:
-          # Reduce matrix size for faster CI
+          # Reduce matrix size for faster CI. Non-Linux runners only need to
+          # prove the build is portable, so they run the deployed version.
           - os: windows-latest
-            node-version: 20.x
+            node-version: 22.x
           - os: macos-latest
-            node-version: 20.x
+            node-version: 22.x
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
@@ -145,13 +155,28 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Everything except this job takes its Node from .nvmrc, but a matrix
+      # needs literals. If the two drift, the deploy leg stops being built and
+      # main fails only after CI reports success. Catch it here, on the PR.
+      - name: Check deploy candidate matches .nvmrc
+        if: matrix.os == 'ubuntu-latest'
+        shell: bash
+        run: |
+          pinned="$(tr -d 'v[:space:]' < .nvmrc | cut -d. -f1)"
+          wanted="${DEPLOY_NODE%%.*}"
+          if [ "$pinned" != "$wanted" ]; then
+            echo "::error file=.nvmrc::.nvmrc pins Node $pinned but DEPLOY_NODE is $DEPLOY_NODE. Update both, and the build matrix."
+            exit 1
+          fi
+          echo "Deploy candidate Node $wanted matches .nvmrc."
+
       # This matrix entry becomes the deployment candidate on main. Pages
       # configuration has to run before Next builds so repository-site forks
       # receive their basePath in generated links and assets.
       - name: Configure GitHub Pages build
         if: >-
           matrix.os == 'ubuntu-latest' &&
-          matrix.node-version == '22.x' &&
+          matrix.node-version == env.DEPLOY_NODE &&
           github.ref == 'refs/heads/main'
         uses: actions/configure-pages@v6
         with:
@@ -182,7 +207,7 @@ jobs:
       - name: Upload build artifacts
         if: >-
           matrix.os == 'ubuntu-latest' &&
-          matrix.node-version == '22.x' &&
+          matrix.node-version == env.DEPLOY_NODE &&
           github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v7
         with:
@@ -208,7 +233,7 @@ jobs:
           fi
           echo "All CI checks passed!"
 
-  # Publish exactly the Linux/Node 22 artifact that passed the complete CI
+  # Publish exactly the Linux/DEPLOY_NODE artifact that passed the complete CI
   # graph. Manual runs are intentionally deployable only from main.
   deploy:
     name: Deploy to GitHub Pages

@@ -20,6 +20,13 @@ const nextConfig = {
 
   // Experimental features
   experimental: {
+    // TypeScript 7 is the native compiler and does not expose the JavaScript
+    // compiler API that Next's build-time type check reaches for, so the build
+    // fails outright without this. Shelling out to the TypeScript CLI is the
+    // path Next itself names in that error. Verified that type errors still
+    // fail the build under this flag — see AGENTS.md.
+    useTypeScriptCli: true,
+
     optimizePackageImports: [
       '@fortawesome/react-fontawesome',
       '@fortawesome/fontawesome-svg-core',
