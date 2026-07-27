@@ -3,6 +3,8 @@ import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
+import { ogProfileSnapshot } from './og-profile.mjs';
+
 const root = process.cwd();
 const EXPECTED_SIZE = { width: 1200, height: 630 };
 const [image, metadata, profile, generatorSource] = await Promise.all([
@@ -24,14 +26,7 @@ const actualSize = {
   width: image.readUInt32BE(16),
   height: image.readUInt32BE(20),
 };
-const expectedProfile = {
-  name: profile.name,
-  employer: profile.employer,
-  focus: profile.focus,
-  countriesVisited: profile.countriesVisited,
-  computingSince: profile.computingSince,
-  currentCity: profile.currentCity,
-};
+const expectedProfile = ogProfileSnapshot(profile);
 const expectedGeneratorDigest = createHash('sha256')
   .update(generatorSource)
   .update('\0')

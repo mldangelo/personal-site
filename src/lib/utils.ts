@@ -38,12 +38,6 @@ export const SITE_DESCRIPTION =
   'Member of the Technical Staff at OpenAI, working on Promptfoo and Codex Security. Co-founded Promptfoo before it joined OpenAI in 2026.';
 
 // Image dimension constants
-export const AVATAR_SIZE = {
-  hero: 120,
-  footer: 80,
-  sidebar: 200,
-} as const;
-
 export const PROJECT_IMAGE = {
   width: 600,
   height: 400,

@@ -78,12 +78,6 @@
   width: 100%;
 }
 
-/* Main content */
-.site-main {
-  flex-grow: 1;
-  width: 100%;
-}
-
 /* ========================================
    SLIDE MENU (native implementation)
    ======================================== */

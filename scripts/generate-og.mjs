@@ -20,6 +20,8 @@ import { createRequire } from 'node:module';
 import { join } from 'node:path';
 import { createElement as h } from 'react';
 
+import { ogProfileSnapshot } from './og-profile.mjs';
+
 // `next/og` ships as CommonJS with no ESM export condition, so it has to be
 // required rather than imported.
 const { ImageResponse } = createRequire(import.meta.url)('next/og');
@@ -33,14 +35,7 @@ const profile = JSON.parse(
 const OUTPUT = join(process.cwd(), 'public', 'og.png');
 const METADATA_OUTPUT = join(process.cwd(), 'public', 'og.meta.json');
 const SIZE = { width: 1200, height: 630 };
-const PROFILE_SNAPSHOT = {
-  name: profile.name,
-  employer: profile.employer,
-  focus: profile.focus,
-  countriesVisited: profile.countriesVisited,
-  computingSince: profile.computingSince,
-  currentCity: profile.currentCity,
-};
+const PROFILE_SNAPSHOT = ogProfileSnapshot(profile);
 const generatorSource = await readFile(new URL(import.meta.url), 'utf8');
 const generatorDigest = createHash('sha256')
   .update(generatorSource)

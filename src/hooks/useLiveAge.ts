@@ -15,7 +15,10 @@ import usePrefersReducedMotion from './usePrefersReducedMotion';
  * Three things keep this from being wasteful or unpleasant:
  *
  * - Cadence is derived from `precision`, so the timer fires roughly when the
- *   last displayed digit actually changes rather than at a fixed 25ms.
+ *   last displayed digit actually changes rather than at a fixed 25ms. Above
+ *   about nine decimals the digit outruns the floor and this stops helping —
+ *   see `ageIntervalFor`, which the only production caller drives past that
+ *   point.
  * - Under reduced motion the reading is taken once and left to stand. Digits
  *   changing several times a second is precisely the motion that setting asks
  *   us to avoid.

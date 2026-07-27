@@ -10,14 +10,11 @@ function getRows(courses: CourseType[]) {
   // Copy first: `sort` mutates in place, and this receives the imported
   // module array, so rendering was reordering shared data as a side effect.
   return [...courses]
-    .sort((a, b) => {
-      let ret = 0;
-      if (a.university > b.university) ret = -1;
-      else if (a.university < b.university) ret = 1;
-      else if (a.number > b.number) ret = 1;
-      else if (a.number < b.number) ret = -1;
-      return ret;
-    })
+    .sort(
+      (a, b) =>
+        b.university.localeCompare(a.university) ||
+        a.number.localeCompare(b.number),
+    )
     .map((course) => <Course data={course} key={course.title} />);
 }
 

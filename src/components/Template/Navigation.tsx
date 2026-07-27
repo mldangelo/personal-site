@@ -22,18 +22,20 @@ export default function Navigation() {
       <nav className="nav-links" aria-label="Primary">
         {routes
           .filter((l) => !l.index && l.primary !== false)
-          .map((l) => (
-            <Link
-              key={l.label}
-              href={l.path}
-              className={`nav-link ${isActiveRoute(pathname, l.path) ? 'active' : ''}`}
-              aria-current={
-                isActiveRoute(pathname, l.path) ? 'page' : undefined
-              }
-            >
-              {l.label}
-            </Link>
-          ))}
+          .map((l) => {
+            const active = isActiveRoute(pathname, l.path);
+
+            return (
+              <Link
+                key={l.label}
+                href={l.path}
+                className={`nav-link ${active ? 'active' : ''}`}
+                aria-current={active ? 'page' : undefined}
+              >
+                {l.label}
+              </Link>
+            );
+          })}
       </nav>
 
       <div className="nav-actions">

@@ -11,11 +11,11 @@ import {
   HOME_URL,
   SITE_URL,
 } from '@/lib/schema';
+import { AUTHOR_NAME } from '@/lib/utils';
 
 const PROJECTS_URL = `${SITE_URL}/projects/`;
 
-const PROJECTS_DESCRIPTION =
-  "Early projects and experiments from Michael D'Angelo (2015 and earlier).";
+const PROJECTS_DESCRIPTION = `Early projects and experiments from ${AUTHOR_NAME} (2015 and earlier).`;
 
 export const metadata: Metadata = createPageMetadata({
   title: 'Archive',
