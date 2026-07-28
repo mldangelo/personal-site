@@ -1,5 +1,5 @@
 import { createElement, isValidElement } from 'react';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import {
   formatReading,
@@ -107,6 +107,53 @@ describe('resolveReadings', () => {
 
     expect(isValidElement(reading.value)).toBe(true);
     expect(reading.value).toBe(element);
+  });
+
+  it('accepts an element as the measurement for a keyed row', () => {
+    // The age and the build clock are readings whose current value only a
+    // browser can take, so the server supplies the client leaf that carries
+    // them rather than a string. A declaration that names the key and no value
+    // is what keeps the element out of the data file.
+    const element = createElement('span', null, '36.42');
+    const declarations: StatDeclaration[] = [
+      { key: 'age', label: 'Current age', source: 'profile' },
+    ];
+
+    const [reading] = resolveReadings(declarations, { age: element });
+
+    expect(reading.value).toBe(element);
+  });
+
+  it('derives a link from the reading when the declaration asks it to', () => {
+    // The deployed commit is the one row whose link target is its own value.
+    const declarations: StatDeclaration[] = [
+      {
+        key: 'deployed_commit',
+        label: 'Deployed from commit',
+        format: (value) => String(value).slice(0, 7),
+        link: (value) => `https://example.com/commit/${value}`,
+      },
+    ];
+
+    const [reading] = resolveReadings(declarations, {
+      deployed_commit: 'abcdef1234567890',
+    });
+
+    expect(reading.value).toBe('abcdef1');
+    expect(reading.link).toBe('https://example.com/commit/abcdef1234567890');
+  });
+
+  it('never calls a link function for a row it is about to drop', () => {
+    // Off CI there is no commit, so there is nothing to link to either.
+    const link = vi.fn(() => 'https://example.com');
+    const declarations: StatDeclaration[] = [
+      { key: 'deployed_commit', label: 'Deployed from commit', link },
+    ];
+
+    expect(resolveReadings(declarations, { deployed_commit: null })).toEqual(
+      [],
+    );
+    expect(link).not.toHaveBeenCalled();
   });
 
   it('prefers the measurement over a declared value when both exist', () => {
