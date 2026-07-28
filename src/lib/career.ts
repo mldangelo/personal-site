@@ -27,9 +27,22 @@ function endKey(position: Position): string {
 }
 
 /**
- * Roles in reverse chronological order: newest start first, and where two
- * roles start on the same date the one still running — or the one that ran
- * longer — comes first.
+ * Roles by recency of involvement: most recently held first, with anything
+ * still running ahead of everything closed, and ties broken by the newer start.
+ *
+ * Ordering on the END date rather than the start is deliberate, and it is the
+ * question a reader is actually asking — "when was he last doing this?" On a
+ * career with long overlapping tenures the two orders disagree sharply. Sorting
+ * by start date buried Arthena (Co-founder & CTO, 2014-01 → 2022-01, eight
+ * years) beneath Matroid (nine months) and a Planet internship (seven months),
+ * because both began later while running *inside* Arthena's window. By end date
+ * Arthena sits above both, where its span puts it.
+ *
+ * The cost of this choice, accepted knowingly: an open-ended role sorts to the
+ * top for as long as it stays open, so Skeptical Investments — an ongoing angel
+ * fund, not a full-time post — sits second, above Promptfoo. `tierFor` in
+ * `src/components/Resume/Experience.tsx` derives visual weight separately, so
+ * position in the list is not the only thing carrying emphasis.
  *
  * The source array is hand-maintained and had drifted out of sequence, running
  * 2022 → 2017 → 2014 → 2015 → 2014 through the middle, so a section that reads
@@ -48,8 +61,8 @@ function endKey(position: Position): string {
 export function sortPositions(positions: Position[]): Position[] {
   return [...positions].sort(
     (a, b) =>
-      b.startDate.localeCompare(a.startDate) ||
-      endKey(b).localeCompare(endKey(a)),
+      endKey(b).localeCompare(endKey(a)) ||
+      b.startDate.localeCompare(a.startDate),
   );
 }
 

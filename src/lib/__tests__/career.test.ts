@@ -44,41 +44,64 @@ function roleNamed(name: string): Position {
 }
 
 describe('sortPositions', () => {
-  it('orders newest start date first', () => {
+  it('orders newest end date first', () => {
     const ordered = sortPositions([
-      position({ name: 'Middle', startDate: '2018-01-01' }),
-      position({ name: 'Oldest', startDate: '2011-06-01' }),
-      position({ name: 'Newest', startDate: '2026-03-09' }),
+      position({ name: 'Middle', endDate: '2018-01-01' }),
+      position({ name: 'Oldest', endDate: '2011-06-01' }),
+      position({ name: 'Newest', endDate: '2026-03-09' }),
     ]);
 
     expect(byName(ordered)).toEqual(['Newest', 'Middle', 'Oldest']);
   });
 
-  it('breaks a shared start date by the later end date', () => {
-    // Both roles begin in January 2014 in the real data. The eight-year one
-    // should not be filed under the four-month internship.
+  it('prefers the end date when start and end disagree', () => {
+    // The property the whole ordering turns on, isolated: `Later` starts after
+    // `Longer` but finished years earlier, because it ran inside `Longer`'s
+    // window. Sorting on the start date puts it first; sorting on the end date
+    // — recency of involvement — does not. Reverse this comparator and only
+    // this assertion fails.
     const ordered = sortPositions([
       position({
-        name: 'Short',
-        startDate: '2014-01-01',
-        endDate: '2014-05-01',
+        name: 'Later',
+        startDate: '2015-09-01',
+        endDate: '2016-06-01',
       }),
       position({
-        name: 'Long',
+        name: 'Longer',
         startDate: '2014-01-01',
         endDate: '2022-01-01',
       }),
     ]);
 
-    expect(byName(ordered)).toEqual(['Long', 'Short']);
+    expect(byName(ordered)).toEqual(['Longer', 'Later']);
   });
 
-  it('places an ongoing role ahead of a closed one that started the same day', () => {
+  it('breaks a shared end date by the later start date', () => {
+    // Same end, so the shorter of the two leads.
+    const ordered = sortPositions([
+      position({
+        name: 'Long',
+        startDate: '2014-01-01',
+        endDate: '2022-01-01',
+      }),
+      position({
+        name: 'Short',
+        startDate: '2021-01-01',
+        endDate: '2022-01-01',
+      }),
+    ]);
+
+    expect(byName(ordered)).toEqual(['Short', 'Long']);
+  });
+
+  it('places an ongoing role ahead of every closed one, however recent', () => {
+    // An ongoing role sorts as though it ends later than any real date, even
+    // against a role that started later and closed only days ago.
     const ordered = sortPositions([
       position({
         name: 'Closed',
-        startDate: '2017-04-01',
-        endDate: '2026-01-01',
+        startDate: '2020-01-01',
+        endDate: '2026-07-01',
       }),
       position({
         name: 'Ongoing',
@@ -103,22 +126,36 @@ describe('sortPositions', () => {
     expect(ordered).not.toBe(input);
   });
 
-  it('returns real career data in strictly non-increasing start order', () => {
+  it('returns real career data in strictly non-increasing end order', () => {
     // The source array runs 2022 → 2017 → 2014 → 2015 → 2014 through the
     // middle. Source order is no longer load-bearing, but the rendered order
-    // is, so it is pinned here.
-    const starts = sortPositions(work).map((entry) => entry.startDate);
+    // is, so it is pinned here. Ordering is by END date — recency of
+    // involvement — so an ongoing role leads and a long tenure is not buried
+    // beneath the shorter ones that started inside it.
+    const ends = sortPositions(work).map(
+      (entry) => entry.endDate ?? '9999-12-31',
+    );
 
-    for (let i = 1; i < starts.length; i += 1) {
-      expect(starts[i].localeCompare(starts[i - 1])).toBeLessThanOrEqual(0);
+    for (let i = 1; i < ends.length; i += 1) {
+      expect(ends[i].localeCompare(ends[i - 1])).toBeLessThanOrEqual(0);
     }
+  });
+
+  it('places a long tenure above the shorter roles that ran inside it', () => {
+    // The concrete regression this ordering exists to prevent: by start date,
+    // an eight-year co-founder role sorted below a nine-month one and a
+    // seven-month internship, because both began later inside its window.
+    const order = sortPositions(work).map((entry) => entry.name);
+
+    expect(order.indexOf('Arthena')).toBeLessThan(order.indexOf('Matroid'));
+    expect(order.indexOf('Arthena')).toBeLessThan(order.indexOf('Planet'));
   });
 
   it('leads the real career data with the current OpenAI role', () => {
     expect(sortPositions(work)[0].name).toBe('OpenAI');
   });
 
-  it('sorts Arthena above the internship that shares its start month', () => {
+  it('sorts Arthena above the internship it ran alongside', () => {
     const ordered = byName(sortPositions(work));
 
     expect(ordered.indexOf('Arthena')).toBeLessThan(

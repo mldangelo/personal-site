@@ -132,8 +132,20 @@ describe('json resume document', () => {
   });
 
   it('omits endDate for the current role rather than inventing one', () => {
-    expect(resume.work[0]).not.toHaveProperty('endDate');
-    expect(resume.work[1].endDate).toBe('2026-03-09');
+    // Looked up by name, not by index: ordering is by end date, so the roles
+    // with no end date lead and their relative position is not this test's
+    // subject. Every ongoing role must omit the key rather than carry a
+    // placeholder, and a closed one must report its real date.
+    const ongoing = resume.work.filter((position) => !position.endDate);
+    expect(ongoing.length).toBeGreaterThan(0);
+    for (const position of ongoing) {
+      expect(position).not.toHaveProperty('endDate');
+    }
+
+    expect(resume.work[0].name).toBe('OpenAI');
+    expect(
+      resume.work.find((position) => position.name === 'Promptfoo')?.endDate,
+    ).toBe('2026-03-09');
   });
 
   it('reduces summaries carrying inline anchors to plain text', () => {

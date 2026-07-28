@@ -114,6 +114,8 @@ describe('work data', () => {
    */
   it('sorts into a strictly reverse-chronological timeline', () => {
     const ordered = sortPositions(work);
+    const endOf = (position: (typeof work)[number]) =>
+      position.endDate ?? '9999-12-31';
 
     expect(ordered).toHaveLength(work.length);
 
@@ -121,20 +123,18 @@ describe('work data', () => {
       const previous = ordered[i - 1];
       const current = ordered[i];
 
-      expect(
-        current.startDate.localeCompare(previous.startDate),
-      ).toBeLessThanOrEqual(0);
+      // Ordered by recency of involvement: an ongoing role sorts as though it
+      // ends later than any real date, so everything still running leads.
+      expect(endOf(current).localeCompare(endOf(previous))).toBeLessThanOrEqual(
+        0,
+      );
 
-      // Where two roles start on the same date, the one still running (or the
-      // one that ran longer) comes first.
-      if (current.startDate === previous.startDate) {
-        expect(current.endDate).toBeDefined();
-
-        if (previous.endDate && current.endDate) {
-          expect(
-            current.endDate.localeCompare(previous.endDate),
-          ).toBeLessThanOrEqual(0);
-        }
+      // Where two roles end on the same date, the one that started later — the
+      // shorter of the two — comes first.
+      if (endOf(current) === endOf(previous)) {
+        expect(
+          current.startDate.localeCompare(previous.startDate),
+        ).toBeLessThanOrEqual(0);
       }
     }
   });
