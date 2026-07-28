@@ -1,8 +1,17 @@
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 import profile from '@/data/profile.json';
-import { getPostSlugs } from '@/lib/posts';
-import { AUTHOR_NAME, SHARE_IMAGE_PATH, SITE_URL } from '@/lib/utils';
+import { sharedOpenGraph } from '@/lib/metadata';
+import { getPostBySlug, getPostSlugs } from '@/lib/posts';
+import {
+  AUTHOR_NAME,
+  SHARE_IMAGE_DIMENSIONS,
+  SHARE_IMAGE_PATH,
+  SITE_URL,
+  TWITTER_HANDLE,
+} from '@/lib/utils';
 import { metadata as aboutMetadata } from '../about/page';
 import { metadata as contactMetadata } from '../contact/page';
 import { metadata as notFoundMetadata } from '../not-found';
@@ -100,18 +109,57 @@ describe('page metadata', () => {
     expect(metadata.alternates?.canonical).toBe(`${SITE_URL}/writing/${slug}/`);
   });
 
-  it('declares the share card on blog posts', async () => {
+  /**
+   * Every post declares the card generated for it rather than the site card, so
+   * a shared essay does not look byte-identical to a shared homepage. The path
+   * is the convention `scripts/og-inputs.mjs` writes to, and the file has to
+   * exist: `generateMetadata` measures it, so a missing card fails the build.
+   * A post's own `image` is the article image for JSON-LD, not the share card,
+   * because it is not the shape `summary_large_image` wants.
+   */
+  it.each(getPostSlugs())(
+    'declares a share card of its own on %s',
+    async (slug) => {
+      const metadata = await generatePostMetadata({
+        params: Promise.resolve({ slug }),
+      });
+      const post = getPostBySlug(slug);
+      const card = `/og/writing/${slug}.png`;
+
+      expect(existsSync(join(process.cwd(), 'public', card))).toBe(true);
+      expect(metadata.openGraph?.images).toEqual([
+        {
+          url: `${SITE_URL}${card}`,
+          width: SHARE_IMAGE_DIMENSIONS.width,
+          height: SHARE_IMAGE_DIMENSIONS.height,
+          alt: `${post?.title} — ${AUTHOR_NAME}`,
+        },
+      ]);
+      expect(metadata.twitter?.images).toEqual(metadata.openGraph?.images);
+      expect(JSON.stringify(metadata.openGraph?.images)).not.toContain(
+        `${SITE_URL}${SHARE_IMAGE_PATH}`,
+      );
+    },
+  );
+
+  /**
+   * The share blocks are spread, not rebuilt: a route-level `openGraph` or
+   * `twitter` object replaces the inherited one, and posts have already shipped
+   * twice missing something omitted here.
+   */
+  it('keeps the shared open graph and twitter fields on blog posts', async () => {
     const [slug] = getPostSlugs();
     const metadata = await generatePostMetadata({
       params: Promise.resolve({ slug }),
     });
 
-    expect(JSON.stringify(metadata.openGraph?.images)).toContain(
-      SHARE_IMAGE_PATH,
-    );
-    expect(JSON.stringify(metadata.twitter?.images)).toContain(
-      SHARE_IMAGE_PATH,
-    );
+    expect(metadata.openGraph?.siteName).toBe(sharedOpenGraph?.siteName);
+    expect(metadata.openGraph).toMatchObject({ locale: 'en_US' });
+    expect(metadata.twitter).toMatchObject({
+      card: 'summary_large_image',
+      site: TWITTER_HANDLE,
+      creator: TWITTER_HANDLE,
+    });
   });
 
   it('overrides 404 share metadata without inventing a canonical url', () => {

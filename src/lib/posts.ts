@@ -8,7 +8,13 @@ export interface PostFrontmatter {
   date: string;
   description: string;
   draft?: boolean;
-  /** Optional article-specific share image in public/. */
+  /**
+   * Optional representative image in public/ — a screenshot or diagram.
+   *
+   * This is the article image for structured data, not the share card: every
+   * published post has a 1200x630 card generated for it by `npm run og`, and
+   * that is what `og:image` points at.
+   */
   image?: string;
   /** Required whenever `image` is set. */
   imageAlt?: string;
