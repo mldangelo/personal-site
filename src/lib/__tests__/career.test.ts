@@ -7,6 +7,7 @@ import {
   monthsBetween,
   positionDuration,
   sortPositions,
+  timelineKey,
   totalExperienceYears,
 } from '../career';
 
@@ -126,18 +127,16 @@ describe('sortPositions', () => {
     expect(ordered).not.toBe(input);
   });
 
-  it('returns real career data in strictly non-increasing end order', () => {
+  it('returns real career data in strictly non-increasing timeline order', () => {
     // The source array runs 2022 → 2017 → 2014 → 2015 → 2014 through the
     // middle. Source order is no longer load-bearing, but the rendered order
-    // is, so it is pinned here. Ordering is by END date — recency of
-    // involvement — so an ongoing role leads and a long tenure is not buried
-    // beneath the shorter ones that started inside it.
-    const ends = sortPositions(work).map(
-      (entry) => entry.endDate ?? '9999-12-31',
-    );
+    // is, so it is pinned here. Ordering is by end date — recency of
+    // involvement — except that an open-ended part-time role is placed by when
+    // it began, which is what `timelineKey` encodes.
+    const keys = sortPositions(work).map(timelineKey);
 
-    for (let i = 1; i < ends.length; i += 1) {
-      expect(ends[i].localeCompare(ends[i - 1])).toBeLessThanOrEqual(0);
+    for (let i = 1; i < keys.length; i += 1) {
+      expect(keys[i].localeCompare(keys[i - 1])).toBeLessThanOrEqual(0);
     }
   });
 
@@ -153,6 +152,61 @@ describe('sortPositions', () => {
 
   it('leads the real career data with the current OpenAI role', () => {
     expect(sortPositions(work)[0].name).toBe('OpenAI');
+  });
+
+  it('places an open-ended part-time role by when it began, not at the top', () => {
+    // An angel fund never formally closes. Ranked purely by recency it would
+    // outrank every full-time position forever; ranked by when it began it
+    // sits among its contemporaries.
+    const ordered = sortPositions([
+      position({
+        name: 'Current Job',
+        startDate: '2024-01-01',
+        endDate: undefined,
+      }),
+      position({
+        name: 'Old Job',
+        startDate: '2019-01-01',
+        endDate: '2023-01-01',
+      }),
+      position({
+        name: 'Side Fund',
+        startDate: '2017-04-01',
+        endDate: undefined,
+        commitment: 'part-time',
+      }),
+    ]);
+
+    expect(byName(ordered)).toEqual(['Current Job', 'Old Job', 'Side Fund']);
+  });
+
+  it('still leads with an open-ended full-time role', () => {
+    // The part-time rule must not weaken the ordinary case.
+    const ordered = sortPositions([
+      position({
+        name: 'Closed',
+        startDate: '2020-01-01',
+        endDate: '2026-07-01',
+      }),
+      position({
+        name: 'Ongoing',
+        startDate: '2017-04-01',
+        endDate: undefined,
+      }),
+    ]);
+
+    expect(byName(ordered)).toEqual(['Ongoing', 'Closed']);
+  });
+
+  it('demotes the real part-time fund below every full-time role it overlapped', () => {
+    const order = sortPositions(work).map((entry) => entry.name);
+    const fund = order.indexOf('Skeptical Investments');
+
+    for (const name of ['OpenAI', 'Promptfoo', 'Smile ID', 'Arthena']) {
+      expect(order.indexOf(name)).toBeLessThan(fund);
+    }
+    // Still ahead of what genuinely predates it.
+    expect(fund).toBeLessThan(order.indexOf('Matroid'));
   });
 
   it('sorts Arthena above the internship it ran alongside', () => {

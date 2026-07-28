@@ -17,13 +17,30 @@ export type DateInput = string | number | Date;
 /**
  * Sort key standing in for the end of a role that has not ended.
  *
- * An ongoing role has no `endDate` and should tiebreak ahead of one that has
+ * An ongoing role has no `endDate` and should sort ahead of one that has
  * already closed, so it sorts as though it ends later than any real date.
  */
 const ONGOING_END = '9999-12-31';
 
-function endKey(position: Position): string {
-  return position.endDate ?? ONGOING_END;
+/**
+ * Where a role sits on the timeline: when it ended, or when it began if it is
+ * an open-ended side engagement.
+ *
+ * "Still running" is only evidence of recency for a role that was someone's
+ * actual job. An angel fund or an advisory seat never formally ends, so
+ * treating it as the most recent thing parks it above every full-time position
+ * permanently — which is what happened here, with a part-time fund sitting
+ * second, above the company its author co-founded and sold. Placing an
+ * open-ended side role by when it *began* puts it among its contemporaries and
+ * leaves the full-time record to carry the top of the list.
+ *
+ * The role still renders "Present" in `--color-signal`, because it genuinely is
+ * ongoing. This governs placement, not honesty about the dates.
+ */
+export function timelineKey(position: Position): string {
+  if (position.endDate) return position.endDate;
+
+  return position.commitment === 'part-time' ? position.startDate : ONGOING_END;
 }
 
 /**
@@ -38,11 +55,13 @@ function endKey(position: Position): string {
  * because both began later while running *inside* Arthena's window. By end date
  * Arthena sits above both, where its span puts it.
  *
- * The cost of this choice, accepted knowingly: an open-ended role sorts to the
- * top for as long as it stays open, so Skeptical Investments — an ongoing angel
- * fund, not a full-time post — sits second, above Promptfoo. `tierFor` in
- * `src/components/Resume/Experience.tsx` derives visual weight separately, so
- * position in the list is not the only thing carrying emphasis.
+ * Ordering by the end date alone has one bad case, which `timelineKey` handles:
+ * an open-ended role would sort to the top for as long as it stays open, so a
+ * part-time fund outranked every full-time position including the company its
+ * author co-founded and sold. A role marked `commitment: 'part-time'` in
+ * `src/data/resume/work.ts` is therefore placed by when it began. That is a
+ * property of the data, not a special case for one employer — a future
+ * advisory seat places itself.
  *
  * The source array is hand-maintained and had drifted out of sequence, running
  * 2022 → 2017 → 2014 → 2015 → 2014 through the middle, so a section that reads
@@ -61,7 +80,7 @@ function endKey(position: Position): string {
 export function sortPositions(positions: Position[]): Position[] {
   return [...positions].sort(
     (a, b) =>
-      endKey(b).localeCompare(endKey(a)) ||
+      timelineKey(b).localeCompare(timelineKey(a)) ||
       b.startDate.localeCompare(a.startDate),
   );
 }

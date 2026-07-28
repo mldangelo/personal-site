@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { sortPositions } from '@/lib/career';
+import { sortPositions, timelineKey } from '@/lib/career';
 import work from '../resume/work';
 
 /** Exactly `YYYY-MM-DD`, which is what makes a string comparison chronological. */
@@ -114,8 +114,7 @@ describe('work data', () => {
    */
   it('sorts into a strictly reverse-chronological timeline', () => {
     const ordered = sortPositions(work);
-    const endOf = (position: (typeof work)[number]) =>
-      position.endDate ?? '9999-12-31';
+    const endOf = timelineKey;
 
     expect(ordered).toHaveLength(work.length);
 
@@ -124,7 +123,8 @@ describe('work data', () => {
       const current = ordered[i];
 
       // Ordered by recency of involvement: an ongoing role sorts as though it
-      // ends later than any real date, so everything still running leads.
+      // ends later than any real date, so everything still running leads --
+      // except an open-ended part-time role, placed by when it began.
       expect(endOf(current).localeCompare(endOf(previous))).toBeLessThanOrEqual(
         0,
       );

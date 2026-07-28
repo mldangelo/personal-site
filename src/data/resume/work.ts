@@ -9,6 +9,18 @@ export interface Position {
   endDate?: string;
   summary?: string;
   highlights?: string[];
+  /**
+   * How much of a working life the role occupied. Omitted means full-time,
+   * which is the ordinary case and should not have to be declared.
+   *
+   * This exists because dates alone cannot say what a role was worth. An
+   * open-ended side engagement never ends, so ordering purely by recency parks
+   * it above every full-time position permanently — see `sortPositions` in
+   * `src/lib/career.ts`, which reads this. It is not published to
+   * `/resume.json`: JSON Resume has no field for it, and `buildWork` picks its
+   * keys explicitly rather than spreading, so nothing leaks by default.
+   */
+  commitment?: 'part-time';
 }
 
 const work: Position[] = [
@@ -60,6 +72,7 @@ const work: Position[] = [
     position: 'Co-founder',
     url: 'http://skepticalinvestments.biz',
     startDate: '2017-04-01',
+    commitment: 'part-time',
     summary: `Skeptical Investments is a micro-VC fund focused on early-stage technical founders,
     with investments in ML, infrastructure, and space startups.`,
     highlights: [
