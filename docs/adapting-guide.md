@@ -61,7 +61,8 @@ account settings unless I explicitly authorize it.
 Rebrand the visual identity using [COLORS], [FONTS], [PORTRAIT], and
 [DESIGN DIRECTION]. Work through the existing semantic tokens. Keep light and
 dark themes, print behavior, accessibility, and the signal-color rules intact.
-Regenerate and verify the share card, then run the full validation suite.
+Regenerate and verify the share card and the icon set, then run the full
+validation suite.
 ```
 
 ### Prepare deployment
