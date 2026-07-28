@@ -160,6 +160,30 @@ function isDraftPath(pathname) {
   );
 }
 
+/**
+ * Nothing in the export may be named after a draft, not only routes.
+ *
+ * The route and metadata checks below see HTML and XML. `public/` is copied
+ * into the export verbatim, so anything generated from `content/writing/` — a
+ * per-post share card, say — reaches the site as a plain file that no metadata
+ * gate looks at, carrying an unpublished title in its name and its pixels.
+ * HTML is skipped here only because `isDraftPath` already covers every route.
+ */
+if (draftSlugs.length > 0) {
+  for (const file of walk(OUT, (name) => !name.endsWith('.html'))) {
+    const path = toUrlPath(relative(OUT, file));
+    const named = path
+      .split('/')
+      .some((segment) =>
+        draftSlugs.includes(basename(segment, extname(segment))),
+      );
+
+    if (named) {
+      fail(path, `exports an asset named after a draft post: /${path}`);
+    }
+  }
+}
+
 const records = pages.map((file) => {
   const relativePath = toUrlPath(relative(OUT, file));
   const html = readFileSync(file, 'utf8');
@@ -603,5 +627,5 @@ if (failures.length > 0) {
 
 console.log(
   `verify-export: ${pages.length} pages OK ` +
-    '(drafts, robots, ids/fragments, canonicals, complete share metadata, local images, internal links, sitemap/RSS)',
+    '(draft routes and assets, robots, ids/fragments, canonicals, complete share metadata, local images, internal links, sitemap/RSS)',
 );

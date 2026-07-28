@@ -315,6 +315,44 @@ describe('verify-export', () => {
     );
   });
 
+  /**
+   * `public/` now holds a generated share card per published post, so the export
+   * can carry an asset derived from `content/writing/`. A card for a draft is
+   * not a route and appears in no metadata, so every other gate here would let
+   * it through — while the file itself is publicly fetchable with the
+   * unpublished title rendered into its pixels.
+   */
+  it('rejects a generated share card for a draft post', () => {
+    const root = createFixture();
+    write(root, 'out/og/writing/secret-draft.png');
+
+    const result = runVerifier(root);
+    expect(result.status).toBe(1);
+    expect(result.output).toContain(
+      'exports an asset named after a draft post: /og/writing/secret-draft.png',
+    );
+  });
+
+  it('rejects any other export named after a draft', () => {
+    const root = createFixture();
+    write(root, 'out/downloads/secret-draft/notes.pdf');
+
+    const result = runVerifier(root);
+    expect(result.status).toBe(1);
+    expect(result.output).toContain(
+      'exports an asset named after a draft post: /downloads/secret-draft/notes.pdf',
+    );
+  });
+
+  it('accepts generated share cards for published posts', () => {
+    const root = createFixture();
+    write(root, 'out/og/writing/about.png');
+
+    const result = runVerifier(root);
+    expect(result.status).toBe(0);
+    expect(result.output).toContain('2 pages OK');
+  });
+
   it('requires the sitemap to cover every indexable route', () => {
     const root = createFixture();
     mutate(root, 'out/sitemap.xml', (xml) =>
