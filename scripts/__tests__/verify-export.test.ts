@@ -386,7 +386,9 @@ describe('verify-export', () => {
 
     const result = runVerifier(root);
     expect(result.status).toBe(0);
-    expect(result.output).toContain('2 pages OK');
+    // Page count tracks `createFixture`, which carries index, about, and
+    // resume. A published post's card is not a page and must not change it.
+    expect(result.output).toContain('3 pages OK');
   });
 
   it('rejects an export with no machine-readable resume', () => {
