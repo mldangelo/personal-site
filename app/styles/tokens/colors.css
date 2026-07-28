@@ -34,14 +34,44 @@
   --color-accent-underline-strong: color-mix(in srgb, var(--color-accent) 55%, transparent);
 
   /* ===================
+     FOCUS RING
+     Named here so every ring on the site is one decision. Two values,
+     because a ring only works if it contrasts with what it surrounds:
+
+     --color-focus-ring       the accent, for controls on the page surface.
+     --color-focus-ring-fill  ink, for accent-filled controls. In light mode
+                              --color-accent-fill resolves to --color-accent,
+                              so an accent ring around a filled button is
+                              exactly the fill's own colour — 1.00:1 — and the
+                              indicator reads as a slightly fatter button
+                              rather than as focus. The 2px offset does keep
+                              it visible against paper (9.2:1), so this is
+                              legibility rather than an SC 1.4.11 failure, but
+                              it is still the weakest ring on the site. Ink is
+                              18.3:1 on paper and 16.3:1 on ink, and it can
+                              never alias a fill. The skip link already did
+                              this by hand; this names the reason.
+     =================== */
+  --color-focus-ring: var(--color-accent);
+  --color-focus-ring-fill: var(--color-fg-bold);
+
+  /* ===================
      SIGNAL — amber
      Reserved for live/measured values and the
      current-position marker. Never decorative.
-     --color-signal      text-safe on page bg (AA)
+     --color-signal      text-safe on page bg (5.5:1 raised, 5.0:1 page)
      --color-signal-mark graphic use only (ticks, dots, rules)
+
+     The mark is not decoration: the filled dot on the resume spine is the
+     only thing that says a role is current, so SC 1.4.11 applies and it owes
+     3:1 against both paper surfaces. It used to be #e8930c, which measured
+     2.36:1 on --color-bg and 2.16:1 on --color-bg-alt — the brightest amber
+     on the page was also the one nobody could see. This is the same hue
+     (36.7deg against 36.8deg) taken down to 3.5:1 on --color-bg and 3.2:1 on
+     --color-bg-alt. Pinned in src/lib/__tests__/contrast.test.ts.
      =================== */
   --color-signal: #9a5600;
-  --color-signal-mark: #e8930c;
+  --color-signal-mark: #bc770a;
 
   /* ===================
      BORDER COLORS
@@ -53,7 +83,9 @@
 
   /* Structural hairlines are meant to be quiet and sit near 1.5:1, which is
      fine for dividing content but not for the only visible edge of a
-     control. Interactive boundaries use this instead, at 3:1 against paper. */
+     control. Interactive boundaries use this instead: 4.1:1 against
+     --color-bg and 3.8:1 against --color-bg-alt, so it clears the 3:1 that
+     SC 1.4.11 asks of a component boundary on either surface. */
   --color-control-border: #767b83;
   --color-border-alt: rgba(35, 39, 46, 0.24);
 

@@ -93,7 +93,7 @@
 }
 
 .project-card:has(.project-card-link:focus-visible) {
-  outline: 2px solid var(--color-accent);
+  outline: var(--rule-strong) solid var(--color-focus-ring);
   outline-offset: 2px;
 }
 
