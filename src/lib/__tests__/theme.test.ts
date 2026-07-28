@@ -1,22 +1,76 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
+  applyThemeColor,
   DARK_SCHEME_QUERY,
   nextThemeChoice,
   readStoredThemeChoice,
+  renderedThemeColor,
   resolveTheme,
   storeThemeChoice,
+  syncThemeColor,
   THEME_ATTRIBUTE,
   THEME_CHOICE_ATTRIBUTE,
   THEME_CHOICES,
+  THEME_COLOR_TOKEN,
   THEME_STORAGE_KEY,
   type ThemeChoice,
+  type ThemeColors,
   themeInitScript,
 } from '../theme';
+import { readColorToken } from '../tokens';
+
+/**
+ * The real token values, so this cannot pass against a palette the site does
+ * not have. Which token the chrome takes is pinned in `theme-color.test.ts`.
+ */
+const CHROME_COLORS: ThemeColors = {
+  light: readColorToken(THEME_COLOR_TOKEN, 'light'),
+  dark: readColorToken(THEME_COLOR_TOKEN, 'dark'),
+};
 
 /** Runs the bootstrap the way a browser does: as a script against this DOM. */
 function runThemeInitScript(): void {
-  new Function(themeInitScript())();
+  new Function(themeInitScript(CHROME_COLORS))();
+}
+
+const injected: Element[] = [];
+
+/**
+ * The media-scoped pair the static export ships, as a browser parses it —
+ * both tags present, whatever the device happens to prefer.
+ */
+function addThemeColorMetas(): void {
+  for (const scheme of ['light', 'dark'] as const) {
+    const meta = document.createElement('meta');
+    meta.setAttribute('name', 'theme-color');
+    meta.setAttribute('media', `(prefers-color-scheme: ${scheme})`);
+    meta.setAttribute('content', CHROME_COLORS[scheme]);
+    document.head.append(meta);
+    injected.push(meta);
+  }
+}
+
+/**
+ * The shape of the real declarations: the token in `:root`, overridden under
+ * `[data-theme='dark']`. jsdom resolves custom properties through the cascade,
+ * so this exercises the same read the browser does. It is written out rather
+ * than loaded from `app/styles/` because the light values live in a Tailwind
+ * `@theme` block, which jsdom does not parse.
+ */
+function addTokenStylesheet(): void {
+  const style = document.createElement('style');
+  style.textContent =
+    `:root{${THEME_COLOR_TOKEN}:${CHROME_COLORS.light};}` +
+    `[${THEME_ATTRIBUTE}='dark']{${THEME_COLOR_TOKEN}:${CHROME_COLORS.dark};}`;
+  document.head.append(style);
+  injected.push(style);
+}
+
+function chromeColors(): string[] {
+  return [...document.querySelectorAll('meta[name="theme-color"]')].map(
+    (meta) => meta.getAttribute('content') ?? '',
+  );
 }
 
 function setPrefersDark(prefersDark: boolean): void {
@@ -71,7 +125,10 @@ describe('theme', () => {
     setPrefersDark(false);
   });
 
-  afterEach(clearRoot);
+  afterEach(() => {
+    clearRoot();
+    for (const node of injected.splice(0)) node.remove();
+  });
 
   describe('nextThemeChoice', () => {
     it('cycles system to light to dark and back', () => {
@@ -201,6 +258,105 @@ describe('theme', () => {
 
       expect(choiceAttribute()).toBe('system');
       expect(themeAttribute()).toBe('light');
+    });
+
+    it('paints the chrome from the stored choice, not from the device', () => {
+      // The bug: the meta tags are scoped by `prefers-color-scheme`, so a
+      // visitor reading in light mode on a dark device got a black address
+      // bar over a white page — and the reverse.
+      addThemeColorMetas();
+      setPrefersDark(true);
+      window.localStorage.setItem(THEME_STORAGE_KEY, 'light');
+
+      runThemeInitScript();
+
+      expect(themeAttribute()).toBe('light');
+      expect(chromeColors()).toEqual([
+        CHROME_COLORS.light,
+        CHROME_COLORS.light,
+      ]);
+    });
+
+    it('paints the chrome from the device while the choice is system', () => {
+      // Following the device is what `system` means, so the scoping is right
+      // here and the resolved value has to agree with it rather than fight it.
+      addThemeColorMetas();
+      setPrefersDark(true);
+
+      runThemeInitScript();
+
+      expect(themeAttribute()).toBe('dark');
+      expect(chromeColors()).toEqual([CHROME_COLORS.dark, CHROME_COLORS.dark]);
+    });
+
+    it('runs on a page with no theme-color tags at all', () => {
+      // A fork that drops the viewport export still gets its theme.
+      expect(runThemeInitScript).not.toThrow();
+      expect(themeAttribute()).toBe('light');
+    });
+  });
+
+  describe('applyThemeColor', () => {
+    it('points every tag at one colour, whatever each is scoped to', () => {
+      // Which tag the browser picks stops mattering once they agree, so this
+      // needs no opinion about `theme-color` precedence between them.
+      addThemeColorMetas();
+
+      applyThemeColor(document, CHROME_COLORS.dark);
+
+      expect(chromeColors()).toEqual([CHROME_COLORS.dark, CHROME_COLORS.dark]);
+    });
+
+    it('leaves the media-scoped pair alone rather than emptying it', () => {
+      // An empty `content` is skipped by the browser, which falls back to its
+      // own default chrome — strictly worse than the scoped pair already here.
+      addThemeColorMetas();
+
+      applyThemeColor(document, '');
+
+      expect(chromeColors()).toEqual([CHROME_COLORS.light, CHROME_COLORS.dark]);
+    });
+  });
+
+  describe('renderedThemeColor', () => {
+    it('reads the token the page is actually painted with', () => {
+      addTokenStylesheet();
+
+      document.documentElement.setAttribute(THEME_ATTRIBUTE, 'dark');
+      expect(renderedThemeColor(document)).toBe(CHROME_COLORS.dark);
+
+      document.documentElement.setAttribute(THEME_ATTRIBUTE, 'light');
+      expect(renderedThemeColor(document)).toBe(CHROME_COLORS.light);
+    });
+
+    it('reports nothing when the token has not resolved', () => {
+      expect(renderedThemeColor(document)).toBe('');
+    });
+  });
+
+  describe('syncThemeColor', () => {
+    it('follows data-theme, which is the only thing the styles follow', () => {
+      addTokenStylesheet();
+      addThemeColorMetas();
+
+      document.documentElement.setAttribute(THEME_ATTRIBUTE, 'dark');
+      syncThemeColor(document);
+      expect(chromeColors()).toEqual([CHROME_COLORS.dark, CHROME_COLORS.dark]);
+
+      document.documentElement.setAttribute(THEME_ATTRIBUTE, 'light');
+      syncThemeColor(document);
+      expect(chromeColors()).toEqual([
+        CHROME_COLORS.light,
+        CHROME_COLORS.light,
+      ]);
+    });
+
+    it('degrades to the media-scoped pair when no token resolves', () => {
+      addThemeColorMetas();
+
+      syncThemeColor(document);
+
+      expect(chromeColors()).toEqual([CHROME_COLORS.light, CHROME_COLORS.dark]);
     });
   });
 });

@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from 'next';
-import Script from 'next/script';
 
 import { SiteSchema } from '@/components/Schema';
 import GoogleAnalytics from '@/components/Template/GoogleAnalytics';
@@ -7,30 +6,44 @@ import Navigation from '@/components/Template/Navigation';
 import { MAIN_CONTENT_ID } from '@/components/Template/PageWrapper';
 import ScrollToTop from '@/components/Template/ScrollToTop';
 import { sharedOpenGraph, sharedTwitter } from '@/lib/metadata';
-import { themeInitScript } from '@/lib/theme';
+import {
+  THEME_COLOR_TOKEN,
+  type ThemeColors,
+  themeInitScript,
+} from '@/lib/theme';
 import { readColorToken } from '@/lib/tokens';
 import { AUTHOR_NAME, SITE_DESCRIPTION, SITE_URL } from '@/lib/utils';
 import { bricolage, jetbrainsMono, newsreader } from './fonts';
 import './tailwind.css';
 
 /**
+ * The colour immediately under the browser's own chrome, per theme, read from
+ * the stylesheets at build time rather than typed here so it cannot drift from
+ * the tokens. `--color-bg-alt` is the page background the sticky header tints;
+ * `--color-bg` is the raised surface and would put two colours side by side.
+ */
+const CHROME_COLORS: ThemeColors = {
+  light: readColorToken(THEME_COLOR_TOKEN, 'light'),
+  dark: readColorToken(THEME_COLOR_TOKEN, 'dark'),
+};
+
+/**
  * `theme-color` paints the browser's own chrome — the Android address bar, the
- * Safari toolbar — so it has to be the colour immediately under it, which is
- * the page background the sticky header tints. One unscoped value is wrong in
- * whichever theme it was not picked for, so both are declared and scoped by
- * `prefers-color-scheme`. The values are read from the stylesheets at build
- * time rather than typed here, so they cannot drift from the tokens.
+ * Safari toolbar. One unscoped value is wrong in whichever theme it was not
+ * picked for, so both are declared and scoped by `prefers-color-scheme`.
+ *
+ * That scoping is the *device* preference, and nothing in this project themes
+ * off the device preference: the rendered theme is `<html data-theme>`, which
+ * a visitor can pin to either value and which outlives the tab. So this pair
+ * is the no-JavaScript answer — the best one available with no way to read the
+ * stored choice — and the bootstrap below repoints both tags at the theme
+ * actually being painted. Left alone, a visitor reading in dark mode on a
+ * light device got a white address bar over a black page.
  */
 export const viewport: Viewport = {
   themeColor: [
-    {
-      media: '(prefers-color-scheme: light)',
-      color: readColorToken('--color-bg-alt', 'light'),
-    },
-    {
-      media: '(prefers-color-scheme: dark)',
-      color: readColorToken('--color-bg-alt', 'dark'),
-    },
+    { media: '(prefers-color-scheme: light)', color: CHROME_COLORS.light },
+    { media: '(prefers-color-scheme: dark)', color: CHROME_COLORS.dark },
   ],
 };
 
@@ -105,13 +118,23 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        {/* CSP-safe theme initialization — prevents flash on load, and stamps
-            the *choice* alongside the resolved theme so the header's theme
-            control can render its own state from the HTML instead of waiting
-            for hydration. Built from the same constants the control uses. */}
-        <Script id="theme-init" strategy="beforeInteractive">
-          {themeInitScript()}
-        </Script>
+        {/* Theme bootstrap — prevents flash on load, stamps the *choice*
+            alongside the resolved theme so the header's theme control can
+            render its own state from the HTML instead of waiting for
+            hydration, and repoints the `theme-color` tags above at that same
+            theme. Built from the same constants the control uses.
+
+            A plain inline script, not `<Script strategy="beforeInteractive">`:
+            in the App Router that strategy serialises the body into
+            `self.__next_s` and Next's `appBootstrap` runs it once the client
+            chunks have loaded, which is long after first paint. Only a
+            parser-blocking script runs before the page is painted, which is
+            the entire point of this one. It sits after the metadata Next
+            emits, so the tags it queries are already parsed. */}
+        <script
+          id="theme-init"
+          dangerouslySetInnerHTML={{ __html: themeInitScript(CHROME_COLORS) }}
+        />
         <SiteSchema />
       </head>
       <body>

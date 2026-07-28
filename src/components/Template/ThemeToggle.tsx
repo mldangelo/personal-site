@@ -9,6 +9,7 @@ import {
   readStoredThemeChoice,
   resolveTheme,
   storeThemeChoice,
+  syncThemeColor,
   THEME_ATTRIBUTE,
   THEME_CHOICE_ATTRIBUTE,
   THEME_CHOICES,
@@ -93,6 +94,16 @@ export default function ThemeToggle() {
     if (resolved !== null) {
       root.setAttribute(THEME_ATTRIBUTE, resolved);
     }
+
+    // The browser chrome is painted from `theme-color` meta tags, which the
+    // export scopes by `prefers-color-scheme` because that is all a static
+    // file can do. Nothing else here themes off the device, so once the
+    // attribute above is settled the tags have to be told what it says —
+    // including when the device flips underneath a `system` choice, which is
+    // the other reason this runs on every change rather than once at mount.
+    // Reads the token back out of the cascade, so it cannot name a colour the
+    // page is not painted with.
+    syncThemeColor(document);
   }, [choice, systemScheme]);
 
   const cycle = useCallback(() => {

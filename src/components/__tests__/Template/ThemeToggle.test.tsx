@@ -9,8 +9,10 @@ import {
   DARK_SCHEME_QUERY,
   THEME_ATTRIBUTE,
   THEME_CHOICE_ATTRIBUTE,
+  THEME_COLOR_TOKEN,
   THEME_STORAGE_KEY,
 } from '@/lib/theme';
+import { readColorToken } from '@/lib/tokens';
 import ThemeToggle from '../../Template/ThemeToggle';
 
 const SYSTEM_LABEL = 'Theme: system. Switch to light.';
@@ -71,6 +73,12 @@ const NAVIGATION_CSS = readFileSync(
   'utf8',
 );
 
+/** The real chrome colours, one per theme, as `app/layout.tsx` reads them. */
+const CHROME_COLORS = {
+  light: readColorToken(THEME_COLOR_TOKEN, 'light'),
+  dark: readColorToken(THEME_COLOR_TOKEN, 'dark'),
+} as const;
+
 const unhydrated: Element[] = [];
 
 /**
@@ -94,6 +102,35 @@ function renderUnhydrated(choice: string | null): Element {
   if (!button) throw new Error('no theme toggle in the server markup');
 
   return button;
+}
+
+/**
+ * The `<head>` a real page has: the media-scoped `theme-color` pair from the
+ * static export, and the token declarations `data-theme` switches between.
+ */
+function renderHead(): void {
+  const style = document.createElement('style');
+  style.textContent =
+    `:root{${THEME_COLOR_TOKEN}:${CHROME_COLORS.light};}` +
+    `[${THEME_ATTRIBUTE}='dark']{${THEME_COLOR_TOKEN}:${CHROME_COLORS.dark};}`;
+  document.head.append(style);
+  unhydrated.push(style);
+
+  for (const scheme of ['light', 'dark'] as const) {
+    const meta = document.createElement('meta');
+    meta.setAttribute('name', 'theme-color');
+    meta.setAttribute('media', `(prefers-color-scheme: ${scheme})`);
+    meta.setAttribute('content', CHROME_COLORS[scheme]);
+    document.head.append(meta);
+    unhydrated.push(meta);
+  }
+}
+
+/** What the address bar is painted with, according to every tag on the page. */
+function chromeColors(): string[] {
+  return [...document.querySelectorAll('meta[name="theme-color"]')].map(
+    (meta) => meta.getAttribute('content') ?? '',
+  );
 }
 
 function visibleStates(): (string | null)[] {
@@ -286,6 +323,23 @@ describe('ThemeToggle', () => {
       expect(root().getAttribute(THEME_ATTRIBUTE)).toBe('dark');
     });
 
+    it('repaints the browser chrome when the device flips', () => {
+      // `theme-color` is scoped by `prefers-color-scheme`, so the tags would
+      // follow this on their own — but they are no longer left to, and a
+      // pinned pair here would be stale for the rest of the visit.
+      renderHead();
+      const media = stubColorScheme(false);
+      render(<ThemeToggle />);
+      expect(chromeColors()).toEqual([
+        CHROME_COLORS.light,
+        CHROME_COLORS.light,
+      ]);
+
+      media.flipTo(true);
+
+      expect(chromeColors()).toEqual([CHROME_COLORS.dark, CHROME_COLORS.dark]);
+    });
+
     it('leaves the bootstrap theme alone when the device cannot be read', () => {
       // Guessing light here is exactly the flash the bootstrap exists to avoid.
       root().setAttribute(THEME_ATTRIBUTE, 'dark');
@@ -300,6 +354,84 @@ describe('ThemeToggle', () => {
 
       expect(root().getAttribute(THEME_ATTRIBUTE)).toBe('dark');
       expect(root().getAttribute(THEME_CHOICE_ATTRIBUTE)).toBe('system');
+    });
+  });
+
+  describe('browser chrome', () => {
+    // The address bar and the toolbar are painted from `theme-color`, which
+    // only the device preference can scope. A visitor who picks a theme is
+    // saying the device preference does not apply to this page, so every
+    // change of `data-theme` has to be carried to the tags as well.
+    it('follows a chosen theme against the device', () => {
+      renderHead();
+      stubColorScheme(true);
+      render(<ThemeToggle />);
+      expect(chromeColors()).toEqual([CHROME_COLORS.dark, CHROME_COLORS.dark]);
+
+      // system -> light, on a device that prefers dark.
+      fireEvent.click(toggle());
+
+      expect(root().getAttribute(THEME_ATTRIBUTE)).toBe('light');
+      expect(chromeColors()).toEqual([
+        CHROME_COLORS.light,
+        CHROME_COLORS.light,
+      ]);
+    });
+
+    it('hands the chrome back to the device on the way round to system', () => {
+      renderHead();
+      const media = stubColorScheme(false);
+      render(<ThemeToggle />);
+
+      // system -> light -> dark, pinned against a light device.
+      fireEvent.click(toggle());
+      fireEvent.click(toggle());
+      expect(chromeColors()).toEqual([CHROME_COLORS.dark, CHROME_COLORS.dark]);
+
+      fireEvent.click(toggle());
+      expect(root().getAttribute(THEME_CHOICE_ATTRIBUTE)).toBe('system');
+      expect(chromeColors()).toEqual([
+        CHROME_COLORS.light,
+        CHROME_COLORS.light,
+      ]);
+
+      media.flipTo(true);
+      expect(chromeColors()).toEqual([CHROME_COLORS.dark, CHROME_COLORS.dark]);
+    });
+
+    it('never names a colour the page is not painted with', () => {
+      renderHead();
+      stubColorScheme(true);
+      render(<ThemeToggle />);
+
+      for (let press = 0; press < 6; press += 1) {
+        const painted =
+          root().getAttribute(THEME_ATTRIBUTE) === 'dark'
+            ? CHROME_COLORS.dark
+            : CHROME_COLORS.light;
+
+        expect(chromeColors()).toEqual([painted, painted]);
+        fireEvent.click(toggle());
+      }
+    });
+
+    it('leaves the scoped pair in place when no token resolves', () => {
+      // No stylesheet — a fork mid-rename, or styles that failed to load.
+      // Degrading to the device preference beats naming a colour from a
+      // palette that is not on the page.
+      for (const scheme of ['light', 'dark'] as const) {
+        const meta = document.createElement('meta');
+        meta.setAttribute('name', 'theme-color');
+        meta.setAttribute('media', `(prefers-color-scheme: ${scheme})`);
+        meta.setAttribute('content', CHROME_COLORS[scheme]);
+        document.head.append(meta);
+        unhydrated.push(meta);
+      }
+
+      render(<ThemeToggle />);
+      fireEvent.click(toggle());
+
+      expect(chromeColors()).toEqual([CHROME_COLORS.light, CHROME_COLORS.dark]);
     });
   });
 });
