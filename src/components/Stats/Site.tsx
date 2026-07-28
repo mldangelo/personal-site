@@ -6,6 +6,8 @@ import {
   countLockedPackages,
 } from '../../lib/manifest';
 import { type Measurement, resolveReadings } from '../../lib/readings';
+import { deployedCommit, utcDate } from '../../lib/telemetry';
+import BuildClock from './BuildClock';
 import Table from './Table';
 
 interface GitHubData {
@@ -88,9 +90,16 @@ async function fetchGitHubStats(): Promise<GitHubStatsResult> {
  * Everything the page asserts about this codebase, counted from the working
  * tree and its manifests rather than typed in. A count that cannot be taken
  * comes back `null` and `resolveReadings` drops its row.
+ *
+ * Two of these describe the build rather than the tree. `built_at` is the
+ * instant this function ran, which under `output: 'export'` is the build; the
+ * value is a live client readout because the interesting figure is how long ago
+ * that was, and only the reader's browser can know. `deployed_commit` is the
+ * commit those bytes came from — `null`, and dropped, off CI.
  */
 function measureThisBuild(): Record<string, Measurement> {
   const locked = countLockedPackages();
+  const builtAt = Date.now();
 
   return {
     source_lines: countSourceLines(),
@@ -98,6 +107,8 @@ function measureThisBuild(): Record<string, Measurement> {
     production_packages: locked?.production ?? null,
     locked_packages: locked?.total ?? null,
     lint_rules: countLintRules(),
+    deployed_commit: deployedCommit(),
+    built_at: <BuildClock builtAt={builtAt} initial={utcDate(builtAt)} />,
   };
 }
 
