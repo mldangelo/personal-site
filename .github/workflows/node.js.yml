@@ -212,6 +212,13 @@ jobs:
       - name: Verify export
         run: npm run verify-export
 
+      # Weighs what Pages actually serves, most of which is not JavaScript, and
+      # fails when a subsystem crosses the ratchet in scripts/budget.json. The
+      # budgets carry documented headroom so ordinary changes stay green; a
+      # deliberate increase is `--update-budget` plus a note in the pull request.
+      - name: Measure export against size budget
+        run: npm run measure-export
+
       - name: Upload build artifacts
         if: >-
           matrix.os == 'ubuntu-latest' &&

@@ -10,8 +10,17 @@
  * Run with `npm run verify-export` after `npm run build`.
  */
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
-import { basename, extname, join, relative, resolve, sep } from 'node:path';
+import { basename, extname, join, relative, resolve } from 'node:path';
 import matter from 'gray-matter';
+
+import {
+  attribute,
+  canonicalValues,
+  decodeHtml,
+  metaValues,
+  tags,
+} from './lib/html.mjs';
+import { exportLayout, readSiteConfig, toUrlPath } from './lib/site.mjs';
 
 const ROOT = process.cwd();
 const OUT = resolve(ROOT, 'out');
@@ -35,108 +44,18 @@ function walk(dir, match) {
   return found;
 }
 
-/** URLs always use forward slashes; `relative` uses the platform separator. */
-const toUrlPath = (path) => path.split(sep).join('/');
-
-function routeForHtml(relativePath) {
-  if (relativePath === 'index.html') return '/';
-  if (relativePath.endsWith('/index.html')) {
-    return `/${relativePath.slice(0, -'index.html'.length)}`;
-  }
-  return `/${relativePath}`;
-}
-
-function decodeHtml(value) {
-  return value
-    .replace(/&quot;/g, '"')
-    .replace(/&apos;|&#39;/g, "'")
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&amp;/g, '&')
-    .replace(/&#x([0-9a-f]+);/gi, (_, hex) =>
-      String.fromCodePoint(Number.parseInt(hex, 16)),
-    )
-    .replace(/&#([0-9]+);/g, (_, decimal) =>
-      String.fromCodePoint(Number.parseInt(decimal, 10)),
-    );
-}
-
-function tags(html, name = '[a-z][\\w:-]*') {
-  return [...html.matchAll(new RegExp(`<${name}\\b[^>]*>`, 'gi'))].map(
-    (match) => match[0],
-  );
-}
-
-function attribute(tag, name) {
-  const match = tag.match(
-    new RegExp(`\\s${name}\\s*=\\s*(?:"([^"]*)"|'([^']*)'|([^\\s>]+))`, 'i'),
-  );
-  const value = match?.[1] ?? match?.[2] ?? match?.[3];
-  return value === undefined ? undefined : decodeHtml(value);
-}
-
-function metaValues(html, key, value) {
-  return tags(html, 'meta')
-    .filter((tag) => attribute(tag, key)?.toLowerCase() === value)
-    .map((tag) => attribute(tag, 'content'))
-    .filter((content) => content !== undefined);
-}
-
-function canonicalValues(html) {
-  return tags(html, 'link')
-    .filter((tag) =>
-      (attribute(tag, 'rel') ?? '')
-        .toLowerCase()
-        .split(/\s+/)
-        .includes('canonical'),
-    )
-    .map((tag) => attribute(tag, 'href'))
-    .filter((href) => href !== undefined);
-}
-
-function readSiteConfig() {
-  const packagePath = resolve(ROOT, 'package.json');
-  try {
-    const { homepage } = JSON.parse(readFileSync(packagePath, 'utf8'));
-    const url = new URL(homepage);
-    if (
-      url.protocol !== 'https:' ||
-      url.search ||
-      url.hash ||
-      !url.pathname.endsWith('/')
-    ) {
-      throw new Error(
-        'homepage must be an HTTPS URL with a trailing slash and no query/hash',
-      );
-    }
-
-    const basePath =
-      url.pathname === '/' ? '' : url.pathname.replace(/\/+$/, '');
-    return { origin: url.origin, basePath };
-  } catch (error) {
-    console.error(
-      `verify-export: cannot read the canonical site URL from package.json: ${error.message}`,
-    );
-    process.exit(1);
-  }
-}
-
-const { origin: SITE_ORIGIN, basePath: SITE_BASE_PATH } = readSiteConfig();
-
-function publicPathForRoute(route) {
-  return `${SITE_BASE_PATH}${route}`;
-}
-
-function routeForPublicPath(pathname) {
-  if (!SITE_BASE_PATH) return pathname;
-  if (pathname === `${SITE_BASE_PATH}/`) return '/';
-  if (!pathname.startsWith(`${SITE_BASE_PATH}/`)) return undefined;
-  return pathname.slice(SITE_BASE_PATH.length);
-}
-
-function siteUrlForRoute(route) {
-  return `${SITE_ORIGIN}${publicPathForRoute(route)}`;
-}
+const {
+  origin: SITE_ORIGIN,
+  basePath: SITE_BASE_PATH,
+  exportFileFor,
+  publicPathForRoute,
+  routeForHtml,
+  routeForPublicPath,
+  siteUrlForRoute,
+} = exportLayout({
+  outDir: OUT,
+  ...readSiteConfig(ROOT, 'verify-export'),
+});
 
 const pages = walk(OUT, (name) => name.endsWith('.html'));
 
@@ -220,19 +139,7 @@ function pageAt(pathname) {
 }
 
 function exportedFileExists(pathname) {
-  let decoded;
-  try {
-    decoded = decodeURIComponent(pathname);
-  } catch {
-    return false;
-  }
-
-  const route = routeForPublicPath(decoded);
-  if (route === undefined) return false;
-
-  const candidate = resolve(OUT, route.replace(/^\/+/, ''));
-  if (candidate !== OUT && !candidate.startsWith(`${OUT}${sep}`)) return false;
-  return existsSync(candidate) && statSync(candidate).isFile();
+  return exportFileFor(pathname) !== undefined;
 }
 
 function parseHttpUrl(raw, baseRoute, page, label) {
