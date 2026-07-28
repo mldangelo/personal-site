@@ -43,5 +43,9 @@
 /* Theme Overrides */
 @import './styles/dark-mode.css';
 
+/* Forced colors — after both themes, because it overrides whichever is
+   active; before print, which still has the last word */
+@import './styles/forced-colors.css';
+
 /* Print — must come last so it can override both themes */
 @import './styles/print.css';
