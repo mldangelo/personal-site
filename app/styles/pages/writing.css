@@ -321,16 +321,30 @@
 
 .prose h2,
 .prose h3,
-.prose h4 {
+.prose h4,
+.prose-anchor-alias {
   scroll-margin-top: calc(var(--header-height) + var(--spacing-6));
 }
 
 @media (max-width: 735px) {
   .prose h2,
   .prose h3,
-  .prose h4 {
+  .prose h4,
+  .prose-anchor-alias {
     scroll-margin-top: calc(var(--header-height-mobile) + var(--spacing-6));
   }
+}
+
+/* A heading whose id changed when the site unified its two slug schemes keeps
+   the id it published on an empty marker inside it, so a link shared before the
+   rename still resolves. Out of flow, so it contributes nothing to layout and
+   takes its position from the top of the heading's content box — which is what
+   makes the old anchor land exactly where the new one does. It carries no text
+   and is `aria-hidden`, so it is a target and nothing else. */
+.prose-anchor-alias {
+  position: absolute;
+  width: 0;
+  height: 0;
 }
 
 .prose p {
