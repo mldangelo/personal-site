@@ -11,6 +11,85 @@
     "computingSince": 1993,
     "currentCity": "New York, NY"
   },
-  "generatorDigest": "69f9406c836e1571b913cecb43e10ae4517ea8749e55735d6e3bc700fb85f241",
-  "imageDigest": "916adc2a96bbdc30d68db9b291927d346cad40e9a12ae7384f8332cd7ed882a2"
+  "colors": {
+    "ink": "#0e1116",
+    "paper": "#f2f1ec",
+    "body": "#23272e",
+    "graphite": "#545a63",
+    "accent": "#1b2fbf",
+    "hairline": "rgba(35, 39, 46, 0.14)"
+  },
+  "generatorDigest": "ebbff8ac512f1c8f6e12781948f9aec362406b2db2c90fae0df418b288e189e9",
+  "imageDigest": "9c76fd6b9be9ed5e8253a35ee7b741e219b2bfd5484b5bd29c90eb7a3241d4eb",
+  "posts": [
+    {
+      "slug": "claude-code-outage",
+      "path": "/og/writing/claude-code-outage.png",
+      "title": "Notes on the Claude Code 2.1.0 outage",
+      "description": "A changelog formatting change took down Claude Code. Lessons about parsing human docs as machine data.",
+      "date": "2026-01-08",
+      "dateLabel": "January 8, 2026",
+      "readout": [
+        {
+          "label": "Words",
+          "value": "409"
+        },
+        {
+          "label": "References",
+          "value": "9"
+        },
+        {
+          "label": "Reading time",
+          "value": "2 min"
+        }
+      ],
+      "imageDigest": "69e48cbf6a97384b0dc37330346d41282e19118ae92cc23980c2bc64f75fd497"
+    },
+    {
+      "slug": "eurostar-chatbot-analysis",
+      "path": "/og/writing/eurostar-chatbot-analysis.png",
+      "title": "Notes on the Eurostar chatbot \"vulnerability\" report",
+      "description": "Looking at what makes something a vulnerability versus a hardening opportunity in LLM applications.",
+      "date": "2026-01-05",
+      "dateLabel": "January 5, 2026",
+      "readout": [
+        {
+          "label": "Words",
+          "value": "870"
+        },
+        {
+          "label": "References",
+          "value": "9"
+        },
+        {
+          "label": "Reading time",
+          "value": "4 min"
+        }
+      ],
+      "imageDigest": "3e5d376939620d60ea397cb1dd40277b15f1fd0136acfd09c09583799790b8c5"
+    },
+    {
+      "slug": "shipping-with-claude-code",
+      "path": "/og/writing/shipping-with-claude-code.png",
+      "title": "What I learned shipping 1,000+ PRs with Claude Code",
+      "description": "Notes from using Claude Code in parallel git worktrees: Plan Mode, ultrathink, verification loops, and Chrome automation.",
+      "date": "2026-01-03",
+      "dateLabel": "January 3, 2026",
+      "readout": [
+        {
+          "label": "Words",
+          "value": "1,930"
+        },
+        {
+          "label": "References",
+          "value": "16"
+        },
+        {
+          "label": "Reading time",
+          "value": "9 min"
+        }
+      ],
+      "imageDigest": "3e1fdafbb35a9ccaab9a70c91d17e5226f5a4213ade3c95e1cf6f410bc997f63"
+    }
+  ]
 }
