@@ -1,11 +1,24 @@
 import { act, render, screen } from '@testing-library/react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { AGE_PRECISION_FULL } from '@/lib/telemetry';
 
 import Personal from '../../Stats/Personal';
 
 describe('Personal', () => {
   beforeEach(() => {
     vi.useFakeTimers();
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      configurable: true,
+      value: (query: string) => ({
+        matches: false,
+        media: query,
+        addEventListener: () => {},
+        removeEventListener: () => {},
+      }),
+    });
   });
 
   afterEach(() => {
@@ -48,20 +61,27 @@ describe('Personal', () => {
     );
   });
 
-  it('updates age over time', async () => {
+  it('ships a real age to readers with no JavaScript', () => {
+    // The whole reason this stopped being a client component. Effects flush
+    // during Testing Library's `render()`, so the unpowered markup — what
+    // `out/stats/index.html` actually contains — has to be rendered this way.
+    const html = renderToStaticMarkup(<Personal />);
+
+    expect(html).not.toContain('--.-----------');
+    expect(html).toMatch(/>\d+\.\d{2}</);
+    expect(html).toMatch(/as of \d{4}-\d{2}-\d{2}/);
+  });
+
+  it('upgrades the age to full precision in the browser', () => {
     render(<Personal />);
 
-    // Get initial age text
-    const ageCell = screen.getByText('Current age').closest('tr');
-    expect(ageCell).toBeInTheDocument();
-
-    // Advance timer to trigger age update
     act(() => {
       vi.advanceTimersByTime(50);
     });
 
-    // Age should still be displayed (value changes but component renders)
-    expect(screen.getByText('Current age')).toBeInTheDocument();
+    expect(document.querySelector('.stat-readout-value')?.textContent).toMatch(
+      new RegExp(`^\\d+\\.\\d{${AGE_PRECISION_FULL}}$`),
+    );
   });
 
   it('marks every reading as coming from the profile', () => {
@@ -82,6 +102,14 @@ describe('Personal', () => {
 
     expect(note).toHaveClass('stats-source-note');
     expect(note).toHaveAttribute('data-source', 'profile');
+  });
+
+  it('explains what the age is when JavaScript never runs', () => {
+    render(<Personal />);
+
+    expect(screen.getByText(/profile readings come from/i).textContent).toMatch(
+      /no javascript/i,
+    );
   });
 
   it('does not append a unit that repeats its label', () => {

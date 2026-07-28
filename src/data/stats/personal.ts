@@ -1,29 +1,5 @@
-'use client';
-
-import useLiveAge from '@/hooks/useLiveAge';
 import type { StatDeclaration } from '@/lib/readings';
-import {
-  AGE_PRECISION_FULL,
-  agePlaceholder,
-  COUNTRIES_VISITED,
-  CURRENT_CITY,
-} from '@/lib/telemetry';
-
-/**
- * The stats page reports age at deliberately absurd precision.
- *
- * The placeholder is the rendered content; `useLiveAge` writes the reading into
- * this node directly, so the ticking never re-renders React.
- */
-function Age() {
-  const ref = useLiveAge<HTMLSpanElement>(AGE_PRECISION_FULL);
-
-  return (
-    <span className="stat-live" ref={ref}>
-      {agePlaceholder(AGE_PRECISION_FULL)}
-    </span>
-  );
-}
+import { COUNTRIES_VISITED, CURRENT_CITY } from '@/lib/telemetry';
 
 /**
  * All three are `source: 'profile'`: they are facts typed into
@@ -32,6 +8,13 @@ function Age() {
  * instant — is still a profile entry, and that is what the mark is telling the
  * reader.
  *
+ * `age` declares a key and no value. This file used to carry a `'use client'`
+ * directive so it could hold the live readout as a React element, which dragged
+ * the declarations, `resolveReadings`, `Table`, and `TableRow` into the client
+ * bundle behind it. The element is supplied by
+ * `src/components/Stats/Personal.tsx` now, because the reading the server can
+ * render depends on when the build ran and only the renderer knows that.
+ *
  * No `unit` on the countries count: `53 countries` beside `Countries visited`
  * says nothing the label has not already said.
  */
@@ -39,7 +22,6 @@ const data: StatDeclaration[] = [
   {
     key: 'age',
     label: 'Current age',
-    value: <Age />,
     source: 'profile',
   },
   {
