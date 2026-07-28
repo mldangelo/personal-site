@@ -27,7 +27,12 @@ const courses: Course[] = [
   {
     title: 'Numerical Linear Algebra',
     number: 'CME 302',
-    link: 'http://scpd.stanford.edu/search/publicCourseSearchDetails.do;jsessionid=561188A06434D7D97953C4706DE12831?method=load&courseId=11685',
+    // CME 302 has no standing class site (web.stanford.edu/class/cme302/ is a
+    // 404), so this points at Stanford's own course catalogue. The previous
+    // link was a 131-character SCPD URL carrying a `jsessionid`, which now
+    // redirects to cgoe.stanford.edu and answers 403 — a dead session URL that
+    // also wrapped across three lines once print started revealing hrefs.
+    link: 'https://explorecourses.stanford.edu/search?q=CME+302',
     university: 'Stanford',
   },
   {
