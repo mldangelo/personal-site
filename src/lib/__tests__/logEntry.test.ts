@@ -146,13 +146,34 @@ describe('extractLogMarker', () => {
     }
   });
 
-  it('does not read a model number as a year', () => {
+  it('does not read a number that is not a date as a year', () => {
+    // Every string here contains a run of digits that `YEAR_PATTERN` matches on
+    // its own, which is what makes this test able to fail: relax any part of
+    // the inline year guard — the preposition anchor, either word boundary, or
+    // the 18xx/19xx/20xx shape — and one of these arrives in the gutter as a
+    // date. The prose the guard was written for cannot do that. "Mavica
+    // MVC-FD71", "Nikon D750", "Pentium III", "approximately 50 countries" hold
+    // no four-digit run at all, so a test built from them passes against a
+    // guard that has been deleted.
+    for (const text of [
+      // An unprefixed model number: nothing here says this 2000 is a date.
+      'It was an old Tandy 2000 that ran MS-DOS.',
+      // "Garmin" ends in "in", which is a preposition only across a boundary.
+      'I still navigate with a Garmin 2000 on the bike.',
+      // A decade is not a year, and "1990s" is not "1990".
+      'I kept a box of 1990s computer magazines.',
+      // Four digits that are a quantity rather than a year-shaped number.
+      'The whole shoot fit on a floppy of 1440 KB.',
+    ]) {
+      expect(extractLogMarker(text), text).toBeNull();
+    }
+
+    // The same number, prefixed, is a date: the anchor separates the two, and
+    // has not simply turned the guard into a refusal to read anything.
     expect(
-      extractLogMarker('My camera is a Sony Mavica MVC-FD71, and it works.'),
-    ).toBeNull();
-    expect(
-      extractLogMarker('I shoot with a Nikon D750 and a D800 these days.'),
-    ).toBeNull();
+      extractLogMarker('I retired that Tandy in 2000, after seven years.')
+        ?.year,
+    ).toBe('2000');
   });
 
   it('omits the age for a year that predates the birth year', () => {
