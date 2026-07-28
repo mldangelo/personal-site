@@ -61,7 +61,8 @@ account settings unless I explicitly authorize it.
 Rebrand the visual identity using [COLORS], [FONTS], [PORTRAIT], and
 [DESIGN DIRECTION]. Work through the existing semantic tokens. Keep light and
 dark themes, print behavior, accessibility, and the signal-color rules intact.
-Regenerate and verify the share cards, then run the full validation suite.
+Regenerate and verify the share cards and the icon set, then run the full
+validation suite.
 ```
 
 ### Prepare deployment
@@ -111,7 +112,7 @@ Identity data starts in shared files, but some text and links are hard-coded.
 | Logo initials                                                  | `src/components/Template/Navigation.tsx`                            |
 | Footer source link                                             | `src/components/Template/Footer.tsx`                                |
 | Portrait and its alt text                                      | `public/images/me.jpg`, `src/components/Template/ThemePortrait.tsx` |
-| Favicon files and web app name                                 | `public/images/favicon/`                                            |
+| Web app name and icon monogram                                 | Derived from `src/data/profile.json` by `npm run icons`             |
 | Sitemap URL for crawlers                                       | `public/robots.txt`                                                 |
 | RSS title and description                                      | `app/feed.xml/route.ts`                                             |
 | Repository statistics and GitHub API URL                       | `src/components/Stats/Site.tsx`, `src/data/stats/site.ts`           |
@@ -189,9 +190,15 @@ build after the refactor.
 | Light and dark colors      | `app/styles/tokens/colors.css`          |
 | Type scale                 | `app/styles/tokens/typography.css`      |
 | Font files and assignments | `app/fonts.ts`                          |
-| Favicon                    | `public/images/favicon/`                |
+| Icons and web app manifest | `scripts/generate-icons.mjs`            |
 | Default metadata           | `app/layout.tsx`, `src/lib/metadata.ts` |
 | Share-card generator       | `scripts/generate-og.mjs`               |
+
+The icon set is generated, not hand-drawn: `npm run icons` renders the monogram
+from `--color-accent` and your name in `src/data/profile.json`, writing
+`app/favicon.ico`, `app/icon.png`, `app/apple-icon.png`, `app/manifest.json`,
+and the manifest icons under `public/images/icons/`. Commit those together with
+`scripts/icons.meta.json`; a test fails if they drift from the tokens.
 
 After changing profile fields on the share cards, their design, the colour
 tokens, or the posts in `content/writing/`, run:
