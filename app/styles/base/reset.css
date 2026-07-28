@@ -31,7 +31,7 @@
 
   /* Focus-visible styles for keyboard navigation */
   :focus-visible {
-    outline: 2px solid var(--color-accent);
+    outline: var(--rule-strong) solid var(--color-focus-ring);
     outline-offset: 3px;
     border-radius: var(--radius-xs);
   }
