@@ -90,6 +90,41 @@ function createFixture({ basePath = '' } = {}) {
       `,
     }),
   );
+  write(
+    root,
+    'out/resume/index.html',
+    htmlPage({
+      canonical: `${siteRoot}resume/`,
+      siteRoot,
+      content: `
+        <a href="${basePath}/resume.json">JSON</a>
+        <main id="resume">Resume</main>
+      `,
+    }),
+  );
+  write(
+    root,
+    'out/resume.json',
+    `${JSON.stringify(
+      {
+        $schema:
+          'https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json',
+        basics: { name: 'Fixture Person', url: siteRoot },
+        work: [
+          {
+            name: 'Fixture Co',
+            position: 'Engineer',
+            url: 'https://work.example/',
+            startDate: '2020-01-01',
+            summary: 'Did the work.',
+          },
+        ],
+        meta: { canonical: `${siteRoot}resume.json` },
+      },
+      null,
+      2,
+    )}\n`,
+  );
   write(root, 'out/og.png');
   write(root, 'out/images/photo.png');
   write(
@@ -99,6 +134,7 @@ function createFixture({ basePath = '' } = {}) {
 <urlset>
   <url><loc>${siteRoot}</loc></url>
   <url><loc>${siteRoot}about/</loc></url>
+  <url><loc>${siteRoot}resume/</loc></url>
 </urlset>`,
   );
   write(
@@ -151,14 +187,14 @@ describe('verify-export', () => {
     const result = runVerifier(createFixture());
 
     expect(result.status).toBe(0);
-    expect(result.output).toContain('2 pages OK');
+    expect(result.output).toContain('3 pages OK');
   });
 
   it('accepts a repository-site base path', () => {
     const result = runVerifier(createFixture({ basePath: '/personal-site' }));
 
     expect(result.status).toBe(0);
-    expect(result.output).toContain('2 pages OK');
+    expect(result.output).toContain('3 pages OK');
   });
 
   it('rejects links that escape a configured repository-site base path', () => {
@@ -351,6 +387,66 @@ describe('verify-export', () => {
     const result = runVerifier(root);
     expect(result.status).toBe(0);
     expect(result.output).toContain('2 pages OK');
+  });
+
+  it('rejects an export with no machine-readable resume', () => {
+    const root = createFixture();
+    rmSync(join(root, 'out/resume.json'));
+
+    const result = runVerifier(root);
+    expect(result.status).toBe(1);
+    expect(result.output).toContain('resume.json\n    missing from export');
+  });
+
+  it('rejects a resume page that stops linking the artifact', () => {
+    const root = createFixture();
+    mutate(root, 'out/resume/index.html', (html) =>
+      html.replace('href="/resume.json"', 'href="/about/"'),
+    );
+
+    const result = runVerifier(root);
+    expect(result.status).toBe(1);
+    expect(result.output).toContain(
+      '/resume/ does not link to the machine-readable resume',
+    );
+  });
+
+  it.each([
+    {
+      name: 'HTML left in resume prose',
+      change: (json: string) =>
+        json.replace('Did the work.', "Did <a href='#'>the work</a>."),
+      expected: 'work[0].summary carries markup rather than plain text',
+    },
+    {
+      name: 'a markdown link left in resume prose',
+      change: (json: string) =>
+        json.replace('Did the work.', 'Did [the work](https://work.example/).'),
+      expected: 'work[0].summary carries markup rather than plain text',
+    },
+    {
+      name: 'uncollapsed whitespace in resume prose',
+      change: (json: string) => json.replace('Did the work.', 'Did  the work.'),
+      expected: 'work[0].summary has uncollapsed whitespace',
+    },
+    {
+      name: 'a key the JSON Resume schema does not define',
+      change: (json: string) => json.replace('"work"', '"jobs"'),
+      expected: 'key is not part of the JSON Resume schema: jobs',
+    },
+    {
+      name: 'a resume canonical that is not the file-like route',
+      change: (json: string) =>
+        json.replace('/resume.json"\n  }', '/resume.json/"\n  }'),
+      expected: 'meta.canonical is https://example.com/resume.json/',
+    },
+  ])('rejects $name', ({ change, expected }) => {
+    const root = createFixture();
+    mutate(root, 'out/resume.json', change);
+
+    const result = runVerifier(root);
+    expect(result.status).toBe(1);
+    expect(result.output).toContain(expected);
   });
 
   it('requires the sitemap to cover every indexable route', () => {

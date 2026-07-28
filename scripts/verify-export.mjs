@@ -524,6 +524,108 @@ if (!existsSync(feedPath)) {
   }
 }
 
+/** Root properties JSON Resume v1.0.0 allows; the schema forbids the rest. */
+const JSON_RESUME_ROOT_KEYS = new Set([
+  '$schema',
+  'basics',
+  'work',
+  'volunteer',
+  'education',
+  'awards',
+  'certificates',
+  'publications',
+  'skills',
+  'languages',
+  'interests',
+  'references',
+  'projects',
+  'meta',
+]);
+
+/** Every string leaf, with a dotted path, so failures name the field. */
+function stringLeaves(value, path = '') {
+  if (typeof value === 'string') return [[path, value]];
+  if (Array.isArray(value)) {
+    return value.flatMap((item, index) =>
+      stringLeaves(item, `${path}[${index}]`),
+    );
+  }
+  if (value && typeof value === 'object') {
+    return Object.entries(value).flatMap(([key, item]) =>
+      stringLeaves(item, path ? `${path}.${key}` : key),
+    );
+  }
+  return [];
+}
+
+const resumeJsonPath = join(OUT, 'resume.json');
+if (!existsSync(resumeJsonPath)) {
+  fail('resume.json', 'missing from export');
+} else {
+  let resume;
+  try {
+    resume = JSON.parse(readFileSync(resumeJsonPath, 'utf8'));
+  } catch (error) {
+    fail('resume.json', `is not valid JSON: ${error.message}`);
+  }
+
+  if (resume) {
+    for (const key of Object.keys(resume)) {
+      if (!JSON_RESUME_ROOT_KEYS.has(key)) {
+        fail(
+          'resume.json',
+          `key is not part of the JSON Resume schema: ${key}`,
+        );
+      }
+    }
+    if (!resume.basics?.name) fail('resume.json', 'basics.name is missing');
+    if (!Array.isArray(resume.work) || resume.work.length === 0) {
+      fail('resume.json', 'work is missing or empty');
+    }
+
+    const expectedCanonical = siteUrlForRoute('/resume.json');
+    if (resume.meta?.canonical !== expectedCanonical) {
+      fail(
+        'resume.json',
+        `meta.canonical is ${resume.meta?.canonical}; expected ${expectedCanonical}`,
+      );
+    }
+
+    for (const [path, value] of stringLeaves(resume)) {
+      if (/^https?:\/\//i.test(value)) {
+        validateXmlUrl(value, 'resume.json');
+        continue;
+      }
+      // JSON Resume prose is plain text. The work summaries are Markdown with
+      // inline anchors in source, so this is the gate on that conversion.
+      if (/<[a-z/][^>]*>/i.test(value) || /\[[^\]]+\]\([^)]*\)/.test(value)) {
+        fail('resume.json', `${path} carries markup rather than plain text`);
+      }
+      if (/\s{2,}|[\n\r\t]/.test(value)) {
+        fail('resume.json', `${path} has uncollapsed whitespace`);
+      }
+    }
+  }
+
+  // The artifact is only discoverable if the page still points at it. The
+  // internal-link pass proves the target exists; this proves the link is there.
+  // `pageAt` takes a public path, which carries the base path on a
+  // repository site.
+  const resumePage = pageAt(publicPathForRoute('/resume/'));
+  if (!resumePage) {
+    fail('resume.json', 'no exported /resume/ page to link the artifact');
+  } else if (
+    !tags(resumePage.html, 'a').some(
+      (tag) => attribute(tag, 'href') === publicPathForRoute('/resume.json'),
+    )
+  ) {
+    fail(
+      'resume.json',
+      '/resume/ does not link to the machine-readable resume',
+    );
+  }
+}
+
 if (failures.length > 0) {
   console.error(`\nverify-export: ${failures.length} problem(s)\n`);
   for (const { page, message } of failures) {
@@ -534,5 +636,5 @@ if (failures.length > 0) {
 
 console.log(
   `verify-export: ${pages.length} pages OK ` +
-    '(draft routes and assets, robots, ids/fragments, canonicals, complete share metadata, local images, internal links, sitemap/RSS)',
+    '(draft routes and assets, robots, ids/fragments, canonicals, complete share metadata, local images, internal links, sitemap/RSS, resume.json)',
 );
