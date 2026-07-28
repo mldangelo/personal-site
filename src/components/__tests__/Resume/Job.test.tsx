@@ -97,4 +97,46 @@ describe('Job', () => {
     const article = document.querySelector('article.jobs-container');
     expect(article).toBeInTheDocument();
   });
+
+  it('derives the tenure from the two dates', () => {
+    render(<Job data={mockJob} />);
+
+    // 2020-01-15 to 2023-06-30.
+    expect(document.querySelector('.daterange-duration')?.textContent).toBe(
+      '3 yr 5 mo',
+    );
+  });
+
+  it('measures an ongoing role to the instant it is given', () => {
+    render(
+      <Job
+        data={{ ...mockJob, endDate: undefined }}
+        now={new Date('2026-07-28T12:00:00Z').getTime()}
+      />,
+    );
+
+    expect(document.querySelector('.daterange-duration')?.textContent).toBe(
+      '6 yr 6 mo',
+    );
+  });
+
+  it('keeps the tenure inside the date range so it shares the gutter', () => {
+    render(<Job data={mockJob} />);
+
+    const duration = document.querySelector('.daterange-duration');
+    expect(duration?.parentElement).toHaveClass('daterange');
+  });
+
+  /**
+   * Amber is reserved for live values and is already spent on "Present" one
+   * word earlier. Marking the same fact twice is what makes the signal stop
+   * meaning anything, so the tenure stays quiet on every role.
+   */
+  it('does not claim the live signal for the tenure', () => {
+    render(<Job data={{ ...mockJob, endDate: undefined }} />);
+
+    expect(document.querySelector('.daterange-duration')).not.toHaveClass(
+      'daterange-present',
+    );
+  });
 });

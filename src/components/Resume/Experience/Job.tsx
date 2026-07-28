@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 
 import type { Position } from '@/data/resume/work';
+import { type DateInput, positionDuration } from '@/lib/career';
 
 import JobSummary from './JobSummary';
 
@@ -10,11 +11,24 @@ export type JobTier = 'lead' | 'primary' | 'early';
 interface JobProps {
   data: Position;
   tier?: JobTier;
+  /**
+   * Instant an ongoing role is measured to. Taken as a prop rather than read
+   * from the clock here so the figure is deterministic and every role on the
+   * spine is measured against the same moment.
+   */
+  now?: DateInput;
 }
 
-export default function Job({ data, tier = 'primary' }: JobProps) {
+export default function Job({
+  data,
+  tier = 'primary',
+  now = Date.now(),
+}: JobProps) {
   const { name, position, url, startDate, endDate, summary, highlights } = data;
   const isCurrent = !endDate;
+  // Derived from the dates rather than written out per role, so it cannot
+  // contradict the range beside it.
+  const duration = positionDuration(data, now);
 
   return (
     <article
@@ -37,6 +51,7 @@ export default function Job({ data, tier = 'primary' }: JobProps) {
         ) : (
           <span className="daterange-present">Present</span>
         )}
+        <span className="daterange-duration">{duration}</span>
       </p>
 
       <div className="job-body">
