@@ -20,6 +20,7 @@ import courses from '@/data/resume/courses';
 import degrees from '@/data/resume/degrees';
 import { categories, skills } from '@/data/resume/skills';
 import work from '@/data/resume/work';
+import { sortPositions } from '@/lib/career';
 import {
   AUTHOR_NAME,
   SITE_DESCRIPTION,
@@ -191,7 +192,10 @@ function buildBasics(): ResumeBasics {
 }
 
 function buildWork(): ResumeWork[] {
-  return work.map((position) => ({
+  // Sorted, not raw array order: `/resume` renders `sortPositions(work)`, and
+  // the two published artifacts describe the same ten roles. Source order in
+  // `work.ts` is not chronological and is not load-bearing.
+  return sortPositions(work).map((position) => ({
     name: position.name,
     position: position.position,
     url: position.url,

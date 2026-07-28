@@ -89,11 +89,6 @@
     background-color: Highlight;
   }
 
-  /* The category tick is the only place a skill carries its group colour. */
-  .skill-tag::before {
-    background-color: CanvasText;
-  }
-
   /* ===================
      COMPOSITING
      Images are not recoloured by a forced palette, but the blend and filter

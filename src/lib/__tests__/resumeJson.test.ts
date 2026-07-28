@@ -6,6 +6,7 @@ import courses from '@/data/resume/courses';
 import degrees from '@/data/resume/degrees';
 import { categories, skills } from '@/data/resume/skills';
 import work from '@/data/resume/work';
+import { sortPositions } from '@/lib/career';
 import {
   buildJsonResume,
   RESUME_JSON_PATH,
@@ -113,15 +114,20 @@ describe('json resume document', () => {
     ).toBe(true);
   });
 
-  it('carries every position in résumé order', () => {
+  it('carries every position in the order /resume renders them', () => {
+    // Not `work` in source order: the page renders `sortPositions(work)`, and
+    // the two published artifacts must not disagree about the same ten roles.
+    const rendered = sortPositions(work);
+
     expect(resume.work.map((position) => position.name)).toEqual(
-      work.map((position) => position.name),
+      rendered.map((position) => position.name),
     );
+    expect(resume.work).toHaveLength(work.length);
     expect(resume.work[0]).toMatchObject({
       name: 'OpenAI',
-      position: work[0].position,
-      url: work[0].url,
-      startDate: work[0].startDate,
+      position: rendered[0].position,
+      url: rendered[0].url,
+      startDate: rendered[0].startDate,
     });
   });
 

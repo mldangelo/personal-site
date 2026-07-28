@@ -58,7 +58,7 @@
 
 .projects-section-count {
   font-variant-numeric: tabular-nums;
-  color: var(--color-fg-muted);
+  color: var(--color-fg-light);
 }
 
 .projects-group-note {
@@ -128,7 +128,7 @@ a.project-entry:focus-visible .project-entry-title {
   font-size: var(--text-2xs);
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;
-  color: var(--color-fg-muted);
+  color: var(--color-fg-light);
 }
 
 .project-entry-body {
@@ -191,7 +191,7 @@ a.project-entry:focus-visible .project-entry-external {
   font-size: var(--text-2xs);
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;
-  color: var(--color-fg-muted);
+  color: var(--color-fg-light);
 }
 
 @media (max-width: 640px) {
