@@ -13,6 +13,18 @@ function headingIds(html: string): string[] {
   return Array.from(html.matchAll(/<h[1-6][^>]*\bid="([^"]+)"/g), (m) => m[1]);
 }
 
+/** Every id in the document, headings and alias markers alike. */
+function allIds(html: string): string[] {
+  return Array.from(html.matchAll(/\bid="([^"]+)"/g), (m) => m[1]);
+}
+
+function aliasIds(html: string): string[] {
+  return Array.from(
+    html.matchAll(/<span class="prose-anchor-alias" id="([^"]+)"/g),
+    (m) => m[1],
+  );
+}
+
 describe('PostContent', () => {
   it('renders measured local images during server rendering', () => {
     const html = renderToStaticMarkup(
@@ -196,5 +208,93 @@ describe('PostContent heading anchors', () => {
     expect(headingIds(html)).not.toContain(
       'on-using---dangerously-skip-permissions',
     );
+  });
+});
+
+describe('PostContent legacy heading anchors', () => {
+  function renderPost(slug: string): string {
+    const post = getPostBySlug(slug);
+    if (!post) {
+      throw new Error(`expected ${slug} to be published`);
+    }
+
+    return renderToStaticMarkup(
+      <PostContent
+        content={post.content}
+        imageSizes={readPostImageSizes(post.content)}
+      />,
+    );
+  }
+
+  it('keeps every id the renamed post published still resolving', () => {
+    const html = renderPost('shipping-with-claude-code');
+
+    // Measured against the live site before the slug schemes were unified.
+    for (const legacyId of [
+      'claudemd--agentsmd',
+      'on-using---dangerously-skip-permissions',
+      'plan-mode--writing-plans-to-files',
+      'browser-automation---chrome-for-interaction-playwright-mcp-for-screenshots',
+    ]) {
+      expect(allIds(html), legacyId).toContain(legacyId);
+    }
+  });
+
+  it('leaves the canonical id on the heading rather than moving it to the alias', () => {
+    const html = renderPost('shipping-with-claude-code');
+
+    for (const canonicalId of [
+      'claude-md-agents-md',
+      'on-using-dangerously-skip-permissions',
+      'plan-mode-writing-plans-to-files',
+      'browser-automation-chrome-for-interaction-playwright-mcp-for-screenshots',
+    ]) {
+      expect(headingIds(html), canonicalId).toContain(canonicalId);
+    }
+
+    expect(aliasIds(html).sort()).toEqual(
+      [
+        'browser-automation---chrome-for-interaction-playwright-mcp-for-screenshots',
+        'claudemd--agentsmd',
+        'on-using---dangerously-skip-permissions',
+        'plan-mode--writing-plans-to-files',
+      ].sort(),
+    );
+  });
+
+  it('never emits the same id twice in any published post', () => {
+    for (const post of getAllPosts()) {
+      const ids = allIds(renderPost(post.slug));
+
+      expect(new Set(ids).size, post.slug).toBe(ids.length);
+    }
+  });
+
+  it('adds nothing to a heading whose id never changed', () => {
+    const html = renderToStaticMarkup(
+      <PostContent content={'## Verification layers\n'} />,
+    );
+
+    expect(html).toBe('<h2 id="verification-layers">Verification layers</h2>');
+  });
+
+  it('hides the alias from assistive technology and from the tab order', () => {
+    const html = renderToStaticMarkup(
+      <PostContent content={'## CLAUDE.md + AGENTS.md\n'} />,
+    );
+
+    expect(html).toContain(
+      '<span class="prose-anchor-alias" id="claudemd--agentsmd" aria-hidden="true"></span>',
+    );
+    expect(html).not.toContain('tabindex');
+  });
+
+  it('suppresses an alias that would collide with another heading', () => {
+    const html = renderToStaticMarkup(
+      <PostContent content={'## Node.js\n\n## Nodejs\n'} />,
+    );
+
+    expect(aliasIds(html)).toEqual([]);
+    expect(headingIds(html)).toEqual(['node-js', 'nodejs']);
   });
 });

@@ -5,7 +5,7 @@ import Image from 'next/image';
 import type { ReactNode } from 'react';
 import { Children, type CSSProperties, isValidElement } from 'react';
 
-import { createHeadingId } from '@/lib/anchors';
+import { createHeadingId, planHeadingAliases } from '@/lib/anchors';
 
 interface ImageSize {
   width: number;
@@ -26,6 +26,54 @@ interface PostContentProps {
 const FALLBACK_SIZE: ImageSize = { width: 1200, height: 675 };
 
 const LANGUAGE_PREFIX = 'language-';
+
+const HEADING_TAGS = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] as const;
+
+/**
+ * Heading overrides that keep a renamed heading's previous id resolving.
+ *
+ * The canonical id stays on the heading itself; the old one rides an empty
+ * marker as the heading's first child. Inside rather than beside, because an
+ * out-of-flow element takes its static position from where it would have been —
+ * the top of the heading's content box — so `#old-slug` lands exactly where
+ * `#new-slug` lands rather than a heading margin above it.
+ */
+function headingOverrides(aliases: ReadonlyMap<string, string>) {
+  const entries = HEADING_TAGS.map(
+    (Tag) =>
+      [
+        Tag,
+        {
+          component: ({
+            id,
+            children,
+          }: {
+            id?: string;
+            children?: ReactNode;
+          }) => {
+            const legacyId = id ? aliases.get(id) : undefined;
+
+            return (
+              <Tag id={id}>
+                {legacyId ? (
+                  <span
+                    className="prose-anchor-alias"
+                    id={legacyId}
+                    // It names nothing and is not content; it exists so a link
+                    // shared before the rename still has somewhere to land.
+                    aria-hidden="true"
+                  />
+                ) : null}
+                {children}
+              </Tag>
+            );
+          },
+        },
+      ] as const,
+  );
+
+  return Object.fromEntries(entries);
+}
 
 function isRootLocalImage(src: string): boolean {
   return src.startsWith('/') && !src.startsWith('//');
@@ -106,6 +154,8 @@ export default function PostContent({
     return measuredSize ?? FALLBACK_SIZE;
   }
 
+  const aliases = planHeadingAliases(content);
+
   return (
     <Markdown
       options={{
@@ -124,6 +174,9 @@ export default function PostContent({
         // the site derived `on-using-dangerously-skip-permissions`.
         slugify: createHeadingId,
         overrides: {
+          // Unifying the scheme renamed ids that were already published, so
+          // each heading also carries whatever id it used to have.
+          ...headingOverrides(aliases),
           p: {
             component: ({ children }: { children?: ReactNode }) => {
               const items = Children.toArray(children);
