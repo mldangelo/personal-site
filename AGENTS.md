@@ -16,7 +16,6 @@ npm run build        # Production build + static export
 **File-scoped (faster feedback):**
 
 ```bash
-npx tsc --noEmit path/to/file.tsx           # Type check single file
 npx biome check path/to/file.tsx            # Lint single file
 npm test -- ComponentName                    # Test single component
 ```
@@ -92,7 +91,7 @@ Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4 · Biome ·
 - **Long-form markdown pages**: Prefer a dedicated renderer component that can parse markdown into semantic sections instead of styling raw headings globally; if `markdown-to-jsx` causes dev/runtime issues in App Router, a `'use client'` boundary may still be required even without hooks. Preserve stable heading ids when converting markdown headings so deep links and `scroll-margin-top` behavior keep working, prefer a shared helper over duplicating slug logic in each page component, and expose those anchors in the UI with section nav or self-links if readers are expected to use them
 - **Blog posts**: Markdown files in `content/writing/` with frontmatter (title, date, description); slug derived from filename
 - **Writing page**: Add external links in `src/data/writing.ts` and keep dated entries sorted newest first; local posts still live in `content/writing/`
-- **Design system ("Ground Station")**: Three type roles, and every element should pick one deliberately — `--font-display` (Bricolage Grotesque) for names and headings, `--font-body` (Newsreader) for prose, `--font-mono` (JetBrains Mono) for data, dates, labels, and buttons. Structure is carried by hairlines (`--rule`) and near-square radii, not by shadow and float; a heavy `--color-fg-bold` rule opens a section, a `--color-border` hairline divides within one
+- **Design system**: Three type roles, and every element should pick one deliberately: `--font-display` (Bricolage Grotesque) for names and headings, `--font-body` (Newsreader) for prose, and `--font-mono` (JetBrains Mono) for data, dates, labels, and buttons. Structure is carried by hairlines (`--rule`) and near-square radii, not by shadow and float. A heavy `--color-fg-bold` rule opens a section; a `--color-border` hairline divides within one
 - **Page measures are semantic**: use `--measure-wide` for split hero compositions, `--measure-page` for default pages/lists/footer, and `--measure-read` for continuous prose and compact data views. Component constraints such as portraits, controls, and short status messages may still use their own intrinsic measure; do not create a new page width for each route
 - **Signal colour discipline**: `--color-accent` (ultramarine) is for structure and links. `--color-signal` (amber) is reserved for values that are live or in progress — the ticking age, a role with no end date. Using it decoratively is what makes the rest of it stop meaning anything. `--color-signal` is the text-safe value; use `--color-signal-mark` for non-text marks only
 - **Link accents and button fills are different tokens**: `--color-accent` is tuned for text on the page background and is far too light in dark mode to sit behind white text (it measured 2.67:1). Filled controls use `--color-accent-fill` / `--color-accent-fill-hover` with `--color-on-accent`
