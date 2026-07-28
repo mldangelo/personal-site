@@ -61,7 +61,7 @@ account settings unless I explicitly authorize it.
 Rebrand the visual identity using [COLORS], [FONTS], [PORTRAIT], and
 [DESIGN DIRECTION]. Work through the existing semantic tokens. Keep light and
 dark themes, print behavior, accessibility, and the signal-color rules intact.
-Regenerate and verify the share card, then run the full validation suite.
+Regenerate and verify the share cards, then run the full validation suite.
 ```
 
 ### Prepare deployment
@@ -193,15 +193,17 @@ build after the refactor.
 | Default metadata           | `app/layout.tsx`, `src/lib/metadata.ts` |
 | Share-card generator       | `scripts/generate-og.mjs`               |
 
-After changing profile fields on the share card or its design, run:
+After changing profile fields on the share cards, their design, the colour
+tokens, or the posts in `content/writing/`, run:
 
 ```bash
 npm run og
 npm run og:check
 ```
 
-`npm run og` updates `public/og.png` and `public/og.meta.json`. The image and
-metadata must stay in sync.
+`npm run og` updates `public/og.png`, one card per published post under
+`public/og/writing/`, and the `public/og.meta.json` ledger. The images and the
+ledger must stay in sync, and drafts never get a card.
 
 ## Audit the result
 
