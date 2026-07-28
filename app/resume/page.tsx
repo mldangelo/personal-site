@@ -7,6 +7,7 @@ import References from '@/components/Resume/References';
 import ResumeNav from '@/components/Resume/ResumeNav';
 import Skills from '@/components/Resume/Skills';
 import PageWrapper from '@/components/Template/PageWrapper';
+import contact from '@/data/contact';
 import profile from '@/data/profile.json';
 import courses from '@/data/resume/courses';
 import degrees from '@/data/resume/degrees';
@@ -22,6 +23,33 @@ export const metadata: Metadata = createPageMetadata({
   path: '/resume/',
 });
 
+/**
+ * Separator between entries in the printed contact line. The space before the
+ * dot is non-breaking and the one after it is not, so five entries that no
+ * longer fit one line wrap to a line that opens with an address rather than
+ * with a stray dot.
+ */
+const PRINT_CONTACT_SEPARATOR = '\u00a0· ';
+
+/** A URL as it should read on paper: no protocol, no `www.`, no trailing slash. */
+function displayUrl(url: string): string {
+  return url.replace(/^https?:\/\/(?:www\.)?/, '').replace(/\/$/, '');
+}
+
+/**
+ * Looks a destination up in the shared contact data rather than retyping it
+ * here, so the printed header cannot drift from the links in the footer.
+ * Throws rather than falling back, because a silently empty `href` on a
+ * printed resume is worse than a failed build.
+ */
+function contactLink(label: string): string {
+  const item = contact.find((entry) => entry.label === label);
+  if (!item) {
+    throw new Error(`No "${label}" entry in src/data/contact.ts`);
+  }
+  return item.link;
+}
+
 export default function ResumePage() {
   // One clock read for the whole page, so the headline span and every tenure
   // on the spine are measured against the same instant. This is a server
@@ -29,6 +57,8 @@ export default function ResumePage() {
   // line count on /stats.
   const now = Date.now();
   const yearsOfExperience = totalExperienceYears(work, now);
+  const github = contactLink('GitHub');
+  const linkedin = contactLink('LinkedIn');
 
   return (
     <PageWrapper>
@@ -48,13 +78,20 @@ export default function ResumePage() {
           </p>
           {/* Print-only, but real markup rather than CSS `content`, so it is
               selectable, linkable, and reads from the shared profile. The
-              screen layout carries these in the footer, which print hides. */}
+              screen layout carries these in the footer, which print hides.
+              Location and LinkedIn belong on a paper resume as much as the
+              email does; both were already in the repo and only this block
+              was missing them. */}
           <address className="resume-print-contact">
-            <a href={`${SITE_URL}/`}>{SITE_URL.replace(/^https?:\/\//, '')}</a>
-            <span aria-hidden="true"> · </span>
+            <span>{profile.currentCity}</span>
+            <span aria-hidden="true">{PRINT_CONTACT_SEPARATOR}</span>
+            <a href={`${SITE_URL}/`}>{displayUrl(SITE_URL)}</a>
+            <span aria-hidden="true">{PRINT_CONTACT_SEPARATOR}</span>
             <a href={`mailto:${profile.email}`}>{profile.email}</a>
-            <span aria-hidden="true"> · </span>
-            <a href="https://github.com/mldangelo">github.com/mldangelo</a>
+            <span aria-hidden="true">{PRINT_CONTACT_SEPARATOR}</span>
+            <a href={github}>{displayUrl(github)}</a>
+            <span aria-hidden="true">{PRINT_CONTACT_SEPARATOR}</span>
+            <a href={linkedin}>{displayUrl(linkedin)}</a>
           </address>
         </header>
 
