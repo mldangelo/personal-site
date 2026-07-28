@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import contact from '@/data/contact';
 import profile from '@/data/profile.json';
@@ -39,6 +39,29 @@ const ISO8601 =
   /^([1-2][0-9]{3}-[0-1][0-9]-[0-3][0-9]|[1-2][0-9]{3}-[0-1][0-9]|[1-2][0-9]{3})$/;
 
 const resume = buildJsonResume();
+
+/**
+ * Every inline `<a href>` in the source résumé prose. The doc comment on
+ * `toPlainText` claims the text of each one survives into the artifact and the
+ * href does not; these are what hold it to that.
+ */
+const sourceAnchors = work
+  .flatMap((position) => [
+    position.summary ?? '',
+    ...(position.highlights ?? []),
+  ])
+  .flatMap((source) => [
+    ...source.matchAll(/<a\s[^>]*href='([^']+)'[^>]*>([^<]+)<\/a>/g),
+  ])
+  .map((match) => ({ href: match[1], text: match[2] }));
+
+/** The plain-text prose of the built document, as one string. */
+const resumeProse = resume.work
+  .flatMap((position) => [
+    position.summary ?? '',
+    ...(position.highlights ?? []),
+  ])
+  .join('\n');
 
 describe('toPlainText', () => {
   it('keeps anchor text and drops the markup', () => {
@@ -147,6 +170,29 @@ describe('json resume document', () => {
     );
   });
 
+  it('keeps the text of every inline anchor', () => {
+    // Six, in three summaries — the count the `toPlainText` comment states.
+    expect(sourceAnchors).toHaveLength(6);
+
+    for (const { text } of sourceAnchors) {
+      expect(resumeProse).toContain(text);
+    }
+  });
+
+  it('drops every inline href, and no other field brings one back', () => {
+    const serialized = serializeJsonResume();
+    const entryUrls = new Set(work.map((position) => position.url));
+
+    for (const { href } of sourceAnchors) {
+      expect(serialized).not.toContain(href);
+      // These are third-party links — an announcement, three investors, two
+      // funds — not the employer's own `url`, so that field does not recover
+      // them. This is the assertion that refutes the comment this file used to
+      // carry.
+      expect(entryUrls.has(href)).toBe(false);
+    }
+  });
+
   it('leaves no markup or uncollapsed whitespace anywhere in the prose', () => {
     const prose = resume.work.flatMap((position) => [
       position.summary ?? '',
@@ -219,13 +265,34 @@ describe('json resume document', () => {
     }
   });
 
-  it('keeps the canonical file-like and the timestamp off the build clock', () => {
+  it('keeps the canonical file-like', () => {
     expect(RESUME_JSON_PATH).toBe('/resume.json');
     expect(RESUME_JSON_URL).toBe(`${SITE_URL}/resume.json`);
     expect(resume.meta.canonical).toBe(RESUME_JSON_URL);
     expect(resume.meta.canonical).not.toMatch(/resume\.json\/$/);
-    // The newest dated event in the work history, not "now".
-    expect(resume.meta.lastModified).toBe('2026-03-09T00:00:00Z');
+  });
+
+  it('publishes no lastModified rather than one that only means the work history', () => {
+    // It used to be the newest date in `work.ts`, which does not move when
+    // profile, contact, degrees, courses, or every skill changes.
+    expect(resume.meta).toEqual({ canonical: RESUME_JSON_URL });
+    expect(serializeJsonResume()).not.toContain('lastModified');
+  });
+
+  it('reads nothing from the build clock', () => {
+    // Stronger than asserting one field is not `Date.now()`: the whole
+    // document has to come out byte-identical after the clock moves years, so
+    // a rebuild cannot churn the artifact in git.
+    vi.useFakeTimers();
+    try {
+      vi.setSystemTime(new Date('2026-01-01T00:00:00Z'));
+      const first = serializeJsonResume();
+      vi.setSystemTime(new Date('2031-06-30T12:34:56Z'));
+
+      expect(serializeJsonResume()).toBe(first);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it('serializes to stable, pretty-printed bytes', () => {
