@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
 
 import { SiteSchema } from '@/components/Schema';
@@ -7,10 +7,41 @@ import Navigation from '@/components/Template/Navigation';
 import { MAIN_CONTENT_ID } from '@/components/Template/PageWrapper';
 import ScrollToTop from '@/components/Template/ScrollToTop';
 import { sharedOpenGraph, sharedTwitter } from '@/lib/metadata';
+import { readColorToken } from '@/lib/tokens';
 import { AUTHOR_NAME, SITE_DESCRIPTION, SITE_URL } from '@/lib/utils';
 import { bricolage, jetbrainsMono, newsreader } from './fonts';
 import './tailwind.css';
 
+/**
+ * `theme-color` paints the browser's own chrome — the Android address bar, the
+ * Safari toolbar — so it has to be the colour immediately under it, which is
+ * the page background the sticky header tints. One unscoped value is wrong in
+ * whichever theme it was not picked for, so both are declared and scoped by
+ * `prefers-color-scheme`. The values are read from the stylesheets at build
+ * time rather than typed here, so they cannot drift from the tokens.
+ */
+export const viewport: Viewport = {
+  themeColor: [
+    {
+      media: '(prefers-color-scheme: light)',
+      color: readColorToken('--color-bg-alt', 'light'),
+    },
+    {
+      media: '(prefers-color-scheme: dark)',
+      color: readColorToken('--color-bg-alt', 'dark'),
+    },
+  ],
+};
+
+/**
+ * The icon set and the web app manifest are not declared here. They come from
+ * Next's file conventions — `app/favicon.ico`, `app/icon.png`,
+ * `app/apple-icon.png`, `app/manifest.json` — which emit their own `<link>`
+ * tags with content-hashed hrefs. Declaring `metadata.icons` would *replace*
+ * those convention-derived links rather than add to them, the same way a
+ * route-level `openGraph` replaces the inherited one. All four are generated
+ * by `npm run icons`; see `scripts/generate-icons.mjs`.
+ */
 export const metadata: Metadata = {
   title: {
     default: AUTHOR_NAME,
