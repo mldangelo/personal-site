@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
+import { sortPositions } from '@/lib/career';
 import work from '../resume/work';
+
+/** Exactly `YYYY-MM-DD`, which is what makes a string comparison chronological. */
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 
 describe('work data', () => {
   it('exports an array of positions', () => {
@@ -82,6 +86,56 @@ describe('work data', () => {
   it('company names are non-empty', () => {
     for (const job of work) {
       expect(job.name.trim().length).toBeGreaterThan(0);
+    }
+  });
+
+  /**
+   * The spine is ordered by `sortPositions`, which compares the ISO strings
+   * directly — exact for `YYYY-MM-DD`, and free of the timezone trap that
+   * parsing to a `Date` reintroduces. A date written any other way (`2014/01`,
+   * `Jan 2014`) would still parse but would sort wrongly and silently, so the
+   * format itself is the invariant worth pinning.
+   */
+  it('dates are written as plain ISO calendar dates', () => {
+    for (const job of work) {
+      expect(job.startDate).toMatch(ISO_DATE);
+
+      if (job.endDate) {
+        expect(job.endDate).toMatch(ISO_DATE);
+      }
+    }
+  });
+
+  /**
+   * The rendered timeline must run one way. Source order is deliberately not
+   * load-bearing — `Experience` sorts before mapping — so this asserts the
+   * ordered result rather than the literal array, and fails if a future entry
+   * carries a date the comparator cannot place.
+   */
+  it('sorts into a strictly reverse-chronological timeline', () => {
+    const ordered = sortPositions(work);
+
+    expect(ordered).toHaveLength(work.length);
+
+    for (let i = 1; i < ordered.length; i += 1) {
+      const previous = ordered[i - 1];
+      const current = ordered[i];
+
+      expect(
+        current.startDate.localeCompare(previous.startDate),
+      ).toBeLessThanOrEqual(0);
+
+      // Where two roles start on the same date, the one still running (or the
+      // one that ran longer) comes first.
+      if (current.startDate === previous.startDate) {
+        expect(current.endDate).toBeDefined();
+
+        if (previous.endDate && current.endDate) {
+          expect(
+            current.endDate.localeCompare(previous.endDate),
+          ).toBeLessThanOrEqual(0);
+        }
+      }
     }
   });
 });
