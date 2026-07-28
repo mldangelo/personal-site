@@ -369,14 +369,34 @@ describe('verify-export', () => {
     );
   });
 
-  it('rejects any other export named after a draft', () => {
+  /**
+   * A leaked draft route ships more than its HTML: Next writes an RSC prefetch
+   * payload beside every prerendered route, and nothing else here reads it.
+   */
+  it('rejects a non-HTML file beside a draft route', () => {
     const root = createFixture();
-    write(root, 'out/downloads/secret-draft/notes.pdf');
+    write(root, 'out/writing/secret-draft/index.txt');
 
     const result = runVerifier(root);
     expect(result.status).toBe(1);
     expect(result.output).toContain(
-      'exports an asset named after a draft post: /downloads/secret-draft/notes.pdf',
+      'exports an asset named after a draft post: /writing/secret-draft/index.txt',
+    );
+  });
+
+  /**
+   * Article images live one directory per post under `public/images/writing/`,
+   * and `public/` ships verbatim, so that directory is a real place for a
+   * draft's screenshots to become publicly fetchable.
+   */
+  it('rejects an article image directory named after a draft', () => {
+    const root = createFixture();
+    write(root, 'out/images/writing/secret-draft/screenshot.webp');
+
+    const result = runVerifier(root);
+    expect(result.status).toBe(1);
+    expect(result.output).toContain(
+      'exports an asset named after a draft post: /images/writing/secret-draft/screenshot.webp',
     );
   });
 
@@ -389,6 +409,53 @@ describe('verify-export', () => {
     // Page count tracks `createFixture`, which carries index, about, and
     // resume. A published post's card is not a page and must not change it.
     expect(result.output).toContain('3 pages OK');
+  });
+
+  /**
+   * The gate is about files generated from `content/writing/`, not about names.
+   * Matching a draft slug against any path segment anywhere in `out/` meant a
+   * draft called `photo` or `resume` failed the whole build over
+   * `images/photo.png` and `resume.json` — committed files nothing derived from
+   * a post, reported as a draft leak.
+   */
+  it('accepts committed assets whose names collide with a draft slug', () => {
+    const root = createFixture();
+    write(
+      root,
+      'content/writing/photo.md',
+      '---\ntitle: Photo\ndraft: true\n---\n',
+    );
+    write(
+      root,
+      'content/writing/resume.md',
+      '---\ntitle: Resume\ndraft: true\n---\n',
+    );
+
+    const result = runVerifier(root);
+    expect(result.status).toBe(0);
+    expect(result.output).toContain('3 pages OK');
+  });
+
+  /**
+   * The gate and the card generator have to agree on what a draft is.
+   * `validatePostFrontmatter` throws for a non-boolean `draft`, so a quoted
+   * `draft: 'true'` never builds — but both scripts once read it as published,
+   * which is how a card for it got committed with nothing objecting.
+   */
+  it('rejects a card for a post whose draft flag is malformed', () => {
+    const root = createFixture();
+    write(
+      root,
+      'content/writing/quoted-draft.md',
+      "---\ntitle: Quoted draft\ndraft: 'true'\n---\n",
+    );
+    write(root, 'out/og/writing/quoted-draft.png');
+
+    const result = runVerifier(root);
+    expect(result.status).toBe(1);
+    expect(result.output).toContain(
+      'exports an asset named after a draft post: /og/writing/quoted-draft.png',
+    );
   });
 
   it('rejects an export with no machine-readable resume', () => {

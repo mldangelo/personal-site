@@ -207,6 +207,30 @@ export function measurePost(markdown) {
 }
 
 /**
+ * Whether frontmatter marks a post as unpublished.
+ *
+ * A plain Node script cannot import `isPublished` from `src/lib/posts.ts`, so
+ * the rule is necessarily reimplemented — and the two have to agree on the safe
+ * side rather than merely overlap. `validatePostFrontmatter` throws for any
+ * `draft` that is not a boolean, so a quoted `draft: 'true'` fails the site
+ * build outright; a script testing `draft === true` called that same post
+ * published and told the author to commit a share card carrying its title.
+ *
+ * Only an explicit, unambiguous "not a draft" publishes here: the key absent,
+ * or literally `false`. Every other value is withheld, so a malformed flag can
+ * never produce a published artifact — the script declines where the app
+ * throws. `scripts/__tests__/drafts.test.ts` enumerates the cases and pins this
+ * against the TypeScript reader.
+ *
+ * `verify-export.mjs` imports this rather than repeating it, because a third
+ * copy of the rule is a third thing to drift.
+ */
+export function isDraftFrontmatter(data) {
+  const draft = data?.draft;
+  return draft !== undefined && draft !== false;
+}
+
+/**
  * The published posts that get a card, newest first.
  *
  * Drafts are excluded unconditionally. `public/` is copied verbatim into the
@@ -228,7 +252,7 @@ export async function readPostCards(root = process.cwd()) {
       await readFile(join(directory, file), 'utf8'),
     );
 
-    if (data.draft === true) continue;
+    if (isDraftFrontmatter(data)) continue;
 
     const slug = file.replace(/\.md$/, '');
     assertSafeSlug(slug, join(CONTENT_DIRECTORY, file));
