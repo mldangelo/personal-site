@@ -13,6 +13,7 @@ import degrees from '@/data/resume/degrees';
 import { categories, skills } from '@/data/resume/skills';
 import work from '@/data/resume/work';
 import { createPageMetadata } from '@/lib/metadata';
+import { RESUME_JSON_PATH } from '@/lib/resumeJson';
 import { AUTHOR_NAME, SITE_URL } from '@/lib/utils';
 
 export const metadata: Metadata = createPageMetadata({
@@ -26,7 +27,20 @@ export default function ResumePage() {
     <PageWrapper>
       <section className="resume-page">
         <header className="resume-header">
-          <h1 className="resume-title">Resume</h1>
+          <div className="resume-header-row">
+            <h1 className="resume-title">Resume</h1>
+            {/* The same affordance as the RSS chip on /writing: this résumé is
+                also published as data, at the JSON Resume path the work data
+                has always claimed to conform to. */}
+            <a
+              href={RESUME_JSON_PATH}
+              className="resume-json-link"
+              title="JSON Resume"
+              aria-label="JSON Resume"
+            >
+              JSON
+            </a>
+          </div>
           <p className="resume-summary">
             Engineering leader with 15+ years building products across AI,
             security, and infrastructure. I&apos;m currently a Member of the
