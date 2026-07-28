@@ -97,7 +97,6 @@ export interface JsonResume {
   skills: ResumeSkill[];
   meta: {
     canonical: string;
-    lastModified: string;
   };
 }
 
@@ -128,8 +127,16 @@ function decodeEntity(entity: string): string {
  * HTML — `JobSummary` renders them through `markdown-to-jsx`, and three of them
  * carry real `<a href>` anchors. The rendered page depends on that markup, so
  * this strips it for the artifact rather than flattening the source data and
- * costing the page its links. The URLs are not lost: every employer's own
- * `url` is already a field on the work entry.
+ * costing the page its links.
+ *
+ * The anchor text survives and the href does not, and nothing else in the
+ * document recovers it. All six are third-party links — the Codex Security
+ * announcement, Anthemis, Foundation Capital, Y Combinator, NEA, Accel — not
+ * the employer's own `url`, which is a separate field on the work entry and
+ * points somewhere else. That is the accepted cost: JSON Resume prose is plain
+ * text, and the schema has nowhere to hang a link inside a summary. The test
+ * file pins both halves, so this paragraph fails rather than rots when a
+ * summary changes.
  *
  * Underscore emphasis is intentionally left alone: `_x_` would eat the
  * underscores out of an identifier like `snake_case_name`.
@@ -259,21 +266,26 @@ function buildSkills(): ResumeSkill[] {
 }
 
 /**
- * The most recent dated event in the work history — not the build clock. The
- * same discipline as `feed.xml`'s `lastBuildDate`: a timestamp read from the
- * clock would rewrite the artifact on every rebuild and could not be pinned by
- * a test.
+ * Assembles the document. `meta.lastModified` is deliberately absent.
+ *
+ * It was emitted as the newest `startDate`/`endDate` in
+ * `src/data/resume/work.ts`, which is a date about the work history rather than
+ * about the document. Editing `profile.json`, `contact.ts`, `degrees.ts`,
+ * `courses.ts`, or every skill in `skills.ts` left it untouched — the one field
+ * that named itself "last modified" was the field least able to notice a
+ * modification.
+ *
+ * Nothing in the data replaces it honestly. Only `work` and `degrees` carry
+ * dates at all, and the newest across both is the same work-history date the
+ * old implementation already published, so widening the search would broaden
+ * the claim without broadening what it can actually see. The build clock is not
+ * an option either: a timestamp read from the clock rewrites the artifact on
+ * every rebuild, churns it in git, and cannot be pinned by a test — the same
+ * discipline `feed.xml` applies to `lastBuildDate`. `meta.lastModified` is
+ * optional in JSON Resume, so the field is omitted rather than published
+ * meaning something narrower than its name. `work[0].startDate` already states
+ * the recency of the work history, under a name that is true.
  */
-function lastModified(): string {
-  const dates = work.flatMap((position) =>
-    [position.startDate, position.endDate].filter(
-      (date): date is string => !!date,
-    ),
-  );
-  // ISO dates sort lexicographically.
-  return `${dates.sort().at(-1)}T00:00:00Z`;
-}
-
 export function buildJsonResume(): JsonResume {
   return {
     $schema: RESUME_SCHEMA_URL,
@@ -283,7 +295,6 @@ export function buildJsonResume(): JsonResume {
     skills: buildSkills(),
     meta: {
       canonical: RESUME_JSON_URL,
-      lastModified: lastModified(),
     },
   };
 }
