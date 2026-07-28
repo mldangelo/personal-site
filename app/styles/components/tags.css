@@ -39,8 +39,11 @@
   justify-content: flex-start;
 }
 
-/* Skills read as plotted values: the category colour is carried by a
-   short tick rather than a heavy left border on a floating pill. */
+/* Skills read as a small record: name, then the competency tier as a mono
+   annotation. The tick that used to sit here was painted from a per-category
+   colour that resolved to the same accent for every category, so it separated
+   nothing — and competency, the one thing it was standing in for, cannot be
+   carried by colour alone (WCAG 1.4.1). It is text now. */
 .skill-tag {
   display: inline-flex;
   align-items: center;
@@ -58,20 +61,21 @@
     background-color var(--duration-fast) var(--ease-out);
 }
 
-.skill-tag::before {
-  content: '';
-  width: 6px;
-  height: var(--rule-strong);
-  background: var(--tag-color, var(--color-accent));
-  flex-shrink: 0;
-}
-
 .skill-tag:hover {
   border-color: var(--color-fg-light);
   background: var(--color-surface-subtle);
 }
 
 .skill-tag-name {
+  white-space: nowrap;
+}
+
+/* Competency tier — annotation, in the same register as the group labels. */
+.skill-tag-tier {
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--color-fg-light);
   white-space: nowrap;
 }
 
@@ -97,16 +101,17 @@
   border-color: var(--color-border-alt);
 }
 
-/* Size variations — weight, not scale. */
-.skill-tag--lg {
+/* Tier variations — weight, not scale, and never the only cue: the tier is
+   spelled out on the tag, so these only reinforce it. */
+.skill-tag--core {
   font-weight: var(--font-weight-medium);
   color: var(--color-fg-bold);
 }
 
-.skill-tag--md {
+.skill-tag--working {
   font-weight: var(--font-weight-normal);
 }
 
-.skill-tag--sm {
+.skill-tag--familiar {
   color: var(--color-fg-light);
 }
