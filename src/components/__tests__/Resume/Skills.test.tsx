@@ -4,9 +4,9 @@ import { describe, expect, it } from 'vitest';
 import Skills from '../../Resume/Skills';
 
 const mockCategories = [
-  { name: 'Languages', color: '#6968b3' },
-  { name: 'ML Engineering', color: '#37b1f5' },
-  { name: 'Web Development', color: '#40494e' },
+  { name: 'Languages' },
+  { name: 'ML Engineering' },
+  { name: 'Web Development' },
 ];
 
 const mockSkills = [

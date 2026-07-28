@@ -6,7 +6,6 @@ export interface Skill {
 
 export interface Category {
   name: string;
-  color: string;
 }
 
 const skills: Skill[] = [
@@ -123,17 +122,22 @@ const skills: Skill[] = [
 ].map((skill) => ({ ...skill, category: skill.category.sort() }));
 
 /**
- * Build categories from skills, all using the accent color token.
+ * The distinct category names, sorted, so the filter row and the group order
+ * both fall out of the skill list itself.
+ *
+ * This used to hand every category a `color` as well — and it handed all of
+ * them the same `var(--color-accent)`, so the per-tag tick it painted came out
+ * identical on every rendered tag. A whole prop chain carried a value that
+ * distinguished nothing, and it was the only cue for competency, which a colour
+ * cannot legibly carry anyway (WCAG 1.4.1). Competency is text on the tag now;
+ * see `tierFor` in `Skills/SkillTag.tsx`.
  */
 function buildCategories(skillsList: Skill[]): Category[] {
   const uniqueCategories = Array.from(
     new Set(skillsList.flatMap(({ category }) => category)),
   ).sort();
 
-  return uniqueCategories.map((category) => ({
-    name: category,
-    color: 'var(--color-accent)',
-  }));
+  return uniqueCategories.map((category) => ({ name: category }));
 }
 
 const categories: Category[] = buildCategories(skills);

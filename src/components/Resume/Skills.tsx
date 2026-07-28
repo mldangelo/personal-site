@@ -87,11 +87,7 @@ export default function Skills({ skills, categories }: SkillsProps) {
               <h3 className="skill-group-title">{category.name}</h3>
               <div className="skill-tags">
                 {categorySkills.map((skill) => (
-                  <SkillTag
-                    key={skill.title}
-                    data={skill}
-                    categories={categories}
-                  />
+                  <SkillTag key={skill.title} data={skill} />
                 ))}
               </div>
             </div>
