@@ -67,12 +67,53 @@ export default function Skills({ skills, categories }: SkillsProps) {
       .filter((group) => group.skills.length > 0);
   }, [skills, categories]);
 
+  /**
+   * Counted from the groups that are actually rendered, never stated, so the
+   * announcement cannot drift from what is on screen. A skill in two categories
+   * renders twice, hence the de-duplication by title.
+   */
+  const totalSkillCount = useMemo(
+    () =>
+      new Set(
+        groupedSkills.flatMap(({ skills: groupSkills }) =>
+          groupSkills.map(({ title }) => title),
+        ),
+      ).size,
+    [groupedSkills],
+  );
+
+  const visibleSkillCount = useMemo(() => {
+    if (activeCategory === ALL_CATEGORY) return totalSkillCount;
+
+    return (
+      groupedSkills.find(({ category }) => category.name === activeCategory)
+        ?.skills.length ?? 0
+    );
+  }, [activeCategory, groupedSkills, totalSkillCount]);
+
+  /**
+   * `aria-pressed` on the buttons reports the state of the control; it says
+   * nothing about the result of pressing it, and the result here is that most
+   * of the section silently disappears. This states the outcome instead.
+   *
+   * It stays `.sr-only`: printing un-hides every group regardless of the filter,
+   * so a visible count would contradict the page it is printed on.
+   */
+  const noun = totalSkillCount === 1 ? 'skill' : 'skills';
+  const filterStatus =
+    activeCategory === ALL_CATEGORY
+      ? `Showing all ${totalSkillCount} ${noun}.`
+      : `Showing ${visibleSkillCount} of ${totalSkillCount} ${noun} in ${activeCategory}.`;
+
   return (
     <div className="skills">
       <div className="title">
         <h2>Skills</h2>
       </div>
       <div className="skill-button-container">{buttonElements}</div>
+      <p className="sr-only" role="status" aria-live="polite">
+        {filterStatus}
+      </p>
       <div className="skill-groups">
         {groupedSkills.map(({ category, skills: categorySkills }) => {
           const isVisible =
