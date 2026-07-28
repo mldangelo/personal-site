@@ -1,9 +1,16 @@
 import type { Position } from '@/data/resume/work';
+import { type DateInput, sortPositions } from '@/lib/career';
 
 import Job, { type JobTier } from './Experience/Job';
 
 interface ExperienceProps {
   data: Position[];
+  /**
+   * Instant an ongoing role's tenure is measured to. Read once by the caller
+   * and threaded down so every duration on the spine agrees with the headline
+   * span on the page.
+   */
+  now?: DateInput;
 }
 
 /** Year before which a role is treated as student-era. */
@@ -50,18 +57,27 @@ export function tierFor(job: Position, positions: Position[]): JobTier {
   return 'primary';
 }
 
-export default function Experience({ data }: ExperienceProps) {
+export default function Experience({
+  data,
+  now = Date.now(),
+}: ExperienceProps) {
+  // `tierFor` was written not to depend on array position; sorting here is the
+  // other half of that decision. Without it the spine rendered in whatever
+  // order the data file happened to be in, which ran backwards in the middle.
+  const positions = sortPositions(data);
+
   return (
     <div className="experience">
       <div className="title">
         <h2>Experience</h2>
       </div>
       <div className="experience-spine">
-        {data.map((job) => (
+        {positions.map((job) => (
           <Job
             data={job}
             key={`${job.name}-${job.position}`}
-            tier={tierFor(job, data)}
+            now={now}
+            tier={tierFor(job, positions)}
           />
         ))}
       </div>

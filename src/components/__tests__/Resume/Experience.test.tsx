@@ -68,4 +68,60 @@ describe('Experience', () => {
     const articles = document.querySelectorAll('.jobs-container');
     expect(articles.length).toBe(0);
   });
+
+  /**
+   * The spine used to render in raw array order, and the real data had drifted
+   * out of sequence, so a section that reads as a timeline ran backwards in the
+   * middle. `tierFor` was already written not to depend on array position;
+   * sorting is the other half of that.
+   */
+  it('renders newest first regardless of the order it is handed', () => {
+    const shuffled = [
+      { ...mockJobs[1], name: 'Oldest Co', startDate: '2015-01-01' },
+      { ...mockJobs[0], name: 'Newest Co', startDate: '2024-01-01' },
+      { ...mockJobs[1], name: 'Middle Co', startDate: '2019-01-01' },
+    ];
+
+    render(<Experience data={shuffled} />);
+
+    const companies = Array.from(document.querySelectorAll('.job-company')).map(
+      (node) => node.textContent,
+    );
+
+    expect(companies).toEqual(['Newest Co', 'Middle Co', 'Oldest Co']);
+  });
+
+  it('gives the lead tier to the newest role after sorting', () => {
+    const shuffled = [
+      { ...mockJobs[1], name: 'Oldest Co', startDate: '2015-01-01' },
+      { ...mockJobs[0], name: 'Newest Co', startDate: '2024-01-01' },
+    ];
+
+    render(<Experience data={shuffled} />);
+
+    const first = document.querySelector('.jobs-container');
+    expect(first).toHaveClass('jobs-container--lead');
+    expect(first?.querySelector('.job-company')?.textContent).toBe('Newest Co');
+  });
+
+  it('measures every ongoing role against a single shared instant', () => {
+    const now = new Date('2026-07-28T12:00:00Z').getTime();
+
+    render(
+      <Experience
+        data={[
+          { ...mockJobs[0], name: 'Still Going', endDate: undefined },
+          { ...mockJobs[1], name: 'Also Going', endDate: undefined },
+        ]}
+        now={now}
+      />,
+    );
+
+    const durations = Array.from(
+      document.querySelectorAll('.daterange-duration'),
+    ).map((node) => node.textContent);
+
+    // 2020-01-01 and 2018-01-01 respectively, both measured to `now`.
+    expect(durations).toEqual(['6 yr 6 mo', '8 yr 6 mo']);
+  });
 });
