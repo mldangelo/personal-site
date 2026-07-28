@@ -602,9 +602,42 @@
   color: var(--color-accent-hover);
 }
 
-/* The live reading — the same rule as the hero: amber means it moves. */
-.stat-live {
+/* A reading that upgrades itself when the page comes alive. The server renders
+   the value it can prove — the age at two decimals, the build date — and the
+   client replaces it in place with the one only a browser can take.
+
+   The box is reserved in `ch` for the widest form the reading takes, so
+   swapping two decimals for eleven cannot resize the cell it sits in. The
+   width comes from the component, measured off the strings themselves. */
+.stat-readout-value {
+  display: inline-block;
+  min-width: var(--readout-width, auto);
+}
+
+/* The same rule as the hero: amber means it moves. Spent only once the client
+   is actually driving the value — the build-time reading it replaces is an
+   ordinary measurement, and painting it amber would make the colour mean
+   "sometimes live", which is how a signal colour stops signalling. */
+.stat-readout-value[data-live='true'] {
   color: var(--color-signal);
+}
+
+/* What the reading is qualified by: the date it was taken, or `ago` once it is
+   counting. Genuinely secondary annotation, so the 11px role.
+
+   Below the value for the same reason the provenance mark sits below its label
+   — both cells align on their first baseline, so an 11px line above a 36px
+   value would drag the value up to meet it. */
+.stat-readout-note {
+  display: block;
+  margin-top: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-weight: var(--font-weight-normal);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--color-fg-light);
 }
 
 .stats-source-note {

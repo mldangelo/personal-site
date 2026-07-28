@@ -1,6 +1,5 @@
-import dayjs from 'dayjs';
-
 import type { StatDeclaration } from '@/lib/readings';
+import { SHORT_SHA_LENGTH, utcDate } from '@/lib/telemetry';
 
 const REPO = 'https://github.com/mldangelo/personal-site';
 const BLOB = `${REPO}/blob/main`;
@@ -46,11 +45,38 @@ const data: StatDeclaration[] = [
     link: 'https://github.com/search?q=repo%3Amldangelo%2Fpersonal-site+is%3Aopen&type=issues',
   },
   {
-    label: 'Last updated at',
+    // Was `Last updated at`, which is not what `pushed_at` is: it is the last
+    // push to the repository, on any branch, and it runs ahead of the deploy
+    // whenever a push does not produce one. The two rows below say what
+    // actually produced the bytes you are reading. Kept because the pair is the
+    // interesting reading — a gap between them is deploy lag.
+    label: 'Last push to this repository',
     key: 'pushed_at',
     source: 'github',
     link: `${REPO}/commits`,
-    format: (x: unknown) => dayjs(x as string).format('MMMM DD, YYYY'),
+    // UTC, not a local format: this string is produced on whichever machine ran
+    // the build, so a host-timezone read would publish a date that depends on
+    // the runner.
+    format: (x: unknown) => utcDate(new Date(x as string).getTime()),
+  },
+  {
+    // Read from the build environment by `deployedCommit()`; see
+    // `src/lib/telemetry.ts`. Off CI there is no commit context, the
+    // measurement is `null`, and the row drops out rather than guessing.
+    label: 'Deployed from commit',
+    key: 'deployed_commit',
+    source: 'measured',
+    format: (x: unknown) => String(x).slice(0, SHORT_SHA_LENGTH),
+    // The one link on the page whose target is the reading itself.
+    link: (x: unknown) => `${REPO}/commit/${x}`,
+  },
+  {
+    // Filled with a live `<BuildClock>` by `src/components/Stats/Site.tsx`.
+    // Deliberately unlinked: the value is a readout with its own note and its
+    // own signal colour, and wrapping it in an anchor would repaint both.
+    label: 'When this build ran',
+    key: 'built_at',
+    source: 'measured',
   },
   {
     // Counted by `countSourceLines()`; see `src/lib/loc.ts`. No `unit` — the

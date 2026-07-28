@@ -45,9 +45,15 @@ describe('site stats data', () => {
 
   it('stats with links have valid URLs', () => {
     const statsWithLinks = data.filter((s) => s.link);
+    const sha = 'a'.repeat(40);
 
     for (const stat of statsWithLinks) {
-      expect(stat.link).toMatch(/^https:\/\//);
+      // A link may be derived from its reading — the deployed commit points at
+      // itself — so resolve it the way `resolveReadings` does.
+      const href =
+        typeof stat.link === 'function' ? stat.link(sha) : stat.link!;
+
+      expect(href, stat.label).toMatch(/^https:\/\//);
     }
   });
 
@@ -59,11 +65,47 @@ describe('site stats data', () => {
     expect(typeof pushedAt!.format).toBe('function');
   });
 
-  it('format function returns formatted date', () => {
+  it('publishes dates in UTC rather than the build host timezone', () => {
+    // Was `January 15, 2024` through `dayjs`, which reads the host timezone: the
+    // published date depended on which runner produced it, and a runner an hour
+    // either side of midnight published a different day. It also has to agree
+    // with the build-date row beside it, which is ISO.
     const pushedAt = data.find((s) => s.key === 'pushed_at');
-    const formatted = pushedAt!.format!('2024-01-15T12:00:00Z');
 
-    expect(formatted).toBe('January 15, 2024');
+    expect(pushedAt!.format!('2024-01-15T12:00:00Z')).toBe('2024-01-15');
+    expect(pushedAt!.format!('2024-01-15T23:59:00Z')).toBe('2024-01-15');
+  });
+
+  it('says what produced these bytes, not just when the repo was pushed', () => {
+    // `Last updated at` showed GitHub's `pushed_at`, which is the repository's
+    // last push on any branch — a claim about the repo dressed up as a claim
+    // about the deploy.
+    expect(data.find((s) => s.label === 'Last updated at')).toBeUndefined();
+    expect(data.find((s) => s.key === 'pushed_at')!.label).toBe(
+      'Last push to this repository',
+    );
+
+    const commit = data.find((s) => s.key === 'deployed_commit');
+    expect(commit).toBeDefined();
+    expect(commit!.source).toBe('measured');
+    expect(commit!.value).toBeUndefined();
+
+    const built = data.find((s) => s.key === 'built_at');
+    expect(built).toBeDefined();
+    expect(built!.source).toBe('measured');
+    expect(built!.value).toBeUndefined();
+  });
+
+  it('links the deployed commit to that exact commit', () => {
+    const commit = data.find((s) => s.key === 'deployed_commit');
+    const sha = '0123456789abcdef0123456789abcdef01234567';
+
+    expect(typeof commit!.link).toBe('function');
+    expect((commit!.link as (v: unknown) => string)(sha)).toBe(
+      `https://github.com/mldangelo/personal-site/commit/${sha}`,
+    );
+    // Shortened for display, but the link keeps the full hash.
+    expect(commit!.format!(sha)).toBe('0123456');
   });
 
   it('declares the lines-of-code stat without hardcoding a count', () => {

@@ -31,6 +31,10 @@ describe('Site', () => {
 
   afterEach(() => {
     vi.restoreAllMocks();
+    // Tests in this file run shuffled, and the deployed-commit row is read from
+    // the environment — a leaked stub would make an unrelated test depend on
+    // whether it ran on CI.
+    vi.unstubAllEnvs();
   });
 
   it('renders the site stats table', async () => {
@@ -88,7 +92,64 @@ describe('Site', () => {
     expect(
       screen.getByText('Open github issues and pull requests'),
     ).toBeInTheDocument();
-    expect(screen.getByText('Last updated at')).toBeInTheDocument();
+    expect(
+      screen.getByText('Last push to this repository'),
+    ).toBeInTheDocument();
+  });
+
+  it('does not pass off the last push as the deploy', async () => {
+    // `Last updated at` showed GitHub's `pushed_at`, which is the repository's
+    // last push on any branch. It is not the commit that produced these bytes,
+    // and it runs ahead of the deploy whenever a push does not produce one.
+    const Component = await Site();
+    render(Component);
+
+    expect(screen.queryByText('Last updated at')).not.toBeInTheDocument();
+    expect(
+      screen.getByText('Last push to this repository').closest('tr')
+        ?.textContent,
+    ).toContain('2024-06-01');
+  });
+
+  it('reports the commit the build was cut from, linked to itself', async () => {
+    const sha = '0123456789abcdef0123456789abcdef01234567';
+    vi.stubEnv('BUILD_SHA', sha);
+
+    const Component = await Site();
+    render(Component);
+
+    const row = screen.getByText('Deployed from commit').closest('tr');
+    expect(row?.textContent).toContain('0123456');
+    expect(row?.querySelector('a')).toHaveAttribute(
+      'href',
+      `https://github.com/mldangelo/personal-site/commit/${sha}`,
+    );
+  });
+
+  it('drops the commit row off CI rather than inventing one', async () => {
+    // A local `npm run build` and `npm run dev` have no commit context. One
+    // fewer reading is the honest outcome; a guess is not.
+    vi.stubEnv('BUILD_SHA', '');
+    vi.stubEnv('GITHUB_SHA', '');
+
+    const Component = await Site();
+    render(Component);
+
+    expect(screen.queryByText('Deployed from commit')).not.toBeInTheDocument();
+    // The build clock does not depend on a commit, so it stays.
+    expect(screen.getByText('When this build ran')).toBeInTheDocument();
+  });
+
+  it('shows when the build ran, and lets the browser count from there', async () => {
+    const Component = await Site();
+    render(Component);
+
+    const row = screen.getByText('When this build ran').closest('tr');
+
+    expect(row?.querySelector('.stat-readout-value')).toBeInTheDocument();
+    expect(row?.textContent).toMatch(
+      /\d+d \d{2}:\d{2}:\d{2}|\d{2}:\d{2}:\d{2}/,
+    );
   });
 
   it('uses fallback data when fetch fails', async () => {
