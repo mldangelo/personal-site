@@ -21,6 +21,7 @@ import {
   tags,
 } from './lib/html.mjs';
 import { exportLayout, readSiteConfig, toUrlPath } from './lib/site.mjs';
+import { isDraftFrontmatter, POST_CARD_DIRECTORY } from './og-inputs.mjs';
 
 const ROOT = process.cwd();
 const OUT = resolve(ROOT, 'out');
@@ -67,8 +68,11 @@ if (pages.length === 0) {
 const draftSlugs = walk(CONTENT, (name) => name.endsWith('.md'))
   // Use the same YAML parser as the application. A line regex misses valid
   // forms such as `draft: true # keep private`, weakening the fault-injection
-  // gate precisely when the route layer regresses.
-  .filter((path) => matter(readFileSync(path, 'utf8')).data.draft === true)
+  // gate precisely when the route layer regresses. `isDraftFrontmatter` is the
+  // share-card scripts' predicate, imported rather than repeated: a gate that
+  // disagreed with the generator about what a draft is would wave through the
+  // exact artifact the generator should never have produced.
+  .filter((path) => isDraftFrontmatter(matter(readFileSync(path, 'utf8')).data))
   .map((path) => basename(path, '.md'));
 
 function isDraftPath(pathname) {
@@ -80,7 +84,45 @@ function isDraftPath(pathname) {
 }
 
 /**
- * Nothing in the export may be named after a draft, not only routes.
+ * Where in the export a file belonging to one post can appear.
+ *
+ * `POST_CARD_DIRECTORY` is the generated share cards, taken from the generator's
+ * own constant so moving them cannot silently un-scope this gate. `/writing` is
+ * the posts' own route tree, which carries more than HTML: Next writes an RSC
+ * prefetch payload beside every prerendered route, so a leaked draft route also
+ * ships an `index.txt` that no metadata check reads. `/images/writing` is where
+ * article images live, one directory per post.
+ *
+ * A new per-post asset directory has to be registered here, or it ships
+ * unwatched — that is the cost of scoping, and it is the smaller cost. The scan
+ * used to match any path segment anywhere in `out/`, which meant a draft slug
+ * colliding with an unrelated committed file (`notes.md` against
+ * `public/images/notes.png`) failed the whole build with a draft-leak message
+ * pointing at a file nothing generated.
+ */
+const POST_ASSET_ROOTS = [POST_CARD_DIRECTORY, '/writing', '/images/writing'];
+
+/**
+ * A route under one of those directories that belongs to a draft.
+ *
+ * The slug has to be a whole path component: `<root>/<slug>` itself, anything
+ * beneath it, or a sibling file named for it (`<root>/<slug>.png`). A prefix
+ * match alone would also catch `<root>/<slug>-part-two.png`, which is a
+ * different post.
+ */
+function isDraftAsset(route) {
+  return POST_ASSET_ROOTS.some((root) =>
+    draftSlugs.some(
+      (slug) =>
+        route === `${root}/${slug}` ||
+        route.startsWith(`${root}/${slug}/`) ||
+        route.startsWith(`${root}/${slug}.`),
+    ),
+  );
+}
+
+/**
+ * Nothing generated from a draft may reach the export, not only routes.
  *
  * The route and metadata checks below see HTML and XML. `public/` is copied
  * into the export verbatim, so anything generated from `content/writing/` — a
@@ -91,13 +133,10 @@ function isDraftPath(pathname) {
 if (draftSlugs.length > 0) {
   for (const file of walk(OUT, (name) => !name.endsWith('.html'))) {
     const path = toUrlPath(relative(OUT, file));
-    const named = path
-      .split('/')
-      .some((segment) =>
-        draftSlugs.includes(basename(segment, extname(segment))),
-      );
 
-    if (named) {
+    // `out/` is the site root; the repository-site base path is not on disk, so
+    // an out-relative path is already a route.
+    if (isDraftAsset(`/${path}`)) {
       fail(path, `exports an asset named after a draft post: /${path}`);
     }
   }
