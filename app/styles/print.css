@@ -155,7 +155,13 @@
     padding-left: 0;
   }
 
+  /* On paper the entry is a list item again, so the year and age run inline
+     ahead of the text instead of stacking in a gutter that no longer exists. */
   .log-entry-marker {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 0 0.4em;
     text-align: left;
     padding-top: 0;
     margin-right: 0.5em;

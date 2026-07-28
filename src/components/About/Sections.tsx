@@ -12,12 +12,15 @@ interface AboutContentProps {
 const LOG_VARIANT = 'about-section--log';
 
 /**
- * A single log entry, with any leading temporal marker lifted into the gutter.
+ * A single log entry, with its temporal marker read into the gutter.
  *
  * markdown-to-jsx has already parsed the entry, so the marker lives in the
- * first child when that child is plain text. Entries that open with a link or
- * with no marker at all keep their text intact and simply leave the gutter
- * empty — the alternative would be rewording the source to fit the layout.
+ * first child when that child is plain text. The gutter files every entry by
+ * year and carries the age underneath, so the column reads as one timeline
+ * rather than as whichever unit each sentence happened to use. Entries that
+ * open with a link or carry no marker at all keep their text intact and simply
+ * leave the gutter empty — the alternative would be rewording the source to
+ * fit the layout.
  */
 function LogEntry({ children }: { children?: ReactNode }) {
   const nodes = Children.toArray(children);
@@ -35,7 +38,12 @@ function LogEntry({ children }: { children?: ReactNode }) {
 
   return (
     <li className="log-entry">
-      <span className="log-entry-marker">{extracted.marker}</span>
+      <span className="log-entry-marker">
+        <span className="log-entry-year">{extracted.year}</span>
+        {extracted.age ? (
+          <span className="log-entry-age">{extracted.age}</span>
+        ) : null}
+      </span>
       <span className="log-entry-body">
         {extracted.rest}
         {rest}

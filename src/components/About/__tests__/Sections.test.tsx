@@ -117,6 +117,57 @@ Lead paragraph.
     expect(html).toContain('id="travel-geography"');
   });
 
+  it('files every history entry in the gutter by year, with its age', () => {
+    const { container } = render(<AboutContent markdown={aboutMarkdown} />);
+    const history = container.querySelector('.about-section--log');
+    const entries = Array.from(
+      history?.querySelectorAll('.log-entry') ?? [],
+    ) as HTMLElement[];
+
+    expect(entries).toHaveLength(15);
+
+    for (const entry of entries) {
+      expect(entry.querySelector('.log-entry-year')?.textContent).toMatch(
+        /^\d{4}(–\d{4})?$/,
+      );
+      expect(entry.querySelector('.log-entry-age')?.textContent).toMatch(
+        /^Age \d{1,2}(–\d{1,2})?$/,
+      );
+    }
+
+    // The log opens on the year the profile claims computing started, and the
+    // sentence that says so keeps its own words.
+    expect(entries[0].querySelector('.log-entry-year')?.textContent).toBe(
+      '1993',
+    );
+    expect(entries[0].querySelector('.log-entry-age')?.textContent).toBe(
+      'Age 3',
+    );
+    expect(entries[0].querySelector('.log-entry-body')?.textContent).toContain(
+      'a computer in my bedroom in 1993',
+    );
+
+    // A leading marker is lifted out instead, leaving a sentence behind.
+    expect(entries[3].querySelector('.log-entry-body')?.textContent).toMatch(
+      /^I discovered the mini-games/,
+    );
+  });
+
+  it('leaves an undated entry an empty gutter rather than a broken marker', () => {
+    const { container } = render(<AboutContent markdown={aboutMarkdown} />);
+    const markers = Array.from(
+      container.querySelectorAll('.about-section--log .log-entry-marker'),
+    );
+    const empty = markers.filter((marker) => marker.textContent === '');
+
+    expect(markers).toHaveLength(26);
+    expect(empty).toHaveLength(3);
+
+    for (const marker of empty) {
+      expect(marker.querySelector('.log-entry-year')).toBeNull();
+    }
+  });
+
   it('supports same-page hash navigation from section links', async () => {
     window.history.replaceState({}, '', '/about/');
 
