@@ -1,49 +1,129 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { type ReactNode, useCallback, useEffect, useState } from 'react';
 
 import { MoonIcon, SunIcon } from '@/components/Icons';
+import usePrefersColorScheme from '@/hooks/usePrefersColorScheme';
+import {
+  nextThemeChoice,
+  readStoredThemeChoice,
+  resolveTheme,
+  storeThemeChoice,
+  THEME_ATTRIBUTE,
+  THEME_CHOICE_ATTRIBUTE,
+  THEME_CHOICES,
+  type ThemeChoice,
+} from '@/lib/theme';
 
+/**
+ * A display, for the state that follows whatever the display is set to.
+ * Local because nothing outside this control needs it; same Feather geometry
+ * and stroke as the sun and moon it sits beside.
+ */
+function SystemIcon({ size = 20 }: { size?: number }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <rect x="2" y="3" width="20" height="14" rx="2" />
+      <line x1="8" y1="21" x2="16" y2="21" />
+      <line x1="12" y1="17" x2="12" y2="21" />
+    </svg>
+  );
+}
+
+const ICONS: Record<ThemeChoice, ReactNode> = {
+  system: <SystemIcon />,
+  light: <SunIcon />,
+  dark: <MoonIcon />,
+};
+
+/**
+ * Current state first, then what a press does.
+ *
+ * `aria-pressed` cannot express three states, and a name that only says
+ * "switch to dark mode" leaves a screen reader user unable to tell which of
+ * the three is active. The next state is derived from `nextThemeChoice` so the
+ * label cannot disagree with the cycle it describes.
+ */
+function labelFor(choice: ThemeChoice): string {
+  return `Theme: ${choice}. Switch to ${nextThemeChoice(choice)}.`;
+}
+
+/**
+ * Cycles light → dark → system, where `system` follows the device live.
+ *
+ * The rendered markup is deliberately identical for all three states: every
+ * state is present, and CSS shows the one matching `data-theme-choice` on
+ * `<html>`, which the `<head>` bootstrap resolves before first paint. That is
+ * what lets a real button ship in the static HTML — the previous version could
+ * not know the theme until it mounted, so it reserved a blank 44x44 hole in
+ * the header and swapped a button in on hydration.
+ */
 export default function ThemeToggle() {
-  const [isDark, setIsDark] = useState<boolean | null>(null);
+  const systemScheme = usePrefersColorScheme();
+  // `null` until mounted, which keeps the hydration render byte-identical to
+  // the server render. It is not used to decide what to draw.
+  const [choice, setChoice] = useState<ThemeChoice | null>(null);
 
   useEffect(() => {
-    const stored = window.localStorage.getItem('theme');
-    if (stored === 'light' || stored === 'dark') {
-      setIsDark(stored === 'dark');
-    } else {
-      setIsDark(window.matchMedia('(prefers-color-scheme: dark)').matches);
+    setChoice(readStoredThemeChoice());
+  }, []);
+
+  useEffect(() => {
+    if (choice === null) return;
+
+    const root = document.documentElement;
+    root.setAttribute(THEME_CHOICE_ATTRIBUTE, choice);
+
+    // `null` while the device preference is still unknown: the bootstrap
+    // already put the right value on `data-theme`, so leave it be rather than
+    // flash a guess. Re-runs when the device flips, which is how `system`
+    // stays live instead of being a one-shot sample at mount.
+    const resolved = resolveTheme(choice, systemScheme);
+    if (resolved !== null) {
+      root.setAttribute(THEME_ATTRIBUTE, resolved);
     }
-  }, []);
+  }, [choice, systemScheme]);
 
-  useEffect(() => {
-    if (isDark === null) return;
-    document.documentElement.setAttribute(
-      'data-theme',
-      isDark ? 'dark' : 'light',
-    );
-    window.localStorage.setItem('theme', isDark ? 'dark' : 'light');
-  }, [isDark]);
+  const cycle = useCallback(() => {
+    const next = nextThemeChoice(choice ?? readStoredThemeChoice());
+    storeThemeChoice(next);
+    setChoice(next);
+  }, [choice]);
 
-  const toggle = useCallback(() => {
-    setIsDark((prev) => !prev);
-  }, []);
-
-  if (isDark === null) {
-    return <div className="theme-toggle-placeholder" />;
-  }
+  // Before mount the accessible name comes from the one state label CSS leaves
+  // visible; after mount this states it outright, for both the name and the
+  // pointer tooltip.
+  const label = choice === null ? undefined : labelFor(choice);
 
   return (
     <button
       type="button"
       className="theme-toggle"
-      onClick={toggle}
-      aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-      title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+      onClick={cycle}
+      aria-label={label}
+      title={label}
     >
-      <span className="theme-toggle-icon">
-        {isDark ? <SunIcon /> : <MoonIcon />}
-      </span>
+      {THEME_CHOICES.map((state) => (
+        <span
+          key={state}
+          className="theme-toggle-state"
+          data-theme-state={state}
+        >
+          {ICONS[state]}
+          <span className="sr-only">{labelFor(state)}</span>
+        </span>
+      ))}
     </button>
   );
 }
