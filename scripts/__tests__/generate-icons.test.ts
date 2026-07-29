@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, posix } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 import profile from '@/data/profile.json';
@@ -97,6 +97,20 @@ describe('generated icon set', () => {
   });
 
   /**
+   * The ledger is committed, so its keys have to mean the same thing on every
+   * platform `npm run icons` might be run from. They are forward-slash literals
+   * in the generator today; deriving one with `join` instead would write
+   * backslashed keys from a Windows regeneration, and the committed file would
+   * then resolve to nothing everywhere else.
+   */
+  it('keys the ledger by forward-slash path on every platform', () => {
+    for (const path of Object.keys(meta.files)) {
+      expect(path).not.toContain('\\');
+      expect(path).toBe(posix.normalize(path));
+    }
+  });
+
+  /**
    * Next reads these dimensions off the files themselves and puts them in the
    * `sizes` attribute of the `<link>` tags it emits, so the wrong size here is
    * a wrong promise in every page's `<head>`.
@@ -169,6 +183,13 @@ describe('generated web app manifest', () => {
    * prefix. A leading slash — which is what the deleted manifest used — breaks
    * that. The paths also have to name files that exist, since the deleted
    * manifest's did not once the art moved.
+   *
+   * Both sides of the containment check are url-shaped strings, so the key is
+   * built with `posix.join` rather than `join`. `join` is `win32.join` on
+   * Windows and normalises the separators to backslashes, which would miss a
+   * ledger key that is correct — a red test against a green manifest, on the
+   * one platform this repository's contributors are least likely to be able to
+   * reproduce.
    */
   it('points every icon at a committed file by relative path', () => {
     expect(manifest.icons.length).toBeGreaterThan(0);
@@ -176,7 +197,7 @@ describe('generated web app manifest', () => {
     for (const icon of manifest.icons) {
       expect(icon.src.startsWith('/')).toBe(false);
       expect(icon.src.startsWith('http')).toBe(false);
-      expect(Object.keys(meta.files)).toContain(join('public', icon.src));
+      expect(Object.keys(meta.files)).toContain(posix.join('public', icon.src));
     }
   });
 
