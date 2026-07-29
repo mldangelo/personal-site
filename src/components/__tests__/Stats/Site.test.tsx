@@ -166,6 +166,31 @@ describe('Site', () => {
     );
   });
 
+  it('does not date the fallback note with a hand-typed refresh date', async () => {
+    // "fallback refreshed July 25, 2026" was the snapshot's vintage typed a
+    // second time in user-facing copy — free to drift from the numbers it
+    // dated, and certain to go stale. Nothing here can honestly derive it: the
+    // build clock is exactly the freshness this branch is admitting it lacks.
+    // The vintage stays visible as the `pushed_at` row instead.
+    vi.mocked(global.fetch).mockRejectedValueOnce(new Error('Network error'));
+
+    const Component = await Site();
+    render(Component);
+
+    const note = screen.getByText(/approximate github readings/i);
+
+    // Any typed date carries a year, so a four-digit run is the guard. A month
+    // name is not — "may" is an ordinary word, and a negative assertion that
+    // can fire on prose is a trap for whoever edits this copy next.
+    expect(note.textContent).not.toMatch(/\d{4}/);
+    // The reader is still told these are last-known values and that the date
+    // shown in the table is part of the same snapshot.
+    expect(note.textContent).toMatch(/last-known values/i);
+    expect(note.textContent).toMatch(
+      /push date above is part of that snapshot/i,
+    );
+  });
+
   it('labels live GitHub readings with their provenance', async () => {
     const Component = await Site();
     render(Component);

@@ -29,6 +29,17 @@ interface GitHubStatsResult {
  * when you notice, and treat a build that logs the warning below as a build
  * that shipped approximate numbers.
  *
+ * The note rendered below deliberately carries no date. It used to spell out
+ * "fallback refreshed July 25, 2026" — this snapshot's vintage typed a second
+ * time, in user-facing copy, free to drift from the numbers it dates and
+ * certain to go stale. Nothing here can honestly supply it either: `pushed_at`
+ * is the repository's last push as of capture rather than the capture, and the
+ * build clock is worse, because this constant exists precisely for builds
+ * where the fetch failed and stamping it with the build time would assert a
+ * freshness it does not have. The vintage stays where it already was — the
+ * `pushed_at` below renders as the "Last push to this repository" row — and
+ * the note tells the reader that row is part of the snapshot.
+ *
  * Refreshed: 2026-07-25
  */
 const FALLBACK_DATA: GitHubData = {
@@ -139,7 +150,7 @@ export default async function SiteStats() {
       <p className="stats-source-note" data-source={source}>
         {source === 'github'
           ? 'GitHub readings fetched at build time. Measured readings counted from the working tree of this build.'
-          : 'Approximate GitHub readings — API unavailable; fallback refreshed July 25, 2026. Measured readings counted from the working tree of this build.'}
+          : 'Approximate GitHub readings — API unavailable, so these are last-known values committed to the repository; the push date above is part of that snapshot, not a live reading. Measured readings counted from the working tree of this build.'}
       </p>
     </>
   );
