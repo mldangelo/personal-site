@@ -16,6 +16,7 @@
  * Run after `npm run build`:
  *   npm run measure-export                       table plus budget gate
  *   npm run measure-export -- --json report.json also write the raw numbers
+ *   npm run measure-export -- --json -           raw numbers on stdout instead
  *   npm run measure-export -- --update-budget    ratchet scripts/budget.json
  */
 import {
@@ -346,6 +347,16 @@ const BUDGET_METRICS = [
 const withHeadroom = ({ headroom }, value) =>
   Math.ceil((value * (1 + headroom)) / 1024) * 1024;
 
+/** Keys documenting the file rather than gating a metric. */
+const isCommentKey = (key) => key.startsWith('_');
+
+/**
+ * `JSON.stringify` renders Infinity as `null` and would name the wrong mistake,
+ * so numbers are described by `String` and everything else as its JSON.
+ */
+const describeBudget = (value) =>
+  typeof value === 'number' ? String(value) : JSON.stringify(value);
+
 function readBudget() {
   if (!existsSync(BUDGET_PATH)) {
     if (options.updateBudget) return {};
@@ -362,11 +373,21 @@ function readBudget() {
     die(`scripts/budget.json is not valid JSON: ${error.message}`);
   }
 
+  // A bare number or string is valid JSON that declares no budgets at all, so
+  // the run would gate nothing and still exit green; `null` did not even get
+  // that far, it took `Object.keys` down with a stack trace.
+  if (budget === null || typeof budget !== 'object' || Array.isArray(budget)) {
+    die(
+      'scripts/budget.json must be a JSON object mapping budget names to ' +
+        `bytes, not ${describeBudget(budget)}.`,
+    );
+  }
+
   // A typo in a budget key would otherwise read as "this metric is not gated",
   // which is the one failure mode a budget file must not have.
   const known = new Set(BUDGET_METRICS.map(({ id }) => id));
   const unknown = Object.keys(budget).filter(
-    (key) => !key.startsWith('_') && !known.has(key),
+    (key) => !isCommentKey(key) && !known.has(key),
   );
   if (unknown.length > 0) {
     die(
@@ -375,19 +396,42 @@ function readBudget() {
     );
   }
 
+  // The same failure mode one level down. A budget accidentally committed as a
+  // string, or as `null`, used to be read as "no budget" and stopped gating
+  // without saying so. Infinity is worse: JSON has no literal for it but
+  // `1e999` parses to one, and it counts as a gated metric that can never be
+  // exceeded. A negative or fractional byte count gates something, but nothing
+  // a person meant, so the whole rule is one predicate.
+  const invalid = Object.entries(budget).filter(
+    ([key, value]) =>
+      !isCommentKey(key) && !(Number.isInteger(value) && value >= 0),
+  );
+  if (invalid.length > 0) {
+    const named = invalid
+      .map(([key, value]) => `${key} is ${describeBudget(value)}`)
+      .join(', ');
+    die(
+      `scripts/budget.json has invalid budget(s): ${named}. ` +
+        'Every budget must be a whole number of bytes, 0 or greater.',
+    );
+  }
+
   return budget;
 }
 
 const budget = readBudget();
 
+// `readBudget` has already rejected every value that is not a byte count, so an
+// `undefined` limit here means the key is absent, which is the one documented
+// way to leave a metric ungated. Coercing here instead is what let a mistyped
+// value pass for that.
 const checks = BUDGET_METRICS.map((metric) => {
   const actual = metric.read(report);
-  const limit = budget[metric.id];
   return {
     id: metric.id,
     label: metric.label,
     actual,
-    limit: typeof limit === 'number' ? limit : undefined,
+    limit: budget[metric.id],
     suggested: withHeadroom(metric, actual),
   };
 }).map((check) => ({
@@ -408,6 +452,18 @@ report.budget = {
 // ---------------------------------------------------------------------------
 // Output
 // ---------------------------------------------------------------------------
+
+/**
+ * `--json -` hands stdout to the machine, so the human narrative moves to
+ * stderr rather than being dropped: `--json - >report.json` still prints the
+ * table in the terminal, and the budget failures below are already there.
+ * Every other invocation keeps the table on stdout where a person reads it.
+ */
+const jsonToStdout = options.json === '-';
+const log = (line) => {
+  if (jsonToStdout) console.error(line);
+  else console.log(line);
+};
 
 const count = (value) => value.toLocaleString('en-US');
 const fixed = (value) =>
@@ -434,13 +490,13 @@ function table(rows, alignRight) {
 }
 
 function section(heading, rows, alignRight) {
-  console.log(`\n  ${heading}`);
+  log(`\n  ${heading}`);
   for (const line of table(rows, alignRight)) {
-    console.log(`    ${line}`);
+    log(`    ${line}`);
   }
 }
 
-console.log(
+log(
   `\n${LABEL}: ${count(files.length)} files, ${count(totalBytes)} bytes ` +
     `(${kib(totalBytes)} KiB) in out/`,
 );
@@ -494,7 +550,7 @@ section(
   new Set([1, 2, 3]),
 );
 
-console.log(
+log(
   `\n  inline SVG: ${count(inlineSvg.bytes)} bytes across ${count(inlineSvg.distinct)} ` +
     `distinct icons, ${count(inlineSvg.repeatedBytes)} of it repeat ` +
     `(widest spread: ${count(inlineSvg.widestSpread)} documents)`,
@@ -519,11 +575,11 @@ section(
 
 if (options.json) {
   const serialized = `${JSON.stringify(report, null, 2)}\n`;
-  if (options.json === '-') {
+  if (jsonToStdout) {
     process.stdout.write(serialized);
   } else {
     writeFileSync(resolve(ROOT, options.json), serialized);
-    console.log(`\n  wrote ${options.json}`);
+    log(`\n  wrote ${options.json}`);
   }
 }
 
@@ -534,9 +590,7 @@ if (options.updateBudget) {
     next[metric.id] = check.suggested;
   }
   writeFileSync(BUDGET_PATH, `${JSON.stringify(next, null, 2)}\n`);
-  console.log(
-    '\n  ratcheted scripts/budget.json to the measured sizes plus headroom',
-  );
+  log('\n  ratcheted scripts/budget.json to the measured sizes plus headroom');
   process.exit(0);
 }
 
@@ -559,4 +613,4 @@ if (exceeded.length > 0) {
 }
 
 const gated = checks.filter((check) => check.limit !== undefined).length;
-console.log(`\n${LABEL}: ${gated} budget(s) within limits\n`);
+log(`\n${LABEL}: ${gated} budget(s) within limits\n`);

@@ -28,6 +28,16 @@ const ICON =
 
 const ASSET_BYTES = CSS.length + JS.length + FONT.length;
 
+/** Everything a known budget key can hold that is not a byte count. */
+const INVALID_BUDGET_VALUES: [shape: string, value: unknown][] = [
+  ['a string', '1024'],
+  ['null', null],
+  ['a boolean', true],
+  ['an object', { bytes: 1024 }],
+  ['a negative number', -1],
+  ['a fraction', 1024.5],
+];
+
 /** Generous enough that only the budget under test can trip. */
 const GENEROUS_BUDGET = {
   _policy: ['fixture'],
@@ -133,6 +143,8 @@ function runMeasurer(root: string, args: string[] = []) {
   });
   return {
     status: result.status,
+    stdout: result.stdout,
+    stderr: result.stderr,
     output: `${result.stdout}${result.stderr}`,
   };
 }
@@ -298,6 +310,78 @@ describe('measure-export', () => {
     expect(output).toContain('unknown budget(s): cssByte');
   });
 
+  // A known key holding something that is not a byte count used to be read as
+  // "no budget for this metric", so the gate quietly stopped gating.
+  it.each(INVALID_BUDGET_VALUES)(
+    'rejects a budget committed as %s',
+    (_shape, value) => {
+      const { root } = createFixture({
+        budget: { ...GENEROUS_BUDGET, cssBytes: value },
+      });
+
+      const { status, output } = runMeasurer(root);
+      expect(status).toBe(1);
+      expect(output).toContain('invalid budget(s): cssBytes');
+      expect(output).not.toContain('budget(s) within limits');
+    },
+  );
+
+  it('names every invalid budget, not just the first', () => {
+    const { root } = createFixture({
+      budget: { ...GENEROUS_BUDGET, cssBytes: null, fontBytes: '1024' },
+    });
+
+    const { status, output } = runMeasurer(root);
+    expect(status).toBe(1);
+    expect(output).toContain(
+      'invalid budget(s): cssBytes is null, fontBytes is "1024"',
+    );
+  });
+
+  it('rejects a budget that overflowed to Infinity', () => {
+    const { root } = createFixture();
+    // JSON has no Infinity literal, but `1e999` parses to one — and it is the
+    // worst of these, because it counts as a gated metric that can never be
+    // exceeded, so the run reports a budget it is not enforcing.
+    write(root, 'scripts/budget.json', '{"_policy": [], "cssBytes": 1e999}');
+
+    const { status, output } = runMeasurer(root);
+    expect(status).toBe(1);
+    expect(output).toContain('invalid budget(s): cssBytes is Infinity');
+  });
+
+  it('treats a zero budget as a real limit rather than an invalid one', () => {
+    const { root } = createFixture({
+      budget: { ...GENEROUS_BUDGET, repeatedInlineSvgBytes: 0 },
+    });
+
+    // `0` is the one edge of the rule that has to stay usable: it is how a
+    // metric is held at nothing.
+    const { status, output } = runMeasurer(root);
+    expect(status).toBe(1);
+    expect(output).not.toContain('invalid budget(s)');
+    expect(output).toContain(
+      'inline SVG repeated across documents (repeatedInlineSvgBytes)',
+    );
+  });
+
+  it.each(['42', '"1024"', '[1, 2]', 'null'])(
+    'rejects a budget file whose root is %s',
+    (contents) => {
+      const { root } = createFixture();
+      write(root, 'scripts/budget.json', contents);
+
+      // `42` is valid JSON declaring no budgets at all, so it used to gate
+      // nothing and exit 0; `null` took `Object.keys` down with a stack trace.
+      const { status, output } = runMeasurer(root);
+      expect(status).toBe(1);
+      expect(output).toContain(
+        'scripts/budget.json must be a JSON object mapping budget names to bytes',
+      );
+      expect(output).not.toContain('budget(s) within limits');
+    },
+  );
+
   it('requires a committed budget file', () => {
     const { root } = createFixture({ budget: null });
 
@@ -327,6 +411,55 @@ describe('measure-export', () => {
     expect(budget.maxRouteFirstLoadBytes).toBe(
       Math.ceil((heaviest * 1.15) / 1024) * 1024,
     );
+  });
+
+  // `--json -` is documented as machine-readable output. The table used to be
+  // printed to stdout ahead of it, so nothing could parse the stream.
+  it.each<[flag: string, args: string[]]>([
+    ['--json -', ['--json', '-']],
+    ['--json=-', ['--json=-']],
+  ])('writes only JSON to stdout for `%s`', (_flag, args) => {
+    const { root, documents } = createFixture();
+    const { status, stdout, stderr } = runMeasurer(root, args);
+
+    expect(status).toBe(0);
+    const report = JSON.parse(stdout) as Report;
+    expect(report.total.files).toBe(11);
+    expect(routeIn(report, '/about/')?.documentBytes).toBe(
+      documents['/about/'],
+    );
+
+    // Suppressed nowhere: the human narrative moves to stderr, so
+    // `--json - >report.json` still shows the table in the terminal.
+    expect(stdout).not.toContain('by subsystem');
+    expect(stderr).toContain('by subsystem');
+    expect(stderr).toContain('7 budget(s) within limits');
+  });
+
+  it('keeps stdout parseable when a budget fails', () => {
+    const { root } = createFixture({
+      budget: { ...GENEROUS_BUDGET, cssBytes: 1024 },
+    });
+
+    const { status, stdout, stderr } = runMeasurer(root, ['--json', '-']);
+    expect(status).toBe(1);
+    expect(checkIn(JSON.parse(stdout) as Report, 'cssBytes')).toMatchObject({
+      limit: 1024,
+      ok: false,
+    });
+    expect(stderr).toContain('1 budget(s) exceeded');
+  });
+
+  it('still prints the table to stdout when the report goes to a file', () => {
+    const { root } = createFixture();
+
+    // The redirect is for `-` only; a person running `--json report.json`
+    // wants both.
+    const { status, stdout } = runMeasurer(root, ['--json', 'report.json']);
+    expect(status).toBe(0);
+    expect(stdout).toContain('by subsystem');
+    expect(stdout).toContain('wrote report.json');
+    expect(stdout).toContain('7 budget(s) within limits');
   });
 
   it('fails when there is nothing to measure', () => {
