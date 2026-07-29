@@ -12,18 +12,18 @@ interface JobProps {
   data: Position;
   tier?: JobTier;
   /**
-   * Instant an ongoing role is measured to. Taken as a prop rather than read
-   * from the clock here so the figure is deterministic and every role on the
-   * spine is measured against the same moment.
+   * Instant an ongoing role is measured to. Required rather than defaulted to
+   * `Date.now()`, because a default is one clock read *per role*: a spine of
+   * ongoing roles would each measure themselves against their own instant, and
+   * the disagreement is invisible until two reads straddle a month boundary.
+   * Requiring it is the same contract `positionDuration` in `src/lib/career.ts`
+   * sets, for the same reason — the figure stays deterministic and a test can
+   * pin it. `Experience` reads the clock once and threads it here.
    */
-  now?: DateInput;
+  now: DateInput;
 }
 
-export default function Job({
-  data,
-  tier = 'primary',
-  now = Date.now(),
-}: JobProps) {
+export default function Job({ data, tier = 'primary', now }: JobProps) {
   const { name, position, url, startDate, endDate, summary, highlights } = data;
   const isCurrent = !endDate;
   // Derived from the dates rather than written out per role, so it cannot

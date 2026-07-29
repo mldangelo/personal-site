@@ -6,9 +6,13 @@ import Job, { type JobTier } from './Experience/Job';
 interface ExperienceProps {
   data: Position[];
   /**
-   * Instant an ongoing role's tenure is measured to. Read once by the caller
-   * and threaded down so every duration on the spine agrees with the headline
-   * span on the page.
+   * Instant every ongoing role's tenure is measured to.
+   *
+   * Optional, and omitting it does read the clock — but exactly once, here,
+   * and the reading is then threaded to every role, so the durations on the
+   * spine always agree with each other. `app/resume/page.tsx` supplies its own
+   * read so they also agree with the headline span above them, and a test can
+   * pin the instant instead of racing the clock.
    */
   now?: DateInput;
 }
@@ -59,6 +63,8 @@ export function tierFor(job: Position, positions: Position[]): JobTier {
 
 export default function Experience({
   data,
+  // The single fallback read. `Job` requires the instant precisely so this
+  // cannot quietly become one read per role.
   now = Date.now(),
 }: ExperienceProps) {
   // `tierFor` was written not to depend on array position; sorting here is the

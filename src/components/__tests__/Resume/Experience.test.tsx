@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import Experience from '../../Resume/Experience';
 
@@ -24,6 +24,12 @@ const mockJobs = [
 ];
 
 describe('Experience', () => {
+  // Only the fallback-read test fakes the clock, but the suite is shuffled, so
+  // the restore has to be unconditional.
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it('renders the experience section with title', () => {
     render(<Experience data={mockJobs} />);
 
@@ -122,6 +128,31 @@ describe('Experience', () => {
     ).map((node) => node.textContent);
 
     // 2020-01-01 and 2018-01-01 respectively, both measured to `now`.
+    expect(durations).toEqual(['6 yr 6 mo', '8 yr 6 mo']);
+  });
+
+  /**
+   * `now` is optional here and omitting it does read the clock — but once, at
+   * the top of the section, and the reading is threaded to every role. `Job`
+   * requires the instant so that stays true; this pins the fallback path.
+   */
+  it('falls back to one clock read shared by the whole spine', () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date(2026, 6, 28, 12, 0, 0));
+
+    render(
+      <Experience
+        data={[
+          { ...mockJobs[0], name: 'Still Going', endDate: undefined },
+          { ...mockJobs[1], name: 'Also Going', endDate: undefined },
+        ]}
+      />,
+    );
+
+    const durations = Array.from(
+      document.querySelectorAll('.daterange-duration'),
+    ).map((node) => node.textContent);
+
     expect(durations).toEqual(['6 yr 6 mo', '8 yr 6 mo']);
   });
 });
