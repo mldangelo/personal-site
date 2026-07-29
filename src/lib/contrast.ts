@@ -1,13 +1,24 @@
 /**
- * WCAG 2.1 relative luminance and contrast ratio, for opaque sRGB hex colours.
+ * WCAG 2.1 relative luminance and contrast ratio, from sRGB hex colours.
  *
  * This exists so the colour tokens can be checked at build time instead of
- * eyeballed. It is a FLOOR, not a proof: it compares two flat token values,
- * and several surfaces on this site are not flat. The paper grain
- * (`body::before`), the header's `backdrop-filter`, and the hero portrait's
- * `mix-blend-mode: multiply` all sit between the two colours a token pair
- * describes, so a pair can pass here while the rendered pixels fail. Treat a
- * pass as "the tokens are not obviously wrong" and check real surfaces by eye.
+ * eyeballed. It is a FLOOR, not a proof, for two reasons.
+ *
+ * It compares two flat token values, and several surfaces on this site are not
+ * flat. The paper grain (`body::before`), the header's `backdrop-filter`, and
+ * the hero portrait's `mix-blend-mode: multiply` all sit between the two
+ * colours a token pair describes, so a pair can pass here while the rendered
+ * pixels fail.
+ *
+ * And an alpha channel is accepted and ignored rather than rejected: `#rgba`
+ * and `#rrggbbaa` parse, and only the colour channels count. An exact answer
+ * for a translucent colour means compositing it against the backdrop it is
+ * really drawn on, and two flat tokens do not carry a backdrop — so what comes
+ * back is the ratio for that colour at full opacity. To score a translucent
+ * value honestly, composite it yourself and pass the resulting hex in.
+ *
+ * Treat a pass as "the tokens are not obviously wrong" and check real surfaces
+ * by eye.
  *
  * Deliberately no dependency: the whole calculation is a dozen lines and a
  * package would need pinning, auditing, and upgrading for it.
@@ -23,11 +34,11 @@ export const AA_LARGE_TEXT = 3;
 export const AA_NON_TEXT = 3;
 
 /**
- * `#rgb`, `#rrggbb`, or `#rrggbbaa` to 0-255 channels.
+ * `#rgb`, `#rgba`, `#rrggbb`, or `#rrggbbaa` to 0-255 channels.
  *
- * An alpha channel is parsed but ignored: compositing a translucent colour
- * needs a backdrop, and the callers here only ever compare opaque tokens.
- * Anything else throws rather than silently scoring black.
+ * An alpha channel is parsed but ignored, as the header says: compositing a
+ * translucent colour needs a backdrop, and the callers here only ever compare
+ * opaque tokens. Anything else throws rather than silently scoring black.
  */
 export function parseHexColor(hex: string): [number, number, number] {
   const body = hex.trim().replace(/^#/, '');
@@ -41,7 +52,7 @@ export function parseHexColor(hex: string): [number, number, number] {
       : body;
 
   if (!/^[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$/.test(expanded)) {
-    throw new Error(`Not an opaque sRGB hex colour: ${hex}`);
+    throw new Error(`Not an sRGB hex colour: ${hex}`);
   }
 
   return [
@@ -65,7 +76,10 @@ export function relativeLuminance(hex: string): number {
   return 0.2126 * linearize(r) + 0.7152 * linearize(g) + 0.0722 * linearize(b);
 }
 
-/** WCAG 2.1 contrast ratio between two opaque colours, 1 to 21. */
+/**
+ * WCAG 2.1 contrast ratio between two colours, 1 to 21. Any alpha channel is
+ * ignored, so the answer is exact only for opaque values.
+ */
 export function contrastRatio(a: string, b: string): number {
   const la = relativeLuminance(a);
   const lb = relativeLuminance(b);

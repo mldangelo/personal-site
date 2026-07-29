@@ -61,7 +61,12 @@ function labelFor(choice: ThemeChoice): string {
 }
 
 /**
- * Cycles light → dark → system, where `system` follows the device live.
+ * Cycles system → light → dark → system, where `system` follows the device live.
+ *
+ * That order is `nextThemeChoice`'s, not a copy of it: both the labels and the
+ * rendered states below come out of `src/lib/theme.ts`, so this control cannot
+ * end up describing an order it does not perform. `system` is the state a
+ * visitor who has never chosen starts in, and the one they can get back to.
  *
  * The rendered markup is deliberately identical for all three states: every
  * state is present, and CSS shows the one matching `data-theme-choice` on
