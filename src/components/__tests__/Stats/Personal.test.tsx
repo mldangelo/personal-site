@@ -104,6 +104,20 @@ describe('Personal', () => {
     expect(note).toHaveAttribute('data-source', 'profile');
   });
 
+  it('describes provenance without naming a repository path', () => {
+    // The note read "come from src/data/profile.json", which is a file tree a
+    // visitor is not looking at. The claim the provenance column exists to
+    // make — declared, not counted — has to survive without the path, because
+    // that is the only part of the sentence a reader was ever using.
+    render(<Personal />);
+
+    const note = screen.getByText(/profile readings come from/i).textContent;
+
+    expect(note).not.toMatch(/src\/data|\.json\b/i);
+    expect(note).toMatch(/declared/i);
+    expect(note).toMatch(/not measurements counted at build time/i);
+  });
+
   it('explains what the age is when JavaScript never runs', () => {
     render(<Personal />);
 

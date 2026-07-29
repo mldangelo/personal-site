@@ -39,10 +39,17 @@ export default function PersonalStats() {
   return (
     <>
       <Table data={readings} />
+      {/* Names the kind of claim, not the file holding it. The note used to
+          read "come from src/data/profile.json", which is a repository path in
+          front of a visitor who is not reading this file tree. What the
+          provenance column is for survives the rewording: a reader can still
+          tell a declared fact from a counted one, which is the only part of
+          that sentence a reader was ever using. */}
       <p className="stats-source-note" data-source="profile">
-        Profile readings come from src/data/profile.json. The age is computed in
-        your browser from the birth instant recorded there; with no JavaScript
-        it holds the coarser reading taken when this build ran.
+        Profile readings come from the site profile — declared facts, not
+        measurements counted at build time. The age is computed in your browser
+        from the birth instant recorded there; with no JavaScript it holds the
+        coarser reading taken when this build ran.
       </p>
     </>
   );
