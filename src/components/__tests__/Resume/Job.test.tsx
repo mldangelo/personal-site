@@ -3,6 +3,13 @@ import { describe, expect, it } from 'vitest';
 
 import Job from '../../Resume/Experience/Job';
 
+/**
+ * `Job` requires the instant an ongoing role is measured to, so no test here
+ * can accidentally measure against the clock the suite happens to run on.
+ * Local time, to match the local midnight dayjs reads the ISO dates as.
+ */
+const NOW = new Date(2026, 6, 28, 12, 0, 0).getTime();
+
 describe('Job', () => {
   const mockJob = {
     name: 'Acme Corp',
@@ -15,14 +22,14 @@ describe('Job', () => {
   };
 
   it('renders company name with link', () => {
-    render(<Job data={mockJob} />);
+    render(<Job data={mockJob} now={NOW} />);
 
     const link = screen.getByRole('link', { name: /acme corp/i });
     expect(link).toHaveAttribute('href', 'https://acme.com');
   });
 
   it('renders position title', () => {
-    render(<Job data={mockJob} />);
+    render(<Job data={mockJob} now={NOW} />);
 
     expect(screen.getByRole('heading', { level: 3 })).toHaveTextContent(
       'Senior Engineer',
@@ -30,7 +37,7 @@ describe('Job', () => {
   });
 
   it('formats date range correctly', () => {
-    render(<Job data={mockJob} />);
+    render(<Job data={mockJob} now={NOW} />);
 
     expect(screen.getByText(/january 2020/i)).toBeInTheDocument();
     expect(screen.getByText(/june 2023/i)).toBeInTheDocument();
@@ -42,20 +49,20 @@ describe('Job', () => {
       endDate: undefined,
     };
 
-    render(<Job data={currentJob} />);
+    render(<Job data={currentJob} now={NOW} />);
 
     expect(screen.getByText(/present/i)).toBeInTheDocument();
   });
 
   it('renders summary with markdown', () => {
-    render(<Job data={mockJob} />);
+    render(<Job data={mockJob} now={NOW} />);
 
     // Summary text should be present
     expect(screen.getByText(/led development of/i)).toBeInTheDocument();
   });
 
   it('renders highlights as list items', () => {
-    render(<Job data={mockJob} />);
+    render(<Job data={mockJob} now={NOW} />);
 
     expect(screen.getByText('Shipped feature X')).toBeInTheDocument();
     expect(screen.getByText('Improved performance by 50%')).toBeInTheDocument();
@@ -70,7 +77,7 @@ describe('Job', () => {
       summary: undefined,
     };
 
-    render(<Job data={jobWithoutSummary} />);
+    render(<Job data={jobWithoutSummary} now={NOW} />);
 
     // Should not crash, highlights should still render
     expect(screen.getByText('Shipped feature X')).toBeInTheDocument();
@@ -82,7 +89,7 @@ describe('Job', () => {
       highlights: undefined,
     };
 
-    render(<Job data={jobWithoutHighlights} />);
+    render(<Job data={jobWithoutHighlights} now={NOW} />);
 
     // Should not crash, summary should still render
     expect(screen.getByText(/led development/i)).toBeInTheDocument();
@@ -92,14 +99,14 @@ describe('Job', () => {
   });
 
   it('renders as article element', () => {
-    render(<Job data={mockJob} />);
+    render(<Job data={mockJob} now={NOW} />);
 
     const article = document.querySelector('article.jobs-container');
     expect(article).toBeInTheDocument();
   });
 
   it('derives the tenure from the two dates', () => {
-    render(<Job data={mockJob} />);
+    render(<Job data={mockJob} now={NOW} />);
 
     // 2020-01-15 to 2023-06-30.
     expect(document.querySelector('.daterange-duration')?.textContent).toBe(
@@ -107,21 +114,34 @@ describe('Job', () => {
     );
   });
 
+  /**
+   * Rendered at two instants rather than one: a single reading is also what a
+   * component reading the clock for itself would produce, so only the second
+   * render distinguishes the required prop from a default.
+   */
   it('measures an ongoing role to the instant it is given', () => {
-    render(
+    const { container } = render(
+      <Job data={{ ...mockJob, endDate: undefined }} now={NOW} />,
+    );
+    const { container: aYearOn } = render(
       <Job
         data={{ ...mockJob, endDate: undefined }}
-        now={new Date('2026-07-28T12:00:00Z').getTime()}
+        now={new Date(2027, 6, 28, 12, 0, 0).getTime()}
       />,
     );
 
-    expect(document.querySelector('.daterange-duration')?.textContent).toBe(
+    // Both from 2020-01-15, to the given instant rather than to whenever the
+    // suite runs.
+    expect(container.querySelector('.daterange-duration')?.textContent).toBe(
       '6 yr 6 mo',
+    );
+    expect(aYearOn.querySelector('.daterange-duration')?.textContent).toBe(
+      '7 yr 6 mo',
     );
   });
 
   it('keeps the tenure inside the date range so it shares the gutter', () => {
-    render(<Job data={mockJob} />);
+    render(<Job data={mockJob} now={NOW} />);
 
     const duration = document.querySelector('.daterange-duration');
     expect(duration?.parentElement).toHaveClass('daterange');
@@ -133,7 +153,7 @@ describe('Job', () => {
    * meaning anything, so the tenure stays quiet on every role.
    */
   it('does not claim the live signal for the tenure', () => {
-    render(<Job data={{ ...mockJob, endDate: undefined }} />);
+    render(<Job data={{ ...mockJob, endDate: undefined }} now={NOW} />);
 
     expect(document.querySelector('.daterange-duration')).not.toHaveClass(
       'daterange-present',
