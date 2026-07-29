@@ -120,29 +120,21 @@ describe('stylesheet graph', () => {
   });
 });
 
-describe('view transitions', () => {
-  // `@view-transition` is the cross-document API. The App Router intercepts
-  // every `<Link>` into a same-document client navigation, so root-level
-  // view-transition CSS is inert unless Next is asked to drive transitions
-  // itself. Shipping it without the flag is a no-op that reads as a feature.
-  it('are not styled unless next.config.mjs enables them', () => {
-    const styled = [ENTRY, ...stylesheets]
-      .filter((file) =>
-        /@view-transition|::view-transition-(old|new)\b/.test(
-          declarationsOf(file),
-        ),
-      )
-      .map(repoPath);
-
-    if (styled.length === 0) {
-      return;
-    }
-
-    const config = readFileSync(join(REPO_ROOT, 'next.config.mjs'), 'utf8');
-
-    expect(
-      /viewTransition\s*:\s*true/.test(config),
-      `${styled.join(', ')} styles view transitions, but next.config.mjs does not set experimental.viewTransition, so none of it fires`,
-    ).toBe(true);
-  });
-});
+// There was a fourth guard here, asserting that `::view-transition-*` CSS may
+// only exist when `next.config.mjs` sets `experimental.viewTransition`. It is
+// deliberately gone rather than repaired, for two independent reasons.
+//
+// It was false: those pseudo-elements are generated for *any* active view
+// transition, including a same-document one started by
+// `document.startViewTransition()`, which needs no framework flag at all. And
+// it could not have proved what it claimed anyway — it read `next.config.mjs`
+// as text, so a commented-out `viewTransition: true` satisfied it.
+//
+// The honest version — view-transition CSS must be accompanied by something
+// that can start a transition — would have passed the file that motivated the
+// guard: deleted `utilities.css` declared its own `@view-transition
+// { navigation: auto }` trigger. What was actually wrong with it was
+// app-specific (every internal link here goes through `<Link>`, so no
+// same-origin cross-document navigation occurs), and that is a fact about this
+// app's routing, not a rule a stylesheet-graph test can hold. `app/tailwind.css`
+// records it as a comment instead.
