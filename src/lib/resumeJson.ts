@@ -109,15 +109,53 @@ const NAMED_ENTITIES: Record<string, string> = {
   quot: '"',
 };
 
+/** The largest code point Unicode defines. */
+const MAX_CODE_POINT = 0x10ffff;
+
+/** The UTF-16 surrogate block — code points, but not characters. */
+const FIRST_SURROGATE = 0xd800;
+const LAST_SURROGATE = 0xdfff;
+
+/**
+ * Whether `String.fromCodePoint` can be handed this and produce a character.
+ *
+ * Two ways a numeric entity fails to name one, and they fail differently.
+ * Above `MAX_CODE_POINT`, `String.fromCodePoint` throws a `RangeError` — a
+ * single mistyped `&#99999999;` in a `src/data/resume/work.ts` summary would
+ * take down `npm run build` rather than degrade, because nothing between here
+ * and the `/resume.json` route handler catches it. Inside the surrogate block
+ * it throws nothing and returns an unpaired code unit instead, which travels
+ * into the artifact as a `\ud800` escape and leaves the published document
+ * holding a string no consumer can decode to text.
+ *
+ * Both are refused by leaving the source text exactly where it is, which is
+ * already what this function does for an unknown named entity: a visible
+ * `&#99999999;` in the published résumé is a bug someone can read, where a
+ * failed build is a bug nobody can publish around and a lone surrogate is a bug
+ * nobody can see.
+ *
+ * The `NaN` a non-numeric run like `&#abc;` parses to needs no clause of its
+ * own: every comparison against `NaN` is false, so it fails both of these the
+ * way it failed the `Number.isNaN` check this replaced. That check was dead
+ * code — deleting it left the suite green, which is how it was found.
+ */
+function isDecodableCodePoint(codePoint: number): boolean {
+  return (
+    codePoint <= MAX_CODE_POINT &&
+    (codePoint < FIRST_SURROGATE || codePoint > LAST_SURROGATE)
+  );
+}
+
 function decodeEntity(entity: string): string {
+  const literal = `&${entity};`;
   const numeric = entity.match(/^#(x)?([0-9a-f]+)$/i);
   if (numeric) {
     const codePoint = Number.parseInt(numeric[2], numeric[1] ? 16 : 10);
-    return Number.isNaN(codePoint)
-      ? `&${entity};`
-      : String.fromCodePoint(codePoint);
+    return isDecodableCodePoint(codePoint)
+      ? String.fromCodePoint(codePoint)
+      : literal;
   }
-  return NAMED_ENTITIES[entity.toLowerCase()] ?? `&${entity};`;
+  return NAMED_ENTITIES[entity.toLowerCase()] ?? literal;
 }
 
 /**
