@@ -84,6 +84,56 @@ describe('toPlainText', () => {
     expect(toPlainText('Trust &amp; Safety &#38; more')).toBe(
       'Trust & Safety & more',
     );
+    // The same character named three ways, so the range guard below cannot be
+    // satisfied by refusing everything numeric.
+    expect(toPlainText('&amp; &#38; &#x26;')).toBe('& & &');
+  });
+
+  it('decodes the last code point Unicode defines', () => {
+    // 0x10FFFF is the boundary: valid, and one above it is not.
+    expect(toPlainText('edge &#x10FFFF; case')).toBe(
+      `edge ${String.fromCodePoint(0x10ffff)} case`,
+    );
+    expect(toPlainText('edge &#1114111; case')).toBe(
+      `edge ${String.fromCodePoint(0x10ffff)} case`,
+    );
+  });
+
+  it('leaves an out-of-range numeric entity intact instead of throwing', () => {
+    // `String.fromCodePoint` throws a `RangeError` above 0x10FFFF, which would
+    // fail the `/resume.json` build over one mistyped entity in a summary.
+    // Same fallback as an unknown named entity: the source text stays put.
+    expect(() => toPlainText('a &#99999999; b')).not.toThrow();
+    expect(toPlainText('a &#99999999; b')).toBe('a &#99999999; b');
+    expect(toPlainText('a &#x6000000; b')).toBe('a &#x6000000; b');
+    // 0x110000, the first invalid code point, in both bases.
+    expect(toPlainText('a &#x110000; b')).toBe('a &#x110000; b');
+    expect(toPlainText('a &#1114112; b')).toBe('a &#1114112; b');
+  });
+
+  it('leaves a lone surrogate as text rather than emitting an unpaired one', () => {
+    // This one does not throw — `String.fromCodePoint(0xd800)` returns half a
+    // surrogate pair, which would reach the artifact as a `\ud800` escape that
+    // decodes to nothing readable. Refused for that reason, not for safety.
+    const decoded = toPlainText('a &#xD800; b');
+
+    expect(decoded).toBe('a &#xD800; b');
+    expect(decoded.isWellFormed()).toBe(true);
+    expect(toPlainText('a &#xDFFF; b')).toBe('a &#xDFFF; b');
+    expect(toPlainText('a &#55296; b')).toBe('a &#55296; b');
+    // The characters either side of the block still decode, so the refusal is
+    // the surrogate range and not everything near it.
+    expect(toPlainText('&#xD7FF;&#xE000;')).toBe(
+      `${String.fromCodePoint(0xd7ff)}${String.fromCodePoint(0xe000)}`,
+    );
+  });
+
+  it('leaves an entity it cannot name a character for intact', () => {
+    // `&#abc;` parses to NaN, and every comparison against NaN is false, so it
+    // reaches the same fallback as the out-of-range cases without a check of
+    // its own. An unrecognised named entity has always taken that fallback.
+    expect(toPlainText('a &#abc; b')).toBe('a &#abc; b');
+    expect(toPlainText('a &nope; b')).toBe('a &nope; b');
   });
 
   it('leaves underscores alone so identifiers survive', () => {
