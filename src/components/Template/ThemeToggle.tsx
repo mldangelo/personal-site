@@ -60,7 +60,8 @@ function labelFor(choice: ThemeChoice): string {
 }
 
 /**
- * Cycles light → dark → system, where `system` follows the device live.
+ * A three-state theme control, including `system`, which follows the device
+ * live rather than sampling its preference once.
  *
  * The rendered markup is deliberately identical for all three states: every
  * state is present, and CSS shows the one matching `data-theme-choice` on
