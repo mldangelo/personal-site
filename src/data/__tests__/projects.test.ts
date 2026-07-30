@@ -11,12 +11,10 @@ describe('projects data', () => {
   it('each project has required properties', () => {
     for (const project of projects) {
       expect(project).toHaveProperty('title');
-      expect(project).toHaveProperty('image');
       expect(project).toHaveProperty('date');
       expect(project).toHaveProperty('desc');
 
       expect(typeof project.title).toBe('string');
-      expect(typeof project.image).toBe('string');
       expect(typeof project.date).toBe('string');
       expect(typeof project.desc).toBe('string');
     }
@@ -31,12 +29,6 @@ describe('projects data', () => {
   it('project descriptions are non-empty', () => {
     for (const project of projects) {
       expect(project.desc.trim().length).toBeGreaterThan(0);
-    }
-  });
-
-  it('image paths start with /', () => {
-    for (const project of projects) {
-      expect(project.image.startsWith('/')).toBe(true);
     }
   });
 

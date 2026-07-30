@@ -58,9 +58,9 @@ const HAIRLINE = 'rgba(35, 39, 46, 0.18)';
  * means something while that stays true.
  */
 const READOUT = [
-  { label: 'Countries visited', value: String(profile.countriesVisited) },
-  { label: 'Computing since', value: String(profile.computingSince) },
   { label: 'Based in', value: profile.currentCity },
+  { label: 'Expected graduation', value: profile.expectedGraduation },
+  { label: 'Focus', value: 'Electrical engineering' },
 ];
 
 const [FIRST_NAME, ...REST_OF_NAME] = profile.name.split(' ');

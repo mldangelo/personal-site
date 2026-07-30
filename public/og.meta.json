@@ -4,13 +4,12 @@
     "height": 630
   },
   "profile": {
-    "name": "Michael D'Angelo",
-    "employer": "OpenAI",
-    "focus": "Promptfoo and Codex Security",
-    "countriesVisited": 53,
-    "computingSince": 1993,
-    "currentCity": "New York, NY"
+    "name": "Henry Matar",
+    "employer": "Lockheed Martin",
+    "focus": "embedded systems, PCB design, and software",
+    "expectedGraduation": "May 2027",
+    "currentCity": "Boulder, CO"
   },
-  "generatorDigest": "69f9406c836e1571b913cecb43e10ae4517ea8749e55735d6e3bc700fb85f241",
-  "imageDigest": "916adc2a96bbdc30d68db9b291927d346cad40e9a12ae7384f8332cd7ed882a2"
+  "generatorDigest": "3ccc1b46275a31a5e98032f5cf95a5bd7b4f8c7a0f95b320e17df517344c3d39",
+  "imageDigest": "69c5b92ff03644e45a344528339973a0b41e4be0ae90f457ef2e0aedc416ecdc"
 }

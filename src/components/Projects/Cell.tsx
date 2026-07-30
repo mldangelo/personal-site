@@ -1,8 +1,5 @@
 import dayjs from 'dayjs';
-import Image from 'next/image';
-
 import type { Project } from '@/data/projects';
-import { PROJECT_IMAGE } from '@/lib/utils';
 
 interface CellProps {
   data: Project;
@@ -15,15 +12,7 @@ export default function Cell({ data }: CellProps) {
 
   const cardContent = (
     <>
-      <div className="project-card-image">
-        <Image
-          src={image}
-          alt=""
-          width={PROJECT_IMAGE.width}
-          height={PROJECT_IMAGE.height}
-          sizes="(max-width: 600px) 100vw, 50vw"
-        />
-      </div>
+      {image ? <div className="project-card-image" /> : null}
 
       <div className="project-card-content">
         <header className="project-card-header">

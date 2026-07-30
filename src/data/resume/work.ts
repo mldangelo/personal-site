@@ -17,8 +17,8 @@ const work: Position[] = [
     position: 'Systems Engineering Intern',
     url: 'https://www.lockheedmartin.com',
     startDate: '2026-06-01',
-    endDate: '2026-08-31',
-    summary: 'Systems engineering internship at Lockheed Martin\'s Mount Laurel, NJ facility.',
+    summary:
+      'Systems engineering intern at Lockheed Martin in Mount Laurel, NJ.',
   },
   {
     name: 'Lower Colorado River Authority (LCRA)',
@@ -39,7 +39,8 @@ const work: Position[] = [
     url: 'https://campkingswood.org',
     startDate: '2023-06-01',
     endDate: '2024-08-31',
-    summary: 'Summer counselor at Camp Kingswood in Bridgton, ME (summers of 2023 and 2024).',
+    summary:
+      'Summer counselor at Camp Kingswood in Bridgton, ME (summers of 2023 and 2024).',
     highlights: [
       'Individually designed, executed, and led recreational programs for 58 campers and 14 staff members.',
     ],

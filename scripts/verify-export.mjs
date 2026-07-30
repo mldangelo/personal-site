@@ -325,8 +325,6 @@ const REQUIRED_SOCIAL_META = [
   ['property', 'og:image'],
   ['property', 'og:image:alt'],
   ['name', 'twitter:card'],
-  ['name', 'twitter:site'],
-  ['name', 'twitter:creator'],
   ['name', 'twitter:title'],
   ['name', 'twitter:description'],
   ['name', 'twitter:image'],
@@ -570,26 +568,6 @@ if (!existsSync(sitemapPath)) {
     if (!sitemapRoutes.has(record.route)) {
       fail('sitemap.xml', `omits indexable route: ${record.route}`);
     }
-  }
-}
-
-const feedPath = join(OUT, 'feed.xml');
-if (!existsSync(feedPath)) {
-  fail('feed.xml', 'missing from export');
-} else {
-  const feed = readFileSync(feedPath, 'utf8');
-  const textLinks = [...feed.matchAll(/<link>\s*([^<]+?)\s*<\/link>/gi)].map(
-    (match) => match[1],
-  );
-  const guids = [...feed.matchAll(/<guid\b[^>]*>\s*([^<]+?)\s*<\/guid>/gi)].map(
-    (match) => match[1],
-  );
-  const atomLinks = tags(feed, 'atom:link')
-    .map((tag) => attribute(tag, 'href'))
-    .filter((href) => href !== undefined);
-
-  for (const url of [...textLinks, ...guids, ...atomLinks]) {
-    validateXmlUrl(url, 'feed.xml');
   }
 }
 

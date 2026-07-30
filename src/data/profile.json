@@ -1,8 +1,9 @@
 {
   "name": "Henry Matar",
-  "role": "Systems Engineering Intern",
+  "role": "Electrical Engineering Student",
   "employer": "Lockheed Martin",
-  "focus": "hardware and embedded systems",
+  "focus": "embedded systems, PCB design, and software",
   "currentCity": "Boulder, CO",
+  "expectedGraduation": "May 2027",
   "email": "henry.matar@colorado.edu"
 }
