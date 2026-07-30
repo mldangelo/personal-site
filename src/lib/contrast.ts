@@ -23,24 +23,31 @@ export const AA_LARGE_TEXT = 3;
 export const AA_NON_TEXT = 3;
 
 /**
- * `#rgb`, `#rrggbb`, or `#rrggbbaa` to 0-255 channels.
+ * `#rgb` or `#rrggbb` (with an optional leading `#`) to 0-255 channels.
  *
- * An alpha channel is parsed but ignored: compositing a translucent colour
- * needs a backdrop, and the callers here only ever compare opaque tokens.
- * Anything else throws rather than silently scoring black.
+ * Alpha-bearing forms intentionally throw. A translucent colour has no single
+ * luminance until it is composited over an explicit backdrop; dropping alpha
+ * would, for example, score transparent black as opaque black. Anything else
+ * also throws rather than silently scoring black.
  */
 export function parseHexColor(hex: string): [number, number, number] {
   const body = hex.trim().replace(/^#/, '');
 
+  if ((body.length === 4 || body.length === 8) && /^[0-9a-fA-F]+$/.test(body)) {
+    throw new Error(
+      `Alpha-bearing hex colours need an explicit backdrop: ${hex}`,
+    );
+  }
+
   const expanded =
-    body.length === 3 || body.length === 4
+    body.length === 3
       ? body
           .split('')
           .map((c) => c + c)
           .join('')
       : body;
 
-  if (!/^[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$/.test(expanded)) {
+  if (!/^[0-9a-fA-F]{6}$/.test(expanded)) {
     throw new Error(`Not an opaque sRGB hex colour: ${hex}`);
   }
 
