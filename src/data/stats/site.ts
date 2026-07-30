@@ -105,10 +105,9 @@ const data: StatDeclaration[] = [
     link: `${REPO}/graphs/contributors`,
   },
   {
-    // The next four are the hardest evidence for "fast by default" and "easy
-    // to fork" in docs/design-goals.md, and they are the numbers a forker
-    // actually wants: what the project chose, what that resolves to, and how
-    // much of it a production install carries.
+    // These distinguish what the project declares, what npm actually placed
+    // outside the dev-only tree on this build host, and every package location
+    // the cross-platform lockfile resolves.
     label: 'Dependencies declared directly',
     key: 'direct_dependencies',
     source: 'measured',
@@ -116,8 +115,8 @@ const data: StatDeclaration[] = [
     link: `${BLOB}/package.json`,
   },
   {
-    label: 'Installed to run in production',
-    key: 'production_packages',
+    label: 'Non-development dependencies on this build host',
+    key: 'installed_non_dev_packages',
     source: 'measured',
     unit: 'packages',
     link: `${BLOB}/package-lock.json`,
