@@ -6,10 +6,14 @@ import { describe, expect, it } from 'vitest';
 import projects, { archive, type Project, shipped } from '../projects';
 import work from '../resume/work';
 
-/** Where a project sits on the timeline: live work sorts above everything. */
-function activityEnd(project: Project): number {
-  if (project.ongoing) return Number.POSITIVE_INFINITY;
-  return Date.parse(project.endDate ?? project.date);
+/** Complete register order: live first, then activity date, then title. */
+function compareActivity(a: Project, b: Project): number {
+  const liveOrder = Number(Boolean(b.ongoing)) - Number(Boolean(a.ongoing));
+  if (liveOrder !== 0) return liveOrder;
+
+  const dateOrder =
+    Date.parse(b.endDate ?? b.date) - Date.parse(a.endDate ?? a.date);
+  return dateOrder || a.title.localeCompare(b.title);
 }
 
 describe('projects data', () => {
@@ -113,18 +117,14 @@ describe('projects data', () => {
     ['shipped', shipped],
     ['archive', archive],
   ])('orders %s by most recent activity first', (_, group) => {
-    const ends = group.map(activityEnd);
-
-    for (let i = 1; i < ends.length; i += 1) {
-      expect(ends[i]).toBeLessThanOrEqual(ends[i - 1]);
-    }
+    expect(group).toEqual([...group].sort(compareActivity));
   });
 
   /**
-   * The résumé is the record. Anything here that names the same thing has to
-   * agree with it, so the register cannot drift into its own version of the
-   * dates. A project may outlive the job — Promptfoo is still being built at
-   * OpenAI — so only a declared end date is compared.
+   * A shipped entry that names a résumé role must agree with that internal
+   * record. This is a consistency gate, not proof of external truth or link
+   * health. A project may outlive the job — Promptfoo is still being built at
+   * OpenAI — so only a declared project end date is compared.
    */
   describe('agreement with the résumé', () => {
     const byName = new Map(work.map((position) => [position.name, position]));
@@ -181,5 +181,38 @@ describe('projects data', () => {
         }
       }
     });
+  });
+
+  it('distinguishes Promptfoo project continuity from the founding role', () => {
+    const promptfoo = projects.find((project) => project.title === 'Promptfoo');
+    const role = work.find((position) => position.name === 'Promptfoo');
+
+    expect(promptfoo?.ongoing).toBe(true);
+    expect(promptfoo?.subtitle).toMatch(/through acquisition/i);
+    expect(promptfoo?.subtitle).toMatch(/continued at OpenAI/i);
+    expect(role?.endDate).toBe('2026-03-09');
+  });
+
+  it('does not publish dead destinations or historically unsupported technology claims', () => {
+    const arthena = projects.find((project) => project.title === 'Arthena');
+    const spacePotato = projects.find(
+      (project) => project.title === 'Space Potato',
+    );
+    const catDetector = projects.find(
+      (project) => project.title === 'Cat Detector',
+    );
+
+    expect(arthena?.link).toBe('https://www.arthena.co/');
+    expect(spacePotato?.link).toBeUndefined();
+    expect(catDetector?.tech).not.toContain('TensorFlow');
+  });
+
+  it('uses established brand and technology capitalization', () => {
+    const harvest = projects.find((project) => project.title === 'Harvest');
+    const arthena = projects.find((project) => project.title === 'Arthena');
+
+    expect(harvest?.subtitle).toContain('TechCrunch');
+    expect(harvest?.tech).toContain('Computer vision');
+    expect(arthena?.tech).toContain('Microservices');
   });
 });
