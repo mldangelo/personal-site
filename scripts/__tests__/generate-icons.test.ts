@@ -27,6 +27,14 @@ type IconsMeta = {
     backgroundDark: string;
     monogram: string;
     name: string;
+    font: {
+      name: string;
+      family: string;
+      weight: number;
+      style: string;
+      url: string;
+      sha256: string;
+    };
   };
   generatorDigest: string;
   files: Record<string, string>;
@@ -74,6 +82,23 @@ describe('generated icon set', () => {
     );
   });
 
+  it('pins the exact supported font bytes used by the generator', () => {
+    const fontUrl = new URL(meta.inputs.font.url);
+
+    expect(meta.inputs.font).toMatchObject({
+      name: 'Display',
+      family: 'Bricolage Grotesque',
+      weight: 800,
+      style: 'normal',
+    });
+    expect(fontUrl.protocol).toBe('https:');
+    expect(fontUrl.hostname).toBe('fonts.gstatic.com');
+    expect(fontUrl.pathname).toMatch(
+      /^\/s\/bricolagegrotesque\/v\d+\/[^/]+\.ttf$/,
+    );
+    expect(meta.inputs.font.sha256).toMatch(/^[0-9a-f]{64}$/);
+  });
+
   it('was produced by the committed generator', () => {
     const source = readFileSync(
       join(root, 'scripts', 'generate-icons.mjs'),
@@ -94,6 +119,13 @@ describe('generated icon set', () => {
       .digest('hex');
 
     expect(digest, STALE).toBe(meta.files[path]);
+  });
+
+  it('records portable repository paths in the ledger', () => {
+    for (const path of Object.keys(meta.files)) {
+      expect(path).not.toContain('\\');
+      expect(path).toBe(posix.normalize(path));
+    }
   });
 
   /**
