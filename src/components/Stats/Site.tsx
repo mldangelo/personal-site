@@ -124,8 +124,25 @@ function measureThisBuild(): Record<string, Measurement> {
 }
 
 /**
- * Site statistics component - fetches GitHub data at build time.
- * Server component, no client-side JavaScript shipped.
+ * The site table: GitHub readings fetched at build time, beside everything this
+ * build can count about itself.
+ *
+ * A server component — but it used to claim "no client-side JavaScript shipped",
+ * and that stopped being true the moment the build clock arrived. What is true
+ * is narrower and more useful: beyond what the shared layout already ships, the
+ * client JavaScript on this page is two leaves, `<BuildClock>` here and
+ * `<LiveAge>` in the personal table, and both write their readings straight to a
+ * text node through `useLiveReadout`. Verified in the export rather than
+ * asserted: the only client references inside either table in
+ * `out/stats/index.txt` are those two, one per `<td>`, so every label, link,
+ * value, and provenance mark around them is server markup that no reading can
+ * re-render.
+ *
+ * Keep the boundary at the leaf. Last time a reading needed a client component
+ * the whole table followed it across — declarations, `resolveReadings`, `Table`,
+ * `TableRow` — and the export shipped `--.-----------` as the age to every
+ * crawler and every printed copy. `src/components/Stats/LiveAge.tsx` tells that
+ * story.
  */
 export default async function SiteStats() {
   // Started before the measurements so the file reads happen during the
