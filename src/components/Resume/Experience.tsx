@@ -6,9 +6,9 @@ import Job, { type JobTier } from './Experience/Job';
 interface ExperienceProps {
   data: Position[];
   /**
-   * Instant an ongoing role's tenure is measured to. Read once by the caller
-   * and threaded down so every duration on the spine agrees with the headline
-   * span on the page.
+   * Instant every ongoing role's tenure is measured to. A caller can supply a
+   * shared value for determinism; otherwise this component reads the clock
+   * once and threads that value to every role.
    */
   now?: DateInput;
 }
@@ -59,6 +59,8 @@ export function tierFor(job: Position, positions: Position[]): JobTier {
 
 export default function Experience({
   data,
+  // The single fallback read. `Job` requires the resulting instant so this
+  // cannot quietly become one read per role.
   now = Date.now(),
 }: ExperienceProps) {
   // `tierFor` was written not to depend on array position; sorting here is the

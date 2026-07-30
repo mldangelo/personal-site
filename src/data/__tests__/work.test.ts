@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { sortPositions } from '@/lib/career';
+import { sortPositions, timelineKey } from '@/lib/career';
 import work from '../resume/work';
 
 /** Exactly `YYYY-MM-DD`, which is what makes a string comparison chronological. */
@@ -75,6 +75,14 @@ describe('work data', () => {
     }
   });
 
+  it('uses the supported commitment value when present', () => {
+    for (const job of work) {
+      if (job.commitment) {
+        expect(job.commitment).toBe('part-time');
+      }
+    }
+  });
+
   it('has positions from different years', () => {
     const years = work.map((job) => new Date(job.startDate).getFullYear());
     const uniqueYears = new Set(years);
@@ -122,19 +130,15 @@ describe('work data', () => {
       const current = ordered[i];
 
       expect(
-        current.startDate.localeCompare(previous.startDate),
+        timelineKey(current).localeCompare(timelineKey(previous)),
       ).toBeLessThanOrEqual(0);
 
-      // Where two roles start on the same date, the one still running (or the
-      // one that ran longer) comes first.
-      if (current.startDate === previous.startDate) {
-        expect(current.endDate).toBeDefined();
-
-        if (previous.endDate && current.endDate) {
-          expect(
-            current.endDate.localeCompare(previous.endDate),
-          ).toBeLessThanOrEqual(0);
-        }
+      // Where two roles have the same timeline key, the later start comes
+      // first.
+      if (timelineKey(current) === timelineKey(previous)) {
+        expect(
+          current.startDate.localeCompare(previous.startDate),
+        ).toBeLessThanOrEqual(0);
       }
     }
   });
