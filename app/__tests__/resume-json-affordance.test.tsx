@@ -13,10 +13,20 @@ describe('resume JSON affordance', () => {
     const { container } = render(<ResumePage />);
     const link = screen.getByRole('link', { name: 'JSON Resume' });
 
-    expect(link).toHaveAttribute('href', RESUME_JSON_PATH);
+    const href = link.getAttribute('href');
+
+    expect(href).toBe(`..${RESUME_JSON_PATH}`);
     expect(link).toHaveTextContent('JSON');
     // File-like route: no trailing slash, even under `trailingSlash: true`.
-    expect(link.getAttribute('href')).not.toMatch(/\/$/);
+    expect(href).not.toMatch(/\/$/);
+    // Exercise the href rendered by ResumePage, rather than a verifier fixture:
+    // it must stay within a repository base path as well as work at the root.
+    expect(new URL(href!, 'https://example.com/resume/').pathname).toBe(
+      '/resume.json',
+    );
+    expect(
+      new URL(href!, 'https://example.com/personal-site/resume/').pathname,
+    ).toBe('/personal-site/resume.json');
 
     const row = container.querySelector('.resume-header-row');
     expect(row).not.toBeNull();

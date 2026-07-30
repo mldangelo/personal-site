@@ -109,40 +109,13 @@ const NAMED_ENTITIES: Record<string, string> = {
   quot: '"',
 };
 
-/** The largest code point Unicode defines. */
-const MAX_CODE_POINT = 0x10ffff;
-
-/** The UTF-16 surrogate block — code points, but not characters. */
-const FIRST_SURROGATE = 0xd800;
-const LAST_SURROGATE = 0xdfff;
-
-/**
- * Whether `String.fromCodePoint` can be handed this and produce a character.
- *
- * Two ways a numeric entity fails to name one, and they fail differently.
- * Above `MAX_CODE_POINT`, `String.fromCodePoint` throws a `RangeError` — a
- * single mistyped `&#99999999;` in a `src/data/resume/work.ts` summary would
- * take down `npm run build` rather than degrade, because nothing between here
- * and the `/resume.json` route handler catches it. Inside the surrogate block
- * it throws nothing and returns an unpaired code unit instead, which travels
- * into the artifact as a `\ud800` escape and leaves the published document
- * holding a string no consumer can decode to text.
- *
- * Both are refused by leaving the source text exactly where it is, which is
- * already what this function does for an unknown named entity: a visible
- * `&#99999999;` in the published résumé is a bug someone can read, where a
- * failed build is a bug nobody can publish around and a lone surrogate is a bug
- * nobody can see.
- *
- * The `NaN` a non-numeric run like `&#abc;` parses to needs no clause of its
- * own: every comparison against `NaN` is false, so it fails both of these the
- * way it failed the `Number.isNaN` check this replaced. That check was dead
- * code — deleting it left the suite green, which is how it was found.
- */
-function isDecodableCodePoint(codePoint: number): boolean {
+/** Unicode scalar values exclude surrogates and stop at U+10FFFF. */
+function isUnicodeScalarValue(codePoint: number): boolean {
   return (
-    codePoint <= MAX_CODE_POINT &&
-    (codePoint < FIRST_SURROGATE || codePoint > LAST_SURROGATE)
+    Number.isInteger(codePoint) &&
+    codePoint >= 0 &&
+    codePoint <= 0x10ffff &&
+    (codePoint < 0xd800 || codePoint > 0xdfff)
   );
 }
 
@@ -151,7 +124,7 @@ function decodeEntity(entity: string): string {
   const numeric = entity.match(/^#(x)?([0-9a-f]+)$/i);
   if (numeric) {
     const codePoint = Number.parseInt(numeric[2], numeric[1] ? 16 : 10);
-    return isDecodableCodePoint(codePoint)
+    return isUnicodeScalarValue(codePoint)
       ? String.fromCodePoint(codePoint)
       : literal;
   }
@@ -165,16 +138,9 @@ function decodeEntity(entity: string): string {
  * HTML — `JobSummary` renders them through `markdown-to-jsx`, and three of them
  * carry real `<a href>` anchors. The rendered page depends on that markup, so
  * this strips it for the artifact rather than flattening the source data and
- * costing the page its links.
- *
- * The anchor text survives and the href does not, and nothing else in the
- * document recovers it. All six are third-party links — the Codex Security
- * announcement, Anthemis, Foundation Capital, Y Combinator, NEA, Accel — not
- * the employer's own `url`, which is a separate field on the work entry and
- * points somewhere else. That is the accepted cost: JSON Resume prose is plain
- * text, and the schema has nowhere to hang a link inside a summary. The test
- * file pins both halves, so this paragraph fails rather than rots when a
- * summary changes.
+ * costing the page its links. Anchor text survives, but inline destinations do
+ * not: JSON Resume summaries are plain strings. Each employer's own URL remains
+ * available separately on the work entry.
  *
  * Underscore emphasis is intentionally left alone: `_x_` would eat the
  * underscores out of an identifier like `snake_case_name`.

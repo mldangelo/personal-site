@@ -67,11 +67,12 @@ export default function ResumePage() {
         <header className="resume-header">
           <div className="resume-header-row">
             <h1 className="resume-title">Resume</h1>
-            {/* The same affordance as the RSS chip on /writing: this résumé is
-                also published as data, at the JSON Resume path the work data
-                has always claimed to conform to. */}
+            {/* The same affordance as the RSS chip on /writing. The href is
+                document-relative on purpose: /resume/ may live below a
+                repository base path, while a root-relative href would escape
+                it. ../resume.json resolves correctly in both deployments. */}
             <a
-              href={RESUME_JSON_PATH}
+              href={`..${RESUME_JSON_PATH}`}
               className="resume-json-link"
               title="JSON Resume"
               aria-label="JSON Resume"

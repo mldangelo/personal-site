@@ -690,9 +690,18 @@ if (!existsSync(resumeJsonPath)) {
   if (!resumePage) {
     fail('resume.json', 'no exported /resume/ page to link the artifact');
   } else if (
-    !tags(resumePage.html, 'a').some(
-      (tag) => attribute(tag, 'href') === publicPathForRoute('/resume.json'),
-    )
+    !tags(resumePage.html, 'a').some((tag) => {
+      const href = attribute(tag, 'href');
+      const url = href
+        ? parseHttpUrl(
+            href,
+            resumePage.route,
+            resumePage.relativePath,
+            'resume JSON link',
+          )
+        : undefined;
+      return url?.href === siteUrlForRoute('/resume.json');
+    })
   ) {
     fail(
       'resume.json',
