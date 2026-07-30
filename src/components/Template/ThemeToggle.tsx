@@ -61,11 +61,16 @@ function labelFor(choice: ThemeChoice): string {
 }
 
 /**
- * Cycles system → light → dark → system, where `system` follows the device live.
+ * One button that cycles every theme choice, `system` included — and `system`
+ * follows the device live rather than sampling it once.
  *
- * That order is `nextThemeChoice`'s, not a copy of it: both the labels and the
- * rendered states below come out of `src/lib/theme.ts`, so this control cannot
- * end up describing an order it does not perform. `system` is the state a
+ * The order is deliberately not written out here. `THEME_CHOICES` and
+ * `nextThemeChoice` in `src/lib/theme.ts` hold it, and both the states rendered
+ * below and every label on them are read from those, so this control cannot
+ * perform an order other than the one it is given. A sequence written out in
+ * this comment could: it is prose, and nothing checks prose — an earlier
+ * version of this docstring spelled the cycle out and claimed, in the same
+ * sentence, that the spelling-out was not a copy. `system` is the state a
  * visitor who has never chosen starts in, and the one they can get back to.
  *
  * The rendered markup is deliberately identical for all three states: every

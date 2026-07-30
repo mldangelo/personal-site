@@ -65,7 +65,18 @@ const NEXT_CHOICE: Record<ThemeChoice, ThemeChoice> = {
   dark: 'system',
 };
 
-/** Every choice, in cycle order starting from `system`. */
+/**
+ * Every choice, in cycle order, opening on the `system` a visitor who has never
+ * chosen is already in.
+ *
+ * The one place the order is written down: `ThemeToggle` iterates this and
+ * labels each state through {@link nextThemeChoice} rather than restating the
+ * sequence in prose, which is what its docstring used to do. This is still a
+ * second literal beside {@link NEXT_CHOICE}, so `theme.test.ts` walks
+ * `nextThemeChoice` from the un-chosen state and asserts the walk reproduces
+ * this array — reordering one and not the other is otherwise invisible, and
+ * was: the whole suite stayed green with this array reversed.
+ */
 export const THEME_CHOICES: readonly ThemeChoice[] = [
   'system',
   'light',

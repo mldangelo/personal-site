@@ -153,6 +153,28 @@ describe('theme', () => {
     });
   });
 
+  describe('THEME_CHOICES', () => {
+    // Two literals hold one order: this array and the `nextThemeChoice` map.
+    // Nothing else notices when they disagree — the rendered states are picked
+    // by CSS from `data-theme-choice`, so their DOM order is unobservable, and
+    // reversing this array leaves every other test in the suite green.
+    it('is nextThemeChoice walked from the un-chosen state', () => {
+      // Nothing stored, per `beforeEach`: where a first-time visitor starts.
+      const start = readStoredThemeChoice();
+      expect(THEME_CHOICES[0]).toBe(start);
+
+      let cursor = start;
+      const walk: ThemeChoice[] = [cursor];
+
+      for (let step = 1; step < THEME_CHOICES.length; step += 1) {
+        cursor = nextThemeChoice(cursor);
+        walk.push(cursor);
+      }
+
+      expect(walk).toEqual([...THEME_CHOICES]);
+    });
+  });
+
   describe('resolveTheme', () => {
     it('ignores the device for an explicit choice', () => {
       expect(resolveTheme('light', 'dark')).toBe('light');
