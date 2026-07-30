@@ -6,35 +6,19 @@
  * already in the prose. Lifting it into the gutter is what turns a bulleted
  * list into a log; inventing one would not be.
  *
- * The prose places entries two different ways, by age and by year, and a gutter
- * that printed whichever one the sentence happened to use was two timelines in
- * one column. So the year is the single axis every entry is filed under, and
- * the age rides along as the secondary line where the prose thinks in ages.
- * Both are read off `profile.birthDate`, which means the log starts at 1993 —
- * the year `profile.computingSince` already claims.
+ * Markers repeat only what the entry actually says. A year does not establish
+ * an exact age without the event date, and an age can span two calendar years,
+ * so deriving either value would add precision the source does not contain.
  */
 
-import profile from '@/data/profile.json';
-
-/**
- * Birth year as written, not as converted: an offset can push the UTC instant
- * into an adjacent calendar year, and the year someone was born is a calendar
- * fact rather than an instant. `src/lib/telemetry.ts` reads the same field for
- * the instant it needs.
- */
-const BIRTH_YEAR = Number.parseInt(profile.birthDate.slice(0, 4), 10);
-
-/** A four-digit year, tight enough that a model number is not one. */
+/** A plausible four-digit year; the surrounding patterns supply date context. */
 const YEAR_PATTERN = /(?:1[89]|20)\d{2}/;
 
 export interface LogMarker {
-  /** Primary gutter line: the year, or year range, the entry is filed under. */
-  year: string;
-  /**
-   * Secondary gutter line, e.g. "Age 7". Absent when no age can be told —
-   * a year before the birth year has none.
-   */
+  /** Explicit age or age range, e.g. "Age 7". */
   age?: string;
+  /** Explicit year or year range. */
+  year?: string;
   /**
    * The entry text to render. The marker is removed only when it was a leading
    * phrase that can be dropped and still leave a sentence behind; a marker
@@ -79,12 +63,11 @@ const LEADING_PATTERNS: Array<{
     pattern: /^I\s+was\s+(\d{1,2})\s+when\s+/i,
     read: (m) => ({ age: [num(m[1])] }),
   },
-  // "In 2016, I visited Canada …" / "In the summer of 1996, my uncle purchased …"
+  // "In 2016, I visited Canada …"
+  // Qualified dates such as "In the summer of 1996" stay in the prose so the
+  // qualifier is not discarded; INLINE_YEAR still annotates the entry.
   {
-    pattern: new RegExp(
-      `^In\\s+(?:the\\s+\\w+\\s+of\\s+)?(${YEAR_PATTERN.source}),\\s+`,
-      'i',
-    ),
+    pattern: new RegExp(`^In\\s+(${YEAR_PATTERN.source}),\\s+`, 'i'),
     read: (m) => ({ year: [num(m[1])] }),
   },
 ];
@@ -125,40 +108,20 @@ function openingSentence(text: string) {
   return end === -1 ? text : text.slice(0, end + 1);
 }
 
-/**
- * Age and year are the same fact told two ways, so either can be derived from
- * the other. The birthday falls in early February, so for all but the first
- * five weeks of a year the age is simply the year minus the birth year; the
- * gutter is an 11px annotation, and that is the precision it is asking for.
- */
-function withDerivedValues({ age, year }: Reading): Reading {
-  return {
-    age: age ?? (year ? shift(year, -BIRTH_YEAR) : undefined),
-    year: year ?? (age ? shift(age, BIRTH_YEAR) : undefined),
-  };
-}
-
-function shift(span: Span, by: number): Span {
-  return span.length === 2 ? [span[0] + by, span[1] + by] : [span[0] + by];
-}
-
 function formatSpan(span: Span) {
   return span.length === 2 ? `${span[0]}–${span[1]}` : `${span[0]}`;
 }
 
 function toMarker(reading: Reading, rest: string): LogMarker | null {
-  const { age, year } = withDerivedValues(reading);
+  const { age, year } = reading;
 
-  if (!year) {
+  if (!age && !year) {
     return null;
   }
 
   return {
-    year: formatSpan(year),
-    // An age is only a fact once the subject exists.
-    ...(age && age.every((value) => value >= 0)
-      ? { age: `Age ${formatSpan(age)}` }
-      : {}),
+    ...(age ? { age: `Age ${formatSpan(age)}` } : {}),
+    ...(year ? { year: formatSpan(year) } : {}),
     rest,
   };
 }

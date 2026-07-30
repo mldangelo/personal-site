@@ -4,8 +4,6 @@ import { aboutMarkdown } from '@/data/about';
 import profile from '@/data/profile.json';
 import { extractLogMarker } from '../logEntry';
 
-const BIRTH_YEAR = Number.parseInt(profile.birthDate.slice(0, 4), 10);
-
 /** Bullets of one about-page section, as authored. */
 function sectionEntries(title: string) {
   const body = aboutMarkdown.split(`# ${title}\n`)[1]?.split('\n# ')[0] ?? '';
@@ -17,13 +15,12 @@ function sectionEntries(title: string) {
 }
 
 describe('extractLogMarker', () => {
-  it('files a leading age under its year and keeps the age alongside', () => {
+  it('lifts a leading age without inventing a year', () => {
     const result = extractLogMarker(
       'At 7, I discovered the mini-games hidden in Microsoft Office.',
     );
 
     expect(result).toEqual({
-      year: '1997',
       age: 'Age 7',
       rest: 'I discovered the mini-games hidden in Microsoft Office.',
     });
@@ -33,14 +30,12 @@ describe('extractLogMarker', () => {
     expect(
       extractLogMarker('At 14 - 17, I played a lot of video games.'),
     ).toEqual({
-      year: '2004–2007',
       age: 'Age 14–17',
       rest: 'I played a lot of video games.',
     });
 
     expect(extractLogMarker('14 - 17, I played a lot of video games.')).toEqual(
       {
-        year: '2004–2007',
         age: 'Age 14–17',
         rest: 'I played a lot of video games.',
       },
@@ -56,23 +51,21 @@ describe('extractLogMarker', () => {
     );
   });
 
-  it('gives a leading year the age that goes with it', () => {
+  it('lifts a leading year without inventing an age', () => {
     expect(extractLogMarker('In 2016, I visited Canada and Ethiopia.')).toEqual(
       {
         year: '2016',
-        age: 'Age 26',
         rest: 'I visited Canada and Ethiopia.',
       },
     );
   });
 
-  it('reads a year through a season', () => {
+  it('annotates a seasonal year without deleting the season', () => {
     expect(
       extractLogMarker('In the summer of 1996, my uncle purchased MegaRace.'),
     ).toEqual({
       year: '1996',
-      age: 'Age 6',
-      rest: 'My uncle purchased MegaRace.',
+      rest: 'In the summer of 1996, my uncle purchased MegaRace.',
     });
   });
 
@@ -86,7 +79,6 @@ describe('extractLogMarker', () => {
     expect(
       extractLogMarker('When I was 12, I set the all-time high record.'),
     ).toEqual({
-      year: '2002',
       age: 'Age 12',
       rest: 'I set the all-time high record.',
     });
@@ -94,7 +86,6 @@ describe('extractLogMarker', () => {
     expect(
       extractLogMarker('I was 11 when I built my first Tesla Coil.'),
     ).toEqual({
-      year: '2001',
       age: 'Age 11',
       rest: 'I built my first Tesla Coil.',
     });
@@ -116,7 +107,6 @@ describe('extractLogMarker', () => {
       extractLogMarker('We subscribed to AOL in 1995. I still remember it.'),
     ).toEqual({
       year: '1995',
-      age: 'Age 5',
       rest: 'We subscribed to AOL in 1995. I still remember it.',
     });
 
@@ -124,7 +114,6 @@ describe('extractLogMarker', () => {
     // best entries on the page with an empty gutter.
     expect(extractLogMarker('I visited Canada in 2016, then Japan.')).toEqual({
       year: '2016',
-      age: 'Age 26',
       rest: 'I visited Canada in 2016, then Japan.',
     });
   });
@@ -194,13 +183,6 @@ describe('extractLogMarker', () => {
     ).toBe('Age 12');
   });
 
-  it('omits the age for a year that predates the birth year', () => {
-    const result = extractLogMarker(`In ${BIRTH_YEAR - 10}, none of this.`);
-
-    expect(result?.year).toBe(String(BIRTH_YEAR - 10));
-    expect(result?.age).toBeUndefined();
-  });
-
   it('rejects a marker with nothing left after it', () => {
     expect(extractLogMarker('At 20, ')).toBeNull();
     expect(extractLogMarker('In 2016, ')).toBeNull();
@@ -217,16 +199,31 @@ describe('extractLogMarker', () => {
 describe('the about page log', () => {
   const history = sectionEntries('Some History');
 
-  it('dates every entry in Some History', () => {
+  it('annotates every history entry with only its stated marker', () => {
     expect(history).toHaveLength(15);
 
-    for (const entry of history) {
-      const marker = extractLogMarker(entry);
-
-      expect(marker, entry.slice(0, 60)).not.toBeNull();
-      expect(marker?.year).toMatch(/^\d{4}(–\d{4})?$/);
-      expect(marker?.age).toMatch(/^Age \d{1,2}(–\d{1,2})?$/);
-    }
+    expect(
+      history.map((entry) => {
+        const { year, age } = extractLogMarker(entry) ?? {};
+        return [year, age].filter(Boolean).join(' / ');
+      }),
+    ).toEqual([
+      '1993 / Age 3',
+      '1995',
+      '1996',
+      'Age 7',
+      'Age 8',
+      'Age 10',
+      'Age 11',
+      'Age 12',
+      'Age 13',
+      'Age 14',
+      'Age 14–17',
+      'Age 16',
+      'Age 18',
+      'Age 19',
+      'Age 20',
+    ]);
   });
 
   it('starts at the year the profile says the computing started', () => {
@@ -237,28 +234,34 @@ describe('the about page log', () => {
     );
   });
 
-  it('reads years and ages off one clock', () => {
-    // Where the prose states both — "in 1993 when I was 3" — the two must
-    // agree, or the gutter is quietly inventing a second timeline.
-    for (const entry of history) {
-      const marker = extractLogMarker(entry);
-      const statedYear = entry.match(/\b((?:19|20)\d{2})\b/);
-      const statedAge = marker?.age?.match(/\d{1,2}/);
+  it('keeps the seasonal qualifier in the real MegaRace entry', () => {
+    const megaRace = history.find((entry) => entry.includes('MegaRace'));
+    const marker = extractLogMarker(megaRace ?? '');
 
-      if (statedYear && statedAge) {
-        expect(
-          Number.parseInt(statedYear[1], 10) - BIRTH_YEAR,
-          entry.slice(0, 60),
-        ).toBe(Number.parseInt(statedAge[0], 10));
-      }
-    }
+    expect(marker?.year).toBe('1996');
+    expect(marker?.age).toBeUndefined();
+    expect(marker?.rest).toContain('In the summer of 1996');
   });
 
-  it('leaves the undated travel entries with no marker rather than a broken one', () => {
+  it('leaves undated travel entries empty and does not derive travel ages', () => {
     const travel = sectionEntries('Travel / Geography');
     const undated = travel.filter((entry) => extractLogMarker(entry) === null);
+    const dated = travel
+      .map((entry) => extractLogMarker(entry))
+      .filter((marker) => marker !== null);
 
     expect(undated).toHaveLength(3);
-    expect(travel.length - undated.length).toBe(8);
+    expect(dated).toHaveLength(8);
+    expect(dated.map((marker) => marker.year)).toEqual([
+      '2016',
+      '2017',
+      '2018',
+      '2019',
+      '2020',
+      '2021',
+      '2022',
+      '2023',
+    ]);
+    expect(dated.every((marker) => marker.age === undefined)).toBe(true);
   });
 });
