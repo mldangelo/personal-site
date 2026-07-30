@@ -12,6 +12,14 @@ import { afterEach, describe, expect, it } from 'vitest';
 
 const measurer = resolve(process.cwd(), 'scripts/measure-export.mjs');
 const fixtureRoots: string[] = [];
+const DOCUMENTED_JSON_COMMAND = 'npm run --silent measure-export -- --json -';
+const PARSE_STDIN = `let text = '';
+process.stdin.setEncoding('utf8');
+process.stdin.on('data', (chunk) => { text += chunk; });
+process.stdin.on('end', () => {
+  process.stdout.write(String(JSON.parse(text).total.files));
+});
+`;
 
 const CSS = 'a'.repeat(4096);
 const JS = 'j'.repeat(8192);
@@ -26,7 +34,7 @@ const RSC_PAGE = 'p'.repeat(50);
 const ICON =
   '<svg class="svg-inline--fa" viewBox="0 0 512 512"><path d="M0 0h512v512H0z"></path></svg>';
 
-const ASSET_BYTES = CSS.length + JS.length + FONT.length;
+const LINKED_ASSET_BYTES = CSS.length + JS.length + FONT.length;
 
 /** Generous enough that only the budget under test can trip. */
 const GENEROUS_BUDGET = {
@@ -36,7 +44,7 @@ const GENEROUS_BUDGET = {
   cssBytes: 1_000_000,
   fontBytes: 1_000_000,
   maxFileBytes: 1_000_000,
-  maxRouteFirstLoadBytes: 1_000_000,
+  maxRouteBootstrapBytes: 1_000_000,
   repeatedInlineSvgBytes: 1_000_000,
 };
 
@@ -48,8 +56,8 @@ type Report = {
   routes: {
     route: string;
     documentBytes: number;
-    assetBytes: number;
-    firstLoadBytes: number;
+    linkedAssetBytes: number;
+    bootstrapBytes: number;
   }[];
   inlineSvg: {
     bytes: number;
@@ -84,7 +92,11 @@ function htmlPage(basePath: string, body: string) {
     <link rel="preload" as="script" href="${asset('/_next/static/chunks/main.js')}">
     <script src="${asset('/_next/static/chunks/main.js')}"></script>
   </head>
-  <body>${body}${ICON}</body>
+  <body>
+    ${body}
+    <img src="${asset('/images/photo.png')}" alt="">
+    ${ICON}
+  </body>
 </html>`;
 }
 
@@ -98,8 +110,16 @@ function createFixture({
   write(
     root,
     'package.json',
-    JSON.stringify({ homepage: `https://example.com${basePath}/` }),
+    JSON.stringify({
+      name: 'measure-export-fixture',
+      version: '0.0.0',
+      private: true,
+      homepage: `https://example.com${basePath}/`,
+      scripts: { 'measure-export': `node "${measurer}"` },
+    }),
   );
+  write(root, 'parse-stdin.mjs', PARSE_STDIN);
+  mkdirSync(join(root, 'scripts'), { recursive: true });
   if (budget) {
     write(root, 'scripts/budget.json', JSON.stringify(budget, null, 2));
   }
@@ -133,7 +153,22 @@ function runMeasurer(root: string, args: string[] = []) {
   });
   return {
     status: result.status,
+    stdout: result.stdout,
+    stderr: result.stderr,
     output: `${result.stdout}${result.stderr}`,
+  };
+}
+
+function runPipeline(root: string, command: string) {
+  const result = spawnSync(command, {
+    cwd: root,
+    encoding: 'utf8',
+    shell: true,
+  });
+  return {
+    status: result.status,
+    stdout: result.stdout,
+    stderr: result.stderr,
   };
 }
 
@@ -209,21 +244,22 @@ describe('measure-export', () => {
     ).not.toBe('rsc');
   });
 
-  it('charges each route for the assets its document pulls', () => {
+  it('measures each route document and its direct bootstrap links', () => {
     const { root, documents } = createFixture();
     const { report } = reportFor(root);
 
     // The stylesheet, the font, and the chunk, counted once even though the
-    // chunk is both preloaded and executed.
+    // chunk is both preloaded and executed. The referenced image is deliberately
+    // outside this narrow metric and remains covered by the export total.
     expect(routeIn(report, '/about/')).toEqual({
       route: '/about/',
       documentBytes: documents['/about/'],
-      assetBytes: ASSET_BYTES,
-      firstLoadBytes: documents['/about/'] + ASSET_BYTES,
+      linkedAssetBytes: LINKED_ASSET_BYTES,
+      bootstrapBytes: documents['/about/'] + LINKED_ASSET_BYTES,
     });
   });
 
-  it('resolves first-load assets through a repository-site base path', () => {
+  it('resolves bootstrap links through a repository-site base path', () => {
     const { root } = createFixture({ basePath: '/personal-site' });
     const { status, report } = reportFor(root);
 
@@ -231,7 +267,9 @@ describe('measure-export', () => {
     expect(report.basePath).toBe('/personal-site');
     // Markup says /personal-site/_next/..., the file is at out/_next/...; a
     // hand-rolled prefix strip resolves nothing and reports 0 asset bytes.
-    expect(routeIn(report, '/about/')?.assetBytes).toBe(ASSET_BYTES);
+    expect(routeIn(report, '/about/')?.linkedAssetBytes).toBe(
+      LINKED_ASSET_BYTES,
+    );
   });
 
   it('counts inline icon markup that repeats across documents', () => {
@@ -274,18 +312,14 @@ describe('measure-export', () => {
     });
   });
 
-  it('leaves a metric ungated when its budget is absent', () => {
+  it('fails closed when a required budget is absent', () => {
     const { fontBytes: _omitted, ...budget } = GENEROUS_BUDGET;
     const { root } = createFixture({ budget });
 
-    const { status, output, report } = reportFor(root);
-    expect(status).toBe(0);
-    expect(output).toContain('6 budget(s) within limits');
-    expect(checkIn(report, 'fontBytes')).toMatchObject({
-      actual: FONT.length,
-      limit: null,
-      ok: true,
-    });
+    const { status, output } = runMeasurer(root);
+    expect(status).toBe(1);
+    expect(output).toContain('missing required budget(s): fontBytes');
+    expect(output).not.toContain('budget(s) within limits');
   });
 
   it('rejects an unknown budget key rather than silently ignoring it', () => {
@@ -298,12 +332,74 @@ describe('measure-export', () => {
     expect(output).toContain('unknown budget(s): cssByte');
   });
 
+  it.each([
+    ['a string', '"large"'],
+    ['null', 'null'],
+    ['an array', '[]'],
+  ])('rejects %s as the budget root', (_description, contents) => {
+    const { root } = createFixture();
+    write(root, 'scripts/budget.json', contents);
+
+    const { status, output } = runMeasurer(root);
+    expect(status).toBe(1);
+    expect(output).toContain('must be a JSON object');
+  });
+
+  it.each([
+    ['a string', '"1000"'],
+    ['null', 'null'],
+    ['zero', '0'],
+    ['a negative number', '-1'],
+    ['a fraction', '1.5'],
+    ['an infinite JSON number', '1e999'],
+  ])('rejects %s as a budget value', (_description, value) => {
+    const { root } = createFixture();
+    const budget = JSON.stringify(GENEROUS_BUDGET).replace(
+      '"fontBytes":1000000',
+      `"fontBytes":${value}`,
+    );
+    write(root, 'scripts/budget.json', budget);
+
+    const { status, output } = runMeasurer(root);
+    expect(status).toBe(1);
+    expect(output).toContain('invalid budget(s): fontBytes is');
+    expect(output).toContain('positive whole number of bytes');
+  });
+
   it('requires a committed budget file', () => {
     const { root } = createFixture({ budget: null });
 
     const { status, output } = runMeasurer(root);
     expect(status).toBe(1);
     expect(output).toContain('scripts/budget.json is missing');
+  });
+
+  it.each([
+    ['an empty object', '{}'],
+    ['only policy notes', '{"_policy":["fixture"]}'],
+    ['no file', null],
+  ])('bootstraps the complete budget from %s', (_description, contents) => {
+    const { root } = createFixture({ budget: null });
+    if (contents !== null) write(root, 'scripts/budget.json', contents);
+
+    const { status, output } = runMeasurer(root, ['--update-budget']);
+    expect(status).toBe(0);
+    expect(output).toContain('ratcheted scripts/budget.json');
+
+    const budget = JSON.parse(
+      readFileSync(join(root, 'scripts/budget.json'), 'utf8'),
+    );
+    expect(Object.keys(budget)).toEqual([
+      '_policy',
+      'totalBytes',
+      'javascriptBytes',
+      'cssBytes',
+      'fontBytes',
+      'maxFileBytes',
+      'maxRouteBootstrapBytes',
+      'repeatedInlineSvgBytes',
+    ]);
+    expect(runMeasurer(root).status).toBe(0);
   });
 
   it('ratchets the budget with documented headroom and keeps the policy', () => {
@@ -321,10 +417,10 @@ describe('measure-export', () => {
     expect(budget._policy).toEqual(['fixture']);
     // 15% headroom rounded up to the next KiB: 4096 -> 4710.4 -> 5120.
     expect(budget.cssBytes).toBe(5120);
-    // 15% on the heaviest first load, same rounding.
+    // 15% on the heaviest bootstrap set, same rounding.
     const heaviest =
-      Math.max(documents['/'], documents['/about/']) + ASSET_BYTES;
-    expect(budget.maxRouteFirstLoadBytes).toBe(
+      Math.max(documents['/'], documents['/about/']) + LINKED_ASSET_BYTES;
+    expect(budget.maxRouteBootstrapBytes).toBe(
       Math.ceil((heaviest * 1.15) / 1024) * 1024,
     );
   });
@@ -336,5 +432,43 @@ describe('measure-export', () => {
     const { status, output } = runMeasurer(root);
     expect(status).toBe(1);
     expect(output).toContain('no files found in out/');
+  });
+
+  it.each([['--json='], ['--json', '']])(
+    'rejects an empty JSON destination',
+    (...args) => {
+      const { status, output } = runMeasurer(
+        createFixture().root,
+        args as string[],
+      );
+      expect(status).toBe(1);
+      expect(output).toContain('--json needs a file path (use `-` for stdout)');
+    },
+  );
+
+  it('keeps stdout machine-readable when JSON is written there', () => {
+    const { status, stdout, stderr } = runMeasurer(createFixture().root, [
+      '--json',
+      '-',
+    ]);
+
+    expect(status).toBe(0);
+    expect(JSON.parse(stdout).total.files).toBe(11);
+    expect(stdout).not.toContain('by subsystem');
+    expect(stderr).toContain('by subsystem');
+    expect(stderr).toContain('7 budget(s) within limits');
+  });
+
+  it('runs the documented npm command through a JSON consumer', () => {
+    expect(readFileSync(measurer, 'utf8')).toContain(DOCUMENTED_JSON_COMMAND);
+    const { root } = createFixture();
+    const { status, stdout, stderr } = runPipeline(
+      root,
+      `${DOCUMENTED_JSON_COMMAND} | "${process.execPath}" parse-stdin.mjs`,
+    );
+
+    expect(status).toBe(0);
+    expect(stdout).toBe('11');
+    expect(stderr).toContain('by subsystem');
   });
 });

@@ -16,7 +16,11 @@
  * Run after `npm run build`:
  *   npm run measure-export                       table plus budget gate
  *   npm run measure-export -- --json report.json also write the raw numbers
+ *   npm run --silent measure-export -- --json -  raw numbers on stdout
  *   npm run measure-export -- --update-budget    ratchet scripts/budget.json
+ *
+ * The npm `--silent` flag is required when JSON goes to stdout; otherwise npm
+ * writes its script banner ahead of the JSON.
  */
 import {
   existsSync,
@@ -54,11 +58,18 @@ function parseArgv(argv) {
     } else if (arg === '--json') {
       options.json = argv[index + 1];
       index += 1;
-      if (options.json === undefined || options.json.startsWith('--')) {
+      if (
+        options.json === undefined ||
+        options.json.length === 0 ||
+        options.json.startsWith('--')
+      ) {
         die('--json needs a file path (use `-` for stdout)');
       }
     } else if (arg.startsWith('--json=')) {
       options.json = arg.slice('--json='.length);
+      if (options.json.length === 0) {
+        die('--json needs a file path (use `-` for stdout)');
+      }
     } else {
       die(`unknown argument: ${arg}`);
     }
@@ -187,22 +198,25 @@ const bytesForGroup = (id) =>
   groups.find((group) => group.id === id)?.bytes ?? 0;
 
 /**
- * What a cold visit to one route downloads: the document plus every exported
- * file it asks for before first paint. Resolving those references is why this
- * shares `exportLayout` with the integrity gate — under a repository-site base
- * path the markup says `/repo/_next/...` while the file is at `out/_next/...`,
- * and a hand-rolled prefix strip is how that breaks in forks only.
+ * A route's bootstrap set is its document plus directly linked stylesheets,
+ * preloads, module preloads, and scripts. It is deliberately narrower than
+ * "first load": images, media, `srcset` candidates, and assets referenced from
+ * CSS are covered by the export total, not attributed to a route here.
+ *
+ * Resolving the direct references shares `exportLayout` with the integrity
+ * gate because repository-site markup says `/repo/_next/...` while the file is
+ * at `out/_next/...`; hand-rolled prefix stripping breaks in forks only.
  */
-const FIRST_LOAD_RELS = new Set(['stylesheet', 'preload', 'modulepreload']);
+const BOOTSTRAP_RELS = new Set(['stylesheet', 'preload', 'modulepreload']);
 
-function referencedFiles(html, route) {
+function referencedBootstrapFiles(html, route) {
   const references = [
     ...tags(html, 'link')
       .filter((tag) =>
         (attribute(tag, 'rel') ?? '')
           .toLowerCase()
           .split(/\s+/)
-          .some((rel) => FIRST_LOAD_RELS.has(rel)),
+          .some((rel) => BOOTSTRAP_RELS.has(rel)),
       )
       .map((tag) => attribute(tag, 'href')),
     ...tags(html, 'script').map((tag) => attribute(tag, 'src')),
@@ -238,21 +252,21 @@ const routes = documents
       inlineSvgCounts.set(svg, (inlineSvgCounts.get(svg) ?? 0) + 1);
     }
 
-    let assetBytes = 0;
-    for (const file of referencedFiles(html, route)) {
-      assetBytes += bytesByPath.get(file) ?? statSync(file).size;
+    let linkedAssetBytes = 0;
+    for (const file of referencedBootstrapFiles(html, route)) {
+      linkedAssetBytes += bytesByPath.get(file) ?? statSync(file).size;
     }
 
     return {
       route,
       documentBytes: document.bytes,
-      assetBytes,
-      firstLoadBytes: document.bytes + assetBytes,
+      linkedAssetBytes,
+      bootstrapBytes: document.bytes + linkedAssetBytes,
     };
   })
   .sort(
     (a, b) =>
-      b.firstLoadBytes - a.firstLoadBytes || a.route.localeCompare(b.route),
+      b.bootstrapBytes - a.bootstrapBytes || a.route.localeCompare(b.route),
   );
 
 /**
@@ -329,10 +343,10 @@ const BUDGET_METRICS = [
     read: (data) => data.largestFiles[0]?.bytes ?? 0,
   },
   {
-    id: 'maxRouteFirstLoadBytes',
-    label: 'heaviest route first load',
+    id: 'maxRouteBootstrapBytes',
+    label: 'heaviest route bootstrap set',
     headroom: 0.15,
-    read: (data) => data.routes[0]?.firstLoadBytes ?? 0,
+    read: (data) => data.routes[0]?.bootstrapBytes ?? 0,
   },
   {
     id: 'repeatedInlineSvgBytes',
@@ -344,7 +358,11 @@ const BUDGET_METRICS = [
 
 /** Round up to the next KiB so the committed numbers read as decisions. */
 const withHeadroom = ({ headroom }, value) =>
-  Math.ceil((value * (1 + headroom)) / 1024) * 1024;
+  Math.max(1024, Math.ceil((value * (1 + headroom)) / 1024) * 1024);
+
+const isPolicyKey = (key) => key.startsWith('_');
+const describeBudgetValue = (value) =>
+  typeof value === 'number' ? String(value) : JSON.stringify(value);
 
 function readBudget() {
   if (!existsSync(BUDGET_PATH)) {
@@ -362,16 +380,47 @@ function readBudget() {
     die(`scripts/budget.json is not valid JSON: ${error.message}`);
   }
 
+  if (budget === null || typeof budget !== 'object' || Array.isArray(budget)) {
+    die(
+      'scripts/budget.json must be a JSON object mapping budget names to ' +
+        `positive byte counts, not ${describeBudgetValue(budget)}.`,
+    );
+  }
+
   // A typo in a budget key would otherwise read as "this metric is not gated",
   // which is the one failure mode a budget file must not have.
   const known = new Set(BUDGET_METRICS.map(({ id }) => id));
   const unknown = Object.keys(budget).filter(
-    (key) => !key.startsWith('_') && !known.has(key),
+    (key) => !isPolicyKey(key) && !known.has(key),
   );
   if (unknown.length > 0) {
     die(
       `scripts/budget.json has unknown budget(s): ${unknown.join(', ')}. ` +
         `Known budgets: ${[...known].join(', ')}.`,
+    );
+  }
+
+  const invalid = Object.entries(budget).filter(
+    ([key, value]) =>
+      !isPolicyKey(key) &&
+      !(Number.isSafeInteger(value) && /** @type {number} */ (value) > 0),
+  );
+  if (invalid.length > 0) {
+    die(
+      'scripts/budget.json has invalid budget(s): ' +
+        `${invalid
+          .map(([key, value]) => `${key} is ${describeBudgetValue(value)}`)
+          .join(', ')}. Every budget must be a positive whole number of bytes.`,
+    );
+  }
+
+  const missing = [...known].filter((key) => budget[key] === undefined);
+  if (missing.length > 0 && !options.updateBudget) {
+    die(
+      `scripts/budget.json is missing required budget(s): ${missing.join(
+        ', ',
+      )}. Restore them or regenerate the complete file with ` +
+        '`npm run measure-export -- --update-budget`.',
     );
   }
 
@@ -382,12 +431,11 @@ const budget = readBudget();
 
 const checks = BUDGET_METRICS.map((metric) => {
   const actual = metric.read(report);
-  const limit = budget[metric.id];
   return {
     id: metric.id,
     label: metric.label,
     actual,
-    limit: typeof limit === 'number' ? limit : undefined,
+    limit: budget[metric.id],
     suggested: withHeadroom(metric, actual),
   };
 }).map((check) => ({
@@ -408,6 +456,12 @@ report.budget = {
 // ---------------------------------------------------------------------------
 // Output
 // ---------------------------------------------------------------------------
+
+const jsonToStdout = options.json === '-';
+const log = (line) => {
+  if (jsonToStdout) console.error(line);
+  else console.log(line);
+};
 
 const count = (value) => value.toLocaleString('en-US');
 const fixed = (value) =>
@@ -434,13 +488,13 @@ function table(rows, alignRight) {
 }
 
 function section(heading, rows, alignRight) {
-  console.log(`\n  ${heading}`);
+  log(`\n  ${heading}`);
   for (const line of table(rows, alignRight)) {
-    console.log(`    ${line}`);
+    log(`    ${line}`);
   }
 }
 
-console.log(
+log(
   `\n${LABEL}: ${count(files.length)} files, ${count(totalBytes)} bytes ` +
     `(${kib(totalBytes)} KiB) in out/`,
 );
@@ -479,22 +533,22 @@ section(
 );
 
 section(
-  'heaviest first loads (document plus the CSS, JS, and fonts it pulls)',
+  'heaviest route bootstrap sets (document plus linked styles, scripts, and preloads)',
   [
-    ['route', 'document', 'assets', 'first load'],
+    ['route', 'document', 'linked assets', 'bootstrap'],
     ...routes
       .slice(0, 5)
       .map((route) => [
         route.route,
         count(route.documentBytes),
-        count(route.assetBytes),
-        count(route.firstLoadBytes),
+        count(route.linkedAssetBytes),
+        count(route.bootstrapBytes),
       ]),
   ],
   new Set([1, 2, 3]),
 );
 
-console.log(
+log(
   `\n  inline SVG: ${count(inlineSvg.bytes)} bytes across ${count(inlineSvg.distinct)} ` +
     `distinct icons, ${count(inlineSvg.repeatedBytes)} of it repeat ` +
     `(widest spread: ${count(inlineSvg.widestSpread)} documents)`,
@@ -519,11 +573,11 @@ section(
 
 if (options.json) {
   const serialized = `${JSON.stringify(report, null, 2)}\n`;
-  if (options.json === '-') {
+  if (jsonToStdout) {
     process.stdout.write(serialized);
   } else {
     writeFileSync(resolve(ROOT, options.json), serialized);
-    console.log(`\n  wrote ${options.json}`);
+    log(`\n  wrote ${options.json}`);
   }
 }
 
@@ -534,9 +588,7 @@ if (options.updateBudget) {
     next[metric.id] = check.suggested;
   }
   writeFileSync(BUDGET_PATH, `${JSON.stringify(next, null, 2)}\n`);
-  console.log(
-    '\n  ratcheted scripts/budget.json to the measured sizes plus headroom',
-  );
+  log('\n  ratcheted scripts/budget.json to the measured sizes plus headroom');
   process.exit(0);
 }
 
@@ -558,5 +610,4 @@ if (exceeded.length > 0) {
   process.exit(1);
 }
 
-const gated = checks.filter((check) => check.limit !== undefined).length;
-console.log(`\n${LABEL}: ${gated} budget(s) within limits\n`);
+log(`\n${LABEL}: ${checks.length} budget(s) within limits\n`);
