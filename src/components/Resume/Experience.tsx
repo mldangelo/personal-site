@@ -31,8 +31,18 @@ function isoYear(date: string): number {
   return Number.parseInt(date.slice(0, 4), 10);
 }
 
+/**
+ * A student-era job title.
+ *
+ * Anchored on word boundaries because the bare substring `intern` also appears
+ * inside `internal`: `/intern/i` demoted "Internal Tools Engineer" and "Head of
+ * Internal Systems" to the student-era tier. The noun form is accepted too, so
+ * "Engineering Internship" places itself without another edit here.
+ */
+const INTERN_TITLE = /\bintern(ship)?\b/i;
+
 function isEarlyCareer(job: Position): boolean {
-  if (/intern/i.test(job.position)) {
+  if (INTERN_TITLE.test(job.position)) {
     return true;
   }
 
@@ -42,23 +52,38 @@ function isEarlyCareer(job: Position): boolean {
 /**
  * How much weight a role should carry on the spine.
  *
- * The lead is derived from the newest substantive start date, not array
- * position. This keeps reordering the source data from silently changing the
- * visual hierarchy while still letting ongoing side roles remain primary.
+ * The lead is the first substantive role in the order the spine actually
+ * renders — `sortPositions` owns that order, and this reads it rather than
+ * keeping a second, independent notion of "newest".
+ *
+ * It used to key on the newest `startDate`, which named the same role only
+ * while the spine was start-date ordered. Ordering then moved to the end date,
+ * and then gained a part-time exception, and nothing tied the two together. The
+ * two answers can disagree — an ongoing role outranks a stint that started
+ * later but has already closed — and when they do, the heaviest entry on the
+ * page sits somewhere in the middle of the list. Two roles beginning in the
+ * same month were both handed the lead, for the same reason: a date is not an
+ * identity.
+ *
+ * Deriving the lead from the rendered order rather than from "which role is
+ * current" is deliberate. The tier is a claim about the page — the entry at the
+ * top of the spine is the one carrying the weight — so it has to follow
+ * whatever ordering the spine uses. It also has to survive a current role that
+ * is early-career: an ongoing internship is genuinely the current job and must
+ * still never lead, so the lead is the first entry the `early` tier declines.
+ *
+ * `positions` may be handed over in any order; the sort happens here.
  */
 export function tierFor(job: Position, positions: Position[]): JobTier {
   if (isEarlyCareer(job)) return 'early';
 
-  const newestStartDate = positions
-    .filter((position) => !isEarlyCareer(position))
-    .map((position) => position.startDate)
-    .sort((a, b) => b.localeCompare(a))[0];
+  const lead = sortPositions(positions).find(
+    (position) => !isEarlyCareer(position),
+  );
 
-  if (job.startDate === newestStartDate) {
-    return 'lead';
-  }
-
-  return 'primary';
+  // Identity, not date equality: two entries that share a date are still two
+  // entries, and only the one rendered first leads.
+  return job === lead ? 'lead' : 'primary';
 }
 
 export default function Experience({
@@ -67,9 +92,10 @@ export default function Experience({
   // cannot quietly become one read per role.
   now = Date.now(),
 }: ExperienceProps) {
-  // `tierFor` was written not to depend on array position; sorting here is the
-  // other half of that decision. Without it the spine rendered in whatever
-  // order the data file happened to be in, which ran backwards in the middle.
+  // Without this the spine rendered in whatever order the data file happened
+  // to be in, which ran backwards in the middle. `tierFor` reads the same
+  // `sortPositions` order, so the entry that renders first is the entry that
+  // leads however this list arrives.
   const positions = sortPositions(data);
 
   return (
