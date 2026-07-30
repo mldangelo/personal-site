@@ -96,7 +96,6 @@ export interface JsonResume {
   skills: ResumeSkill[];
   meta: {
     canonical: string;
-    lastModified: string;
   };
 }
 
@@ -109,15 +108,26 @@ const NAMED_ENTITIES: Record<string, string> = {
   quot: '"',
 };
 
+/** Unicode scalar values exclude surrogates and stop at U+10FFFF. */
+function isUnicodeScalarValue(codePoint: number): boolean {
+  return (
+    Number.isInteger(codePoint) &&
+    codePoint >= 0 &&
+    codePoint <= 0x10ffff &&
+    (codePoint < 0xd800 || codePoint > 0xdfff)
+  );
+}
+
 function decodeEntity(entity: string): string {
+  const literal = `&${entity};`;
   const numeric = entity.match(/^#(x)?([0-9a-f]+)$/i);
   if (numeric) {
     const codePoint = Number.parseInt(numeric[2], numeric[1] ? 16 : 10);
-    return Number.isNaN(codePoint)
-      ? `&${entity};`
-      : String.fromCodePoint(codePoint);
+    return isUnicodeScalarValue(codePoint)
+      ? String.fromCodePoint(codePoint)
+      : literal;
   }
-  return NAMED_ENTITIES[entity.toLowerCase()] ?? `&${entity};`;
+  return NAMED_ENTITIES[entity.toLowerCase()] ?? literal;
 }
 
 /**
@@ -127,8 +137,9 @@ function decodeEntity(entity: string): string {
  * HTML — `JobSummary` renders them through `markdown-to-jsx`, and three of them
  * carry real `<a href>` anchors. The rendered page depends on that markup, so
  * this strips it for the artifact rather than flattening the source data and
- * costing the page its links. The URLs are not lost: every employer's own
- * `url` is already a field on the work entry.
+ * costing the page its links. Anchor text survives, but inline destinations do
+ * not: JSON Resume summaries are plain strings. Each employer's own URL remains
+ * available separately on the work entry.
  *
  * Underscore emphasis is intentionally left alone: `_x_` would eat the
  * underscores out of an identifier like `snake_case_name`.
@@ -254,22 +265,6 @@ function buildSkills(): ResumeSkill[] {
   }));
 }
 
-/**
- * The most recent dated event in the work history — not the build clock. The
- * same discipline as `feed.xml`'s `lastBuildDate`: a timestamp read from the
- * clock would rewrite the artifact on every rebuild and could not be pinned by
- * a test.
- */
-function lastModified(): string {
-  const dates = work.flatMap((position) =>
-    [position.startDate, position.endDate].filter(
-      (date): date is string => !!date,
-    ),
-  );
-  // ISO dates sort lexicographically.
-  return `${dates.sort().at(-1)}T00:00:00Z`;
-}
-
 export function buildJsonResume(): JsonResume {
   return {
     $schema: RESUME_SCHEMA_URL,
@@ -279,7 +274,6 @@ export function buildJsonResume(): JsonResume {
     skills: buildSkills(),
     meta: {
       canonical: RESUME_JSON_URL,
-      lastModified: lastModified(),
     },
   };
 }

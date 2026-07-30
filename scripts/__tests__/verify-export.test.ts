@@ -97,7 +97,7 @@ function createFixture({ basePath = '' } = {}) {
       canonical: `${siteRoot}resume/`,
       siteRoot,
       content: `
-        <a href="${basePath}/resume.json">JSON</a>
+        <a href="../resume.json">JSON</a>
         <main id="resume">Resume</main>
       `,
     }),
@@ -363,7 +363,7 @@ describe('verify-export', () => {
   it('rejects a resume page that stops linking the artifact', () => {
     const root = createFixture();
     mutate(root, 'out/resume/index.html', (html) =>
-      html.replace('href="/resume.json"', 'href="/about/"'),
+      html.replace('href="../resume.json"', 'href="/about/"'),
     );
 
     const result = runVerifier(root);

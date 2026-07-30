@@ -62,6 +62,29 @@ describe('toPlainText', () => {
     );
   });
 
+  it('preserves invalid numeric entities instead of throwing or emitting surrogates', () => {
+    for (const entity of [
+      '&#1114112;',
+      '&#x110000;',
+      '&#99999999;',
+      '&#xD800;',
+      '&#xDFFF;',
+    ]) {
+      expect(() => toPlainText(`before ${entity} after`)).not.toThrow();
+      expect(toPlainText(`before ${entity} after`)).toBe(
+        `before ${entity} after`,
+      );
+    }
+  });
+
+  it('decodes valid scalar values at each side of the surrogate range', () => {
+    expect(toPlainText('&#xD7FF;&#xE000;&#x10FFFF;')).toBe(
+      `${String.fromCodePoint(0xd7ff)}${String.fromCodePoint(
+        0xe000,
+      )}${String.fromCodePoint(0x10ffff)}`,
+    );
+  });
+
   it('leaves underscores alone so identifiers survive', () => {
     expect(toPlainText('the snake_case_name field')).toBe(
       'the snake_case_name field',
@@ -213,13 +236,15 @@ describe('json resume document', () => {
     }
   });
 
-  it('keeps the canonical file-like and the timestamp off the build clock', () => {
+  it('keeps the canonical file-like without inventing a modification date', () => {
     expect(RESUME_JSON_PATH).toBe('/resume.json');
     expect(RESUME_JSON_URL).toBe(`${SITE_URL}/resume.json`);
     expect(resume.meta.canonical).toBe(RESUME_JSON_URL);
     expect(resume.meta.canonical).not.toMatch(/resume\.json\/$/);
-    // The newest dated event in the work history, not "now".
-    expect(resume.meta.lastModified).toBe('2026-03-09T00:00:00Z');
+    // Work dates describe employment, not edits to profile, education, skills,
+    // prose, or this generator. JSON Resume makes lastModified optional.
+    expect(resume.meta).not.toHaveProperty('lastModified');
+    expect(serializeJsonResume()).not.toContain('lastModified');
   });
 
   it('serializes to stable, pretty-printed bytes', () => {
