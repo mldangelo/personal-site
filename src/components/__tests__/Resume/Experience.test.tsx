@@ -110,6 +110,47 @@ describe('Experience', () => {
     expect(first?.querySelector('.job-company')?.textContent).toBe('Newest Co');
   });
 
+  /**
+   * The lead tier and the render order are two readings of the same list, and
+   * they used to be derived separately — the order from `timelineKey`, the lead
+   * from the newest `startDate`. When those disagree the heaviest entry on the
+   * page is not the one at the top of it. Here the brief stint began later but
+   * has closed, so the ongoing role renders first and has to carry the weight.
+   */
+  it('puts the lead tier on the role it renders first', () => {
+    render(
+      <Experience
+        data={[
+          {
+            ...mockJobs[0],
+            name: 'Long Ongoing Co',
+            startDate: '2015-01-01',
+            endDate: undefined,
+          },
+          {
+            ...mockJobs[1],
+            name: 'Brief Recent Co',
+            startDate: '2024-01-01',
+            endDate: '2024-06-01',
+          },
+        ]}
+        now={new Date('2026-07-28T12:00:00Z').getTime()}
+      />,
+    );
+
+    const tiers = Array.from(document.querySelectorAll('.jobs-container')).map(
+      (node) => ({
+        company: node.querySelector('.job-company')?.textContent,
+        lead: node.classList.contains('jobs-container--lead'),
+      }),
+    );
+
+    expect(tiers).toEqual([
+      { company: 'Long Ongoing Co', lead: true },
+      { company: 'Brief Recent Co', lead: false },
+    ]);
+  });
+
   it('measures every ongoing role against a single shared instant', () => {
     const now = new Date('2026-07-28T12:00:00Z').getTime();
 
