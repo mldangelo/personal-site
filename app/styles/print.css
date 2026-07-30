@@ -44,8 +44,18 @@
     padding-top: 0;
   }
 
-  /* Screen chrome has no meaning on paper. */
+  /* Screen chrome has no meaning on paper.
+   *
+   * `.skip-link` is the one that got missed, and the reason is worth keeping:
+   * it is a direct child of `<body>`, not of `.site-header`, so suppressing the
+   * header never touched it. On screen it hides by riding `transform:
+   * translateY(-200%)` out of a `position: fixed` box — and nothing in this
+   * file resets either property, so in print the fixed box resolves into flow
+   * and the accent-filled button lands on the page. It printed four times
+   * across a five-page résumé before anyone looked at a PDF. Anything appended
+   * to `<body>` outside `.site-wrapper` needs adding here explicitly. */
   body::before,
+  .skip-link,
   .site-header,
   .site-footer-new,
   .slide-menu,
