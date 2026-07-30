@@ -480,7 +480,7 @@ describe('verify-export', () => {
    * not the slug and is not derived from it, so no filename rule could see it.
    * The post's own Markdown can.
    */
-  it('reports a draft image filed in an arbitrarily named directory', () => {
+  it('rejects a draft image filed in an arbitrarily named directory', () => {
     const root = createFixture();
     draftWithBody(
       root,
@@ -489,7 +489,7 @@ describe('verify-export', () => {
     write(root, 'out/images/writing/codex-desktop-app-post/overview.webp');
 
     const result = runVerifier(root);
-    expect(result.status).toBe(0);
+    expect(result.status).toBe(1);
     expect(result.output).toContain(
       'images/writing/codex-desktop-app-post/overview.webp\n    draft post "secret-draft" references this file',
     );
@@ -498,24 +498,7 @@ describe('verify-export', () => {
     );
   });
 
-  /**
-   * A warning that only appears above a line reading `3 pages OK` is a warning
-   * nobody reads. The count rides on the success line too.
-   */
-  it('carries the warning count on the success line', () => {
-    const root = createFixture();
-    draftWithBody(root, '![Shot](/images/writing/loose/shot.webp)');
-    write(root, 'out/images/writing/loose/shot.webp');
-
-    const result = runVerifier(root);
-    expect(result.status).toBe(0);
-    expect(result.output).toContain(
-      'verify-export: 1 warning(s), not blocking the build',
-    );
-    expect(result.output).toContain('3 pages OK, 1 warning(s)');
-  });
-
-  it('reports a draft image declared only in frontmatter', () => {
+  it('rejects a draft image declared only in frontmatter', () => {
     const root = createFixture();
     write(
       root,
@@ -525,7 +508,7 @@ describe('verify-export', () => {
     write(root, 'out/images/elsewhere/hero.png');
 
     const result = runVerifier(root);
-    expect(result.status).toBe(0);
+    expect(result.status).toBe(1);
     expect(result.output).toContain(
       'images/elsewhere/hero.png\n    draft post "secret-draft" references this file',
     );

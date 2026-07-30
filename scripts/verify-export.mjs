@@ -31,17 +31,6 @@ const CONTENT = resolve(ROOT, 'content/writing');
 const failures = [];
 const fail = (page, message) => failures.push({ page, message });
 
-/**
- * Reported but not fatal.
- *
- * Everything else here is a defect in something the build produced, and the
- * build is the thing that can be fixed. A warning is for a true finding whose
- * remedy is a decision only the author can make — see
- * `DRAFT_REFERENCED_ASSETS_FAIL`.
- */
-const warnings = [];
-const warn = (page, message) => warnings.push({ page, message });
-
 function walk(dir, match) {
   const found = [];
   if (!existsSync(dir)) return found;
@@ -169,24 +158,6 @@ if (draftSlugs.length > 0) {
 }
 
 /**
- * Whether a file a draft's Markdown points at should block the build.
- *
- * `false`, deliberately, and this is the one line to flip to change that.
- *
- * The two draft-asset checks find different things. A file named after a draft
- * is one the build produced from an unpublished post, and the build is what gets
- * fixed — failing is right, and no author is inconvenienced by it. A file a
- * draft *references* is the author's own: committing the screenshots alongside
- * the draft that will use them is the normal way to write a post here, and the
- * remedy is a decision about the author's own working copy — move them out of
- * `public/` until the post ships, or accept the exposure knowingly. Failing
- * would make that decision by stopping every deploy from `main` until someone
- * happened to look, and the exposure is not undone by a red build; it is only
- * reported. So it is reported, loudly, by name, with the URL.
- */
-const DRAFT_REFERENCED_ASSETS_FAIL = false;
-
-/**
  * Files a draft declares as its own, wherever they were filed.
  *
  * This is the half of the draft-asset gate that does not go through names. The
@@ -199,11 +170,11 @@ for (const [route, slug] of draftOnlyAssetRoutes(posts)) {
   if (isDraftAsset(route)) continue;
   if (!exportedFileExists(publicPathForRoute(route))) continue;
 
-  (DRAFT_REFERENCED_ASSETS_FAIL ? fail : warn)(
+  fail(
     route.replace(/^\//, ''),
     `draft post "${slug}" references this file, so it is publicly fetchable at ` +
       `${siteUrlForRoute(route)}. Move it out of public/ until the post ships, ` +
-      'or leave it knowing it is readable.',
+      'or publish the post in the same change.',
   );
 }
 
@@ -730,15 +701,6 @@ if (!existsSync(resumeJsonPath)) {
   }
 }
 
-if (warnings.length > 0) {
-  console.warn(
-    `\nverify-export: ${warnings.length} warning(s), not blocking the build\n`,
-  );
-  for (const { page, message } of warnings) {
-    console.warn(`  ${page}\n    ${message}`);
-  }
-}
-
 if (failures.length > 0) {
   console.error(`\nverify-export: ${failures.length} problem(s)\n`);
   for (const { page, message } of failures) {
@@ -747,10 +709,6 @@ if (failures.length > 0) {
   process.exit(1);
 }
 
-// The warning count rides on the success line as well as being printed above,
-// so a passing run never reads as clean when it is not.
 console.log(
-  `verify-export: ${pages.length} pages OK` +
-    (warnings.length > 0 ? `, ${warnings.length} warning(s)` : '') +
-    ' (draft routes and assets, robots, ids/fragments, canonicals, complete share metadata, local images, internal links, sitemap/RSS, resume.json)',
+  `verify-export: ${pages.length} pages OK (draft routes and assets, robots, ids/fragments, canonicals, complete share metadata, local images, internal links, sitemap/RSS, resume.json)`,
 );
