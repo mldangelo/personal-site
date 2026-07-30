@@ -9,9 +9,17 @@ export default function CategoryButton({
   isActive,
   label,
 }: CategoryButtonProps) {
+  const isAll = label === 'All';
+
   return (
     <button
-      className={`skillbutton ${isActive ? 'skillbutton-active' : ''}`}
+      className={[
+        'skillbutton',
+        isAll ? 'skillbutton--all' : '',
+        isActive ? 'skillbutton-active' : '',
+      ]
+        .filter(Boolean)
+        .join(' ')}
       type="button"
       onClick={() => handleClick(label)}
       aria-pressed={isActive}

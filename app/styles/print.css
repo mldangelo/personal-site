@@ -1,0 +1,240 @@
+/* ========================================
+   PRINT
+   The resume is the page people actually print, and the screen design
+   is already close to a print design: hairlines, a dated gutter, and a
+   real reading serif. This mostly gets the screen chrome out of the way,
+   forces ink-on-paper colour, and controls where pages break.
+   ======================================== */
+
+@media print {
+  /* Colour is unreliable and expensive in print; the whole document
+     goes to black on white regardless of the active theme. */
+  :root,
+  [data-theme='dark'],
+  [data-theme='light'] {
+    --color-bg: #fff;
+    --color-bg-alt: #fff;
+    --color-fg: #000;
+    --color-fg-bold: #000;
+    --color-fg-light: #333;
+    --color-accent: #000;
+    --color-accent-hover: #000;
+    --color-signal: #000;
+    --color-signal-mark: #000;
+    --color-border: rgba(0, 0, 0, 0.28);
+    --color-border-alt: rgba(0, 0, 0, 0.45);
+    --color-border-bg: rgba(0, 0, 0, 0.18);
+    --color-surface-subtle: transparent;
+    --color-surface-hover: transparent;
+  }
+
+  @page {
+    margin: 16mm 14mm;
+  }
+
+  html {
+    background: #fff;
+  }
+
+  body {
+    background: #fff !important;
+    color: #000;
+    font-size: 10.5pt;
+    line-height: 1.45;
+    padding-top: 0;
+  }
+
+  /* Screen chrome has no meaning on paper. */
+  body::before,
+  .site-header,
+  .site-footer-new,
+  .slide-menu,
+  .slide-menu-overlay,
+  .hamburger-container,
+  .theme-toggle,
+  .reading-progress,
+  .resume-nav,
+  .hero-bg,
+  .writing-rss-link,
+  .about-section-nav,
+  .about-section-heading-hash {
+    display: none !important;
+  }
+
+  .page-main,
+  .page-main--hero,
+  .resume-page,
+  .about-page,
+  .writing-page,
+  .post-page {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .page-container {
+    min-height: 0;
+  }
+
+  /* Contact details belong on a printed resume, and the screen layout puts
+     them only in the footer this hides. Rendered as real markup by
+     ResumeContact rather than CSS content, so it is selectable and stays in
+     step with the shared profile. */
+  .resume-print-contact {
+    display: block;
+    margin-top: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 8.5pt;
+    font-style: normal;
+    letter-spacing: 0.04em;
+    color: #333;
+  }
+
+  .resume-print-contact a {
+    color: inherit;
+    text-decoration: none;
+    background-image: none;
+  }
+
+  .resume-title,
+  .stats-title,
+  .page-title {
+    font-size: 22pt;
+  }
+
+  .resume-summary {
+    font-size: 10pt;
+    max-width: none;
+  }
+
+  .resume-content {
+    gap: 1.5rem;
+    padding-top: 1rem;
+  }
+
+  /* Keep a role and its bullets on one page wherever the page allows. */
+  .jobs-container,
+  .degree-container,
+  .about-section--log li,
+  .writing-item,
+  .course-container {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .jobs-container {
+    padding-bottom: 1.25rem;
+    grid-template-columns: 9rem minmax(0, 1fr);
+    gap: 0 1.5rem;
+  }
+
+  /* The spine and its ticks are screen scaffolding; on paper the dated
+     gutter already does that work, and hairlines cost toner. */
+  .jobs-container::before,
+  .job-marker,
+  .about-section--log .log-entry::before,
+  .about-section--log .log-entry::after {
+    display: none;
+  }
+
+  .about-section--log ul {
+    padding-left: 1.1rem;
+    list-style: disc;
+  }
+
+  /* The entries are grid containers on screen; restore list semantics so the
+     disc markers above actually render. */
+  .about-section--log .log-entry {
+    display: list-item;
+    padding-left: 0;
+  }
+
+  .log-entry-marker {
+    text-align: left;
+    padding-top: 0;
+    margin-right: 0.5em;
+  }
+
+  .log-entry-marker:empty {
+    display: none;
+  }
+
+  .log-entry-body {
+    display: inline;
+  }
+
+  .jobs-container--lead header h3 {
+    font-size: 14pt;
+  }
+
+  .jobs-container header h3 {
+    font-size: 12pt;
+    margin-bottom: 0.35rem;
+  }
+
+  .jobs-container .points li {
+    font-size: 9.5pt;
+    margin-bottom: 0.25rem;
+  }
+
+  .summary,
+  .jobs-container--lead .summary {
+    font-size: 10pt;
+  }
+
+  .stat-table-value {
+    font-size: 14pt;
+  }
+
+  /* Section headers should not be stranded at the foot of a page. */
+  .resume-section,
+  .about-section {
+    break-before: auto;
+  }
+
+  .resume-page .title h2,
+  .about-section h2,
+  .stats-section-title {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  /* Filter controls do nothing on paper, and every skill prints regardless
+     of what is selected on screen — the groups stay in the DOM precisely so
+     this override can reach them. */
+  .skill-button-container {
+    display: none;
+  }
+
+  .skill-group[hidden] {
+    display: block !important;
+  }
+
+  .skill-tag,
+  .tech-tag {
+    border-color: rgba(0, 0, 0, 0.35);
+  }
+
+  .skill-tag::before {
+    display: none;
+  }
+
+  /* Reveal destinations for links that are not obvious from their text. */
+  .about-content a[href^='http']::after,
+  .prose a[href^='http']::after {
+    content: ' (' attr(href) ')';
+    font-family: var(--font-mono);
+    font-size: 8pt;
+    word-break: break-all;
+  }
+
+  a {
+    color: #000;
+    background-image: none !important;
+  }
+
+  img {
+    max-width: 100% !important;
+    filter: grayscale(1) !important;
+  }
+}

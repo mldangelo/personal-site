@@ -1,15 +1,18 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import routes from '../../data/routes';
+import { isActiveRoute } from '../../lib/routes';
 import SlideMenu from './SlideMenu';
 
 const MENU_ID = 'mobile-nav-menu';
 
 export default function Hamburger() {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
@@ -22,14 +25,39 @@ export default function Hamburger() {
 
   const slideMenu = (
     <SlideMenu id={MENU_ID} isOpen={open} onClose={closeMenu} position="right">
+      {/* The trap keeps focus inside the dialog, so it needs a way out that
+          is not the Escape key alone. */}
+      <button
+        type="button"
+        className="slide-menu-close"
+        onClick={closeMenu}
+        aria-label="Close navigation menu"
+      >
+        <span aria-hidden="true">×</span>
+      </button>
       <ul className="hamburger-ul">
-        {routes.map((l) => (
-          <li key={l.label}>
-            <Link href={l.path} onClick={closeMenu}>
-              <h3 className={l.index ? 'index-li' : undefined}>{l.label}</h3>
-            </Link>
-          </li>
-        ))}
+        {routes
+          .filter((l) => l.primary !== false)
+          .map((l) => {
+            const active = isActiveRoute(pathname, l.path);
+
+            return (
+              <li key={l.label}>
+                {/* Navigation labels, not document sections — these were <h3>,
+                  which put six phantom headings into the outline. */}
+                <Link
+                  href={l.path}
+                  onClick={closeMenu}
+                  className={active ? 'active' : undefined}
+                  aria-current={active ? 'page' : undefined}
+                >
+                  <span className={l.index ? 'index-li' : undefined}>
+                    {l.label}
+                  </span>
+                </Link>
+              </li>
+            );
+          })}
       </ul>
     </SlideMenu>
   );
@@ -37,7 +65,7 @@ export default function Hamburger() {
   return (
     <>
       <div className="hamburger-container">
-        <nav className="main" id="hamburger-nav">
+        <div className="main" id="hamburger-nav">
           <ul>
             <li className="menu">
               <button
@@ -61,7 +89,7 @@ export default function Hamburger() {
               </button>
             </li>
           </ul>
-        </nav>
+        </div>
       </div>
       {mounted && createPortal(slideMenu, document.body)}
     </>

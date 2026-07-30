@@ -21,13 +21,6 @@ describe('References', () => {
     expect(link).toHaveAttribute('href', '/contact');
   });
 
-  it('has an anchor for navigation', () => {
-    render(<References />);
-
-    const anchor = document.getElementById('references');
-    expect(anchor).toBeInTheDocument();
-  });
-
   it('displays as minimal inline text', () => {
     render(<References />);
 

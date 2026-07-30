@@ -1,147 +1,85 @@
 /* ========================================
-   SKILL BAR COMPONENT
-   Animated progress bars with labels
+   SKILL CONTROLS
+   Filter buttons and skill layout helpers
    ======================================== */
 
 @layer components {
-  /* Skill bar */
-  .skillbar {
-    background: var(--color-border-bg);
-    border-radius: var(--radius-xs);
-    display: block;
-    height: 2.25em;
-    margin-bottom: 1em;
-    overflow: hidden;
-    position: relative;
-    transition: opacity var(--duration-fast) ease;
-    width: 100%;
-  }
-
-  .skillbar:hover {
-    opacity: 0.85;
-  }
-
-  .skillbar-title {
-    /* Use CSS custom property if set, fallback to accent */
-    background: var(--skillbar-color, var(--color-accent));
-    border-radius: var(--radius-xs) 0 0 var(--radius-xs);
-    color: var(--color-bg);
-    font-size: var(--text-base);
-    font-weight: var(--font-weight-medium);
-    height: 100%;
-    left: 0;
-    min-width: 100px;
-    position: absolute;
-    top: 0;
-    z-index: 2;
-  }
-
-  .skillbar-title span {
-    align-items: center;
-    background: var(--color-overlay-dark);
-    display: flex;
-    height: 100%;
-    padding: 0 1em;
-  }
-
-  /* Text color classes for skill bar contrast */
-  .skillbar-title--light {
-    color: var(--color-white);
-  }
-
-  .skillbar-title--light span {
-    background: rgba(0, 0, 0, 0.2);
-  }
-
-  .skillbar-title--dark {
-    color: var(--color-fg);
-  }
-
-  .skillbar-title--dark span {
-    background: rgba(255, 255, 255, 0.2);
-  }
-
-  .skillbar-bar {
-    /* Use CSS custom property if set, fallback to accent */
-    background: var(--skillbar-color, var(--color-accent));
-    height: 100%;
-    position: relative;
-    transition: width var(--duration-skill) ease-in-out;
-    width: 0;
-  }
-
-  .skill-bar-percent {
-    align-items: center;
-    color: var(--color-fg-light);
-    display: flex;
-    font-family: var(--font-heading);
-    font-size: var(--text-sm);
-    height: 100%;
-    letter-spacing: var(--tracking-tight);
-    position: absolute;
-    right: 1em;
-    top: 0;
-    z-index: 1;
-  }
-
-  /* Skill buttons - modern pill style */
+  /* Filter switches — squared, mono, and unlit until selected. */
   .skillbutton {
     appearance: none;
-    background-color: var(--color-bg);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-full);
-    color: var(--color-fg);
+    background-color: transparent;
+    border: var(--rule) solid var(--color-control-border);
+    border-radius: var(--radius-sm);
+    color: var(--color-fg-light);
     cursor: pointer;
     display: inline-block;
-    font-family: var(--font-sans);
-    font-size: var(--text-sm);
+    font-family: var(--font-mono);
+    font-size: var(--text-ui);
     font-weight: var(--font-weight-medium);
-    letter-spacing: var(--tracking-normal);
-    padding: 0.5em 1em;
-    text-transform: none;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    min-height: 2.75rem;
+    padding: 0.4em 0.7em;
     transition:
       background-color var(--duration-fast) ease,
       border-color var(--duration-fast) ease,
-      box-shadow var(--duration-fast) ease,
       color var(--duration-fast) ease;
   }
 
   .skillbutton:hover {
-    border-color: var(--color-accent);
-    color: var(--color-accent);
-    background: var(--color-accent-light);
+    border-color: var(--color-fg-light);
+    color: var(--color-fg-bold);
+    background: var(--color-surface-subtle);
   }
 
   .skillbutton:focus-visible {
-    border-color: var(--color-accent);
-    box-shadow: 0 0 0 2px var(--color-accent-light);
-    color: var(--color-accent);
-    outline: none;
+    outline: var(--rule-strong) solid var(--color-accent);
+    outline-offset: 2px;
   }
 
   .skillbutton-active {
-    background-color: var(--color-accent);
-    border-color: var(--color-accent);
-    color: var(--color-white);
-    box-shadow: 0 0 0 2px var(--color-accent-light);
+    background-color: var(--color-accent-fill);
+    border-color: var(--color-accent-fill);
+    color: var(--color-on-accent);
+  }
+
+  .skillbutton-active:hover {
+    background-color: var(--color-accent-fill-hover);
+    border-color: var(--color-accent-fill-hover);
+    color: var(--color-on-accent);
+  }
+
+  /* "All" is a reset, not another category. Keep the target full-sized while
+     removing the filled chip that otherwise dominates the filter row. */
+  .skillbutton--all,
+  .skillbutton--all:hover,
+  .skillbutton--all.skillbutton-active,
+  .skillbutton--all.skillbutton-active:hover {
+    background: transparent;
+    border-color: transparent;
+  }
+
+  .skillbutton--all.skillbutton-active {
+    color: var(--color-accent);
+    border-bottom-color: var(--color-accent);
+  }
+
+  .skillbutton--all.skillbutton-active:hover {
+    border-bottom-color: var(--color-accent);
   }
 
   /* Skill section containers */
   .skill-button-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5em;
+    gap: 0.25rem;
     justify-content: flex-start;
-    margin-bottom: 2em;
+    margin-bottom: 1.5rem;
   }
 
-  @media (max-width: 736px) {
+  @media (max-width: 735px) {
     .skill-button-container {
       justify-content: center;
     }
-  }
-
-  .skill-row-container {
-    margin-top: 1em;
   }
 }

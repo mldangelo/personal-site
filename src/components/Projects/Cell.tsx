@@ -18,17 +18,21 @@ export default function Cell({ data }: CellProps) {
       <div className="project-card-image">
         <Image
           src={image}
-          alt={title}
+          alt=""
           width={PROJECT_IMAGE.width}
           height={PROJECT_IMAGE.height}
           sizes="(max-width: 600px) 100vw, 50vw"
         />
-        <div className="project-card-overlay" />
       </div>
 
       <div className="project-card-content">
         <header className="project-card-header">
           <h3 className="project-card-title">{title}</h3>
+          {hasLink && (
+            <span className="project-card-affordance" aria-hidden="true">
+              ↗
+            </span>
+          )}
           {subtitle && <p className="project-card-subtitle">{subtitle}</p>}
         </header>
 
@@ -53,10 +57,10 @@ export default function Cell({ data }: CellProps) {
 
   return (
     <article
-      className={`project-card ${featured ? 'project-card--featured' : ''} ${!hasLink ? 'project-card--static' : ''}`}
+      className={`project-card ${featured ? 'project-card--featured' : ''} ${hasLink ? 'project-card--linked' : 'project-card--static'}`}
     >
       {hasLink ? (
-        <a href={link} className="project-card-link">
+        <a href={link} className="project-card-link" aria-label={title}>
           {cardContent}
         </a>
       ) : (

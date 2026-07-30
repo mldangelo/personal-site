@@ -46,13 +46,6 @@ describe('Experience', () => {
     expect(screen.getByText(/Software Engineer/)).toBeInTheDocument();
   });
 
-  it('has anchor link for navigation', () => {
-    render(<Experience data={mockJobs} />);
-
-    const anchor = document.getElementById('experience');
-    expect(anchor).toBeInTheDocument();
-  });
-
   it('renders jobs with company links', () => {
     render(<Experience data={mockJobs} />);
 

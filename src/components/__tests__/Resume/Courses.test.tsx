@@ -61,19 +61,31 @@ describe('Courses', () => {
   });
 
   it('sorts courses by university then number', () => {
-    render(<Courses data={mockCourses} />);
+    const unsortedCourses = [mockCourses[2], mockCourses[1], mockCourses[0]];
+
+    render(<Courses data={unsortedCourses} />);
 
     const items = screen.getAllByRole('listitem');
-    // Stanford courses should come before MIT (reverse alpha)
-    // And within Stanford, sorted by number
-    expect(items.length).toBe(3);
+    expect(items.map((item) => item.textContent)).toEqual([
+      'CS 229:Machine Learning',
+      'CS 230:Deep Learning',
+      'CS 161:Algorithms',
+    ]);
   });
 
-  it('has anchor link for navigation', () => {
-    render(<Courses data={mockCourses} />);
+  it('does not mutate the source array while sorting', () => {
+    const unsortedCourses = [
+      { ...mockCourses[2] },
+      { ...mockCourses[1] },
+      { ...mockCourses[0] },
+    ];
+    const originalOrder = unsortedCourses.map((course) => course.title);
 
-    const anchor = document.getElementById('courses');
-    expect(anchor).toBeInTheDocument();
+    render(<Courses data={unsortedCourses} />);
+
+    expect(unsortedCourses.map((course) => course.title)).toEqual(
+      originalOrder,
+    );
   });
 });
 
@@ -104,5 +116,11 @@ describe('Course', () => {
 
     const item = screen.getByRole('listitem');
     expect(item).toBeInTheDocument();
+  });
+
+  it('does not create a phantom heading for the course code', () => {
+    render(<Course data={mockCourse} />);
+
+    expect(screen.queryByRole('heading')).not.toBeInTheDocument();
   });
 });

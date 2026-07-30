@@ -1,45 +1,29 @@
 import type { Metadata } from 'next';
-import { Raleway, Source_Sans_3 } from 'next/font/google';
 import Script from 'next/script';
 
+import { SiteSchema } from '@/components/Schema';
 import GoogleAnalytics from '@/components/Template/GoogleAnalytics';
 import Navigation from '@/components/Template/Navigation';
+import { MAIN_CONTENT_ID } from '@/components/Template/PageWrapper';
 import ScrollToTop from '@/components/Template/ScrollToTop';
-import { AUTHOR_NAME, SITE_URL, TWITTER_HANDLE } from '@/lib/utils';
+import { sharedOpenGraph, sharedTwitter } from '@/lib/metadata';
+import { AUTHOR_NAME, SITE_DESCRIPTION, SITE_URL } from '@/lib/utils';
+import { bricolage, jetbrainsMono, newsreader } from './fonts';
 import './tailwind.css';
-
-const sourceSans = Source_Sans_3({
-  weight: ['400', '700'],
-  subsets: ['latin'],
-  variable: '--font-source-sans',
-  display: 'swap',
-  preload: true,
-  adjustFontFallback: true,
-});
-
-const raleway = Raleway({
-  weight: ['400', '800'],
-  subsets: ['latin'],
-  variable: '--font-raleway',
-  display: 'swap',
-  preload: true,
-  adjustFontFallback: true,
-});
-
-const siteDescription =
-  'Member of the Technical Staff at OpenAI, working on Promptfoo and agent security. Previously co-founded Promptfoo, Arthena, and Matroid, and led engineering at Smile ID.';
 
 export const metadata: Metadata = {
   title: {
     default: AUTHOR_NAME,
     template: `%s | ${AUTHOR_NAME}`,
   },
-  description: siteDescription,
+  description: SITE_DESCRIPTION,
   keywords: [
     AUTHOR_NAME,
     'OpenAI',
     'Promptfoo',
-    'agent security',
+    'Codex Security',
+    'AI security',
+    'application security',
     'LLM security',
     'machine learning',
     'startup founder',
@@ -48,36 +32,28 @@ export const metadata: Metadata = {
   authors: [{ name: AUTHOR_NAME }],
   creator: AUTHOR_NAME,
   metadataBase: new URL(SITE_URL),
+  // The root is the origin of the share metadata, so it uses the same shared
+  // blocks as every other page. Hand-writing them here is what left the
+  // homepage advertising a different og:image:alt from the rest of the site
+  // for the identical image.
   openGraph: {
+    ...sharedOpenGraph,
     type: 'website',
-    locale: 'en_US',
-    url: SITE_URL,
-    siteName: AUTHOR_NAME,
+    url: `${SITE_URL}/`,
     title: AUTHOR_NAME,
-    description: siteDescription,
-    images: [
-      {
-        url: '/images/me.jpg',
-        width: 1200,
-        height: 630,
-        alt: AUTHOR_NAME,
-      },
-    ],
+    description: SITE_DESCRIPTION,
   },
   twitter: {
-    card: 'summary_large_image',
-    site: TWITTER_HANDLE,
-    creator: TWITTER_HANDLE,
+    ...sharedTwitter,
     title: AUTHOR_NAME,
-    description: siteDescription,
-    images: ['/images/me.jpg'],
+    description: SITE_DESCRIPTION,
   },
+  // Only the snippet/preview hints are declared globally. `index, follow` is
+  // already the default, and emitting it here meant every page that sets
+  // `noindex` — the 404, the legacy post route — shipped with contradictory
+  // robots tags that a crawler is free to resolve either way.
   robots: {
-    index: true,
-    follow: true,
     googleBot: {
-      index: true,
-      follow: true,
       'max-video-preview': -1,
       'max-image-preview': 'large',
       'max-snippet': -1,
@@ -93,7 +69,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${sourceSans.variable} ${raleway.variable}`}
+      className={`${bricolage.variable} ${newsreader.variable} ${jetbrainsMono.variable}`}
       suppressHydrationWarning
     >
       <head>
@@ -101,8 +77,15 @@ export default function RootLayout({
         <Script id="theme-init" strategy="beforeInteractive">
           {`(function(){try{var t=window.localStorage.getItem('theme');if(t==='dark'||t==='light'){document.documentElement.setAttribute('data-theme',t)}else if(window.matchMedia('(prefers-color-scheme:dark)').matches){document.documentElement.setAttribute('data-theme','dark')}else{document.documentElement.setAttribute('data-theme','light')}}catch(e){}})();`}
         </Script>
+        <SiteSchema />
       </head>
       <body>
+        {/* First focusable element on the page. The About and Resume pages
+            are thousands of pixels long, so tabbing past the nav to reach
+            content is otherwise the only route in. */}
+        <a href={`#${MAIN_CONTENT_ID}`} className="skip-link">
+          Skip to content
+        </a>
         <ScrollToTop />
         <div className="site-wrapper">
           <Navigation />

@@ -29,4 +29,13 @@ describe('ContactIcons', () => {
     const links = screen.getAllByRole('link');
     expect(links.length).toBeGreaterThan(0);
   });
+
+  it('can omit email when the page already has a primary email action', () => {
+    render(<ContactIcons includeEmail={false} />);
+
+    expect(
+      screen.queryByRole('link', { name: /email/i }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /github/i })).toBeInTheDocument();
+  });
 });

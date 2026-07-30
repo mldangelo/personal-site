@@ -1,11 +1,52 @@
 'use client';
 
 import Markdown from 'markdown-to-jsx';
+import { Children, type ReactNode } from 'react';
 import { createUniqueHeadingIds } from '@/lib/anchors';
+import { extractLogMarker } from '@/lib/logEntry';
 
 interface AboutContentProps {
   markdown: string;
 }
+
+const LOG_VARIANT = 'about-section--log';
+
+/**
+ * A single log entry, with any leading temporal marker lifted into the gutter.
+ *
+ * markdown-to-jsx has already parsed the entry, so the marker lives in the
+ * first child when that child is plain text. Entries that open with a link or
+ * with no marker at all keep their text intact and simply leave the gutter
+ * empty — the alternative would be rewording the source to fit the layout.
+ */
+function LogEntry({ children }: { children?: ReactNode }) {
+  const nodes = Children.toArray(children);
+  const [first, ...rest] = nodes;
+  const extracted = typeof first === 'string' ? extractLogMarker(first) : null;
+
+  if (!extracted) {
+    return (
+      <li className="log-entry">
+        <span className="log-entry-marker" />
+        <span className="log-entry-body">{children}</span>
+      </li>
+    );
+  }
+
+  return (
+    <li className="log-entry">
+      <span className="log-entry-marker">{extracted.marker}</span>
+      <span className="log-entry-body">
+        {extracted.rest}
+        {rest}
+      </span>
+    </li>
+  );
+}
+
+const LOG_MARKDOWN_OPTIONS = {
+  overrides: { li: { component: LogEntry } },
+};
 
 interface AboutSection {
   body: string;
@@ -18,7 +59,14 @@ interface ParsedAboutSection {
   title: string;
 }
 
+/**
+ * Sections whose lists are chronological get the log treatment: entries
+ * hang off a spine with a tick each, the same device the resume uses.
+ * The rest stay as plain lists, because order carries no meaning there.
+ */
 const sectionVariants: Record<string, string> = {
+  'Some History': 'about-section--log',
+  'Travel / Geography': 'about-section--log',
   'Fun Facts': 'about-section--compact',
   'I Like': 'about-section--compact',
   'I Dream Of': 'about-section--compact',
@@ -83,6 +131,10 @@ function getSectionClassName(title: string) {
   return variant ? `about-section ${variant}` : 'about-section';
 }
 
+function isLogSection(title: string) {
+  return sectionVariants[title] === LOG_VARIANT;
+}
+
 export default function AboutContent({ markdown }: AboutContentProps) {
   const { intro, sections } = splitAboutMarkdown(markdown);
 
@@ -119,7 +171,11 @@ export default function AboutContent({ markdown }: AboutContentProps) {
               </span>
             </a>
           </h2>
-          <Markdown>{section.body}</Markdown>
+          {isLogSection(section.title) ? (
+            <Markdown options={LOG_MARKDOWN_OPTIONS}>{section.body}</Markdown>
+          ) : (
+            <Markdown>{section.body}</Markdown>
+          )}
         </section>
       ))}
     </article>

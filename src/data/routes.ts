@@ -1,13 +1,16 @@
+import { AUTHOR_NAME } from '@/lib/utils';
+
 export interface Route {
   label: string;
   path: string;
   index?: boolean;
+  primary?: boolean;
 }
 
 const routes: Route[] = [
   {
     index: true,
-    label: "Michael D'Angelo",
+    label: AUTHOR_NAME,
     path: '/',
   },
   {
@@ -25,6 +28,7 @@ const routes: Route[] = [
   {
     label: 'Stats',
     path: '/stats',
+    primary: false,
   },
   {
     label: 'Contact',
@@ -33,6 +37,7 @@ const routes: Route[] = [
   {
     label: 'Archive',
     path: '/projects',
+    primary: false,
   },
 ];
 

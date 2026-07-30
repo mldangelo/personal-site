@@ -12,7 +12,7 @@ export interface Project {
 const data: Project[] = [
   {
     title: 'Nearest Dollar',
-    subtitle: '2015 BVP Hackathon',
+    subtitle: 'BVP Hackathon',
     image: '/images/projects/nearestdollar.jpg',
     date: '2015-11-20',
     desc: 'Connected to bank accounts to round up purchases and donate spare change to charity.',

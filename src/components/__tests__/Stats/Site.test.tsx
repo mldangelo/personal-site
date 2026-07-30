@@ -96,7 +96,9 @@ describe('Site', () => {
       screen.getByText('Number of people watching this repository'),
     ).toBeInTheDocument();
     expect(screen.getByText('Number of forks')).toBeInTheDocument();
-    expect(screen.getByText('Open github issues')).toBeInTheDocument();
+    expect(
+      screen.getByText('Open github issues and pull requests'),
+    ).toBeInTheDocument();
     expect(screen.getByText('Last updated at')).toBeInTheDocument();
   });
 
@@ -108,5 +110,19 @@ describe('Site', () => {
 
     // Should still render with fallback data
     expect(screen.getByRole('table')).toBeInTheDocument();
+    expect(screen.getByText(/approximate github readings/i)).toHaveAttribute(
+      'data-source',
+      'fallback',
+    );
+  });
+
+  it('labels live GitHub readings with their provenance', async () => {
+    const Component = await Site();
+    render(Component);
+
+    expect(screen.getByText(/fetched at build time/i)).toHaveAttribute(
+      'data-source',
+      'github',
+    );
   });
 });

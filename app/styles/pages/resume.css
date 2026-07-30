@@ -2,42 +2,32 @@
    RESUME PAGE STYLES
    ======================================== */
 
-.resume-page .link-container {
-  padding-top: 1em;
-}
-
-.resume-page .link-container h4 {
-  border-bottom: none;
-  display: inline-flex;
-  text-decoration: none;
-}
-
-.resume-page .link-container h4 a {
-  margin: 0;
-  padding: 0 0.5em;
-}
-
+/* Section headers sit left, under a heavy rule — the same device
+   that opens the readout strip on the home page. */
 .resume-page .education .title,
 .resume-page .experience .title,
 .resume-page .skills .title,
 .resume-page .courses .title,
 .resume-page .references .title {
   margin-bottom: 2.5rem;
-  text-align: center;
+  text-align: left;
 }
 
-.resume-page .education .title h3,
-.resume-page .experience .title h3,
-.resume-page .skills .title h3,
-.resume-page .courses .title h3,
-.resume-page .references .title h3 {
-  font-size: var(--text-3xl);
-  font-weight: var(--font-weight-black);
-  letter-spacing: var(--tracking-tight);
-  color: var(--color-fg-bold);
-  display: inline-block;
-  padding-bottom: 0.75rem;
-  border-bottom: 3px solid var(--color-accent);
+.resume-page .education .title h2,
+.resume-page .experience .title h2,
+.resume-page .skills .title h2,
+.resume-page .courses .title h2,
+.resume-page .references .title h2 {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--color-fg-light);
+  display: block;
+  margin: 0;
+  padding-top: 0.875rem;
+  border-top: var(--rule) solid var(--color-fg-bold);
 }
 
 .resume-page .skills {
@@ -55,13 +45,13 @@
 .resume-page .courses .course-list {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
+  gap: 0 3rem;
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-@media (max-width: 736px) {
+@media (max-width: 735px) {
   .resume-page .courses .course-list {
     grid-template-columns: 1fr;
   }
@@ -73,103 +63,113 @@
 
 /* Resume page specific */
 .resume-page {
-  max-width: 880px;
+  max-width: var(--measure-page);
   margin: 0 auto;
 }
 
 .resume-header {
-  text-align: center;
+  text-align: left;
   margin-bottom: 2rem;
 }
 
 .resume-title {
-  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
   font-weight: var(--font-weight-black);
-  letter-spacing: var(--tracking-tight);
+  letter-spacing: var(--tracking-display);
   margin-bottom: 1.25rem;
   color: var(--color-fg-bold);
 }
 
 .resume-summary {
-  font-size: var(--text-lg);
-  line-height: 1.7;
+  font-size: var(--text-md);
+  line-height: var(--leading-snug);
   color: var(--color-fg);
-  max-width: 640px;
-  margin: 0 auto;
+  max-width: 62ch;
+  margin: 0;
 }
 
+/* Section index — a row of mono labels on a rule, not a pill bar. */
 .resume-nav {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  gap: var(--spacing-2);
-  margin-top: var(--spacing-6);
+  justify-content: flex-start;
+  /* Row gap matters: the links wrap below ~375px, and the active indicator
+     used to be positioned relative to the bar rather than the link, so it
+     drew straight through the second row. */
+  gap: 0.5rem 1.75rem;
+  margin-top: var(--spacing-8);
   margin-bottom: var(--spacing-4);
   position: sticky;
   top: var(--header-height);
   z-index: var(--z-sticky);
-  background: color-mix(in srgb, var(--color-bg-alt) 92%, transparent);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  padding: var(--spacing-4) var(--spacing-6);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--color-border-bg);
-  box-shadow: var(--shadow-sm);
+  background: var(--color-bg-alt);
+  padding: 0.75rem 0;
+  border-top: var(--rule) solid var(--color-border);
+  border-bottom: var(--rule) solid var(--color-border);
 }
 
-@media (max-width: 736px) {
+@media (max-width: 735px) {
   .resume-nav {
     top: var(--header-height-mobile);
-    gap: var(--spacing-1);
-    padding: var(--spacing-3) var(--spacing-4);
-    border-radius: var(--radius-md);
-    margin-left: calc(-1 * var(--spacing-2));
-    margin-right: calc(-1 * var(--spacing-2));
+    gap: 0 1rem;
   }
 }
 
 .resume-nav-link {
-  padding: 0.5rem 1rem;
-  font-size: var(--text-sm);
+  position: relative;
+  padding: 0.25rem 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-ui);
   font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
   color: var(--color-fg-light);
   background: transparent;
+  background-image: none;
   border: none;
-  border-radius: var(--radius-sm);
   text-decoration: none;
-  transition: all var(--duration-fast) var(--ease-out);
+  transition: color var(--duration-fast) var(--ease-out);
 }
 
 .resume-nav-link:hover {
-  color: var(--color-fg);
-  background: var(--color-surface-hover);
+  color: var(--color-fg-bold);
+  background: transparent;
 }
 
-/* Active state - subtle highlight */
 .resume-nav-link.active {
   color: var(--color-accent);
-  background: var(--color-accent-subtle);
-  font-weight: var(--font-weight-bold);
+}
+
+/* Anchored to the link itself, so a wrapped row underlines its own item. */
+.resume-nav-link.active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--rule-strong);
+  background: var(--color-accent);
 }
 
 .resume-nav-link:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
+  outline: var(--rule-strong) solid var(--color-accent);
+  outline-offset: 3px;
 }
 
 .resume-content {
   display: flex;
   flex-direction: column;
-  gap: 4.5rem;
+  gap: 4rem;
+  padding-top: 2.5rem;
 }
 
 .resume-section {
   scroll-margin-top: calc(var(--header-height) + var(--scroll-offset-resume));
-  padding-top: var(--spacing-10);
-  border-top: 2px solid var(--color-border);
 }
 
-.resume-section:first-child {
-  border-top: none;
-  padding-top: 0;
+/* Printed resumes need contact details, which live in the footer on screen.
+   Shown only by print.css. */
+.resume-print-contact {
+  display: none;
 }

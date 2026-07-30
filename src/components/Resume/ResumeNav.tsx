@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const sections = [
   { name: 'Experience', id: 'experience' },
@@ -17,7 +17,6 @@ const INTERSECTION_MARGIN = '-20% 0px -75% 0px';
 
 export default function ResumeNav() {
   const [activeSection, setActiveSection] = useState<SectionId>('experience');
-  const observerRef = useRef<IntersectionObserver | null>(null);
 
   useEffect(() => {
     // Check if IntersectionObserver is available (not in test environment)
@@ -25,13 +24,8 @@ export default function ResumeNav() {
       return;
     }
 
-    // Clean up previous observer
-    if (observerRef.current) {
-      observerRef.current.disconnect();
-    }
-
     // Create IntersectionObserver for efficient scroll tracking
-    observerRef.current = new IntersectionObserver(
+    const observer = new IntersectionObserver(
       (entries) => {
         // Find the entry that is most visible (highest intersection ratio)
         const visibleEntries = entries.filter((entry) => entry.isIntersecting);
@@ -71,12 +65,12 @@ export default function ResumeNav() {
     sections.forEach(({ id }) => {
       const element = document.getElementById(id);
       if (element) {
-        observerRef.current?.observe(element);
+        observer.observe(element);
       }
     });
 
     return () => {
-      observerRef.current?.disconnect();
+      observer.disconnect();
     };
   }, []);
 

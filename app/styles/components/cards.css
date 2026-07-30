@@ -3,13 +3,8 @@
    Project cards, job cards, and card patterns
    ======================================== */
 
-/* Cell container for project cards */
+/* Portrait image */
 @layer components {
-  .cell-container {
-    display: block;
-  }
-
-  /* Portrait image */
   .theme-portrait {
     display: inline-block;
     position: relative;
@@ -26,26 +21,25 @@
 }
 
 .projects-header {
-  text-align: center;
+  text-align: left;
   margin-bottom: 3rem;
 }
 
 .projects-section-title {
-  font-size: var(--text-sm);
-  font-weight: var(--font-weight-bold);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-weight: var(--font-weight-medium);
   color: var(--color-fg-light);
   text-transform: uppercase;
-  letter-spacing: var(--tracking-wide);
-  margin-bottom: 1.5rem;
+  letter-spacing: var(--tracking-label);
+  margin-bottom: 1.25rem;
+  padding-top: 0.875rem;
+  border-top: var(--rule) solid var(--color-fg-bold);
 }
 
 .projects-featured {
   margin-bottom: 4rem;
   position: relative;
-}
-
-.projects-featured::before {
-  content: none;
 }
 
 .projects-grid {
@@ -62,9 +56,6 @@
 
 .projects-grid--featured .project-card {
   grid-column: 1 / -1;
-  box-shadow:
-    var(--shadow-lg),
-    0 0 0 2px var(--color-accent-light);
 }
 
 @media screen and (min-width: 600px) {
@@ -78,20 +69,16 @@
 }
 
 .project-card {
-  background: var(--color-bg);
-  border-radius: var(--radius-lg);
+  background: transparent;
+  border-radius: 0;
   overflow: hidden;
-  border: 1px solid var(--color-border-bg);
-  box-shadow: var(--shadow-sm);
-  transition: all var(--duration-normal) var(--ease-out);
+  border: var(--rule) solid var(--color-border);
+  box-shadow: none;
+  transition: border-color var(--duration-fast) var(--ease-out);
 }
 
-.project-card:hover {
-  transform: translateY(var(--lift-md));
-  border-color: var(--color-accent-border);
-  box-shadow:
-    var(--shadow-xl),
-    0 0 0 1px var(--color-accent-border);
+.project-card--linked:hover {
+  border-color: var(--color-fg-bold);
 }
 
 /* Full card link wrapper */
@@ -115,11 +102,6 @@
   cursor: default;
 }
 
-.project-card--static:hover {
-  transform: none;
-  box-shadow: var(--shadow-md);
-}
-
 .project-card-static {
   display: block;
 }
@@ -129,24 +111,30 @@
   display: block;
   aspect-ratio: 16/10;
   overflow: hidden;
+  background: var(--color-surface-subtle);
 }
 
+/* Archive imagery is held back in greyscale and only develops on
+   hover, so a page of screenshots does not shout over the resume. */
 .project-card-image img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  transition: transform var(--duration-normal) var(--ease-out);
+  object-fit: contain;
+  filter: grayscale(1) contrast(1.05);
+  transition: filter var(--duration-normal) var(--ease-out);
 }
 
-.project-card:hover .project-card-image img {
-  transform: scale(var(--scale-sm));
+.project-card--linked:hover .project-card-image img,
+.project-card--linked:focus-within .project-card-image img {
+  filter: grayscale(0) contrast(1);
 }
 
-.project-card-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, var(--color-overlay-darker) 0%, transparent 50%);
-  pointer-events: none;
+/* Without a pointer there is no hover to reveal the developed image, so
+   touch users would only ever see greyscale. */
+@media (hover: none) {
+  .project-card-image img {
+    filter: none;
+  }
 }
 
 .project-card-content {
@@ -154,26 +142,46 @@
 }
 
 .project-card-header {
+  position: relative;
   margin-bottom: 0.875rem;
 }
 
-.project-card-title {
-  font-size: var(--text-xl);
-  font-weight: var(--font-weight-black);
-  margin-bottom: 0.35rem;
+.project-card--linked .project-card-header {
+  padding-right: 2rem;
 }
 
-.project-card-title a {
-  color: var(--color-fg-bold);
-  text-decoration: none;
-}
-
-.project-card-title a:hover {
+.project-card-affordance {
+  position: absolute;
+  top: 0.15rem;
+  right: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-ui);
   color: var(--color-accent);
+  opacity: 0.65;
+  transition:
+    opacity var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
+}
+
+.project-card--linked:hover .project-card-affordance,
+.project-card--linked:focus-within .project-card-affordance {
+  opacity: 1;
+  transform: translate(1px, -1px);
+}
+
+.project-card-title {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--tracking-tight);
+  margin-bottom: 0.4rem;
 }
 
 .project-card-subtitle {
-  font-size: var(--text-sm);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
   color: var(--color-fg-light);
   font-weight: var(--font-weight-medium);
 }
@@ -193,95 +201,247 @@
 }
 
 .project-card-date {
-  font-size: var(--text-xs);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--tracking-wide);
   color: var(--color-fg-light);
 }
 
 /* ========================================
-   JOB CARDS
+   EXPERIENCE SPINE
+   One continuous rule down the page with a dated tick per role.
+   Replaces the stack of identical cards, in which a current role
+   and a 2013 internship carried exactly the same weight.
    ======================================== */
 
-.jobs-container {
-  margin-bottom: 2rem;
-  padding: 2rem;
-  background: var(--color-bg);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--color-border);
+.experience-spine {
   position: relative;
-  transition:
-    border-color var(--duration-fast) var(--ease-out),
-    transform var(--duration-fast) var(--ease-out),
-    box-shadow var(--duration-fast) var(--ease-out);
 }
 
+.jobs-container {
+  position: relative;
+  display: grid;
+  grid-template-columns: 11rem minmax(0, 1fr);
+  gap: 0 2.5rem;
+  padding: 0 0 3rem;
+  background: none;
+  border: 0;
+  border-radius: 0;
+}
+
+/* The spine itself: drawn by each entry so it runs unbroken,
+   and stopped short on the last one. */
 .jobs-container::before {
   content: '';
   position: absolute;
-  left: 0;
-  top: 1.5rem;
-  bottom: 1.5rem;
-  width: 3px;
-  background: linear-gradient(180deg, var(--color-accent) 0%, var(--color-accent-secondary) 100%);
-  border-radius: 2px;
-  opacity: 0;
-  transition: opacity var(--duration-fast) var(--ease-out);
-}
-
-.jobs-container:hover {
-  border-color: var(--color-accent-border);
-  transform: translateY(var(--lift-sm));
-  box-shadow: var(--shadow-lg);
-}
-
-.jobs-container:hover::before {
-  opacity: 1;
+  left: calc(11rem + 1.25rem);
+  top: 0.6rem;
+  bottom: 0;
+  width: var(--rule);
+  background: var(--color-border);
 }
 
 .jobs-container:last-child {
-  margin-bottom: 0;
+  padding-bottom: 0;
 }
 
-.jobs-container header h4 {
-  font-size: var(--text-xl);
-  font-weight: var(--font-weight-black);
-  margin-bottom: 0.35rem;
-  line-height: 1.3;
+.jobs-container:last-child::before {
+  bottom: auto;
+  height: 100%;
+  background: linear-gradient(to bottom, var(--color-border), transparent);
 }
 
-.jobs-container header h4 a {
+/* Tick marking this role's position on the spine. */
+.job-marker {
+  position: absolute;
+  left: calc(11rem + 1.25rem);
+  top: 0.6rem;
+  width: 7px;
+  height: 7px;
+  transform: translate(-50%, -50%) translateY(0.35em);
+  border: var(--rule-strong) solid var(--color-fg-light);
+  background: var(--color-bg-alt);
+  border-radius: var(--radius-full);
+}
+
+/* Only a role still in progress lights up. */
+.jobs-container--current .job-marker {
+  border-color: var(--color-signal-mark);
+  background: var(--color-signal-mark);
+  width: 9px;
+  height: 9px;
+}
+
+.job-body {
+  min-width: 0;
+}
+
+/* Dates sit in the gutter, in mono, so the column scans as a
+   timeline rather than as a caption under each heading. */
+.daterange {
+  grid-column: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  /* Without these the gutter stretches to the full row height and a
+     wrapped range strands its second date next to the bullets. */
+  align-content: flex-start;
+  align-self: start;
+  gap: 0 0.4em;
+  margin: 0;
+  padding-top: 0.35em;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-fg-light);
+  line-height: 1.5;
+}
+
+.daterange-sep {
+  color: var(--color-border-alt);
+}
+
+.daterange-present {
+  color: var(--color-signal);
+  font-weight: var(--font-weight-medium);
+}
+
+.jobs-container header h3 {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--tracking-tight);
+  margin-bottom: 0.75rem;
+  line-height: 1.15;
+}
+
+.jobs-container header h3 a.job-company {
   color: var(--color-fg-bold);
   text-decoration: none;
+  background-image: none;
+  width: fit-content;
 }
 
-.jobs-container header h4 a:hover {
+.jobs-container header h3 a.job-company:hover {
   color: var(--color-accent);
 }
 
-.jobs-container .role {
-  display: block;
+.job-position {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
   font-weight: var(--font-weight-medium);
-  color: var(--color-fg);
-  font-size: var(--text-md);
-  margin-top: 0.25rem;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--color-fg-light);
 }
 
 .jobs-container .points {
   margin-top: 1rem;
+  margin-bottom: 0;
+  list-style: none;
+  padding-left: 0;
 }
 
 .jobs-container .points li {
+  position: relative;
   font-size: var(--text-base);
-  line-height: 1.7;
+  line-height: var(--leading-normal);
   margin-bottom: 0.6rem;
-  padding: 0;
+  padding-left: 1.25rem;
   color: var(--color-fg-light);
 }
 
-.daterange {
+.jobs-container .points li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.72em;
+  width: 7px;
+  height: var(--rule);
+  background: var(--color-border-alt);
+}
+
+/* Lead — hierarchy through breathing room and a measured size step, rather
+   than making the first company twice as loud as the rest of the history. */
+.jobs-container--lead {
+  padding-top: 1.5rem;
+  padding-bottom: 4.5rem;
+}
+
+.jobs-container--lead .job-marker {
+  top: calc(1.5rem + 0.6rem);
+}
+
+.jobs-container--lead header h3 {
+  font-size: var(--text-xl);
+  font-weight: var(--font-weight-black);
+  letter-spacing: var(--tracking-display);
+}
+
+.jobs-container--lead .summary {
+  font-size: var(--text-lg);
+  color: var(--color-fg);
+}
+
+/* Early — internships and student-era work, stepped down so a
+   decade of history stays on the page without competing. */
+.jobs-container--early {
+  padding-bottom: 2rem;
+}
+
+.jobs-container--early header h3 {
+  font-size: var(--text-md);
+  margin-bottom: 0.5rem;
+}
+
+.jobs-container--early .summary,
+.jobs-container--early .points li {
   font-size: var(--text-sm);
-  letter-spacing: var(--tracking-tight);
-  color: var(--color-fg-light);
-  margin-bottom: 0.5em;
+  line-height: var(--leading-snug);
+  margin-bottom: 0.4rem;
+}
+
+.jobs-container--early .job-marker {
+  width: 5px;
+  height: 5px;
+  border-width: var(--rule);
+}
+
+@media (max-width: 760px) {
+  .jobs-container {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.5rem;
+    padding-left: 1.5rem;
+  }
+
+  .jobs-container::before,
+  .jobs-container:last-child::before {
+    left: 0;
+  }
+
+  .job-marker {
+    left: 0;
+    transform: translate(-50%, -50%) translateY(0.5em);
+  }
+
+  .daterange {
+    padding-top: 0;
+  }
+
+  .jobs-container--lead {
+    padding-top: 1rem;
+    padding-bottom: 3.5rem;
+  }
+
+  .jobs-container--lead .job-marker {
+    top: calc(1rem + 0.6rem);
+  }
 }
 
 .summary {
@@ -312,7 +472,7 @@
   margin-bottom: 1.5em;
 }
 
-.degree-container h4 {
+.degree-container h3 {
   font-weight: var(--font-weight-normal);
 }
 
@@ -338,38 +498,53 @@
    COURSE CARDS
    ======================================== */
 
+/* Courses read as a catalogue listing: a mono course code in the
+   gutter and the title beside it, ruled rather than boxed. */
 .course-container {
   display: block;
 }
 
 .course-container a {
-  display: block;
-  padding: 1rem 1.25rem;
-  background: var(--color-surface-subtle);
-  border: 1px solid var(--color-border-bg);
-  border-radius: var(--radius-md);
+  display: grid;
+  grid-template-columns: 5.5rem minmax(0, 1fr);
+  gap: 0 1rem;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0.3rem 0;
+  background: transparent;
+  background-image: none;
+  border: 0;
+  border-radius: 0;
   text-decoration: none;
-  transition: all var(--duration-fast) var(--ease-out);
+  transition: background-color var(--duration-fast) var(--ease-out);
 }
 
-.course-container a:hover {
-  border-color: var(--color-border);
-  background: var(--color-surface-hover);
-  transform: translateY(var(--lift-sm));
+.course-container a:hover,
+.course-container a:focus-visible {
+  background: var(--color-surface-subtle);
 }
 
 .courses .course-number {
   display: block;
-  font-size: var(--text-sm);
-  font-weight: var(--font-weight-bold);
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-fg-light);
+}
+
+.course-container a:hover .course-number,
+.course-container a:focus-visible .course-number {
   color: var(--color-accent);
-  margin-bottom: 0.25rem;
 }
 
 .courses .course-name {
   display: block;
-  font-family: var(--font-sans);
-  font-size: var(--text-base);
-  font-weight: var(--font-weight-medium);
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-normal);
   color: var(--color-fg);
+  line-height: var(--leading-snug);
 }

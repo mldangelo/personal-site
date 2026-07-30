@@ -1,6 +1,6 @@
 import writing from '@/data/writing';
 import { getAllPosts } from '@/lib/posts';
-import { SITE_URL } from '@/lib/utils';
+import { AUTHOR_NAME, SITE_URL } from '@/lib/utils';
 
 export const dynamic = 'force-static';
 
@@ -63,15 +63,18 @@ export async function GET() {
     </item>`,
     )
     .join('');
+  const lastBuildDate = items[0]?.date
+    ? formatRssDate(items[0].date)
+    : new Date(0).toUTCString();
 
   const rss = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Michael D'Angelo - Writing</title>
+    <title>${escapeXml(AUTHOR_NAME)} - Writing</title>
     <link>${SITE_URL}/writing/</link>
-    <description>Articles on AI security, LLM red teaming, and trust &amp; safety by Michael D'Angelo.</description>
+    <description>Articles on AI security, LLM red teaming, and trust &amp; safety by ${escapeXml(AUTHOR_NAME)}.</description>
     <language>en-us</language>
-    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
+    <lastBuildDate>${lastBuildDate}</lastBuildDate>
     <atom:link href="${SITE_URL}/feed.xml" rel="self" type="application/rss+xml"/>${rssItems}
   </channel>
 </rss>`;

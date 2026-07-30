@@ -1,24 +1,20 @@
 'use client';
 
-import { useEffect, useReducer, useRef, useState } from 'react';
+import { useEffect, useReducer, useRef } from 'react';
+
+import profile from '@/data/profile.json';
+import usePrefersReducedMotion from '@/hooks/usePrefersReducedMotion';
 
 // Animation timing constants
 const ANIMATION_TICK_MS = 50; // Tick length in milliseconds
 const HOLD_TICKS_AFTER_MESSAGE = 50; // Ticks to wait after message completes
 
-// Validates the first half of an email address per RFC 5322
-function validateText(text: string): boolean {
-  const re = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))$/;
-  return re.test(text) || text.length === 0;
-}
-
-function prefersReducedMotion(): boolean {
-  if (typeof window === 'undefined') return false;
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-}
+/** The address the link always resolves to, whatever the animation shows. */
+const CONTACT_ADDRESS = profile.email;
+const [CONTACT_LOCAL_PART, CONTACT_DOMAIN] = CONTACT_ADDRESS.split('@');
 
 const messages = [
-  'hi',
+  CONTACT_LOCAL_PART,
   'hello',
   'hola',
   'you-can-email-me-at-literally-anything! Really',
@@ -62,41 +58,58 @@ type AnimationAction =
   | { type: 'PAUSE' }
   | { type: 'RESUME'; maxIdx: number };
 
+/**
+ * The opening frame of a message.
+ *
+ * Advancing used to reset to zero characters, so `message` was `''` for one
+ * tick at every boundary — and the render fell back to the static address,
+ * flashing it fifteen times a cycle. A message now begins already showing its
+ * first character, so the prefix is never empty mid-animation.
+ */
+function startOf(idx: number): AnimationState {
+  return {
+    idx,
+    message: messages[idx].slice(0, 1),
+    char: 2,
+    isActive: true,
+  };
+}
+
 function animationReducer(
   state: AnimationState,
   action: AnimationAction,
 ): AnimationState {
   switch (action.type) {
     case 'TICK': {
-      let newIdx = state.idx;
-      let newChar = state.char;
-
-      if (state.char - action.hold >= messages[state.idx].length) {
-        newIdx += 1;
-        newChar = 0;
+      if (state.idx >= messages.length) {
+        return state;
       }
 
-      if (newIdx === messages.length) {
-        if (action.loopMessage) {
-          return {
-            idx: 0,
-            message: '',
-            char: 0,
-            isActive: true,
-          };
-        }
+      const finished = state.char - action.hold >= messages[state.idx].length;
+
+      if (!finished) {
         return {
           ...state,
-          isActive: false,
+          message: messages[state.idx].slice(0, state.char),
+          char: state.char + 1,
+          isActive: true,
         };
       }
 
-      return {
-        idx: newIdx,
-        message: messages[newIdx].slice(0, newChar),
-        char: newChar + 1,
-        isActive: true,
-      };
+      const nextIdx = state.idx + 1;
+
+      if (nextIdx === messages.length) {
+        if (action.loopMessage) {
+          return startOf(0);
+        }
+
+        // Completion is recorded in `idx`, not only in `isActive`. Leaving it
+        // on the last message meant RESUME's `idx < maxIdx` test passed, so a
+        // finished animation re-armed its interval on every mouse-out.
+        return { ...state, idx: messages.length, isActive: false };
+      }
+
+      return startOf(nextIdx);
     }
     case 'PAUSE':
       return { ...state, isActive: false };
@@ -115,17 +128,14 @@ interface EmailLinkProps {
 }
 
 export default function EmailLink({ loopMessage = false }: EmailLinkProps) {
-  // Check for reduced motion preference
-  const [reducedMotion, setReducedMotion] = useState(false);
+  const reducedMotion = usePrefersReducedMotion();
 
-  useEffect(() => {
-    setReducedMotion(prefersReducedMotion());
-  }, []);
-
+  // Opens on the real local part, already complete, so the first thing anyone
+  // sees is the actual address — and it holds there before the cycle starts.
   const [state, dispatch] = useReducer(animationReducer, {
     idx: 0,
-    message: '',
-    char: 0,
+    message: CONTACT_LOCAL_PART,
+    char: messages[0].length,
     isActive: true,
   });
 
@@ -143,10 +153,9 @@ export default function EmailLink({ loopMessage = false }: EmailLinkProps) {
     state.isActive && !reducedMotion ? ANIMATION_TICK_MS : null,
   );
 
-  // Use 'hi' as default message when reduced motion or paused with empty message
-  const displayMessage =
-    reducedMotion || state.message === '' ? 'hi' : state.message;
-  const isValid = validateText(displayMessage);
+  // The reducer never yields an empty prefix, so the only reason to override
+  // it is reduced motion, where the real address should simply stand.
+  const displayMessage = reducedMotion ? CONTACT_LOCAL_PART : state.message;
 
   const handlePause = () => dispatch({ type: 'PAUSE' });
   const handleResume = () => {
@@ -155,51 +164,33 @@ export default function EmailLink({ loopMessage = false }: EmailLinkProps) {
     }
   };
 
-  const handleClick = (e: React.MouseEvent) => {
-    if (!isValid) {
-      e.preventDefault();
-    }
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (!isValid && (e.key === 'Enter' || e.key === ' ')) {
-      e.preventDefault();
-    }
-  };
-
-  const emailContent = (
-    <>
-      <span className="contact-email-prefix">{displayMessage}</span>
-      <span className="contact-email-domain">@mldangelo.com</span>
-    </>
-  );
-
   return (
     <div
       className="contact-email-container"
       onMouseEnter={handlePause}
       onMouseLeave={handleResume}
     >
-      {isValid ? (
-        <a
-          href={`mailto:${displayMessage}@mldangelo.com`}
-          className="contact-email-link"
-          onClick={handleClick}
-          onKeyDown={handleKeyDown}
-          onFocus={handlePause}
-          onBlur={handleResume}
-        >
-          {emailContent}
-        </a>
-      ) : (
-        <span
-          className="contact-email-link contact-email-link--invalid"
-          aria-disabled="true"
-          tabIndex={-1}
-        >
-          {emailContent}
+      {/* Always a real link to a real address.
+          The animation cycles through joke aliases, three of which are not
+          valid local-parts ("but not this :(  " among them). Those used to
+          swap the anchor for an aria-disabled, unfocusable <span>, so for
+          roughly a fifth of the cycle the contact page offered no way to
+          reach anyone. The gag is now purely visual: the shown alias is
+          decorative and the destination never changes. */}
+      <a
+        href={`mailto:${CONTACT_ADDRESS}`}
+        className="contact-email-link"
+        onFocus={handlePause}
+        onBlur={handleResume}
+      >
+        <span className="sr-only">Email {CONTACT_ADDRESS}</span>
+        <span className="contact-email-prefix" aria-hidden="true">
+          {displayMessage}
         </span>
-      )}
+        <span className="contact-email-domain" aria-hidden="true">
+          @{CONTACT_DOMAIN}
+        </span>
+      </a>
     </div>
   );
 }

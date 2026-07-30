@@ -6,11 +6,9 @@
 @theme inline {
   /* ===================
      SPACING SCALE
-     Base unit: 4px (0.25rem)
+     Base unit: 4px (0.25rem). Curated rather than exhaustive — steps are
+     added when something needs them, not kept on the chance it might.
      =================== */
-  --spacing-0: 0;
-  --spacing-1: 0.25rem; /* 4px */
-  --spacing-2: 0.5rem; /* 8px */
   --spacing-3: 0.75rem; /* 12px */
   --spacing-4: 1rem; /* 16px */
   --spacing-5: 1.25rem; /* 20px */
@@ -20,15 +18,12 @@
   --spacing-10: 2.5rem; /* 40px */
   --spacing-12: 3rem; /* 48px */
   --spacing-16: 4rem; /* 64px */
-  --spacing-20: 5rem; /* 80px */
   --spacing-24: 6rem; /* 96px */
 
   /* ===================
      SEMANTIC SPACING
      =================== */
   --spacing-element: var(--spacing-7); /* 1.75rem - between block elements */
-  --spacing-section: var(--spacing-16); /* 4rem - between major sections */
-  --spacing-section-sm: var(--spacing-8); /* 2rem - compressed sections */
   --scroll-offset-resume: var(--spacing-24); /* 6rem - resume section scroll offset */
 
   /* ===================
@@ -36,15 +31,10 @@
      =================== */
   --header-height: 4rem;
   --header-height-mobile: 3.5rem;
-  --sidebar-width: 20rem;
-  --content-max-width: 90rem;
 
-  /* ===================
-     BREAKPOINTS (rem-based)
-     =================== */
-  --breakpoint-sm: 30rem; /* 480px */
-  --breakpoint-md: 46rem; /* 736px */
-  --breakpoint-lg: 61.25rem; /* 980px */
-  --breakpoint-xl: 80rem; /* 1280px */
-  --breakpoint-2xl: 105rem; /* 1680px */
+  /* Three page measures keep routes aligned without forcing component-sized
+     details (portraits, status messages, controls) into page-level tokens. */
+  --measure-wide: 70rem; /* Hero and other split compositions */
+  --measure-page: 56rem; /* Default pages, lists, resume, and footer */
+  --measure-read: 40rem; /* Continuous prose and compact data views */
 }

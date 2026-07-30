@@ -3,24 +3,35 @@
    Page containers and section layouts
    ======================================== */
 
-/* Page container - flex column for sticky footer */
+/* Page container - flex column for sticky footer.
+   The header is fixed and body carries matching top padding, so a full 100vh
+   here made every short page exactly one header taller than the viewport and
+   scroll by 64px for nothing. dvh also tracks mobile browser chrome. */
 .page-container {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: calc(100dvh - var(--header-height));
+}
+
+@media (max-width: 735px) {
+  .page-container {
+    min-height: calc(100dvh - var(--header-height-mobile));
+  }
 }
 
 /* Main content area */
 .page-main {
   flex: 1;
   width: 100%;
-  max-width: 800px;
+  max-width: var(--measure-page);
   margin: 0 auto;
   padding: 2rem 1.5rem;
 }
 
-.page-main--wide {
-  max-width: 56rem;
+/* The hero grid needs room for a full-measure readout strip
+   alongside its portrait. */
+.page-main--hero {
+  max-width: var(--measure-wide);
 }
 
 @media screen and (min-width: 736px) {
@@ -40,10 +51,4 @@
   font-size: var(--text-lg);
   color: var(--color-fg-light);
   margin-bottom: 2rem;
-}
-
-/* Link anchor offset for fixed header */
-.link-to {
-  position: relative;
-  top: -4.5em;
 }

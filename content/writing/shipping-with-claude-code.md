@@ -2,6 +2,8 @@
 title: What I learned shipping 1,000+ PRs with Claude Code
 date: '2026-01-03'
 description: 'Notes from using Claude Code in parallel git worktrees: Plan Mode, ultrathink, verification loops, and Chrome automation.'
+image: /images/writing/api-costs-july-2025.png
+imageAlt: 'Anthropic API costs for July 2025 showing $9,986.20 in token usage'
 ---
 
 ## Context

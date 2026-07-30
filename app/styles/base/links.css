@@ -22,11 +22,17 @@
     background-size: 100% 1.5px;
   }
 
-  /* Keep simple underline for inline content links
-     Exclude .hero-highlight which uses text-decoration instead
-     Reset the animated underline to avoid double underline */
-  p a:not(.hero-highlight),
-  li a:not(.hero-highlight) {
+  /* Persistent underline for inline prose links, replacing the animated one
+     so they do not double up.
+
+     Scoped to `p` deliberately. This used to match `li a` as well, but the
+     site uses `<li>` for plenty of non-prose UI — navigation, icon rows,
+     course listings — so the rule kept painting accent underlines on things
+     that are not prose, and each of those had to opt out by hand. The mobile
+     menu shipped looking broken for exactly this reason. Prose lists get
+     their underline from their own container rules (`.about-content a`,
+     `.prose a`) instead. */
+  p a:not(.hero-highlight) {
     background-image: linear-gradient(
       transparent calc(100% - 1.5px),
       var(--color-accent-underline) 1.5px
@@ -38,8 +44,7 @@
       background-image var(--duration-fast) var(--ease-out);
   }
 
-  p a:not(.hero-highlight):hover,
-  li a:not(.hero-highlight):hover {
+  p a:not(.hero-highlight):hover {
     color: var(--color-accent-hover);
     background-image: linear-gradient(transparent calc(100% - 1.5px), var(--color-accent) 1.5px);
   }
