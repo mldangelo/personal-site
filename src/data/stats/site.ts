@@ -1,5 +1,5 @@
 import type { StatDeclaration } from '@/lib/readings';
-import { SHORT_SHA_LENGTH, utcDate } from '@/lib/telemetry';
+import { deployedCommitUrl, SHORT_SHA_LENGTH, utcDate } from '@/lib/telemetry';
 
 const REPO = 'https://github.com/mldangelo/personal-site';
 const BLOB = `${REPO}/blob/main`;
@@ -86,7 +86,7 @@ const data: StatDeclaration[] = [
     source: 'measured',
     format: (x: unknown) => String(x).slice(0, SHORT_SHA_LENGTH),
     // The one link on the page whose target is the reading itself.
-    link: (x: unknown) => `${REPO}/commit/${x}`,
+    link: deployedCommitUrl,
   },
   {
     // Filled with a live `<BuildClock>` by `src/components/Stats/Site.tsx`.

@@ -16,8 +16,9 @@ import Table from './Table';
  * It was a client component only so that the age could tick, and the price was
  * that the age did not exist until JavaScript ran: `out/stats/index.html`
  * shipped `--.-----------` as the site's most distinctive value, to every
- * crawler, every reader with JavaScript off, and every printed copy. The client
- * boundary is a single `<LiveAge>` span now.
+ * crawler and every reader (or print renderer) with JavaScript off. A browser
+ * that prints after hydration already sees the live value. The client boundary
+ * is a single `<LiveAge>` span now.
  *
  * The readings are resolved per render rather than once at module scope, because
  * the age the server can prove depends on the instant this runs. Under
