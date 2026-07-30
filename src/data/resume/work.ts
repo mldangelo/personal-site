@@ -70,7 +70,7 @@ const work: Position[] = [
   {
     name: 'Arthena',
     position: 'Co-founder & CTO',
-    url: 'https://arthena.com',
+    url: 'https://www.arthena.co/',
     startDate: '2014-01-01',
     endDate: '2022-01-01',
     summary: `Arthena was a quantitative art investment platform backed by <a href='https://www.anthemis.com/'>Anthemis</a>,

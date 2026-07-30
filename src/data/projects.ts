@@ -7,12 +7,11 @@
  * - `archive` — student-era experiments. A register that deletes its own
  *   history is a brochure, so these stay, stepped down rather than removed.
  *
- * Every claim here is lifted from `src/data/resume/work.ts` or
- * `src/data/about.ts`. Those files are the record; this one is a view onto
- * them. Do not add a metric, a date, or a destination that is not already
- * written down there — `src/data/__tests__/projects.test.ts` cross-checks the
- * dates and links of shipped entries against the résumé for exactly that
- * reason.
+ * Shipped entries that share a title with `src/data/resume/work.ts` are
+ * cross-checked there for dates, destinations, and numeric claims. Archive
+ * entries are maintained here directly. Those checks establish internal
+ * consistency; factual claims and public destinations still need primary-
+ * source and live-link review.
  */
 export type ProjectStatus = 'shipped' | 'archive';
 
@@ -31,13 +30,18 @@ export interface Project {
    * need art invented for it.
    */
   image?: string;
-  /** ISO date the work started, or the date a one-off shipped. */
+  /**
+   * ISO date Michael's work on the project started, or a one-off shipped.
+   * This is project activity, not necessarily a public launch date.
+   */
   date: string;
-  /** ISO date the work ended. Omitted on one-off entries and on live work. */
+  /** ISO date project activity ended. Omitted on one-offs and live work. */
   endDate?: string;
   /**
-   * Still in progress. Drives the one amber reading on the page, which is
-   * what `--color-signal` is reserved for. Mutually exclusive with `endDate`.
+   * The project is still active. This is deliberately independent of the
+   * historical role named by `subtitle`: a project can continue after an
+   * acquisition or employment transition. Drives the amber `Present` reading
+   * and is mutually exclusive with `endDate`.
    */
   ongoing?: boolean;
   desc: string;
@@ -47,27 +51,29 @@ export interface Project {
 }
 
 /**
- * Hand-ordered, most recent activity first within each group. Live work leads;
- * `projects.test.ts` pins that ordering so a new entry cannot be appended into
- * the middle of a decade.
+ * Hand-ordered, most recent activity first within each group. Live work leads,
+ * then sorts by its own start date; finished work sorts by its end (or one-off)
+ * date. `projects.test.ts` pins the complete comparator, including ties.
  */
 const data: Project[] = [
-  {
-    title: 'Promptfoo',
-    subtitle: 'Co-founder & CTO',
-    link: 'https://promptfoo.dev',
-    date: '2024-07-01',
-    ongoing: true,
-    desc: 'Started as a developer-first eval tool and grew into a platform for AI security, red-teaming, and compliance: evaluation framework, vulnerability scanning, static analysis, and automated red-teaming. Reached more than 350,000 developers, 130,000 monthly active users, and teams at more than 25% of the Fortune 500 before joining OpenAI in 2026.',
-    status: 'shipped',
-  },
   {
     title: 'Codex Security',
     subtitle: 'OpenAI · Research preview',
     link: 'https://openai.com/index/codex-security-now-in-research-preview/',
+    // Michael's involvement began with his OpenAI role. The public research
+    // preview launched three days earlier; month-precision UI shows Mar 2026.
     date: '2026-03-09',
     ongoing: true,
     desc: 'Securing AI systems and applying AI to software security at OpenAI — using models to find and fix vulnerabilities in code.',
+    status: 'shipped',
+  },
+  {
+    title: 'Promptfoo',
+    subtitle: 'Co-founder & CTO through acquisition · Continued at OpenAI',
+    link: 'https://promptfoo.dev',
+    date: '2024-07-01',
+    ongoing: true,
+    desc: 'Started as a developer-first eval tool and grew into a platform for AI security, red-teaming, and compliance: evaluation framework, vulnerability scanning, static analysis, and automated red-teaming. Reached more than 350,000 developers, 130,000 monthly active users, and teams at more than 25% of the Fortune 500 before joining OpenAI in 2026.',
     status: 'shipped',
   },
   {
@@ -83,7 +89,7 @@ const data: Project[] = [
   {
     title: 'Arthena',
     subtitle: 'Co-founder & CTO',
-    link: 'https://arthena.com',
+    link: 'https://www.arthena.co/',
     date: '2014-01-01',
     endDate: '2022-01-01',
     desc: 'Quantitative art investment platform backed by Anthemis, Foundation Capital, and Y Combinator. Valuation models over irregularly-sampled time series, plus the data pipelines and research tools behind them. Built from idea to acquisition by Masterworks in 2023.',
@@ -91,7 +97,7 @@ const data: Project[] = [
       'Graph embeddings',
       'Probabilistic forecasting',
       'Online learning',
-      'Micro-services',
+      'Microservices',
     ],
     status: 'shipped',
   },
@@ -116,18 +122,17 @@ const data: Project[] = [
   },
   {
     title: 'Harvest',
-    subtitle: '3rd place at Techcrunch Disrupt SF',
+    subtitle: '3rd place at TechCrunch Disrupt SF',
     link: 'https://devpost.com/software/harvest',
     image: '/images/projects/harvest.jpg',
     date: '2015-09-20',
     desc: 'Low-cost crop monitoring to catch irrigation leaks and nutrient deficiencies.',
-    tech: ['Python', 'Arduino', 'Computer Vision', 'AWS'],
+    tech: ['Python', 'Arduino', 'Computer vision', 'AWS'],
     status: 'archive',
   },
   {
     title: 'Space Potato',
     subtitle: 'Kickstarter-funded weather balloon',
-    link: 'http://www.spacepotato.org',
     image: '/images/projects/spacepotato.jpg',
     date: '2015-06-28',
     desc: 'Potato-powered weather balloon with cameras. Photos published in a coffee table book.',
@@ -140,7 +145,9 @@ const data: Project[] = [
     image: '/images/projects/catdetector.jpg',
     date: '2015-05-15',
     desc: 'Classified 60,000+ cats across 80 breeds before server costs shut it down.',
-    tech: ['Python', 'TensorFlow', 'CNN', 'AWS'],
+    // TensorFlow was not open-sourced until November 2015, six months after
+    // this project date. No primary source establishes a later port.
+    tech: ['Python', 'CNN', 'AWS'],
     status: 'archive',
   },
   {

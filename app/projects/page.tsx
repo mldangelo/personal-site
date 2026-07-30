@@ -55,8 +55,8 @@ export default function ProjectsPage() {
         <header className="projects-header">
           <h1 className="page-title">{PAGE_TITLE}</h1>
           <p className="page-subtitle">
-            Things I have built, and the student-era experiments that came
-            first.
+            Projects I have built and led, plus the student-era experiments that
+            came first.
           </p>
         </header>
 
