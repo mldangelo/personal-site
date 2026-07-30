@@ -44,8 +44,13 @@
     padding-top: 0;
   }
 
-  /* Screen chrome has no meaning on paper. */
+  /* Screen chrome has no meaning on paper. Everything `position: fixed`
+     belongs in here: paged media repeats a fixed element on every page instead
+     of scrolling it away, so `.skip-link` — held offscreen on the viewport by
+     `transform: translateY(-200%)` alone — printed an accent-filled "SKIP TO
+     CONTENT" box at the foot of four of the resume's five pages. */
   body::before,
+  .skip-link,
   .site-header,
   .site-footer-new,
   .slide-menu,
@@ -226,10 +231,6 @@
   .skill-tag,
   .tech-tag {
     border-color: rgba(0, 0, 0, 0.35);
-  }
-
-  .skill-tag::before {
-    display: none;
   }
 
   /* Reveal destinations for links that are not obvious from their text. On the

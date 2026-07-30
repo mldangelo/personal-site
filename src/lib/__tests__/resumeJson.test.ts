@@ -306,24 +306,35 @@ describe('json resume document', () => {
     expect(resume.education[1]).not.toHaveProperty('courses');
   });
 
-  it('groups skills by category with keywords ordered by competency', () => {
+  /**
+   * The artifact publishes the authored order, not a sort. Keywords used to be
+   * ordered by a 1–5 `competency` self-score, and the filter behind them used
+   * `String.includes` against what is now a single category name.
+   */
+  it('groups skills by category in the order the page renders them', () => {
     expect(resume.skills.map((skill) => skill.name)).toEqual(
       categories.map((category) => category.name),
     );
 
     for (const group of resume.skills) {
       const expected = skills
-        .filter((skill) => skill.category.includes(group.name))
+        .filter((skill) => skill.category === group.name)
         .map((skill) => skill.title);
 
-      expect(group.keywords).toHaveLength(expected.length);
-      expect([...group.keywords].sort()).toEqual([...expected].sort());
+      expect(group.keywords).toEqual(expected);
+    }
 
-      const competencies = group.keywords.map(
-        (keyword) =>
-          skills.find((skill) => skill.title === keyword)?.competency ?? 0,
-      );
-      expect(competencies).toEqual([...competencies].sort((a, b) => b - a));
+    // Every skill reaches the artifact exactly once, which is what a single
+    // display category buys and what the old substring filter could not
+    // guarantee.
+    expect(resume.skills.flatMap((group) => group.keywords)).toHaveLength(
+      skills.length,
+    );
+  });
+
+  it('publishes no proficiency level', () => {
+    for (const group of resume.skills) {
+      expect(group).not.toHaveProperty('level');
     }
   });
 
