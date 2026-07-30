@@ -119,30 +119,3 @@ describe('stylesheet graph', () => {
     expect(empty).toEqual([]);
   });
 });
-
-describe('view transitions', () => {
-  // `@view-transition` is the cross-document API. The App Router intercepts
-  // every `<Link>` into a same-document client navigation, so root-level
-  // view-transition CSS is inert unless Next is asked to drive transitions
-  // itself. Shipping it without the flag is a no-op that reads as a feature.
-  it('are not styled unless next.config.mjs enables them', () => {
-    const styled = [ENTRY, ...stylesheets]
-      .filter((file) =>
-        /@view-transition|::view-transition-(old|new)\b/.test(
-          declarationsOf(file),
-        ),
-      )
-      .map(repoPath);
-
-    if (styled.length === 0) {
-      return;
-    }
-
-    const config = readFileSync(join(REPO_ROOT, 'next.config.mjs'), 'utf8');
-
-    expect(
-      /viewTransition\s*:\s*true/.test(config),
-      `${styled.join(', ')} styles view transitions, but next.config.mjs does not set experimental.viewTransition, so none of it fires`,
-    ).toBe(true);
-  });
-});

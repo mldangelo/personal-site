@@ -36,10 +36,9 @@
 @import './styles/pages/writing.css';
 @import './styles/pages/content.css';
 
-/* There is deliberately no page-transition stylesheet. `@view-transition` is
-   the cross-document API, and the App Router intercepts every `<Link>` into a
-   same-document navigation, so it never fired. See AGENTS.md before adding one
-   back. */
+/* Page transitions are not part of the current interaction design. Internal
+   `<Link>` routes use client navigation, and the app has no same-document
+   View Transition API trigger. See AGENTS.md before adding transition styles. */
 
 /* Theme Overrides */
 @import './styles/dark-mode.css';
