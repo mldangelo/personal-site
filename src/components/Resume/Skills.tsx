@@ -50,22 +50,58 @@ export default function Skills({ skills, categories }: SkillsProps) {
    * Filtering by removing groups from the DOM meant a printed page reflected
    * whatever filter happened to be set, silently omitting skills. Keeping the
    * markup lets `print.css` show everything regardless.
+   *
+   * The source data is already ordered editorially, and that order is the only
+   * hierarchy the section has, so nothing here sorts. A group with no skills is
+   * dropped rather than rendered as an empty heading.
    */
   const groupedSkills = useMemo(() => {
-    const sortedSkills = [...skills].sort((a, b) => {
-      if (a.competency !== b.competency) return b.competency - a.competency;
-      return a.title.localeCompare(b.title);
-    });
-
     return categories
       .map((category) => ({
         category,
-        skills: sortedSkills.filter((skill) =>
-          skill.category.includes(category.name),
-        ),
+        skills: skills.filter((skill) => skill.category === category.name),
       }))
       .filter((group) => group.skills.length > 0);
   }, [skills, categories]);
+
+  /**
+   * Counted from the groups that are actually rendered, never stated, so the
+   * announcement cannot drift from what is on screen. Summing group lengths is
+   * exact because a skill declares one category, so it renders in one group —
+   * this used to de-duplicate by title, which was load-bearing when a skill
+   * could appear under several.
+   */
+  const totalSkillCount = useMemo(
+    () =>
+      groupedSkills.reduce(
+        (total, { skills: group }) => total + group.length,
+        0,
+      ),
+    [groupedSkills],
+  );
+
+  const visibleSkillCount = useMemo(() => {
+    if (activeCategory === ALL_CATEGORY) return totalSkillCount;
+
+    return (
+      groupedSkills.find(({ category }) => category.name === activeCategory)
+        ?.skills.length ?? 0
+    );
+  }, [activeCategory, groupedSkills, totalSkillCount]);
+
+  /**
+   * `aria-pressed` on the buttons reports the state of the control; it says
+   * nothing about the result of pressing it, and the result here is that most
+   * of the section silently disappears. This states the outcome instead.
+   *
+   * It stays `.sr-only`: printing un-hides every group regardless of the filter,
+   * so a visible count would contradict the page it is printed on.
+   */
+  const noun = totalSkillCount === 1 ? 'skill' : 'skills';
+  const filterStatus =
+    activeCategory === ALL_CATEGORY
+      ? `Showing all ${totalSkillCount} ${noun}.`
+      : `Showing ${visibleSkillCount} of ${totalSkillCount} ${noun} in ${activeCategory}.`;
 
   return (
     <div className="skills">
@@ -73,6 +109,9 @@ export default function Skills({ skills, categories }: SkillsProps) {
         <h2>Skills</h2>
       </div>
       <div className="skill-button-container">{buttonElements}</div>
+      <p className="sr-only" role="status" aria-live="polite">
+        {filterStatus}
+      </p>
       <div className="skill-groups">
         {groupedSkills.map(({ category, skills: categorySkills }) => {
           const isVisible =
@@ -87,11 +126,7 @@ export default function Skills({ skills, categories }: SkillsProps) {
               <h3 className="skill-group-title">{category.name}</h3>
               <div className="skill-tags">
                 {categorySkills.map((skill) => (
-                  <SkillTag
-                    key={skill.title}
-                    data={skill}
-                    categories={categories}
-                  />
+                  <SkillTag key={skill.title} data={skill} />
                 ))}
               </div>
             </div>

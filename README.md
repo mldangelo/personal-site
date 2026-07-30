@@ -98,11 +98,11 @@ npm run type-check      # Run TypeScript
 npm test                # Run Vitest
 npm run build           # Build the production static export
 npm run verify-export   # Inspect the generated HTML and XML
-npm run og              # Regenerate the share card
-npm run og:check        # Verify the committed share card is current
+npm run og              # Regenerate the site and per-post share cards
+npm run og:check        # Verify the committed share cards are current
 ```
 
-CI checks formatting, linting, types, the share card, tests, the production
+CI checks formatting, linting, types, the share cards, tests, the production
 build, and the exported site on every pull request.
 
 ## Deploy

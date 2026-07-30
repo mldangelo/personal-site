@@ -1,6 +1,11 @@
 import dayjs from 'dayjs';
 
 import type { Position } from '@/data/resume/work';
+import {
+  type DateInput,
+  positionDuration,
+  positionDurationLong,
+} from '@/lib/career';
 
 import JobSummary from './JobSummary';
 
@@ -10,11 +15,25 @@ export type JobTier = 'lead' | 'primary' | 'early';
 interface JobProps {
   data: Position;
   tier?: JobTier;
+  /**
+   * Instant an ongoing role is measured to. Required rather than defaulted to
+   * `Date.now()`, because a default is one clock read *per role*: a spine of
+   * ongoing roles would each measure themselves against their own instant, and
+   * the disagreement is invisible until two reads straddle a month boundary.
+   * Requiring it is the same contract `positionDuration` in `src/lib/career.ts`
+   * sets, for the same reason — the figure stays deterministic and a test can
+   * pin it. `Experience` reads the clock once and threads it here.
+   */
+  now: DateInput;
 }
 
-export default function Job({ data, tier = 'primary' }: JobProps) {
+export default function Job({ data, tier = 'primary', now }: JobProps) {
   const { name, position, url, startDate, endDate, summary, highlights } = data;
   const isCurrent = !endDate;
+  // Derived from the dates rather than written out per role, so it cannot
+  // contradict the range beside it.
+  const duration = positionDuration(data, now);
+  const durationLong = positionDurationLong(data, now);
 
   return (
     <article
@@ -37,6 +56,10 @@ export default function Job({ data, tier = 'primary' }: JobProps) {
         ) : (
           <span className="daterange-present">Present</span>
         )}
+        <span className="daterange-duration">
+          <span aria-hidden="true">{duration}</span>
+          <span className="sr-only">Duration: {durationLong}</span>
+        </span>
       </p>
 
       <div className="job-body">

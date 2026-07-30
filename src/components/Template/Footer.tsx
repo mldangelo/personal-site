@@ -3,12 +3,14 @@ import Link from 'next/link';
 import ContactIcons from '@/components/Contact/ContactIcons';
 import work from '@/data/resume/work';
 import routes from '@/data/routes';
+import { currentPosition } from '@/lib/career';
 import { AUTHOR_NAME } from '@/lib/utils';
 
 import ThemePortrait from './ThemePortrait';
 
 export default function Footer() {
-  const currentRole = `${work[0].position} at ${work[0].name}`;
+  const current = currentPosition(work);
+  const currentRole = current ? `${current.position} at ${current.name}` : null;
 
   return (
     <footer className="site-footer-new">

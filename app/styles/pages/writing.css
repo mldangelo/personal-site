@@ -200,8 +200,12 @@
    Individual post layout and typography
    ======================================== */
 
+/* The article occupies the page measure and the reading measure is applied to
+   the prose inside it, rather than to the article itself. Capping the article
+   left a wide figure nothing to grow into: a block at `width: auto` fills its
+   containing block, so a larger `max-width` on the figure did nothing. */
 .post-page {
-  max-width: var(--measure-read);
+  max-width: var(--measure-page);
   margin: 0;
   padding: 0;
 }
@@ -241,6 +245,7 @@
 }
 
 .post-header {
+  max-width: var(--measure-read);
   margin-bottom: 2.5rem;
   padding-bottom: 1.5rem;
   border-bottom: var(--rule) solid var(--color-border);
@@ -282,6 +287,12 @@
   color: var(--color-fg);
 }
 
+/* Continuous prose is held to the reading measure one block at a time, which is
+   what leaves the rest of the page measure available to a wide figure. */
+.prose > * {
+  max-width: var(--measure-read);
+}
+
 .prose h2 {
   font-family: var(--font-display);
   font-size: var(--text-xl);
@@ -310,16 +321,30 @@
 
 .prose h2,
 .prose h3,
-.prose h4 {
+.prose h4,
+.prose-anchor-alias {
   scroll-margin-top: calc(var(--header-height) + var(--spacing-6));
 }
 
 @media (max-width: 735px) {
   .prose h2,
   .prose h3,
-  .prose h4 {
+  .prose h4,
+  .prose-anchor-alias {
     scroll-margin-top: calc(var(--header-height-mobile) + var(--spacing-6));
   }
+}
+
+/* A heading whose id changed when the site unified its two slug schemes keeps
+   the id it published on an empty marker inside it, so a link shared before the
+   rename still resolves. Out of flow, so it contributes nothing to layout and
+   takes its position from the top of the heading's content box — which is what
+   makes the old anchor land exactly where the new one does. It carries no text
+   and is `aria-hidden`, so it is a target and nothing else. */
+.prose-anchor-alias {
+  position: absolute;
+  width: 0;
+  height: 0;
 }
 
 .prose p {
@@ -389,13 +414,44 @@
   border-radius: var(--radius-xs);
 }
 
+/* The wrapper carries the block's margin so the language plate can be
+   positioned against the fence's own top hairline. */
+.prose-fence {
+  position: relative;
+  margin: 1.5rem 0;
+}
+
 .prose pre {
   background: var(--color-surface-subtle);
   border: var(--rule) solid var(--color-border);
   border-radius: var(--radius-sm);
   padding: 1rem;
   overflow-x: auto;
-  margin: 1.5rem 0;
+  margin: 0;
+}
+
+/* Annotation on the rule that is already there: the language breaks the top
+   hairline the way a callout breaks a border on a drawing. Ink, not amber — a
+   fence's language is a static fact, not a live reading. */
+.prose-fence-lang {
+  position: absolute;
+  top: 0;
+  right: 0.75rem;
+  transform: translateY(-50%);
+  padding: 0 0.4rem;
+  /* Masks the hairline it straddles and nothing else, so the focus ring on the
+     fence below still reads as an unbroken rectangle. */
+  background: linear-gradient(var(--color-bg-alt), var(--color-bg-alt)) center / 100%
+    calc(var(--rule) + 2px) no-repeat;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  white-space: nowrap;
+  line-height: 1;
+  color: var(--color-fg-light);
+  pointer-events: none;
 }
 
 .prose pre code {
@@ -417,4 +473,51 @@
   height: auto;
   border-radius: var(--radius-sm);
   margin: 1.5rem 0;
+}
+
+/* ========================================
+   FIGURES
+   A screenshot is usually evidence — a dollar figure, a graph — so it is
+   allowed to reach its own intrinsic width rather than being crushed into the
+   reading measure. `--figure-width` is the build-time measurement, set inline
+   by PostContent, so a figure is never upscaled past its own pixels.
+   ======================================== */
+
+.prose-figure {
+  margin: 2rem 0;
+  /* Opting out of the per-block reading measure above: a `max-width` would
+     otherwise beat any width set here. */
+  max-width: none;
+  width: min(var(--figure-width, 100%), var(--measure-read), 100%);
+}
+
+.prose .prose-figure img {
+  display: block;
+  width: 100%;
+  margin: 0;
+}
+
+/* The caption is annotation about the figure, so it is set in mono at the
+   annotation size rather than as prose. */
+.prose-figcaption {
+  /* The figure may be wider than the reading measure; its caption is still
+     text, so it is not. */
+  max-width: var(--measure-read);
+  margin-top: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-fg-light);
+  text-wrap: pretty;
+}
+
+/* Above this width `.page-main` has reached its full --measure-page, so there is
+   real room beside the reading column for a wide figure to use. `100%` is the
+   article's own content box, so this can never overflow the page. Scoped to
+   `screen` so the printed article keeps its figures inside the text column. */
+@media screen and (min-width: 980px) {
+  .prose-figure {
+    width: min(var(--figure-width, 100%), 100%);
+  }
 }

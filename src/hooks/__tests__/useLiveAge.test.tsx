@@ -7,12 +7,18 @@ import useLiveAge from '../useLiveAge';
 
 const TEST_PRECISION = 8;
 
-function LiveAge({ precision = TEST_PRECISION }: { precision?: number }) {
-  const ref = useLiveAge<HTMLSpanElement>(precision);
+function LiveAge({
+  precision = TEST_PRECISION,
+  initial,
+}: {
+  precision?: number;
+  initial?: string;
+}) {
+  const { ref } = useLiveAge<HTMLSpanElement>(precision, initial);
 
   return (
     <span data-testid="live-age" ref={ref}>
-      {agePlaceholder(precision)}
+      {initial ?? agePlaceholder(precision)}
     </span>
   );
 }
@@ -54,6 +60,17 @@ describe('useLiveAge', () => {
     expect(live).toHaveLength(ageAt(Date.now(), TEST_PRECISION).length);
   });
 
+  it('renders the initial reading it was given on the server', () => {
+    // What the stats page threads through: the age the build measured, at a
+    // precision the build can honestly claim. Effects flush during Testing
+    // Library's `render()`, so the server path has to be checked this way.
+    const initial = ageAt(Date.now(), 2);
+    const html = renderToStaticMarkup(<LiveAge initial={initial} />);
+
+    expect(html).toContain(`>${initial}<`);
+    expect(html).not.toContain('--.');
+  });
+
   it('replaces the placeholder with a live reading', () => {
     render(<LiveAge />);
 
@@ -62,6 +79,20 @@ describe('useLiveAge', () => {
     });
 
     expect(screen.getByTestId('live-age')).toHaveTextContent(/^\d+\.\d+$/);
+  });
+
+  it('upgrades the precision of the reading it was handed', () => {
+    const initial = ageAt(Date.now(), 2);
+
+    render(<LiveAge initial={initial} />);
+
+    act(() => {
+      vi.advanceTimersByTime(50);
+    });
+
+    expect(screen.getByTestId('live-age')).toHaveTextContent(
+      new RegExp(`^\\d+\\.\\d{${TEST_PRECISION}}$`),
+    );
   });
 
   it('respects the requested precision', () => {
@@ -122,7 +153,7 @@ describe('useLiveAge', () => {
 
     function Counted() {
       renders += 1;
-      const ref = useLiveAge<HTMLSpanElement>(TEST_PRECISION);
+      const { ref } = useLiveAge<HTMLSpanElement>(TEST_PRECISION);
 
       return (
         <span data-testid="live-age" ref={ref}>
@@ -144,6 +175,28 @@ describe('useLiveAge', () => {
     expect(screen.getByTestId('live-age').textContent).not.toBe(firstReading);
     // ...and React never rendered again to make that happen.
     expect(renders).toBe(rendersAfterMount);
+  });
+
+  it('costs one extra render to come alive, and no more', () => {
+    // `live` exists so a readout can spend the signal colour only once the
+    // client is driving it. It flips once, on mount — the budget is the initial
+    // render plus that flip, and nothing per tick.
+    let renders = 0;
+
+    function Counted() {
+      renders += 1;
+      const { ref } = useLiveAge<HTMLSpanElement>(TEST_PRECISION);
+
+      return (
+        <span data-testid="live-age" ref={ref}>
+          {agePlaceholder(TEST_PRECISION)}
+        </span>
+      );
+    }
+
+    render(<Counted />);
+
+    expect(renders).toBe(2);
   });
 
   it('stops ticking when unmounted', () => {

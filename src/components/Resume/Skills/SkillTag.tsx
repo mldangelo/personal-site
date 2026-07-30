@@ -1,41 +1,23 @@
-import type { CSSProperties } from 'react';
-
-import type { Category, Skill } from '@/data/resume/skills';
-import { MAX_COMPETENCY } from '@/lib/utils';
+import type { Skill } from '@/data/resume/skills';
 
 interface SkillTagProps {
   data: Skill;
-  categories: Category[];
 }
 
-export default function SkillTag({ data, categories }: SkillTagProps) {
-  const { category, competency, title } = data;
-
-  // Get the primary category color
-  const categoryColor = categories.find((cat) =>
-    category.includes(cat.name),
-  )?.color;
-
-  // Size based on competency (5 = large, 4 = medium, 3 = small)
-  const sizeClass =
-    competency >= 5
-      ? 'skill-tag--lg'
-      : competency >= 4
-        ? 'skill-tag--md'
-        : 'skill-tag--sm';
-
-  return (
-    <span
-      className={`skill-tag ${sizeClass}`}
-      style={
-        {
-          '--tag-color': categoryColor,
-        } as CSSProperties
-      }
-      title={`${title}: ${competency} out of ${MAX_COMPETENCY}`}
-      aria-label={`${title}: proficiency ${competency} out of ${MAX_COMPETENCY}`}
-    >
-      <span className="skill-tag-name">{title}</span>
-    </span>
-  );
+/**
+ * A tag is its name and nothing else.
+ *
+ * The old tag encoded a 1–5 self-score in its size plus a `title` and an
+ * `aria-label`. That label sat on a bare `<span>`, which maps to role `generic`,
+ * so the name was discarded and screen readers announced nothing at all. A
+ * `core`/`working`/`familiar` tier later replaced the score with a coarser one.
+ * Both rating systems are gone; hierarchy is the authored order of
+ * `src/data/resume/skills.ts`.
+ *
+ * Separately, an inline `--tag-color` painted the same decorative category tick
+ * on every tag; it never encoded competency. Anything added back here needs a
+ * useful visible purpose and, if it carries text, a role that accepts a name.
+ */
+export default function SkillTag({ data }: SkillTagProps) {
+  return <span className="skill-tag">{data.title}</span>;
 }

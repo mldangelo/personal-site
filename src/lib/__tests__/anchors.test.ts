@@ -1,7 +1,12 @@
 import { describe, expect, it } from 'vitest';
 
 import { aboutMarkdown } from '@/data/about';
-import { createHeadingId, createUniqueHeadingIds } from '../anchors';
+import { getPostBySlug } from '@/lib/posts';
+import {
+  createHeadingId,
+  createUniqueHeadingIds,
+  planMarkdownHeadingAnchors,
+} from '../anchors';
 
 function getAboutSectionTitles(markdown: string): string[] {
   return Array.from(
@@ -64,5 +69,75 @@ describe('createUniqueHeadingIds', () => {
 
     expect(ids.every((id) => id.length > 0)).toBe(true);
     expect(new Set(ids).size).toBe(ids.length);
+  });
+});
+
+const aliasesFor = (markdown: string) =>
+  planMarkdownHeadingAnchors(markdown).aliases;
+
+describe('planMarkdownHeadingAnchors', () => {
+  it('emits nothing when both slug schemes agree', () => {
+    expect(aliasesFor('## Verification layers\n\n## The workflow\n')).toEqual(
+      new Map(),
+    );
+  });
+
+  it('recovers the ids the real published post used to serve', () => {
+    const post = getPostBySlug('shipping-with-claude-code');
+    if (!post) {
+      throw new Error('expected shipping-with-claude-code to be published');
+    }
+
+    expect(aliasesFor(post.content)).toEqual(
+      new Map([
+        [
+          'on-using-dangerously-skip-permissions',
+          'on-using---dangerously-skip-permissions',
+        ],
+        [
+          'browser-automation-chrome-for-interaction-playwright-mcp-for-screenshots',
+          'browser-automation---chrome-for-interaction-playwright-mcp-for-screenshots',
+        ],
+        [
+          'plan-mode-writing-plans-to-files',
+          'plan-mode--writing-plans-to-files',
+        ],
+        ['claude-md-agents-md', 'claudemd--agentsmd'],
+      ]),
+    );
+  });
+
+  it('covers a heading written after the rename with no list to update', () => {
+    expect(aliasesFor('## Shipping `--yolo` mode\n')).toEqual(
+      new Map([['shipping-yolo-mode', 'shipping---yolo-mode']]),
+    );
+  });
+
+  it('suppresses an alias that another heading already owns as its canonical id', () => {
+    // `Node.js` used to publish `nodejs`, which the second heading now derives
+    // canonically. Two elements sharing an id is worse than one dead link, so
+    // the alias is dropped rather than emitted.
+    const aliases = aliasesFor('## Node.js\n\n## Nodejs\n');
+
+    expect(aliases.get('node-js')).toBeUndefined();
+    expect(aliases).toEqual(new Map());
+  });
+
+  it('suppresses a legacy id when two headings would claim it', () => {
+    // Both headings used to publish `a--b`; assigning the alias to either one
+    // would make the other old deep link land at the wrong section.
+    const aliases = aliasesFor('## A & B\n\n## A  B\n');
+
+    expect(aliases).toEqual(new Map());
+  });
+
+  it('refuses to alias an id that appears on more than one heading', () => {
+    expect(aliasesFor('## Using `--flag`\n\n## Using `--flag`\n')).toEqual(
+      new Map(),
+    );
+  });
+
+  it('never proposes an empty id as a link target', () => {
+    expect(aliasesFor('## !!!\n')).toEqual(new Map());
   });
 });

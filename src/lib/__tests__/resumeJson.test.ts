@@ -1,0 +1,379 @@
+import { describe, expect, it, vi } from 'vitest';
+
+import contact from '@/data/contact';
+import profile from '@/data/profile.json';
+import courses from '@/data/resume/courses';
+import degrees from '@/data/resume/degrees';
+import { categories, skills } from '@/data/resume/skills';
+import work from '@/data/resume/work';
+import { sortPositions } from '@/lib/career';
+import {
+  buildJsonResume,
+  RESUME_JSON_PATH,
+  RESUME_JSON_URL,
+  serializeJsonResume,
+  toPlainText,
+} from '@/lib/resumeJson';
+import { AUTHOR_NAME, SITE_DESCRIPTION, SITE_URL } from '@/lib/utils';
+
+/** Root properties JSON Resume v1.0.0 allows; the schema forbids the rest. */
+const ROOT_KEYS = [
+  '$schema',
+  'basics',
+  'work',
+  'volunteer',
+  'education',
+  'awards',
+  'certificates',
+  'publications',
+  'skills',
+  'languages',
+  'interests',
+  'references',
+  'projects',
+  'meta',
+];
+
+/** The schema's `iso8601` definition: YYYY, YYYY-MM, or YYYY-MM-DD. */
+const ISO8601 =
+  /^([1-2][0-9]{3}-[0-1][0-9]-[0-3][0-9]|[1-2][0-9]{3}-[0-1][0-9]|[1-2][0-9]{3})$/;
+
+const resume = buildJsonResume();
+
+/**
+ * Every inline `<a href>` in the source résumé prose. The doc comment on
+ * `toPlainText` claims the text of each one survives into the artifact and the
+ * href does not; these are what hold it to that.
+ */
+const sourceAnchors = work
+  .flatMap((position) => [
+    position.summary ?? '',
+    ...(position.highlights ?? []),
+  ])
+  .flatMap((source) => [
+    ...source.matchAll(/<a\s[^>]*href='([^']+)'[^>]*>([^<]+)<\/a>/g),
+  ])
+  .map((match) => ({ href: match[1], text: match[2] }));
+
+/** The plain-text prose of the built document, as one string. */
+const resumeProse = resume.work
+  .flatMap((position) => [
+    position.summary ?? '',
+    ...(position.highlights ?? []),
+  ])
+  .join('\n');
+
+describe('toPlainText', () => {
+  it('keeps anchor text and drops the markup', () => {
+    expect(
+      toPlainText("see <a href='https://example.com'>the docs</a> now"),
+    ).toBe('see the docs now');
+  });
+
+  it('unwraps markdown links, emphasis, and code', () => {
+    expect(
+      toPlainText('[docs](https://example.com) are **very** *good* `code`'),
+    ).toBe('docs are very good code');
+  });
+
+  it('collapses the wrapping and indentation of template literals', () => {
+    expect(toPlainText('one\n    two\n\n  three ')).toBe('one two three');
+  });
+
+  it('decodes HTML entities', () => {
+    expect(toPlainText('Trust &amp; Safety &#38; more')).toBe(
+      'Trust & Safety & more',
+    );
+    // The same character named three ways, so the range guard below cannot be
+    // satisfied by refusing everything numeric.
+    expect(toPlainText('&amp; &#38; &#x26;')).toBe('& & &');
+  });
+
+  it('decodes the last code point Unicode defines', () => {
+    // 0x10FFFF is the boundary: valid, and one above it is not.
+    expect(toPlainText('edge &#x10FFFF; case')).toBe(
+      `edge ${String.fromCodePoint(0x10ffff)} case`,
+    );
+    expect(toPlainText('edge &#1114111; case')).toBe(
+      `edge ${String.fromCodePoint(0x10ffff)} case`,
+    );
+  });
+
+  it('leaves an out-of-range numeric entity intact instead of throwing', () => {
+    // `String.fromCodePoint` throws a `RangeError` above 0x10FFFF, which would
+    // fail the `/resume.json` build over one mistyped entity in a summary.
+    // Same fallback as an unknown named entity: the source text stays put.
+    expect(() => toPlainText('a &#99999999; b')).not.toThrow();
+    expect(toPlainText('a &#99999999; b')).toBe('a &#99999999; b');
+    expect(toPlainText('a &#x6000000; b')).toBe('a &#x6000000; b');
+    // 0x110000, the first invalid code point, in both bases.
+    expect(toPlainText('a &#x110000; b')).toBe('a &#x110000; b');
+    expect(toPlainText('a &#1114112; b')).toBe('a &#1114112; b');
+  });
+
+  it('leaves a lone surrogate as text rather than emitting an unpaired one', () => {
+    // This one does not throw — `String.fromCodePoint(0xd800)` returns half a
+    // surrogate pair, which would reach the artifact as a `\ud800` escape that
+    // decodes to nothing readable. Refused for that reason, not for safety.
+    const decoded = toPlainText('a &#xD800; b');
+
+    expect(decoded).toBe('a &#xD800; b');
+    expect(decoded.isWellFormed()).toBe(true);
+    expect(toPlainText('a &#xDFFF; b')).toBe('a &#xDFFF; b');
+    expect(toPlainText('a &#55296; b')).toBe('a &#55296; b');
+    // The characters either side of the block still decode, so the refusal is
+    // the surrogate range and not everything near it.
+    expect(toPlainText('&#xD7FF;&#xE000;')).toBe(
+      `${String.fromCodePoint(0xd7ff)}${String.fromCodePoint(0xe000)}`,
+    );
+  });
+
+  it('leaves an entity it cannot name a character for intact', () => {
+    // `&#abc;` parses to NaN, and every comparison against NaN is false, so it
+    // reaches the same fallback as the out-of-range cases without a check of
+    // its own. An unrecognised named entity has always taken that fallback.
+    expect(toPlainText('a &#abc; b')).toBe('a &#abc; b');
+    expect(toPlainText('a &nope; b')).toBe('a &nope; b');
+  });
+
+  it('leaves underscores alone so identifiers survive', () => {
+    expect(toPlainText('the snake_case_name field')).toBe(
+      'the snake_case_name field',
+    );
+  });
+});
+
+describe('json resume document', () => {
+  it('declares the schema it conforms to and adds no keys of its own', () => {
+    expect(resume.$schema).toBe(
+      'https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json',
+    );
+    for (const key of Object.keys(resume)) {
+      expect(ROOT_KEYS).toContain(key);
+    }
+  });
+
+  it('builds basics from the shared profile facts', () => {
+    expect(resume.basics).toMatchObject({
+      name: AUTHOR_NAME,
+      label: profile.role,
+      email: profile.email,
+      image: `${SITE_URL}/images/me.jpg`,
+      url: `${SITE_URL}/`,
+      summary: SITE_DESCRIPTION,
+    });
+  });
+
+  it('splits the display city into city and region without asserting a country', () => {
+    expect(resume.basics.location).toEqual({ city: 'New York', region: 'NY' });
+  });
+
+  it('lists every non-email contact as a profile with its handle', () => {
+    const socials = contact.filter((item) => !item.link.startsWith('mailto:'));
+
+    expect(resume.basics.profiles).toHaveLength(socials.length);
+    expect(resume.basics.profiles).toContainEqual({
+      network: 'GitHub',
+      username: 'mldangelo',
+      url: 'https://github.com/mldangelo',
+    });
+    expect(resume.basics.profiles).toContainEqual({
+      network: 'LinkedIn',
+      username: 'michaelldangelo',
+      url: 'https://www.linkedin.com/in/michaelldangelo',
+    });
+    expect(
+      resume.basics.profiles.every((entry) => entry.username.length > 0),
+    ).toBe(true);
+  });
+
+  it('carries every position in the order /resume renders them', () => {
+    // Not `work` in source order: the page renders `sortPositions(work)`, and
+    // the two published artifacts must not disagree about the same ten roles.
+    const rendered = sortPositions(work);
+
+    expect(resume.work.map((position) => position.name)).toEqual(
+      rendered.map((position) => position.name),
+    );
+    expect(resume.work).toHaveLength(work.length);
+    expect(resume.work[0]).toMatchObject({
+      name: 'OpenAI',
+      position: rendered[0].position,
+      url: rendered[0].url,
+      startDate: rendered[0].startDate,
+    });
+  });
+
+  it('omits endDate for the current role rather than inventing one', () => {
+    // Looked up by name, not by index: ordering is by end date, so the roles
+    // with no end date lead and their relative position is not this test's
+    // subject. Every ongoing role must omit the key rather than carry a
+    // placeholder, and a closed one must report its real date.
+    const ongoing = resume.work.filter((position) => !position.endDate);
+    expect(ongoing.length).toBeGreaterThan(0);
+    for (const position of ongoing) {
+      expect(position).not.toHaveProperty('endDate');
+    }
+
+    expect(resume.work[0].name).toBe('OpenAI');
+    expect(
+      resume.work.find((position) => position.name === 'Promptfoo')?.endDate,
+    ).toBe('2026-03-09');
+  });
+
+  it('reduces summaries carrying inline anchors to plain text', () => {
+    expect(resume.work[0].summary).toBe(
+      'Building Promptfoo and Codex Security at OpenAI, with a focus on securing AI systems and applying AI to software security.',
+    );
+
+    const arthena = resume.work.find((position) => position.name === 'Arthena');
+    expect(arthena?.summary).toContain(
+      'backed by Anthemis, Foundation Capital, and Y Combinator',
+    );
+  });
+
+  it('keeps the text of every inline anchor', () => {
+    // Six, in three summaries — the count the `toPlainText` comment states.
+    expect(sourceAnchors).toHaveLength(6);
+
+    for (const { text } of sourceAnchors) {
+      expect(resumeProse).toContain(text);
+    }
+  });
+
+  it('drops every inline href, and no other field brings one back', () => {
+    const serialized = serializeJsonResume();
+    const entryUrls = new Set(work.map((position) => position.url));
+
+    for (const { href } of sourceAnchors) {
+      expect(serialized).not.toContain(href);
+      // These are third-party links — an announcement, three investors, two
+      // funds — not the employer's own `url`, so that field does not recover
+      // them. This is the assertion that refutes the comment this file used to
+      // carry.
+      expect(entryUrls.has(href)).toBe(false);
+    }
+  });
+
+  it('leaves no markup or uncollapsed whitespace anywhere in the prose', () => {
+    const prose = resume.work.flatMap((position) => [
+      position.summary ?? '',
+      ...(position.highlights ?? []),
+    ]);
+
+    expect(prose.length).toBeGreaterThan(0);
+    for (const text of prose) {
+      expect(text).not.toMatch(/[<>]/);
+      expect(text).not.toMatch(/\[[^\]]+\]\([^)]*\)/);
+      expect(text).not.toMatch(/\s{2,}|[\n\r\t]/);
+    }
+  });
+
+  it('uses schema-valid dates throughout', () => {
+    for (const position of resume.work) {
+      expect(position.startDate).toMatch(ISO8601);
+      if (position.endDate) expect(position.endDate).toMatch(ISO8601);
+    }
+    for (const entry of resume.education) {
+      expect(entry.endDate).toMatch(ISO8601);
+    }
+  });
+
+  it('splits the degree string into studyType and area', () => {
+    expect(resume.education).toHaveLength(degrees.length);
+    expect(resume.education[0]).toMatchObject({
+      institution: 'Stanford University',
+      url: 'https://stanford.edu',
+      studyType: 'M.S.',
+      area: 'Computational and Mathematical Engineering (ICME)',
+      endDate: '2016',
+    });
+    expect(resume.education[1]).toMatchObject({
+      institution: 'University at Buffalo',
+      studyType: 'B.S.',
+      area: 'Electrical Engineering, Computer Engineering',
+      endDate: '2012',
+    });
+  });
+
+  it('files coursework under the school it was taken at', () => {
+    expect(resume.education[0].courses).toHaveLength(courses.length);
+    expect(resume.education[0].courses).toContain(
+      'EE 364a - Convex Optimization',
+    );
+    // Every course in the data is a Stanford course, so Buffalo carries none
+    // rather than an empty array.
+    expect(resume.education[1]).not.toHaveProperty('courses');
+  });
+
+  /**
+   * The artifact publishes the authored order, not a sort. Keywords used to be
+   * ordered by a 1–5 `competency` self-score, and the filter behind them used
+   * `String.includes` against what is now a single category name.
+   */
+  it('groups skills by category in the order the page renders them', () => {
+    expect(resume.skills.map((skill) => skill.name)).toEqual(
+      categories.map((category) => category.name),
+    );
+
+    for (const group of resume.skills) {
+      const expected = skills
+        .filter((skill) => skill.category === group.name)
+        .map((skill) => skill.title);
+
+      expect(group.keywords).toEqual(expected);
+    }
+
+    // Every skill reaches the artifact exactly once, which is what a single
+    // display category buys and what the old substring filter could not
+    // guarantee.
+    expect(resume.skills.flatMap((group) => group.keywords)).toHaveLength(
+      skills.length,
+    );
+  });
+
+  it('publishes no proficiency level', () => {
+    for (const group of resume.skills) {
+      expect(group).not.toHaveProperty('level');
+    }
+  });
+
+  it('keeps the canonical file-like', () => {
+    expect(RESUME_JSON_PATH).toBe('/resume.json');
+    expect(RESUME_JSON_URL).toBe(`${SITE_URL}/resume.json`);
+    expect(resume.meta.canonical).toBe(RESUME_JSON_URL);
+    expect(resume.meta.canonical).not.toMatch(/resume\.json\/$/);
+  });
+
+  it('publishes no lastModified rather than one that only means the work history', () => {
+    // It used to be the newest date in `work.ts`, which does not move when
+    // profile, contact, degrees, courses, or every skill changes.
+    expect(resume.meta).toEqual({ canonical: RESUME_JSON_URL });
+    expect(serializeJsonResume()).not.toContain('lastModified');
+  });
+
+  it('reads nothing from the build clock', () => {
+    // Stronger than asserting one field is not `Date.now()`: the whole
+    // document has to come out byte-identical after the clock moves years, so
+    // a rebuild cannot churn the artifact in git.
+    vi.useFakeTimers();
+    try {
+      vi.setSystemTime(new Date('2026-01-01T00:00:00Z'));
+      const first = serializeJsonResume();
+      vi.setSystemTime(new Date('2031-06-30T12:34:56Z'));
+
+      expect(serializeJsonResume()).toBe(first);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('serializes to stable, pretty-printed bytes', () => {
+    const serialized = serializeJsonResume();
+
+    expect(serialized).toBe(serializeJsonResume());
+    expect(serialized.endsWith('\n')).toBe(true);
+    expect(serialized).toContain('\n  "basics": {');
+    expect(JSON.parse(serialized)).toEqual(resume);
+  });
+});

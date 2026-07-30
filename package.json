@@ -26,7 +26,9 @@
     "analyze": "ANALYZE=true npm run build",
     "og": "node scripts/generate-og.mjs",
     "og:check": "node scripts/check-og.mjs",
-    "verify-export": "node scripts/verify-export.mjs"
+    "icons": "node scripts/generate-icons.mjs",
+    "verify-export": "node scripts/verify-export.mjs",
+    "measure-export": "node scripts/measure-export.mjs"
   },
   "dependencies": {
     "@fontsource-variable/bricolage-grotesque": "^5.3.0",

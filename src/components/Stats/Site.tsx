@@ -1,13 +1,15 @@
-import initialData from '../../data/stats/site';
+import declarations from '../../data/stats/site';
 import { countSourceLines } from '../../lib/loc';
+import {
+  countDirectDependencies,
+  countInstalledNonDevPackages,
+  countLintRules,
+  countLockedPackages,
+} from '../../lib/manifest';
+import { type Measurement, resolveReadings } from '../../lib/readings';
+import { deployedCommit, utcDate } from '../../lib/telemetry';
+import BuildClock from './BuildClock';
 import Table from './Table';
-
-type GitHubCacheKey =
-  | 'stargazers_count'
-  | 'subscribers_count'
-  | 'forks'
-  | 'open_issues_count'
-  | 'pushed_at';
 
 interface GitHubData {
   stargazers_count: number;
@@ -27,6 +29,17 @@ interface GitHubStatsResult {
  * time (rate limit, offline CI). These go stale by definition — refresh them
  * when you notice, and treat a build that logs the warning below as a build
  * that shipped approximate numbers.
+ *
+ * The note rendered below deliberately carries no date. It used to spell out
+ * "fallback refreshed July 25, 2026" — this snapshot's vintage typed a second
+ * time, in user-facing copy, free to drift from the numbers it dates and
+ * certain to go stale. Nothing here can honestly supply it either: `pushed_at`
+ * is the repository's last push as of capture rather than the capture, and the
+ * build clock is worse, because this constant exists precisely for builds
+ * where the fetch failed and stamping it with the build time would assert a
+ * freshness it does not have. The vintage stays where it already was — the
+ * `pushed_at` below renders as the "Last push to this repository" row — and
+ * the note tells the reader that row is part of the snapshot.
  *
  * Refreshed: 2026-07-25
  */
@@ -86,38 +99,66 @@ async function fetchGitHubStats(): Promise<GitHubStatsResult> {
 }
 
 /**
- * Site statistics component - fetches GitHub data at build time.
- * Server component, no client-side JavaScript shipped.
+ * Everything the page asserts about this codebase, counted from the working
+ * tree and its manifests rather than typed in. A count that cannot be taken
+ * comes back `null` and `resolveReadings` drops its row.
+ *
+ * Two of these describe the build rather than the tree. `built_at` is the
+ * instant this function ran, which under `output: 'export'` is the build; the
+ * value is a live client readout because the interesting figure is how long ago
+ * that was, and only the reader's browser can know. `deployed_commit` is the
+ * commit those bytes came from — `null`, and dropped, off CI.
+ */
+function measureThisBuild(): Record<string, Measurement> {
+  const builtAt = Date.now();
+
+  return {
+    source_lines: countSourceLines(),
+    direct_dependencies: countDirectDependencies(),
+    installed_non_dev_packages: countInstalledNonDevPackages(),
+    locked_packages: countLockedPackages(),
+    lint_rules: countLintRules(),
+    deployed_commit: deployedCommit(),
+    built_at: <BuildClock builtAt={builtAt} initial={utcDate(builtAt)} />,
+  };
+}
+
+/**
+ * The site table: GitHub readings fetched at build time, beside everything this
+ * build can count about itself.
+ *
+ * A server component — but it used to claim "no client-side JavaScript shipped",
+ * and that stopped being true the moment the build clock arrived. What is true
+ * is narrower and more useful: beyond what the shared layout already ships, the
+ * client JavaScript on this page is two leaves, `<BuildClock>` here and
+ * `<LiveAge>` in the personal table, and both write their readings straight to a
+ * text node through `useLiveReadout`. Verified in the export rather than
+ * asserted: the only client references inside either table in
+ * `out/stats/index.txt` are those two, one per `<td>`, so every label, link,
+ * value, and provenance mark around them is server markup that no reading can
+ * re-render.
+ *
+ * Keep the boundary at the leaf. Last time a reading needed a client component
+ * the whole table followed it across — declarations, `resolveReadings`, `Table`,
+ * `TableRow` — and the export shipped `--.-----------` as the age to every
+ * crawler and every printed copy. `src/components/Stats/LiveAge.tsx` tells that
+ * story.
  */
 export default async function SiteStats() {
-  // Started before the walk so the directory scan happens during the network
-  // round trip rather than after it. The Pages build deliberately runs this
-  // fetch uncached every time, so the two costs would otherwise stack.
+  // Started before the measurements so the file reads happen during the
+  // network round trip rather than after it. The Pages build deliberately runs
+  // this fetch uncached every time, so the two costs would otherwise stack.
   const githubStats = fetchGitHubStats();
 
-  // Measured from the working tree rather than typed in, so the figure
-  // cannot drift away from the code it describes.
-  const sourceLines = countSourceLines();
+  const measurements = measureThisBuild();
   const { data: githubData, source } = await githubStats;
 
-  // Apply formatting and resolve values - functions can't be serialized in RSC
-  const data = initialData.map((field) => {
-    const rawValue =
-      field.key === 'source_lines'
-        ? sourceLines
-        : field.key && field.key in githubData
-          ? (githubData[field.key as GitHubCacheKey] ?? field.value)
-          : field.value;
-
-    // Apply format function if present, otherwise use raw value
-    const value = field.format ? field.format(rawValue) : rawValue;
-
-    // Return only serializable properties (no functions)
-    return {
-      label: field.label,
-      value,
-      link: field.link,
-    };
+  // Resolution — including the `format` functions, which cannot cross the RSC
+  // boundary — happens in `src/lib/readings.ts` so both stats tables describe
+  // their provenance the same way.
+  const data = resolveReadings(declarations, {
+    ...measurements,
+    ...githubData,
   });
 
   return (
@@ -125,8 +166,8 @@ export default async function SiteStats() {
       <Table data={data} />
       <p className="stats-source-note" data-source={source}>
         {source === 'github'
-          ? 'GitHub readings fetched at build time.'
-          : 'Approximate GitHub readings — API unavailable; fallback refreshed July 25, 2026.'}
+          ? 'GitHub readings fetched at build time. Measured readings counted from the working tree of this build.'
+          : 'Approximate GitHub readings — API unavailable, so these are last-known values committed to the repository; the push date above is part of that snapshot, not a live reading. Measured readings counted from the working tree of this build.'}
       </p>
     </>
   );

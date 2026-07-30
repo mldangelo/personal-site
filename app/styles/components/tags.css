@@ -39,12 +39,14 @@
   justify-content: flex-start;
 }
 
-/* Skills read as plotted values: the category colour is carried by a
-   short tick rather than a heavy left border on a floating pill. */
+/* One weight for every skill. Both competency cues that have been through
+   here — a size variant and a spelled-out tier — encoded a 1–5 self-score that
+   is no longer published. Separately, the old per-category tick resolved to
+   the same accent in every category, so it communicated neither category nor
+   competency. Hierarchy is the authored order of the groups and their tags. */
 .skill-tag {
   display: inline-flex;
   align-items: center;
-  gap: 0.5em;
   padding: 0.4em 0.75em;
   background: transparent;
   border: var(--rule) solid var(--color-border);
@@ -53,26 +55,15 @@
   font-size: var(--text-xs);
   font-weight: var(--font-weight-normal);
   color: var(--color-fg);
+  white-space: nowrap;
   transition:
     border-color var(--duration-fast) var(--ease-out),
     background-color var(--duration-fast) var(--ease-out);
 }
 
-.skill-tag::before {
-  content: '';
-  width: 6px;
-  height: var(--rule-strong);
-  background: var(--tag-color, var(--color-accent));
-  flex-shrink: 0;
-}
-
 .skill-tag:hover {
   border-color: var(--color-fg-light);
   background: var(--color-surface-subtle);
-}
-
-.skill-tag-name {
-  white-space: nowrap;
 }
 
 /* Tech tags — squared, quiet, mono. */
@@ -95,18 +86,4 @@
 .project-card--linked:focus-within .tech-tag {
   color: var(--color-fg);
   border-color: var(--color-border-alt);
-}
-
-/* Size variations — weight, not scale. */
-.skill-tag--lg {
-  font-weight: var(--font-weight-medium);
-  color: var(--color-fg-bold);
-}
-
-.skill-tag--md {
-  font-weight: var(--font-weight-normal);
-}
-
-.skill-tag--sm {
-  color: var(--color-fg-light);
 }

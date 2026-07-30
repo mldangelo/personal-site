@@ -4,6 +4,7 @@ import Markdown from 'markdown-to-jsx';
 import { Children, type ReactNode } from 'react';
 import { createUniqueHeadingIds } from '@/lib/anchors';
 import { extractLogMarker } from '@/lib/logEntry';
+import { PROSE_LINK_OVERRIDES } from '@/lib/markdownLinks';
 
 interface AboutContentProps {
   markdown: string;
@@ -12,12 +13,13 @@ interface AboutContentProps {
 const LOG_VARIANT = 'about-section--log';
 
 /**
- * A single log entry, with any leading temporal marker lifted into the gutter.
+ * A single log entry, with its explicit temporal marker read into the gutter.
  *
  * markdown-to-jsx has already parsed the entry, so the marker lives in the
- * first child when that child is plain text. Entries that open with a link or
- * with no marker at all keep their text intact and simply leave the gutter
- * empty — the alternative would be rewording the source to fit the layout.
+ * first child when that child is plain text. Entries may state an age, a year,
+ * or both; the gutter does not derive a counterpart from an imprecise date.
+ * Entries that open with a link or carry no marker at all keep their text
+ * intact and simply leave the gutter empty.
  */
 function LogEntry({ children }: { children?: ReactNode }) {
   const nodes = Children.toArray(children);
@@ -35,7 +37,14 @@ function LogEntry({ children }: { children?: ReactNode }) {
 
   return (
     <li className="log-entry">
-      <span className="log-entry-marker">{extracted.marker}</span>
+      <span className="log-entry-marker">
+        {extracted.year ? (
+          <span className="log-entry-year">{extracted.year}</span>
+        ) : null}
+        {extracted.age ? (
+          <span className="log-entry-age">{extracted.age}</span>
+        ) : null}
+      </span>
       <span className="log-entry-body">
         {extracted.rest}
         {rest}
@@ -44,8 +53,16 @@ function LogEntry({ children }: { children?: ReactNode }) {
   );
 }
 
+/**
+ * Every block here is prose, so every block routes its internal links; the log
+ * sections additionally file each entry in the gutter.
+ */
+const MARKDOWN_OPTIONS = {
+  overrides: PROSE_LINK_OVERRIDES,
+};
+
 const LOG_MARKDOWN_OPTIONS = {
-  overrides: { li: { component: LogEntry } },
+  overrides: { ...PROSE_LINK_OVERRIDES, li: { component: LogEntry } },
 };
 
 interface AboutSection {
@@ -142,7 +159,7 @@ export default function AboutContent({ markdown }: AboutContentProps) {
     <article className="about-content">
       {intro ? (
         <div className="about-intro">
-          <Markdown>{intro}</Markdown>
+          <Markdown options={MARKDOWN_OPTIONS}>{intro}</Markdown>
         </div>
       ) : null}
       {sections.length > 0 ? (
@@ -174,7 +191,7 @@ export default function AboutContent({ markdown }: AboutContentProps) {
           {isLogSection(section.title) ? (
             <Markdown options={LOG_MARKDOWN_OPTIONS}>{section.body}</Markdown>
           ) : (
-            <Markdown>{section.body}</Markdown>
+            <Markdown options={MARKDOWN_OPTIONS}>{section.body}</Markdown>
           )}
         </section>
       ))}

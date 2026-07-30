@@ -69,7 +69,7 @@
 }
 
 .about-section-nav-link:focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: var(--rule-strong) solid var(--color-focus-ring);
   outline-offset: 2px;
 }
 
@@ -105,7 +105,7 @@
 }
 
 .about-section-heading-link:focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: var(--rule-strong) solid var(--color-focus-ring);
   outline-offset: 4px;
   border-radius: var(--radius-xs);
 }
@@ -220,8 +220,13 @@
 }
 
 /* Empty for entries that carry no marker; the column still holds so the
-   spine stays straight down the list. */
+   spine stays straight down the list. When the prose explicitly states both
+   year and age, stack them so the pair fits without widening the gutter. */
 .log-entry-marker {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.1em;
   font-family: var(--font-mono);
   font-size: var(--text-2xs);
   font-variant-numeric: tabular-nums;
@@ -231,6 +236,12 @@
   text-align: right;
   padding-top: 0.4em;
   line-height: 1.4;
+}
+
+/* Give an explicitly stated year a little more ink than the secondary age. */
+.log-entry-year {
+  color: var(--color-fg);
+  font-weight: var(--font-weight-medium);
 }
 
 .log-entry-body {
@@ -253,7 +264,11 @@
     left: 0;
   }
 
+  /* No gutter column to stack inside, so a year-age pair sits on one line. */
   .log-entry-marker {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 0 0.5em;
     text-align: left;
     padding-top: 0;
   }
@@ -534,6 +549,53 @@
   color: var(--color-fg-light);
 }
 
+.stat-table-label-text {
+  display: block;
+}
+
+/* Provenance. A figure counted from this working tree is not the same kind of
+   claim as one fetched from an API or one typed into a profile, so each row
+   says which it is — the 11px category-label role, not a value.
+
+   It hangs under the label instead of taking a third column. The 40/60 split
+   already wraps the value with `overflow-wrap: anywhere` below 480px, and a
+   third element per row would crowd it off a phone; stacked, the mark needs no
+   breakpoint of its own. It also has to sit below rather than above, because
+   both cells align on their first baseline — an 11px mark above the label
+   would drag the 36px value up to meet it. */
+.stat-provenance {
+  display: block;
+  margin-top: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-weight: var(--font-weight-normal);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--color-fg-light);
+}
+
+/* A hairline tick, in the ink the mark is already set in. Amber is reserved
+   for live values and the accent for structure and links, so nothing here
+   spends a colour: the three marks separate by word, weight, and rule. */
+.stat-provenance::before {
+  content: '';
+  display: inline-block;
+  width: 0.75rem;
+  margin-right: 0.5rem;
+  vertical-align: 0.28em;
+  border-top: var(--rule) solid currentcolor;
+}
+
+/* Counted from the tree this page describes — the only first-hand readings
+   here, so they carry the heavier rule. */
+.stat-provenance[data-source='measured'] {
+  font-weight: var(--font-weight-medium);
+}
+
+.stat-provenance[data-source='measured']::before {
+  border-top-width: var(--rule-strong);
+}
+
 .stat-table-value {
   width: 60%;
   text-align: right;
@@ -555,9 +617,42 @@
   color: var(--color-accent-hover);
 }
 
-/* The live reading — the same rule as the hero: amber means it moves. */
-.stat-live {
+/* A reading that upgrades itself when the page comes alive. The server renders
+   the value it can prove — the age at two decimals, the build date — and the
+   client replaces it in place with the one only a browser can take.
+
+   The box is reserved in `ch` for the widest form the reading takes, so
+   swapping two decimals for eleven cannot resize the cell it sits in. The
+   width comes from the component, measured off the strings themselves. */
+.stat-readout-value {
+  display: inline-block;
+  min-width: var(--readout-width, auto);
+}
+
+/* The same rule as the hero: amber means it moves. Spent only once the client
+   is actually driving the value — the build-time reading it replaces is an
+   ordinary measurement, and painting it amber would make the colour mean
+   "sometimes live", which is how a signal colour stops signalling. */
+.stat-readout-value[data-live='true'] {
   color: var(--color-signal);
+}
+
+/* What the reading is qualified by: the date it was taken, or `ago` once it is
+   counting. Genuinely secondary annotation, so the 11px role.
+
+   Below the value for the same reason the provenance mark sits below its label
+   — both cells align on their first baseline, so an 11px line above a 36px
+   value would drag the value up to meet it. */
+.stat-readout-note {
+  display: block;
+  margin-top: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-weight: var(--font-weight-normal);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--color-fg-light);
 }
 
 .stats-source-note {
@@ -567,6 +662,16 @@
   line-height: var(--leading-snug);
   letter-spacing: var(--tracking-wide);
   color: var(--color-fg-light);
+}
+
+/* A build that shipped last-known numbers must not look like one that fetched
+   them. Flagged with a heavy hairline and full-strength ink — deliberately not
+   amber, which on this site means a value is live, the opposite of what this
+   note is admitting. */
+.stats-source-note[data-source='fallback'] {
+  padding-left: 0.75rem;
+  border-left: var(--rule-strong) solid var(--color-border-alt);
+  color: var(--color-fg);
 }
 
 /* Screen reader only - visually hidden but accessible */
@@ -639,6 +744,13 @@
     font-size: var(--text-md);
     white-space: normal;
     overflow-wrap: anywhere;
+  }
+
+  /* The label column is ~150px on a phone. Tighten the tick so the mark still
+     fits on one line beside it rather than wrapping under its own rule. */
+  .stat-provenance::before {
+    width: 0.5rem;
+    margin-right: 0.35rem;
   }
 }
 

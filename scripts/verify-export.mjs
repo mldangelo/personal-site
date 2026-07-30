@@ -10,8 +10,20 @@
  * Run with `npm run verify-export` after `npm run build`.
  */
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
-import { basename, extname, join, relative, resolve, sep } from 'node:path';
+import { basename, extname, join, relative, resolve } from 'node:path';
 import matter from 'gray-matter';
+
+import { validatePostFrontmatterData } from '../src/lib/post-frontmatter.mjs';
+import {
+  attribute,
+  canonicalValues,
+  decodeHtml,
+  metaValues,
+  tags,
+} from './lib/html.mjs';
+import { declaredAssetRoutes, draftOnlyAssetRoutes } from './lib/markdown.mjs';
+import { exportLayout, readSiteConfig, toUrlPath } from './lib/site.mjs';
+import { POST_CARD_DIRECTORY } from './og-inputs.mjs';
 
 const ROOT = process.cwd();
 const OUT = resolve(ROOT, 'out');
@@ -35,108 +47,18 @@ function walk(dir, match) {
   return found;
 }
 
-/** URLs always use forward slashes; `relative` uses the platform separator. */
-const toUrlPath = (path) => path.split(sep).join('/');
-
-function routeForHtml(relativePath) {
-  if (relativePath === 'index.html') return '/';
-  if (relativePath.endsWith('/index.html')) {
-    return `/${relativePath.slice(0, -'index.html'.length)}`;
-  }
-  return `/${relativePath}`;
-}
-
-function decodeHtml(value) {
-  return value
-    .replace(/&quot;/g, '"')
-    .replace(/&apos;|&#39;/g, "'")
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&amp;/g, '&')
-    .replace(/&#x([0-9a-f]+);/gi, (_, hex) =>
-      String.fromCodePoint(Number.parseInt(hex, 16)),
-    )
-    .replace(/&#([0-9]+);/g, (_, decimal) =>
-      String.fromCodePoint(Number.parseInt(decimal, 10)),
-    );
-}
-
-function tags(html, name = '[a-z][\\w:-]*') {
-  return [...html.matchAll(new RegExp(`<${name}\\b[^>]*>`, 'gi'))].map(
-    (match) => match[0],
-  );
-}
-
-function attribute(tag, name) {
-  const match = tag.match(
-    new RegExp(`\\s${name}\\s*=\\s*(?:"([^"]*)"|'([^']*)'|([^\\s>]+))`, 'i'),
-  );
-  const value = match?.[1] ?? match?.[2] ?? match?.[3];
-  return value === undefined ? undefined : decodeHtml(value);
-}
-
-function metaValues(html, key, value) {
-  return tags(html, 'meta')
-    .filter((tag) => attribute(tag, key)?.toLowerCase() === value)
-    .map((tag) => attribute(tag, 'content'))
-    .filter((content) => content !== undefined);
-}
-
-function canonicalValues(html) {
-  return tags(html, 'link')
-    .filter((tag) =>
-      (attribute(tag, 'rel') ?? '')
-        .toLowerCase()
-        .split(/\s+/)
-        .includes('canonical'),
-    )
-    .map((tag) => attribute(tag, 'href'))
-    .filter((href) => href !== undefined);
-}
-
-function readSiteConfig() {
-  const packagePath = resolve(ROOT, 'package.json');
-  try {
-    const { homepage } = JSON.parse(readFileSync(packagePath, 'utf8'));
-    const url = new URL(homepage);
-    if (
-      url.protocol !== 'https:' ||
-      url.search ||
-      url.hash ||
-      !url.pathname.endsWith('/')
-    ) {
-      throw new Error(
-        'homepage must be an HTTPS URL with a trailing slash and no query/hash',
-      );
-    }
-
-    const basePath =
-      url.pathname === '/' ? '' : url.pathname.replace(/\/+$/, '');
-    return { origin: url.origin, basePath };
-  } catch (error) {
-    console.error(
-      `verify-export: cannot read the canonical site URL from package.json: ${error.message}`,
-    );
-    process.exit(1);
-  }
-}
-
-const { origin: SITE_ORIGIN, basePath: SITE_BASE_PATH } = readSiteConfig();
-
-function publicPathForRoute(route) {
-  return `${SITE_BASE_PATH}${route}`;
-}
-
-function routeForPublicPath(pathname) {
-  if (!SITE_BASE_PATH) return pathname;
-  if (pathname === `${SITE_BASE_PATH}/`) return '/';
-  if (!pathname.startsWith(`${SITE_BASE_PATH}/`)) return undefined;
-  return pathname.slice(SITE_BASE_PATH.length);
-}
-
-function siteUrlForRoute(route) {
-  return `${SITE_ORIGIN}${publicPathForRoute(route)}`;
-}
+const {
+  origin: SITE_ORIGIN,
+  basePath: SITE_BASE_PATH,
+  exportFileFor,
+  publicPathForRoute,
+  routeForHtml,
+  routeForPublicPath,
+  siteUrlForRoute,
+} = exportLayout({
+  outDir: OUT,
+  ...readSiteConfig(ROOT, 'verify-export'),
+});
 
 const pages = walk(OUT, (name) => name.endsWith('.html'));
 
@@ -145,18 +67,116 @@ if (pages.length === 0) {
   process.exit(1);
 }
 
-const draftSlugs = walk(CONTENT, (name) => name.endsWith('.md'))
+const posts = walk(CONTENT, (name) => name.endsWith('.md')).map((path) => {
   // Use the same YAML parser as the application. A line regex misses valid
   // forms such as `draft: true # keep private`, weakening the fault-injection
-  // gate precisely when the route layer regresses.
-  .filter((path) => matter(readFileSync(path, 'utf8')).data.draft === true)
-  .map((path) => basename(path, '.md'));
+  // gate precisely when the route layer regresses. Validation is shared with
+  // the route and share-card readers so malformed frontmatter cannot pass one
+  // publication boundary and fail another.
+  const { data, content } = matter(readFileSync(path, 'utf8'));
+  const source = relative(ROOT, path);
+  const frontmatter = validatePostFrontmatterData(data, source);
+
+  return {
+    slug: basename(path, '.md'),
+    isDraft: frontmatter.draft === true,
+    assets: declaredAssetRoutes({ data, content }),
+  };
+});
+
+const draftSlugs = posts
+  .filter((post) => post.isDraft)
+  .map((post) => post.slug);
 
 function isDraftPath(pathname) {
   const route = routeForPublicPath(pathname) ?? pathname;
   return draftSlugs.some(
     (slug) =>
       route === `/writing/${slug}` || route.startsWith(`/writing/${slug}/`),
+  );
+}
+
+/**
+ * Where in the export a file *named after* a post can appear.
+ *
+ * `POST_CARD_DIRECTORY` is the generated share cards, taken from the generator's
+ * own constant so moving them cannot silently un-scope this gate. `/writing` is
+ * the posts' own route tree, which carries more than HTML: Next writes an RSC
+ * prefetch payload beside every prerendered route, so a leaked draft route also
+ * ships an `index.txt` that no metadata check reads. `/images/writing` is where
+ * article images live.
+ *
+ * Scoping is what keeps a slug rule honest: the scan used to match any path
+ * segment anywhere in `out/`, which meant a draft slug colliding with an
+ * unrelated committed file (`notes.md` against `public/images/notes.png`) failed
+ * the whole build with a draft-leak message pointing at a file nothing
+ * generated. The cost is that a name this list does not cover is invisible here
+ * — which is not the same as unwatched, because the reference scan below reads
+ * the post's own declaration and does not care about names at all. Register a
+ * new directory that holds *generated* per-post files anyway; the Markdown
+ * cannot reference what the build invents.
+ */
+const POST_ASSET_ROOTS = [POST_CARD_DIRECTORY, '/writing', '/images/writing'];
+
+/**
+ * A route under one of those directories that belongs to a draft.
+ *
+ * The slug has to be a whole path component: `<root>/<slug>` itself, anything
+ * beneath it, or a sibling file named for it (`<root>/<slug>.png`). A prefix
+ * match alone would also catch `<root>/<slug>-part-two.png`, which is a
+ * different post.
+ */
+function isDraftAsset(route) {
+  return POST_ASSET_ROOTS.some((root) =>
+    draftSlugs.some(
+      (slug) =>
+        route === `${root}/${slug}` ||
+        route.startsWith(`${root}/${slug}/`) ||
+        route.startsWith(`${root}/${slug}.`),
+    ),
+  );
+}
+
+/**
+ * Nothing belonging to a draft may reach the export, not only routes.
+ *
+ * The route and metadata checks below see HTML and XML. `public/` is copied
+ * into the export verbatim, so anything belonging to an unpublished post — a
+ * per-post share card, an author's screenshots — reaches the site as a plain
+ * file that no metadata gate looks at, carrying unpublished work in its name
+ * and its pixels. HTML is skipped here only because `isDraftPath` already
+ * covers every route.
+ */
+if (draftSlugs.length > 0) {
+  for (const file of walk(OUT, (name) => !name.endsWith('.html'))) {
+    const path = toUrlPath(relative(OUT, file));
+
+    // `out/` is the site root; the repository-site base path is not on disk, so
+    // an out-relative path is already a route.
+    if (isDraftAsset(`/${path}`)) {
+      fail(path, `exports an asset named after a draft post: /${path}`);
+    }
+  }
+}
+
+/**
+ * Files a draft declares as its own, wherever they were filed.
+ *
+ * This is the half of the draft-asset gate that does not go through names. The
+ * live example is `public/images/writing/codex-desktop-app-post/`, three
+ * screenshots for a `draft: true` post in a directory whose name appears in no
+ * slug — publicly fetchable, and invisible to every other check here.
+ */
+for (const [route, slug] of draftOnlyAssetRoutes(posts)) {
+  // Already fatal above, and one file deserves one report.
+  if (isDraftAsset(route)) continue;
+  if (!exportedFileExists(publicPathForRoute(route))) continue;
+
+  fail(
+    route.replace(/^\//, ''),
+    `draft post "${slug}" references this file, so it is publicly fetchable at ` +
+      `${siteUrlForRoute(route)}. Move it out of public/ until the post ships, ` +
+      'or publish the post in the same change.',
   );
 }
 
@@ -196,19 +216,7 @@ function pageAt(pathname) {
 }
 
 function exportedFileExists(pathname) {
-  let decoded;
-  try {
-    decoded = decodeURIComponent(pathname);
-  } catch {
-    return false;
-  }
-
-  const route = routeForPublicPath(decoded);
-  if (route === undefined) return false;
-
-  const candidate = resolve(OUT, route.replace(/^\/+/, ''));
-  if (candidate !== OUT && !candidate.startsWith(`${OUT}${sep}`)) return false;
-  return existsSync(candidate) && statSync(candidate).isFile();
+  return exportFileFor(pathname) !== undefined;
 }
 
 function parseHttpUrl(raw, baseRoute, page, label) {
@@ -593,6 +601,117 @@ if (!existsSync(feedPath)) {
   }
 }
 
+/** Root properties JSON Resume v1.0.0 allows; the schema forbids the rest. */
+const JSON_RESUME_ROOT_KEYS = new Set([
+  '$schema',
+  'basics',
+  'work',
+  'volunteer',
+  'education',
+  'awards',
+  'certificates',
+  'publications',
+  'skills',
+  'languages',
+  'interests',
+  'references',
+  'projects',
+  'meta',
+]);
+
+/** Every string leaf, with a dotted path, so failures name the field. */
+function stringLeaves(value, path = '') {
+  if (typeof value === 'string') return [[path, value]];
+  if (Array.isArray(value)) {
+    return value.flatMap((item, index) =>
+      stringLeaves(item, `${path}[${index}]`),
+    );
+  }
+  if (value && typeof value === 'object') {
+    return Object.entries(value).flatMap(([key, item]) =>
+      stringLeaves(item, path ? `${path}.${key}` : key),
+    );
+  }
+  return [];
+}
+
+const resumeJsonPath = join(OUT, 'resume.json');
+if (!existsSync(resumeJsonPath)) {
+  fail('resume.json', 'missing from export');
+} else {
+  let resume;
+  try {
+    resume = JSON.parse(readFileSync(resumeJsonPath, 'utf8'));
+  } catch (error) {
+    fail('resume.json', `is not valid JSON: ${error.message}`);
+  }
+
+  if (resume) {
+    for (const key of Object.keys(resume)) {
+      if (!JSON_RESUME_ROOT_KEYS.has(key)) {
+        fail(
+          'resume.json',
+          `key is not part of the JSON Resume schema: ${key}`,
+        );
+      }
+    }
+    if (!resume.basics?.name) fail('resume.json', 'basics.name is missing');
+    if (!Array.isArray(resume.work) || resume.work.length === 0) {
+      fail('resume.json', 'work is missing or empty');
+    }
+
+    const expectedCanonical = siteUrlForRoute('/resume.json');
+    if (resume.meta?.canonical !== expectedCanonical) {
+      fail(
+        'resume.json',
+        `meta.canonical is ${resume.meta?.canonical}; expected ${expectedCanonical}`,
+      );
+    }
+
+    for (const [path, value] of stringLeaves(resume)) {
+      if (/^https?:\/\//i.test(value)) {
+        validateXmlUrl(value, 'resume.json');
+        continue;
+      }
+      // JSON Resume prose is plain text. The work summaries are Markdown with
+      // inline anchors in source, so this is the gate on that conversion.
+      if (/<[a-z/][^>]*>/i.test(value) || /\[[^\]]+\]\([^)]*\)/.test(value)) {
+        fail('resume.json', `${path} carries markup rather than plain text`);
+      }
+      if (/\s{2,}|[\n\r\t]/.test(value)) {
+        fail('resume.json', `${path} has uncollapsed whitespace`);
+      }
+    }
+  }
+
+  // The artifact is only discoverable if the page still points at it. The
+  // internal-link pass proves the target exists; this proves the link is there.
+  // `pageAt` takes a public path, which carries the base path on a
+  // repository site.
+  const resumePage = pageAt(publicPathForRoute('/resume/'));
+  if (!resumePage) {
+    fail('resume.json', 'no exported /resume/ page to link the artifact');
+  } else if (
+    !tags(resumePage.html, 'a').some((tag) => {
+      const href = attribute(tag, 'href');
+      const url = href
+        ? parseHttpUrl(
+            href,
+            resumePage.route,
+            resumePage.relativePath,
+            'resume JSON link',
+          )
+        : undefined;
+      return url?.href === siteUrlForRoute('/resume.json');
+    })
+  ) {
+    fail(
+      'resume.json',
+      '/resume/ does not link to the machine-readable resume',
+    );
+  }
+}
+
 if (failures.length > 0) {
   console.error(`\nverify-export: ${failures.length} problem(s)\n`);
   for (const { page, message } of failures) {
@@ -602,6 +721,5 @@ if (failures.length > 0) {
 }
 
 console.log(
-  `verify-export: ${pages.length} pages OK ` +
-    '(drafts, robots, ids/fragments, canonicals, complete share metadata, local images, internal links, sitemap/RSS)',
+  `verify-export: ${pages.length} pages OK (draft routes and assets, robots, ids/fragments, canonicals, complete share metadata, local images, internal links, sitemap/RSS, resume.json)`,
 );

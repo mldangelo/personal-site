@@ -1,0 +1,28 @@
+{
+  "inputs": {
+    "accent": "#1b2fbf",
+    "onAccent": "#ffffff",
+    "backgroundLight": "#f2f1ec",
+    "backgroundDark": "#0d1015",
+    "monogram": "MD",
+    "name": "Michael D'Angelo",
+    "font": {
+      "name": "Display",
+      "family": "Bricolage Grotesque",
+      "weight": 800,
+      "style": "normal",
+      "url": "https://fonts.gstatic.com/s/bricolagegrotesque/v9/3y9U6as8bTXq_nANBjzKo3IeZx8z6up5BeSl5jBNz_19PpbpMXuECpwUxJBOm_OJWiaaD30YfKfjZZoLvZvlyM0.ttf",
+      "sha256": "50fe1039eb3ff208d027a4867d3f53bd288bba76273a718578f7b3ec0feec388"
+    }
+  },
+  "generatorDigest": "b7fe60d0b43748f80ec6a3e22b5579befbd429e31300a444ff57f1b13ada7b7e",
+  "files": {
+    "app/favicon.ico": "e0423a29796f0de8e4c42155d5765fcfcf390bbd563a52e7bd43a12f87002a5b",
+    "app/icon.png": "224596726d08380ce1699ffd56b3bd00f610dcb52f663ae750ea6ca2dc3d7e69",
+    "app/apple-icon.png": "3781164a36d1d2bd296ca457b9ee442d81fc6143fabdf7e97f272da046fae3d2",
+    "public/images/icons/icon-192.png": "6be44646a28a01356ab60e7628fae568ae066d6c44023379ca9bb02d9c152749",
+    "public/images/icons/icon-512.png": "ae923388e39e883b6796016b7ae7bb48c9aa05ca1a79e0d9325db4c17a9d252b",
+    "public/images/icons/icon-maskable-512.png": "85d2a76c26ec68d3584631e522f8815a928cb1d64a79a349924f469198eb5678",
+    "app/manifest.json": "344a3ab20d1d4d49bac37e190816a69c0d68a2031ae5f572d73d003549f8af22"
+  }
+}

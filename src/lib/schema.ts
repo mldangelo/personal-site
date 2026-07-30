@@ -1,6 +1,7 @@
 import contact from '@/data/contact';
 import degrees from '@/data/resume/degrees';
 import work from '@/data/resume/work';
+import { currentPosition } from '@/lib/career';
 import type { Post } from '@/lib/posts';
 import {
   AUTHOR_NAME,
@@ -65,7 +66,9 @@ export function personNode(): SchemaNode {
   const emailItem = contact.find((item) => item.link.startsWith('mailto:'));
   const email = emailItem?.link.replace('mailto:', '');
 
-  const currentJob = work[0];
+  // Derived, not positional — see `currentPosition`. Reading `work[0]` tied the
+  // site-wide employer to the order of a hand-maintained file.
+  const currentJob = currentPosition(work);
 
   const [givenName, ...familyParts] = AUTHOR_NAME.split(' ');
   const familyName = familyParts.join(' ');
@@ -86,14 +89,21 @@ export function personNode(): SchemaNode {
       caption: AUTHOR_NAME,
     },
     description: SITE_DESCRIPTION,
-    jobTitle: currentJob.position,
+    // Omitted rather than emitted empty when there is no current role. A
+    // `jobTitle` of `undefined` or a nameless `worksFor` is worse than absent
+    // structured data: consumers treat a present-but-blank field as a claim.
+    // `work[0]` never needed this branch only because indexing an array is
+    // untyped, not because the case could not arise.
+    ...(currentJob && { jobTitle: currentJob.position }),
     ...(email && { email }),
     sameAs: socialLinks,
-    worksFor: {
-      '@type': 'Organization',
-      name: currentJob.name,
-      url: currentJob.url,
-    },
+    ...(currentJob && {
+      worksFor: {
+        '@type': 'Organization',
+        name: currentJob.name,
+        url: currentJob.url,
+      },
+    }),
     alumniOf: degrees.map((degree) => ({
       '@type': 'CollegeOrUniversity',
       name: degree.school,

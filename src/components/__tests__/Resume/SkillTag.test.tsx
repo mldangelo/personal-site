@@ -1,73 +1,54 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
+import type { Skill } from '@/data/resume/skills';
+
 import SkillTag from '../../Resume/Skills/SkillTag';
 
-const mockCategories = [
-  { name: 'Languages', color: '#6968b3' },
-  { name: 'ML Engineering', color: '#37b1f5' },
-];
+const skill: Skill = { title: 'Coding Agents', category: 'Agent Systems' };
 
 describe('SkillTag', () => {
-  it('renders the skill title', () => {
-    const skill = { title: 'Python', competency: 5, category: ['Languages'] };
+  it('renders the skill title as its text', () => {
+    render(<SkillTag data={skill} />);
 
-    render(<SkillTag data={skill} categories={mockCategories} />);
-
-    expect(screen.getByText('Python')).toBeInTheDocument();
+    expect(screen.getByText('Coding Agents')).toBeInTheDocument();
   });
 
-  it('applies large size class for competency 5', () => {
-    const skill = { title: 'Python', competency: 5, category: ['Languages'] };
-
-    render(<SkillTag data={skill} categories={mockCategories} />);
-
-    const tag = document.querySelector('.skill-tag');
-    expect(tag).toHaveClass('skill-tag--lg');
-  });
-
-  it('applies medium size class for competency 4', () => {
-    const skill = {
-      title: 'JavaScript',
-      competency: 4,
-      category: ['Languages'],
-    };
-
-    render(<SkillTag data={skill} categories={mockCategories} />);
-
-    const tag = document.querySelector('.skill-tag');
-    expect(tag).toHaveClass('skill-tag--md');
-  });
-
-  it('applies small size class for competency 3 or below', () => {
-    const skill = { title: 'Ruby', competency: 3, category: ['Languages'] };
-
-    render(<SkillTag data={skill} categories={mockCategories} />);
-
-    const tag = document.querySelector('.skill-tag');
-    expect(tag).toHaveClass('skill-tag--sm');
-  });
-
-  it('sets category color as CSS variable', () => {
-    const skill = { title: 'Python', competency: 5, category: ['Languages'] };
-
-    render(<SkillTag data={skill} categories={mockCategories} />);
+  /**
+   * The tag published a 1–5 self-score three ways at once: a `title` tooltip,
+   * an `aria-label`, and a size variant. The `aria-label` reached nobody — it
+   * sat on a bare `<span>`, which maps to role `generic`, so browsers discard
+   * the name. All three are gone with the score.
+   */
+  it('carries no rating in a tooltip or an accessible name', () => {
+    render(<SkillTag data={skill} />);
 
     const tag = document.querySelector('.skill-tag') as HTMLElement;
-    expect(tag.style.getPropertyValue('--tag-color')).toBe('#6968b3');
+    expect(tag).not.toHaveAttribute('title');
+    expect(tag).not.toHaveAttribute('aria-label');
+    expect(tag.textContent).toBe('Coding Agents');
   });
 
-  it('uses first matching category color for multi-category skills', () => {
-    const skill = {
-      title: 'Python',
-      competency: 5,
-      category: ['Languages', 'ML Engineering'],
-    };
+  /**
+   * No rating may come back as a modifier class, and the unrelated decorative
+   * category colour does not belong inline either.
+   */
+  it('renders one class and no inline style, whatever the skill', () => {
+    render(
+      <>
+        <SkillTag data={skill} />
+        <SkillTag data={{ title: 'Online Learning', category: 'ML Systems' }} />
+      </>,
+    );
 
-    render(<SkillTag data={skill} categories={mockCategories} />);
+    const tags = Array.from(
+      document.querySelectorAll<HTMLElement>('.skill-tag'),
+    );
+    expect(tags).toHaveLength(2);
 
-    const tag = document.querySelector('.skill-tag') as HTMLElement;
-    // Should use Languages color since it's first in categories list
-    expect(tag.style.getPropertyValue('--tag-color')).toBe('#6968b3');
+    for (const tag of tags) {
+      expect(tag.className).toBe('skill-tag');
+      expect(tag.getAttribute('style')).toBeNull();
+    }
   });
 });

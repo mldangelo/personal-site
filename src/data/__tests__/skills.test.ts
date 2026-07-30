@@ -3,103 +3,78 @@ import { describe, expect, it } from 'vitest';
 import { categories, skills } from '../resume/skills';
 
 describe('skills data', () => {
-  it('exports an array of skills', () => {
-    expect(Array.isArray(skills)).toBe(true);
+  it('exports a non-empty array of unique skills', () => {
     expect(skills.length).toBeGreaterThan(0);
+
+    const titles = skills.map(({ title }) => title);
+    expect(new Set(titles).size).toBe(titles.length);
   });
 
-  it('each skill has required properties', () => {
-    for (const skill of skills) {
-      expect(skill).toHaveProperty('title');
-      expect(skill).toHaveProperty('competency');
-      expect(skill).toHaveProperty('category');
+  it('keeps each skill in one valid display category', () => {
+    const categoryNames = categories.map(({ name }) => name);
 
+    for (const skill of skills) {
       expect(typeof skill.title).toBe('string');
-      expect(typeof skill.competency).toBe('number');
-      expect(Array.isArray(skill.category)).toBe(true);
+      expect(typeof skill.category).toBe('string');
+      expect(categoryNames).toContain(skill.category);
     }
   });
 
-  it('competency values are between 1 and 5', () => {
+  /**
+   * Order is the only hierarchy. A skill carries a title and a category and
+   * nothing else — no `competency` self-score, and no `featured` flag, which
+   * was the same self-rating with two levels instead of five and was set on 16
+   * of 27 entries.
+   */
+  it('publishes no rating alongside a skill', () => {
     for (const skill of skills) {
-      expect(skill.competency).toBeGreaterThanOrEqual(1);
-      expect(skill.competency).toBeLessThanOrEqual(5);
-    }
-  });
-
-  it('each skill has at least one category', () => {
-    for (const skill of skills) {
-      expect(skill.category.length).toBeGreaterThanOrEqual(1);
-    }
-  });
-
-  it('skill categories reference valid category names', () => {
-    const categoryNames = categories.map((c) => c.name);
-
-    for (const skill of skills) {
-      for (const cat of skill.category) {
-        expect(categoryNames).toContain(cat);
-      }
-    }
-  });
-
-  // Data quality: categories should be sorted for consistent UI display
-  it('skill categories are sorted alphabetically for UI consistency', () => {
-    for (const skill of skills) {
-      const sorted = [...skill.category].sort();
-      expect(skill.category).toEqual(sorted);
+      expect(Object.keys(skill).sort()).toEqual(['category', 'title']);
     }
   });
 });
 
 describe('categories data', () => {
-  it('exports an array of categories', () => {
-    expect(Array.isArray(categories)).toBe(true);
-    expect(categories.length).toBeGreaterThan(0);
+  it('keeps the deliberate editorial order', () => {
+    expect(categories.map(({ name }) => name)).toEqual([
+      'Agent Systems',
+      'AI Security & Evals',
+      'ML Systems',
+      'Software & Infrastructure',
+    ]);
   });
 
-  it('each category has required properties', () => {
+  /**
+   * Categories used to carry a `color`, and every one of them got the same
+   * `var(--color-accent)`, so the tick it painted on each tag was identical
+   * everywhere. The field was decorative and unrelated to the independently
+   * derived competency score.
+   */
+  it('carries nothing but a name', () => {
     for (const category of categories) {
-      expect(category).toHaveProperty('name');
-      expect(category).toHaveProperty('color');
-
-      expect(typeof category.name).toBe('string');
-      expect(typeof category.color).toBe('string');
+      expect(Object.keys(category)).toEqual(['name']);
     }
   });
 
-  it('category colors are valid CSS colors (hex or CSS variable)', () => {
-    const hexColorRegex = /^#[0-9a-fA-F]{6}$/;
-    const cssVarRegex = /^var\(--[\w-]+\)$/;
+  it('represents every category exactly once in the data', () => {
+    const names = categories.map(({ name }) => name);
+    const usedCategories = new Set(skills.map(({ category }) => category));
 
-    for (const category of categories) {
-      const isValidColor =
-        hexColorRegex.test(category.color) || cssVarRegex.test(category.color);
-      expect(isValidColor).toBe(true);
+    expect(new Set(names).size).toBe(names.length);
+    expect(usedCategories).toEqual(new Set(names));
+  });
+
+  /**
+   * No category name may contain another. `buildSkills` in
+   * `src/lib/resumeJson.ts` once matched with `String.includes`, which is
+   * substring matching against a single-string category, so a name like
+   * `ML Systems Engineering` would have silently swallowed `ML Systems`.
+   */
+  it('has no name that is a substring of another', () => {
+    const names = categories.map(({ name }) => name);
+
+    for (const name of names) {
+      const others = names.filter((other) => other !== name);
+      expect(others.filter((other) => other.includes(name))).toEqual([]);
     }
-  });
-
-  // Data quality: categories should be sorted for filter button display order
-  it('categories are sorted alphabetically by name', () => {
-    const names = categories.map((c) => c.name);
-    const sorted = [...names].sort();
-
-    expect(names).toEqual(sorted);
-  });
-
-  it('all skill categories are represented', () => {
-    const usedCategories = new Set(skills.flatMap((s) => s.category));
-    const availableCategories = new Set(categories.map((c) => c.name));
-
-    for (const used of usedCategories) {
-      expect(availableCategories.has(used)).toBe(true);
-    }
-  });
-
-  it('has unique category names', () => {
-    const names = categories.map((c) => c.name);
-    const uniqueNames = new Set(names);
-
-    expect(uniqueNames.size).toBe(names.length);
   });
 });

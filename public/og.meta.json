@@ -3,6 +3,32 @@
     "width": 1200,
     "height": 630
   },
+  "fonts": [
+    {
+      "name": "Display",
+      "family": "Bricolage Grotesque",
+      "weight": 800,
+      "style": "normal",
+      "url": "https://fonts.gstatic.com/s/bricolagegrotesque/v9/3y9U6as8bTXq_nANBjzKo3IeZx8z6up5BeSl5jBNz_19PpbpMXuECpwUxJBOm_OJWiaaD30YfKfjZZoLvZvlyM0.ttf",
+      "sha256": "50fe1039eb3ff208d027a4867d3f53bd288bba76273a718578f7b3ec0feec388"
+    },
+    {
+      "name": "Mono",
+      "family": "JetBrains Mono",
+      "weight": 500,
+      "style": "normal",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8-qxjPQ.ttf",
+      "sha256": "3386a05f6ece969e4537de6be894170d20558e82f7d56c8c5d332972ef172160"
+    },
+    {
+      "name": "Body",
+      "family": "Newsreader",
+      "weight": 400,
+      "style": "normal",
+      "url": "https://fonts.gstatic.com/s/newsreader/v26/cY9qfjOCX1hbuyalUrK49dLac06G1ZGsZBtoBCzBDXXD9JVF438weI_ADA.ttf",
+      "sha256": "b8f5e0a8bdd6a12c722ca5635d9da87e77ccbb2d0172112e34e00c4e55f2cd5a"
+    }
+  ],
   "profile": {
     "name": "Michael D'Angelo",
     "employer": "OpenAI",
@@ -11,6 +37,85 @@
     "computingSince": 1993,
     "currentCity": "New York, NY"
   },
-  "generatorDigest": "69f9406c836e1571b913cecb43e10ae4517ea8749e55735d6e3bc700fb85f241",
-  "imageDigest": "916adc2a96bbdc30d68db9b291927d346cad40e9a12ae7384f8332cd7ed882a2"
+  "colors": {
+    "ink": "#0e1116",
+    "paper": "#f2f1ec",
+    "body": "#23272e",
+    "graphite": "#545a63",
+    "accent": "#1b2fbf",
+    "hairline": "rgba(35, 39, 46, 0.14)"
+  },
+  "generatorDigest": "29afa7878e3f0e87fc660c316c29ef5209a6126d919dbd0596183485e76ef4a7",
+  "imageDigest": "9c76fd6b9be9ed5e8253a35ee7b741e219b2bfd5484b5bd29c90eb7a3241d4eb",
+  "posts": [
+    {
+      "slug": "claude-code-outage",
+      "path": "/og/writing/claude-code-outage.png",
+      "title": "Notes on the Claude Code 2.1.0 outage",
+      "description": "A changelog formatting change took down Claude Code. Lessons about parsing human docs as machine data.",
+      "date": "2026-01-08",
+      "dateLabel": "January 8, 2026",
+      "readout": [
+        {
+          "label": "Words",
+          "value": "409"
+        },
+        {
+          "label": "External links",
+          "value": "9"
+        },
+        {
+          "label": "Reading time",
+          "value": "2 min"
+        }
+      ],
+      "imageDigest": "3d77ffcc9d766054ee80aab11e015b769effc7dc78bcc7df885509409d1119e3"
+    },
+    {
+      "slug": "eurostar-chatbot-analysis",
+      "path": "/og/writing/eurostar-chatbot-analysis.png",
+      "title": "Notes on the Eurostar chatbot \"vulnerability\" report",
+      "description": "Looking at what makes something a vulnerability versus a hardening opportunity in LLM applications.",
+      "date": "2026-01-05",
+      "dateLabel": "January 5, 2026",
+      "readout": [
+        {
+          "label": "Words",
+          "value": "870"
+        },
+        {
+          "label": "External links",
+          "value": "9"
+        },
+        {
+          "label": "Reading time",
+          "value": "4 min"
+        }
+      ],
+      "imageDigest": "7d4e87009ffd843f5fd04c763d06f4be0991a716646ec84423d08a88bdddf35d"
+    },
+    {
+      "slug": "shipping-with-claude-code",
+      "path": "/og/writing/shipping-with-claude-code.png",
+      "title": "What I learned shipping 1,000+ PRs with Claude Code",
+      "description": "Notes from using Claude Code in parallel git worktrees: Plan Mode, ultrathink, verification loops, and Chrome automation.",
+      "date": "2026-01-03",
+      "dateLabel": "January 3, 2026",
+      "readout": [
+        {
+          "label": "Words",
+          "value": "1,930"
+        },
+        {
+          "label": "External links",
+          "value": "16"
+        },
+        {
+          "label": "Reading time",
+          "value": "9 min"
+        }
+      ],
+      "imageDigest": "e89b0532b445d7aeae2ba1c4b76e90b8c990dba48fbc651faba08af72f600e44"
+    }
+  ]
 }
