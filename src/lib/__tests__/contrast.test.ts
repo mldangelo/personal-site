@@ -82,10 +82,18 @@ describe('contrastRatio', () => {
 });
 
 describe('parseHexColor', () => {
-  it('accepts the three hex lengths and ignores alpha', () => {
+  it('accepts opaque shorthand and longhand hex', () => {
     expect(parseHexColor('#abc')).toEqual([0xaa, 0xbb, 0xcc]);
     expect(parseHexColor('bc770a')).toEqual([188, 119, 10]);
-    expect(parseHexColor('#bc770a80')).toEqual([188, 119, 10]);
+  });
+
+  it('rejects alpha instead of assigning a false opaque contrast score', () => {
+    expect(() => parseHexColor('#0000')).toThrow(/explicit backdrop/);
+    expect(() => parseHexColor('#00000000')).toThrow(/explicit backdrop/);
+    expect(() => parseHexColor('#bc770aff')).toThrow(/explicit backdrop/);
+    expect(() => contrastRatio('#00000000', '#ffffff')).toThrow(
+      /explicit backdrop/,
+    );
   });
 
   it('throws rather than scoring an unparseable colour as black', () => {
@@ -95,8 +103,8 @@ describe('parseHexColor', () => {
 });
 
 describe('--color-signal-mark', () => {
-  // The filled dot on the resume spine is the only thing that says a role is
-  // current, so SC 1.4.11 applies to it: 3:1 against both paper surfaces.
+  // The filled dot reinforces the textual "Present" state as the timeline's
+  // non-text indicator, so SC 1.4.11 applies: 3:1 against both paper surfaces.
   it('clears 3:1 on both light backdrops', () => {
     const mark = lightToken('--color-signal-mark');
 

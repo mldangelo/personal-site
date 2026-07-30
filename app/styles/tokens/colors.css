@@ -62,13 +62,13 @@
      --color-signal      text-safe on page bg (5.5:1 raised, 5.0:1 page)
      --color-signal-mark graphic use only (ticks, dots, rules)
 
-     The mark is not decoration: the filled dot on the resume spine is the
-     only thing that says a role is current, so SC 1.4.11 applies and it owes
-     3:1 against both paper surfaces. It used to be #e8930c, which measured
-     2.36:1 on --color-bg and 2.16:1 on --color-bg-alt — the brightest amber
-     on the page was also the one nobody could see. This is the same hue
-     (36.7deg against 36.8deg) taken down to 3.5:1 on --color-bg and 3.2:1 on
-     --color-bg-alt. Pinned in src/lib/__tests__/contrast.test.ts.
+     The mark is not decoration: the filled dot reinforces the textual
+     "Present" state as the resume timeline's non-text indicator, so
+     SC 1.4.11 applies and it owes 3:1 against both paper surfaces. It used to
+     be #e8930c, which measured 2.36:1 on --color-bg and 2.16:1 on
+     --color-bg-alt. This is the same hue (36.7deg against 36.8deg) taken down
+     to 3.5:1 on --color-bg and 3.2:1 on --color-bg-alt. Pinned in
+     src/lib/__tests__/contrast.test.ts.
      =================== */
   --color-signal: #9a5600;
   --color-signal-mark: #bc770a;
