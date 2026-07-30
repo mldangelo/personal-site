@@ -10,6 +10,12 @@ import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 
+import {
+  assetRoute,
+  declaredAssetRoutes,
+  draftOnlyAssetRoutes,
+} from '../lib/markdown.mjs';
+
 const verifier = resolve(process.cwd(), 'scripts/verify-export.mjs');
 const fixtureRoots: string[] = [];
 
@@ -163,6 +169,15 @@ function mutate(
 ) {
   const file = join(root, path);
   writeFileSync(file, transform(readFileSync(file, 'utf8')));
+}
+
+/** Gives the fixture's draft a body, keeping its `draft: true` frontmatter. */
+function draftWithBody(root: string, body: string) {
+  write(
+    root,
+    'content/writing/secret-draft.md',
+    `---\ntitle: Secret draft\ndraft: true # keep private\n---\n\n${body}\n`,
+  );
 }
 
 function runVerifier(root: string) {
@@ -458,6 +473,159 @@ describe('verify-export', () => {
     );
   });
 
+  /**
+   * The hole the slug scan cannot cover. A post's screenshots are filed wherever
+   * the author filed them, and this repository's draft keeps three in
+   * `public/images/writing/codex-desktop-app-post/` — a directory name that is
+   * not the slug and is not derived from it, so no filename rule could see it.
+   * The post's own Markdown can.
+   */
+  it('reports a draft image filed in an arbitrarily named directory', () => {
+    const root = createFixture();
+    draftWithBody(
+      root,
+      '![A screenshot](/images/writing/codex-desktop-app-post/overview.webp)',
+    );
+    write(root, 'out/images/writing/codex-desktop-app-post/overview.webp');
+
+    const result = runVerifier(root);
+    expect(result.status).toBe(0);
+    expect(result.output).toContain(
+      'images/writing/codex-desktop-app-post/overview.webp\n    draft post "secret-draft" references this file',
+    );
+    expect(result.output).toContain(
+      'publicly fetchable at https://example.com/images/writing/codex-desktop-app-post/overview.webp',
+    );
+  });
+
+  /**
+   * A warning that only appears above a line reading `3 pages OK` is a warning
+   * nobody reads. The count rides on the success line too.
+   */
+  it('carries the warning count on the success line', () => {
+    const root = createFixture();
+    draftWithBody(root, '![Shot](/images/writing/loose/shot.webp)');
+    write(root, 'out/images/writing/loose/shot.webp');
+
+    const result = runVerifier(root);
+    expect(result.status).toBe(0);
+    expect(result.output).toContain(
+      'verify-export: 1 warning(s), not blocking the build',
+    );
+    expect(result.output).toContain('3 pages OK, 1 warning(s)');
+  });
+
+  it('reports a draft image declared only in frontmatter', () => {
+    const root = createFixture();
+    write(
+      root,
+      'content/writing/secret-draft.md',
+      '---\ntitle: Secret draft\ndraft: true\nimage: /images/elsewhere/hero.png\nimageAlt: Hero\n---\n',
+    );
+    write(root, 'out/images/elsewhere/hero.png');
+
+    const result = runVerifier(root);
+    expect(result.status).toBe(0);
+    expect(result.output).toContain(
+      'images/elsewhere/hero.png\n    draft post "secret-draft" references this file',
+    );
+  });
+
+  it('accepts article images belonging to a published post', () => {
+    const root = createFixture();
+    write(
+      root,
+      'content/writing/published.md',
+      '---\ntitle: Published\nimage: /images/writing/published/hero.png\nimageAlt: Hero\n---\n\n![Chart](/images/writing/published/chart.png)\n',
+    );
+    write(root, 'out/images/writing/published/hero.png');
+    write(root, 'out/images/writing/published/chart.png');
+
+    const result = runVerifier(root);
+    expect(result.status).toBe(0);
+    expect(result.output).not.toContain('warning');
+    expect(result.output).toContain('3 pages OK (');
+  });
+
+  /**
+   * An illustration used by a published post and quoted by a draft still has to
+   * ship. Reporting it would be the same false positive the slug scan was
+   * narrowed to avoid: a committed file nothing derived from an unpublished
+   * post, named as a draft leak.
+   */
+  it('accepts an image a draft shares with a published post', () => {
+    const root = createFixture();
+    draftWithBody(root, '![Shared](/images/writing/shared/diagram.png)');
+    write(
+      root,
+      'content/writing/published.md',
+      '---\ntitle: Published\n---\n\n![Shared](/images/writing/shared/diagram.png)\n',
+    );
+    write(root, 'out/images/writing/shared/diagram.png');
+
+    const result = runVerifier(root);
+    expect(result.status).toBe(0);
+    expect(result.output).not.toContain('warning');
+  });
+
+  /**
+   * The reference scan matches whole paths, and must not grow into a directory
+   * or prefix rule. `-notes.png` is a sibling nothing declared; widening the
+   * match to catch it would reintroduce the false-positive class the slug scan
+   * was already narrowed to fix.
+   */
+  it('accepts a neighbouring file whose name only resembles a draft image', () => {
+    const root = createFixture();
+    draftWithBody(root, '![Shot](/images/writing/loose/shot.webp)');
+    write(root, 'out/images/writing/loose/shot-notes.png');
+    write(root, 'out/images/writing/loose-extra.png');
+
+    const result = runVerifier(root);
+    expect(result.status).toBe(0);
+    expect(result.output).not.toContain('warning');
+  });
+
+  /**
+   * A remote image names a host, so its path is not a file here. Resolving one
+   * as a route would report `out/images/photo.png` — a committed asset the draft
+   * never mentioned.
+   */
+  it('ignores an off-site image reference in a draft', () => {
+    const root = createFixture();
+    draftWithBody(root, '![Remote](https://cdn.example/images/photo.png)');
+
+    const result = runVerifier(root);
+    expect(result.status).toBe(0);
+    expect(result.output).not.toContain('warning');
+  });
+
+  it('stays silent about a draft image that is not in the export', () => {
+    const root = createFixture();
+    draftWithBody(root, '![Missing](/images/writing/loose/absent.webp)');
+
+    const result = runVerifier(root);
+    expect(result.status).toBe(0);
+    expect(result.output).not.toContain('warning');
+  });
+
+  /**
+   * One file, one report. A draft image that also sits under a slug-named
+   * directory is caught by both checks, and the fatal one is the one that
+   * should speak.
+   */
+  it('reports a slug-named draft image once, as a failure', () => {
+    const root = createFixture();
+    draftWithBody(root, '![Shot](/images/writing/secret-draft/shot.webp)');
+    write(root, 'out/images/writing/secret-draft/shot.webp');
+
+    const result = runVerifier(root);
+    expect(result.status).toBe(1);
+    expect(result.output).toContain(
+      'exports an asset named after a draft post: /images/writing/secret-draft/shot.webp',
+    );
+    expect(result.output).not.toContain('warning');
+  });
+
   it('rejects an export with no machine-readable resume', () => {
     const root = createFixture();
     rmSync(join(root, 'out/resume.json'));
@@ -529,5 +697,159 @@ describe('verify-export', () => {
     expect(result.output).toContain(
       'sitemap.xml\n    omits indexable route: /about/',
     );
+  });
+});
+
+/**
+ * `scripts/lib/` is imported directly rather than reached only through the gate,
+ * for the reason `site.mjs` and `html.mjs` are: a fixture exercises one shape of
+ * input, and the awkward edges here — a title after the destination, an
+ * angle-bracketed path, a linked image, a scheme that is not http — never occur
+ * in this repository's own posts, so nothing would fail if they stopped working.
+ */
+describe('assetRoute', () => {
+  it.each([
+    ['a root-relative path', '/images/writing/post/shot.webp'],
+    ['surrounding whitespace', '  /images/writing/post/shot.webp  '],
+    ['an angle-bracketed path', '</images/writing/post/shot.webp>'],
+    ['a query string', '/images/writing/post/shot.webp?v=2'],
+    ['a fragment', '/images/writing/post/shot.webp#top'],
+  ])('resolves %s', (_, reference) => {
+    expect(assetRoute(reference)).toBe('/images/writing/post/shot.webp');
+  });
+
+  it('keeps a percent-encoded path encoded for the export lookup', () => {
+    // `exportFileFor` decodes; decoding twice would resolve `%2F` as a
+    // separator and reach outside the directory the author named.
+    expect(assetRoute('/images/writing/a%20b.png')).toBe(
+      '/images/writing/a%20b.png',
+    );
+  });
+
+  it.each([
+    ['an https URL', 'https://cdn.example/images/photo.png'],
+    ['an http URL', 'http://cdn.example/images/photo.png'],
+    ['a data URI', 'data:image/png;base64,AAAA'],
+    ['a protocol-relative URL', '//cdn.example/images/photo.png'],
+    ['a document-relative path', 'images/photo.png'],
+    ['a parent-relative path', '../images/photo.png'],
+    ['the site root', '/'],
+    ['an empty reference', '   '],
+    ['a non-string', undefined],
+  ])('declines %s', (_, reference) => {
+    expect(assetRoute(reference)).toBeUndefined();
+  });
+});
+
+describe('declaredAssetRoutes', () => {
+  it('reads the frontmatter image', () => {
+    expect([
+      ...declaredAssetRoutes({
+        data: { image: '/images/writing/post/hero.png' },
+        content: '',
+      }),
+    ]).toEqual(['/images/writing/post/hero.png']);
+  });
+
+  it.each([
+    ['a plain image', '![Alt](/images/a.png)'],
+    ['an image with a caption title', '![Alt](/images/a.png "A caption")'],
+    ['an angle-bracketed destination', '![Alt](</images/a.png>)'],
+    ['a linked image', '[![Alt](/images/a.png)](https://example.com/)'],
+    ['inline HTML', '<img src="/images/a.png" alt="Alt">'],
+    ['padding inside the parentheses', '![Alt]( /images/a.png )'],
+  ])('reads %s', (_, body) => {
+    expect([...declaredAssetRoutes({ data: {}, content: body })]).toEqual([
+      '/images/a.png',
+    ]);
+  });
+
+  it('reads every image in a document once', () => {
+    const content = [
+      '![One](/images/a.png)',
+      'Prose about it.',
+      '![Two](/images/b.png)',
+      '![One again](/images/a.png)',
+    ].join('\n\n');
+
+    expect([...declaredAssetRoutes({ data: {}, content })]).toEqual([
+      '/images/a.png',
+      '/images/b.png',
+    ]);
+  });
+
+  /**
+   * Unlike the word and reference counts in `og-inputs.mjs`, which measure what
+   * a reader sees. This asks which files belong to the post, and a path an
+   * author wrote inside a fence is still that answer.
+   */
+  it('reads a path inside fenced code', () => {
+    const content = '```md\n![Alt](/images/a.png)\n```\n';
+
+    expect([...declaredAssetRoutes({ data: {}, content })]).toEqual([
+      '/images/a.png',
+    ]);
+  });
+
+  it('skips remote and relative references', () => {
+    const content = [
+      '![Remote](https://cdn.example/images/photo.png)',
+      '![Relative](images/photo.png)',
+      '![Local](/images/a.png)',
+    ].join('\n\n');
+
+    expect([...declaredAssetRoutes({ data: {}, content })]).toEqual([
+      '/images/a.png',
+    ]);
+  });
+
+  it('returns nothing for a post with no images and no arguments', () => {
+    expect([
+      ...declaredAssetRoutes({ data: {}, content: 'Just prose.' }),
+    ]).toEqual([]);
+    expect([...declaredAssetRoutes()]).toEqual([]);
+  });
+});
+
+describe('draftOnlyAssetRoutes', () => {
+  const post = (slug: string, isDraft: boolean, routes: string[]) => ({
+    slug,
+    isDraft,
+    assets: new Set(routes),
+  });
+
+  it('names the draft that declared each asset', () => {
+    const owners = draftOnlyAssetRoutes([
+      post('secret', true, ['/images/a.png', '/images/b.png']),
+    ]);
+
+    expect([...owners]).toEqual([
+      ['/images/a.png', 'secret'],
+      ['/images/b.png', 'secret'],
+    ]);
+  });
+
+  it('subtracts assets a published post also declares', () => {
+    const owners = draftOnlyAssetRoutes([
+      post('secret', true, ['/images/shared.png', '/images/only-draft.png']),
+      post('shipped', false, ['/images/shared.png']),
+    ]);
+
+    expect([...owners.keys()]).toEqual(['/images/only-draft.png']);
+  });
+
+  it('attributes an asset two drafts share to the first of them', () => {
+    const owners = draftOnlyAssetRoutes([
+      post('first', true, ['/images/a.png']),
+      post('second', true, ['/images/a.png']),
+    ]);
+
+    expect(owners.get('/images/a.png')).toBe('first');
+  });
+
+  it('returns nothing when every post is published', () => {
+    expect(
+      draftOnlyAssetRoutes([post('shipped', false, ['/images/a.png'])]).size,
+    ).toBe(0);
   });
 });
