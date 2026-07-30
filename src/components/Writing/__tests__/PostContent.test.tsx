@@ -1,11 +1,22 @@
+import type { ComponentPropsWithoutRef } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { createHeadingId } from '@/lib/anchors';
 import { readPostImageSizes } from '@/lib/imageSize';
 import { getAllPosts, getPostBySlug } from '@/lib/posts';
 
 import PostContent from '../PostContent';
+
+// `<Link>` renders a plain `<a>`, so nothing in the markup distinguishes a
+// client-routed link from one that reloads the document. The mock marks it.
+vi.mock('next/link', () => ({
+  default: ({ href, children, ...rest }: ComponentPropsWithoutRef<'a'>) => (
+    <a data-router-link="true" href={href} {...rest}>
+      {children}
+    </a>
+  ),
+}));
 
 const OG_SIZE = { '/og.png': { width: 1200, height: 630 } };
 
@@ -121,6 +132,72 @@ describe('PostContent figures', () => {
     );
 
     expect(html).toContain('--figure-width:1117px');
+  });
+});
+
+describe('PostContent links', () => {
+  it('routes a link to another post through the router', () => {
+    const html = renderToStaticMarkup(
+      <PostContent
+        content={
+          'I wrote about [shipping with Claude Code](/writing/shipping-with-claude-code/).\n'
+        }
+      />,
+    );
+
+    expect(html).toContain(
+      '<a data-router-link="true" href="/writing/shipping-with-claude-code/">',
+    );
+  });
+
+  it('normalises a route the author wrote without its trailing slash', () => {
+    const html = renderToStaticMarkup(
+      <PostContent content={'See the [résumé](/resume#skills).\n'} />,
+    );
+
+    expect(html).toContain('href="/resume/#skills"');
+  });
+
+  it('leaves an off-site link, a scheme, and a fragment native', () => {
+    const html = renderToStaticMarkup(
+      <PostContent
+        content={
+          'Read [the announcement](https://openai.com/index/codex-security-now-in-research-preview/), [email me](mailto:hello@example.com), or jump to [the layers](#verification-layers).\n'
+        }
+      />,
+    );
+
+    expect(html).not.toContain('data-router-link');
+    expect(html).toContain(
+      '<a href="https://openai.com/index/codex-security-now-in-research-preview/">',
+    );
+    expect(html).toContain('<a href="mailto:hello@example.com">');
+    expect(html).toContain('<a href="#verification-layers">');
+  });
+
+  it('leaves an exported file to the host rather than the router', () => {
+    const html = renderToStaticMarkup(
+      <PostContent
+        content={'Grab [the feed](/feed.xml) or [the card](/og.png).\n'}
+      />,
+    );
+
+    expect(html).not.toContain('data-router-link');
+    expect(html).toContain('<a href="/feed.xml">');
+    expect(html).toContain('<a href="/og.png">');
+  });
+
+  it('routes a linked figure without costing it its figure', () => {
+    const html = renderToStaticMarkup(
+      <PostContent
+        content={'Intro.\n\n[![Alt](/og.png "The card")](/writing/)\n'}
+        imageSizes={OG_SIZE}
+      />,
+    );
+
+    expect(html).toContain('<figure class="prose-figure"');
+    expect(html).toContain('<a data-router-link="true" href="/writing/">');
+    expect(html).toContain('The card</figcaption>');
   });
 });
 

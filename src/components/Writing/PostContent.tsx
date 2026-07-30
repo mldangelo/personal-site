@@ -6,6 +6,7 @@ import type { ReactNode } from 'react';
 import { Children, type CSSProperties, isValidElement } from 'react';
 
 import { createHeadingId, planHeadingAliases } from '@/lib/anchors';
+import { PROSE_LINK_OVERRIDES } from '@/lib/markdownLinks';
 
 interface ImageSize {
   width: number;
@@ -174,6 +175,10 @@ export default function PostContent({
         // the site derived `on-using-dangerously-skip-permissions`.
         slugify: createHeadingId,
         overrides: {
+          // A post that links to another post is an internal navigation like
+          // any other, so it goes through the router rather than reloading the
+          // document.
+          ...PROSE_LINK_OVERRIDES,
           // Unifying the scheme renamed ids that were already published, so
           // each heading also carries whatever id it used to have.
           ...headingOverrides(aliases),

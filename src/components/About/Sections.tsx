@@ -4,6 +4,7 @@ import Markdown from 'markdown-to-jsx';
 import { Children, type ReactNode } from 'react';
 import { createUniqueHeadingIds } from '@/lib/anchors';
 import { extractLogMarker } from '@/lib/logEntry';
+import { PROSE_LINK_OVERRIDES } from '@/lib/markdownLinks';
 
 interface AboutContentProps {
   markdown: string;
@@ -52,8 +53,16 @@ function LogEntry({ children }: { children?: ReactNode }) {
   );
 }
 
+/**
+ * Every block here is prose, so every block routes its internal links; the log
+ * sections additionally file each entry in the gutter.
+ */
+const MARKDOWN_OPTIONS = {
+  overrides: PROSE_LINK_OVERRIDES,
+};
+
 const LOG_MARKDOWN_OPTIONS = {
-  overrides: { li: { component: LogEntry } },
+  overrides: { ...PROSE_LINK_OVERRIDES, li: { component: LogEntry } },
 };
 
 interface AboutSection {
@@ -150,7 +159,7 @@ export default function AboutContent({ markdown }: AboutContentProps) {
     <article className="about-content">
       {intro ? (
         <div className="about-intro">
-          <Markdown>{intro}</Markdown>
+          <Markdown options={MARKDOWN_OPTIONS}>{intro}</Markdown>
         </div>
       ) : null}
       {sections.length > 0 ? (
@@ -182,7 +191,7 @@ export default function AboutContent({ markdown }: AboutContentProps) {
           {isLogSection(section.title) ? (
             <Markdown options={LOG_MARKDOWN_OPTIONS}>{section.body}</Markdown>
           ) : (
-            <Markdown>{section.body}</Markdown>
+            <Markdown options={MARKDOWN_OPTIONS}>{section.body}</Markdown>
           )}
         </section>
       ))}
