@@ -152,6 +152,40 @@ describe('site stats data', () => {
     }
   });
 
+  it('spells the brand GitHub in every label', () => {
+    // Case-sensitive, because a case-insensitive assertion passes against the
+    // bug: `Stars this repository has on github` and `Open github issues and
+    // pull requests` both shipped, and they were the only lowercase brand in
+    // the export.
+    for (const stat of data) {
+      expect(stat.label, stat.label).not.toContain('github');
+    }
+
+    // The keys and URLs keep the API's and the web's own spelling.
+    expect(data.some((s) => s.label.includes('GitHub'))).toBe(true);
+    expect(data.some((s) => s.key === 'stargazers_count')).toBe(true);
+  });
+
+  it('names the fact rather than counting it, except in the joke', () => {
+    // `Number of forks` was the `forks` API key with `Number of` bolted on: it
+    // named the field, not the fact, and never said what had been forked. The
+    // value column is a number on every row, so the prefix told a reader
+    // nothing. The joke keeps it — a deadpan inventory line is the punchline.
+    const counted = data
+      .filter((s) => s.label.startsWith('Number of'))
+      .map((s) => s.label);
+
+    expect(counted).toEqual(['Number of spoons']);
+  });
+
+  it('does not open a label with a verb a reader could obey', () => {
+    // `Open github issues and pull requests` put an imperative at the head of a
+    // table row, which is exactly where a control's label sits.
+    for (const stat of data) {
+      expect(stat.label, stat.label).not.toMatch(/^(Open|Click|View|See)\b/);
+    }
+  });
+
   it('units appear only where the label does not already name them', () => {
     for (const stat of data.filter((s) => s.unit)) {
       expect(stat.label.toLowerCase(), stat.label).not.toContain(

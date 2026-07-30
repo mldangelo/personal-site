@@ -49,9 +49,9 @@ describe('Site', () => {
     render(Component);
 
     expect(
-      screen.getByText('Stars this repository has on github'),
+      screen.getByText('Stars this repository has on GitHub'),
     ).toBeInTheDocument();
-    expect(screen.getByText('Number of forks')).toBeInTheDocument();
+    expect(screen.getByText('Forks of this repository')).toBeInTheDocument();
     expect(screen.getByText('Number of spoons')).toBeInTheDocument();
   });
 
@@ -83,17 +83,38 @@ describe('Site', () => {
     render(Component);
 
     expect(
-      screen.getByText('Stars this repository has on github'),
+      screen.getByText('Stars this repository has on GitHub'),
     ).toBeInTheDocument();
     expect(
-      screen.getByText('Number of people watching this repository'),
+      screen.getByText('People watching this repository'),
     ).toBeInTheDocument();
-    expect(screen.getByText('Number of forks')).toBeInTheDocument();
+    expect(screen.getByText('Forks of this repository')).toBeInTheDocument();
     expect(
-      screen.getByText('Open github issues and pull requests'),
+      screen.getByText('Issues and pull requests open on GitHub'),
     ).toBeInTheDocument();
     expect(
       screen.getByText('Last push to this repository'),
+    ).toBeInTheDocument();
+  });
+
+  it('spells the brand GitHub everywhere the page says it', async () => {
+    // `Stars this repository has on github` and `Open github issues and pull
+    // requests` were the only lowercase brand in the entire export, on the one
+    // page that is entirely about a GitHub repository. Case-sensitive on
+    // purpose: `/github/i` passes against the bug.
+    const Component = await Site();
+    const { container } = render(Component);
+
+    for (const element of container.querySelectorAll(
+      '.stat-table-label-text, .stats-source-note',
+    )) {
+      expect(element.textContent, element.textContent ?? '').not.toContain(
+        'github',
+      );
+    }
+    // The URLs are untouched — only the copy changes.
+    expect(
+      container.querySelector('a[href*="github.com"]'),
     ).toBeInTheDocument();
   });
 
