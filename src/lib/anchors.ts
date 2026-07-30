@@ -26,70 +26,90 @@ export function createUniqueHeadingIds(titles: readonly string[]): string[] {
   });
 }
 
+export interface MarkdownHeadingPlan {
+  ids: string[];
+  aliases: Map<string, string>;
+  slugify: (source: string) => string;
+}
+
 /**
- * Heading ids a post used to publish, keyed by the canonical id that replaced
- * them.
+ * Plans the unique heading ids for a Markdown document and any legacy ids that
+ * still need to resolve.
  *
- * Putting `createHeadingId` behind markdown-to-jsx's `slugify` unified the two
- * slug schemes, which was right — but it also renamed four of the fifteen
- * `<h2 id>` values on an already-published post, so every deep link anyone had
- * shared into those sections stopped resolving. The new ids stay canonical and
- * the old ones are re-emitted as alias targets.
- *
- * Nothing here is a list to maintain. markdown-to-jsx hands its own default
- * slugifier to a custom `slugify`, so both schemes are computed for every
- * heading from the library's own parse of the document: the legacy scheme is
- * the one that actually shipped rather than a copy of it that could drift, and
- * posts written after this are covered for free.
- *
- * An alias is only emitted when it can be emitted safely. Two elements sharing
- * an id is worse than one dead link, so a legacy id that some other heading
- * already claims as its canonical id — or that a second heading would claim as
- * its own alias, or that would have to attach to an id appearing twice — is
- * dropped instead.
+ * Posts originally shipped with markdown-to-jsx's slugifier. The site later
+ * standardized on createHeadingId, which is more readable but changed several
+ * already-public anchors. Parsing once up front lets the renderer both
+ * de-duplicate its canonical ids and retain safe aliases for the exact legacy
+ * values the library used to publish.
  */
-export function planHeadingAliases(markdown: string): Map<string, string> {
-  const headings: Array<{ canonical: string; legacy: string }> = [];
+export function planMarkdownHeadingAnchors(
+  markdown: string,
+): MarkdownHeadingPlan {
+  const headings: Array<{ source: string; legacy: string }> = [];
 
   parser(markdown, {
     slugify: (source, legacySlugify) => {
-      const canonical = createHeadingId(source);
+      const legacy = legacySlugify(source);
 
-      headings.push({ canonical, legacy: legacySlugify(source) });
+      headings.push({ source, legacy });
 
-      return canonical;
+      return legacy;
     },
   });
 
-  const canonicalCounts = new Map<string, number>();
-  for (const { canonical } of headings) {
-    canonicalCounts.set(canonical, (canonicalCounts.get(canonical) ?? 0) + 1);
+  const ids = createUniqueHeadingIds(headings.map(({ source }) => source));
+  const idsBySource = new Map<string, string[]>();
+
+  for (const [index, { source }] of headings.entries()) {
+    const id = ids[index];
+    if (id) {
+      idsBySource.set(source, [...(idsBySource.get(source) ?? []), id]);
+    }
+  }
+
+  const callsBySource = new Map<string, number>();
+  const slugify = (source: string): string => {
+    const sourceIds = idsBySource.get(source);
+    if (!sourceIds?.length) {
+      return createHeadingId(source);
+    }
+
+    const call = callsBySource.get(source) ?? 0;
+    callsBySource.set(source, call + 1);
+
+    // React Strict Mode may evaluate markdown-to-jsx's memoized compiler more
+    // than once. Cycling over each source's complete id sequence makes every
+    // full evaluation deterministic instead of exhausting a one-shot cursor.
+    return sourceIds[call % sourceIds.length] ?? createHeadingId(source);
+  };
+
+  const canonicalIds = new Set(ids);
+  const legacyCounts = new Map<string, number>();
+
+  for (const { legacy } of headings) {
+    if (legacy) {
+      legacyCounts.set(legacy, (legacyCounts.get(legacy) ?? 0) + 1);
+    }
   }
 
   const aliases = new Map<string, string>();
-  const claimed = new Set(canonicalCounts.keys());
+  const claimedIds = new Set(canonicalIds);
 
-  for (const { canonical, legacy } of headings) {
-    // The default slugifier keeps nothing from a heading with no anchor-safe
-    // characters, and an empty id is not a link target.
-    if (!legacy) {
-      continue;
-    }
+  for (const [index, { legacy }] of headings.entries()) {
+    const canonical = ids[index];
 
-    // Every canonical id is already claimed, so this is also what makes the
-    // common case — the two schemes agreeing — emit nothing extra.
-    if (claimed.has(legacy)) {
-      continue;
-    }
-
-    // A repeated heading has no single element to hang the alias on.
-    if (canonicalCounts.get(canonical) !== 1) {
+    if (
+      !canonical ||
+      !legacy ||
+      claimedIds.has(legacy) ||
+      legacyCounts.get(legacy) !== 1
+    ) {
       continue;
     }
 
     aliases.set(canonical, legacy);
-    claimed.add(legacy);
+    claimedIds.add(legacy);
   }
 
-  return aliases;
+  return { ids, aliases, slugify };
 }

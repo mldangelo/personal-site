@@ -5,7 +5,7 @@ import { getPostBySlug } from '@/lib/posts';
 import {
   createHeadingId,
   createUniqueHeadingIds,
-  planHeadingAliases,
+  planMarkdownHeadingAnchors,
 } from '../anchors';
 
 function getAboutSectionTitles(markdown: string): string[] {
@@ -72,11 +72,14 @@ describe('createUniqueHeadingIds', () => {
   });
 });
 
-describe('planHeadingAliases', () => {
+const aliasesFor = (markdown: string) =>
+  planMarkdownHeadingAnchors(markdown).aliases;
+
+describe('planMarkdownHeadingAnchors', () => {
   it('emits nothing when both slug schemes agree', () => {
-    expect(
-      planHeadingAliases('## Verification layers\n\n## The workflow\n'),
-    ).toEqual(new Map());
+    expect(aliasesFor('## Verification layers\n\n## The workflow\n')).toEqual(
+      new Map(),
+    );
   });
 
   it('recovers the ids the real published post used to serve', () => {
@@ -85,7 +88,7 @@ describe('planHeadingAliases', () => {
       throw new Error('expected shipping-with-claude-code to be published');
     }
 
-    expect(planHeadingAliases(post.content)).toEqual(
+    expect(aliasesFor(post.content)).toEqual(
       new Map([
         [
           'on-using-dangerously-skip-permissions',
@@ -105,7 +108,7 @@ describe('planHeadingAliases', () => {
   });
 
   it('covers a heading written after the rename with no list to update', () => {
-    expect(planHeadingAliases('## Shipping `--yolo` mode\n')).toEqual(
+    expect(aliasesFor('## Shipping `--yolo` mode\n')).toEqual(
       new Map([['shipping-yolo-mode', 'shipping---yolo-mode']]),
     );
   });
@@ -114,26 +117,27 @@ describe('planHeadingAliases', () => {
     // `Node.js` used to publish `nodejs`, which the second heading now derives
     // canonically. Two elements sharing an id is worse than one dead link, so
     // the alias is dropped rather than emitted.
-    const aliases = planHeadingAliases('## Node.js\n\n## Nodejs\n');
+    const aliases = aliasesFor('## Node.js\n\n## Nodejs\n');
 
     expect(aliases.get('node-js')).toBeUndefined();
     expect(aliases).toEqual(new Map());
   });
 
-  it('gives a legacy id to only one heading when two would claim it', () => {
-    // Both of these used to publish `a--b`, from different canonical ids.
-    const aliases = planHeadingAliases('## A & B\n\n## A  B\n');
+  it('suppresses a legacy id when two headings would claim it', () => {
+    // Both headings used to publish `a--b`; assigning the alias to either one
+    // would make the other old deep link land at the wrong section.
+    const aliases = aliasesFor('## A & B\n\n## A  B\n');
 
-    expect(aliases).toEqual(new Map([['a-and-b', 'a--b']]));
+    expect(aliases).toEqual(new Map());
   });
 
   it('refuses to alias an id that appears on more than one heading', () => {
-    expect(
-      planHeadingAliases('## Using `--flag`\n\n## Using `--flag`\n'),
-    ).toEqual(new Map());
+    expect(aliasesFor('## Using `--flag`\n\n## Using `--flag`\n')).toEqual(
+      new Map(),
+    );
   });
 
   it('never proposes an empty id as a link target', () => {
-    expect(planHeadingAliases('## !!!\n')).toEqual(new Map());
+    expect(aliasesFor('## !!!\n')).toEqual(new Map());
   });
 });
