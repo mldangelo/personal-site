@@ -30,8 +30,8 @@ describe('SkillTag', () => {
   });
 
   /**
-   * Whatever weight a tag has must survive greyscale and print, so no cue may
-   * come back as an inline colour or as a modifier class keyed off the data.
+   * No rating may come back as a modifier class, and the unrelated decorative
+   * category colour does not belong inline either.
    */
   it('renders one class and no inline style, whatever the skill', () => {
     render(

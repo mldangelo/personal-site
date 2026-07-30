@@ -46,8 +46,8 @@ describe('categories data', () => {
   /**
    * Categories used to carry a `color`, and every one of them got the same
    * `var(--color-accent)`, so the tick it painted on each tag was identical
-   * everywhere — a whole prop chain carrying a value that distinguished
-   * nothing.
+   * everywhere. The field was decorative and unrelated to the independently
+   * derived competency score.
    */
   it('carries nothing but a name', () => {
     for (const category of categories) {

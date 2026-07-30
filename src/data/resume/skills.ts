@@ -23,13 +23,12 @@ export interface Category {
  * Skills and categories are intentionally ordered, and order is the only
  * hierarchy here.
  *
- * Two earlier hierarchies are deliberately gone. A public 1–5 `competency`
- * self-score was published as tag size, then as a `core`/`working`/`familiar`
- * tier — a self-assessment reported to a precision it never had. And every
- * category once carried a `color` that `buildCategories` set to the same
- * `var(--color-accent)`, so the per-tag tick it painted distinguished nothing
- * while being the only cue for competency, which colour cannot legibly carry
- * anyway (WCAG 1.4.1).
+ * Two earlier competency hierarchies are deliberately gone. A public 1–5
+ * self-score was published as tag size plus tooltip text, then as a
+ * `core`/`working`/`familiar` tier — a self-assessment reported to a precision
+ * it never had. Separately, every category once carried a `color` that
+ * `buildCategories` set to the same `var(--color-accent)`, so the decorative
+ * per-tag tick distinguished nothing; it did not encode competency.
  *
  * A `featured` flag replacing them would be the same self-rating with two
  * levels instead of five, and it landed on 16 of 27 entries, which identifies

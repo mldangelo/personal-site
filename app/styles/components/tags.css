@@ -39,11 +39,11 @@
   justify-content: flex-start;
 }
 
-/* One weight for every skill. Three cues have been through here — a size
-   variant, a per-category tick, and a spelled-out competency tier — and all
-   three encoded a 1–5 self-score that is no longer published. Hierarchy is the
-   authored order of the group and the order of the groups themselves, which is
-   how the rest of the site carries it. */
+/* One weight for every skill. Both competency cues that have been through
+   here — a size variant and a spelled-out tier — encoded a 1–5 self-score that
+   is no longer published. Separately, the old per-category tick resolved to
+   the same accent in every category, so it communicated neither category nor
+   competency. Hierarchy is the authored order of the groups and their tags. */
 .skill-tag {
   display: inline-flex;
   align-items: center;
