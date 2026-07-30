@@ -20,6 +20,7 @@ import {
   metaValues,
   tags,
 } from './lib/html.mjs';
+import { declaredAssetRoutes, draftOnlyAssetRoutes } from './lib/markdown.mjs';
 import { exportLayout, readSiteConfig, toUrlPath } from './lib/site.mjs';
 import { isDraftFrontmatter, POST_CARD_DIRECTORY } from './og-inputs.mjs';
 
@@ -29,6 +30,17 @@ const CONTENT = resolve(ROOT, 'content/writing');
 
 const failures = [];
 const fail = (page, message) => failures.push({ page, message });
+
+/**
+ * Reported but not fatal.
+ *
+ * Everything else here is a defect in something the build produced, and the
+ * build is the thing that can be fixed. A warning is for a true finding whose
+ * remedy is a decision only the author can make — see
+ * `DRAFT_REFERENCED_ASSETS_FAIL`.
+ */
+const warnings = [];
+const warn = (page, message) => warnings.push({ page, message });
 
 function walk(dir, match) {
   const found = [];
@@ -65,15 +77,25 @@ if (pages.length === 0) {
   process.exit(1);
 }
 
-const draftSlugs = walk(CONTENT, (name) => name.endsWith('.md'))
+const posts = walk(CONTENT, (name) => name.endsWith('.md')).map((path) => {
   // Use the same YAML parser as the application. A line regex misses valid
   // forms such as `draft: true # keep private`, weakening the fault-injection
   // gate precisely when the route layer regresses. `isDraftFrontmatter` is the
   // share-card scripts' predicate, imported rather than repeated: a gate that
   // disagreed with the generator about what a draft is would wave through the
   // exact artifact the generator should never have produced.
-  .filter((path) => isDraftFrontmatter(matter(readFileSync(path, 'utf8')).data))
-  .map((path) => basename(path, '.md'));
+  const { data, content } = matter(readFileSync(path, 'utf8'));
+
+  return {
+    slug: basename(path, '.md'),
+    isDraft: isDraftFrontmatter(data),
+    assets: declaredAssetRoutes({ data, content }),
+  };
+});
+
+const draftSlugs = posts
+  .filter((post) => post.isDraft)
+  .map((post) => post.slug);
 
 function isDraftPath(pathname) {
   const route = routeForPublicPath(pathname) ?? pathname;
@@ -84,21 +106,24 @@ function isDraftPath(pathname) {
 }
 
 /**
- * Where in the export a file belonging to one post can appear.
+ * Where in the export a file *named after* a post can appear.
  *
  * `POST_CARD_DIRECTORY` is the generated share cards, taken from the generator's
  * own constant so moving them cannot silently un-scope this gate. `/writing` is
  * the posts' own route tree, which carries more than HTML: Next writes an RSC
  * prefetch payload beside every prerendered route, so a leaked draft route also
  * ships an `index.txt` that no metadata check reads. `/images/writing` is where
- * article images live, one directory per post.
+ * article images live.
  *
- * A new per-post asset directory has to be registered here, or it ships
- * unwatched — that is the cost of scoping, and it is the smaller cost. The scan
- * used to match any path segment anywhere in `out/`, which meant a draft slug
- * colliding with an unrelated committed file (`notes.md` against
- * `public/images/notes.png`) failed the whole build with a draft-leak message
- * pointing at a file nothing generated.
+ * Scoping is what keeps a slug rule honest: the scan used to match any path
+ * segment anywhere in `out/`, which meant a draft slug colliding with an
+ * unrelated committed file (`notes.md` against `public/images/notes.png`) failed
+ * the whole build with a draft-leak message pointing at a file nothing
+ * generated. The cost is that a name this list does not cover is invisible here
+ * — which is not the same as unwatched, because the reference scan below reads
+ * the post's own declaration and does not care about names at all. Register a
+ * new directory that holds *generated* per-post files anyway; the Markdown
+ * cannot reference what the build invents.
  */
 const POST_ASSET_ROOTS = [POST_CARD_DIRECTORY, '/writing', '/images/writing'];
 
@@ -122,13 +147,14 @@ function isDraftAsset(route) {
 }
 
 /**
- * Nothing generated from a draft may reach the export, not only routes.
+ * Nothing belonging to a draft may reach the export, not only routes.
  *
  * The route and metadata checks below see HTML and XML. `public/` is copied
- * into the export verbatim, so anything generated from `content/writing/` — a
- * per-post share card, say — reaches the site as a plain file that no metadata
- * gate looks at, carrying an unpublished title in its name and its pixels.
- * HTML is skipped here only because `isDraftPath` already covers every route.
+ * into the export verbatim, so anything belonging to an unpublished post — a
+ * per-post share card, an author's screenshots — reaches the site as a plain
+ * file that no metadata gate looks at, carrying unpublished work in its name
+ * and its pixels. HTML is skipped here only because `isDraftPath` already
+ * covers every route.
  */
 if (draftSlugs.length > 0) {
   for (const file of walk(OUT, (name) => !name.endsWith('.html'))) {
@@ -140,6 +166,45 @@ if (draftSlugs.length > 0) {
       fail(path, `exports an asset named after a draft post: /${path}`);
     }
   }
+}
+
+/**
+ * Whether a file a draft's Markdown points at should block the build.
+ *
+ * `false`, deliberately, and this is the one line to flip to change that.
+ *
+ * The two draft-asset checks find different things. A file named after a draft
+ * is one the build produced from an unpublished post, and the build is what gets
+ * fixed — failing is right, and no author is inconvenienced by it. A file a
+ * draft *references* is the author's own: committing the screenshots alongside
+ * the draft that will use them is the normal way to write a post here, and the
+ * remedy is a decision about the author's own working copy — move them out of
+ * `public/` until the post ships, or accept the exposure knowingly. Failing
+ * would make that decision by stopping every deploy from `main` until someone
+ * happened to look, and the exposure is not undone by a red build; it is only
+ * reported. So it is reported, loudly, by name, with the URL.
+ */
+const DRAFT_REFERENCED_ASSETS_FAIL = false;
+
+/**
+ * Files a draft declares as its own, wherever they were filed.
+ *
+ * This is the half of the draft-asset gate that does not go through names. The
+ * live example is `public/images/writing/codex-desktop-app-post/`, three
+ * screenshots for a `draft: true` post in a directory whose name appears in no
+ * slug — publicly fetchable, and invisible to every other check here.
+ */
+for (const [route, slug] of draftOnlyAssetRoutes(posts)) {
+  // Already fatal above, and one file deserves one report.
+  if (isDraftAsset(route)) continue;
+  if (!exportedFileExists(publicPathForRoute(route))) continue;
+
+  (DRAFT_REFERENCED_ASSETS_FAIL ? fail : warn)(
+    route.replace(/^\//, ''),
+    `draft post "${slug}" references this file, so it is publicly fetchable at ` +
+      `${siteUrlForRoute(route)}. Move it out of public/ until the post ships, ` +
+      'or leave it knowing it is readable.',
+  );
 }
 
 const records = pages.map((file) => {
@@ -665,6 +730,15 @@ if (!existsSync(resumeJsonPath)) {
   }
 }
 
+if (warnings.length > 0) {
+  console.warn(
+    `\nverify-export: ${warnings.length} warning(s), not blocking the build\n`,
+  );
+  for (const { page, message } of warnings) {
+    console.warn(`  ${page}\n    ${message}`);
+  }
+}
+
 if (failures.length > 0) {
   console.error(`\nverify-export: ${failures.length} problem(s)\n`);
   for (const { page, message } of failures) {
@@ -673,7 +747,10 @@ if (failures.length > 0) {
   process.exit(1);
 }
 
+// The warning count rides on the success line as well as being printed above,
+// so a passing run never reads as clean when it is not.
 console.log(
-  `verify-export: ${pages.length} pages OK ` +
-    '(draft routes and assets, robots, ids/fragments, canonicals, complete share metadata, local images, internal links, sitemap/RSS, resume.json)',
+  `verify-export: ${pages.length} pages OK` +
+    (warnings.length > 0 ? `, ${warnings.length} warning(s)` : '') +
+    ' (draft routes and assets, robots, ids/fragments, canonicals, complete share metadata, local images, internal links, sitemap/RSS, resume.json)',
 );
