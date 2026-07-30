@@ -1,10 +1,21 @@
 import { render, screen, waitFor, within } from '@testing-library/react';
+import type { ComponentPropsWithoutRef } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { aboutMarkdown } from '@/data/about';
 import { createHeadingId } from '@/lib/anchors';
 import AboutContent from '../Sections';
+
+// `<Link>` renders a plain `<a>`, so nothing in the DOM distinguishes a
+// client-routed link from one that reloads the document. The mock marks it.
+vi.mock('next/link', () => ({
+  default: ({ href, children, ...rest }: ComponentPropsWithoutRef<'a'>) => (
+    <a data-router-link="true" href={href} {...rest}>
+      {children}
+    </a>
+  ),
+}));
 
 function getActualSectionTitles(markdown: string) {
   return Array.from(markdown.matchAll(/^# (.+)$/gm))
@@ -166,6 +177,60 @@ Lead paragraph.
     for (const marker of empty) {
       expect(marker.querySelector('.log-entry-year')).toBeNull();
     }
+  });
+
+  it('routes the internal link the real prose carries, and leaves the rest native', () => {
+    render(<AboutContent markdown={aboutMarkdown} />);
+
+    // `- [Good design](/).` in `src/data/about.ts`, which shipped as a native
+    // anchor and reloaded the document from a fully client-routed page.
+    const internal = screen.getByRole('link', { name: 'Good design' });
+
+    expect(internal).toHaveAttribute('data-router-link', 'true');
+    expect(internal).toHaveAttribute('href', '/');
+    // No opt-out class: `.about-content a` is what underlines a prose link.
+    expect(internal).not.toHaveAttribute('class');
+
+    const external = screen.getByRole('link', { name: 'OpenAI' });
+
+    expect(external).not.toHaveAttribute('data-router-link');
+    expect(external).toHaveAttribute('href', 'https://openai.com');
+  });
+
+  it('routes internal links from the intro, a log section, and a plain section', () => {
+    render(
+      <AboutContent
+        markdown={`# Intro
+
+Start at the [home page](/).
+
+# Some History
+
+- At 10, I built a [terrible site](/projects) with FrontPage.
+
+# I Like
+
+- [Good design](/).
+- [Books](https://www.goodreads.com/mdangelo).`}
+      />,
+    );
+
+    const routed: [string, string][] = [
+      ['home page', '/'],
+      ['terrible site', '/projects/'],
+      ['Good design', '/'],
+    ];
+
+    for (const [name, href] of routed) {
+      const link = screen.getByRole('link', { name });
+
+      expect(link, name).toHaveAttribute('data-router-link', 'true');
+      expect(link, name).toHaveAttribute('href', href);
+    }
+
+    expect(screen.getByRole('link', { name: 'Books' })).not.toHaveAttribute(
+      'data-router-link',
+    );
   });
 
   it('supports same-page hash navigation from section links', async () => {

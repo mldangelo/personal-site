@@ -133,8 +133,18 @@ describe('stylesheet graph', () => {
 // The honest version — view-transition CSS must be accompanied by something
 // that can start a transition — would have passed the file that motivated the
 // guard: deleted `utilities.css` declared its own `@view-transition
-// { navigation: auto }` trigger. What was actually wrong with it was
-// app-specific (every internal link here goes through `<Link>`, so no
-// same-origin cross-document navigation occurs), and that is a fact about this
-// app's routing, not a rule a stylesheet-graph test can hold. `app/tailwind.css`
-// records it as a comment instead.
+// { navigation: auto }` trigger. What was actually wrong with it is
+// app-specific, a fact about this app's routing rather than a rule a
+// stylesheet-graph test can hold, so `app/tailwind.css` records it as a
+// comment instead.
+//
+// That routing fact was overstated when it was first written here. It said
+// every internal link goes through `<Link>`, while Markdown prose still
+// rendered native anchors — `[Good design](/)` in `src/data/about.ts` exported
+// a literal `<a href="/">` from `/about/`, which is precisely the same-origin
+// cross-document navigation the deleted rule could have run for.
+// `src/lib/markdownLinks.tsx` routes internal Markdown links through `<Link>`
+// as well now, and `src/lib/__tests__/markdownLinks.test.tsx` pins the
+// classification. What is left native and same-origin is links to exported
+// files — `/feed.xml`, `/resume.json`, `/og.png` — and a navigation to one of
+// those has no document on the other side to opt in.
