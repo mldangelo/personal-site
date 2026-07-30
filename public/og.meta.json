@@ -3,6 +3,32 @@
     "width": 1200,
     "height": 630
   },
+  "fonts": [
+    {
+      "name": "Display",
+      "family": "Bricolage Grotesque",
+      "weight": 800,
+      "style": "normal",
+      "url": "https://fonts.gstatic.com/s/bricolagegrotesque/v9/3y9U6as8bTXq_nANBjzKo3IeZx8z6up5BeSl5jBNz_19PpbpMXuECpwUxJBOm_OJWiaaD30YfKfjZZoLvZvlyM0.ttf",
+      "sha256": "50fe1039eb3ff208d027a4867d3f53bd288bba76273a718578f7b3ec0feec388"
+    },
+    {
+      "name": "Mono",
+      "family": "JetBrains Mono",
+      "weight": 500,
+      "style": "normal",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8-qxjPQ.ttf",
+      "sha256": "3386a05f6ece969e4537de6be894170d20558e82f7d56c8c5d332972ef172160"
+    },
+    {
+      "name": "Body",
+      "family": "Newsreader",
+      "weight": 400,
+      "style": "normal",
+      "url": "https://fonts.gstatic.com/s/newsreader/v26/cY9qfjOCX1hbuyalUrK49dLac06G1ZGsZBtoBCzBDXXD9JVF438weI_ADA.ttf",
+      "sha256": "b8f5e0a8bdd6a12c722ca5635d9da87e77ccbb2d0172112e34e00c4e55f2cd5a"
+    }
+  ],
   "profile": {
     "name": "Michael D'Angelo",
     "employer": "OpenAI",
@@ -19,7 +45,7 @@
     "accent": "#1b2fbf",
     "hairline": "rgba(35, 39, 46, 0.14)"
   },
-  "generatorDigest": "ebbff8ac512f1c8f6e12781948f9aec362406b2db2c90fae0df418b288e189e9",
+  "generatorDigest": "29afa7878e3f0e87fc660c316c29ef5209a6126d919dbd0596183485e76ef4a7",
   "imageDigest": "9c76fd6b9be9ed5e8253a35ee7b741e219b2bfd5484b5bd29c90eb7a3241d4eb",
   "posts": [
     {
@@ -35,7 +61,7 @@
           "value": "409"
         },
         {
-          "label": "References",
+          "label": "External links",
           "value": "9"
         },
         {
@@ -43,7 +69,7 @@
           "value": "2 min"
         }
       ],
-      "imageDigest": "69e48cbf6a97384b0dc37330346d41282e19118ae92cc23980c2bc64f75fd497"
+      "imageDigest": "3d77ffcc9d766054ee80aab11e015b769effc7dc78bcc7df885509409d1119e3"
     },
     {
       "slug": "eurostar-chatbot-analysis",
@@ -58,7 +84,7 @@
           "value": "870"
         },
         {
-          "label": "References",
+          "label": "External links",
           "value": "9"
         },
         {
@@ -66,7 +92,7 @@
           "value": "4 min"
         }
       ],
-      "imageDigest": "3e5d376939620d60ea397cb1dd40277b15f1fd0136acfd09c09583799790b8c5"
+      "imageDigest": "7d4e87009ffd843f5fd04c763d06f4be0991a716646ec84423d08a88bdddf35d"
     },
     {
       "slug": "shipping-with-claude-code",
@@ -81,7 +107,7 @@
           "value": "1,930"
         },
         {
-          "label": "References",
+          "label": "External links",
           "value": "16"
         },
         {
@@ -89,7 +115,7 @@
           "value": "9 min"
         }
       ],
-      "imageDigest": "3e1fdafbb35a9ccaab9a70c91d17e5226f5a4213ade3c95e1cf6f410bc997f63"
+      "imageDigest": "e89b0532b445d7aeae2ba1c4b76e90b8c990dba48fbc651faba08af72f600e44"
     }
   ]
 }
