@@ -3,9 +3,15 @@
 import Markdown from 'markdown-to-jsx';
 import Image from 'next/image';
 import type { ReactNode } from 'react';
-import { Children, type CSSProperties, isValidElement } from 'react';
+import {
+  Children,
+  type CSSProperties,
+  isValidElement,
+  useEffect,
+  useRef,
+} from 'react';
 
-import { createHeadingId } from '@/lib/anchors';
+import { planMarkdownHeadingAnchors } from '@/lib/anchors';
 
 interface ImageSize {
   width: number;
@@ -27,6 +33,50 @@ const FALLBACK_SIZE: ImageSize = { width: 1200, height: 675 };
 
 const LANGUAGE_PREFIX = 'language-';
 
+const HEADING_TAGS = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] as const;
+
+/**
+ * Heading overrides that keep renamed, already-published ids resolving.
+ *
+ * The canonical id remains on the heading. The old id rides an empty,
+ * out-of-flow marker at the same position, so existing deep links keep working
+ * without adding duplicate heading semantics or another tab stop.
+ */
+function headingOverrides(aliases: ReadonlyMap<string, string>) {
+  const entries = HEADING_TAGS.map(
+    (Tag) =>
+      [
+        Tag,
+        {
+          component: ({
+            id,
+            children,
+          }: {
+            id?: string;
+            children?: ReactNode;
+          }) => {
+            const legacyId = id ? aliases.get(id) : undefined;
+
+            return (
+              <Tag id={id}>
+                {legacyId ? (
+                  <span
+                    className="prose-anchor-alias"
+                    id={legacyId}
+                    aria-hidden="true"
+                  />
+                ) : null}
+                {children}
+              </Tag>
+            );
+          },
+        },
+      ] as const,
+  );
+
+  return Object.fromEntries(entries);
+}
+
 function isRootLocalImage(src: string): boolean {
   return src.startsWith('/') && !src.startsWith('//');
 }
@@ -34,12 +84,13 @@ function isRootLocalImage(src: string): boolean {
 /**
  * The image a block-level paragraph exists only to carry, if it carries one.
  *
- * A Markdown image's CommonMark title — `![alt](src "title")` — is its caption,
- * and it was being destructured away, so every caption an author wrote was
- * dropped on the floor. Turning that into a real `<figure>`/`<figcaption>` has
- * to happen here rather than in the `img` override: markdown-to-jsx wraps a
- * standalone image in a `<p>`, and a `<figure>` inside a `<p>` is invalid, so
- * the browser would hoist it out and break hydration.
+ * This site treats a standalone Markdown image's optional title —
+ * `![alt](src "title")` — as visible caption copy while preserving the title
+ * on the image itself. Turning that local authoring convention into a real
+ * `<figure>`/`<figcaption>` has to happen here rather than in the `img`
+ * override: markdown-to-jsx wraps a standalone image in a `<p>`, and a
+ * `<figure>` inside a `<p>` is invalid, so the browser would hoist it out and
+ * break hydration.
  */
 function figureImage(
   node: ReactNode,
@@ -91,6 +142,59 @@ function fenceLanguage(children: ReactNode): string | undefined {
     ?.slice(LANGUAGE_PREFIX.length);
 }
 
+/**
+ * Makes a code fence keyboard-reachable only while it actually overflows.
+ *
+ * A short fence needs no extra tab stop. A wide one does, because horizontal
+ * keyboard scrolling starts only after the scroll container receives focus.
+ * There is no landmark role: the preformatted content already supplies the
+ * useful semantics, and repeated code-block regions would just add noise.
+ */
+function CodeFence({ children }: { children?: ReactNode }) {
+  const preRef = useRef<HTMLPreElement>(null);
+  const language = fenceLanguage(children);
+
+  useEffect(() => {
+    const pre = preRef.current;
+    if (!pre) {
+      return;
+    }
+
+    const syncTabStop = () => {
+      if (pre.scrollWidth > pre.clientWidth) {
+        pre.setAttribute('tabindex', '0');
+      } else {
+        pre.removeAttribute('tabindex');
+      }
+    };
+
+    syncTabStop();
+    window.addEventListener('resize', syncTabStop);
+
+    const observer =
+      typeof ResizeObserver === 'undefined'
+        ? null
+        : new ResizeObserver(syncTabStop);
+    observer?.observe(pre);
+
+    return () => {
+      window.removeEventListener('resize', syncTabStop);
+      observer?.disconnect();
+    };
+  }, []);
+
+  return (
+    <div className="prose-fence">
+      {language ? (
+        <span className="prose-fence-lang" aria-hidden="true">
+          {language}
+        </span>
+      ) : null}
+      <pre ref={preRef}>{children}</pre>
+    </div>
+  );
+}
+
 export default function PostContent({
   content,
   imageSizes = {},
@@ -106,6 +210,8 @@ export default function PostContent({
     return measuredSize ?? FALLBACK_SIZE;
   }
 
+  const headingPlan = planMarkdownHeadingAnchors(content);
+
   return (
     <Markdown
       options={{
@@ -118,12 +224,12 @@ export default function PostContent({
         // `.prose > *` silently lands on the wrapper and constrains everything
         // inside it — which is exactly what stopped a wide figure widening.
         wrapper: null,
-        // One slug scheme for the whole site. The default slugifier keeps every
-        // separator it deletes, so `--dangerously-skip-permissions` became
-        // `on-using---dangerously-skip-permissions` while every other page on
-        // the site derived `on-using-dangerously-skip-permissions`.
-        slugify: createHeadingId,
+        // One unique slug scheme for the whole site. The precomputed plan also
+        // leaves safe aliases for ids that were published under the library's
+        // old default scheme.
+        slugify: headingPlan.slugify,
         overrides: {
+          ...headingOverrides(headingPlan.aliases),
           p: {
             component: ({ children }: { children?: ReactNode }) => {
               const items = Children.toArray(children);
@@ -156,7 +262,15 @@ export default function PostContent({
             },
           },
           img: {
-            component: ({ alt, src }: { alt?: string; src?: string }) => {
+            component: ({
+              alt,
+              src,
+              title,
+            }: {
+              alt?: string;
+              src?: string;
+              title?: string;
+            }) => {
               if (!src) {
                 return null;
               }
@@ -170,38 +284,13 @@ export default function PostContent({
                   width={width}
                   height={height}
                   loading="lazy"
+                  title={title}
                 />
               );
             },
           },
           pre: {
-            component: ({ children }: { children?: ReactNode }) => {
-              const language = fenceLanguage(children);
-
-              return (
-                <div className="prose-fence">
-                  {language ? (
-                    // The name is already on the region below, so the plate is
-                    // annotation only and must not be announced twice.
-                    <span className="prose-fence-lang" aria-hidden="true">
-                      {language}
-                    </span>
-                  ) : null}
-                  {/* The fence has always scrolled horizontally, but only for a
-                      mouse. A named, focusable region gives the keyboard the
-                      same reach. */}
-                  <pre
-                    tabIndex={0}
-                    role="region"
-                    aria-label={
-                      language ? `${language} code block` : 'Code block'
-                    }
-                  >
-                    {children}
-                  </pre>
-                </div>
-              );
-            },
+            component: CodeFence,
           },
         },
       }}

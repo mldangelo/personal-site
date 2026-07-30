@@ -321,16 +321,24 @@
 
 .prose h2,
 .prose h3,
-.prose h4 {
+.prose h4,
+.prose-anchor-alias {
   scroll-margin-top: calc(var(--header-height) + var(--spacing-6));
 }
 
 @media (max-width: 735px) {
   .prose h2,
   .prose h3,
-  .prose h4 {
+  .prose h4,
+  .prose-anchor-alias {
     scroll-margin-top: calc(var(--header-height-mobile) + var(--spacing-6));
   }
+}
+
+.prose-anchor-alias {
+  position: absolute;
+  width: 0;
+  height: 0;
 }
 
 .prose p {
@@ -414,13 +422,6 @@
   padding: 1rem;
   overflow-x: auto;
   margin: 0;
-}
-
-/* The fence is keyboard-reachable so its horizontal scroll is too, which means
-   it needs a focus ring of its own. */
-.prose pre:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
 }
 
 /* Annotation on the rule that is already there: the language breaks the top

@@ -1,3 +1,5 @@
+import { act, render } from '@testing-library/react';
+import { StrictMode } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 
@@ -11,6 +13,17 @@ const OG_SIZE = { '/og.png': { width: 1200, height: 630 } };
 
 function headingIds(html: string): string[] {
   return Array.from(html.matchAll(/<h[1-6][^>]*\bid="([^"]+)"/g), (m) => m[1]);
+}
+
+function allIds(html: string): string[] {
+  return Array.from(html.matchAll(/\bid="([^"]+)"/g), (m) => m[1]);
+}
+
+function aliasIds(html: string): string[] {
+  return Array.from(
+    html.matchAll(/<span class="prose-anchor-alias" id="([^"]+)"/g),
+    (m) => m[1],
+  );
 }
 
 describe('PostContent', () => {
@@ -46,7 +59,7 @@ describe('PostContent', () => {
 });
 
 describe('PostContent figures', () => {
-  it('renders a CommonMark image title as a real figcaption', () => {
+  it('promotes the site caption convention while preserving the image title', () => {
     const html = renderToStaticMarkup(
       <PostContent
         content={'Intro.\n\n![Alt](/og.png "July API spend: $9,986.20")\n'}
@@ -57,6 +70,7 @@ describe('PostContent figures', () => {
     expect(html).toContain(
       '<figcaption class="prose-figcaption">July API spend: $9,986.20</figcaption>',
     );
+    expect(html).toContain('title="July API spend: $9,986.20"');
     expect(html).toContain('<figure class="prose-figure"');
   });
 
@@ -123,22 +137,57 @@ describe('PostContent code fences', () => {
     );
   });
 
-  it('makes the fence a focusable scroll region with an accessible name', () => {
+  it('does not add tab stops or landmark regions during server rendering', () => {
     const html = renderToStaticMarkup(
-      <PostContent content={'Intro.\n\n```markdown\n@AGENTS.md\n```\n'} />,
+      <PostContent
+        content={
+          '```markdown\n@AGENTS.md\n```\n\n```markdown\n@CLAUDE.md\n```\n'
+        }
+      />,
     );
 
-    expect(html).toContain('tabindex="0"');
-    expect(html).toContain('role="region"');
-    expect(html).toContain('aria-label="markdown code block"');
+    expect(html).not.toContain('tabindex');
+    expect(html).not.toContain('role="region"');
+    expect(html).not.toContain('aria-label');
   });
 
-  it('names an unlabelled fence without inventing a language plate', () => {
+  it('adds a tab stop only while the rendered fence actually overflows', () => {
+    const { container } = render(
+      <PostContent content={'```text\nA deliberately long line\n```\n'} />,
+    );
+    const pre = container.querySelector('pre');
+    if (!pre) {
+      throw new Error('expected a rendered code fence');
+    }
+
+    let clientWidth = 320;
+    let scrollWidth = 640;
+    Object.defineProperties(pre, {
+      clientWidth: {
+        configurable: true,
+        get: () => clientWidth,
+      },
+      scrollWidth: {
+        configurable: true,
+        get: () => scrollWidth,
+      },
+    });
+
+    act(() => window.dispatchEvent(new Event('resize')));
+    expect(pre).toHaveAttribute('tabindex', '0');
+    expect(pre).not.toHaveAttribute('role');
+
+    clientWidth = 640;
+    scrollWidth = 640;
+    act(() => window.dispatchEvent(new Event('resize')));
+    expect(pre).not.toHaveAttribute('tabindex');
+  });
+
+  it('does not invent a language plate for an unlabelled fence', () => {
     const html = renderToStaticMarkup(
       <PostContent content={'Intro.\n\n```\nultrathink: audit this\n```\n'} />,
     );
 
-    expect(html).toContain('aria-label="Code block"');
     expect(html).not.toContain('prose-fence-lang');
   });
 });
@@ -160,6 +209,37 @@ describe('PostContent heading anchors', () => {
     expect(headingIds(html)).toEqual([
       'on-using-dangerously-skip-permissions',
       'claude-md-agents-md',
+    ]);
+  });
+
+  it('gives normalized duplicate headings deterministic unique ids', () => {
+    const html = renderToStaticMarkup(
+      <PostContent
+        content={'## Repeat\n\n## Repeat\n\n## Répeat\n\n## !!!\n\n## ???\n'}
+      />,
+    );
+
+    expect(headingIds(html)).toEqual([
+      'repeat',
+      'repeat-2',
+      'repeat-3',
+      'section',
+      'section-2',
+    ]);
+    expect(new Set(allIds(html)).size).toBe(allIds(html).length);
+  });
+
+  it('keeps duplicate ids stable when Strict Mode repeats compilation', () => {
+    const { container } = render(
+      <StrictMode>
+        <PostContent content={'## Repeat\n\n## Repeat\n\n## Répeat\n'} />
+      </StrictMode>,
+    );
+
+    expect(headingIds(container.innerHTML)).toEqual([
+      'repeat',
+      'repeat-2',
+      'repeat-3',
     ]);
   });
 
@@ -196,5 +276,52 @@ describe('PostContent heading anchors', () => {
     expect(headingIds(html)).not.toContain(
       'on-using---dangerously-skip-permissions',
     );
+  });
+
+  it('keeps the previously published ids resolving as hidden aliases', () => {
+    const post = getPostBySlug('shipping-with-claude-code');
+    if (!post) {
+      throw new Error('expected shipping-with-claude-code to be published');
+    }
+
+    const html = renderToStaticMarkup(
+      <PostContent
+        content={post.content}
+        imageSizes={readPostImageSizes(post.content)}
+      />,
+    );
+
+    expect(aliasIds(html).sort()).toEqual(
+      [
+        'browser-automation---chrome-for-interaction-playwright-mcp-for-screenshots',
+        'claudemd--agentsmd',
+        'on-using---dangerously-skip-permissions',
+        'plan-mode--writing-plans-to-files',
+      ].sort(),
+    );
+    expect(new Set(allIds(html)).size).toBe(allIds(html).length);
+  });
+
+  it('suppresses a legacy alias that would collide with another canonical id', () => {
+    const html = renderToStaticMarkup(
+      <PostContent content={'## Node.js\n\n## Nodejs\n'} />,
+    );
+
+    expect(headingIds(html)).toEqual(['node-js', 'nodejs']);
+    expect(aliasIds(html)).toEqual([]);
+  });
+
+  it('emits no duplicate ids in any published post', () => {
+    for (const post of getAllPosts()) {
+      const html = renderToStaticMarkup(
+        <PostContent
+          content={post.content}
+          imageSizes={readPostImageSizes(post.content)}
+        />,
+      );
+      const ids = allIds(html);
+
+      expect(new Set(ids).size, post.slug).toBe(ids.length);
+    }
   });
 });
