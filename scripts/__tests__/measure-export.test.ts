@@ -13,6 +13,29 @@ import { afterEach, describe, expect, it } from 'vitest';
 const measurer = resolve(process.cwd(), 'scripts/measure-export.mjs');
 const fixtureRoots: string[] = [];
 
+/**
+ * The exact command the script's header advertises as machine-readable, run here
+ * as written. `--silent` is npm's own flag, so it sits before the `--`; without
+ * it npm prints its two-line script banner to stdout ahead of the JSON and any
+ * consumer parsing the stream fails on the first line.
+ */
+const DOCUMENTED_JSON_COMMAND = 'npm run measure-export --silent -- --json -';
+
+/**
+ * Stands in for `jq empty` without depending on jq: reads the whole stream and
+ * exits non-zero unless it parses. Written into the fixture as a file so the
+ * shell in the pipeline has nothing to quote.
+ */
+const PARSE_STDIN = `let text = '';
+process.stdin.setEncoding('utf8');
+process.stdin.on('data', (chunk) => {
+  text += chunk;
+});
+process.stdin.on('end', () => {
+  process.stdout.write(String(JSON.parse(text).total.files));
+});
+`;
+
 const CSS = 'a'.repeat(4096);
 const JS = 'j'.repeat(8192);
 const FONT = 'f'.repeat(2048);
@@ -105,11 +128,25 @@ function createFixture({
   const root = mkdtempSync(join(tmpdir(), 'measure-export-'));
   fixtureRoots.push(root);
 
+  // `scripts` is what makes `npm run measure-export` reachable from the fixture,
+  // so the documented npm command can be exercised rather than approximated by
+  // spawning node directly — which is how the banner on stdout went unnoticed.
   write(
     root,
     'package.json',
-    JSON.stringify({ homepage: `https://example.com${basePath}/` }),
+    JSON.stringify({
+      name: 'measure-export-fixture',
+      version: '0.0.0',
+      private: true,
+      homepage: `https://example.com${basePath}/`,
+      scripts: { 'measure-export': `node "${measurer}"` },
+    }),
   );
+  write(root, 'parse-stdin.mjs', PARSE_STDIN);
+  // A real checkout always has `scripts/` — the measurer lives in it — so a
+  // fixture with no budget file still needs the directory, or `--update-budget`
+  // has nowhere to write and the bootstrap looks broken for the wrong reason.
+  mkdirSync(join(root, 'scripts'), { recursive: true });
   if (budget) {
     write(root, 'scripts/budget.json', JSON.stringify(budget, null, 2));
   }
@@ -146,6 +183,23 @@ function runMeasurer(root: string, args: string[] = []) {
     stdout: result.stdout,
     stderr: result.stderr,
     output: `${result.stdout}${result.stderr}`,
+  };
+}
+
+/**
+ * Runs a shell pipeline in the fixture, so the reported status is the consumer's
+ * — exactly what a person's shell reports for `… | jq empty`.
+ */
+function runPipeline(root: string, command: string) {
+  const result = spawnSync(command, {
+    cwd: root,
+    encoding: 'utf8',
+    shell: true,
+  });
+  return {
+    status: result.status,
+    stdout: result.stdout,
+    stderr: result.stderr,
   };
 }
 
@@ -300,6 +354,76 @@ describe('measure-export', () => {
     });
   });
 
+  it('names a metric it is measuring but not gating', () => {
+    const { fontBytes: _omitted, ...budget } = GENEROUS_BUDGET;
+    const { root } = createFixture({ budget });
+
+    const { status, stdout, stderr } = runMeasurer(root, ['--json', '-']);
+    expect(status).toBe(0);
+    expect(stderr).toContain('1 metric(s) measured but not gated: fontBytes');
+    // A warning on the machine-readable stream would be the other bug.
+    expect(() => JSON.parse(stdout)).not.toThrow();
+  });
+
+  it('says nothing about ungated metrics when all seven are budgeted', () => {
+    const { output } = runMeasurer(createFixture().root);
+
+    expect(output).not.toContain('not gated');
+  });
+
+  // `{}` and `{"_policy": []}` satisfied every other rule in this file, then
+  // gave all seven metrics an undefined limit and reported
+  // `0 budget(s) within limits` with status 0 — the silent no-gates failure the
+  // root and value checks exist to prevent, one level up.
+  it.each([
+    ['an empty object', '{}'],
+    ['nothing but comment keys', '{"_policy": ["notes"]}'],
+  ])(
+    'refuses to gate nothing when the budget file is %s',
+    (_shape, contents) => {
+      const { root } = createFixture();
+      write(root, 'scripts/budget.json', contents);
+
+      const { status, output } = runMeasurer(root);
+      expect(status).toBe(1);
+      expect(output).toContain('scripts/budget.json declares no budgets');
+      expect(output).toContain('totalBytes');
+      expect(output).not.toContain('budget(s) within limits');
+    },
+  );
+
+  // The gate above is only tolerable because the bootstrap path stays open, and
+  // only useful because the bootstrap closes it: `--update-budget` writes every
+  // known metric, so a file it produced can never be the empty one.
+  it.each([
+    ['an empty object', '{}'],
+    ['nothing but comment keys', '{"_policy": ["notes"]}'],
+    ['no file at all', null],
+  ])('bootstraps a budget from %s with --update-budget', (_shape, contents) => {
+    const { root } = createFixture({ budget: null });
+    if (contents !== null) write(root, 'scripts/budget.json', contents);
+
+    const { status, output } = runMeasurer(root, ['--update-budget']);
+    expect(status).toBe(0);
+    expect(output).toContain('ratcheted scripts/budget.json');
+
+    const budget = JSON.parse(
+      readFileSync(join(root, 'scripts/budget.json'), 'utf8'),
+    );
+    expect(Object.keys(budget)).toEqual([
+      '_policy',
+      'totalBytes',
+      'javascriptBytes',
+      'cssBytes',
+      'fontBytes',
+      'maxFileBytes',
+      'maxRouteFirstLoadBytes',
+      'repeatedInlineSvgBytes',
+    ]);
+    // Which is exactly what the run it just unblocked requires.
+    expect(runMeasurer(root).status).toBe(0);
+  });
+
   it('rejects an unknown budget key rather than silently ignoring it', () => {
     const { root } = createFixture({
       budget: { ...GENEROUS_BUDGET, cssByte: 1024 },
@@ -433,6 +557,46 @@ describe('measure-export', () => {
     // `--json - >report.json` still shows the table in the terminal.
     expect(stdout).not.toContain('by subsystem');
     expect(stderr).toContain('by subsystem');
+    expect(stderr).toContain('7 budget(s) within limits');
+  });
+
+  it('advertises the machine-readable command this suite runs', () => {
+    // Header and test cannot drift: the string below is the one being run.
+    expect(readFileSync(measurer, 'utf8')).toContain(DOCUMENTED_JSON_COMMAND);
+  });
+
+  // Spawning `node` directly parses whatever this script writes and says nothing
+  // about the command people are told to run. `npm run measure-export -- --json -`
+  // prints npm's two-line script banner to stdout ahead of the JSON, so piping
+  // the documented command to `jq empty` exited 5 and the producer got EPIPE.
+  it('parses when the documented npm command is piped to a consumer', () => {
+    const { root } = createFixture();
+    const { status, stdout, stderr } = runPipeline(
+      root,
+      `${DOCUMENTED_JSON_COMMAND} | "${process.execPath}" parse-stdin.mjs`,
+    );
+
+    expect(status).toBe(0);
+    // The consumer echoes the file count it parsed out of the stream.
+    expect(stdout).toBe('11');
+    expect(stderr).toContain('by subsystem');
+  });
+
+  it('exits quietly when the consumer stops reading', () => {
+    const { root } = createFixture();
+
+    // `true` is the deterministic stand-in for a consumer that already has what
+    // it came for — `head` past its last line, `jq .total` past its field. A
+    // literal `head -1` only trips this once the report outgrows the pipe
+    // buffer, which is how an unhandled EPIPE stack trace sat here unnoticed.
+    const { status, stderr } = runPipeline(
+      root,
+      `"${process.execPath}" "${measurer}" --json - | true`,
+    );
+
+    expect(status).toBe(0);
+    expect(stderr).not.toContain('EPIPE');
+    // Quietly, not silently: the human narrative on stderr still lands.
     expect(stderr).toContain('7 budget(s) within limits');
   });
 

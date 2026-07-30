@@ -16,8 +16,16 @@
  * Run after `npm run build`:
  *   npm run measure-export                       table plus budget gate
  *   npm run measure-export -- --json report.json also write the raw numbers
- *   npm run measure-export -- --json -           raw numbers on stdout instead
+ *   npm run measure-export --silent -- --json -  raw numbers on stdout instead
  *   npm run measure-export -- --update-budget    ratchet scripts/budget.json
+ *
+ * `--silent` on the third line is load-bearing, and it is npm's flag rather than
+ * this script's, so it goes before the `--`. Without it npm prints its two-line
+ * script banner to stdout ahead of the JSON, so the documented command piped to
+ * `jq empty` exits 5 on the banner's first line and this script is handed EPIPE
+ * by the consumer that gave up. A dedicated `measure-export:json` script would
+ * not help: npm banners whichever script name it is handed, so the silent form
+ * is the only npm invocation that is actually machine-readable.
  */
 import {
   existsSync,
@@ -40,6 +48,24 @@ const die = (message) => {
   console.error(`${LABEL}: ${message}`);
   process.exit(1);
 };
+
+/**
+ * A consumer is allowed to stop reading. `--json - | head` and `| jq .total`
+ * both close the pipe as soon as they have what they came for, and the write
+ * that lands afterwards is not a fault in this script — but Node reports it as
+ * an EPIPE `error` event on the stream, which unhandled prints a stack trace
+ * over whatever the consumer was doing. Only the JSON write is exposed: the
+ * table goes through `console.*`, which swallows write errors itself.
+ *
+ * Exiting 0 loses the budget verdict, which is the right trade because there is
+ * nobody left to read it — the CI gate runs unpiped, so it can never land here.
+ */
+for (const stream of [process.stdout, process.stderr]) {
+  stream.on('error', (error) => {
+    if (error.code === 'EPIPE') process.exit(0);
+    throw error;
+  });
+}
 
 // ---------------------------------------------------------------------------
 // Arguments
@@ -416,6 +442,23 @@ function readBudget() {
     );
   }
 
+  // Every rule above rejects a file that would gate the wrong thing. A file that
+  // names no metric at all is the same failure with nothing to point at: `{}`
+  // and `{"_policy": []}` both satisfy all three checks, then every limit reads
+  // as `undefined`, every metric passes, and the run prints
+  // `0 budget(s) within limits` and exits 0 — a gate that gates nothing, which
+  // is exactly what the root check above says it exists to prevent.
+  // `--update-budget` is the one caller allowed to start from nothing, because
+  // filling the file in is its whole job.
+  const declared = Object.keys(budget).filter((key) => !isCommentKey(key));
+  if (declared.length === 0 && !options.updateBudget) {
+    die(
+      'scripts/budget.json declares no budgets, so this run would gate ' +
+        `nothing. It must set at least one of: ${[...known].join(', ')}. ` +
+        'Write them with `npm run measure-export -- --update-budget`.',
+    );
+  }
+
   return budget;
 }
 
@@ -572,6 +615,25 @@ section(
   ],
   new Set([1, 2, 3]),
 );
+
+/**
+ * Omitting a key is the documented way to leave a metric ungated, so a partial
+ * budget is a decision rather than a mistake and does not fail the build. It is
+ * still the empty-file failure in miniature: nothing distinguishes "ungated on
+ * purpose" from "a metric was added and never budgeted", and `--update-budget`
+ * writes all of them, so drift only ever appears by hand. Naming the gaps on
+ * stderr — never on the machine-readable stream — makes the decision one a
+ * reader has to keep making, without red-lighting a file that is allowed to look
+ * like this. Suppressed under `--update-budget`, which is about to close them.
+ */
+const ungated = checks.filter((check) => check.limit === undefined);
+if (ungated.length > 0 && !options.updateBudget) {
+  console.error(
+    `\n${LABEL}: ${ungated.length} metric(s) measured but not gated: ` +
+      `${ungated.map((check) => check.id).join(', ')}. ` +
+      'Budget them in scripts/budget.json, or leave them out on purpose.',
+  );
+}
 
 if (options.json) {
   const serialized = `${JSON.stringify(report, null, 2)}\n`;
