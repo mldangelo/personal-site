@@ -109,8 +109,12 @@ describe('Job', () => {
     render(<Job data={mockJob} now={NOW} />);
 
     // 2020-01-15 to 2023-06-30.
-    expect(document.querySelector('.daterange-duration')?.textContent).toBe(
+    const duration = document.querySelector('.daterange-duration');
+    expect(duration?.querySelector('[aria-hidden="true"]')?.textContent).toBe(
       '3 yr 5 mo',
+    );
+    expect(duration?.querySelector('.sr-only')).toHaveTextContent(
+      'Duration: 3 years 5 months',
     );
   });
 
@@ -132,12 +136,14 @@ describe('Job', () => {
 
     // Both from 2020-01-15, to the given instant rather than to whenever the
     // suite runs.
-    expect(container.querySelector('.daterange-duration')?.textContent).toBe(
-      '6 yr 6 mo',
-    );
-    expect(aYearOn.querySelector('.daterange-duration')?.textContent).toBe(
-      '7 yr 6 mo',
-    );
+    expect(
+      container.querySelector('.daterange-duration [aria-hidden="true"]')
+        ?.textContent,
+    ).toBe('6 yr 6 mo');
+    expect(
+      aYearOn.querySelector('.daterange-duration [aria-hidden="true"]')
+        ?.textContent,
+    ).toBe('7 yr 6 mo');
   });
 
   it('keeps the tenure inside the date range so it shares the gutter', () => {

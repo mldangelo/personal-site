@@ -123,6 +123,26 @@ export function formatDuration(months: number): string {
   return `${years} yr ${remainingMonths} mo`;
 }
 
+/** A month count written out for an accessible duration label. */
+export function formatDurationLong(months: number): string {
+  const total = Math.max(0, Math.trunc(months));
+
+  if (total < 1) {
+    return 'less than 1 month';
+  }
+
+  const years = Math.floor(total / 12);
+  const remainingMonths = total % 12;
+  const yearText = years === 1 ? '1 year' : `${years} years`;
+  const monthText =
+    remainingMonths === 1 ? '1 month' : `${remainingMonths} months`;
+
+  if (years === 0) return monthText;
+  if (remainingMonths === 0) return yearText;
+
+  return `${yearText} ${monthText}`;
+}
+
 /**
  * How long a role lasted, formatted. A role with no `endDate` is measured to
  * `now`, which the caller supplies.
@@ -133,22 +153,24 @@ export function positionDuration(position: Position, now: DateInput): string {
   );
 }
 
-/**
- * Completed whole years since the earliest role began.
- *
- * `app/resume/page.tsx` used to claim "15+ years" as typed prose. It was true
- * the day it was written, which is exactly the problem: nothing would have
- * caught it going stale. Same rule as `src/lib/loc.ts` — if it is countable,
- * count it.
- *
- * One number, deliberately. Summing the months actually occupied by a role is
- * a different and smaller figure, and presenting both at once reads as hedging
- * rather than as precision, so the elapsed span is the only one reported.
- */
-export function totalExperienceYears(
-  positions: Position[],
+/** The same tenure written without abbreviations for assistive technology. */
+export function positionDurationLong(
+  position: Position,
   now: DateInput,
-): number {
+): string {
+  return formatDurationLong(
+    monthsBetween(position.startDate, position.endDate ?? now),
+  );
+}
+
+/**
+ * Completed whole years from the earliest role to now.
+ *
+ * This is elapsed career span, not a sum of active months and not a claim that
+ * every month in the interval was spent in a listed role. The public copy uses
+ * that exact meaning.
+ */
+export function careerSpanYears(positions: Position[], now: DateInput): number {
   const earliestStart = positions.reduce<string | null>(
     (earliest, position) =>
       earliest === null || position.startDate.localeCompare(earliest) < 0

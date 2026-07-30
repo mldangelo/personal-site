@@ -81,11 +81,26 @@ describe('Experience', () => {
    * middle. `tierFor` was already written not to depend on array position;
    * sorting is the other half of that.
    */
-  it('renders newest first regardless of the order it is handed', () => {
+  it('renders the most recently held role first regardless of source order', () => {
     const shuffled = [
-      { ...mockJobs[1], name: 'Oldest Co', startDate: '2015-01-01' },
-      { ...mockJobs[0], name: 'Newest Co', startDate: '2024-01-01' },
-      { ...mockJobs[1], name: 'Middle Co', startDate: '2019-01-01' },
+      {
+        ...mockJobs[1],
+        name: 'Oldest Co',
+        startDate: '2014-01-01',
+        endDate: '2015-01-01',
+      },
+      {
+        ...mockJobs[0],
+        name: 'Newest Co',
+        startDate: '2023-01-01',
+        endDate: '2024-01-01',
+      },
+      {
+        ...mockJobs[1],
+        name: 'Middle Co',
+        startDate: '2018-01-01',
+        endDate: '2019-01-01',
+      },
     ];
 
     render(<Experience data={shuffled} />);
@@ -97,7 +112,7 @@ describe('Experience', () => {
     expect(companies).toEqual(['Newest Co', 'Middle Co', 'Oldest Co']);
   });
 
-  it('gives the lead tier to the newest role after sorting', () => {
+  it('gives the lead tier to the newest substantive start', () => {
     const shuffled = [
       { ...mockJobs[1], name: 'Oldest Co', startDate: '2015-01-01' },
       { ...mockJobs[0], name: 'Newest Co', startDate: '2024-01-01' },
@@ -105,9 +120,8 @@ describe('Experience', () => {
 
     render(<Experience data={shuffled} />);
 
-    const first = document.querySelector('.jobs-container');
-    expect(first).toHaveClass('jobs-container--lead');
-    expect(first?.querySelector('.job-company')?.textContent).toBe('Newest Co');
+    const lead = document.querySelector('.jobs-container--lead');
+    expect(lead?.querySelector('.job-company')?.textContent).toBe('Newest Co');
   });
 
   /**
@@ -165,7 +179,7 @@ describe('Experience', () => {
     );
 
     const durations = Array.from(
-      document.querySelectorAll('.daterange-duration'),
+      document.querySelectorAll('.daterange-duration [aria-hidden="true"]'),
     ).map((node) => node.textContent);
 
     // 2020-01-01 and 2018-01-01 respectively, both measured to `now`.
@@ -191,7 +205,7 @@ describe('Experience', () => {
     );
 
     const durations = Array.from(
-      document.querySelectorAll('.daterange-duration'),
+      document.querySelectorAll('.daterange-duration [aria-hidden="true"]'),
     ).map((node) => node.textContent);
 
     expect(durations).toEqual(['6 yr 6 mo', '8 yr 6 mo']);

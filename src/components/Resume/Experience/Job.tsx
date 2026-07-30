@@ -1,7 +1,11 @@
 import dayjs from 'dayjs';
 
 import type { Position } from '@/data/resume/work';
-import { type DateInput, positionDuration } from '@/lib/career';
+import {
+  type DateInput,
+  positionDuration,
+  positionDurationLong,
+} from '@/lib/career';
 
 import JobSummary from './JobSummary';
 
@@ -29,6 +33,7 @@ export default function Job({ data, tier = 'primary', now }: JobProps) {
   // Derived from the dates rather than written out per role, so it cannot
   // contradict the range beside it.
   const duration = positionDuration(data, now);
+  const durationLong = positionDurationLong(data, now);
 
   return (
     <article
@@ -51,7 +56,10 @@ export default function Job({ data, tier = 'primary', now }: JobProps) {
         ) : (
           <span className="daterange-present">Present</span>
         )}
-        <span className="daterange-duration">{duration}</span>
+        <span className="daterange-duration">
+          <span aria-hidden="true">{duration}</span>
+          <span className="sr-only">Duration: {durationLong}</span>
+        </span>
       </p>
 
       <div className="job-body">

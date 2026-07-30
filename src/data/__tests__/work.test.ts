@@ -75,6 +75,14 @@ describe('work data', () => {
     }
   });
 
+  it('uses the supported commitment value when present', () => {
+    for (const job of work) {
+      if (job.commitment) {
+        expect(job.commitment).toBe('part-time');
+      }
+    }
+  });
+
   it('has positions from different years', () => {
     const years = work.map((job) => new Date(job.startDate).getFullYear());
     const uniqueYears = new Set(years);

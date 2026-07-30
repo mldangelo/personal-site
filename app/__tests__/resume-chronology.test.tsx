@@ -2,7 +2,7 @@ import { render } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import work from '@/data/resume/work';
-import { sortPositions, totalExperienceYears } from '@/lib/career';
+import { careerSpanYears, sortPositions } from '@/lib/career';
 import ResumePage from '../resume/page';
 
 /**
@@ -11,7 +11,7 @@ import ResumePage from '../resume/page';
  * `ResumePage` reads the clock once during render. A test that reads it again
  * to build its expectation is comparing two instants, and the two disagree by
  * a whole year whenever they straddle the anniversary of the earliest role —
- * `totalExperienceYears` steps there. The window is narrow and the failure
+ * `careerSpanYears` steps there. The window is narrow and the failure
  * would be unreproducible, which is the worst shape a test failure comes in,
  * so the clock is frozen and both sides share one reading.
  *
@@ -58,10 +58,12 @@ describe('resume chronology', () => {
   it('states the career span once, derived from the earliest role', () => {
     const { container } = render(<ResumePage />);
 
-    const years = totalExperienceYears(work, FROZEN_NOW.getTime());
+    const years = careerSpanYears(work, FROZEN_NOW.getTime());
     const summary = container.querySelector('.resume-summary');
 
-    expect(summary?.textContent).toContain(`${years}+ years`);
+    expect(summary?.textContent).toContain(
+      `career spanning ${years}+ years across`,
+    );
 
     // One number, stated once. Showing the elapsed span next to a
     // months-occupied figure reads as hedging rather than as precision.
@@ -83,14 +85,19 @@ describe('resume chronology', () => {
     expect(statedSpan(fiveYearsOn)).toBe(statedSpan(container) + 5);
   });
 
-  it('gives every role a tenure derived from its own dates', () => {
+  it('labels every abbreviated tenure for non-visual readers', () => {
     const { container } = render(<ResumePage />);
 
     const durations = container.querySelectorAll('.daterange-duration');
 
     expect(durations).toHaveLength(work.length);
     for (const duration of durations) {
-      expect(duration.textContent).toMatch(/^(<1 mo|\d+ yr( \d+ mo)?|\d+ mo)$/);
+      expect(
+        duration.querySelector('[aria-hidden="true"]')?.textContent,
+      ).toMatch(/^(<1 mo|\d+ yr( \d+ mo)?|\d+ mo)$/);
+      expect(duration.querySelector('.sr-only')?.textContent).toMatch(
+        /^Duration: (less than 1 month|\d+ years?( \d+ months?)?|\d+ months?)$/,
+      );
     }
   });
 });

@@ -3,13 +3,15 @@ import { describe, expect, it } from 'vitest';
 import type { Position } from '@/data/resume/work';
 import work from '@/data/resume/work';
 import {
+  careerSpanYears,
   currentPosition,
   formatDuration,
+  formatDurationLong,
   monthsBetween,
   positionDuration,
+  positionDurationLong,
   sortPositions,
   timelineKey,
-  totalExperienceYears,
 } from '../career';
 
 /**
@@ -213,9 +215,16 @@ describe('sortPositions', () => {
   it('sorts Arthena above the internship it ran alongside', () => {
     const ordered = byName(sortPositions(work));
 
-    expect(ordered.indexOf('Arthena')).toBeLessThan(
-      ordered.indexOf('Planetary Resources'),
-    );
+    expect(ordered.indexOf('Arthena')).toBeLessThan(ordered.indexOf('Matroid'));
+    expect(ordered.indexOf('Arthena')).toBeLessThan(ordered.indexOf('Planet'));
+  });
+
+  it('places an open-ended side role among its contemporaries', () => {
+    const ordered = byName(sortPositions(work));
+    const sideRole = ordered.indexOf('Skeptical Investments');
+
+    expect(sideRole).toBeGreaterThan(ordered.indexOf('Arthena'));
+    expect(sideRole).toBeLessThan(ordered.indexOf('Matroid'));
   });
 });
 
@@ -266,6 +275,19 @@ describe('formatDuration', () => {
   });
 });
 
+describe('formatDurationLong', () => {
+  it('writes out singular and plural units', () => {
+    expect(formatDurationLong(1)).toBe('1 month');
+    expect(formatDurationLong(12)).toBe('1 year');
+    expect(formatDurationLong(13)).toBe('1 year 1 month');
+    expect(formatDurationLong(26)).toBe('2 years 2 months');
+  });
+
+  it('describes a sub-month duration without a zero', () => {
+    expect(formatDurationLong(0)).toBe('less than 1 month');
+  });
+});
+
 describe('positionDuration', () => {
   it('measures a closed role between its own dates and ignores now', () => {
     expect(positionDuration(roleNamed('Arthena'), NOW)).toBe('8 yr');
@@ -287,13 +309,16 @@ describe('positionDuration', () => {
   it('agrees with the range shown beside it', () => {
     // July 2024 – March 2026.
     expect(positionDuration(roleNamed('Promptfoo'), NOW)).toBe('1 yr 8 mo');
+    expect(positionDurationLong(roleNamed('Promptfoo'), NOW)).toBe(
+      '1 year 8 months',
+    );
   });
 });
 
-describe('totalExperienceYears', () => {
-  it('counts completed years since the earliest role began', () => {
+describe('careerSpanYears', () => {
+  it('counts the elapsed span since the earliest role began', () => {
     // Earliest start in the real data is 2011-06-01.
-    expect(totalExperienceYears(work, NOW)).toBe(15);
+    expect(careerSpanYears(work, NOW)).toBe(15);
   });
 
   it('reads the earliest start regardless of array order', () => {
@@ -303,24 +328,24 @@ describe('totalExperienceYears', () => {
       position({ startDate: '2014-01-01' }),
     ];
 
-    expect(totalExperienceYears(positions, NOW)).toBe(20);
+    expect(careerSpanYears(positions, NOW)).toBe(20);
   });
 
   it('does not round a partial year up', () => {
-    expect(
-      totalExperienceYears([position({ startDate: '2011-08-01' })], NOW),
-    ).toBe(14);
+    expect(careerSpanYears([position({ startDate: '2011-08-01' })], NOW)).toBe(
+      14,
+    );
   });
 
   it('returns zero for no positions rather than throwing', () => {
-    expect(totalExperienceYears([], NOW)).toBe(0);
+    expect(careerSpanYears([], NOW)).toBe(0);
   });
 
   it('advances on its own as the clock moves', () => {
     const laterYear = new Date('2027-07-28T12:00:00Z').getTime();
 
-    expect(totalExperienceYears(work, laterYear)).toBe(
-      totalExperienceYears(work, NOW) + 1,
+    expect(careerSpanYears(work, laterYear)).toBe(
+      careerSpanYears(work, NOW) + 1,
     );
   });
 });
