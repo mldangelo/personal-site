@@ -1,6 +1,6 @@
 ---
 title: Why I Mostly Switched From Claude Code to the Codex Desktop App
-date: '2026-06-23'
+date: '2026-07-30'
 description: 'How the Codex desktop app became my default coding workspace, and where Claude Code still wins.'
 ---
 
@@ -14,7 +14,7 @@ I mostly switched because Codex now gives me one place for the pieces I use ever
 
 That volume is high enough that small workflow problems show up fast. Over the last month my coding-agent usage has averaged more than 3 billion tokens a day. The number sounds absurd, and most of it is cached input: the same repo context read again and again across dozens of parallel threads. I track it as a measure of how much work is moving through the tool, not what I'm spending. At that volume, the dull operational stuff is what decides the day: whether approvals interrupt me, whether I trust the review surface, whether a stopped thread picks back up cleanly.
 
-Part of that volume comes from how I have Codex configured. As of June 2026 the docs set `agents.max_threads` to `6` by default; I run `48`. They set `agents.max_depth` to `1`; I run `3`. The docs have since renamed the first key to `agents.max_concurrent_threads_per_session`, kept `agents.max_threads` as a legacy alias, and stopped publishing a numeric default, so read them before you copy anything. Don't copy that unless you have effectively unlimited tokens. It burns context fast, and it turns weak task boundaries into expensive, noisy fan-out. I get away with it because my work is mostly small, bounded checks running side by side, and I can still see enough to review each one.
+Part of that volume comes from how I had Codex configured in June: `agents.max_threads = 48` and `agents.max_depth = 3`. Those are a dated snapshot of my local setup, not current recommendations. The docs now call the first setting `agents.max_concurrent_threads_per_session`, retain `agents.max_threads` as a legacy alias, choose the default when it is unset, and do not document `agents.max_depth`. Read the current docs before changing any of these settings. My configuration burns context fast, and it turns weak task boundaries into expensive, noisy fan-out. I get away with it because my work is mostly small, bounded checks running side by side, and I can still see enough to review each one.
 
 GPT-5.5 is the other half of making that affordable. I default to it in Codex when I can. OpenAI says it uses far fewer tokens on the same work, which at my volume turns straight into lower cost and fewer limit walls. I haven't benchmarked the claim myself, but the token math is reason enough.
 
@@ -32,7 +32,7 @@ Once I had more than one agent going, the overhead was orientation: reconstructi
 
 On a typical day I might have four agents going at once: one worktree fixing a flaky test, one thread reviewing an open PR, one trying a UI change against a local server, and one clicking through the app to see whether the change actually works. I move between them, reading diffs, approving commands, and killing the ones that have wandered off. Each is a single thread: a prompt, a work summary, the changed files, and a review action.
 
-![Codex thread showing a completed dark mode change and review action](/images/writing/codex-desktop-app-post/codex-app-overview.webp)
+![Codex thread showing a completed dark mode change and review action](/images/writing/codex-desktop-app-post/codex-dark-mode-review.webp)
 
 The screenshots here are official product images. My own workspaces are full of private code and internal context, and they're a lot messier than the product renders.
 
@@ -42,7 +42,7 @@ Most of what the app buys me is keeping parallel work straight. I can see what e
 
 I used to approximate this with terminal panes, naming conventions, and notes to myself, which meant holding the whole map in my head: which pane was which, which branch went with which task, what I'd already verified, what I still needed to say. The specific UI is beside the point. What I needed was for that state to live somewhere other than my memory.
 
-![Codex diff summary with a queued follow-up prompt](/images/writing/codex-desktop-app-post/codex-editor-diff.webp)
+![Codex diff summary with a queued follow-up prompt](/images/writing/codex-desktop-app-post/codex-queued-follow-up.webp)
 
 ## Worktrees as a unit of work
 
@@ -64,7 +64,7 @@ Voice input caught me off guard, and not because it's faster. It lowers the fric
 
 Automations handle the other end — the work I'd otherwise forget. I use them for recurring checks I want delivered like an inbox: which PRs are stuck, whether this branch still passes, regressions in flows I always forget to test, docs that have drifted. They run in the current project or a separate worktree and drop findings into Triage, so the agent keeps working between my sessions. A lot of real engineering work is repetitive and easy to defer, and automations absorb it.
 
-![Codex automation confirmation for a weekly planning task](/images/writing/codex-desktop-app-post/codex-automations.webp)
+![Codex automation confirmation for a weekly planning task](/images/writing/codex-desktop-app-post/codex-weekly-planning-automation.webp)
 
 ## Browser and computer use
 
