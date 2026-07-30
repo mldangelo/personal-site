@@ -105,14 +105,18 @@ export default function ThemeToggle() {
       root.setAttribute(THEME_ATTRIBUTE, resolved);
     }
 
-    // The browser chrome is painted from `theme-color` meta tags, which the
-    // export scopes by `prefers-color-scheme` because that is all a static
-    // file can do. Nothing else here themes off the device, so once the
-    // attribute above is settled the tags have to be told what it says —
-    // including when the device flips underneath a `system` choice, which is
-    // the other reason this runs on every change rather than once at mount.
-    // Reads the token back out of the cascade, so it cannot name a colour the
-    // page is not painted with.
+    // The browser chrome is painted from a `theme-color` meta, which cannot be
+    // styled, so once the attribute above is settled the tag has to be told
+    // what it says — including when the device flips underneath a `system`
+    // choice, which is the other reason this runs on every change rather than
+    // once at mount. Reads the token back out of the cascade, so it cannot
+    // name a colour the page is not painted with.
+    //
+    // The pathname is deliberately *not* a dependency. It used to need to be,
+    // because this repointed the tags Next rendered and React rebuilt those on
+    // every client-side navigation, reverting the mutation. It now writes to a
+    // tag the bootstrap created, which React never owns and no navigation can
+    // touch — so the mutation survives without this effect having to chase it.
     syncThemeColor(document);
   }, [choice, systemScheme]);
 

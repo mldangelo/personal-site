@@ -1,16 +1,21 @@
+import { readdirSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
 
-import { THEME_COLOR_META_SELECTOR } from '@/lib/theme';
+import {
+  RESOLVED_THEME_COLOR_ATTRIBUTE,
+  THEME_COLOR_META_SELECTOR,
+} from '@/lib/theme';
 import { readColorToken } from '@/lib/tokens';
-import RootLayout, { viewport } from '../layout';
+import * as rootLayout from '../layout';
 
 // `next/font/local` only exists as a build-time transform, so importing the
-// root layout for its `viewport` export needs it stubbed. The stub returns the
-// shape `app/fonts.ts` destructures and nothing else. `vi.mock` is hoisted
-// above the import above, which is why this can be a static import rather than
-// a top-level `await import` — `target` here is es2015, which forbids one.
+// root layout needs it stubbed. The stub returns the shape `app/fonts.ts`
+// destructures and nothing else. `vi.mock` is hoisted above the import above,
+// which is why this can be a static import rather than a top-level
+// `await import` — `target` here is es2015, which forbids one.
 vi.mock('next/font/local', () => ({
   default: () => ({ variable: 'font-mock', className: 'font-mock', style: {} }),
 }));
@@ -18,29 +23,60 @@ vi.mock('next/font/local', () => ({
 const LIGHT = readColorToken('--color-bg-alt', 'light');
 const DARK = readColorToken('--color-bg-alt', 'dark');
 
+// No `s` flag: `target` here is es2015, which does not have one.
+const HEAD =
+  /<head>([\s\S]*?)<\/head>/.exec(
+    renderToStaticMarkup(createElement(rootLayout.default, { children: null })),
+  )?.[1] ?? '';
+
+const NOSCRIPT = /<noscript>([\s\S]*?)<\/noscript>/.exec(HEAD)?.[1] ?? '';
+
+/** Every stylesheet this project writes, as one string. */
+function projectStyles(): string {
+  const dir = join(process.cwd(), 'app', 'styles');
+  const files = readdirSync(dir, { recursive: true, encoding: 'utf8' })
+    .filter((name) => name.endsWith('.css'))
+    .map((name) => join(dir, name));
+
+  return [join(process.cwd(), 'app', 'tailwind.css'), ...files]
+    .map((path) => readFileSync(path, 'utf8'))
+    .join('\n');
+}
+
 /**
  * The export shipped with no `theme-color` at all, so mobile browsers painted
- * their chrome from their own default rather than from the page. A single
- * unscoped value only fixes that for one of the two themes, which is why this
- * pins the media-scoped pair rather than merely pinning that a value exists.
+ * their chrome from their own default rather than from the page. Then it
+ * shipped a media-scoped pair, which described a dark theme no visitor without
+ * JavaScript is ever served, and which React rebuilt out from under the
+ * bootstrap on every client-side navigation.
  *
- * The pair is scoped by the *device* preference, which is not what this site
- * themes off — `<html data-theme>` is, and a visitor can pin it against the
- * device. So the pair is what the page ships for a reader with no JavaScript,
- * and the bootstrap below repoints it at the rendered theme for everyone else.
+ * What ships now is one unscoped light value in `<noscript>` — the whole truth
+ * for a reader with no JavaScript — and one script-owned tag that carries the
+ * rendered theme for everyone else.
  */
 describe('theme-color', () => {
-  const themeColor = viewport.themeColor;
-
-  it('declares one media-scoped value per colour scheme', () => {
-    expect(Array.isArray(themeColor)).toBe(true);
-    expect(themeColor).toEqual([
-      { media: '(prefers-color-scheme: light)', color: LIGHT },
-      { media: '(prefers-color-scheme: dark)', color: DARK },
-    ]);
+  it('declares one unscoped value, for a reader with no JavaScript', () => {
+    expect(NOSCRIPT).toContain('name="theme-color"');
+    expect(NOSCRIPT).toContain(`content="${LIGHT}"`);
+    expect(NOSCRIPT).not.toContain('media=');
   });
 
-  it('declares two different colours, so the scoping does something', () => {
+  /**
+   * The premise of the line above, re-derived rather than asserted in prose:
+   * dark is reached only through `[data-theme]`, which the bootstrap sets, so
+   * a reader with no JavaScript gets the light page on every device and the
+   * light chrome is the only honest thing to declare for them.
+   *
+   * If a `prefers-color-scheme` block ever does land in the stylesheets — by
+   * hand, or through a Tailwind `dark:` utility, which defaults to that query —
+   * this goes red and points at the declaration that has to change with it.
+   */
+  it('is unscoped because no stylesheet reacts to the device preference', () => {
+    expect(projectStyles()).not.toContain('prefers-color-scheme');
+    expect(projectStyles()).toContain("[data-theme='dark']");
+  });
+
+  it('declares two different colours, so the theme switch does something', () => {
     expect(LIGHT).not.toBe(DARK);
   });
 
@@ -51,20 +87,30 @@ describe('theme-color', () => {
    * page's.
    */
   it('uses the page background, not the raised surface', () => {
-    const values = (
-      themeColor as ReadonlyArray<{ media?: string; color: string }>
-    ).map((entry) => entry.color);
+    expect(HEAD).not.toContain(readColorToken('--color-bg', 'light'));
+    expect(HEAD).not.toContain(readColorToken('--color-bg', 'dark'));
+  });
 
-    expect(values).not.toContain(readColorToken('--color-bg', 'light'));
-    expect(values).not.toContain(readColorToken('--color-bg', 'dark'));
+  /**
+   * The reason the fallback is in `<noscript>` and not in `viewport.themeColor`.
+   * React re-creates its hoisted `<meta>` elements on every client-side
+   * navigation and matches them back up by `content` and `name` but never by
+   * `media`, so a React-owned `theme-color` tag claims the script-owned one and
+   * then destroys it on the first `<Link>` press. Nothing React renders may be
+   * a `theme-color` tag.
+   */
+  it('renders no theme-color meta React could own', () => {
+    // `viewport.themeColor` is the only route from this file to a hoisted
+    // `theme-color` element, so the absence of the export *is* the property —
+    // and Next's own metadata does not appear in this render, which is why the
+    // markup cannot be asked instead.
+    expect('viewport' in rootLayout).toBe(false);
+    expect(HEAD.replace(/<noscript>[\s\S]*?<\/noscript>/g, '')).not.toContain(
+      '<meta name="theme-color"',
+    );
   });
 
   describe('bootstrap', () => {
-    // No `s` flag: `target` here is es2015, which does not have one.
-    const head = /<head>([\s\S]*?)<\/head>/.exec(
-      renderToStaticMarkup(createElement(RootLayout, { children: null })),
-    )?.[1];
-
     /**
      * A literal `<script>` with the body inline, which is the only kind that
      * runs before the page is painted. `<Script strategy="beforeInteractive">`
@@ -75,16 +121,25 @@ describe('theme-color', () => {
      * this assertion is the only place the distinction is visible.
      */
     it('ships the theme bootstrap as a parser-blocking inline script', () => {
-      expect(head).toMatch(/<script id="theme-init">\(function\(\)\{/);
-      expect(head).not.toContain('__next_s');
+      expect(HEAD).toMatch(/<script id="theme-init">\(function\(\)\{/);
+      expect(HEAD).not.toContain('__next_s');
     });
 
-    it('carries both chrome colours and the tags they belong to', () => {
-      // Read at build from the same token the pair above declares, so the
+    it('carries both chrome colours and creates the tag that holds one', () => {
+      // Read at build from the same token the fallback above declares, so the
       // scripted value and the no-JavaScript value cannot disagree.
-      expect(head).toContain(JSON.stringify(LIGHT));
-      expect(head).toContain(JSON.stringify(DARK));
-      expect(head).toContain(THEME_COLOR_META_SELECTOR);
+      expect(HEAD).toContain(JSON.stringify(LIGHT));
+      expect(HEAD).toContain(JSON.stringify(DARK));
+      // That the tag is unscoped and lands first is behaviour, not text, so it
+      // is pinned by running this script in `src/lib/__tests__/theme.test.ts`
+      // rather than by reading the minified body for a method name.
+      expect(HEAD).toContain(RESOLVED_THEME_COLOR_ATTRIBUTE);
+    });
+
+    it('queries no tag it did not create', () => {
+      // Repointing the page's own tags is the mechanism this replaced; a
+      // bootstrap that goes looking for them again has gone back to it.
+      expect(HEAD).not.toContain(THEME_COLOR_META_SELECTOR);
     });
   });
 });
