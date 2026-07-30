@@ -1,106 +1,54 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
-import SkillTag, { tierFor } from '../../Resume/Skills/SkillTag';
+import type { Skill } from '@/data/resume/skills';
 
-describe('tierFor', () => {
-  it('maps the top of the scale to core', () => {
-    expect(tierFor(5)).toBe('core');
-  });
+import SkillTag from '../../Resume/Skills/SkillTag';
 
-  it('maps one below the top to working', () => {
-    expect(tierFor(4)).toBe('working');
-  });
-
-  it('maps everything else to familiar', () => {
-    expect(tierFor(3)).toBe('familiar');
-    expect(tierFor(1)).toBe('familiar');
-  });
-});
+const skill: Skill = { title: 'Coding Agents', category: 'Agent Systems' };
 
 describe('SkillTag', () => {
-  it('renders the skill title', () => {
-    const skill = { title: 'Python', competency: 5, category: ['Languages'] };
-
+  it('renders the skill title as its text', () => {
     render(<SkillTag data={skill} />);
 
-    expect(screen.getByText('Python')).toBeInTheDocument();
+    expect(screen.getByText('Coding Agents')).toBeInTheDocument();
   });
 
   /**
-   * Competency used to reach the reader only through `--tag-color` (identical
-   * for every category) and an `aria-label` on a bare `<span>`, which maps to
-   * role `generic` — browsers discard accessible names there, so the
-   * proficiency was announced to nobody. It is real text now.
+   * The tag published a 1–5 self-score three ways at once: a `title` tooltip,
+   * an `aria-label`, and a size variant. The `aria-label` reached nobody — it
+   * sat on a bare `<span>`, which maps to role `generic`, so browsers discard
+   * the name. All three are gone with the score.
    */
-  it('states the competency tier as text', () => {
-    const skill = { title: 'Python', competency: 5, category: ['Languages'] };
-
+  it('carries no rating in a tooltip or an accessible name', () => {
     render(<SkillTag data={skill} />);
 
     const tag = document.querySelector('.skill-tag') as HTMLElement;
-    expect(tag.textContent).toContain('core');
-    expect(tag.querySelector('.skill-tag-tier')).toHaveTextContent(
-      'proficiency: core',
-    );
-  });
-
-  it('does not lean on an accessible name a generic element would discard', () => {
-    const skill = { title: 'Python', competency: 5, category: ['Languages'] };
-
-    render(<SkillTag data={skill} />);
-
-    const tag = document.querySelector('.skill-tag') as HTMLElement;
+    expect(tag).not.toHaveAttribute('title');
     expect(tag).not.toHaveAttribute('aria-label');
-  });
-
-  it('applies the core tier class for the top competency', () => {
-    const skill = { title: 'Python', competency: 5, category: ['Languages'] };
-
-    render(<SkillTag data={skill} />);
-
-    expect(document.querySelector('.skill-tag')).toHaveClass('skill-tag--core');
-  });
-
-  it('applies the working tier class one below the top', () => {
-    const skill = {
-      title: 'JavaScript',
-      competency: 4,
-      category: ['Languages'],
-    };
-
-    render(<SkillTag data={skill} />);
-
-    const tag = document.querySelector('.skill-tag');
-    expect(tag).toHaveClass('skill-tag--working');
-    expect(tag).toHaveTextContent('working');
-  });
-
-  it('applies the familiar tier class for competency 3 or below', () => {
-    const skill = { title: 'Ruby', competency: 3, category: ['Languages'] };
-
-    render(<SkillTag data={skill} />);
-
-    const tag = document.querySelector('.skill-tag');
-    expect(tag).toHaveClass('skill-tag--familiar');
-    expect(tag).toHaveTextContent('familiar');
+    expect(tag.textContent).toBe('Coding Agents');
   });
 
   /**
-   * The tier is the only competency cue, so it has to survive greyscale and
-   * print. No inline colour may be reintroduced to carry it.
+   * Whatever weight a tag has must survive greyscale and print, so no cue may
+   * come back as an inline colour or as a modifier class keyed off the data.
    */
-  it('sets no inline colour custom property', () => {
-    const skill = {
-      title: 'Python',
-      competency: 5,
-      category: ['Languages', 'ML Engineering'],
-    };
+  it('renders one class and no inline style, whatever the skill', () => {
+    render(
+      <>
+        <SkillTag data={skill} />
+        <SkillTag data={{ title: 'Online Learning', category: 'ML Systems' }} />
+      </>,
+    );
 
-    render(<SkillTag data={skill} />);
+    const tags = Array.from(
+      document.querySelectorAll<HTMLElement>('.skill-tag'),
+    );
+    expect(tags).toHaveLength(2);
 
-    const tag = document.querySelector('.skill-tag') as HTMLElement;
-    expect(tag.style.getPropertyValue('--tag-color')).toBe('');
-    expect(tag.getAttribute('style')).toBeNull();
+    for (const tag of tags) {
+      expect(tag.className).toBe('skill-tag');
+      expect(tag.getAttribute('style')).toBeNull();
+    }
   });
 });

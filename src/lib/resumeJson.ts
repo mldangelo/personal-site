@@ -287,18 +287,23 @@ function buildEducation(): ResumeEducation[] {
 }
 
 /**
- * One entry per category, keywords ordered by competency. The 1–5 competency
- * scale has no counterpart in the schema's free-text `level`, so it shapes the
- * ordering rather than being translated into a word the data never claimed.
+ * One entry per category, keywords in the order they are authored.
+ *
+ * This used to sort by a 1–5 `competency` self-score, which is gone from the
+ * data; the authored order is the hierarchy now, and it is the same order the
+ * page renders, so the artifact and the page agree. No `level` is emitted —
+ * the schema's field is free text and the data makes no such claim.
+ *
+ * The filter was `skill.category.includes(category.name)`, written when a skill
+ * held an array of categories. Against a single string that is substring
+ * matching, which happens to be right for these four names and would silently
+ * stop being right for a category whose name contained another's.
  */
 function buildSkills(): ResumeSkill[] {
   return categories.map((category) => ({
     name: category.name,
     keywords: skills
-      .filter((skill) => skill.category.includes(category.name))
-      .sort(
-        (a, b) => b.competency - a.competency || a.title.localeCompare(b.title),
-      )
+      .filter((skill) => skill.category === category.name)
       .map((skill) => skill.title),
   }));
 }

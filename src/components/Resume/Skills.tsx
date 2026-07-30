@@ -50,35 +50,33 @@ export default function Skills({ skills, categories }: SkillsProps) {
    * Filtering by removing groups from the DOM meant a printed page reflected
    * whatever filter happened to be set, silently omitting skills. Keeping the
    * markup lets `print.css` show everything regardless.
+   *
+   * The source data is already ordered editorially, and that order is the only
+   * hierarchy the section has, so nothing here sorts. A group with no skills is
+   * dropped rather than rendered as an empty heading.
    */
   const groupedSkills = useMemo(() => {
-    const sortedSkills = [...skills].sort((a, b) => {
-      if (a.competency !== b.competency) return b.competency - a.competency;
-      return a.title.localeCompare(b.title);
-    });
-
     return categories
       .map((category) => ({
         category,
-        skills: sortedSkills.filter((skill) =>
-          skill.category.includes(category.name),
-        ),
+        skills: skills.filter((skill) => skill.category === category.name),
       }))
       .filter((group) => group.skills.length > 0);
   }, [skills, categories]);
 
   /**
    * Counted from the groups that are actually rendered, never stated, so the
-   * announcement cannot drift from what is on screen. A skill in two categories
-   * renders twice, hence the de-duplication by title.
+   * announcement cannot drift from what is on screen. Summing group lengths is
+   * exact because a skill declares one category, so it renders in one group —
+   * this used to de-duplicate by title, which was load-bearing when a skill
+   * could appear under several.
    */
   const totalSkillCount = useMemo(
     () =>
-      new Set(
-        groupedSkills.flatMap(({ skills: groupSkills }) =>
-          groupSkills.map(({ title }) => title),
-        ),
-      ).size,
+      groupedSkills.reduce(
+        (total, { skills: group }) => total + group.length,
+        0,
+      ),
     [groupedSkills],
   );
 

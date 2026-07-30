@@ -43,9 +43,6 @@ export const PROJECT_IMAGE = {
   height: 400,
 } as const;
 
-// Skill competency
-export const MAX_COMPETENCY = 5;
-
 /**
  * Formats a date string to a human-readable format.
  * Parses as UTC to avoid timezone shifts.

@@ -44,16 +44,21 @@
     padding-top: 0;
   }
 
-  /* Screen chrome has no meaning on paper.
+  /* Screen chrome has no meaning on paper, and everything `position: fixed`
+   * belongs in here: paged media repeats a fixed element on every page rather
+   * than scrolling it away.
    *
-   * `.skip-link` is the one that got missed, and the reason is worth keeping:
-   * it is a direct child of `<body>`, not of `.site-header`, so suppressing the
-   * header never touched it. On screen it hides by riding `transform:
-   * translateY(-200%)` out of a `position: fixed` box — and nothing in this
-   * file resets either property, so in print the fixed box resolves into flow
-   * and the accent-filled button lands on the page. It printed four times
-   * across a five-page résumé before anyone looked at a PDF. Anything appended
-   * to `<body>` outside `.site-wrapper` needs adding here explicitly. */
+   * `.skip-link` is the one that got missed, and both halves of why are worth
+   * keeping. It is a direct child of `<body>`, not of `.site-header`, so
+   * suppressing the header never reached it — and it hides on screen by riding
+   * `transform: translateY(-200%)` out of a fixed box, which nothing in this
+   * file resets. So it printed an accent-filled "SKIP TO CONTENT" box at the
+   * foot of four of the resume's five pages before anyone looked at a PDF.
+   *
+   * Two guards in `app/styles/__tests__/stylesheets.test.ts` hold the class of
+   * bug rather than the instance: every `position: fixed` selector in the
+   * stylesheet graph must be suppressed here, and so must anything rendered
+   * under `<body>` outside `.site-wrapper`. */
   body::before,
   .skip-link,
   .site-header,
@@ -236,10 +241,6 @@
   .skill-tag,
   .tech-tag {
     border-color: rgba(0, 0, 0, 0.35);
-  }
-
-  .skill-tag::before {
-    display: none;
   }
 
   /* Reveal destinations for links that are not obvious from their text. On the

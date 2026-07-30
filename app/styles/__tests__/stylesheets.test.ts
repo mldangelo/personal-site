@@ -202,3 +202,60 @@ describe('print chrome suppression', () => {
 // classification. What is left native and same-origin is links to exported
 // files — `/feed.xml`, `/resume.json`, `/og.png` — and a navigation to one of
 // those has no document on the other side to opt in.
+
+/**
+ * Paged media repeats a `position: fixed` element on every page instead of
+ * scrolling it away, and offscreen tricks that hold on a viewport need not hold
+ * there: `.skip-link` is hidden only by `transform: translateY(-200%)`, and it
+ * printed an accent-filled "SKIP TO CONTENT" box at the foot of four of the
+ * resume's five pages.
+ *
+ * So this pins the class, not the instance — every fixed selector has to be
+ * named in `print.css`, or explicitly excused below.
+ */
+const PRINT_CSS = join(STYLES_DIR, 'print.css');
+
+/** Selectors that are `position: fixed` but must survive onto paper. */
+const PRINT_EXEMPT: string[] = [];
+
+/**
+ * Selector lists of every rule in a stylesheet whose body matches `pattern`.
+ *
+ * Regex, not a parser: `[^{}]` cannot cross a brace, so a rule nested inside
+ * `@media` is matched on its own and the at-rule prelude — which has a brace
+ * between it and the rule — is never mistaken for a selector.
+ */
+function selectorsDeclaring(file: string, pattern: RegExp): string[] {
+  const css = readFileSync(file, 'utf8').replace(COMMENT_PATTERN, '');
+
+  return [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)]
+    .filter(([, , body]) => pattern.test(body))
+    .flatMap(([, prelude]) => prelude.split(','))
+    .map((selector) => selector.trim())
+    .filter((selector) => selector.length > 0 && !selector.startsWith('@'));
+}
+
+describe('print suppresses the fixed screen chrome', () => {
+  const fixed = [
+    ...new Set(
+      stylesheets
+        .filter((file) => file !== PRINT_CSS)
+        .flatMap((file) => selectorsDeclaring(file, /position:\s*fixed\b/)),
+    ),
+  ];
+  const hidden = new Set(selectorsDeclaring(PRINT_CSS, /display:\s*none\b/));
+
+  it('finds fixed-position selectors to check', () => {
+    // If this goes empty the next assertion passes for the wrong reason.
+    expect(fixed).toContain('.skip-link');
+    expect(fixed.length).toBeGreaterThan(3);
+  });
+
+  it('hides every fixed-position selector on paper', () => {
+    const unsuppressed = fixed.filter(
+      (selector) => !PRINT_EXEMPT.includes(selector) && !hidden.has(selector),
+    );
+
+    expect(unsuppressed).toEqual([]);
+  });
+});
