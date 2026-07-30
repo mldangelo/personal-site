@@ -244,14 +244,17 @@
   }
 
   /* Reveal destinations for links that are not obvious from their text. On the
-     resume that is the identifying link on each entry — the company, the
-     school, the course — which otherwise print as undifferentiated black text
-     and lose the destination entirely on paper.
+     resume that is the identifying link on each professional or education
+     entry — the company or school — which otherwise prints as
+     undifferentiated black text and loses the destination entirely on paper.
 
      Deliberately not the citations inside a role summary: three URLs inside
      one sentence of 10pt serif cost more legibility than they return. And not
      `.resume-print-contact`, whose link text is already the readable URL, so
-     revealing the href there would print every address twice.
+     revealing the href there would print every address twice. Course links
+     remain clickable in a PDF, but printing 13 raw catalogue URLs makes the
+     paper artifact denser without giving a reader practical destinations to
+     retype.
 
      This rule sits ahead of the `a` reset below on purpose. The reset declares
      only `color` and `background-image`, neither of which is `content`, and
@@ -261,8 +264,7 @@
   .about-content a[href^='http']::after,
   .prose a[href^='http']::after,
   .job-company[href^='http']::after,
-  .degree-container .school a[href^='http']::after,
-  .course-container a[href^='http']::after {
+  .degree-container .school a[href^='http']::after {
     content: ' (' attr(href) ')';
     font-family: var(--font-mono);
     font-size: 8pt;
@@ -274,14 +276,7 @@
     word-break: break-all;
   }
 
-  /* `.course-container a` is a two-column grid (code | title), so its
-     pseudo-element becomes a third grid item and would land back in the
-     5.5rem code column. Place the URL under the title instead, and drop the
-     touch-target floor that costs 13 courses a third of a page. */
-  .course-container a[href^='http']::after {
-    grid-column: 2;
-  }
-
+  /* A screen touch-target floor has no meaning on paper. */
   .course-container a {
     min-height: 0;
   }
