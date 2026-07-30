@@ -5,6 +5,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import {
   countDirectDependencies,
+  countInstalledNonDevPackages,
   countLintRules,
   countLockedPackages,
 } from '../manifest';
@@ -59,8 +60,39 @@ describe('countDirectDependencies', () => {
   });
 });
 
+describe('countInstalledNonDevPackages', () => {
+  it('counts the installed non-development tree for this build platform', () => {
+    write('node_modules/.package-lock.json', {
+      packages: {
+        'node_modules/next': {},
+        'node_modules/@next/swc-darwin-arm64': { optional: true },
+        'node_modules/semver': { devOptional: true },
+        'node_modules/vitest': { dev: true },
+      },
+    });
+
+    expect(countInstalledNonDevPackages(root)).toBe(3);
+  });
+
+  it('does not count the root project as a dependency of itself', () => {
+    write('node_modules/.package-lock.json', {
+      packages: { '': { name: 'root' } },
+    });
+
+    expect(countInstalledNonDevPackages(root)).toBe(0);
+  });
+
+  it('returns null when npm has no installed-tree lockfile', () => {
+    expect(countInstalledNonDevPackages(root)).toBeNull();
+  });
+
+  it('reports a plausible figure for this build', () => {
+    expect(countInstalledNonDevPackages()).toBeGreaterThan(10);
+  });
+});
+
 describe('countLockedPackages', () => {
-  it('separates the production tree from everything resolved', () => {
+  it('counts every package location resolved in the lockfile', () => {
     write('package-lock.json', {
       packages: {
         '': { name: 'root' },
@@ -70,18 +102,16 @@ describe('countLockedPackages', () => {
       },
     });
 
-    expect(countLockedPackages(root)).toEqual({ production: 2, total: 3 });
+    expect(countLockedPackages(root)).toBe(3);
   });
 
   it('does not count the root project as a dependency of itself', () => {
     write('package-lock.json', { packages: { '': { name: 'root' } } });
 
-    expect(countLockedPackages(root)).toEqual({ production: 0, total: 0 });
+    expect(countLockedPackages(root)).toBe(0);
   });
 
-  it('excludes platform-specific optional binaries from production', () => {
-    // Counting every platform's prebuilt binary would report a tree that no
-    // single machine ever installs.
+  it('includes every platform variant because this is a lockfile count', () => {
     write('package-lock.json', {
       packages: {
         '': {},
@@ -92,7 +122,7 @@ describe('countLockedPackages', () => {
       },
     });
 
-    expect(countLockedPackages(root)).toEqual({ production: 1, total: 4 });
+    expect(countLockedPackages(root)).toBe(4);
   });
 
   it('returns null when there is no lockfile to read', () => {
@@ -108,12 +138,7 @@ describe('countLockedPackages', () => {
   });
 
   it('reports plausible figures for this repository', () => {
-    const counts = countLockedPackages();
-
-    expect(counts).not.toBeNull();
-    expect(counts?.total).toBeGreaterThan(100);
-    expect(counts?.production).toBeGreaterThan(0);
-    expect(counts?.production).toBeLessThan(counts?.total ?? 0);
+    expect(countLockedPackages()).toBeGreaterThan(100);
   });
 });
 

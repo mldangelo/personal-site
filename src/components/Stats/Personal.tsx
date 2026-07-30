@@ -5,9 +5,9 @@ import { resolveReadings } from '@/lib/readings';
 import declarations from '../../data/stats/personal';
 import Table from './Table';
 
-// Resolved once, at module scope: the age readout writes itself into a text
-// node out of band rather than through React state, so this component is never
-// re-rendered and there is nothing to memoize.
+// Resolved once, at module scope. The age readout writes itself into a text
+// node out of band rather than through React state, so ticking the age does not
+// trigger a component re-render.
 const readings = resolveReadings(declarations);
 
 export default function PersonalStats() {

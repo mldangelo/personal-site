@@ -45,7 +45,7 @@ describe('Site', () => {
     render(Component);
 
     expect(
-      screen.getByText('Stars this repository has on github'),
+      screen.getByText('Stars this repository has on GitHub'),
     ).toBeInTheDocument();
     expect(screen.getByText('Number of forks')).toBeInTheDocument();
     expect(screen.getByText('Number of spoons')).toBeInTheDocument();
@@ -79,16 +79,16 @@ describe('Site', () => {
     render(Component);
 
     expect(
-      screen.getByText('Stars this repository has on github'),
+      screen.getByText('Stars this repository has on GitHub'),
     ).toBeInTheDocument();
     expect(
       screen.getByText('Number of people watching this repository'),
     ).toBeInTheDocument();
     expect(screen.getByText('Number of forks')).toBeInTheDocument();
     expect(
-      screen.getByText('Open github issues and pull requests'),
+      screen.getByText('Open GitHub issues and pull requests'),
     ).toBeInTheDocument();
-    expect(screen.getByText('Last updated at')).toBeInTheDocument();
+    expect(screen.getByText('Last pushed')).toBeInTheDocument();
   });
 
   it('uses fallback data when fetch fails', async () => {
@@ -132,7 +132,7 @@ describe('Site', () => {
     for (const label of [
       'Lines of TypeScript powering this website',
       'Dependencies declared directly',
-      'Installed to run in production',
+      'Non-development dependencies on this build host',
       'Resolved into the lockfile',
       'Enforced by CI on every push',
     ]) {

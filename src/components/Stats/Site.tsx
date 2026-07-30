@@ -2,6 +2,7 @@ import declarations from '../../data/stats/site';
 import { countSourceLines } from '../../lib/loc';
 import {
   countDirectDependencies,
+  countInstalledNonDevPackages,
   countLintRules,
   countLockedPackages,
 } from '../../lib/manifest';
@@ -90,13 +91,11 @@ async function fetchGitHubStats(): Promise<GitHubStatsResult> {
  * comes back `null` and `resolveReadings` drops its row.
  */
 function measureThisBuild(): Record<string, Measurement> {
-  const locked = countLockedPackages();
-
   return {
     source_lines: countSourceLines(),
     direct_dependencies: countDirectDependencies(),
-    production_packages: locked?.production ?? null,
-    locked_packages: locked?.total ?? null,
+    installed_non_dev_packages: countInstalledNonDevPackages(),
+    locked_packages: countLockedPackages(),
     lint_rules: countLintRules(),
   };
 }

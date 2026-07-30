@@ -8,13 +8,13 @@ import { join } from 'node:path';
  * assert `Number of linter warnings: 0` from a string literal with the comment
  * "enforced via github workflow" beside it. A page whose entire premise is
  * measurement cannot carry a figure nobody re-checks, so the dependency and
- * lint-rule figures are taken from `package.json`, `package-lock.json`, and
- * `biome.json` on every build.
+ * lint-rule figures are taken from `package.json`, npm's installed-tree
+ * lockfile, `package-lock.json`, and `biome.json` on every build.
  *
  * Every function returns `null` rather than a guess when its manifest is
- * missing or unreadable — a fork that installs with pnpm has no
- * `package-lock.json`, and dropping that one row is honest where inventing a
- * number is not. `resolveReadings` omits rows whose measurement is `null`.
+ * missing or unreadable — a fork that installs with pnpm has neither npm
+ * lockfile, and dropping the affected rows is honest where inventing numbers
+ * is not. `resolveReadings` omits rows whose measurement is `null`.
  *
  * Server-only: these read the filesystem and must not be imported into a
  * client component.
@@ -60,65 +60,55 @@ export function countDirectDependencies(
   return countKeys(manifest.dependencies) + countKeys(manifest.devDependencies);
 }
 
-export interface LockedPackageCounts {
-  /**
-   * Packages reachable from `dependencies` on any platform, so what a
-   * production install actually contains.
-   */
-  production: number;
-  /**
-   * Every package the lockfile resolves — production, tooling, and the
-   * platform-specific binaries only one machine ever installs.
-   */
-  total: number;
+/**
+ * Non-development package locations present in this build's installed tree.
+ *
+ * npm's hidden lockfile describes the actual `node_modules` tree, so it
+ * includes compatible optional packages for this build platform and excludes
+ * incompatible binaries. Only `dev: true` entries are removed: npm documents
+ * `devOptional` as a package that is also an optional dependency of a non-dev
+ * dependency, so excluding it would undercount the non-development tree.
+ */
+export function countInstalledNonDevPackages(
+  cwd: string = process.cwd(),
+): number | null {
+  const lockfile = readJsonObject(
+    join(cwd, 'node_modules', '.package-lock.json'),
+  );
+
+  if (!lockfile || !isRecord(lockfile.packages)) {
+    return null;
+  }
+
+  let count = 0;
+
+  for (const [path, entry] of Object.entries(lockfile.packages)) {
+    if (path === '' || !isRecord(entry) || entry.dev === true) {
+      continue;
+    }
+
+    count += 1;
+  }
+
+  return count;
 }
 
 /**
- * Counts from `package-lock.json`.
+ * Every package location resolved in `package-lock.json`.
  *
- * npm marks a package `dev` when it is only reachable through
- * `devDependencies`, `devOptional` when it is reachable both ways, and
- * `optional` for the per-platform binaries (`@next/swc-*`, `sharp`'s
- * prebuilds) where a given install takes one and skips the rest. The
- * production figure excludes all three: counting every platform's binary
- * would report a tree no machine has.
+ * This deliberately makes no claim about what one machine installs: the
+ * lockfile includes tooling and mutually exclusive platform binaries.
  */
 export function countLockedPackages(
   cwd: string = process.cwd(),
-): LockedPackageCounts | null {
+): number | null {
   const lockfile = readJsonObject(join(cwd, 'package-lock.json'));
 
   if (!lockfile || !isRecord(lockfile.packages)) {
     return null;
   }
 
-  let production = 0;
-  let total = 0;
-
-  for (const [path, entry] of Object.entries(lockfile.packages)) {
-    // The empty key is the root project, not a dependency of it.
-    if (path === '') {
-      continue;
-    }
-
-    total += 1;
-
-    if (!isRecord(entry)) {
-      continue;
-    }
-
-    if (
-      entry.dev === true ||
-      entry.devOptional === true ||
-      entry.optional === true
-    ) {
-      continue;
-    }
-
-    production += 1;
-  }
-
-  return { production, total };
+  return Object.keys(lockfile.packages).filter((path) => path !== '').length;
 }
 
 function collectEnabledRules(linter: unknown, into: Set<string>): void {

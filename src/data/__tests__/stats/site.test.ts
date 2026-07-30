@@ -83,7 +83,7 @@ describe('site stats data', () => {
     // this codebase, which is the one thing this file must never carry.
     for (const key of [
       'direct_dependencies',
-      'production_packages',
+      'installed_non_dev_packages',
       'locked_packages',
       'lint_rules',
     ]) {
