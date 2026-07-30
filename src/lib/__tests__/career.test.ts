@@ -3,11 +3,14 @@ import { describe, expect, it } from 'vitest';
 import type { Position } from '@/data/resume/work';
 import work from '@/data/resume/work';
 import {
+  careerSpanYears,
   formatDuration,
+  formatDurationLong,
   monthsBetween,
   positionDuration,
+  positionDurationLong,
   sortPositions,
-  totalExperienceYears,
+  timelineKey,
 } from '../career';
 
 /**
@@ -44,41 +47,42 @@ function roleNamed(name: string): Position {
 }
 
 describe('sortPositions', () => {
-  it('orders newest start date first', () => {
+  it('orders newest end date first', () => {
     const ordered = sortPositions([
-      position({ name: 'Middle', startDate: '2018-01-01' }),
-      position({ name: 'Oldest', startDate: '2011-06-01' }),
-      position({ name: 'Newest', startDate: '2026-03-09' }),
+      position({ name: 'Middle', endDate: '2018-01-01' }),
+      position({ name: 'Oldest', endDate: '2011-06-01' }),
+      position({ name: 'Newest', endDate: '2026-03-09' }),
     ]);
 
     expect(byName(ordered)).toEqual(['Newest', 'Middle', 'Oldest']);
   });
 
-  it('breaks a shared start date by the later end date', () => {
-    // Both roles begin in January 2014 in the real data. The eight-year one
-    // should not be filed under the four-month internship.
+  it('prefers recency of involvement when start and end disagree', () => {
     const ordered = sortPositions([
       position({
-        name: 'Short',
-        startDate: '2014-01-01',
-        endDate: '2014-05-01',
+        name: 'Later but shorter',
+        startDate: '2015-09-01',
+        endDate: '2016-06-01',
       }),
       position({
-        name: 'Long',
+        name: 'Earlier but recent',
         startDate: '2014-01-01',
         endDate: '2022-01-01',
       }),
     ]);
 
-    expect(byName(ordered)).toEqual(['Long', 'Short']);
+    expect(byName(ordered)).toEqual([
+      'Earlier but recent',
+      'Later but shorter',
+    ]);
   });
 
-  it('places an ongoing role ahead of a closed one that started the same day', () => {
+  it('places an ongoing full-time role ahead of a closed role', () => {
     const ordered = sortPositions([
       position({
         name: 'Closed',
-        startDate: '2017-04-01',
-        endDate: '2026-01-01',
+        startDate: '2020-01-01',
+        endDate: '2026-07-01',
       }),
       position({
         name: 'Ongoing',
@@ -103,14 +107,14 @@ describe('sortPositions', () => {
     expect(ordered).not.toBe(input);
   });
 
-  it('returns real career data in strictly non-increasing start order', () => {
+  it('returns real career data in non-increasing timeline order', () => {
     // The source array runs 2022 → 2017 → 2014 → 2015 → 2014 through the
     // middle. Source order is no longer load-bearing, but the rendered order
     // is, so it is pinned here.
-    const starts = sortPositions(work).map((entry) => entry.startDate);
+    const keys = sortPositions(work).map(timelineKey);
 
-    for (let i = 1; i < starts.length; i += 1) {
-      expect(starts[i].localeCompare(starts[i - 1])).toBeLessThanOrEqual(0);
+    for (let i = 1; i < keys.length; i += 1) {
+      expect(keys[i].localeCompare(keys[i - 1])).toBeLessThanOrEqual(0);
     }
   });
 
@@ -118,12 +122,19 @@ describe('sortPositions', () => {
     expect(sortPositions(work)[0].name).toBe('OpenAI');
   });
 
-  it('sorts Arthena above the internship that shares its start month', () => {
+  it('places the long Arthena role above shorter overlapping roles', () => {
     const ordered = byName(sortPositions(work));
 
-    expect(ordered.indexOf('Arthena')).toBeLessThan(
-      ordered.indexOf('Planetary Resources'),
-    );
+    expect(ordered.indexOf('Arthena')).toBeLessThan(ordered.indexOf('Matroid'));
+    expect(ordered.indexOf('Arthena')).toBeLessThan(ordered.indexOf('Planet'));
+  });
+
+  it('places an open-ended side role among its contemporaries', () => {
+    const ordered = byName(sortPositions(work));
+    const sideRole = ordered.indexOf('Skeptical Investments');
+
+    expect(sideRole).toBeGreaterThan(ordered.indexOf('Arthena'));
+    expect(sideRole).toBeLessThan(ordered.indexOf('Matroid'));
   });
 });
 
@@ -174,6 +185,19 @@ describe('formatDuration', () => {
   });
 });
 
+describe('formatDurationLong', () => {
+  it('writes out singular and plural units', () => {
+    expect(formatDurationLong(1)).toBe('1 month');
+    expect(formatDurationLong(12)).toBe('1 year');
+    expect(formatDurationLong(13)).toBe('1 year 1 month');
+    expect(formatDurationLong(26)).toBe('2 years 2 months');
+  });
+
+  it('describes a sub-month duration without a zero', () => {
+    expect(formatDurationLong(0)).toBe('less than 1 month');
+  });
+});
+
 describe('positionDuration', () => {
   it('measures a closed role between its own dates and ignores now', () => {
     expect(positionDuration(roleNamed('Arthena'), NOW)).toBe('8 yr');
@@ -195,13 +219,16 @@ describe('positionDuration', () => {
   it('agrees with the range shown beside it', () => {
     // July 2024 – March 2026.
     expect(positionDuration(roleNamed('Promptfoo'), NOW)).toBe('1 yr 8 mo');
+    expect(positionDurationLong(roleNamed('Promptfoo'), NOW)).toBe(
+      '1 year 8 months',
+    );
   });
 });
 
-describe('totalExperienceYears', () => {
-  it('counts completed years since the earliest role began', () => {
+describe('careerSpanYears', () => {
+  it('counts the elapsed span since the earliest role began', () => {
     // Earliest start in the real data is 2011-06-01.
-    expect(totalExperienceYears(work, NOW)).toBe(15);
+    expect(careerSpanYears(work, NOW)).toBe(15);
   });
 
   it('reads the earliest start regardless of array order', () => {
@@ -211,24 +238,24 @@ describe('totalExperienceYears', () => {
       position({ startDate: '2014-01-01' }),
     ];
 
-    expect(totalExperienceYears(positions, NOW)).toBe(20);
+    expect(careerSpanYears(positions, NOW)).toBe(20);
   });
 
   it('does not round a partial year up', () => {
-    expect(
-      totalExperienceYears([position({ startDate: '2011-08-01' })], NOW),
-    ).toBe(14);
+    expect(careerSpanYears([position({ startDate: '2011-08-01' })], NOW)).toBe(
+      14,
+    );
   });
 
   it('returns zero for no positions rather than throwing', () => {
-    expect(totalExperienceYears([], NOW)).toBe(0);
+    expect(careerSpanYears([], NOW)).toBe(0);
   });
 
   it('advances on its own as the clock moves', () => {
     const laterYear = new Date('2027-07-28T12:00:00Z').getTime();
 
-    expect(totalExperienceYears(work, laterYear)).toBe(
-      totalExperienceYears(work, NOW) + 1,
+    expect(careerSpanYears(work, laterYear)).toBe(
+      careerSpanYears(work, NOW) + 1,
     );
   });
 });

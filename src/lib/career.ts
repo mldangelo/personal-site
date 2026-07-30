@@ -17,19 +17,31 @@ export type DateInput = string | number | Date;
 /**
  * Sort key standing in for the end of a role that has not ended.
  *
- * An ongoing role has no `endDate` and should tiebreak ahead of one that has
- * already closed, so it sorts as though it ends later than any real date.
+ * An ongoing full-time role has no `endDate` and should sort ahead of one that
+ * has already closed, so it sorts as though it ends later than any real date.
  */
 const ONGOING_END = '9999-12-31';
 
-function endKey(position: Position): string {
-  return position.endDate ?? ONGOING_END;
+/**
+ * Recency key for the rendered career spine.
+ *
+ * Closed roles are placed by when the work ended. An ongoing full-time role
+ * leads. An open-ended side role is placed by when it began: "still active" is
+ * true, but it should not permanently outrank every later primary job.
+ */
+export function timelineKey(position: Position): string {
+  if (position.endDate) return position.endDate;
+
+  return position.commitment === 'part-time' ? position.startDate : ONGOING_END;
 }
 
 /**
- * Roles in reverse chronological order: newest start first, and where two
- * roles start on the same date the one still running — or the one that ran
- * longer — comes first.
+ * Roles by recency of involvement: newest timeline key first, with ties broken
+ * by the later start date.
+ *
+ * End date is primary because long overlapping roles otherwise fall below
+ * short roles that merely began later. In the real data, start-date sorting
+ * buried the 2014–2022 Arthena tenure below Matroid and Planet.
  *
  * The source array is hand-maintained and had drifted out of sequence, running
  * 2022 → 2017 → 2014 → 2015 → 2014 through the middle, so a section that reads
@@ -48,8 +60,8 @@ function endKey(position: Position): string {
 export function sortPositions(positions: Position[]): Position[] {
   return [...positions].sort(
     (a, b) =>
-      b.startDate.localeCompare(a.startDate) ||
-      endKey(b).localeCompare(endKey(a)),
+      timelineKey(b).localeCompare(timelineKey(a)) ||
+      b.startDate.localeCompare(a.startDate),
   );
 }
 
@@ -91,6 +103,26 @@ export function formatDuration(months: number): string {
   return `${years} yr ${remainingMonths} mo`;
 }
 
+/** A month count written out for an accessible duration label. */
+export function formatDurationLong(months: number): string {
+  const total = Math.max(0, Math.trunc(months));
+
+  if (total < 1) {
+    return 'less than 1 month';
+  }
+
+  const years = Math.floor(total / 12);
+  const remainingMonths = total % 12;
+  const yearText = years === 1 ? '1 year' : `${years} years`;
+  const monthText =
+    remainingMonths === 1 ? '1 month' : `${remainingMonths} months`;
+
+  if (years === 0) return monthText;
+  if (remainingMonths === 0) return yearText;
+
+  return `${yearText} ${monthText}`;
+}
+
 /**
  * How long a role lasted, formatted. A role with no `endDate` is measured to
  * `now`, which the caller supplies.
@@ -101,22 +133,24 @@ export function positionDuration(position: Position, now: DateInput): string {
   );
 }
 
-/**
- * Completed whole years since the earliest role began.
- *
- * `app/resume/page.tsx` used to claim "15+ years" as typed prose. It was true
- * the day it was written, which is exactly the problem: nothing would have
- * caught it going stale. Same rule as `src/lib/loc.ts` — if it is countable,
- * count it.
- *
- * One number, deliberately. Summing the months actually occupied by a role is
- * a different and smaller figure, and presenting both at once reads as hedging
- * rather than as precision, so the elapsed span is the only one reported.
- */
-export function totalExperienceYears(
-  positions: Position[],
+/** The same tenure written without abbreviations for assistive technology. */
+export function positionDurationLong(
+  position: Position,
   now: DateInput,
-): number {
+): string {
+  return formatDurationLong(
+    monthsBetween(position.startDate, position.endDate ?? now),
+  );
+}
+
+/**
+ * Completed whole years from the earliest role to now.
+ *
+ * This is elapsed career span, not a sum of active months and not a claim that
+ * every month in the interval was spent in a listed role. The public copy uses
+ * that exact meaning.
+ */
+export function careerSpanYears(positions: Position[], now: DateInput): number {
   const earliestStart = positions.reduce<string | null>(
     (earliest, position) =>
       earliest === null || position.startDate.localeCompare(earliest) < 0

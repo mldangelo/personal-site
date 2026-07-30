@@ -13,7 +13,7 @@ import courses from '@/data/resume/courses';
 import degrees from '@/data/resume/degrees';
 import { categories, skills } from '@/data/resume/skills';
 import work from '@/data/resume/work';
-import { totalExperienceYears } from '@/lib/career';
+import { careerSpanYears } from '@/lib/career';
 import { createPageMetadata } from '@/lib/metadata';
 import { AUTHOR_NAME, SITE_URL } from '@/lib/utils';
 
@@ -56,7 +56,7 @@ export default function ResumePage() {
   // component, so the value is baked at build time — the same contract as the
   // line count on /stats.
   const now = Date.now();
-  const yearsOfExperience = totalExperienceYears(work, now);
+  const careerSpan = careerSpanYears(work, now);
   const github = contactLink('GitHub');
   const linkedin = contactLink('LinkedIn');
 
@@ -65,14 +65,13 @@ export default function ResumePage() {
       <section className="resume-page">
         <header className="resume-header">
           <h1 className="resume-title">Resume</h1>
-          {/* The span is counted from the earliest role in `work`, never
-              typed — see `totalExperienceYears`. A hand-written "15+" is
-              correct on the day it is written and wrong from then on. */}
+          {/* This is elapsed span from the earliest role, not summed active
+              tenure — see `careerSpanYears`. */}
           <p className="resume-summary">
-            Engineering leader with {yearsOfExperience}+ years building products
-            across AI, security, and infrastructure. I&apos;m currently a Member
-            of the Technical Staff at OpenAI, working on Promptfoo and Codex
-            Security. I help secure AI systems and use AI to find software
+            Engineering leader with a career spanning {careerSpan}+ years across
+            AI, security, and infrastructure. I&apos;m currently a Member of the
+            Technical Staff at OpenAI, working on Promptfoo and Codex Security.
+            I help secure AI systems and use AI to find software
             vulnerabilities. I co-founded Promptfoo before it joined OpenAI in
             2026. Stanford MS, YC alum, previously VP Engineering.
           </p>
