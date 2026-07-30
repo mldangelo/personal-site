@@ -13,6 +13,7 @@ import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { basename, extname, join, relative, resolve } from 'node:path';
 import matter from 'gray-matter';
 
+import { validatePostFrontmatterData } from '../src/lib/post-frontmatter.mjs';
 import {
   attribute,
   canonicalValues,
@@ -22,7 +23,7 @@ import {
 } from './lib/html.mjs';
 import { declaredAssetRoutes, draftOnlyAssetRoutes } from './lib/markdown.mjs';
 import { exportLayout, readSiteConfig, toUrlPath } from './lib/site.mjs';
-import { isDraftFrontmatter, POST_CARD_DIRECTORY } from './og-inputs.mjs';
+import { POST_CARD_DIRECTORY } from './og-inputs.mjs';
 
 const ROOT = process.cwd();
 const OUT = resolve(ROOT, 'out');
@@ -69,15 +70,16 @@ if (pages.length === 0) {
 const posts = walk(CONTENT, (name) => name.endsWith('.md')).map((path) => {
   // Use the same YAML parser as the application. A line regex misses valid
   // forms such as `draft: true # keep private`, weakening the fault-injection
-  // gate precisely when the route layer regresses. `isDraftFrontmatter` is the
-  // share-card scripts' predicate, imported rather than repeated: a gate that
-  // disagreed with the generator about what a draft is would wave through the
-  // exact artifact the generator should never have produced.
+  // gate precisely when the route layer regresses. Validation is shared with
+  // the route and share-card readers so malformed frontmatter cannot pass one
+  // publication boundary and fail another.
   const { data, content } = matter(readFileSync(path, 'utf8'));
+  const source = relative(ROOT, path);
+  const frontmatter = validatePostFrontmatterData(data, source);
 
   return {
     slug: basename(path, '.md'),
-    isDraft: isDraftFrontmatter(data),
+    isDraft: frontmatter.draft === true,
     assets: declaredAssetRoutes({ data, content }),
   };
 });

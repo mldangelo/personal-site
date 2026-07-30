@@ -13,6 +13,7 @@ import { join } from 'node:path';
 
 import matter from 'gray-matter';
 
+import { validatePostFrontmatterData } from '../src/lib/post-frontmatter.mjs';
 import { ogProfileSnapshot } from './og-profile.mjs';
 
 /** Every card is a `summary_large_image`, so every card is this size. */
@@ -22,6 +23,41 @@ export const HOME_CARD_PATH = '/og.png';
 /** One card per published post, named after its slug. */
 export const POST_CARD_DIRECTORY = '/og/writing';
 export const LEDGER_PATH = '/og.meta.json';
+
+/**
+ * Exact font files used by satori.
+ *
+ * Google Fonts' family CSS is mutable: resolving "Bricolage Grotesque 800" on
+ * two different days can return different bytes under the same generator
+ * source. These versioned TTF URLs and their digests make a changed response a
+ * hard failure instead of silently redrawing every committed card.
+ */
+export const CARD_FONTS = [
+  {
+    name: 'Display',
+    family: 'Bricolage Grotesque',
+    weight: 800,
+    style: 'normal',
+    url: 'https://fonts.gstatic.com/s/bricolagegrotesque/v9/3y9U6as8bTXq_nANBjzKo3IeZx8z6up5BeSl5jBNz_19PpbpMXuECpwUxJBOm_OJWiaaD30YfKfjZZoLvZvlyM0.ttf',
+    sha256: '50fe1039eb3ff208d027a4867d3f53bd288bba76273a718578f7b3ec0feec388',
+  },
+  {
+    name: 'Mono',
+    family: 'JetBrains Mono',
+    weight: 500,
+    style: 'normal',
+    url: 'https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8-qxjPQ.ttf',
+    sha256: '3386a05f6ece969e4537de6be894170d20558e82f7d56c8c5d332972ef172160',
+  },
+  {
+    name: 'Body',
+    family: 'Newsreader',
+    weight: 400,
+    style: 'normal',
+    url: 'https://fonts.gstatic.com/s/newsreader/v26/cY9qfjOCX1hbuyalUrK49dLac06G1ZGsZBtoBCzBDXXD9JVF438weI_ADA.ttf',
+    sha256: 'b8f5e0a8bdd6a12c722ca5635d9da87e77ccbb2d0172112e34e00c4e55f2cd5a',
+  },
+];
 
 /**
  * The files whose contents decide what a card looks like.
@@ -34,6 +70,7 @@ const GENERATOR_SOURCES = [
   'scripts/generate-og.mjs',
   'scripts/og-inputs.mjs',
   'scripts/og-profile.mjs',
+  'src/lib/post-frontmatter.mjs',
 ];
 
 const CONTENT_DIRECTORY = join('content', 'writing');
@@ -162,7 +199,7 @@ export function countProseWords(markdown) {
 }
 
 /** Distinct sources a post links out to. Two links to one URL are one source. */
-export function countReferences(markdown) {
+export function countExternalLinks(markdown) {
   const links = markdown
     .replace(/```[\s\S]*?```/g, ' ')
     .replace(/`[^`\n]*`/g, ' ')
@@ -198,36 +235,15 @@ export function measurePost(markdown) {
 
   return [
     { label: 'Words', value: words.toLocaleString('en-US') },
-    { label: 'References', value: String(countReferences(markdown)) },
+    {
+      label: 'External links',
+      value: String(countExternalLinks(markdown)),
+    },
     {
       label: 'Reading time',
       value: `${Math.max(1, Math.round(words / READING_WORDS_PER_MINUTE))} min`,
     },
   ];
-}
-
-/**
- * Whether frontmatter marks a post as unpublished.
- *
- * A plain Node script cannot import `isPublished` from `src/lib/posts.ts`, so
- * the rule is necessarily reimplemented — and the two have to agree on the safe
- * side rather than merely overlap. `validatePostFrontmatter` throws for any
- * `draft` that is not a boolean, so a quoted `draft: 'true'` fails the site
- * build outright; a script testing `draft === true` called that same post
- * published and told the author to commit a share card carrying its title.
- *
- * Only an explicit, unambiguous "not a draft" publishes here: the key absent,
- * or literally `false`. Every other value is withheld, so a malformed flag can
- * never produce a published artifact — the script declines where the app
- * throws. `scripts/__tests__/drafts.test.ts` enumerates the cases and pins this
- * against the TypeScript reader.
- *
- * `verify-export.mjs` imports this rather than repeating it, because a third
- * copy of the rule is a third thing to drift.
- */
-export function isDraftFrontmatter(data) {
-  const draft = data?.draft;
-  return draft !== undefined && draft !== false;
 }
 
 /**
@@ -252,33 +268,20 @@ export async function readPostCards(root = process.cwd()) {
       await readFile(join(directory, file), 'utf8'),
     );
 
-    if (isDraftFrontmatter(data)) continue;
-
     const slug = file.replace(/\.md$/, '');
-    assertSafeSlug(slug, join(CONTENT_DIRECTORY, file));
+    const source = join(CONTENT_DIRECTORY, file);
+    assertSafeSlug(slug, source);
+    const frontmatter = validatePostFrontmatterData(data, source);
 
-    if (typeof data.title !== 'string' || data.title.trim() === '') {
-      throw new Error(`${join(CONTENT_DIRECTORY, file)} has no title`);
-    }
-    if (
-      typeof data.description !== 'string' ||
-      data.description.trim() === ''
-    ) {
-      throw new Error(`${join(CONTENT_DIRECTORY, file)} has no description`);
-    }
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(String(data.date))) {
-      throw new Error(
-        `${join(CONTENT_DIRECTORY, file)} has no YYYY-MM-DD date: ${data.date}`,
-      );
-    }
+    if (frontmatter.draft === true) continue;
 
     cards.push({
       slug,
       path: postCardPath(slug),
-      title: data.title.trim(),
-      description: data.description.trim(),
-      date: String(data.date),
-      dateLabel: formatCardDate(String(data.date)),
+      title: frontmatter.title,
+      description: frontmatter.description,
+      date: frontmatter.date,
+      dateLabel: formatCardDate(frontmatter.date),
       readout: measurePost(content),
     });
   }
@@ -317,6 +320,7 @@ export async function readCardInputs(root = process.cwd()) {
   return {
     profile,
     size: CARD_SIZE,
+    fonts: CARD_FONTS,
     profileSnapshot,
     colors,
     posts,
@@ -326,4 +330,14 @@ export async function readCardInputs(root = process.cwd()) {
 
 export function imageDigest(image) {
   return createHash('sha256').update(image).digest('hex');
+}
+
+export function assertCardFontDigest(font, data) {
+  const actual = imageDigest(data);
+  if (actual !== font.sha256) {
+    throw new Error(
+      `${font.family} ${font.weight} from ${font.url} has SHA-256 ${actual}; ` +
+        `expected ${font.sha256}. Refusing to generate cards from changed font bytes.`,
+    );
+  }
 }

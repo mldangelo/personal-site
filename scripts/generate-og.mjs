@@ -24,6 +24,7 @@ import { join } from 'node:path';
 import { createElement as h } from 'react';
 
 import {
+  assertCardFontDigest,
   HOME_CARD_PATH,
   imageDigest,
   LEDGER_PATH,
@@ -40,8 +41,15 @@ const root = process.cwd();
 
 // The stats page reads the same profile file, so the cards cannot silently
 // drift from the public facts elsewhere on the site.
-const { profile, profileSnapshot, size, colors, posts, generatorDigest } =
-  await readCardInputs(root);
+const {
+  profile,
+  profileSnapshot,
+  size,
+  fonts: fontSources,
+  colors,
+  posts,
+  generatorDigest,
+} = await readCardInputs(root);
 
 const { ink, paper, body, graphite, accent, hairline } = colors;
 
@@ -101,28 +109,24 @@ const READOUT = [
 const [FIRST_NAME, ...REST_OF_NAME] = profile.name.split(' ');
 const AUTHOR = profile.name.replace("'", '’');
 
-/**
- * Fetches a font from Google as TTF, which is what satori accepts.
- *
- * Google's CSS endpoint serves woff2 to modern browsers and TTF to older
- * clients, so the request deliberately goes out without a browser User-Agent.
- */
-async function loadGoogleFont(family, weight) {
-  const css = await fetch(
-    `https://fonts.googleapis.com/css2?family=${family}:wght@${weight}`,
-  ).then((response) => response.text());
-
-  const url = css.match(/src:\s*url\((https:\/\/[^)]+)\)/)?.[1];
-  if (!url) {
-    throw new Error(`No font URL found for ${family} ${weight}`);
+/** Fetches one exact TTF and refuses any response whose bytes have changed. */
+async function loadCardFont(source) {
+  const response = await fetch(source.url);
+  if (!response.ok) {
+    throw new Error(
+      `Failed to download ${source.family} ${source.weight}: ${response.status}`,
+    );
   }
 
-  const font = await fetch(url);
-  if (!font.ok) {
-    throw new Error(`Failed to download ${family}: ${font.status}`);
-  }
+  const data = Buffer.from(await response.arrayBuffer());
+  assertCardFontDigest(source, data);
 
-  return font.arrayBuffer();
+  return {
+    name: source.name,
+    data,
+    weight: source.weight,
+    style: source.style,
+  };
 }
 
 function readoutCell(cell, index) {
@@ -331,20 +335,10 @@ function postCard(post) {
   );
 }
 
-// The three type roles the site uses, fetched once and reused for every card.
-// `loadGoogleFont` is the only network dependency in this script, so one round
-// trip per card would be both slow and one more chance of a partial failure.
-const [display, mono, serif] = await Promise.all([
-  loadGoogleFont('Bricolage+Grotesque', 800),
-  loadGoogleFont('JetBrains+Mono', 500),
-  loadGoogleFont('Newsreader', 400),
-]);
-
-const fonts = [
-  { name: 'Display', data: display, weight: 800, style: 'normal' },
-  { name: 'Mono', data: mono, weight: 500, style: 'normal' },
-  { name: 'Body', data: serif, weight: 400, style: 'normal' },
-];
+// The three type roles are fetched once and reused for every card. The URLs are
+// versioned and the bytes checksummed in `og-inputs.mjs`, so this network read
+// cannot silently choose a newer font revision.
+const fonts = await Promise.all(fontSources.map(loadCardFont));
 
 async function render(element) {
   const response = new ImageResponse(element, { ...size, fonts });
@@ -369,6 +363,7 @@ const digests = new Map(
 );
 const ledger = {
   size,
+  fonts: fontSources,
   profile: profileSnapshot,
   colors,
   generatorDigest,

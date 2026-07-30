@@ -86,6 +86,10 @@ if (!same(ledger.colors, inputs.colors)) {
   fail(`The card colours no longer match the design tokens. ${REGENERATE}`);
 }
 
+if (!same(ledger.fonts, inputs.fonts)) {
+  fail(`The checksummed share-card fonts are stale. ${REGENERATE}`);
+}
+
 if (ledger.generatorDigest !== inputs.generatorDigest) {
   fail(
     `The share-card generator changed without regenerated cards. ${REGENERATE}`,
@@ -148,5 +152,5 @@ if (failures.length > 0) {
 
 console.log(
   `og:check: ${1 + inputs.posts.length} cards at ${EXPECTED_SIZE.width}x${EXPECTED_SIZE.height}; ` +
-    'images, profile facts, colour tokens, post readouts, and generator current',
+    'images, checksummed fonts, profile facts, colour tokens, post readouts, and generator current',
 );

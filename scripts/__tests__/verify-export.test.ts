@@ -67,7 +67,7 @@ function createFixture({ basePath = '' } = {}) {
   write(
     root,
     'content/writing/secret-draft.md',
-    '---\ntitle: Secret draft\ndraft: true # keep private\n---\n',
+    "---\ntitle: Secret draft\ndate: '2026-01-08'\ndescription: Private fixture post.\ndraft: true # keep private\n---\n",
   );
   write(
     root,
@@ -176,7 +176,7 @@ function draftWithBody(root: string, body: string) {
   write(
     root,
     'content/writing/secret-draft.md',
-    `---\ntitle: Secret draft\ndraft: true # keep private\n---\n\n${body}\n`,
+    `---\ntitle: Secret draft\ndate: '2026-01-08'\ndescription: Private fixture post.\ndraft: true # keep private\n---\n\n${body}\n`,
   );
 }
 
@@ -438,12 +438,12 @@ describe('verify-export', () => {
     write(
       root,
       'content/writing/photo.md',
-      '---\ntitle: Photo\ndraft: true\n---\n',
+      "---\ntitle: Photo\ndate: '2026-01-08'\ndescription: Draft whose slug matches an asset.\ndraft: true\n---\n",
     );
     write(
       root,
       'content/writing/resume.md',
-      '---\ntitle: Resume\ndraft: true\n---\n',
+      "---\ntitle: Resume\ndate: '2026-01-08'\ndescription: Draft whose slug matches an artifact.\ndraft: true\n---\n",
     );
 
     const result = runVerifier(root);
@@ -457,19 +457,19 @@ describe('verify-export', () => {
    * `draft: 'true'` never builds — but both scripts once read it as published,
    * which is how a card for it got committed with nothing objecting.
    */
-  it('rejects a card for a post whose draft flag is malformed', () => {
+  it('rejects malformed draft frontmatter before inspecting generated assets', () => {
     const root = createFixture();
     write(
       root,
       'content/writing/quoted-draft.md',
-      "---\ntitle: Quoted draft\ndraft: 'true'\n---\n",
+      "---\ntitle: Quoted draft\ndate: '2026-01-08'\ndescription: Malformed draft fixture.\ndraft: 'true'\n---\n",
     );
     write(root, 'out/og/writing/quoted-draft.png');
 
     const result = runVerifier(root);
     expect(result.status).toBe(1);
     expect(result.output).toContain(
-      'exports an asset named after a draft post: /og/writing/quoted-draft.png',
+      'Invalid frontmatter in content/writing/quoted-draft.md: "draft" must be a boolean when provided',
     );
   });
 
@@ -503,7 +503,7 @@ describe('verify-export', () => {
     write(
       root,
       'content/writing/secret-draft.md',
-      '---\ntitle: Secret draft\ndraft: true\nimage: /images/elsewhere/hero.png\nimageAlt: Hero\n---\n',
+      "---\ntitle: Secret draft\ndate: '2026-01-08'\ndescription: Private fixture post.\ndraft: true\nimage: /images/elsewhere/hero.png\nimageAlt: Hero\n---\n",
     );
     write(root, 'out/images/elsewhere/hero.png');
 
@@ -519,7 +519,7 @@ describe('verify-export', () => {
     write(
       root,
       'content/writing/published.md',
-      '---\ntitle: Published\nimage: /images/writing/published/hero.png\nimageAlt: Hero\n---\n\n![Chart](/images/writing/published/chart.png)\n',
+      "---\ntitle: Published\ndate: '2026-01-08'\ndescription: Published fixture post.\nimage: /images/writing/published/hero.png\nimageAlt: Hero\n---\n\n![Chart](/images/writing/published/chart.png)\n",
     );
     write(root, 'out/images/writing/published/hero.png');
     write(root, 'out/images/writing/published/chart.png');
@@ -542,7 +542,7 @@ describe('verify-export', () => {
     write(
       root,
       'content/writing/published.md',
-      '---\ntitle: Published\n---\n\n![Shared](/images/writing/shared/diagram.png)\n',
+      "---\ntitle: Published\ndate: '2026-01-08'\ndescription: Published fixture post.\n---\n\n![Shared](/images/writing/shared/diagram.png)\n",
     );
     write(root, 'out/images/writing/shared/diagram.png');
 

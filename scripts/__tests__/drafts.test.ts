@@ -1,19 +1,4 @@
-/**
- * The one rule three readers have to agree on.
- *
- * `isPublished` in `src/lib/posts.ts` decides what the site renders, and a plain
- * Node build script cannot import it, so `scripts/og-inputs.mjs` reimplements
- * the rule and `scripts/verify-export.mjs` imports that reimplementation. This
- * file is what holds them together.
- *
- * They disagreed. Both scripts skipped a post only when `draft === true`, while
- * `validatePostFrontmatter` throws for any `draft` that is not a boolean — so a
- * quoted `draft: 'true'`, a plausible typo, failed the site build outright while
- * `npm run og:check` told the author to commit a share card for it. The fix is
- * not to copy the app's validator into a script; it is to make the scripts
- * refuse anything that is not an explicit, unambiguous "published", so a
- * malformed flag can never produce a published artifact.
- */
+/** The TypeScript route reader and plain-Node asset readers share one validator. */
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -21,8 +6,9 @@ import { join } from 'node:path';
 import matter from 'gray-matter';
 import { afterAll, describe, expect, it } from 'vitest';
 
+import { validatePostFrontmatterData } from '@/lib/post-frontmatter.mjs';
 import { validatePostFrontmatter } from '@/lib/posts';
-import { isDraftFrontmatter, readPostCards } from '../og-inputs.mjs';
+import { readPostCards } from '../og-inputs.mjs';
 
 interface DraftCase {
   /** The frontmatter as an author would write it. */
@@ -107,12 +93,12 @@ function frontmatterOf(entry: DraftCase) {
 
 const fixtureRoots: string[] = [];
 
-function createFixture() {
+function createFixture(entries = CASES) {
   const root = mkdtempSync(join(tmpdir(), 'draft-predicate-'));
   fixtureRoots.push(root);
   mkdirSync(join(root, 'content', 'writing'), { recursive: true });
 
-  for (const entry of CASES) {
+  for (const entry of entries) {
     writeFileSync(
       join(root, 'content', 'writing', `${entry.slug}.md`),
       postSource(entry),
@@ -128,57 +114,62 @@ afterAll(() => {
   }
 });
 
-describe('the draft predicate the build scripts share', () => {
-  it.each(CASES)('reads $name as draft: $isDraft', (entry) => {
-    expect(isDraftFrontmatter(frontmatterOf(entry))).toBe(entry.isDraft);
+describe('the frontmatter validator every post reader shares', () => {
+  it.each(CASES)('handles $name identically at both boundaries', (entry) => {
+    const data = frontmatterOf(entry);
+    const source = `content/writing/${entry.slug}.md`;
+
+    if (entry.appRefuses) {
+      expect(() => validatePostFrontmatterData(data, source)).toThrow(
+        '"draft" must be a boolean when provided',
+      );
+      expect(() => validatePostFrontmatter(data, source)).toThrow(
+        '"draft" must be a boolean when provided',
+      );
+      return;
+    }
+
+    const shared = validatePostFrontmatterData(data, source);
+    expect(validatePostFrontmatter(data, source)).toEqual(shared);
+    expect(Boolean(shared.draft)).toBe(entry.isDraft);
   });
 
-  it('treats frontmatter with no draft key at all as published', () => {
-    expect(isDraftFrontmatter({})).toBe(false);
+  it('rejects an empty draft value', () => {
+    const data = matter(
+      [
+        '---',
+        'title: Empty draft value',
+        "date: '2026-01-08'",
+        'description: The value must still be a boolean.',
+        'draft:',
+        '---',
+      ].join('\n'),
+    ).data;
+
+    expect(() => validatePostFrontmatterData(data, 'empty-draft.md')).toThrow(
+      '"draft" must be a boolean when provided',
+    );
   });
-
-  /**
-   * `draft:` with nothing after it parses as null, which is neither a boolean
-   * the site accepts nor an absent key, so it is withheld like any other
-   * malformed value.
-   */
-  it('withholds an empty draft value', () => {
-    expect(isDraftFrontmatter(matter('---\ndraft:\n---\n').data)).toBe(true);
-  });
-
-  it.each(CASES)(
-    'never publishes what the site refuses to build: $name',
-    (entry) => {
-      const data = frontmatterOf(entry);
-      const source = `content/writing/${entry.slug}.md`;
-
-      if (entry.appRefuses) {
-        expect(() => validatePostFrontmatter(data, source)).toThrow(
-          '"draft" must be a boolean when provided',
-        );
-        // The site will not build this file. The scripts must therefore not
-        // produce an artifact for it either — declining is the safe side of a
-        // disagreement, publishing is not.
-        expect(isDraftFrontmatter(data)).toBe(true);
-        return;
-      }
-
-      // Where the site accepts the value, the two readers must land on exactly
-      // the same answer: `isPublished` is `!post.draft` outside `next dev`.
-      const frontmatter = validatePostFrontmatter(data, source);
-      expect(Boolean(frontmatter.draft)).toBe(isDraftFrontmatter(data));
-    },
-  );
 });
 
 describe('readPostCards', () => {
-  it('generates a card only for the unambiguously published cases', async () => {
-    const cards = (await readPostCards(createFixture())) as { slug: string }[];
+  it('generates cards only for validated, published posts', async () => {
+    const validCases = CASES.filter((entry) => !entry.appRefuses);
+    const cards = (await readPostCards(createFixture(validCases))) as {
+      slug: string;
+    }[];
 
     expect(cards.map((card) => card.slug).sort()).toEqual(
-      CASES.filter((entry) => !entry.isDraft)
+      validCases
+        .filter((entry) => !entry.isDraft)
         .map((entry) => entry.slug)
         .sort(),
+    );
+  });
+
+  it('rejects malformed frontmatter before a draft can be skipped', async () => {
+    await expect(readPostCards(createFixture())).rejects.toThrow(
+      '"draft" must be a boolean when provided',
     );
   });
 });

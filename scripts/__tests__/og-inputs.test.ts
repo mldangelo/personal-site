@@ -1,13 +1,30 @@
-import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readdirSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
+import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { beforeAll, describe, expect, it } from 'vitest';
+import matter from 'gray-matter';
+import { afterEach, beforeAll, describe, expect, it } from 'vitest';
 
-import { getAllPosts, getPostSlugs } from '@/lib/posts';
+import {
+  getAllPosts,
+  getPostSlugs,
+  validatePostFrontmatter,
+} from '@/lib/posts';
 import { formatDate } from '@/lib/utils';
 import {
+  assertCardFontDigest,
+  CARD_FONTS,
+  countExternalLinks,
   countProseWords,
-  countReferences,
   formatCardDate,
+  imageDigest,
   postCardPath,
   readPostCards,
 } from '../og-inputs.mjs';
@@ -25,12 +42,31 @@ interface PostCard {
 const ROOT = process.cwd();
 const CARD_DIRECTORY = join(ROOT, 'public', 'og', 'writing');
 const LEDGER = join(ROOT, 'public', 'og.meta.json');
+const temporaryRoots: string[] = [];
 
 let cards: PostCard[] = [];
 
 beforeAll(async () => {
   cards = (await readPostCards(ROOT)) as PostCard[];
 });
+
+afterEach(() => {
+  for (const root of temporaryRoots.splice(0)) {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+function postFixture(frontmatter: Record<string, unknown>): string {
+  const root = mkdtempSync(join(tmpdir(), 'post-card-frontmatter-'));
+  const directory = join(root, 'content', 'writing');
+  mkdirSync(directory, { recursive: true });
+  writeFileSync(
+    join(directory, 'example.md'),
+    matter.stringify('Fixture body.\n', frontmatter),
+  );
+  temporaryRoots.push(root);
+  return root;
+}
 
 /**
  * The card set is derived from `content/writing/` by a plain Node script, which
@@ -95,13 +131,95 @@ describe('share card inputs', () => {
     for (const card of cards) {
       expect(card.readout.map((cell) => cell.label)).toEqual([
         'Words',
-        'References',
+        'External links',
         'Reading time',
       ]);
       for (const cell of card.readout) {
         expect(cell.value).toMatch(/\d/);
       }
     }
+  });
+});
+
+describe('share card fonts', () => {
+  it('records exact versioned TTFs and their checksums in the ledger', () => {
+    const ledger = JSON.parse(readFileSync(LEDGER, 'utf8'));
+
+    expect(ledger.fonts).toEqual(CARD_FONTS);
+    expect(new Set(CARD_FONTS.map((font) => font.name)).size).toBe(
+      CARD_FONTS.length,
+    );
+
+    for (const font of CARD_FONTS) {
+      expect(font.url).toMatch(
+        /^https:\/\/fonts\.gstatic\.com\/s\/[^/]+\/v\d+\/[^/]+\.ttf$/,
+      );
+      expect(font.sha256).toMatch(/^[a-f0-9]{64}$/);
+    }
+  });
+
+  it('rejects changed bytes instead of silently redrawing the cards', () => {
+    const data = Buffer.from('fixture font bytes');
+    const font = { ...CARD_FONTS[0], sha256: imageDigest(data) };
+
+    expect(() => assertCardFontDigest(font, data)).not.toThrow();
+    expect(() =>
+      assertCardFontDigest({ ...font, sha256: '0'.repeat(64) }, data),
+    ).toThrow(/Refusing to generate cards from changed font bytes/);
+  });
+});
+
+describe('share card frontmatter validation', () => {
+  const base = {
+    title: 'Fixture title',
+    date: '2026-01-08',
+    description: 'Fixture description.',
+  };
+
+  it.each([
+    [{ ...base, draft: 'true' }, '"draft" must be a boolean'],
+    [{ ...base, date: '2026-02-30' }, '"date" must be a real calendar date'],
+    [{ ...base, image: '/images/example.png' }, '"imageAlt" is required'],
+    [{ ...base, imageAlt: 'Example' }, '"image" is required'],
+    [
+      { ...base, image: 'https://example.com/image.png', imageAlt: 'Example' },
+      '"image" must be a root-relative path',
+    ],
+    [
+      { date: '2026-01-08', description: 'Missing title', draft: true },
+      '"title" must be a non-empty string',
+    ],
+  ])(
+    'rejects the same malformed frontmatter as the route reader %#',
+    async (frontmatter, message) => {
+      const source = join('content', 'writing', 'example.md');
+
+      expect(() => validatePostFrontmatter(frontmatter, source)).toThrow(
+        message,
+      );
+      await expect(readPostCards(postFixture(frontmatter))).rejects.toThrow(
+        message,
+      );
+    },
+  );
+
+  it('normalizes valid text exactly as the route reader does', async () => {
+    const frontmatter = {
+      ...base,
+      title: '  Fixture title  ',
+      description: '  Fixture description.  ',
+      draft: false,
+    };
+    const [card] = (await readPostCards(
+      postFixture(frontmatter),
+    )) as PostCard[];
+    const validated = validatePostFrontmatter(frontmatter);
+
+    expect(card).toMatchObject({
+      title: validated.title,
+      date: validated.date,
+      description: validated.description,
+    });
   });
 });
 
@@ -122,17 +240,17 @@ describe('post measurements', () => {
 
   it('counts distinct outbound sources', () => {
     expect(
-      countReferences('[a](https://one.example) [b](https://two.example)'),
+      countExternalLinks('[a](https://one.example) [b](https://two.example)'),
     ).toBe(2);
     expect(
-      countReferences(
+      countExternalLinks(
         '[a](https://one.example) again [b](https://one.example)',
       ),
     ).toBe(1);
-    expect(countReferences('[internal](/writing/post/)')).toBe(0);
-    expect(countReferences('![remote](https://one.example/a.png)')).toBe(0);
-    expect(countReferences('```md\n[in code](https://one.example)\n```')).toBe(
-      0,
-    );
+    expect(countExternalLinks('[internal](/writing/post/)')).toBe(0);
+    expect(countExternalLinks('![remote](https://one.example/a.png)')).toBe(0);
+    expect(
+      countExternalLinks('```md\n[in code](https://one.example)\n```'),
+    ).toBe(0);
   });
 });
