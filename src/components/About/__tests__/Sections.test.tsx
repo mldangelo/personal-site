@@ -117,7 +117,7 @@ Lead paragraph.
     expect(html).toContain('id="travel-geography"');
   });
 
-  it('files every history entry in the gutter by year, with its age', () => {
+  it('renders only the history markers stated by the prose', () => {
     const { container } = render(<AboutContent markdown={aboutMarkdown} />);
     const history = container.querySelector('.about-section--log');
     const entries = Array.from(
@@ -125,26 +125,35 @@ Lead paragraph.
     ) as HTMLElement[];
 
     expect(entries).toHaveLength(15);
+    expect(
+      entries.map((entry) => ({
+        year: entry.querySelector('.log-entry-year')?.textContent ?? null,
+        age: entry.querySelector('.log-entry-age')?.textContent ?? null,
+      })),
+    ).toEqual([
+      { year: '1993', age: 'Age 3' },
+      { year: '1995', age: null },
+      { year: '1996', age: null },
+      { year: null, age: 'Age 7' },
+      { year: null, age: 'Age 8' },
+      { year: null, age: 'Age 10' },
+      { year: null, age: 'Age 11' },
+      { year: null, age: 'Age 12' },
+      { year: null, age: 'Age 13' },
+      { year: null, age: 'Age 14' },
+      { year: null, age: 'Age 14–17' },
+      { year: null, age: 'Age 16' },
+      { year: null, age: 'Age 18' },
+      { year: null, age: 'Age 19' },
+      { year: null, age: 'Age 20' },
+    ]);
 
-    for (const entry of entries) {
-      expect(entry.querySelector('.log-entry-year')?.textContent).toMatch(
-        /^\d{4}(–\d{4})?$/,
-      );
-      expect(entry.querySelector('.log-entry-age')?.textContent).toMatch(
-        /^Age \d{1,2}(–\d{1,2})?$/,
-      );
-    }
-
-    // The log opens on the year the profile claims computing started, and the
-    // sentence that says so keeps its own words.
-    expect(entries[0].querySelector('.log-entry-year')?.textContent).toBe(
-      '1993',
-    );
-    expect(entries[0].querySelector('.log-entry-age')?.textContent).toBe(
-      'Age 3',
-    );
+    // Embedded markers remain in the prose, including meaningful qualifiers.
     expect(entries[0].querySelector('.log-entry-body')?.textContent).toContain(
       'a computer in my bedroom in 1993',
+    );
+    expect(entries[2].querySelector('.log-entry-body')?.textContent).toContain(
+      'In the summer of 1996',
     );
 
     // A leading marker is lifted out instead, leaving a sentence behind.

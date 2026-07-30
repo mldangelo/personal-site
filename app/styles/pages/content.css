@@ -220,8 +220,8 @@
 }
 
 /* Empty for entries that carry no marker; the column still holds so the
-   spine stays straight down the list. Year over age, stacked, because the
-   pair has to fit the gutter without widening it. */
+   spine stays straight down the list. When the prose explicitly states both
+   year and age, stack them so the pair fits without widening the gutter. */
 .log-entry-marker {
   display: flex;
   flex-direction: column;
@@ -238,8 +238,7 @@
   line-height: 1.4;
 }
 
-/* The year is the axis the whole log is filed under, so it takes the ink; the
-   age is the same instant told the way the prose tells it. */
+/* Give an explicitly stated year a little more ink than the secondary age. */
 .log-entry-year {
   color: var(--color-fg);
   font-weight: var(--font-weight-medium);
@@ -265,8 +264,7 @@
     left: 0;
   }
 
-  /* No gutter column to stack inside, so the pair sits on one line above
-     the entry rather than eating two. */
+  /* No gutter column to stack inside, so a year-age pair sits on one line. */
   .log-entry-marker {
     flex-direction: row;
     align-items: baseline;
