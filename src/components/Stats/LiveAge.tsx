@@ -21,8 +21,9 @@ interface LiveAgeProps {
  * client'` directive so it could hold this component as a value, which pulled
  * the declarations, `resolveReadings`, `Table`, and `TableRow` across with it —
  * and shipped `--.-----------` as the only age any crawler, no-JS visitor, or
- * printed copy ever saw. Now the server renders the reading it can prove and
- * this span upgrades the precision in place.
+ * no-JS print renderer saw. A browser printing after hydration already had the
+ * live value. Now the server renders the reading it can prove and this span
+ * upgrades the precision in place.
  *
  * `initial` is a prop rather than a recomputed value on purpose: the client
  * clock is not the build clock, and a locally computed initial would differ from

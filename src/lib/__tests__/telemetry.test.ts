@@ -9,7 +9,10 @@ import {
   agePlaceholder,
   BIRTH_DATE,
   BUILD_CLOCK_INTERVAL,
+  DEFAULT_BUILD_REPOSITORY,
   deployedCommit,
+  deployedCommitUrl,
+  deployedRepository,
   elapsedPlaceholder,
   elapsedSince,
   MS_PER_YEAR,
@@ -161,33 +164,75 @@ describe('deployedCommit', () => {
   it('reports the commit the build step handed it', () => {
     const sha = '0123456789abcdef0123456789abcdef01234567';
     process.env.BUILD_SHA = sha;
+    process.env.BUILD_REPOSITORY = 'mldangelo/personal-site';
 
     expect(deployedCommit()).toBe(sha);
+    expect(deployedRepository()).toBe('mldangelo/personal-site');
+    expect(deployedCommitUrl(sha)).toBe(
+      `https://github.com/mldangelo/personal-site/commit/${sha}`,
+    );
     expect(sha.slice(0, SHORT_SHA_LENGTH)).toBe('0123456');
   });
 
-  it("falls back to the runner's own variable", () => {
-    // A fork that never edited the workflow still gets the row.
+  it("falls back to the runner's own commit and repository", () => {
+    // A fork that never edited the workflow still gets its own valid link.
     delete process.env.BUILD_SHA;
+    delete process.env.BUILD_REPOSITORY;
     process.env.GITHUB_SHA = 'f'.repeat(40);
+    process.env.GITHUB_REPOSITORY = 'octocat/personal-site';
 
     expect(deployedCommit()).toBe('f'.repeat(40));
+    expect(deployedRepository()).toBe('octocat/personal-site');
+    expect(deployedCommitUrl('f'.repeat(40))).toBe(
+      `https://github.com/octocat/personal-site/commit/${'f'.repeat(40)}`,
+    );
+  });
+
+  it('uses upstream only for a local explicitly identified build', () => {
+    const sha = 'e'.repeat(40);
+    process.env.BUILD_SHA = sha;
+    delete process.env.BUILD_REPOSITORY;
+    delete process.env.GITHUB_REPOSITORY;
+
+    expect(deployedRepository()).toBe(DEFAULT_BUILD_REPOSITORY);
+    expect(deployedCommitUrl(sha)).toContain(
+      `github.com/${DEFAULT_BUILD_REPOSITORY}/commit/`,
+    );
   });
 
   it('returns null off CI so the row drops rather than guessing', () => {
     delete process.env.BUILD_SHA;
     delete process.env.GITHUB_SHA;
+    delete process.env.BUILD_REPOSITORY;
+    delete process.env.GITHUB_REPOSITORY;
 
     expect(deployedCommit()).toBeNull();
   });
 
-  it('refuses anything that is not a commit hash', () => {
+  it('refuses invalid commit or repository identities', () => {
     // An empty or truncated value would render a link to a commit that does not
     // exist, which is worse than showing no row at all.
     for (const value of ['', '   ', 'abc123', 'main', `${'a'.repeat(41)}`]) {
       process.env.BUILD_SHA = value;
 
       expect(deployedCommit(), value).toBeNull();
+    }
+
+    process.env.BUILD_SHA = 'a'.repeat(40);
+    for (const value of [
+      '',
+      'owner',
+      '/repo',
+      'owner/',
+      'owner/repo/extra',
+      'owner/repo?tab=actions',
+    ]) {
+      process.env.BUILD_REPOSITORY = value;
+
+      expect(deployedCommit(), value).toBeNull();
+      expect(() => deployedCommitUrl('a'.repeat(40)), value).toThrow(
+        /invalid deployed commit/i,
+      );
     }
   });
 });

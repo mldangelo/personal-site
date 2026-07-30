@@ -1,5 +1,5 @@
 import type { StatDeclaration } from '@/lib/readings';
-import { SHORT_SHA_LENGTH, utcDate } from '@/lib/telemetry';
+import { deployedCommitUrl, SHORT_SHA_LENGTH, utcDate } from '@/lib/telemetry';
 
 const REPO = 'https://github.com/mldangelo/personal-site';
 const BLOB = `${REPO}/blob/main`;
@@ -19,7 +19,7 @@ const BLOB = `${REPO}/blob/main`;
  */
 const data: StatDeclaration[] = [
   {
-    label: 'Stars this repository has on github',
+    label: 'Stars this repository has on GitHub',
     key: 'stargazers_count',
     source: 'github',
     link: `${REPO}/stargazers`,
@@ -39,7 +39,7 @@ const data: StatDeclaration[] = [
   {
     // GitHub's open_issues_count includes open pull requests, so the label
     // says what the number actually counts rather than overstating issues.
-    label: 'Open github issues and pull requests',
+    label: 'Open GitHub issues and pull requests',
     key: 'open_issues_count',
     source: 'github',
     link: 'https://github.com/search?q=repo%3Amldangelo%2Fpersonal-site+is%3Aopen&type=issues',
@@ -68,7 +68,7 @@ const data: StatDeclaration[] = [
     source: 'measured',
     format: (x: unknown) => String(x).slice(0, SHORT_SHA_LENGTH),
     // The one link on the page whose target is the reading itself.
-    link: (x: unknown) => `${REPO}/commit/${x}`,
+    link: deployedCommitUrl,
   },
   {
     // Filled with a live `<BuildClock>` by `src/components/Stats/Site.tsx`.

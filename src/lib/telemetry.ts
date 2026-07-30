@@ -36,9 +36,10 @@ export const AGE_PRECISION_FULL = 11;
  * Decimal places the build itself can honestly claim.
  *
  * The page used to ship `--.-----------` to crawlers, no-JS visitors, and
- * anyone who printed it, because the only reading was the one the browser
- * computed. The server can compute a real one — but only to the precision that
- * survives until the next deploy. One unit at two decimals is
+ * no-JS print renderers because the only reading was the one the browser
+ * computed. (A browser printing after hydration already saw the live value.)
+ * The server can compute a real one — but only to the precision that survives
+ * until the next deploy. One unit at two decimals is
  * `MS_PER_YEAR / 100`, about 3.7 days, so the figure stays true for roughly a
  * deploy cycle; the remaining nine digits of `AGE_PRECISION_FULL` would be
  * nine digits of fiction the moment the build finished. The reading is labelled
@@ -149,6 +150,28 @@ export function elapsedPlaceholder(): string {
 /** Characters of a commit hash worth showing. Enough to be unambiguous. */
 export const SHORT_SHA_LENGTH = 7;
 
+/** Upstream identity used only when a local build supplies no CI repository. */
+export const DEFAULT_BUILD_REPOSITORY = 'mldangelo/personal-site';
+
+const COMMIT_SHA = /^[0-9a-f]{40}$/i;
+const REPOSITORY_NAME = /^[a-z0-9](?:[a-z0-9-]{0,38})\/[a-z0-9._-]{1,100}$/i;
+
+/**
+ * The owner/repository that produced this build.
+ *
+ * The explicit build input and GitHub runner fallback mirror the commit
+ * variables below. A local build has no repository context, so it uses the
+ * upstream project. A malformed value supplied by CI is rejected rather than
+ * interpolated into a public URL.
+ */
+export function deployedRepository(): string | null {
+  const configured =
+    process.env.BUILD_REPOSITORY ?? process.env.GITHUB_REPOSITORY;
+  const repository = (configured ?? DEFAULT_BUILD_REPOSITORY).trim();
+
+  return REPOSITORY_NAME.test(repository) ? repository : null;
+}
+
 /**
  * The commit that produced this build, or `null` when there is no build to ask.
  *
@@ -157,12 +180,12 @@ export const SHORT_SHA_LENGTH = 7;
  * the deploy whenever a push lands on a branch or a deploy fails. The only
  * honest answer is the commit the running build was cut from.
  *
- * `BUILD_SHA` is set explicitly by the build step in
- * `.github/workflows/node.js.yml`; `GITHUB_SHA` is the runner's own default and
- * is read as a fallback so a fork that never touched the workflow still gets
- * the row. Off CI — `npm run dev`, a local `npm run build` — there is no commit
- * context, so this returns `null` and `resolveReadings` drops the row rather
- * than inventing one.
+ * `BUILD_SHA` and `BUILD_REPOSITORY` are set explicitly by the build step in
+ * `.github/workflows/node.js.yml`; `GITHUB_SHA` and `GITHUB_REPOSITORY` are the
+ * runner defaults and are read as a pair so a fork that never touched the
+ * workflow still links its own commit rather than an upstream 404. Off CI —
+ * `npm run dev`, a local `npm run build` — there is no commit context, so this
+ * returns `null` and `resolveReadings` drops the row rather than inventing one.
  *
  * The shape is checked because an empty or truncated value would otherwise
  * render as a link to a commit that does not exist.
@@ -170,5 +193,21 @@ export const SHORT_SHA_LENGTH = 7;
 export function deployedCommit(): string | null {
   const sha = (process.env.BUILD_SHA ?? process.env.GITHUB_SHA ?? '').trim();
 
-  return /^[0-9a-f]{40}$/i.test(sha) ? sha : null;
+  return COMMIT_SHA.test(sha) && deployedRepository() ? sha : null;
+}
+
+/**
+ * Link a validated deployed-commit reading back to the repository that built
+ * it. Kept beside the environment parser so the SHA and repository cannot
+ * accidentally come from different assumptions.
+ */
+export function deployedCommitUrl(value: unknown): string {
+  const sha = String(value);
+  const repository = deployedRepository();
+
+  if (!COMMIT_SHA.test(sha) || !repository) {
+    throw new Error('Cannot link an invalid deployed commit');
+  }
+
+  return `https://github.com/${repository}/commit/${sha}`;
 }

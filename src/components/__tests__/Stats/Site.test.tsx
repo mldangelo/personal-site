@@ -49,7 +49,7 @@ describe('Site', () => {
     render(Component);
 
     expect(
-      screen.getByText('Stars this repository has on github'),
+      screen.getByText('Stars this repository has on GitHub'),
     ).toBeInTheDocument();
     expect(screen.getByText('Number of forks')).toBeInTheDocument();
     expect(screen.getByText('Number of spoons')).toBeInTheDocument();
@@ -83,14 +83,14 @@ describe('Site', () => {
     render(Component);
 
     expect(
-      screen.getByText('Stars this repository has on github'),
+      screen.getByText('Stars this repository has on GitHub'),
     ).toBeInTheDocument();
     expect(
       screen.getByText('Number of people watching this repository'),
     ).toBeInTheDocument();
     expect(screen.getByText('Number of forks')).toBeInTheDocument();
     expect(
-      screen.getByText('Open github issues and pull requests'),
+      screen.getByText('Open GitHub issues and pull requests'),
     ).toBeInTheDocument();
     expect(
       screen.getByText('Last push to this repository'),
@@ -114,6 +114,7 @@ describe('Site', () => {
   it('reports the commit the build was cut from, linked to itself', async () => {
     const sha = '0123456789abcdef0123456789abcdef01234567';
     vi.stubEnv('BUILD_SHA', sha);
+    vi.stubEnv('BUILD_REPOSITORY', 'mldangelo/personal-site');
 
     const Component = await Site();
     render(Component);
@@ -123,6 +124,25 @@ describe('Site', () => {
     expect(row?.querySelector('a')).toHaveAttribute(
       'href',
       `https://github.com/mldangelo/personal-site/commit/${sha}`,
+    );
+  });
+
+  it("links a fork's deployed commit to the fork", async () => {
+    const sha = 'fedcba9876543210fedcba9876543210fedcba98';
+    vi.stubEnv('BUILD_SHA', sha);
+    vi.stubEnv('BUILD_REPOSITORY', 'octocat/personal-site');
+
+    const Component = await Site();
+    render(Component);
+
+    expect(
+      screen
+        .getByText('Deployed from commit')
+        .closest('tr')
+        ?.querySelector('a'),
+    ).toHaveAttribute(
+      'href',
+      `https://github.com/octocat/personal-site/commit/${sha}`,
     );
   });
 

@@ -114,7 +114,9 @@ function measureThisBuild(): Record<string, Measurement> {
 
 /**
  * Site statistics component - fetches GitHub data at build time.
- * Server component, no client-side JavaScript shipped.
+ *
+ * The table stays server-rendered; only the build clock is a client leaf so it
+ * can count forward from the build instant without re-rendering the table.
  */
 export default async function SiteStats() {
   // Started before the measurements so the file reads happen during the
