@@ -12,113 +12,133 @@ export interface Category {
 const skills: Skill[] = [
   // Languages
   {
+    title: 'C',
+    competency: 5,
+    category: ['Languages', 'Embedded Systems'],
+  },
+  {
+    title: 'C++',
+    competency: 5,
+    category: ['Languages', 'Embedded Systems'],
+  },
+  {
     title: 'Python',
     competency: 5,
-    category: ['Languages', 'ML Engineering'],
+    category: ['Languages', 'Data & Analytics'],
   },
   {
-    title: 'TypeScript',
-    competency: 5,
-    category: ['Languages', 'Web Development'],
-  },
-  {
-    title: 'SQL',
+    title: 'MicroPython',
     competency: 4,
-    category: ['Languages', 'Databases'],
-  },
-  // AI & LLM
-  {
-    title: 'AI Agents',
-    competency: 5,
-    category: ['ML Engineering'],
+    category: ['Languages', 'Embedded Systems'],
   },
   {
-    title: 'LLM Evaluation',
-    competency: 5,
-    category: ['ML Engineering'],
-  },
-  {
-    title: 'AI Red-teaming',
-    competency: 5,
-    category: ['ML Engineering'],
-  },
-  {
-    title: 'LLM APIs',
-    competency: 5,
-    category: ['ML Engineering'],
-  },
-  {
-    title: 'RAG',
+    title: 'Verilog',
     competency: 4,
-    category: ['ML Engineering'],
+    category: ['Languages', 'Hardware Design'],
   },
   {
-    title: 'Prompt Engineering',
+    title: 'MATLAB',
     competency: 4,
-    category: ['ML Engineering'],
+    category: ['Languages', 'Data & Analytics'],
   },
   {
-    title: 'Vector Databases',
-    competency: 4,
-    category: ['ML Engineering', 'Databases'],
-  },
-  {
-    title: 'PyTorch',
-    competency: 4,
-    category: ['ML Engineering'],
-  },
-  {
-    title: 'Pandas',
-    competency: 5,
-    category: ['ML Engineering', 'Data Engineering'],
-  },
-  // Web Development
-  {
-    title: 'Node.js',
-    competency: 5,
-    category: ['Web Development'],
-  },
-  {
-    title: 'FastAPI',
-    competency: 4,
-    category: ['Web Development'],
-  },
-  {
-    title: 'Next.js',
+    title: 'Java',
     competency: 3,
-    category: ['Web Development'],
+    category: ['Languages'],
   },
-  // Databases
+  // Hardware Design
   {
-    title: 'PostgreSQL',
+    title: 'PCB Design',
+    competency: 5,
+    category: ['Hardware Design'],
+  },
+  {
+    title: 'Altium Designer',
+    competency: 5,
+    category: ['Hardware Design', 'Tools'],
+  },
+  {
+    title: 'Signal Integrity',
     competency: 4,
-    category: ['Databases'],
+    category: ['Hardware Design'],
   },
   {
-    title: 'Redis',
+    title: 'Analog Circuit Design',
+    competency: 4,
+    category: ['Hardware Design'],
+  },
+  {
+    title: 'SPICE Simulation (SIMetrix, LTSpice)',
+    competency: 5,
+    category: ['Hardware Design', 'Circuit Simulation & Analysis'],
+  },
+  {
+    title: 'Oscilloscopes',
+    competency: 5,
+    category: ['Hardware Design'],
+  },
+  {
+    title: 'Soldering & Prototyping',
+    competency: 5,
+    category: ['Hardware Design'],
+  },
+  {
+    title: '3D Printing',
+    competency: 4,
+    category: ['Hardware Design'],
+  },
+  {
+    title: 'CAD (Onshape)',
     competency: 3,
-    category: ['Databases'],
+    category: ['Hardware Design', 'Tools'],
   },
-  // Infrastructure
+  // Embedded Systems
   {
-    title: 'AWS',
+    title: 'Embedded Systems',
+    competency: 5,
+    category: ['Embedded Systems'],
+  },
+  {
+    title: 'STM32',
     competency: 4,
-    category: ['Infrastructure'],
+    category: ['Embedded Systems'],
   },
   {
-    title: 'Docker',
+    title: 'I2C / Communication Protocols',
     competency: 4,
-    category: ['Infrastructure'],
+    category: ['Embedded Systems'],
   },
   {
-    title: 'Kubernetes',
+    title: 'Closed-Loop Control Systems',
+    competency: 4,
+    category: ['Embedded Systems'],
+  },
+  {
+    title: 'RF / IR Wireless Control',
     competency: 3,
-    category: ['Infrastructure'],
+    category: ['Embedded Systems'],
+  },
+  // Data & Analytics
+  {
+    title: 'Data Structures & Algorithms',
+    competency: 4,
+    category: ['Data & Analytics'],
   },
   {
-    title: 'Observability',
+    title: 'Power BI',
     competency: 4,
-    category: ['Infrastructure', 'ML Engineering'],
+    category: ['Data & Analytics'],
+  },
+  {
+    title: 'Linux',
+    competency: 4,
+    category: ['Data & Analytics', 'Tools'],
+  },
+  // Tools
+  {
+    title: 'Git (GitHub, GitLab)',
+    competency: 5,
+    category: ['Tools'],
   },
 ].map((skill) => ({ ...skill, category: skill.category.sort() }));
 

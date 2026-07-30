@@ -1,11 +1,8 @@
 {
-  "name": "Michael D'Angelo",
-  "role": "Member of the Technical Staff",
-  "employer": "OpenAI",
-  "focus": "Promptfoo and Codex Security",
-  "birthDate": "1990-02-05T09:24:00-05:00",
-  "computingSince": 1993,
-  "countriesVisited": 53,
-  "currentCity": "New York, NY",
-  "email": "hi@mldangelo.com"
+  "name": "Henry Matar",
+  "role": "Systems Engineering Intern",
+  "employer": "Lockheed Martin",
+  "focus": "hardware and embedded systems",
+  "currentCity": "Boulder, CO",
+  "email": "henry.matar@colorado.edu"
 }
