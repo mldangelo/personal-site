@@ -70,11 +70,9 @@ describe('print: revealing link destinations', () => {
   });
 
   it.each([
-    // The identifying link on each resume entry. Before this, ~25 links
-    // printed as plain black text with no destination at all.
+    // The identifying link on each professional or education entry.
     ".job-company[href^='http']::after",
     ".degree-container .school a[href^='http']::after",
-    ".course-container a[href^='http']::after",
     // Already covered, and must stay covered.
     ".about-content a[href^='http']::after",
     ".prose a[href^='http']::after",
@@ -90,6 +88,7 @@ describe('print: revealing link destinations', () => {
     const revealed = RULES[revealIndex].selectors.join(' ');
 
     expect(revealed).not.toContain('resume-print-contact');
+    expect(revealed).not.toContain('course-container');
     expect(revealed).not.toContain('.summary');
     expect(revealed).not.toContain('.points');
   });
@@ -117,17 +116,31 @@ describe('print: revealing link destinations', () => {
     expect(clobbering).toEqual([]);
   });
 
-  it('lifts the revealed course URL out of the two-column grid', () => {
-    // `.course-container a` is `display: grid` with a 5.5rem code column, so
-    // its pseudo-element is a grid item and lands back in that narrow column
-    // unless it is placed explicitly.
-    const placed = RULES.find(
+  it('keeps course links clickable without dumping raw URLs onto paper', () => {
+    const revealed = RULES[revealIndex].selectors.join(' ');
+    const { container } = render(<ResumePage />);
+
+    expect(revealed).not.toContain('course-container');
+    expect(PRINT_CSS).not.toMatch(
+      /\.course-container\s+a\[href\^=['"]http['"]\]::after/,
+    );
+    expect(
+      container.querySelectorAll('.course-container a[href]'),
+    ).toHaveLength(courses.length);
+  });
+});
+
+describe('print: screen chrome', () => {
+  it('suppresses the skip link', () => {
+    const hidden = RULES.find(
       (rule) =>
-        rule.selectors.includes(".course-container a[href^='http']::after") &&
-        rule.declarations.includes('grid-column'),
+        rule.selectors.includes('.skip-link') &&
+        /(?:^|[;\s])display\s*:\s*none(?:\s*!important)?\s*;/.test(
+          rule.declarations,
+        ),
     );
 
-    expect(placed).toBeDefined();
+    expect(hidden).toBeDefined();
   });
 });
 
