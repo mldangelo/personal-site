@@ -4,6 +4,7 @@ import {
   applyThemeColor,
   DARK_SCHEME_QUERY,
   nextThemeChoice,
+  RESOLVED_THEME_COLOR_SELECTOR,
   readStoredThemeChoice,
   renderedThemeColor,
   resolveTheme,
@@ -12,6 +13,7 @@ import {
   THEME_ATTRIBUTE,
   THEME_CHOICE_ATTRIBUTE,
   THEME_CHOICES,
+  THEME_COLOR_META_SELECTOR,
   THEME_COLOR_TOKEN,
   THEME_STORAGE_KEY,
   type ThemeChoice,
@@ -37,18 +39,51 @@ function runThemeInitScript(): void {
 const injected: Element[] = [];
 
 /**
- * The media-scoped pair the static export ships, as a browser parses it —
- * both tags present, whatever the device happens to prefer.
+ * A media-scoped pair, hoisted into `<head>` the way React hoists the ones a
+ * fork might declare through `viewport.themeColor`.
+ *
+ * The export no longer ships these — its fallback lives in `<noscript>` — but
+ * the script-owned tag has to win against them anyway, because that is what
+ * makes it durable rather than merely first to run.
  */
-function addThemeColorMetas(): void {
-  for (const scheme of ['light', 'dark'] as const) {
+function addThemeColorMetas(): Element[] {
+  const added = ['light', 'dark'].map((scheme) => {
     const meta = document.createElement('meta');
     meta.setAttribute('name', 'theme-color');
     meta.setAttribute('media', `(prefers-color-scheme: ${scheme})`);
-    meta.setAttribute('content', CHROME_COLORS[scheme]);
+    meta.setAttribute('content', CHROME_COLORS[scheme as 'light' | 'dark']);
     document.head.append(meta);
     injected.push(meta);
+    return meta;
+  });
+
+  return added;
+}
+
+/** The content of the one tag the bootstrap and the toggle both write to. */
+function resolvedChromeColor(): string | null {
+  return (
+    document
+      .querySelector(RESOLVED_THEME_COLOR_SELECTOR)
+      ?.getAttribute('content') ?? null
+  );
+}
+
+/**
+ * What the browser would paint, modelled the way the spec says: the first tag
+ * in tree order whose `media` matches, or which carries no `media` at all.
+ */
+function paintedChromeColor(prefersDark: boolean): string | null {
+  for (const meta of document.querySelectorAll(THEME_COLOR_META_SELECTOR)) {
+    const media = meta.getAttribute('media');
+    const matches =
+      media === null ||
+      media === `(prefers-color-scheme: ${prefersDark ? 'dark' : 'light'})`;
+
+    if (matches) return meta.getAttribute('content');
   }
+
+  return null;
 }
 
 /**
@@ -128,6 +163,11 @@ describe('theme', () => {
   afterEach(() => {
     clearRoot();
     for (const node of injected.splice(0)) node.remove();
+    // The script-owned tag is created by the code under test rather than by a
+    // helper, so it is not in `injected` and has to be swept separately.
+    for (const node of document.querySelectorAll(THEME_COLOR_META_SELECTOR)) {
+      node.remove();
+    }
   });
 
   describe('nextThemeChoice', () => {
@@ -283,9 +323,9 @@ describe('theme', () => {
     });
 
     it('paints the chrome from the stored choice, not from the device', () => {
-      // The bug: the meta tags are scoped by `prefers-color-scheme`, so a
-      // visitor reading in light mode on a dark device got a black address
-      // bar over a white page — and the reverse.
+      // The bug: a `theme-color` tag can only be scoped by
+      // `prefers-color-scheme`, so a visitor reading in light mode on a dark
+      // device got a black address bar over a white page — and the reverse.
       addThemeColorMetas();
       setPrefersDark(true);
       window.localStorage.setItem(THEME_STORAGE_KEY, 'light');
@@ -293,49 +333,109 @@ describe('theme', () => {
       runThemeInitScript();
 
       expect(themeAttribute()).toBe('light');
-      expect(chromeColors()).toEqual([
-        CHROME_COLORS.light,
-        CHROME_COLORS.light,
-      ]);
+      expect(resolvedChromeColor()).toBe(CHROME_COLORS.light);
+      expect(paintedChromeColor(true)).toBe(CHROME_COLORS.light);
     });
 
     it('paints the chrome from the device while the choice is system', () => {
-      // Following the device is what `system` means, so the scoping is right
-      // here and the resolved value has to agree with it rather than fight it.
+      // Following the device is what `system` means, so the resolved value has
+      // to agree with it rather than fight it.
       addThemeColorMetas();
       setPrefersDark(true);
 
       runThemeInitScript();
 
       expect(themeAttribute()).toBe('dark');
-      expect(chromeColors()).toEqual([CHROME_COLORS.dark, CHROME_COLORS.dark]);
+      expect(resolvedChromeColor()).toBe(CHROME_COLORS.dark);
+      expect(paintedChromeColor(true)).toBe(CHROME_COLORS.dark);
+    });
+
+    it('leaves the tags it did not create exactly as it found them', () => {
+      // Repointing them is what React undoes on the first client-side
+      // navigation, because it matches its own hoisted metas back up by
+      // `content` and rebuilds any it cannot find.
+      const pair = addThemeColorMetas();
+      setPrefersDark(true);
+
+      runThemeInitScript();
+
+      expect(pair.map((meta) => meta.getAttribute('content'))).toEqual([
+        CHROME_COLORS.light,
+        CHROME_COLORS.dark,
+      ]);
+    });
+
+    it('adds one unscoped tag, ahead of everything else', () => {
+      // Unscoped so it always matches, first so it always wins: those two
+      // together are why no navigation and no tag order can unseat it.
+      addThemeColorMetas();
+
+      runThemeInitScript();
+
+      const metas = [...document.querySelectorAll(THEME_COLOR_META_SELECTOR)];
+      expect(metas).toHaveLength(3);
+      expect(metas[0].hasAttribute('media')).toBe(false);
+      expect(metas[0].matches(RESOLVED_THEME_COLOR_SELECTOR)).toBe(true);
+    });
+
+    it('creates the same tag applyThemeColor writes to', () => {
+      // The script cannot import the selector it is built from, so this is the
+      // only thing keeping the created tag and the written tag from drifting
+      // into two tags — which is what a mismatch would silently become.
+      runThemeInitScript();
+      applyThemeColor(document, CHROME_COLORS.dark);
+
+      expect(chromeColors()).toEqual([CHROME_COLORS.dark]);
     });
 
     it('runs on a page with no theme-color tags at all', () => {
-      // A fork that drops the viewport export still gets its theme.
+      // A fork that drops the `<noscript>` fallback still gets its theme.
       expect(runThemeInitScript).not.toThrow();
       expect(themeAttribute()).toBe('light');
+      expect(resolvedChromeColor()).toBe(CHROME_COLORS.light);
     });
   });
 
   describe('applyThemeColor', () => {
-    it('points every tag at one colour, whatever each is scoped to', () => {
-      // Which tag the browser picks stops mattering once they agree, so this
-      // needs no opinion about `theme-color` precedence between them.
+    it('creates one unscoped tag ahead of any the page already has', () => {
       addThemeColorMetas();
 
       applyThemeColor(document, CHROME_COLORS.dark);
 
-      expect(chromeColors()).toEqual([CHROME_COLORS.dark, CHROME_COLORS.dark]);
+      expect(paintedChromeColor(false)).toBe(CHROME_COLORS.dark);
+      expect(paintedChromeColor(true)).toBe(CHROME_COLORS.dark);
     });
 
-    it('leaves the media-scoped pair alone rather than emptying it', () => {
+    it('reuses its own tag rather than adding one per call', () => {
+      applyThemeColor(document, CHROME_COLORS.dark);
+      applyThemeColor(document, CHROME_COLORS.light);
+      applyThemeColor(document, CHROME_COLORS.dark);
+
+      expect(chromeColors()).toEqual([CHROME_COLORS.dark]);
+    });
+
+    it('leaves the page it was given untouched', () => {
+      // Mutating the tags the document shipped is the mechanism this replaced:
+      // React re-creates its own hoisted metas on navigation, so a mutation
+      // there lasts until the visitor follows one link.
+      const pair = addThemeColorMetas();
+
+      applyThemeColor(document, CHROME_COLORS.dark);
+
+      expect(pair.map((meta) => meta.getAttribute('content'))).toEqual([
+        CHROME_COLORS.light,
+        CHROME_COLORS.dark,
+      ]);
+    });
+
+    it('adds no tag at all when no colour resolves', () => {
       // An empty `content` is skipped by the browser, which falls back to its
-      // own default chrome — strictly worse than the scoped pair already here.
+      // own default chrome — strictly worse than the fallback already here.
       addThemeColorMetas();
 
       applyThemeColor(document, '');
 
+      expect(document.querySelector(RESOLVED_THEME_COLOR_SELECTOR)).toBeNull();
       expect(chromeColors()).toEqual([CHROME_COLORS.light, CHROME_COLORS.dark]);
     });
   });
@@ -359,26 +459,40 @@ describe('theme', () => {
   describe('syncThemeColor', () => {
     it('follows data-theme, which is the only thing the styles follow', () => {
       addTokenStylesheet();
-      addThemeColorMetas();
 
       document.documentElement.setAttribute(THEME_ATTRIBUTE, 'dark');
       syncThemeColor(document);
-      expect(chromeColors()).toEqual([CHROME_COLORS.dark, CHROME_COLORS.dark]);
+      expect(resolvedChromeColor()).toBe(CHROME_COLORS.dark);
 
       document.documentElement.setAttribute(THEME_ATTRIBUTE, 'light');
       syncThemeColor(document);
-      expect(chromeColors()).toEqual([
-        CHROME_COLORS.light,
-        CHROME_COLORS.light,
-      ]);
+      expect(resolvedChromeColor()).toBe(CHROME_COLORS.light);
     });
 
-    it('degrades to the media-scoped pair when no token resolves', () => {
+    it('degrades to whatever the page already declares when no token resolves', () => {
       addThemeColorMetas();
 
       syncThemeColor(document);
 
       expect(chromeColors()).toEqual([CHROME_COLORS.light, CHROME_COLORS.dark]);
+    });
+
+    it('holds its reading while React rebuilds the tags it owns', () => {
+      // An App Router client-side navigation destroys and re-creates every
+      // hoisted `<meta>`, from the build-time payload. Anything written into
+      // one of those is gone; the tag written here is not React's to rebuild.
+      addTokenStylesheet();
+      const pair = addThemeColorMetas();
+
+      document.documentElement.setAttribute(THEME_ATTRIBUTE, 'dark');
+      syncThemeColor(document);
+      expect(paintedChromeColor(false)).toBe(CHROME_COLORS.dark);
+
+      for (const meta of pair) meta.remove();
+      addThemeColorMetas();
+
+      expect(paintedChromeColor(false)).toBe(CHROME_COLORS.dark);
+      expect(paintedChromeColor(true)).toBe(CHROME_COLORS.dark);
     });
   });
 });

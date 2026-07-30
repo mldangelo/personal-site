@@ -1,4 +1,4 @@
-import type { Metadata, Viewport } from 'next';
+import type { Metadata } from 'next';
 
 import { SiteSchema } from '@/components/Schema';
 import GoogleAnalytics from '@/components/Template/GoogleAnalytics';
@@ -28,24 +28,35 @@ const CHROME_COLORS: ThemeColors = {
 };
 
 /**
- * `theme-color` paints the browser's own chrome — the Android address bar, the
- * Safari toolbar. One unscoped value is wrong in whichever theme it was not
- * picked for, so both are declared and scoped by `prefers-color-scheme`.
+ * The chrome colour for a visitor with no JavaScript, and for nobody else.
  *
- * That scoping is the *device* preference, and nothing in this project themes
- * off the device preference: the rendered theme is `<html data-theme>`, which
- * a visitor can pin to either value and which outlives the tab. So this pair
- * is the no-JavaScript answer — the best one available with no way to read the
- * stored choice — and the bootstrap below repoints both tags at the theme
- * actually being painted. Left alone, a visitor reading in dark mode on a
- * light device got a white address bar over a black page.
+ * `theme-color` paints the browser's own chrome — the Android address bar, the
+ * Safari toolbar — and cannot be styled, so it can only be scoped by
+ * `prefers-color-scheme`. That is the *device* preference, and no stylesheet
+ * here reacts to it: dark is reached only through `<html data-theme='dark'>`,
+ * which the bootstrap below sets. So a scoped pair painted dark chrome over a
+ * light page for a no-JavaScript visitor on a dark-preferring device — it
+ * described a dark theme they were never served.
+ * `app/__tests__/theme-color.test.ts` re-derives that premise from the
+ * stylesheets rather than trusting this comment.
+ *
+ * One unscoped light value is therefore the whole truth without JavaScript:
+ * that is the only page a reader can get, on any device. `app/manifest.json`
+ * says the same thing with its single `theme_color`.
+ *
+ * It lives in `<noscript>` because React must not own it. React re-creates its
+ * hoisted `<meta>` elements on every client-side navigation and matches them
+ * back up by `content`, `name`, `property`, `http-equiv` and `charset` — never
+ * `media` — so any React-rendered `theme-color` tag whose colour can equal a
+ * rendered theme will claim the script-owned tag instead and then destroy it on
+ * the next `<Link>` press. Measured before this changed: React owned the
+ * `media=light` node while it carried the dark colour. `<noscript>` puts the
+ * fallback exactly where it applies and nowhere React can reach.
+ *
+ * Interpolated straight into markup because `readColorToken` refuses anything
+ * that is not a literal hex, so the value cannot carry a quote or a tag.
  */
-export const viewport: Viewport = {
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: CHROME_COLORS.light },
-    { media: '(prefers-color-scheme: dark)', color: CHROME_COLORS.dark },
-  ],
-};
+const NO_SCRIPT_THEME_COLOR = `<meta name="theme-color" content="${CHROME_COLORS.light}">`;
 
 /**
  * The icon set and the web app manifest are not declared here. They come from
@@ -118,19 +129,19 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        <noscript dangerouslySetInnerHTML={{ __html: NO_SCRIPT_THEME_COLOR }} />
         {/* Theme bootstrap — prevents flash on load, stamps the *choice*
             alongside the resolved theme so the header's theme control can
             render its own state from the HTML instead of waiting for
-            hydration, and repoints the `theme-color` tags above at that same
-            theme. Built from the same constants the control uses.
+            hydration, and prepends the one `theme-color` tag that carries that
+            same theme. Built from the same constants the control uses.
 
             A plain inline script, not `<Script strategy="beforeInteractive">`:
             in the App Router that strategy serialises the body into
             `self.__next_s` and Next's `appBootstrap` runs it once the client
             chunks have loaded, which is long after first paint. Only a
             parser-blocking script runs before the page is painted, which is
-            the entire point of this one. It sits after the metadata Next
-            emits, so the tags it queries are already parsed. */}
+            the entire point of this one. */}
         <script
           id="theme-init"
           dangerouslySetInnerHTML={{ __html: themeInitScript(CHROME_COLORS) }}

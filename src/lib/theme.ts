@@ -11,9 +11,11 @@
  *   render its own state — which is what forced it to wait for hydration and
  *   leave a 44x44 hole in the header.
  *
- * The `theme-color` meta tags follow `data-theme` too, for the same reason
- * every stylesheet does: an explicit choice is allowed to disagree with the
- * device, and the browser chrome has to be the colour immediately under it.
+ * The browser chrome follows `data-theme` too, for the same reason every
+ * stylesheet does: an explicit choice is allowed to disagree with the device,
+ * and the chrome has to be the colour immediately under it. It cannot be
+ * styled, so it gets a `theme-color` meta of its own —
+ * {@link RESOLVED_THEME_COLOR_ATTRIBUTE}.
  *
  * The functions that touch `window` are browser-only by design; the module has
  * no `'use client'` marker so `app/layout.tsx` can build the bootstrap script
@@ -37,18 +39,32 @@ export const DARK_SCHEME_QUERY = '(prefers-color-scheme: dark)';
  */
 export const THEME_COLOR_TOKEN = '--color-bg-alt';
 
+/** Every `theme-color` meta, whoever created it. */
+export const THEME_COLOR_META_SELECTOR = 'meta[name="theme-color"]';
+
 /**
- * Every `theme-color` meta, not the one that happens to match the device.
+ * The mark on the one `theme-color` meta that carries the *rendered* theme.
  *
  * `theme-color` has no `data-theme` selector, so the only lever from script is
- * the `content` of the tags themselves. The static export ships the
- * media-scoped pair from `app/layout.tsx` — that is the answer for a visitor
- * with no JavaScript, and the only correct one available without it. Once
- * script runs, the device preference stops being the question, so every tag is
- * pointed at the rendered theme and it no longer matters which one the browser
- * picks.
+ * a tag's `content`. Repointing the tags the page already shipped is the
+ * obvious move and it does not hold: React owns those and re-creates them on
+ * every client-side navigation, from the build-time payload. Worse, it matches
+ * them back up by `content` and `name` but never by `media`, so a repointed tag
+ * is claimed by whichever hoisted meta now shares its colour and a third tag is
+ * built for the one left unmatched. Measured on the export: two tags declared,
+ * three in the live document, and the first `<Link>` press put the light chrome
+ * colour back over a dark page for the rest of the session.
+ *
+ * So the rendered theme gets a tag of its own, created by
+ * {@link themeInitScript} before first paint and never rendered by React. It
+ * carries no `media`, so it always matches, and it is prepended to `<head>`, so
+ * it is first in tree order — the two things that make the browser paint from
+ * it. React cannot revert what it does not own.
  */
-export const THEME_COLOR_META_SELECTOR = 'meta[name="theme-color"]';
+export const RESOLVED_THEME_COLOR_ATTRIBUTE = 'data-theme-color';
+
+/** The script-owned tag from {@link RESOLVED_THEME_COLOR_ATTRIBUTE}, alone. */
+export const RESOLVED_THEME_COLOR_SELECTOR = `${THEME_COLOR_META_SELECTOR}[${RESOLVED_THEME_COLOR_ATTRIBUTE}]`;
 
 /** The chrome colour for each theme, lifted out of the stylesheets at build. */
 export type ThemeColors = Readonly<Record<ResolvedTheme, string>>;
@@ -131,18 +147,40 @@ export function storeThemeChoice(choice: ThemeChoice): void {
 }
 
 /**
- * Point every `theme-color` meta at one colour.
+ * The script-owned `theme-color` meta, created on first use.
  *
- * An empty colour is a no-op rather than an empty `content`: a tag with no
- * usable value is skipped by the browser, which would drop back to its own
- * default chrome instead of to the media-scoped value that is already there.
+ * Prepended rather than appended: the browser paints from the first tag in
+ * tree order whose `media` matches, and this one carries no `media`, so being
+ * first is what makes it the answer whatever else the page ships. Landing
+ * above `<meta charset>` costs nothing — the document was decoded while it was
+ * parsed, and this runs after that.
+ */
+function resolvedThemeColorMeta(doc: Document): HTMLMetaElement {
+  const existing = doc.head.querySelector<HTMLMetaElement>(
+    RESOLVED_THEME_COLOR_SELECTOR,
+  );
+  if (existing) return existing;
+
+  const meta = doc.createElement('meta');
+  meta.setAttribute('name', 'theme-color');
+  meta.setAttribute(RESOLVED_THEME_COLOR_ATTRIBUTE, '');
+  doc.head.prepend(meta);
+
+  return meta;
+}
+
+/**
+ * Point the browser chrome at one colour.
+ *
+ * An empty colour is a no-op rather than an empty `content`, and rather than a
+ * tag at all: a tag with no usable value is skipped by the browser, so an
+ * empty one would drop the page back to default chrome instead of to the
+ * `<noscript>` value `app/layout.tsx` ships.
  */
 export function applyThemeColor(doc: Document, color: string): void {
   if (!color) return;
 
-  for (const meta of doc.querySelectorAll(THEME_COLOR_META_SELECTOR)) {
-    meta.setAttribute('content', color);
-  }
+  resolvedThemeColorMeta(doc).setAttribute('content', color);
 }
 
 /**
@@ -151,8 +189,8 @@ export function applyThemeColor(doc: Document, color: string): void {
  * Deliberately the computed token rather than a hex handed to the client: the
  * cascade has already answered this question, so this cannot disagree with
  * what is on screen the way a second copy of the palette could. Returns `''`
- * when the stylesheet has not resolved — {@link applyThemeColor} then leaves
- * the existing tags alone.
+ * when the stylesheet has not resolved — {@link applyThemeColor} then adds no
+ * tag at all.
  */
 export function renderedThemeColor(doc: Document): string {
   const view = doc.defaultView;
@@ -182,10 +220,13 @@ export function syncThemeColor(doc: Document): void {
  * that throws used to abort the whole function and ship a page with no
  * `data-theme` at all.
  *
- * It also settles the chrome colour, in the same pass and from the same
+ * It also adds the chrome colour's tag, in the same pass and from the same
  * resolved theme, because a returning visitor whose stored choice contradicts
- * their device would otherwise have the address bar painted from the media
- * query for the whole of the first paint. The colours are passed in rather
+ * their device would otherwise read the whole first paint with the address bar
+ * painted from a device preference nothing else here follows. This is the only
+ * place that tag is created — {@link applyThemeColor} finds it afterwards and
+ * would otherwise create a second one, which `theme.test.ts` checks by running
+ * this script and then calling that function. The colours are passed in rather
  * than read here: they come from `readColorToken`, which reads the filesystem
  * and must not reach the client bundle. They are embedded through
  * `JSON.stringify` so a value can never break out of the string literal.
@@ -194,5 +235,5 @@ export function themeInitScript(colors: ThemeColors): string {
   const light = JSON.stringify(colors.light);
   const dark = JSON.stringify(colors.dark);
 
-  return `(function(){var c='system';try{var s=window.localStorage.getItem('${THEME_STORAGE_KEY}');if(s==='light'||s==='dark'){c=s}}catch(e){}var r=document.documentElement;r.setAttribute('${THEME_CHOICE_ATTRIBUTE}',c);var t=c;if(c==='system'){t='light';try{if(window.matchMedia('${DARK_SCHEME_QUERY}').matches){t='dark'}}catch(e){}}r.setAttribute('${THEME_ATTRIBUTE}',t);var k=t==='dark'?${dark}:${light},m=document.querySelectorAll('${THEME_COLOR_META_SELECTOR}');for(var i=0;i<m.length;i++){m[i].setAttribute('content',k)}})();`;
+  return `(function(){var c='system';try{var s=window.localStorage.getItem('${THEME_STORAGE_KEY}');if(s==='light'||s==='dark'){c=s}}catch(e){}var r=document.documentElement;r.setAttribute('${THEME_CHOICE_ATTRIBUTE}',c);var t=c;if(c==='system'){t='light';try{if(window.matchMedia('${DARK_SCHEME_QUERY}').matches){t='dark'}}catch(e){}}r.setAttribute('${THEME_ATTRIBUTE}',t);var m=document.createElement('meta');m.setAttribute('name','theme-color');m.setAttribute('${RESOLVED_THEME_COLOR_ATTRIBUTE}','');m.setAttribute('content',t==='dark'?${dark}:${light});document.head.prepend(m)})();`;
 }
