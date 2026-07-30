@@ -213,7 +213,7 @@ describe('Site', () => {
     for (const label of [
       'Lines of TypeScript powering this website',
       'Dependencies declared directly',
-      'Installed to run in production',
+      'Non-development dependencies on this build host',
       'Resolved into the lockfile',
       'Enforced by CI on every push',
     ]) {

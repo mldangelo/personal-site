@@ -2,6 +2,7 @@ import declarations from '../../data/stats/site';
 import { countSourceLines } from '../../lib/loc';
 import {
   countDirectDependencies,
+  countInstalledNonDevPackages,
   countLintRules,
   countLockedPackages,
 } from '../../lib/manifest';
@@ -98,14 +99,13 @@ async function fetchGitHubStats(): Promise<GitHubStatsResult> {
  * commit those bytes came from — `null`, and dropped, off CI.
  */
 function measureThisBuild(): Record<string, Measurement> {
-  const locked = countLockedPackages();
   const builtAt = Date.now();
 
   return {
     source_lines: countSourceLines(),
     direct_dependencies: countDirectDependencies(),
-    production_packages: locked?.production ?? null,
-    locked_packages: locked?.total ?? null,
+    installed_non_dev_packages: countInstalledNonDevPackages(),
+    locked_packages: countLockedPackages(),
     lint_rules: countLintRules(),
     deployed_commit: deployedCommit(),
     built_at: <BuildClock builtAt={builtAt} initial={utcDate(builtAt)} />,

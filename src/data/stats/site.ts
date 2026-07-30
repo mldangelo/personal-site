@@ -5,9 +5,9 @@ const REPO = 'https://github.com/mldangelo/personal-site';
 const BLOB = `${REPO}/blob/main`;
 
 /* Keys are filled in by `src/components/Stats/Site.tsx`: `source: 'github'`
- * rows match keys returned by the GitHub api, `source: 'measured'` rows are
+ * rows match keys returned by the GitHub API, `source: 'measured'` rows are
  * counted from the working tree at build time. To see everything returned by
- * the github api, run:
+ * the GitHub API, run:
  curl https://api.github.com/repos/mldangelo/personal-site
  *
  * Never type a figure about this codebase into this file. A `measured` row
@@ -87,10 +87,9 @@ const data: StatDeclaration[] = [
     link: `${REPO}/graphs/contributors`,
   },
   {
-    // The next four are the hardest evidence for "fast by default" and "easy
-    // to fork" in docs/design-goals.md, and they are the numbers a forker
-    // actually wants: what the project chose, what that resolves to, and how
-    // much of it a production install carries.
+    // These distinguish what the project declares, what npm actually placed
+    // outside the dev-only tree on this build host, and every package location
+    // the cross-platform lockfile resolves.
     label: 'Dependencies declared directly',
     key: 'direct_dependencies',
     source: 'measured',
@@ -98,8 +97,8 @@ const data: StatDeclaration[] = [
     link: `${BLOB}/package.json`,
   },
   {
-    label: 'Installed to run in production',
-    key: 'production_packages',
+    label: 'Non-development dependencies on this build host',
+    key: 'installed_non_dev_packages',
     source: 'measured',
     unit: 'packages',
     link: `${BLOB}/package-lock.json`,
