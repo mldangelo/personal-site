@@ -120,6 +120,60 @@ describe('stylesheet graph', () => {
   });
 });
 
+/**
+ * The printed page suppresses screen chrome, and the list is hand-maintained,
+ * so it drifts. `.skip-link` sat outside it for as long as it existed and
+ * printed an accent-filled button on four of five résumé pages.
+ *
+ * This derives the expectation from `app/layout.tsx` instead of restating it:
+ * anything rendered as a direct child of `<body>` outside `.site-wrapper` is
+ * chrome by construction — it is not page content — so it must appear in the
+ * suppression block. That is the property that was violated, and it catches the
+ * next element appended there without anyone remembering this file exists.
+ */
+describe('print chrome suppression', () => {
+  const printCss = readFileSync(
+    join(REPO_ROOT, 'app/styles/print.css'),
+    'utf8',
+  );
+  const layout = readFileSync(join(REPO_ROOT, 'app/layout.tsx'), 'utf8');
+
+  /** Class names on elements rendered directly under `<body>`. */
+  function bodyLevelClasses(): string[] {
+    const body = layout.slice(layout.indexOf('<body'));
+    const found = new Set<string>();
+
+    for (const match of body.matchAll(/className="([a-z][a-z0-9- ]*)"/g)) {
+      for (const name of match[1].split(/\s+/)) {
+        // `site-wrapper` holds the page itself; everything else at this level
+        // is chrome.
+        if (name && name !== 'site-wrapper') found.add(name);
+      }
+    }
+
+    return [...found];
+  }
+
+  it('suppresses the skip link, which is not inside the header', () => {
+    expect(printCss).toMatch(/^\s*\.skip-link,$/m);
+  });
+
+  it('suppresses every chrome element rendered at body level', () => {
+    const classes = bodyLevelClasses();
+
+    // Guard the guard: if the layout stops rendering chrome at body level this
+    // test would pass vacuously.
+    expect(classes.length).toBeGreaterThan(0);
+
+    for (const name of classes) {
+      expect(
+        printCss,
+        `.${name} is rendered at body level but never suppressed for print`,
+      ).toContain(`.${name},`);
+    }
+  });
+});
+
 // There was a fourth guard here, asserting that `::view-transition-*` CSS may
 // only exist when `next.config.mjs` sets `experimental.viewTransition`. It is
 // deliberately gone rather than repaired, for two independent reasons.
