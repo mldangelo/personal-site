@@ -1,5 +1,4 @@
-import type { Metadata, Viewport } from 'next';
-import Script from 'next/script';
+import type { Metadata } from 'next';
 
 import { SiteSchema } from '@/components/Schema';
 import GoogleAnalytics from '@/components/Template/GoogleAnalytics';
@@ -7,31 +6,28 @@ import Navigation from '@/components/Template/Navigation';
 import { MAIN_CONTENT_ID } from '@/components/Template/PageWrapper';
 import ScrollToTop from '@/components/Template/ScrollToTop';
 import { sharedOpenGraph, sharedTwitter } from '@/lib/metadata';
+import {
+  THEME_COLOR_TOKEN,
+  type ThemeColors,
+  themeInitScript,
+} from '@/lib/theme-color';
 import { readColorToken } from '@/lib/tokens';
 import { AUTHOR_NAME, SITE_DESCRIPTION, SITE_URL } from '@/lib/utils';
 import { bricolage, jetbrainsMono, newsreader } from './fonts';
 import './tailwind.css';
 
-/**
- * `theme-color` paints the browser's own chrome — the Android address bar, the
- * Safari toolbar — so it has to be the colour immediately under it, which is
- * the page background the sticky header tints. One unscoped value is wrong in
- * whichever theme it was not picked for, so both are declared and scoped by
- * `prefers-color-scheme`. The values are read from the stylesheets at build
- * time rather than typed here, so they cannot drift from the tokens.
- */
-export const viewport: Viewport = {
-  themeColor: [
-    {
-      media: '(prefers-color-scheme: light)',
-      color: readColorToken('--color-bg-alt', 'light'),
-    },
-    {
-      media: '(prefers-color-scheme: dark)',
-      color: readColorToken('--color-bg-alt', 'dark'),
-    },
-  ],
+const CHROME_COLORS: ThemeColors = {
+  light: readColorToken(THEME_COLOR_TOKEN, 'light'),
+  dark: readColorToken(THEME_COLOR_TOKEN, 'dark'),
 };
+
+/**
+ * Without JavaScript the site stays in its default light theme, whatever the
+ * device preference is, so its browser chrome must do the same. With
+ * JavaScript, the parser-blocking bootstrap below creates a separate,
+ * unscoped tag for the resolved site theme.
+ */
+const NO_SCRIPT_THEME_COLOR = `<meta name="theme-color" content="${CHROME_COLORS.light}">`;
 
 /**
  * The icon set and the web app manifest are not declared here. They come from
@@ -104,10 +100,14 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        {/* CSP-safe theme initialization - prevents flash on load */}
-        <Script id="theme-init" strategy="beforeInteractive">
-          {`(function(){try{var t=window.localStorage.getItem('theme');if(t==='dark'||t==='light'){document.documentElement.setAttribute('data-theme',t)}else if(window.matchMedia('(prefers-color-scheme:dark)').matches){document.documentElement.setAttribute('data-theme','dark')}else{document.documentElement.setAttribute('data-theme','light')}}catch(e){}})();`}
-        </Script>
+        <noscript dangerouslySetInnerHTML={{ __html: NO_SCRIPT_THEME_COLOR }} />
+        {/* A literal inline script is parser-blocking. In the App Router,
+            next/script's beforeInteractive strategy is queued for Next's
+            client bootstrap and can run after first paint. */}
+        <script
+          id="theme-init"
+          dangerouslySetInnerHTML={{ __html: themeInitScript(CHROME_COLORS) }}
+        />
         <SiteSchema />
       </head>
       <body>

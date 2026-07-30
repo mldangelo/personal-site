@@ -12,7 +12,8 @@
  *
  * Run with `npm run icons`. The output is committed, like `public/og.png`, so
  * builds stay deterministic and do not depend on Google Fonts being reachable
- * from CI.
+ * from CI. Regeneration downloads one exact, versioned TTF and rejects it
+ * unless its bytes match the digest recorded below.
  *
  * What each output is for, and how it is reached:
  *   app/favicon.ico              /favicon.ico — requested by convention, with
@@ -47,6 +48,20 @@ const MANIFEST_ICON_DIR = join(root, 'public', 'images', 'icons');
 const META_OUTPUT = join(root, 'scripts', 'icons.meta.json');
 
 /**
+ * Satori cannot read the self-hosted WOFF2 files used by the site, so icon
+ * generation needs a TTF. Both the versioned URL and the expected bytes are
+ * pinned: the network is transport, not an unrecorded generator input.
+ */
+const ICON_FONT = Object.freeze({
+  name: 'Display',
+  family: 'Bricolage Grotesque',
+  weight: 800,
+  style: 'normal',
+  url: 'https://fonts.gstatic.com/s/bricolagegrotesque/v9/3y9U6as8bTXq_nANBjzKo3IeZx8z6up5BeSl5jBNz_19PpbpMXuECpwUxJBOm_OJWiaaD30YfKfjZZoLvZvlyM0.ttf',
+  sha256: '50fe1039eb3ff208d027a4867d3f53bd288bba76273a718578f7b3ec0feec388',
+});
+
+/**
  * Reads one custom property out of a token stylesheet.
  *
  * Deliberately narrow: the value has to be a literal hex colour. `next/og`
@@ -73,34 +88,26 @@ async function readColorToken(path, name) {
 }
 
 /**
- * Fetches a font from Google as TTF, which is what satori accepts.
- *
- * Google's CSS endpoint serves woff2 to modern browsers and TTF to older
- * clients, so the request deliberately goes out without a browser User-Agent.
- * The self-hosted Fontsource copy in `node_modules` is woff2 only, which
- * satori cannot read, so this cannot be sourced locally.
- *
- * `generate-og.mjs` carries the same function. It is copied rather than shared
- * because that generator's source is folded into the digest committed in
- * `public/og.meta.json`: editing it to extract a helper would invalidate the
- * committed share card and fail `npm run og:check`.
+ * Downloads and verifies the only binary input not committed to the
+ * repository. A changed response fails before any generated file is written.
  */
-async function loadGoogleFont(family, weight) {
-  const css = await fetch(
-    `https://fonts.googleapis.com/css2?family=${family}:wght@${weight}`,
-  ).then((response) => response.text());
-
-  const url = css.match(/src:\s*url\((https:\/\/[^)]+)\)/)?.[1];
-  if (!url) {
-    throw new Error(`No font URL found for ${family} ${weight}`);
+async function loadIconFont() {
+  const response = await fetch(ICON_FONT.url);
+  if (!response.ok) {
+    throw new Error(
+      `Failed to download ${ICON_FONT.family}: ${response.status}`,
+    );
   }
 
-  const font = await fetch(url);
-  if (!font.ok) {
-    throw new Error(`Failed to download ${family}: ${font.status}`);
+  const font = Buffer.from(await response.arrayBuffer());
+  const digest = createHash('sha256').update(font).digest('hex');
+  if (digest !== ICON_FONT.sha256) {
+    throw new Error(
+      `Unexpected ${ICON_FONT.family} font digest: expected ${ICON_FONT.sha256}, received ${digest}`,
+    );
   }
 
-  return font.arrayBuffer();
+  return font;
 }
 
 /**
@@ -146,8 +153,8 @@ function mark(size, ratio, colors, monogram) {
       {
         style: {
           display: 'flex',
-          fontFamily: 'Display',
-          fontWeight: 800,
+          fontFamily: ICON_FONT.name,
+          fontWeight: ICON_FONT.weight,
           fontSize: Math.round(size * ratio),
           // No optical tracking. The share card tightens the big name to
           // -0.045em, but satori charges that to the layout box without
@@ -166,7 +173,14 @@ async function renderPng(size, ratio, colors, monogram, fontData) {
   const response = new ImageResponse(mark(size, ratio, colors, monogram), {
     width: size,
     height: size,
-    fonts: [{ name: 'Display', data: fontData, weight: 800, style: 'normal' }],
+    fonts: [
+      {
+        name: ICON_FONT.name,
+        data: fontData,
+        weight: ICON_FONT.weight,
+        style: ICON_FONT.style,
+      },
+    ],
   });
 
   return Buffer.from(await response.arrayBuffer());
@@ -235,7 +249,7 @@ const RASTERS = [
   { size: 512, ratio: 0.38, key: 'maskable512' },
 ];
 
-const display = await loadGoogleFont('Bricolage+Grotesque', 800);
+const display = await loadIconFont();
 
 const rendered = new Map();
 for (const { size, ratio, text, key } of RASTERS) {
@@ -312,6 +326,7 @@ const inputs = {
   backgroundDark: bgDark,
   monogram: MONOGRAM,
   name: profile.name,
+  font: ICON_FONT,
 };
 
 await writeFile(

@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, posix } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 import profile from '@/data/profile.json';
@@ -27,6 +27,14 @@ type IconsMeta = {
     backgroundDark: string;
     monogram: string;
     name: string;
+    font: {
+      name: string;
+      family: string;
+      weight: number;
+      style: string;
+      url: string;
+      sha256: string;
+    };
   };
   generatorDigest: string;
   files: Record<string, string>;
@@ -74,6 +82,23 @@ describe('generated icon set', () => {
     );
   });
 
+  it('pins the exact supported font bytes used by the generator', () => {
+    const fontUrl = new URL(meta.inputs.font.url);
+
+    expect(meta.inputs.font).toMatchObject({
+      name: 'Display',
+      family: 'Bricolage Grotesque',
+      weight: 800,
+      style: 'normal',
+    });
+    expect(fontUrl.protocol).toBe('https:');
+    expect(fontUrl.hostname).toBe('fonts.gstatic.com');
+    expect(fontUrl.pathname).toMatch(
+      /^\/s\/bricolagegrotesque\/v\d+\/[^/]+\.ttf$/,
+    );
+    expect(meta.inputs.font.sha256).toMatch(/^[0-9a-f]{64}$/);
+  });
+
   it('was produced by the committed generator', () => {
     const source = readFileSync(
       join(root, 'scripts', 'generate-icons.mjs'),
@@ -94,6 +119,13 @@ describe('generated icon set', () => {
       .digest('hex');
 
     expect(digest, STALE).toBe(meta.files[path]);
+  });
+
+  it('records portable repository paths in the ledger', () => {
+    for (const path of Object.keys(meta.files)) {
+      expect(path).not.toContain('\\');
+      expect(path).toBe(posix.normalize(path));
+    }
   });
 
   /**
@@ -176,7 +208,7 @@ describe('generated web app manifest', () => {
     for (const icon of manifest.icons) {
       expect(icon.src.startsWith('/')).toBe(false);
       expect(icon.src.startsWith('http')).toBe(false);
-      expect(Object.keys(meta.files)).toContain(join('public', icon.src));
+      expect(Object.keys(meta.files)).toContain(posix.join('public', icon.src));
     }
   });
 

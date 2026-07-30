@@ -1,52 +1,54 @@
+import { createElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
 
+import {
+  RESOLVED_THEME_COLOR_ATTRIBUTE,
+  THEME_COLOR_TOKEN,
+} from '@/lib/theme-color';
 import { readColorToken } from '@/lib/tokens';
-import { viewport } from '../layout';
+import RootLayout from '../layout';
 
 // `next/font/local` only exists as a build-time transform, so importing the
-// root layout for its `viewport` export needs it stubbed. The stub returns the
-// shape `app/fonts.ts` destructures and nothing else. `vi.mock` is hoisted
-// above the import above, which is why this can be a static import rather than
-// a top-level `await import` — `target` here is es2015, which forbids one.
+// root layout needs it stubbed. `vi.mock` is hoisted above the static import.
 vi.mock('next/font/local', () => ({
   default: () => ({ variable: 'font-mock', className: 'font-mock', style: {} }),
 }));
 
-/**
- * The export shipped with no `theme-color` at all, so mobile browsers painted
- * their chrome from their own default rather than from the page. A single
- * unscoped value only fixes that for one of the two themes, which is why this
- * pins the media-scoped pair rather than merely pinning that a value exists.
- */
-describe('theme-color', () => {
-  const themeColor = viewport.themeColor;
+const LIGHT = readColorToken(THEME_COLOR_TOKEN, 'light');
+const DARK = readColorToken(THEME_COLOR_TOKEN, 'dark');
 
-  it('declares one media-scoped value per colour scheme', () => {
-    expect(Array.isArray(themeColor)).toBe(true);
-    expect(themeColor).toEqual([
-      {
-        media: '(prefers-color-scheme: light)',
-        color: readColorToken('--color-bg-alt', 'light'),
-      },
-      {
-        media: '(prefers-color-scheme: dark)',
-        color: readColorToken('--color-bg-alt', 'dark'),
-      },
-    ]);
+function renderedHead(): string {
+  return (
+    /<head>([\s\S]*?)<\/head>/.exec(
+      renderToStaticMarkup(createElement(RootLayout, { children: null })),
+    )?.[1] ?? ''
+  );
+}
+
+describe('theme-color', () => {
+  it('uses two different page-background colours', () => {
+    expect(LIGHT).not.toBe(DARK);
+    expect(LIGHT).not.toBe(readColorToken('--color-bg', 'light'));
+    expect(DARK).not.toBe(readColorToken('--color-bg', 'dark'));
   });
 
-  /**
-   * `theme-color` sits directly above the page, and the sticky header tints
-   * the page background rather than introducing its own surface. Reading
-   * `--color-bg` instead would put the raised-surface colour next to the
-   * page's.
-   */
-  it('uses the page background, not the raised surface', () => {
-    const values = (
-      themeColor as ReadonlyArray<{ media?: string; color: string }>
-    ).map((entry) => entry.color);
+  it('ships the only no-JavaScript theme, light, as its fallback', () => {
+    const head = renderedHead();
 
-    expect(values).not.toContain(readColorToken('--color-bg', 'light'));
-    expect(values).not.toContain(readColorToken('--color-bg', 'dark'));
+    expect(head).toContain(
+      `<noscript><meta name="theme-color" content="${LIGHT}"></noscript>`,
+    );
+    expect(head).not.toContain('media="(prefers-color-scheme:');
+  });
+
+  it('runs the resolved-theme bootstrap before first paint', () => {
+    const head = renderedHead();
+
+    expect(head).toMatch(/<script id="theme-init">\(function\(\)\{/);
+    expect(head).not.toContain('__next_s');
+    expect(head).toContain(JSON.stringify(LIGHT));
+    expect(head).toContain(JSON.stringify(DARK));
+    expect(head).toContain(RESOLVED_THEME_COLOR_ATTRIBUTE);
   });
 });
