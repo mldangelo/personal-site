@@ -92,8 +92,18 @@ const LEADING_PATTERNS: Array<{
 /**
  * Markers the sentence is built around, which cannot be lifted without
  * rewriting it: "…in my bedroom in 1993 when I was 3", "…to AOL in 1995".
- * Both are anchored to a preposition or to "I was" so that a stray number —
- * "approximately 50 countries", "a Sony Mavica MVC-FD71" — is not read as a date.
+ *
+ * Both are anchored so a stray number is not read as a date, and the two
+ * anchors stop different numbers, so each needs its own example.
+ * `INLINE_YEAR` wants a preposition in front of the year, which is what keeps
+ * a model number out of the gutter: unanchored, "an old Tandy 2000" files the
+ * entry under 2000. Its word boundaries carry the near misses — "a Garmin
+ * 2000" would match on the "in" ending "Garmin", "a box of 1990s" on a decade
+ * — and `YEAR_PATTERN`'s 18xx/19xx/20xx shape is the only thing rejecting "a
+ * floppy of 1440 KB", which is already a preposition in front of four digits.
+ * `INLINE_AGE` wants "I was" or "at the age of" in front of the number, which
+ * is what keeps a count out of it: unanchored, "approximately 50 countries"
+ * reads as Age 50 and dates the entry to 2040.
  */
 const INLINE_YEAR = new RegExp(
   `\\b(?:in|of|since|during|by)\\s+(${YEAR_PATTERN.source})\\b`,

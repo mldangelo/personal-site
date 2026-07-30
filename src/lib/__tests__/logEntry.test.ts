@@ -147,14 +147,13 @@ describe('extractLogMarker', () => {
   });
 
   it('does not read a number that is not a date as a year', () => {
-    // Every string here contains a run of digits that `YEAR_PATTERN` matches on
-    // its own, which is what makes this test able to fail: relax any part of
-    // the inline year guard — the preposition anchor, either word boundary, or
-    // the 18xx/19xx/20xx shape — and one of these arrives in the gutter as a
-    // date. The prose the guard was written for cannot do that. "Mavica
-    // MVC-FD71", "Nikon D750", "Pentium III", "approximately 50 countries" hold
-    // no four-digit run at all, so a test built from them passes against a
-    // guard that has been deleted.
+    // One string per part of the inline year guard, which is what makes this
+    // test able to fail: relax the preposition anchor, either word boundary, or
+    // the 18xx/19xx/20xx shape, and exactly one of these arrives in the gutter
+    // as a date. The prose the guard was written for cannot do that — "Mavica
+    // MVC-FD71", "Nikon D750" and "Pentium III" hold no digit run either inline
+    // pattern can reach, so a test built from them passes against a guard that
+    // has been deleted.
     for (const text of [
       // An unprefixed model number: nothing here says this 2000 is a date.
       'It was an old Tandy 2000 that ran MS-DOS.',
@@ -174,6 +173,25 @@ describe('extractLogMarker', () => {
       extractLogMarker('I retired that Tandy in 2000, after seven years.')
         ?.year,
     ).toBe('2000');
+  });
+
+  it('does not read a bare count as an age', () => {
+    // The other inline anchor, which holds back a different number: a small
+    // quantity, not a model number. Drop "I was" / "at the age of" from
+    // `INLINE_AGE` and this one is filed as Age 50, in 2040.
+    expect(
+      extractLogMarker(
+        "I've been to approximately 50 countries, some of which I have forgotten.",
+      ),
+    ).toBeNull();
+
+    // The same number after the anchor still reads, mid-sentence and so through
+    // `INLINE_AGE` rather than a leading pattern: the guard is a distinction,
+    // not a refusal.
+    expect(
+      extractLogMarker('I set the record at my local laser tag when I was 12.')
+        ?.age,
+    ).toBe('Age 12');
   });
 
   it('omits the age for a year that predates the birth year', () => {
