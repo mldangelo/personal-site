@@ -163,3 +163,30 @@ export function totalExperienceYears(
 
   return Math.floor(monthsBetween(earliestStart, now) / 12);
 }
+
+/**
+ * The role to describe as current in site-wide copy: the JSON-LD `jobTitle` and
+ * `worksFor`, and the footer's one-line identity.
+ *
+ * `schema.ts` and `Footer.tsx` both used to read `work[0]` off the raw array.
+ * That was correct only because the newest role happens to be written first,
+ * and this module's own docstring had just declared source order *not*
+ * load-bearing — a new entry appended anywhere was documented as safe, and
+ * would silently have rewritten the site's JSON-LD employer and the footer of
+ * every page.
+ *
+ * "Current" is derived rather than positional: the ongoing role — no `endDate`
+ * — that is somebody's actual job, newest start first. `commitment:
+ * 'part-time'` is excluded deliberately, for the same reason it does not lead
+ * the resume spine: an angel fund running alongside a full-time post is not the
+ * answer to "where does he work". If nothing is ongoing, the most recently
+ * ended role stands in, so this never returns `undefined` for a non-empty list
+ * and callers need no fallback branch.
+ */
+export function currentPosition(positions: Position[]): Position | undefined {
+  const ongoingFullTime = positions
+    .filter((entry) => !entry.endDate && entry.commitment !== 'part-time')
+    .sort((a, b) => b.startDate.localeCompare(a.startDate));
+
+  return ongoingFullTime[0] ?? sortPositions(positions)[0];
+}

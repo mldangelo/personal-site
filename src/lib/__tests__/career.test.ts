@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import type { Position } from '@/data/resume/work';
 import work from '@/data/resume/work';
 import {
+  currentPosition,
   formatDuration,
   monthsBetween,
   positionDuration,
@@ -321,5 +322,63 @@ describe('totalExperienceYears', () => {
     expect(totalExperienceYears(work, laterYear)).toBe(
       totalExperienceYears(work, NOW) + 1,
     );
+  });
+});
+
+describe('currentPosition', () => {
+  it('names the ongoing full-time role, not the first in the array', () => {
+    expect(currentPosition(work)?.name).toBe('OpenAI');
+  });
+
+  it('is independent of source order', () => {
+    // The property `schema.ts` and `Footer.tsx` used to depend on by accident:
+    // appending or reordering entries must not change the site-wide employer.
+    const reversed = [...work].reverse();
+
+    expect(currentPosition(reversed)?.name).toBe(currentPosition(work)?.name);
+  });
+
+  it('skips an ongoing part-time role in favour of the full-time one', () => {
+    const chosen = currentPosition([
+      position({
+        name: 'Side Fund',
+        startDate: '2017-04-01',
+        endDate: undefined,
+        commitment: 'part-time',
+      }),
+      position({
+        name: 'Day Job',
+        startDate: '2024-01-01',
+        endDate: undefined,
+      }),
+    ]);
+
+    expect(chosen?.name).toBe('Day Job');
+  });
+
+  it('prefers the newest start when two full-time roles are both ongoing', () => {
+    const chosen = currentPosition([
+      position({ name: 'Older', startDate: '2020-01-01', endDate: undefined }),
+      position({ name: 'Newer', startDate: '2026-03-09', endDate: undefined }),
+    ]);
+
+    expect(chosen?.name).toBe('Newer');
+  });
+
+  it('falls back to the most recently ended role when nothing is ongoing', () => {
+    const chosen = currentPosition([
+      position({ name: 'Old', startDate: '2014-01-01', endDate: '2016-01-01' }),
+      position({
+        name: 'Recent',
+        startDate: '2018-01-01',
+        endDate: '2022-01-01',
+      }),
+    ]);
+
+    expect(chosen?.name).toBe('Recent');
+  });
+
+  it('returns undefined for an empty list rather than throwing', () => {
+    expect(currentPosition([])).toBeUndefined();
   });
 });
