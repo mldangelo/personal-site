@@ -11,11 +11,11 @@ export type SkillTier = 'core' | 'working' | 'familiar';
  * Three coarse tiers derived from the 1–5 self-score.
  *
  * The score is a self-assessment, so it is reported at the precision it
- * actually has: a tier, not a plotted value with an axis. The tier is rendered
- * as real text rather than encoded in the tag's colour, which is what the tag
- * used to do — a colour-only cue fails WCAG 1.4.1, and the `aria-label` it was
- * paired with sat on a bare `<span>`, whose role is `generic`, so browsers
- * discarded the name and screen readers announced nothing at all.
+ * actually has: a tier, not a plotted value with an axis. The old tag varied
+ * size and weight by score, but its numeric `aria-label` sat on a bare
+ * `<span>`, whose `generic` role cannot take an accessible name. The visible
+ * legend explains the three tiers once; each tag includes its own tier as
+ * visually hidden text so non-visual readers receive the same information.
  */
 export function tierFor(competency: number): SkillTier {
   if (competency >= MAX_COMPETENCY) return 'core';
@@ -30,10 +30,7 @@ export default function SkillTag({ data }: SkillTagProps) {
   return (
     <span className={`skill-tag skill-tag--${tier}`}>
       <span className="skill-tag-name">{title}</span>
-      <span className="skill-tag-tier">
-        <span className="sr-only">proficiency: </span>
-        {tier}
-      </span>
+      <span className="sr-only">, proficiency: {tier}</span>
     </span>
   );
 }

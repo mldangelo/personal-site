@@ -128,9 +128,9 @@ const skills: Skill[] = [
  * This used to hand every category a `color` as well — and it handed all of
  * them the same `var(--color-accent)`, so the per-tag tick it painted came out
  * identical on every rendered tag. A whole prop chain carried a value that
- * distinguished nothing, and it was the only cue for competency, which a colour
- * cannot legibly carry anyway (WCAG 1.4.1). Competency is text on the tag now;
- * see `tierFor` in `Skills/SkillTag.tsx`.
+ * distinguished neither categories nor competency. Competency was derived
+ * independently from the numeric score; see `tierFor` in
+ * `Skills/SkillTag.tsx`.
  */
 function buildCategories(skillsList: Skill[]): Category[] {
   const uniqueCategories = Array.from(

@@ -39,15 +39,12 @@
   justify-content: flex-start;
 }
 
-/* Skills read as a small record: name, then the competency tier as a mono
-   annotation. The tick that used to sit here was painted from a per-category
-   colour that resolved to the same accent for every category, so it separated
-   nothing — and competency, the one thing it was standing in for, cannot be
-   carried by colour alone (WCAG 1.4.1). It is text now. */
+/* The old per-category tick resolved to the same accent in every category, so
+   it communicated nothing. Competency was conveyed separately through the
+   tag's size and weight. */
 .skill-tag {
   display: inline-flex;
   align-items: center;
-  gap: 0.5em;
   padding: 0.4em 0.75em;
   background: transparent;
   border: var(--rule) solid var(--color-border);
@@ -70,13 +67,24 @@
   white-space: nowrap;
 }
 
-/* Competency tier — annotation, in the same register as the group labels. */
-.skill-tag-tier {
+/* Explain the three visual weights once instead of repeating CORE / WORKING /
+   FAMILIAR inside every tag. Individual tags repeat their tier for assistive
+   technology with visually hidden text. */
+.skill-tier-legend {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.75rem 0 1.5rem;
+  font-family: var(--font-mono);
   font-size: var(--text-2xs);
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;
   color: var(--color-fg-light);
-  white-space: nowrap;
+}
+
+.skill-tier-legend-label {
+  color: var(--color-fg);
 }
 
 /* Tech tags — squared, quiet, mono. */
@@ -101,8 +109,8 @@
   border-color: var(--color-border-alt);
 }
 
-/* Tier variations — weight, not scale, and never the only cue: the tier is
-   spelled out on the tag, so these only reinforce it. */
+/* Tier variations — the legend names these weights once, and each tag carries
+   a visually hidden textual equivalent. */
 .skill-tag--core {
   font-weight: var(--font-weight-medium);
   color: var(--color-fg-bold);

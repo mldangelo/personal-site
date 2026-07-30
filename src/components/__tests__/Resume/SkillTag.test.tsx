@@ -28,21 +28,20 @@ describe('SkillTag', () => {
   });
 
   /**
-   * Competency used to reach the reader only through `--tag-color` (identical
-   * for every category) and an `aria-label` on a bare `<span>`, which maps to
-   * role `generic` — browsers discard accessible names there, so the
-   * proficiency was announced to nobody. It is real text now.
+   * The old visual size/weight cue was paired with an `aria-label` on a bare
+   * `<span>`, which maps to role `generic`. Browsers discard accessible names
+   * there, so the proficiency was announced to nobody.
    */
-  it('states the competency tier as text', () => {
+  it('states the competency tier in visually hidden text', () => {
     const skill = { title: 'Python', competency: 5, category: ['Languages'] };
 
     render(<SkillTag data={skill} />);
 
     const tag = document.querySelector('.skill-tag') as HTMLElement;
-    expect(tag.textContent).toContain('core');
-    expect(tag.querySelector('.skill-tag-tier')).toHaveTextContent(
-      'proficiency: core',
+    expect(tag.querySelector('.sr-only')).toHaveTextContent(
+      ', proficiency: core',
     );
+    expect(tag.querySelector('.skill-tag-tier')).not.toBeInTheDocument();
   });
 
   it('does not lean on an accessible name a generic element would discard', () => {
@@ -73,7 +72,9 @@ describe('SkillTag', () => {
 
     const tag = document.querySelector('.skill-tag');
     expect(tag).toHaveClass('skill-tag--working');
-    expect(tag).toHaveTextContent('working');
+    expect(tag?.querySelector('.sr-only')).toHaveTextContent(
+      'proficiency: working',
+    );
   });
 
   it('applies the familiar tier class for competency 3 or below', () => {
@@ -83,12 +84,15 @@ describe('SkillTag', () => {
 
     const tag = document.querySelector('.skill-tag');
     expect(tag).toHaveClass('skill-tag--familiar');
-    expect(tag).toHaveTextContent('familiar');
+    expect(tag?.querySelector('.sr-only')).toHaveTextContent(
+      'proficiency: familiar',
+    );
   });
 
   /**
-   * The tier is the only competency cue, so it has to survive greyscale and
-   * print. No inline colour may be reintroduced to carry it.
+   * The old category colour did not encode competency and distinguished no
+   * categories because every value was identical. Do not restore that prop
+   * chain as if it were part of the tier model.
    */
   it('sets no inline colour custom property', () => {
     const skill = {

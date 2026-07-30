@@ -152,6 +152,18 @@ describe('Skills', () => {
     expect(groupTitles.length).toBeGreaterThan(0);
   });
 
+  it('explains competency tiers once instead of repeating them visibly on every tag', () => {
+    const { container } = render(
+      <Skills skills={mockSkills} categories={mockCategories} />,
+    );
+
+    expect(container.querySelectorAll('.skill-tier-legend')).toHaveLength(1);
+    expect(container.querySelector('.skill-tier-legend')).toHaveTextContent(
+      /Levels\s*Core\s*·\s*Working\s*·\s*Familiar/,
+    );
+    expect(container.querySelectorAll('.skill-tag-tier')).toHaveLength(0);
+  });
+
   /**
    * Clicking a filter used to change most of the section with no announcement
    * of any kind — `aria-pressed` reports the control, not the outcome — and

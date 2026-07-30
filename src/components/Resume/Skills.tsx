@@ -114,6 +114,14 @@ export default function Skills({ skills, categories }: SkillsProps) {
       <p className="sr-only" role="status" aria-live="polite">
         {filterStatus}
       </p>
+      <p className="skill-tier-legend">
+        <span className="skill-tier-legend-label">Levels</span>
+        <span className="skill-tag--core">Core</span>
+        <span aria-hidden="true">·</span>
+        <span className="skill-tag--working">Working</span>
+        <span aria-hidden="true">·</span>
+        <span className="skill-tag--familiar">Familiar</span>
+      </p>
       <div className="skill-groups">
         {groupedSkills.map(({ category, skills: categorySkills }) => {
           const isVisible =
