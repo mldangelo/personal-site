@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Script from 'next/script';
 
 import { SiteSchema } from '@/components/Schema';
 import GoogleAnalytics from '@/components/Template/GoogleAnalytics';
@@ -74,13 +73,14 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        {/* CSP-safe theme initialization — prevents flash on load, and stamps
+        {/* Pre-paint theme initialization — prevents flash on load, and stamps
             the *choice* alongside the resolved theme so the header's theme
             control can render its own state from the HTML instead of waiting
             for hydration. Built from the same constants the control uses. */}
-        <Script id="theme-init" strategy="beforeInteractive">
-          {themeInitScript()}
-        </Script>
+        <script
+          id="theme-init"
+          dangerouslySetInnerHTML={{ __html: themeInitScript() }}
+        />
         <SiteSchema />
       </head>
       <body>

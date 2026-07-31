@@ -13,9 +13,9 @@ import {
 } from '@/lib/theme';
 import ThemeToggle from '../../Template/ThemeToggle';
 
-const SYSTEM_LABEL = 'Theme: system. Switch to light.';
-const LIGHT_LABEL = 'Theme: light. Switch to dark.';
-const DARK_LABEL = 'Theme: dark. Switch to system.';
+const SYSTEM_LABEL = 'Theme preference: system. Switch to light.';
+const LIGHT_LABEL = 'Theme preference: light. Switch to dark.';
+const DARK_LABEL = 'Theme preference: dark. Switch to system.';
 
 /** A `matchMedia` stand-in whose preference can be flipped mid-test. */
 function stubColorScheme(prefersDark: boolean) {

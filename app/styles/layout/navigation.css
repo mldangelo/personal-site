@@ -146,8 +146,9 @@
   display: flex;
 }
 
-/* No choice stamped means the bootstrap never ran. Following the device is
-   what the page is doing in that case, so that is what the control shows. */
+/* No choice stamped means the bootstrap never ran, so the real preference is
+   unknowable from CSS. Show the default `system` choice until the client can
+   read storage instead of pretending the resolved light/dark theme was forced. */
 :root:not([data-theme-choice]) .theme-toggle-state[data-theme-state='system'] {
   display: flex;
 }

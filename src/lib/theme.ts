@@ -96,10 +96,11 @@ export function storeThemeChoice(choice: ThemeChoice): void {
 /**
  * The inline `<head>` script that stamps both attributes before first paint.
  *
- * Built from the constants above so the bootstrap and the React control cannot
- * drift apart. Each `window` access is guarded separately: a `localStorage`
- * that throws used to abort the whole function and ship a page with no
- * `data-theme` at all.
+ * Built from the constants above so the bootstrap and the React control share
+ * one vocabulary. Their storage parsing is necessarily duplicated inside the
+ * generated script, so an agreement test guards it against drift. Each
+ * `window` access is guarded separately: a `localStorage` that throws used to
+ * abort the whole function and ship a page with no `data-theme` at all.
  */
 export function themeInitScript(): string {
   return `(function(){var c='system';try{var s=window.localStorage.getItem('${THEME_STORAGE_KEY}');if(s==='light'||s==='dark'){c=s}}catch(e){}var r=document.documentElement;r.setAttribute('${THEME_CHOICE_ATTRIBUTE}',c);var t=c;if(c==='system'){t='light';try{if(window.matchMedia('${DARK_SCHEME_QUERY}').matches){t='dark'}}catch(e){}}r.setAttribute('${THEME_ATTRIBUTE}',t)})();`;

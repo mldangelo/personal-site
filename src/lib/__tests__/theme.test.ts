@@ -80,6 +80,19 @@ describe('theme', () => {
       expect(nextThemeChoice('dark')).toBe('system');
     });
 
+    it('walks in the order THEME_CHOICES documents', () => {
+      const walked: ThemeChoice[] = [];
+      let cursor: ThemeChoice = 'system';
+
+      for (let step = 0; step < THEME_CHOICES.length; step += 1) {
+        walked.push(cursor);
+        cursor = nextThemeChoice(cursor);
+      }
+
+      expect(walked).toEqual(THEME_CHOICES);
+      expect(cursor).toBe('system');
+    });
+
     it('reaches every state from every state, so none is a dead end', () => {
       for (const start of THEME_CHOICES) {
         const seen = new Set<ThemeChoice>([start]);

@@ -16,7 +16,9 @@ import {
 } from '@/lib/theme';
 
 /**
- * A display, for the state that follows whatever the display is set to.
+ * A monitor icon for the state that follows the device's color-scheme
+ * preference.
+ *
  * Local because nothing outside this control needs it; same Feather geometry
  * and stroke as the sun and moon it sits beside.
  */
@@ -56,7 +58,7 @@ const ICONS: Record<ThemeChoice, ReactNode> = {
  * label cannot disagree with the cycle it describes.
  */
 function labelFor(choice: ThemeChoice): string {
-  return `Theme: ${choice}. Switch to ${nextThemeChoice(choice)}.`;
+  return `Theme preference: ${choice}. Switch to ${nextThemeChoice(choice)}.`;
 }
 
 /**
