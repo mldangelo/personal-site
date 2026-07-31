@@ -38,15 +38,20 @@ function isEarlyCareer(job: Position): boolean {
 /**
  * How much weight a role should carry on the spine.
  *
- * The lead is derived from the newest substantive start date, not array
- * position. This keeps reordering the source data from silently changing the
- * visual hierarchy while still letting ongoing side roles remain primary.
+ * The lead is derived from the newest substantive, non-side-role start date,
+ * not array position. This keeps reordering the source data from silently
+ * changing the visual hierarchy while ensuring a newly added part-time
+ * engagement cannot outrank the primary career.
  */
 export function tierFor(job: Position, positions: Position[]): JobTier {
   if (isEarlyCareer(job)) return 'early';
+  if (job.commitment === 'part-time') return 'primary';
 
   const newestStartDate = positions
-    .filter((position) => !isEarlyCareer(position))
+    .filter(
+      (position) =>
+        !isEarlyCareer(position) && position.commitment !== 'part-time',
+    )
     .map((position) => position.startDate)
     .sort((a, b) => b.localeCompare(a))[0];
 

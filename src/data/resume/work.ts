@@ -1,6 +1,4 @@
-/**
- * Conforms to https://jsonresume.org/schema/
- */
+/** Based on the JSON Resume work item, with a local `commitment` extension. */
 export interface Position {
   name: string;
   position: string;
