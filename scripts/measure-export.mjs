@@ -29,7 +29,7 @@ import {
   statSync,
   writeFileSync,
 } from 'node:fs';
-import { extname, join, relative, resolve } from 'node:path';
+import { extname, isAbsolute, join, relative, resolve, sep } from 'node:path';
 
 import { attribute, elements, tags } from './lib/html.mjs';
 import { exportLayout, readSiteConfig, toUrlPath } from './lib/site.mjs';
@@ -79,6 +79,30 @@ function parseArgv(argv) {
 }
 
 const options = parseArgv(process.argv.slice(2));
+
+const isInside = (parent, candidate) => {
+  const offset = relative(parent, candidate);
+  return (
+    offset === '' ||
+    (offset !== '..' && !offset.startsWith(`..${sep}`) && !isAbsolute(offset))
+  );
+};
+
+const jsonDestination =
+  options.json && options.json !== '-'
+    ? resolve(ROOT, options.json)
+    : undefined;
+
+if (jsonDestination && isInside(OUT, jsonDestination)) {
+  die(
+    '--json must write outside out/ so the report cannot change the export ' +
+      'it measures',
+  );
+}
+
+if (jsonDestination && relative(BUDGET_PATH, jsonDestination) === '') {
+  die('--json must not overwrite scripts/budget.json');
+}
 
 // ---------------------------------------------------------------------------
 // Subsystems
@@ -233,7 +257,13 @@ function referencedBootstrapFiles(html, route) {
     if (url.origin !== site.origin) continue;
 
     const file = exportFileFor(url.pathname);
-    if (file) resolved.add(file);
+    if (!file) {
+      die(
+        `route ${route} references same-origin bootstrap asset ${reference}, ` +
+          'but no exported file resolves from it',
+      );
+    }
+    resolved.add(file);
   }
   return resolved;
 }
@@ -271,8 +301,10 @@ const routes = documents
 
 /**
  * Icon markup is inlined into every document that renders it, so a set of
- * icons in the header or footer is paid for once per page. Count the bytes that
- * a shared sprite would remove: every repeat past the first.
+ * icons in the header or footer is paid for once per page. Count full inline
+ * markup repeated past the first. This is an upper bound on a deduplication
+ * opportunity, not exact sprite savings: a sprite still needs its definition
+ * and a reference element at every use site.
  */
 const inlineSvg = [...inlineSvgCounts.entries()].reduce(
   (summary, [markup, count]) => {
@@ -576,7 +608,7 @@ if (options.json) {
   if (jsonToStdout) {
     process.stdout.write(serialized);
   } else {
-    writeFileSync(resolve(ROOT, options.json), serialized);
+    writeFileSync(jsonDestination, serialized);
     log(`\n  wrote ${options.json}`);
   }
 }

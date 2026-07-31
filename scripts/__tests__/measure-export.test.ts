@@ -1,5 +1,6 @@
 import { spawnSync } from 'node:child_process';
 import {
+  existsSync,
   mkdirSync,
   mkdtempSync,
   readFileSync,
@@ -272,6 +273,18 @@ describe('measure-export', () => {
     );
   });
 
+  it('fails when a same-origin bootstrap asset is missing', () => {
+    const { root } = createFixture();
+    rmSync(join(root, 'out/_next/static/css/app.css'));
+
+    const { status, output } = runMeasurer(root);
+
+    expect(status).toBe(1);
+    expect(output).toContain('references same-origin bootstrap asset');
+    expect(output).toContain('/_next/static/css/app.css');
+    expect(output).toContain('no exported file resolves from it');
+  });
+
   it('counts inline icon markup that repeats across documents', () => {
     const { report } = reportFor(createFixture().root);
 
@@ -457,6 +470,32 @@ describe('measure-export', () => {
     expect(stdout).not.toContain('by subsystem');
     expect(stderr).toContain('by subsystem');
     expect(stderr).toContain('7 budget(s) within limits');
+  });
+
+  it('rejects a JSON report inside the export being measured', () => {
+    const { root } = createFixture();
+    const destination = join(root, 'out/report.json');
+
+    const { status, output } = runMeasurer(root, ['--json', 'out/report.json']);
+
+    expect(status).toBe(1);
+    expect(output).toContain('--json must write outside out/');
+    expect(existsSync(destination)).toBe(false);
+  });
+
+  it('does not let a JSON report overwrite the budget policy', () => {
+    const { root } = createFixture();
+    const budgetPath = join(root, 'scripts/budget.json');
+    const before = readFileSync(budgetPath, 'utf8');
+
+    const { status, output } = runMeasurer(root, [
+      '--json',
+      'scripts/budget.json',
+    ]);
+
+    expect(status).toBe(1);
+    expect(output).toContain('--json must not overwrite scripts/budget.json');
+    expect(readFileSync(budgetPath, 'utf8')).toBe(before);
   });
 
   it('runs the documented npm command through a JSON consumer', () => {
