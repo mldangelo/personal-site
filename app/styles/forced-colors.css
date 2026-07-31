@@ -2,15 +2,15 @@
    FORCED COLORS
    Windows High Contrast Mode, and any other user-forced palette.
 
-   A forced palette replaces every author colour with one of a handful of
-   system colours and throws `background-image` away entirely. That is fine for
-   a design built out of filled boxes and borders, and it is a problem for this
-   one, because several things here are drawn in colour on a background image:
+   A forced palette replaces author colours with system colours and removes
+   non-URL background images. That is fine for a design built out of filled
+   boxes and borders, and it is a problem for this one, because several things
+   here are drawn in colour or with a gradient background:
 
-     - every prose underline is a `linear-gradient` background, so the links
-       lose the only thing marking them as links;
-     - the lit resume marker and the active skill filter are distinguished by
-       fill colour alone, so they flatten into their own unlit state;
+     - global paragraph-link and hero-highlight underlines are
+       `linear-gradient` backgrounds, so those links lose their visible line;
+     - the current resume marker and active skill filter rely on filled state,
+       so they flatten toward their unselected appearance;
      - the portrait is composited with `mix-blend-mode: multiply`, which
        multiplies against a forced Canvas that is frequently pure black.
 
@@ -46,11 +46,19 @@
     text-decoration: none;
   }
 
-  /* The active nav item is marked by a bar drawn as a pseudo-element
-     background, which flattens to Canvas. Name the system colour so it does
-     not get remapped into the page. */
-  .nav-link::after {
+  /* Desktop and resume navigation mark the active item with a
+     pseudo-element background, which otherwise flattens to Canvas. */
+  .nav-link::after,
+  .resume-nav-link.active::after {
     background-color: LinkText;
+  }
+
+  /* Mobile navigation normally changes only the label colour. Forced colors
+     maps every navigation link to LinkText, so retain current-page state with
+     a non-colour cue. */
+  .hamburger-ul li a.active span {
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
   }
 
   /* ===================
@@ -65,8 +73,8 @@
     border-color: ButtonText;
   }
 
-  /* A lit filter is a selection rather than a button, so it takes the one
-     pair a forced palette guarantees stands apart from the page. */
+  /* A lit filter is a selection rather than a generic button, so use the
+     palette's semantic selection pair. */
   .skillbutton-active:not(.skillbutton--all) {
     background-color: Highlight;
     color: HighlightText;
@@ -74,12 +82,12 @@
   }
 
   /* ===================
-     STATE THAT IS ONLY A COLOUR
+     STATE THAT NEEDS MORE THAN COLOUR
      Amber does not exist in a forced palette, so anything relying on it has
-     to survive as a shape. Filled-versus-hollow does; 9px-versus-7px does not.
+     to survive as a shape. Filled-versus-hollow is the deliberate cue; the
+     9px-versus-7px size difference is too subtle to carry the state alone.
      =================== */
-  .jobs-container--current .job-marker,
-  .about-section--log .log-entry:hover::after {
+  .jobs-container--current .job-marker {
     background-color: CanvasText;
     border-color: CanvasText;
   }
@@ -102,7 +110,10 @@
      =================== */
   .theme-portrait img,
   .hero-portrait img,
-  [data-theme='dark'] .hero-portrait img {
+  .hero-portrait:hover img,
+  [data-theme='dark'] .hero-portrait img,
+  [data-theme='dark'] .hero-portrait:hover img,
+  .site-footer-new .footer-avatar img {
     mix-blend-mode: normal;
     filter: none;
   }
@@ -116,8 +127,8 @@
     -webkit-backdrop-filter: none;
   }
 
-  /* The paper grain is a background image, so it is discarded regardless.
-     Take the fixed layer with it rather than leaving an empty one. */
+  /* URL-backed background images are not removed automatically. The grain is
+     a data URL, so hide its fixed layer explicitly in the forced palette. */
   body::before {
     display: none;
   }

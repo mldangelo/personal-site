@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
@@ -61,6 +61,17 @@ function resolve(theme: Map<string, string>, name: string): string {
 const lightToken = (name: string) => resolve(light, name);
 const darkToken = (name: string) => resolve(dark, name);
 
+function cssFiles(directory: string): string[] {
+  return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const path = join(directory, entry.name);
+    return entry.isDirectory()
+      ? cssFiles(path)
+      : entry.name.endsWith('.css')
+        ? [path]
+        : [];
+  });
+}
+
 describe('contrastRatio', () => {
   it('anchors at the extremes of the scale', () => {
     expect(contrastRatio('#ffffff', '#000000')).toBeCloseTo(21, 5);
@@ -103,8 +114,8 @@ describe('parseHexColor', () => {
 });
 
 describe('--color-signal-mark', () => {
-  // The filled dot reinforces the textual "Present" state as the timeline's
-  // non-text indicator, so SC 1.4.11 applies: 3:1 against both paper surfaces.
+  // "Present" carries the meaning in text, so this redundant dot is not a
+  // WCAG 1.4.11 requirement. The design still sets a 3:1 floor.
   it('clears 3:1 on both light backdrops', () => {
     const mark = lightToken('--color-signal-mark');
 
@@ -195,9 +206,29 @@ describe('--color-focus-ring-fill', () => {
   });
 });
 
+describe('focus ring declarations', () => {
+  it('use the semantic ring tokens instead of palette colours', () => {
+    const violations = cssFiles(STYLES).flatMap((file) => {
+      const css = readFileSync(file, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+      return [...css.matchAll(/outline(?:-color)?\s*:\s*([^;]+);/g)]
+        .filter(([, value]) => {
+          const declaration = value.trim();
+          return (
+            declaration !== 'none' &&
+            !declaration.includes('var(--color-focus-ring')
+          );
+        })
+        .map((match) => `${file.replace(`${STYLES}/`, '')}: ${match[0]}`);
+    });
+
+    expect(violations).toEqual([]);
+  });
+});
+
 describe('--color-control-border', () => {
-  // The only visible edge of an unfilled control, so SC 1.4.11 applies. The
-  // comments beside these tokens quote these numbers.
+  // This is a deliberate 3:1 floor for unfilled control boundaries, not a
+  // blanket claim that SC 1.4.11 requires every labelled border. The comments
+  // beside these tokens quote these numbers.
   it('clears 3:1 on every surface it is drawn on', () => {
     expect(
       contrastRatio(

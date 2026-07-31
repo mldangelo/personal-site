@@ -8,16 +8,9 @@
     scroll-behavior: smooth;
   }
 
-  /* Respect reduced motion preference.
-     The `*` rule below is the whole of it. This block used to also hide
-     `body::before` and `body::after` as "heavy fixed overlays that cause
-     repaints", but `body::before` is the static paper grain — one
-     background-image, no animation, no transition, and promoted to its own
-     composited layer by `contain: strict` plus `translateZ(0)` precisely so
-     that being `position: fixed` costs no repaint on scroll. Hiding it
-     deleted the design's only ambient texture for people who asked for less
-     motion, which is not a motion concession. `body::after` was never
-     defined anywhere, so that half of the selector never did anything. */
+  /* Respect reduced motion without removing static decoration. The paper
+     grain on `body::before` has no animation or transition; `body::after` is
+     not defined. */
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,

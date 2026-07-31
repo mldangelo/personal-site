@@ -39,8 +39,8 @@
   --color-signal: #f0a202;
   --color-signal-mark: #f0a202;
 
-  /* Clears the 3:1 a component boundary owes, with room: 5.7:1 against
-     --color-bg and 6.1:1 against --color-bg-alt. */
+  /* Clears the chosen 3:1 boundary floor with room: 5.7:1 against --color-bg
+     and 6.1:1 against --color-bg-alt. */
   --color-control-border: #8b929c;
 
   /* Borders */

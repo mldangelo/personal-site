@@ -47,10 +47,10 @@
                               rather than as focus. The 2px offset does keep
                               it visible against paper (9.2:1), so this is
                               legibility rather than an SC 1.4.11 failure, but
-                              it is still the weakest ring on the site. Ink is
-                              18.3:1 on paper and 16.3:1 on ink, and it can
-                              never alias a fill. The skip link already did
-                              this by hand; this names the reason.
+                              it is still the weakest ring on the site. The
+                              alternate ring resolves to near-black on the
+                              light surface and near-white on the dark one,
+                              clearing 18.3:1 and 16.3:1 respectively.
      =================== */
   --color-focus-ring: var(--color-accent);
   --color-focus-ring-fill: var(--color-fg-bold);
@@ -62,12 +62,11 @@
      --color-signal      text-safe on page bg (5.5:1 raised, 5.0:1 page)
      --color-signal-mark graphic use only (ticks, dots, rules)
 
-     The mark is not decoration: the filled dot reinforces the textual
-     "Present" state as the resume timeline's non-text indicator, so
-     SC 1.4.11 applies and it owes 3:1 against both paper surfaces. It used to
-     be #e8930c, which measured 2.36:1 on --color-bg and 2.16:1 on
-     --color-bg-alt. This is the same hue (36.7deg against 36.8deg) taken down
-     to 3.5:1 on --color-bg and 3.2:1 on --color-bg-alt. Pinned in
+     The visible "Present" text already carries the state, so WCAG 1.4.11 does
+     not require this redundant dot to clear 3:1. The design still chooses
+     that floor so the timeline reinforcement stays perceptible. The previous
+     #e8930c measured 2.36:1 on --color-bg and 2.16:1 on --color-bg-alt; this
+     same-hue replacement measures 3.5:1 and 3.2:1. Pinned in
      src/lib/__tests__/contrast.test.ts.
      =================== */
   --color-signal: #9a5600;
@@ -84,8 +83,9 @@
   /* Structural hairlines are meant to be quiet and sit near 1.5:1, which is
      fine for dividing content but not for the only visible edge of a
      control. Interactive boundaries use this instead: 4.1:1 against
-     --color-bg and 3.8:1 against --color-bg-alt, so it clears the 3:1 that
-     SC 1.4.11 asks of a component boundary on either surface. */
+     --color-bg and 3.8:1 against --color-bg-alt. That is a deliberate 3:1
+     floor even where visible text independently identifies the control, not
+     a claim that every labelled boundary is required by SC 1.4.11. */
   --color-control-border: #767b83;
   --color-border-alt: rgba(35, 39, 46, 0.24);
 
