@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import profile from '@/data/profile.json';
 import { getPostSlugs } from '@/lib/posts';
+import { RESUME_JSON_URL } from '@/lib/resumeJson';
 import { AUTHOR_NAME, SHARE_IMAGE_PATH, SITE_URL } from '@/lib/utils';
 import { metadata as aboutMetadata } from '../about/page';
 import { metadata as contactMetadata } from '../contact/page';
@@ -89,6 +90,13 @@ describe('page metadata', () => {
     expect(writingMetadata.alternates?.types).toEqual({
       'application/rss+xml': '/feed.xml',
     });
+  });
+
+  it('advertises the JSON Resume alongside the resume canonical', () => {
+    expect(resumeMetadata.alternates?.types).toEqual({
+      'application/json': RESUME_JSON_URL,
+    });
+    expect(resumeMetadata.alternates?.canonical).toBe(`${SITE_URL}/resume/`);
   });
 
   it('declares a canonical url for blog posts', async () => {

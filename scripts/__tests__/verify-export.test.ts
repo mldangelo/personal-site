@@ -13,6 +13,11 @@ import { afterEach, describe, expect, it } from 'vitest';
 const verifier = resolve(process.cwd(), 'scripts/verify-export.mjs');
 const fixtureRoots: string[] = [];
 
+interface ResumeFixture {
+  basics: { name: unknown };
+  work: unknown[];
+}
+
 function write(root: string, path: string, contents = '') {
   const destination = join(root, path);
   mkdirSync(dirname(destination), { recursive: true });
@@ -22,10 +27,12 @@ function write(root: string, path: string, contents = '') {
 function htmlPage({
   canonical,
   content,
+  head = '',
   siteRoot,
 }: {
   canonical: string;
   content: string;
+  head?: string;
   siteRoot: string;
 }) {
   return `<!doctype html>
@@ -47,6 +54,7 @@ function htmlPage({
     <meta name="twitter:title" content="Fixture">
     <meta name="twitter:description" content="Fixture description">
     <meta name="twitter:image" content="${siteRoot}og.png">
+    ${head}
   </head>
   <body>${content}</body>
 </html>`;
@@ -96,6 +104,7 @@ function createFixture({ basePath = '' } = {}) {
     htmlPage({
       canonical: `${siteRoot}resume/`,
       siteRoot,
+      head: `<link rel="alternate" type="application/json" href="${siteRoot}resume.json">`,
       content: `
         <a href="../resume.json">JSON</a>
         <main id="resume">Resume</main>
@@ -360,6 +369,45 @@ describe('verify-export', () => {
     expect(result.output).toContain('resume.json\n    missing from export');
   });
 
+  it('rejects a JSON primitive instead of accepting it as a resume document', () => {
+    const root = createFixture();
+    write(root, 'out/resume.json', 'null\n');
+
+    const result = runVerifier(root);
+    expect(result.status).toBe(1);
+    expect(result.output).toContain(
+      'resume.json\n    root must be a JSON object',
+    );
+  });
+
+  it.each([
+    {
+      name: 'a non-string basics.name',
+      change: (resume: ResumeFixture) => {
+        resume.basics.name = [];
+      },
+      expected: 'basics.name must be a non-empty string',
+    },
+    {
+      name: 'a non-object work item',
+      change: (resume: ResumeFixture) => {
+        resume.work = [1];
+      },
+      expected: 'work[0] must be a JSON object',
+    },
+  ])('rejects $name', ({ change, expected }) => {
+    const root = createFixture();
+    mutate(root, 'out/resume.json', (json) => {
+      const resume = JSON.parse(json) as ResumeFixture;
+      change(resume);
+      return JSON.stringify(resume);
+    });
+
+    const result = runVerifier(root);
+    expect(result.status).toBe(1);
+    expect(result.output).toContain(expected);
+  });
+
   it('rejects a resume page that stops linking the artifact', () => {
     const root = createFixture();
     mutate(root, 'out/resume/index.html', (html) =>
@@ -370,6 +418,22 @@ describe('verify-export', () => {
     expect(result.status).toBe(1);
     expect(result.output).toContain(
       '/resume/ does not link to the machine-readable resume',
+    );
+  });
+
+  it('rejects a resume page that stops advertising the JSON alternate', () => {
+    const root = createFixture();
+    mutate(root, 'out/resume/index.html', (html) =>
+      html.replace(
+        '<link rel="alternate" type="application/json" href="https://example.com/resume.json">',
+        '',
+      ),
+    );
+
+    const result = runVerifier(root);
+    expect(result.status).toBe(1);
+    expect(result.output).toContain(
+      '/resume/ does not advertise the machine-readable resume',
     );
   });
 

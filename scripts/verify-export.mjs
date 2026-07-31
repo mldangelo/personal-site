@@ -632,13 +632,20 @@ if (!existsSync(resumeJsonPath)) {
   fail('resume.json', 'missing from export');
 } else {
   let resume;
+  let parsed = false;
   try {
     resume = JSON.parse(readFileSync(resumeJsonPath, 'utf8'));
+    parsed = true;
   } catch (error) {
     fail('resume.json', `is not valid JSON: ${error.message}`);
   }
 
-  if (resume) {
+  if (
+    parsed &&
+    (resume === null || typeof resume !== 'object' || Array.isArray(resume))
+  ) {
+    fail('resume.json', 'root must be a JSON object');
+  } else if (parsed) {
     for (const key of Object.keys(resume)) {
       if (!JSON_RESUME_ROOT_KEYS.has(key)) {
         fail(
@@ -647,9 +654,24 @@ if (!existsSync(resumeJsonPath)) {
         );
       }
     }
-    if (!resume.basics?.name) fail('resume.json', 'basics.name is missing');
+    if (
+      typeof resume.basics?.name !== 'string' ||
+      resume.basics.name.trim() === ''
+    ) {
+      fail('resume.json', 'basics.name must be a non-empty string');
+    }
     if (!Array.isArray(resume.work) || resume.work.length === 0) {
       fail('resume.json', 'work is missing or empty');
+    } else {
+      resume.work.forEach((entry, index) => {
+        if (
+          entry === null ||
+          typeof entry !== 'object' ||
+          Array.isArray(entry)
+        ) {
+          fail('resume.json', `work[${index}] must be a JSON object`);
+        }
+      });
     }
 
     const expectedCanonical = siteUrlForRoute('/resume.json');
@@ -700,6 +722,34 @@ if (!existsSync(resumeJsonPath)) {
     fail(
       'resume.json',
       '/resume/ does not link to the machine-readable resume',
+    );
+  }
+
+  if (
+    resumePage &&
+    !tags(resumePage.html, 'link').some((tag) => {
+      const rel = (attribute(tag, 'rel') ?? '').toLowerCase().split(/\s+/);
+      if (
+        !rel.includes('alternate') ||
+        attribute(tag, 'type')?.toLowerCase() !== 'application/json'
+      ) {
+        return false;
+      }
+      const href = attribute(tag, 'href');
+      const url = href
+        ? parseHttpUrl(
+            href,
+            resumePage.route,
+            resumePage.relativePath,
+            'resume JSON alternate',
+          )
+        : undefined;
+      return url?.href === siteUrlForRoute('/resume.json');
+    })
+  ) {
+    fail(
+      'resume.json',
+      '/resume/ does not advertise the machine-readable resume',
     );
   }
 }

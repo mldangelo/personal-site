@@ -9,7 +9,7 @@ describe('resume.json route', () => {
     expect(dynamic).toBe('force-static');
   });
 
-  it('serves JSON with the content type GitHub Pages will echo', async () => {
+  it('returns JSON with an explicit UTF-8 content type before export', async () => {
     const response = await GET();
 
     expect(response.headers.get('Content-Type')).toBe(

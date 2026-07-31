@@ -90,6 +90,14 @@ describe('toPlainText', () => {
       'the snake_case_name field',
     );
   });
+
+  it('preserves angle-bracket comparisons that are not HTML tags', () => {
+    expect(
+      toPlainText(
+        'latency < 50ms and throughput > 1k with Map<string, number>',
+      ),
+    ).toBe('latency < 50ms and throughput > 1k with Map<string, number>');
+  });
 });
 
 describe('json resume document', () => {

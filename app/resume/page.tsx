@@ -13,14 +13,27 @@ import degrees from '@/data/resume/degrees';
 import { categories, skills } from '@/data/resume/skills';
 import work from '@/data/resume/work';
 import { createPageMetadata } from '@/lib/metadata';
-import { RESUME_JSON_PATH } from '@/lib/resumeJson';
+import { RESUME_JSON_PATH, RESUME_JSON_URL } from '@/lib/resumeJson';
 import { AUTHOR_NAME, SITE_URL } from '@/lib/utils';
 
-export const metadata: Metadata = createPageMetadata({
+const resumeMetadata = createPageMetadata({
   title: 'Resume',
   description: `${AUTHOR_NAME}'s Resume. OpenAI, Promptfoo, Smile ID, Arthena, Matroid, Stanford ICME, YC alum.`,
   path: '/resume/',
 });
+
+export const metadata: Metadata = {
+  ...resumeMetadata,
+  // The visible chip serves readers; the alternate lets tools discover the
+  // machine-readable document without scraping page copy. Keep the canonical
+  // that createPageMetadata already supplied when adding the new type.
+  alternates: {
+    ...resumeMetadata.alternates,
+    types: {
+      'application/json': RESUME_JSON_URL,
+    },
+  },
+};
 
 export default function ResumePage() {
   return (

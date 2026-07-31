@@ -3,9 +3,10 @@
  *
  * `src/data/resume/work.ts` has opened with `Conforms to
  * https://jsonresume.org/schema/` since it was written, and nothing emitted or
- * validated that. This module is what makes the claim true. Every value is
- * assembled from the same data files the rendered `/resume` page reads, so the
- * document and the page cannot drift.
+ * validated that. This module publishes the document the comment promises. It
+ * reuses the rendered résumé's profile, work, education, course, and skill
+ * sources so those facts do not need a second maintained copy; explicit
+ * mapping tests pin the places where the two representations differ.
  *
  * Deliberately a subset of the schema: sections this résumé has no data for
  * (`volunteer`, `awards`, `certificates`, `publications`, `languages`,
@@ -148,7 +149,10 @@ export function toPlainText(value: string): string {
   return (
     value
       .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1') // [text](url)
-      .replace(/<[^>]*>/g, '') // inline HTML
+      // The maintained source contains anchors. Strip only those known tags so
+      // technical prose such as comparisons and `Map<K, V>` survives; any new
+      // HTML construct stays visible to the export verifier until supported.
+      .replace(/<\/?a(?:\s[^>]*)?>/gi, '')
       .replace(/\*\*([^*]+)\*\*/g, '$1') // **strong**
       .replace(/\*([^*]+)\*/g, '$1') // *emphasis*
       .replace(/`([^`]+)`/g, '$1') // `code`
@@ -259,7 +263,8 @@ function buildSkills(): ResumeSkill[] {
     keywords: skills
       .filter((skill) => skill.category.includes(category.name))
       .sort(
-        (a, b) => b.competency - a.competency || a.title.localeCompare(b.title),
+        (a, b) =>
+          b.competency - a.competency || a.title.localeCompare(b.title, 'en'),
       )
       .map((skill) => skill.title),
   }));
