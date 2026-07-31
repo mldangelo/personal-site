@@ -34,9 +34,14 @@ function LogEntry({ children }: { children?: ReactNode }) {
     );
   }
 
+  const markerRepeatsBody = extracted.rest === first;
+
   return (
     <li className="log-entry">
-      <span className="log-entry-marker">
+      <span
+        className="log-entry-marker"
+        aria-hidden={markerRepeatsBody || undefined}
+      >
         {extracted.year ? (
           <span className="log-entry-year">{extracted.year}</span>
         ) : null}

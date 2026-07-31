@@ -155,10 +155,19 @@ Lead paragraph.
     expect(entries[2].querySelector('.log-entry-body')?.textContent).toContain(
       'In the summer of 1996',
     );
+    for (const index of [0, 1, 2]) {
+      expect(entries[index].querySelector('.log-entry-marker')).toHaveAttribute(
+        'aria-hidden',
+        'true',
+      );
+    }
 
     // A leading marker is lifted out instead, leaving a sentence behind.
     expect(entries[3].querySelector('.log-entry-body')?.textContent).toMatch(
       /^I discovered the mini-games/,
+    );
+    expect(entries[3].querySelector('.log-entry-marker')).not.toHaveAttribute(
+      'aria-hidden',
     );
   });
 
