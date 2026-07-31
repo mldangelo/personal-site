@@ -1,6 +1,21 @@
 import { describe, expect, it } from 'vitest';
 
+import { sortPositions, timelineKey } from '@/lib/career';
 import work from '../resume/work';
+
+/** Exactly `YYYY-MM-DD`, which is what makes a string comparison chronological. */
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+
+function isPlainIsoCalendarDate(value: string): boolean {
+  if (!ISO_DATE.test(value)) return false;
+
+  const parsed = new Date(`${value}T00:00:00Z`);
+
+  return (
+    !Number.isNaN(parsed.getTime()) &&
+    parsed.toISOString().slice(0, 10) === value
+  );
+}
 
 describe('work data', () => {
   it('exports an array of positions', () => {
@@ -19,22 +34,6 @@ describe('work data', () => {
       expect(typeof job.position).toBe('string');
       expect(typeof job.url).toBe('string');
       expect(typeof job.startDate).toBe('string');
-    }
-  });
-
-  it('startDate is a valid date string', () => {
-    for (const job of work) {
-      const date = new Date(job.startDate);
-      expect(date.toString()).not.toBe('Invalid Date');
-    }
-  });
-
-  it('endDate is valid when present', () => {
-    for (const job of work) {
-      if (job.endDate) {
-        const date = new Date(job.endDate);
-        expect(date.toString()).not.toBe('Invalid Date');
-      }
     }
   });
 
@@ -71,6 +70,14 @@ describe('work data', () => {
     }
   });
 
+  it('uses the supported commitment value when present', () => {
+    for (const job of work) {
+      if (job.commitment) {
+        expect(job.commitment).toBe('part-time');
+      }
+    }
+  });
+
   it('has positions from different years', () => {
     const years = work.map((job) => new Date(job.startDate).getFullYear());
     const uniqueYears = new Set(years);
@@ -82,6 +89,54 @@ describe('work data', () => {
   it('company names are non-empty', () => {
     for (const job of work) {
       expect(job.name.trim().length).toBeGreaterThan(0);
+    }
+  });
+
+  /**
+   * The spine is ordered by `sortPositions`, which compares the ISO strings
+   * directly — exact for `YYYY-MM-DD`, and free of the timezone trap that
+   * parsing to a `Date` reintroduces. A date written any other way (`2014/01`,
+   * `Jan 2014`) would still parse but would sort wrongly and silently, so the
+   * format itself is the invariant worth pinning. The round-trip check also
+   * rejects impossible dates such as `2026-02-31`, which JavaScript otherwise
+   * normalizes into March without reporting an error.
+   */
+  it('dates are real plain ISO calendar dates', () => {
+    for (const job of work) {
+      expect(isPlainIsoCalendarDate(job.startDate)).toBe(true);
+
+      if (job.endDate) {
+        expect(isPlainIsoCalendarDate(job.endDate)).toBe(true);
+      }
+    }
+  });
+
+  /**
+   * The rendered timeline must run one way. Source order is deliberately not
+   * load-bearing — `Experience` sorts before mapping — so this asserts the
+   * ordered result rather than the literal array, and fails if a future entry
+   * carries a date the comparator cannot place.
+   */
+  it('sorts into a strictly reverse-chronological timeline', () => {
+    const ordered = sortPositions(work);
+
+    expect(ordered).toHaveLength(work.length);
+
+    for (let i = 1; i < ordered.length; i += 1) {
+      const previous = ordered[i - 1];
+      const current = ordered[i];
+
+      expect(
+        timelineKey(current).localeCompare(timelineKey(previous)),
+      ).toBeLessThanOrEqual(0);
+
+      // Where two roles have the same timeline key, the later start comes
+      // first.
+      if (timelineKey(current) === timelineKey(previous)) {
+        expect(
+          current.startDate.localeCompare(previous.startDate),
+        ).toBeLessThanOrEqual(0);
+      }
     }
   });
 });

@@ -309,6 +309,21 @@
   font-weight: var(--font-weight-medium);
 }
 
+/* Derived tenure, given its own line in the gutter so it reads as an
+   annotation on the range rather than as part of it. Mono, 11px, and
+   --color-fg-light are all inherited from `.daterange`; the step down is
+   positional because anything tonally quieter than --color-fg-light drops
+   under AA at this size.
+
+   No amber, including on a role still running. The signal for "this one is
+   live" is already spent on `.daterange-present` one word earlier, and
+   marking the same fact twice in the same line is how amber stops meaning
+   anything. */
+.daterange-duration {
+  flex-basis: 100%;
+  margin-top: 0.15em;
+}
+
 .jobs-container header h3 {
   display: flex;
   flex-direction: column;

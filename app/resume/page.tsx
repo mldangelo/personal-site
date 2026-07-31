@@ -12,6 +12,7 @@ import courses from '@/data/resume/courses';
 import degrees from '@/data/resume/degrees';
 import { categories, skills } from '@/data/resume/skills';
 import work from '@/data/resume/work';
+import { careerSpanYears } from '@/lib/career';
 import { createPageMetadata } from '@/lib/metadata';
 import { AUTHOR_NAME, SITE_URL } from '@/lib/utils';
 
@@ -22,14 +23,23 @@ export const metadata: Metadata = createPageMetadata({
 });
 
 export default function ResumePage() {
+  // One clock read for the whole page, so the headline span and every tenure
+  // on the spine are measured against the same instant. This is a server
+  // component, so the value is baked at build time — the same contract as the
+  // line count on /stats.
+  const now = Date.now();
+  const careerSpan = careerSpanYears(work, now);
+
   return (
     <PageWrapper>
       <section className="resume-page">
         <header className="resume-header">
           <h1 className="resume-title">Resume</h1>
+          {/* This is elapsed span from the earliest role, not summed active
+              tenure — see `careerSpanYears`. */}
           <p className="resume-summary">
-            Engineering leader with 15+ years building products across AI,
-            security, and infrastructure. I&apos;m currently a Member of the
+            Engineering leader with a career spanning {careerSpan}+ years across
+            AI, security, and infrastructure. I&apos;m currently a Member of the
             Technical Staff at OpenAI, working on Promptfoo and Codex Security.
             I help secure AI systems and use AI to find software
             vulnerabilities. I co-founded Promptfoo before it joined OpenAI in
@@ -51,7 +61,7 @@ export default function ResumePage() {
 
         <div className="resume-content">
           <section id="experience" className="resume-section">
-            <Experience data={work} />
+            <Experience data={work} now={now} />
           </section>
 
           <section id="education" className="resume-section">
