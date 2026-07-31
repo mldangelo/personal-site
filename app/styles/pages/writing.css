@@ -431,6 +431,7 @@
   position: absolute;
   top: 0;
   right: 0.75rem;
+  max-width: calc(100% - 1.5rem);
   transform: translateY(-50%);
   padding: 0 0.4rem;
   /* Masks the hairline it straddles and nothing else, so the focus ring on the
@@ -443,6 +444,8 @@
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   line-height: 1;
   color: var(--color-fg-light);
   pointer-events: none;
@@ -474,7 +477,9 @@
    A screenshot is usually evidence — a dollar figure, a graph — so it is
    allowed to reach its own intrinsic width rather than being crushed into the
    reading measure. `--figure-width` is the build-time measurement, set inline
-   by PostContent, so a figure is never upscaled past its own pixels.
+   by PostContent, so a measured local figure is never upscaled past its own
+   pixels. Remote images use a documented fallback because their bytes are not
+   available to the build.
    ======================================== */
 
 .prose-figure {
@@ -489,6 +494,10 @@
   display: block;
   width: 100%;
   margin: 0;
+}
+
+.prose .prose-figure > a {
+  display: block;
 }
 
 /* The caption is annotation about the figure, so it is set in mono at the

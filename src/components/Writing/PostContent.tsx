@@ -2,7 +2,11 @@
 
 import Markdown from 'markdown-to-jsx';
 import Image from 'next/image';
-import type { ReactNode } from 'react';
+import type {
+  HTMLAttributes,
+  KeyboardEvent as ReactKeyboardEvent,
+  ReactNode,
+} from 'react';
 import {
   Children,
   type CSSProperties,
@@ -32,6 +36,7 @@ interface PostContentProps {
 const FALLBACK_SIZE: ImageSize = { width: 1200, height: 675 };
 
 const LANGUAGE_PREFIX = 'language-';
+const CODE_SCROLL_STEP = 40;
 
 const HEADING_TAGS = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] as const;
 
@@ -51,14 +56,12 @@ function headingOverrides(aliases: ReadonlyMap<string, string>) {
           component: ({
             id,
             children,
-          }: {
-            id?: string;
-            children?: ReactNode;
-          }) => {
+            ...props
+          }: HTMLAttributes<HTMLHeadingElement>) => {
             const legacyId = id ? aliases.get(id) : undefined;
 
             return (
-              <Tag id={id}>
+              <Tag {...props} id={id}>
                 {legacyId ? (
                   <span
                     className="prose-anchor-alias"
@@ -107,12 +110,12 @@ function figureImage(
   };
 
   if (typeof props.src === 'string') {
+    const caption =
+      typeof props.title === 'string' ? props.title.trim() : undefined;
+
     return {
       src: props.src,
-      caption:
-        typeof props.title === 'string' && props.title
-          ? props.title
-          : undefined,
+      caption: caption || undefined,
     };
   }
 
@@ -140,6 +143,26 @@ function fenceLanguage(children: ReactNode): string | undefined {
     .split(/\s+/)
     .find((token) => token.startsWith(LANGUAGE_PREFIX))
     ?.slice(LANGUAGE_PREFIX.length);
+}
+
+function scrollCodeFence(event: ReactKeyboardEvent<HTMLPreElement>) {
+  if (
+    event.altKey ||
+    event.ctrlKey ||
+    event.metaKey ||
+    (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight')
+  ) {
+    return;
+  }
+
+  const pre = event.currentTarget;
+  if (pre.scrollWidth <= pre.clientWidth) {
+    return;
+  }
+
+  pre.scrollLeft +=
+    event.key === 'ArrowRight' ? CODE_SCROLL_STEP : -CODE_SCROLL_STEP;
+  event.preventDefault();
 }
 
 /**
@@ -170,6 +193,16 @@ function CodeFence({ children }: { children?: ReactNode }) {
 
     syncTabStop();
     window.addEventListener('resize', syncTabStop);
+    let disposed = false;
+
+    // A fallback face and the final mono face can wrap the same line
+    // differently. Recheck once fonts settle because ResizeObserver watches
+    // the fence's box, not changes to its scrollable content width.
+    void document.fonts?.ready.then(() => {
+      if (!disposed) {
+        syncTabStop();
+      }
+    });
 
     const observer =
       typeof ResizeObserver === 'undefined'
@@ -178,19 +211,25 @@ function CodeFence({ children }: { children?: ReactNode }) {
     observer?.observe(pre);
 
     return () => {
+      disposed = true;
       window.removeEventListener('resize', syncTabStop);
       observer?.disconnect();
     };
-  }, []);
+  }, [children]);
 
   return (
     <div className="prose-fence">
       {language ? (
-        <span className="prose-fence-lang" aria-hidden="true">
-          {language}
-        </span>
+        <>
+          <span className="prose-fence-lang" aria-hidden="true">
+            {language}
+          </span>
+          <span className="sr-only">{language} code block</span>
+        </>
       ) : null}
-      <pre ref={preRef}>{children}</pre>
+      <pre ref={preRef} onKeyDown={scrollCodeFence}>
+        {children}
+      </pre>
     </div>
   );
 }
@@ -242,9 +281,10 @@ export default function PostContent({
               return (
                 <figure
                   className="prose-figure"
-                  // Measured at build time, so a wide figure can be allowed to
-                  // exceed the reading measure without ever being upscaled
-                  // past its own pixels.
+                  // Local images are measured at build time, so a wide local
+                  // figure can exceed the reading measure without being
+                  // upscaled past its own pixels. Remote images retain the
+                  // documented fallback because their bytes are unavailable.
                   style={
                     {
                       '--figure-width': `${sizeFor(image.src).width}px`,

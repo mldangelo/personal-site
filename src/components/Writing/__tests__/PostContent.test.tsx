@@ -1,4 +1,4 @@
-import { act, render } from '@testing-library/react';
+import { act, fireEvent, render } from '@testing-library/react';
 import { StrictMode } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
@@ -74,6 +74,32 @@ describe('PostContent figures', () => {
     expect(html).toContain('<figure class="prose-figure"');
   });
 
+  it('does not emit an empty caption for a whitespace-only title', () => {
+    const html = renderToStaticMarkup(
+      <PostContent content={'![Alt](/og.png "   ")\n'} imageSizes={OG_SIZE} />,
+    );
+
+    expect(html).not.toContain('<figcaption');
+  });
+
+  it('renders the published contributions qualification as a figure caption', () => {
+    const post = getPostBySlug('shipping-with-claude-code');
+    if (!post) {
+      throw new Error('expected shipping-with-claude-code to be published');
+    }
+
+    const html = renderToStaticMarkup(
+      <PostContent
+        content={post.content}
+        imageSizes={readPostImageSizes(post.content)}
+      />,
+    );
+
+    expect(html).toContain(
+      '<figcaption class="prose-figcaption">GitHub counts commits, pull requests, reviews, and issue activity here; I use the total as a rough proxy for output.</figcaption>',
+    );
+  });
+
   it('promotes a standalone image to a figure without emitting one inside a paragraph', () => {
     const html = renderToStaticMarkup(
       <PostContent
@@ -135,6 +161,7 @@ describe('PostContent code fences', () => {
     expect(html).toContain(
       '<span class="prose-fence-lang" aria-hidden="true">bash</span>',
     );
+    expect(html).toContain('<span class="sr-only">bash code block</span>');
   });
 
   it('does not add tab stops or landmark regions during server rendering', () => {
@@ -183,6 +210,69 @@ describe('PostContent code fences', () => {
     expect(pre).not.toHaveAttribute('tabindex');
   });
 
+  it('scrolls an overflowing focused fence with horizontal arrow keys', () => {
+    const { container } = render(
+      <PostContent content={'```text\nA deliberately long line\n```\n'} />,
+    );
+    const pre = container.querySelector('pre');
+    if (!pre) {
+      throw new Error('expected a rendered code fence');
+    }
+
+    Object.defineProperties(pre, {
+      clientWidth: {
+        configurable: true,
+        value: 320,
+      },
+      scrollWidth: {
+        configurable: true,
+        value: 640,
+      },
+    });
+
+    fireEvent.keyDown(pre, { key: 'ArrowRight' });
+    expect(pre.scrollLeft).toBe(40);
+
+    fireEvent.keyDown(pre, { key: 'ArrowLeft' });
+    expect(pre.scrollLeft).toBe(0);
+  });
+
+  it('remeasures overflow when a retained fence receives new code', () => {
+    let scrollWidth = 320;
+    const { container, rerender } = render(
+      <PostContent content={'```text\nshort\n```\n'} />,
+    );
+    const pre = container.querySelector('pre');
+    if (!pre) {
+      throw new Error('expected a rendered code fence');
+    }
+
+    Object.defineProperties(pre, {
+      clientWidth: {
+        configurable: true,
+        get: () => 320,
+      },
+      scrollWidth: {
+        configurable: true,
+        get: () => scrollWidth,
+      },
+    });
+
+    act(() => window.dispatchEvent(new Event('resize')));
+    expect(pre).not.toHaveAttribute('tabindex');
+
+    scrollWidth = 640;
+    rerender(
+      <PostContent
+        content={
+          '```text\nA replacement line that now exceeds the retained fence\n```\n'
+        }
+      />,
+    );
+    expect(container.querySelector('pre')).toBe(pre);
+    expect(pre).toHaveAttribute('tabindex', '0');
+  });
+
   it('does not invent a language plate for an unlabelled fence', () => {
     const html = renderToStaticMarkup(
       <PostContent content={'Intro.\n\n```\nultrathink: audit this\n```\n'} />,
@@ -225,6 +315,27 @@ describe('PostContent heading anchors', () => {
       'repeat-3',
       'section',
       'section-2',
+    ]);
+    expect(new Set(allIds(html)).size, html).toBe(allIds(html).length);
+  });
+
+  it('keeps ids unique when a heading already ends in a generated suffix', () => {
+    const html = renderToStaticMarkup(
+      <PostContent
+        content={
+          '## Repeat\n\n## Repeat\n\n## Repeat 2\n\n## Repeat\n\n## !!!\n\n## Section\n\n## !!!\n'
+        }
+      />,
+    );
+
+    expect(headingIds(html)).toEqual([
+      'repeat',
+      'repeat-2',
+      'repeat-2-2',
+      'repeat-3',
+      'section',
+      'section-2',
+      'section-3',
     ]);
     expect(new Set(allIds(html)).size).toBe(allIds(html).length);
   });
@@ -300,6 +411,68 @@ describe('PostContent heading anchors', () => {
       ].sort(),
     );
     expect(new Set(allIds(html)).size).toBe(allIds(html).length);
+  });
+
+  it('keeps one legacy alias when a formerly duplicated heading repeats', () => {
+    const html = renderToStaticMarkup(
+      <PostContent
+        content={
+          '## On using `--dangerously-skip-permissions`\n\n## On using `--dangerously-skip-permissions`\n'
+        }
+      />,
+    );
+
+    expect(headingIds(html)).toEqual([
+      'on-using-dangerously-skip-permissions',
+      'on-using-dangerously-skip-permissions-2',
+    ]);
+    expect(aliasIds(html)).toEqual(['on-using---dangerously-skip-permissions']);
+    expect(new Set(allIds(html)).size).toBe(allIds(html).length);
+  });
+
+  it('does not collide with raw HTML or footnote ids in the document', () => {
+    const html = renderToStaticMarkup(
+      <PostContent
+        content={
+          '<h2 id="custom">Raw heading</h2>\n\n## Custom\n\n[^note]\n\n[^note]: Footnote copy\n\n## note\n'
+        }
+      />,
+    );
+
+    expect(headingIds(html)).toEqual(['custom', 'custom-2', 'note-2']);
+    expect(allIds(html)).toContain('note');
+    expect(html).toContain('href="#note"');
+    expect(new Set(allIds(html)).size, html).toBe(allIds(html).length);
+  });
+
+  it('preserves authored attributes on raw HTML headings', () => {
+    const html = renderToStaticMarkup(
+      <PostContent
+        content={
+          '<h2 id="kept" class="special" data-kind="example">Raw heading</h2>\n'
+        }
+      />,
+    );
+
+    expect(html).toContain(
+      '<h2 class="special" data-kind="example" id="kept">',
+    );
+    expect(html).toContain('Raw heading</h2>');
+  });
+
+  it('keeps footnote links paired with the library-generated footer id', () => {
+    const html = renderToStaticMarkup(
+      <PostContent
+        content={
+          '## foo.bar\n\nA dotted footnote label.[^foo.bar]\n\n[^foo.bar]: Footnote copy\n'
+        }
+      />,
+    );
+
+    expect(headingIds(html)).toEqual(['foo-bar']);
+    expect(html).toContain('href="#foobar"');
+    expect(html).toContain('<div id="foobar">');
+    expect(html).not.toContain('<div id="foo-bar">');
   });
 
   it('suppresses a legacy alias that would collide with another canonical id', () => {

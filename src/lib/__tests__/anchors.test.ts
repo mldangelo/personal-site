@@ -59,6 +59,37 @@ describe('createUniqueHeadingIds', () => {
     ]);
   });
 
+  it('does not collide with an explicit numeric suffix or fallback id', () => {
+    expect(
+      createUniqueHeadingIds([
+        'Repeat',
+        'Repeat',
+        'Repeat 2',
+        'Repeat',
+        '!!!',
+        'Section',
+        '!!!',
+      ]),
+    ).toEqual([
+      'repeat',
+      'repeat-2',
+      'repeat-2-2',
+      'repeat-3',
+      'section',
+      'section-2',
+      'section-3',
+    ]);
+  });
+
+  it('avoids ids already reserved by the surrounding document', () => {
+    expect(
+      createUniqueHeadingIds(
+        ['Custom', 'Note', 'Custom'],
+        new Set(['custom', 'note']),
+      ),
+    ).toEqual(['custom-2', 'note-2', 'custom-3']);
+  });
+
   it('produces unique, non-empty ids for the real about headings', () => {
     const ids = createUniqueHeadingIds(getAboutSectionTitles(aboutMarkdown));
 
