@@ -101,7 +101,7 @@
    The 44x44 box is the hit target and is reserved by the button itself, not by
    a placeholder waiting on hydration. */
 .theme-toggle {
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   width: 44px;
@@ -117,6 +117,23 @@
     background-color var(--duration-fast) var(--ease-out);
 }
 
+/* The parser-blocking bootstrap stamps the choice before the body paints.
+   Without that attribute JavaScript did not run, so the button would be inert
+   and its "switch" label would promise an action it cannot perform. */
+:root[data-theme-choice] .theme-toggle {
+  display: flex;
+}
+
+/* The mobile menu is client-rendered too. Do not expose its trigger when the
+   same missing bootstrap attribute proves the click handler cannot hydrate. */
+.hamburger-button {
+  display: none;
+}
+
+:root[data-theme-choice] .hamburger-button {
+  display: flex;
+}
+
 .theme-toggle:hover {
   color: var(--color-fg-bold);
   background: var(--color-bg-alt);
@@ -130,10 +147,9 @@
 }
 
 /* All three states ship in the HTML. `data-theme-choice` on <html> — stamped
-   by the head bootstrap before first paint — selects the visible one, so the
-   correct icon and the correct accessible name are there without JavaScript.
-   `data-theme` alone could not do this: it cannot tell a forced dark theme
-   from a followed one. */
+   by the head bootstrap before first paint — selects the visible one before
+   React hydrates. `data-theme` alone could not do this: it cannot tell a
+   forced dark theme from a followed one. */
 .theme-toggle-state {
   display: none;
   align-items: center;
@@ -146,15 +162,13 @@
   display: flex;
 }
 
-/* No choice stamped means the bootstrap never ran, so the real preference is
-   unknowable from CSS. Show the default `system` choice until the client can
-   read storage instead of pretending the resolved light/dark theme was forced. */
-:root:not([data-theme-choice]) .theme-toggle-state[data-theme-state='system'] {
-  display: flex;
-}
-
 /* Hide hamburger on desktop */
 @media screen and (min-width: 736px) {
+  /* Match the logo rail even when no JavaScript means no theme control. */
+  .nav-actions {
+    min-width: 44px;
+  }
+
   .hamburger-button {
     display: none;
   }

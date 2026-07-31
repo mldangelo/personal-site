@@ -149,18 +149,24 @@ describe('ThemeToggle', () => {
   describe('before hydration', () => {
     // The server markup plus the real stylesheet plus the attribute the head
     // bootstrap stamps — no React. This is the whole claim of the component:
-    // one icon and one truthful name, with no JavaScript involved.
+    // one icon and one truthful name before the client bundle hydrates.
     it.each([
       ['system', SYSTEM_LABEL],
       ['light', LIGHT_LABEL],
       ['dark', DARK_LABEL],
-      // No attribute at all means the bootstrap never ran.
-      [null, SYSTEM_LABEL],
     ])('shows one state and names it for choice %s', (choice, label) => {
       const button = renderUnhydrated(choice);
 
-      expect(visibleStates()).toEqual([choice ?? 'system']);
+      expect(button).toBeVisible();
+      expect(visibleStates()).toEqual([choice]);
       expect(button).toHaveAccessibleName(label);
+    });
+
+    it('hides the inert control when the bootstrap did not run', () => {
+      const button = renderUnhydrated(null);
+
+      expect(button).not.toBeVisible();
+      expect(visibleStates()).toEqual([]);
     });
   });
 

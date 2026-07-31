@@ -1,7 +1,16 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
+import { THEME_CHOICE_ATTRIBUTE } from '@/lib/theme';
 import Hamburger from '../../Template/Hamburger';
+
+const NAVIGATION_CSS = readFileSync(
+  join(process.cwd(), 'app/styles/layout/navigation.css'),
+  'utf8',
+);
 
 describe('Hamburger', () => {
   it('renders the hamburger button', () => {
@@ -19,6 +28,35 @@ describe('Hamburger', () => {
     const button = screen.getByRole('button');
     expect(button).toHaveAttribute('aria-expanded', 'false');
     expect(button).toHaveAttribute('aria-controls', 'mobile-nav-menu');
+  });
+
+  it('stays hidden until the pre-paint bootstrap proves scripts ran', () => {
+    const root = document.documentElement;
+    root.removeAttribute(THEME_CHOICE_ATTRIBUTE);
+    const style = document.createElement('style');
+    style.textContent = NAVIGATION_CSS;
+    document.head.appendChild(style);
+
+    try {
+      render(<Hamburger />);
+      const button =
+        document.querySelector<HTMLButtonElement>('.hamburger-button');
+
+      expect(button).not.toBeNull();
+      expect(button).not.toBeVisible();
+      expect(
+        screen.queryByRole('button', { name: 'Open navigation menu' }),
+      ).toBeNull();
+
+      root.setAttribute(THEME_CHOICE_ATTRIBUTE, 'system');
+      expect(button).toBeVisible();
+      expect(screen.getByRole('button', { name: 'Open navigation menu' })).toBe(
+        button,
+      );
+    } finally {
+      root.removeAttribute(THEME_CHOICE_ATTRIBUTE);
+      style.remove();
+    }
   });
 
   it('toggles menu open on click', () => {
