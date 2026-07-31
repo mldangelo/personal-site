@@ -61,7 +61,15 @@ function createFixture({ basePath = '' } = {}) {
   write(
     root,
     'content/writing/secret-draft.md',
-    '---\ntitle: Secret draft\ndraft: true # keep private\n---\n',
+    [
+      '---',
+      'title: Secret draft',
+      "date: '2026-01-01'",
+      'description: Private fixture',
+      'draft: true # keep private',
+      '---',
+      '',
+    ].join('\n'),
   );
   write(
     root,
@@ -127,6 +135,14 @@ function mutate(
 ) {
   const file = join(root, path);
   writeFileSync(file, transform(readFileSync(file, 'utf8')));
+}
+
+function appendDraftBody(root: string, body: string) {
+  mutate(
+    root,
+    'content/writing/secret-draft.md',
+    (markdown) => `${markdown}\n${body}\n`,
+  );
 }
 
 function runVerifier(root: string) {
@@ -313,6 +329,254 @@ describe('verify-export', () => {
     expect(result.output).toContain(
       'feed.xml\n    exposes draft route: /writing/secret-draft/',
     );
+  });
+
+  /**
+   * `public/` now holds a generated share card per published post, so the export
+   * can carry an asset derived from `content/writing/`. A card for a draft is
+   * not a route and appears in no metadata, so every other gate here would let
+   * it through — while the file itself is publicly fetchable with the
+   * unpublished title rendered into its pixels.
+   */
+  it('rejects a generated share card for a draft post', () => {
+    const root = createFixture();
+    write(root, 'out/og/writing/secret-draft.png');
+
+    const result = runVerifier(root);
+    expect(result.status).toBe(1);
+    expect(result.output).toContain(
+      'exports a file named after a draft post: /og/writing/secret-draft.png',
+    );
+  });
+
+  it('rejects any other export named after a draft', () => {
+    const root = createFixture();
+    write(root, 'out/downloads/secret-draft/notes.pdf');
+
+    const result = runVerifier(root);
+    expect(result.status).toBe(1);
+    expect(result.output).toContain(
+      'exports a file named after a draft post: /downloads/secret-draft/notes.pdf',
+    );
+  });
+
+  it('rejects noindex HTML named after a draft outside the writing route', () => {
+    const root = createFixture();
+    write(
+      root,
+      'out/secret-draft.html',
+      '<!doctype html><html><head><meta name="robots" content="noindex"></head><body>Draft-derived page</body></html>',
+    );
+
+    const result = runVerifier(root);
+    expect(result.status).toBe(1);
+    expect(result.output).toContain(
+      'exports a file named after a draft post: /secret-draft.html',
+    );
+  });
+
+  it.each([
+    ['a nested-alt inline image', '![nested [alt]](/images/private.png)'],
+    [
+      'a full reference image',
+      '![private][asset]\n\n[asset]: /images/private.png',
+    ],
+    [
+      'a collapsed reference image',
+      '![private][]\n\n[private]: /images/private.png',
+    ],
+    [
+      'a shortcut reference image',
+      '![private]\n\n[private]: /images/private.png',
+    ],
+    ['a parent-relative image', '![private](../../images/private.png)'],
+    [
+      'a same-origin absolute image',
+      '![private](https://example.com/images/private.png)',
+    ],
+    [
+      'a same-origin protocol-relative image',
+      '![private](//example.com/images/private.png)',
+    ],
+    [
+      'a raw HTML image with a quoted angle bracket',
+      '<img alt="private > screenshot" src="/images/private.png">',
+    ],
+  ])('rejects a draft-only exported asset declared through %s', (_, body) => {
+    const root = createFixture();
+    write(root, 'out/images/private.png');
+    appendDraftBody(root, body);
+
+    const result = runVerifier(root);
+    expect(result.status).toBe(1);
+    expect(result.output).toContain(
+      'content/writing/secret-draft.md\n    draft references a publicly exported image: /images/private.png',
+    );
+  });
+
+  it('resolves relative draft assets within a repository-site base path', () => {
+    const root = createFixture({ basePath: '/personal-site' });
+    write(root, 'out/images/private.png');
+    appendDraftBody(root, '![private](../../images/private.png)');
+
+    const result = runVerifier(root);
+    expect(result.status).toBe(1);
+    expect(result.output).toContain(
+      'draft references a publicly exported image: /personal-site/images/private.png',
+    );
+  });
+
+  it('rejects every local candidate in a draft HTML srcset', () => {
+    const root = createFixture();
+    write(root, 'out/images/private-small.webp');
+    write(root, 'out/images/private-large.webp');
+    appendDraftBody(
+      root,
+      '<picture><source srcset="/images/private-small.webp 1x, /images/private-large.webp 2x"></picture>',
+    );
+
+    const result = runVerifier(root);
+    expect(result.status).toBe(1);
+    expect(result.output).toContain(
+      'draft references a publicly exported image: /images/private-small.webp',
+    );
+    expect(result.output).toContain(
+      'draft references a publicly exported image: /images/private-large.webp',
+    );
+  });
+
+  it.each([
+    [
+      'an image input src',
+      '<input type="image" src="/images/private.svg">',
+      'out/images/private.svg',
+      'image',
+    ],
+  ])(
+    'rejects a draft-only exported resource declared through %s',
+    (_, body, exportedPath, kind) => {
+      const root = createFixture();
+      write(root, exportedPath);
+      appendDraftBody(root, body);
+
+      const result = runVerifier(root);
+      expect(result.status).toBe(1);
+      expect(result.output).toContain(
+        `draft references a publicly exported ${kind}`,
+      );
+    },
+  );
+
+  it.each([
+    '<div style="background-image:url(/images/private.png)">Private</div>',
+    String.raw`<div style="background-image:u\72l(/images/private.png)">Private</div>`,
+    '<script src="/scripts/private.js"></script>',
+    '<iframe src="data:text/html,<img src=https://example.com/images/private.png>"></iframe>',
+    '<object data="data:text/html,<img src=https://example.com/images/private.png>"></object>',
+    '<link rel="stylesheet" href="data:text/css,body{background:url(https://example.com/images/private.png)}">',
+    '<svg><rect fill="url(/images/private.svg#paint)"></rect></svg>',
+    '<svg><image id="i"><set attributeName="href" to="/images/private.png"></set></image></svg>',
+  ])('fails closed for an uninspectable draft HTML fetch: %s', (body) => {
+    const root = createFixture();
+    appendDraftBody(root, body);
+
+    const result = runVerifier(root);
+    expect(result.status).toBe(1);
+    expect(result.output).toMatch(/not allowed|cannot be verified/i);
+  });
+
+  it('rejects an exported attachment linked only from a draft', () => {
+    const root = createFixture();
+    write(root, 'out/downloads/private-notes.pdf');
+    appendDraftBody(
+      root,
+      '[private notes][notes]\n\n[notes]: /downloads/private-notes.pdf',
+    );
+
+    const result = runVerifier(root);
+    expect(result.status).toBe(1);
+    expect(result.output).toContain(
+      'draft references a publicly exported link: /downloads/private-notes.pdf',
+    );
+  });
+
+  it('rejects a draft-only frontmatter image', () => {
+    const root = createFixture();
+    write(root, 'out/images/private-frontmatter.png');
+    mutate(root, 'content/writing/secret-draft.md', (markdown) =>
+      markdown.replace(
+        'draft: true # keep private',
+        [
+          'draft: true # keep private',
+          'image: /images/private-frontmatter.png',
+          'imageAlt: Private screenshot',
+        ].join('\n'),
+      ),
+    );
+
+    const result = runVerifier(root);
+    expect(result.status).toBe(1);
+    expect(result.output).toContain(
+      'draft references a publicly exported image: /images/private-frontmatter.png',
+    );
+  });
+
+  it('allows a draft to use an asset that an exported page already uses', () => {
+    const root = createFixture();
+    appendDraftBody(root, '![shared](/images/photo.png)');
+
+    const result = runVerifier(root);
+    expect(result.status).toBe(0);
+    expect(result.output).toContain('2 pages OK');
+  });
+
+  it('allows draft links to public pages and references to absent private files', () => {
+    const root = createFixture();
+    appendDraftBody(
+      root,
+      [
+        '[About](/about/)',
+        '![kept outside public](/images/not-published.png)',
+        '![external](https://cdn.example.net/private-preview.png)',
+        '![embedded](data:image/png;base64,AAAA)',
+      ].join('\n'),
+    );
+
+    const result = runVerifier(root);
+    expect(result.status).toBe(0);
+    expect(result.output).toContain('2 pages OK');
+  });
+
+  it('fails closed when draft srcset syntax is ambiguous', () => {
+    const root = createFixture();
+    appendDraftBody(
+      root,
+      '<source srcset="data:image/png;base64,AAAA, /images/hidden.png 2x">',
+    );
+
+    const result = runVerifier(root);
+    expect(result.status).toBe(1);
+    expect(result.output).toContain('srcset');
+  });
+
+  it('validates draft frontmatter before trusting its privacy boundary', () => {
+    const root = createFixture();
+    mutate(root, 'content/writing/secret-draft.md', (markdown) =>
+      markdown.replace('draft: true', "draft: 'true'"),
+    );
+
+    const result = runVerifier(root);
+    expect(result.status).toBe(1);
+    expect(result.output).toContain('"draft" must be a boolean');
+  });
+
+  it('accepts generated share cards for published posts', () => {
+    const root = createFixture();
+    write(root, 'out/og/writing/about.png');
+
+    const result = runVerifier(root);
+    expect(result.status).toBe(0);
+    expect(result.output).toContain('2 pages OK');
   });
 
   it('requires the sitemap to cover every indexable route', () => {

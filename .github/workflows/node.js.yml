@@ -83,7 +83,7 @@ jobs:
       - name: Format Check
         run: npm run format:check
 
-      - name: Verify generated share card
+      - name: Verify generated share cards
         run: npm run og:check
 
   # Run tests

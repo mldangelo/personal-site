@@ -13,6 +13,12 @@ import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { basename, extname, join, relative, resolve, sep } from 'node:path';
 import matter from 'gray-matter';
 
+import {
+  parseSrcset,
+  readMarkdownReferences,
+} from '../src/lib/markdown-assets.mjs';
+import { validatePostFrontmatterData } from '../src/lib/post-frontmatter.mjs';
+
 const ROOT = process.cwd();
 const OUT = resolve(ROOT, 'out');
 const CONTENT = resolve(ROOT, 'content/writing');
@@ -62,7 +68,7 @@ function decodeHtml(value) {
 }
 
 function tags(html, name = '[a-z][\\w:-]*') {
-  return [...html.matchAll(new RegExp(`<${name}\\b[^>]*>`, 'gi'))].map(
+  return [...html.matchAll(new RegExp(`<(?:${name})\\b[^>]*>`, 'gi'))].map(
     (match) => match[0],
   );
 }
@@ -145,12 +151,20 @@ if (pages.length === 0) {
   process.exit(1);
 }
 
-const draftSlugs = walk(CONTENT, (name) => name.endsWith('.md'))
-  // Use the same YAML parser as the application. A line regex misses valid
-  // forms such as `draft: true # keep private`, weakening the fault-injection
-  // gate precisely when the route layer regresses.
-  .filter((path) => matter(readFileSync(path, 'utf8')).data.draft === true)
-  .map((path) => basename(path, '.md'));
+const posts = walk(CONTENT, (name) => name.endsWith('.md')).map((path) => {
+  const source = toUrlPath(relative(ROOT, path));
+  const { data, content } = matter(readFileSync(path, 'utf8'));
+  const frontmatter = validatePostFrontmatterData(data, source);
+
+  return {
+    slug: basename(path, '.md'),
+    source,
+    content,
+    frontmatter,
+  };
+});
+const drafts = posts.filter(({ frontmatter }) => frontmatter.draft === true);
+const draftSlugs = drafts.map(({ slug }) => slug);
 
 function isDraftPath(pathname) {
   const route = routeForPublicPath(pathname) ?? pathname;
@@ -158,6 +172,34 @@ function isDraftPath(pathname) {
     (slug) =>
       route === `/writing/${slug}` || route.startsWith(`/writing/${slug}/`),
   );
+}
+
+/**
+ * Nothing in the export may be named after a draft, not only writing routes.
+ *
+ * The route and metadata checks below see HTML and XML. `public/` is copied
+ * into the export verbatim, so anything generated from `content/writing/` — a
+ * per-post share card, say — reaches the site as a plain file that no metadata
+ * gate looks at, carrying an unpublished title in its name and its pixels.
+ * Writing-route HTML is skipped here only because `isDraftPath` covers it
+ * below. HTML elsewhere still needs this name check: a noindex page called
+ * after a draft is public even though it is absent from the sitemap.
+ */
+if (draftSlugs.length > 0) {
+  for (const file of walk(OUT, () => true)) {
+    const path = toUrlPath(relative(OUT, file));
+    if (file.endsWith('.html') && isDraftPath(routeForHtml(path))) continue;
+
+    const named = path
+      .split('/')
+      .some((segment) =>
+        draftSlugs.includes(basename(segment, extname(segment))),
+      );
+
+    if (named) {
+      fail(path, `exports a file named after a draft post: /${path}`);
+    }
+  }
 }
 
 const records = pages.map((file) => {
@@ -209,6 +251,120 @@ function exportedFileExists(pathname) {
   const candidate = resolve(OUT, route.replace(/^\/+/, ''));
   if (candidate !== OUT && !candidate.startsWith(`${OUT}${sep}`)) return false;
   return existsSync(candidate) && statSync(candidate).isFile();
+}
+
+function localExportedResource(raw, baseRoute) {
+  let url;
+  try {
+    url = new URL(raw, siteUrlForRoute(baseRoute));
+  } catch {
+    return undefined;
+  }
+
+  if (
+    !['http:', 'https:'].includes(url.protocol) ||
+    url.origin !== SITE_ORIGIN ||
+    routeForPublicPath(url.pathname) === undefined ||
+    pageAt(url.pathname) ||
+    !exportedFileExists(url.pathname)
+  ) {
+    return undefined;
+  }
+
+  return url.pathname;
+}
+
+/**
+ * Assets already used by an exported page are public independently of a
+ * draft. The draft gate below targets the dangerous remainder: files copied
+ * into `out/` that only unpublished Markdown asks the browser to fetch.
+ */
+function exportedPageAssets() {
+  const assets = new Set();
+
+  function add(raw, route) {
+    if (!raw) return;
+    const path = localExportedResource(raw, route);
+    if (path) assets.add(path);
+  }
+
+  for (const record of records) {
+    for (const image of metaValues(record.html, 'property', 'og:image')) {
+      add(image, record.route);
+    }
+    for (const image of metaValues(record.html, 'name', 'twitter:image')) {
+      add(image, record.route);
+    }
+    for (const tag of tags(record.html, 'a')) {
+      add(attribute(tag, 'href'), record.route);
+    }
+    for (const tag of tags(record.html, 'img|source')) {
+      add(attribute(tag, 'src'), record.route);
+      const srcset = attribute(tag, 'srcset');
+      if (srcset) {
+        for (const source of parseSrcset(srcset)) add(source, record.route);
+      }
+    }
+    for (const tag of tags(
+      record.html,
+      'audio|embed|iframe|object|track|video',
+    )) {
+      add(attribute(tag, 'src'), record.route);
+      add(attribute(tag, 'data'), record.route);
+      add(attribute(tag, 'poster'), record.route);
+    }
+  }
+
+  return assets;
+}
+
+const publicPageAssets = exportedPageAssets();
+
+/**
+ * Draft assets need not contain the draft slug. Parse the source with the same
+ * grammar used by the renderer, resolve relative URLs from the eventual post
+ * route, and reject any referenced file that otherwise has no public owner.
+ *
+ * Missing files are allowed: that is how a local draft can retain image slots
+ * while the underlying screenshots stay outside public/. The development
+ * renderer has a draft-only fallback for precisely that preview state.
+ */
+for (const draft of drafts) {
+  const references = readMarkdownReferences(draft.content);
+  if (draft.frontmatter.image) {
+    references.push({ kind: 'image', target: draft.frontmatter.image });
+  }
+
+  for (const { kind, target } of references) {
+    const route = `/writing/${draft.slug}/`;
+    let url;
+    try {
+      url = new URL(target, siteUrlForRoute(route));
+    } catch {
+      fail(draft.source, `draft has an invalid ${kind} URL: ${target}`);
+      continue;
+    }
+
+    if (!['http:', 'https:'].includes(url.protocol)) continue;
+    if (url.origin !== SITE_ORIGIN) continue;
+    if (routeForPublicPath(url.pathname) === undefined) {
+      fail(
+        draft.source,
+        `draft ${kind} points outside configured base path ${SITE_BASE_PATH}/: ${target}`,
+      );
+      continue;
+    }
+    if (kind === 'link' && pageAt(url.pathname)) continue;
+    if (
+      exportedFileExists(url.pathname) &&
+      !publicPageAssets.has(url.pathname)
+    ) {
+      fail(
+        draft.source,
+        `draft references a publicly exported ${kind}: ${url.pathname}`,
+      );
+    }
+  }
 }
 
 function parseHttpUrl(raw, baseRoute, page, label) {
@@ -603,5 +759,5 @@ if (failures.length > 0) {
 
 console.log(
   `verify-export: ${pages.length} pages OK ` +
-    '(drafts, robots, ids/fragments, canonicals, complete share metadata, local images, internal links, sitemap/RSS)',
+    '(draft routes and referenced assets, robots, ids/fragments, canonicals, complete share metadata, local images, internal links, sitemap/RSS)',
 );

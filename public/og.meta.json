@@ -3,6 +3,49 @@
     "width": 1200,
     "height": 630
   },
+  "fonts": [
+    {
+      "name": "Display",
+      "family": "Bricolage Grotesque",
+      "weight": 800,
+      "style": "normal",
+      "url": "https://fonts.gstatic.com/s/bricolagegrotesque/v9/3y9U6as8bTXq_nANBjzKo3IeZx8z6up5BeSl5jBNz_19PpbpMXuECpwUxJBOm_OJWiaaD30YfKfjZZoLvZvlyM0.ttf",
+      "sha256": "50fe1039eb3ff208d027a4867d3f53bd288bba76273a718578f7b3ec0feec388"
+    },
+    {
+      "name": "Mono",
+      "family": "JetBrains Mono",
+      "weight": 500,
+      "style": "normal",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8-qxjPQ.ttf",
+      "sha256": "3386a05f6ece969e4537de6be894170d20558e82f7d56c8c5d332972ef172160"
+    },
+    {
+      "name": "Body",
+      "family": "Newsreader",
+      "weight": 400,
+      "style": "normal",
+      "url": "https://fonts.gstatic.com/s/newsreader/v26/cY9qfjOCX1hbuyalUrK49dLac06G1ZGsZBtoBCzBDXXD9JVF438weI_ADA.ttf",
+      "sha256": "b8f5e0a8bdd6a12c722ca5635d9da87e77ccbb2d0172112e34e00c4e55f2cd5a"
+    }
+  ],
+  "renderer": [
+    {
+      "name": "next",
+      "version": "16.2.12",
+      "integrity": "sha512-iD59eYQWmbFcEbX7v/acG5DRym9iw1DdaPoD0WTA920naWsE25wShzJW4+UvAs8MK9EC2kBfIH6vtto1H1PHGw=="
+    },
+    {
+      "name": "react",
+      "version": "19.2.8",
+      "integrity": "sha512-PWaYA1L/q9u2u7xYQi+Y3L3Yfnie7XyLeaJICV1MGD6LprsBxcAqGjYyr0eY3p+QdsA+x/Irkt4Qif8D63+Sbw=="
+    },
+    {
+      "name": "sharp",
+      "version": "0.35.3",
+      "integrity": "sha512-ej0zVHuZGHCiABXcNxeYhpRnPNPAcvbG8RMdBAhDAxLKkCRVSpK3Iyu7qbqw3JMzoj0REeM6f3tJLtVwl0023Q=="
+    }
+  ],
   "profile": {
     "name": "Michael D'Angelo",
     "employer": "OpenAI",
@@ -11,6 +54,85 @@
     "computingSince": 1993,
     "currentCity": "New York, NY"
   },
-  "generatorDigest": "69f9406c836e1571b913cecb43e10ae4517ea8749e55735d6e3bc700fb85f241",
-  "imageDigest": "916adc2a96bbdc30d68db9b291927d346cad40e9a12ae7384f8332cd7ed882a2"
+  "colors": {
+    "ink": "#0e1116",
+    "paper": "#f2f1ec",
+    "body": "#23272e",
+    "graphite": "#545a63",
+    "accent": "#1b2fbf",
+    "hairline": "rgba(35, 39, 46, 0.14)"
+  },
+  "generatorDigest": "4ab1eb74ef0f0f5a7ef6c7326f5dc976d6c00c3277fda373f4808f51a84e3537",
+  "imageDigest": "9c76fd6b9be9ed5e8253a35ee7b741e219b2bfd5484b5bd29c90eb7a3241d4eb",
+  "posts": [
+    {
+      "slug": "claude-code-outage",
+      "path": "/og/writing/claude-code-outage.png",
+      "title": "Notes on the Claude Code 2.1.0 outage",
+      "description": "A changelog formatting change took down Claude Code. Lessons about parsing human docs as machine data.",
+      "date": "2026-01-08",
+      "dateLabel": "January 8, 2026",
+      "readout": [
+        {
+          "label": "Words",
+          "value": "406"
+        },
+        {
+          "label": "Unique external links",
+          "value": "9"
+        },
+        {
+          "label": "Reading time",
+          "value": "2 min"
+        }
+      ],
+      "imageDigest": "5e5c96344427b0fa2ca767631fc47feabaaefa404986e14a7cad6d3730f8df28"
+    },
+    {
+      "slug": "eurostar-chatbot-analysis",
+      "path": "/og/writing/eurostar-chatbot-analysis.png",
+      "title": "Notes on the Eurostar chatbot \"vulnerability\" report",
+      "description": "Looking at what makes something a vulnerability versus a hardening opportunity in LLM applications.",
+      "date": "2026-01-05",
+      "dateLabel": "January 5, 2026",
+      "readout": [
+        {
+          "label": "Words",
+          "value": "868"
+        },
+        {
+          "label": "Unique external links",
+          "value": "9"
+        },
+        {
+          "label": "Reading time",
+          "value": "4 min"
+        }
+      ],
+      "imageDigest": "a1f18c68bf7fb348b7d2cbe775953699f70db8a8833a4adc5c02d6fac1eb4227"
+    },
+    {
+      "slug": "shipping-with-claude-code",
+      "path": "/og/writing/shipping-with-claude-code.png",
+      "title": "What I learned shipping 1,000+ PRs with Claude Code",
+      "description": "Notes from using Claude Code in parallel git worktrees: Plan Mode, ultrathink, verification loops, and Chrome automation.",
+      "date": "2026-01-03",
+      "dateLabel": "January 3, 2026",
+      "readout": [
+        {
+          "label": "Words",
+          "value": "1,924"
+        },
+        {
+          "label": "Unique external links",
+          "value": "17"
+        },
+        {
+          "label": "Reading time",
+          "value": "9 min"
+        }
+      ],
+      "imageDigest": "a46c1dfd2a4da87e8f532a11589745410d8af75c52eb67e6933d794376bcb394"
+    }
+  ]
 }

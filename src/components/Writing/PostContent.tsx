@@ -11,6 +11,11 @@ interface PostContentProps {
    * each one reserved the wrong ratio and shifted the page as it loaded.
    */
   imageSizes?: Record<string, { width: number; height: number }>;
+  /**
+   * Draft previews may point at intentionally unpublished local images. The
+   * production path remains strict and refuses invented dimensions.
+   */
+  allowMissingLocalImages?: boolean;
 }
 
 /** Remote/data images cannot be inspected from the repository at build time. */
@@ -21,6 +26,7 @@ function isRootLocalImage(src: string): boolean {
 }
 
 export default function PostContent({
+  allowMissingLocalImages = false,
   content,
   imageSizes = {},
 }: PostContentProps) {
@@ -35,7 +41,11 @@ export default function PostContent({
               }
 
               const measuredSize = imageSizes[src];
-              if (isRootLocalImage(src) && !measuredSize) {
+              if (
+                isRootLocalImage(src) &&
+                !measuredSize &&
+                !allowMissingLocalImages
+              ) {
                 throw new Error(
                   `Missing measured dimensions for local article image: ${src}`,
                 );

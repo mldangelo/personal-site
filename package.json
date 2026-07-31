@@ -25,7 +25,7 @@
     "predeploy": "npm run build",
     "analyze": "ANALYZE=true npm run build",
     "og": "node scripts/generate-og.mjs",
-    "og:check": "node scripts/check-og.mjs",
+    "og:check": "node scripts/check-og.mjs && node scripts/generate-og.mjs --check",
     "verify-export": "node scripts/verify-export.mjs"
   },
   "dependencies": {
