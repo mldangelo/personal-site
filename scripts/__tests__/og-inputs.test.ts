@@ -21,13 +21,16 @@ import { formatDate } from '@/lib/utils';
 import {
   assertCardFontDigest,
   CARD_FONTS,
+  CARD_RENDERER_PACKAGES,
   countExternalLinks,
   countProseWords,
   formatCardDate,
   imageDigest,
   postCardPath,
+  readCardRenderer,
   readPostCards,
 } from '../og-inputs.mjs';
+import { TITLE_SIZES, titleFontSize } from '../og-layout.mjs';
 
 interface PostCard {
   slug: string;
@@ -169,6 +172,48 @@ describe('share card fonts', () => {
   });
 });
 
+describe('share card renderer', () => {
+  it('records the exact locked renderer packages in the ledger', async () => {
+    const ledger = JSON.parse(readFileSync(LEDGER, 'utf8'));
+    const renderer = await readCardRenderer(ROOT);
+
+    expect(ledger.renderer).toEqual(renderer);
+    expect(renderer.map((entry) => entry.name)).toEqual(CARD_RENDERER_PACKAGES);
+    for (const entry of renderer) {
+      expect(entry.version).toMatch(/^\d+\.\d+\.\d+/);
+      expect(entry.integrity).toMatch(/^sha512-/);
+    }
+  });
+
+  it('changes the renderer snapshot when a locked renderer changes', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'post-card-renderer-'));
+    temporaryRoots.push(root);
+    const entries = Object.fromEntries(
+      CARD_RENDERER_PACKAGES.map((name) => [
+        `node_modules/${name}`,
+        {
+          version: '1.0.0',
+          integrity: `sha512-${name}-one`,
+        },
+      ]),
+    );
+
+    writeFileSync(
+      join(root, 'package-lock.json'),
+      JSON.stringify({ packages: entries }),
+    );
+    const before = await readCardRenderer(root);
+
+    entries['node_modules/next'].integrity = 'sha512-next-two';
+    writeFileSync(
+      join(root, 'package-lock.json'),
+      JSON.stringify({ packages: entries }),
+    );
+
+    await expect(readCardRenderer(root)).resolves.not.toEqual(before);
+  });
+});
+
 describe('share card frontmatter validation', () => {
   const base = {
     title: 'Fixture title',
@@ -236,9 +281,11 @@ describe('post measurements', () => {
     ).toBe(2);
     expect(countProseWords('- one\n- two\n\n> quoted')).toBe(3);
     expect(countProseWords('![alt text](/images/a.png)')).toBe(0);
+    expect(countProseWords('latency < 50ms and throughput > 1k')).toBe(5);
+    expect(countProseWords('<strong>Two words</strong>')).toBe(2);
   });
 
-  it('counts distinct outbound sources', () => {
+  it('counts distinct inline external destinations', () => {
     expect(
       countExternalLinks('[a](https://one.example) [b](https://two.example)'),
     ).toBe(2);
@@ -250,7 +297,50 @@ describe('post measurements', () => {
     expect(countExternalLinks('[internal](/writing/post/)')).toBe(0);
     expect(countExternalLinks('![remote](https://one.example/a.png)')).toBe(0);
     expect(
+      countExternalLinks(
+        '[![chart](/images/chart.png)](https://one.example/report)',
+      ),
+    ).toBe(1);
+    expect(
       countExternalLinks('```md\n[in code](https://one.example)\n```'),
     ).toBe(0);
+  });
+});
+
+describe('post card fitting', () => {
+  it('finds a supported title size for every published post', () => {
+    for (const card of cards) {
+      expect(TITLE_SIZES).toContain(
+        titleFontSize(card, { width: 1200, height: 630 }),
+      );
+    }
+  });
+
+  it('rejects copy that cannot fit instead of rendering a cropped card', () => {
+    expect(() =>
+      titleFontSize(
+        {
+          slug: 'too-long',
+          title: 'A title that keeps going '.repeat(30),
+          description: 'A description that cannot fit on the card. '.repeat(30),
+        },
+        { width: 1200, height: 630 },
+      ),
+    ).toThrow(
+      /share card for too-long cannot fit its title and description.*Shorten the frontmatter copy/,
+    );
+  });
+
+  it('rejects an unbreakable title whose wrapped lines cannot fit', () => {
+    expect(() =>
+      titleFontSize(
+        {
+          slug: 'unbreakable',
+          title: 'W'.repeat(200),
+          description: 'A short description.',
+        },
+        { width: 1200, height: 630 },
+      ),
+    ).toThrow(/share card for unbreakable cannot fit/);
   });
 });

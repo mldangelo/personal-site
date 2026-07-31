@@ -7,6 +7,10 @@
  * changes underneath them. This recomputes every input the generator used and
  * compares it against `public/og.meta.json`.
  *
+ * This script checks ledger consistency first; the `og:check` package command
+ * follows it with a fresh render in `generate-og.mjs --check`, which proves the
+ * committed pixels actually came from these inputs.
+ *
  * It is also the gate on the one asset in `public/` that is derived from
  * `content/writing/`: a card left behind by a post that became a draft, or was
  * renamed, would stay publicly fetchable with its title rendered into it.
@@ -90,6 +94,10 @@ if (!same(ledger.fonts, inputs.fonts)) {
   fail(`The checksummed share-card fonts are stale. ${REGENERATE}`);
 }
 
+if (!same(ledger.renderer, inputs.renderer)) {
+  fail(`The locked share-card renderer changed. ${REGENERATE}`);
+}
+
 if (ledger.generatorDigest !== inputs.generatorDigest) {
   fail(
     `The share-card generator changed without regenerated cards. ${REGENERATE}`,
@@ -152,5 +160,5 @@ if (failures.length > 0) {
 
 console.log(
   `og:check: ${1 + inputs.posts.length} cards at ${EXPECTED_SIZE.width}x${EXPECTED_SIZE.height}; ` +
-    'images, checksummed fonts, profile facts, colour tokens, post readouts, and generator current',
+    'images, checksummed fonts, locked renderer, profile facts, colour tokens, post readouts, and generator current',
 );

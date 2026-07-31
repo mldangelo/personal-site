@@ -329,7 +329,7 @@ describe('verify-export', () => {
     const result = runVerifier(root);
     expect(result.status).toBe(1);
     expect(result.output).toContain(
-      'exports an asset named after a draft post: /og/writing/secret-draft.png',
+      'exports a file named after a draft post: /og/writing/secret-draft.png',
     );
   });
 
@@ -340,7 +340,22 @@ describe('verify-export', () => {
     const result = runVerifier(root);
     expect(result.status).toBe(1);
     expect(result.output).toContain(
-      'exports an asset named after a draft post: /downloads/secret-draft/notes.pdf',
+      'exports a file named after a draft post: /downloads/secret-draft/notes.pdf',
+    );
+  });
+
+  it('rejects noindex HTML named after a draft outside the writing route', () => {
+    const root = createFixture();
+    write(
+      root,
+      'out/secret-draft.html',
+      '<!doctype html><html><head><meta name="robots" content="noindex"></head><body>Draft-derived page</body></html>',
+    );
+
+    const result = runVerifier(root);
+    expect(result.status).toBe(1);
+    expect(result.output).toContain(
+      'exports a file named after a draft post: /secret-draft.html',
     );
   });
 

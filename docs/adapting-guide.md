@@ -203,7 +203,12 @@ npm run og:check
 
 `npm run og` updates `public/og.png`, one card per published post under
 `public/og/writing/`, and the `public/og.meta.json` ledger. The images and the
-ledger must stay in sync, and drafts never get a card.
+ledger must stay in sync, and drafts never get a card. The ledger also binds
+the locked Next, React, and Sharp renderer packages, so an upgrade to one of
+them requires regeneration even when the card source itself did not change.
+`npm run og:check` then fetches the checksum-pinned fonts and compares a fresh
+render byte for byte, so changing an image and its editable ledger digest
+together does not pass verification.
 
 ## Audit the result
 

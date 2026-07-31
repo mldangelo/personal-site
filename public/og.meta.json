@@ -29,6 +29,23 @@
       "sha256": "b8f5e0a8bdd6a12c722ca5635d9da87e77ccbb2d0172112e34e00c4e55f2cd5a"
     }
   ],
+  "renderer": [
+    {
+      "name": "next",
+      "version": "16.2.12",
+      "integrity": "sha512-iD59eYQWmbFcEbX7v/acG5DRym9iw1DdaPoD0WTA920naWsE25wShzJW4+UvAs8MK9EC2kBfIH6vtto1H1PHGw=="
+    },
+    {
+      "name": "react",
+      "version": "19.2.8",
+      "integrity": "sha512-PWaYA1L/q9u2u7xYQi+Y3L3Yfnie7XyLeaJICV1MGD6LprsBxcAqGjYyr0eY3p+QdsA+x/Irkt4Qif8D63+Sbw=="
+    },
+    {
+      "name": "sharp",
+      "version": "0.35.3",
+      "integrity": "sha512-ej0zVHuZGHCiABXcNxeYhpRnPNPAcvbG8RMdBAhDAxLKkCRVSpK3Iyu7qbqw3JMzoj0REeM6f3tJLtVwl0023Q=="
+    }
+  ],
   "profile": {
     "name": "Michael D'Angelo",
     "employer": "OpenAI",
@@ -45,7 +62,7 @@
     "accent": "#1b2fbf",
     "hairline": "rgba(35, 39, 46, 0.14)"
   },
-  "generatorDigest": "29afa7878e3f0e87fc660c316c29ef5209a6126d919dbd0596183485e76ef4a7",
+  "generatorDigest": "675bf237392897837c97646c400788404704c209688a9acadeab318bcdd74690",
   "imageDigest": "9c76fd6b9be9ed5e8253a35ee7b741e219b2bfd5484b5bd29c90eb7a3241d4eb",
   "posts": [
     {
@@ -108,14 +125,14 @@
         },
         {
           "label": "External links",
-          "value": "16"
+          "value": "17"
         },
         {
           "label": "Reading time",
           "value": "9 min"
         }
       ],
-      "imageDigest": "e89b0532b445d7aeae2ba1c4b76e90b8c990dba48fbc651faba08af72f600e44"
+      "imageDigest": "071d10643434a0be7ec7810daa1712e627931f4696507910075f58b3ce68403b"
     }
   ]
 }

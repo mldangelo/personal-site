@@ -161,17 +161,21 @@ function isDraftPath(pathname) {
 }
 
 /**
- * Nothing in the export may be named after a draft, not only routes.
+ * Nothing in the export may be named after a draft, not only writing routes.
  *
  * The route and metadata checks below see HTML and XML. `public/` is copied
  * into the export verbatim, so anything generated from `content/writing/` — a
  * per-post share card, say — reaches the site as a plain file that no metadata
  * gate looks at, carrying an unpublished title in its name and its pixels.
- * HTML is skipped here only because `isDraftPath` already covers every route.
+ * Writing-route HTML is skipped here only because `isDraftPath` covers it
+ * below. HTML elsewhere still needs this name check: a noindex page called
+ * after a draft is public even though it is absent from the sitemap.
  */
 if (draftSlugs.length > 0) {
-  for (const file of walk(OUT, (name) => !name.endsWith('.html'))) {
+  for (const file of walk(OUT, () => true)) {
     const path = toUrlPath(relative(OUT, file));
+    if (file.endsWith('.html') && isDraftPath(routeForHtml(path))) continue;
+
     const named = path
       .split('/')
       .some((segment) =>
@@ -179,7 +183,7 @@ if (draftSlugs.length > 0) {
       );
 
     if (named) {
-      fail(path, `exports an asset named after a draft post: /${path}`);
+      fail(path, `exports a file named after a draft post: /${path}`);
     }
   }
 }

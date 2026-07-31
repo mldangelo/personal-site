@@ -25,6 +25,16 @@ export const POST_CARD_DIRECTORY = '/og/writing';
 export const LEDGER_PATH = '/og.meta.json';
 
 /**
+ * Installed packages whose exact locked bytes can change rendered pixels.
+ *
+ * `next/og` bundles satori and the OG renderer, React supplies the element
+ * tree, and the Node renderer dynamically loads Sharp when it is installed.
+ * The lock entries are therefore inputs just as surely as the generator source
+ * and fonts are.
+ */
+export const CARD_RENDERER_PACKAGES = ['next', 'react', 'sharp'];
+
+/**
  * Exact font files used by satori.
  *
  * Google Fonts' family CSS is mutable: resolving "Bricolage Grotesque 800" on
@@ -69,6 +79,7 @@ export const CARD_FONTS = [
 const GENERATOR_SOURCES = [
   'scripts/generate-og.mjs',
   'scripts/og-inputs.mjs',
+  'scripts/og-layout.mjs',
   'scripts/og-profile.mjs',
   'src/lib/post-frontmatter.mjs',
 ];
@@ -188,22 +199,37 @@ function assertSafeSlug(slug, file) {
  * marks, and table pipes do not inflate the number.
  */
 export function countProseWords(markdown) {
-  return markdown
-    .replace(/```[\s\S]*?```/g, ' ')
-    .replace(/`[^`\n]*`/g, ' ')
-    .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
-    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
-    .replace(/<[^>]+>/g, ' ')
-    .split(/\s+/)
-    .filter((token) => /[\p{L}\p{N}]/u.test(token)).length;
+  return (
+    markdown
+      .replace(/```[\s\S]*?```/g, ' ')
+      .replace(/`[^`\n]*`/g, ' ')
+      .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
+      .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+      // Restrict this to recognizable HTML. A broad `<[^>]+>` expression also
+      // erases technical prose such as `latency < 50ms and throughput > 1k`.
+      .replace(
+        /<\/?(?:a|abbr|b|blockquote|br|cite|code|del|details|div|em|figcaption|figure|h[1-6]|hr|i|img|kbd|li|mark|ol|p|pre|s|small|span|strong|sub|summary|sup|table|tbody|td|th|thead|tr|ul)(?:\s+[^<>]*?)?\s*\/?>/gi,
+        ' ',
+      )
+      .split(/\s+/)
+      .filter((token) => /[\p{L}\p{N}]/u.test(token)).length
+  );
 }
 
-/** Distinct sources a post links out to. Two links to one URL are one source. */
+/**
+ * Distinct inline external destinations.
+ *
+ * A linked image is still a link. The label expression therefore accepts one
+ * nested Markdown image, as in `[![chart](/chart.png)](https://example.com)`,
+ * while the negative lookbehind keeps the image's own source from counting.
+ */
 export function countExternalLinks(markdown) {
   const links = markdown
     .replace(/```[\s\S]*?```/g, ' ')
     .replace(/`[^`\n]*`/g, ' ')
-    .matchAll(/(?<!!)\[[^\]]*\]\(\s*(https?:\/\/[^)\s]+)/g);
+    .matchAll(
+      /(?<!!)\[(?:[^\[\]]|!\[[^\]]*\]\([^)]*\))*\]\(\s*<?(https?:\/\/[^)\s>]+)>?(?:\s+(?:"[^"]*"|'[^']*'|\([^)]*\)))?\s*\)/g,
+    );
 
   return new Set([...links].map((match) => match[1])).size;
 }
@@ -292,6 +318,39 @@ export async function readPostCards(root = process.cwd()) {
   );
 }
 
+/** Exact lockfile identities of the packages that render card pixels. */
+export async function readCardRenderer(root = process.cwd()) {
+  const lockPath = join(root, 'package-lock.json');
+  let lock;
+
+  try {
+    lock = JSON.parse(await readFile(lockPath, 'utf8'));
+  } catch (error) {
+    throw new Error(
+      'Cannot read the share-card renderer from package-lock.json',
+      { cause: error },
+    );
+  }
+
+  return CARD_RENDERER_PACKAGES.map((name) => {
+    const entry = lock?.packages?.[`node_modules/${name}`];
+    if (
+      typeof entry?.version !== 'string' ||
+      typeof entry?.integrity !== 'string'
+    ) {
+      throw new Error(
+        `package-lock.json has no complete node_modules/${name} lock entry for the share-card renderer`,
+      );
+    }
+
+    return {
+      name,
+      version: entry.version,
+      integrity: entry.integrity,
+    };
+  });
+}
+
 /**
  * Everything the committed cards are derived from.
  *
@@ -299,13 +358,14 @@ export async function readPostCards(root = process.cwd()) {
  * digest attached; `check-og.mjs` recomputes it and compares.
  */
 export async function readCardInputs(root = process.cwd()) {
-  const [profile, colors, posts, sources] = await Promise.all([
+  const [profile, colors, posts, sources, renderer] = await Promise.all([
     readFile(join(root, 'src/data/profile.json'), 'utf8').then(JSON.parse),
     readCardColors(root),
     readPostCards(root),
     Promise.all(
       GENERATOR_SOURCES.map((source) => readFile(join(root, source), 'utf8')),
     ),
+    readCardRenderer(root),
   ]);
 
   const profileSnapshot = ogProfileSnapshot(profile);
@@ -324,6 +384,7 @@ export async function readCardInputs(root = process.cwd()) {
     profileSnapshot,
     colors,
     posts,
+    renderer,
     generatorDigest,
   };
 }

@@ -11,14 +11,14 @@
  * instead of relying on metadata-file inheritance, which a route-level
  * `openGraph` object silently replaces.
  *
- * Run with `npm run og`. The output is committed: a card changes only when the
- * design or the facts on it change, so builds stay deterministic and do not
- * depend on Google Fonts being reachable from CI. `npm run og:check` is what
- * fails CI when a committed card no longer matches the repository.
+ * Run with `npm run og`. The output is committed, so ordinary builds neither
+ * render cards nor fetch fonts. `npm run og:check` validates the ledger and
+ * performs one fresh, byte-for-byte render so an edited image and edited digest
+ * cannot masquerade as generator output.
  *
  * Drafts never get a card — see `readPostCards` in `og-inputs.mjs`.
  */
-import { mkdir, readdir, rm, writeFile } from 'node:fs/promises';
+import { mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { join } from 'node:path';
 import { createElement as h } from 'react';
@@ -32,6 +32,20 @@ import {
   publicFile,
   readCardInputs,
 } from './og-inputs.mjs';
+import {
+  DESCRIPTION_GAP,
+  DESCRIPTION_LINE_HEIGHT,
+  DESCRIPTION_SIZE,
+  DESCRIPTION_WIDTH,
+  PADDING_TOP,
+  PADDING_X,
+  READOUT_RULE,
+  TITLE_GAP,
+  TITLE_LINE_HEIGHT,
+  TOP_RULE,
+  titleFontSize,
+  WORD_BREAK,
+} from './og-layout.mjs';
 
 // `next/og` ships as CommonJS with no ESM export condition, so it has to be
 // required rather than imported.
@@ -48,6 +62,7 @@ const {
   fonts: fontSources,
   colors,
   posts,
+  renderer,
   generatorDigest,
 } = await readCardInputs(root);
 
@@ -61,36 +76,6 @@ const { ink, paper, body, graphite, accent, hairline } = colors;
  * The title size is therefore chosen up front from an estimate, and every
  * number that estimate assumes is the same constant the styles use.
  * ------------------------------------------------------------------------- */
-const PADDING_X = 80;
-const PADDING_TOP = 72;
-/** The heavy rule that opens a card. A hairline divides within one. */
-const TOP_RULE = 10;
-const READOUT_RULE = 2;
-/** Readout label, value, and the row's own padding. */
-const READOUT_HEIGHT = 122;
-/** Mono 25 at satori's default line height. */
-const BYLINE_HEIGHT = 30;
-const TITLE_GAP = 28;
-const TITLE_LINE_HEIGHT = 1.02;
-const DESCRIPTION_GAP = 26;
-const DESCRIPTION_SIZE = 30;
-const DESCRIPTION_LINE_HEIGHT = 1.4;
-/** Prose wants a narrower measure than the card is wide. */
-const DESCRIPTION_WIDTH = 880;
-/** Slack, so a line the estimate misjudges still has somewhere to go. */
-const BOTTOM_GAP = 44;
-
-const CONTENT_WIDTH = size.width - PADDING_X * 2;
-const TEXT_HEIGHT =
-  size.height -
-  TOP_RULE -
-  PADDING_TOP -
-  READOUT_HEIGHT -
-  BYLINE_HEIGHT -
-  TITLE_GAP -
-  DESCRIPTION_GAP -
-  BOTTOM_GAP;
-
 /**
  * The site card reports selected static profile facts.
  *
@@ -111,22 +96,37 @@ const AUTHOR = profile.name.replace("'", '’');
 
 /** Fetches one exact TTF and refuses any response whose bytes have changed. */
 async function loadCardFont(source) {
-  const response = await fetch(source.url);
-  if (!response.ok) {
-    throw new Error(
-      `Failed to download ${source.family} ${source.weight}: ${response.status}`,
-    );
+  let lastError;
+
+  for (let attempt = 1; attempt <= 2; attempt += 1) {
+    let data;
+    try {
+      const response = await fetch(source.url, {
+        signal: AbortSignal.timeout(15_000),
+      });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      data = Buffer.from(await response.arrayBuffer());
+    } catch (error) {
+      lastError = error;
+      continue;
+    }
+
+    // A digest mismatch is not a transient network failure: do not retry it
+    // and obscure the exact changed-byte error.
+    assertCardFontDigest(source, data);
+
+    return {
+      name: source.name,
+      data,
+      weight: source.weight,
+      style: source.style,
+    };
   }
 
-  const data = Buffer.from(await response.arrayBuffer());
-  assertCardFontDigest(source, data);
-
-  return {
-    name: source.name,
-    data,
-    weight: source.weight,
-    style: source.style,
-  };
+  throw new Error(
+    `Failed to download ${source.family} ${source.weight} after two 15-second attempts`,
+    { cause: lastError },
+  );
 }
 
 function readoutCell(cell, index) {
@@ -243,50 +243,6 @@ function siteCard() {
   );
 }
 
-/**
- * Average character advance as a fraction of point size.
- *
- * Measured off a rendered card: Bricolage 800 sits near 0.475em per character
- * in mixed case, and Newsreader is narrower still. Rounding up is deliberate —
- * over-estimating a line's width only steps a title down one size, while
- * under-estimating it runs the text into the rule below.
- */
-const CHARACTER_WIDTH = 0.5;
-
-function estimateLines(text, fontSize, width) {
-  const perLine = Math.max(1, width / (fontSize * CHARACTER_WIDTH));
-  // Words do not break, so a wrapped line usually ends a little short.
-  return Math.max(1, Math.ceil(text.length / (perLine * 0.95)));
-}
-
-/**
- * Display size for a post title, chosen from what the description leaves.
- *
- * Titles run from a few words to a full sentence, and one fixed size either
- * shrinks the short ones or overflows the long ones. Deriving the step from the
- * post itself means a new post places itself, the same way `tierFor` does on
- * the resume.
- */
-const TITLE_SIZES = [100, 84, 72, 60, 50];
-
-function titleFontSize(post) {
-  const descriptionHeight =
-    estimateLines(post.description, DESCRIPTION_SIZE, DESCRIPTION_WIDTH) *
-    DESCRIPTION_SIZE *
-    DESCRIPTION_LINE_HEIGHT;
-  const available = TEXT_HEIGHT - descriptionHeight;
-
-  return (
-    TITLE_SIZES.find(
-      (fontSize) =>
-        estimateLines(post.title, fontSize, CONTENT_WIDTH) *
-          fontSize *
-          TITLE_LINE_HEIGHT <=
-        available,
-    ) ?? TITLE_SIZES.at(-1)
-  );
-}
-
 /** Straight quotes are a typewriter artifact; the card is set type. */
 function typeset(text) {
   return text
@@ -305,12 +261,13 @@ function postCard(post) {
         style: {
           marginTop: TITLE_GAP,
           fontFamily: 'Display',
-          fontSize: titleFontSize(post),
+          fontSize: titleFontSize(post, size),
           fontWeight: 800,
           letterSpacing: '-0.035em',
           lineHeight: TITLE_LINE_HEIGHT,
           color: ink,
           display: 'block',
+          wordBreak: WORD_BREAK,
         },
       },
       typeset(post.title),
@@ -328,6 +285,7 @@ function postCard(post) {
           lineHeight: DESCRIPTION_LINE_HEIGHT,
           color: body,
           display: 'block',
+          wordBreak: WORD_BREAK,
         },
       },
       typeset(post.description),
@@ -364,6 +322,7 @@ const digests = new Map(
 const ledger = {
   size,
   fonts: fontSources,
+  renderer,
   profile: profileSnapshot,
   colors,
   generatorDigest,
@@ -374,16 +333,40 @@ const ledger = {
   })),
 };
 
+if (process.argv.includes('--check')) {
+  const mismatches = [];
+
+  for (const { path, image } of rendered) {
+    let committed;
+    try {
+      committed = await readFile(publicFile(root, path));
+    } catch {
+      mismatches.push(`public${path} is missing`);
+      continue;
+    }
+
+    if (!committed.equals(image)) {
+      mismatches.push(`public${path} does not match a fresh render`);
+    }
+  }
+
+  if (mismatches.length > 0) {
+    console.error(`\nog:render-check: ${mismatches.length} problem(s)\n`);
+    for (const mismatch of mismatches) console.error(`  ${mismatch}`);
+    console.error('\nRun `npm run og` and commit the generated files.');
+    process.exit(1);
+  }
+
+  console.log(
+    `og:render-check: ${rendered.length} committed card(s) match a fresh render`,
+  );
+  process.exit(0);
+}
+
 await mkdir(publicFile(root, POST_CARD_DIRECTORY), { recursive: true });
-await Promise.all([
-  ...rendered.map(({ path, image }) =>
-    writeFile(publicFile(root, path), image),
-  ),
-  writeFile(
-    publicFile(root, LEDGER_PATH),
-    `${JSON.stringify(ledger, null, 2)}\n`,
-  ),
-]);
+await Promise.all(
+  rendered.map(({ path, image }) => writeFile(publicFile(root, path), image)),
+);
 
 // A post that becomes a draft, or is renamed, must not leave its card behind:
 // `public/` is served verbatim, so a stale card stays fetchable forever.
@@ -395,6 +378,14 @@ await Promise.all(
   stale.map((file) =>
     rm(join(publicFile(root, POST_CARD_DIRECTORY), file), { recursive: true }),
   ),
+);
+
+// The ledger is the commit marker for a generation run. Write it only after
+// every image and deletion succeeds, so an interrupted run stays visibly stale
+// to `npm run og:check` instead of advertising a partially written card set.
+await writeFile(
+  publicFile(root, LEDGER_PATH),
+  `${JSON.stringify(ledger, null, 2)}\n`,
 );
 
 console.log(
