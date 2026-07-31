@@ -97,7 +97,7 @@ describe('site stats data', () => {
     };
 
     expect(linkFor('source_lines')).toBe(
-      'https://github.com/octocat/personal-site/graphs/contributors',
+      `https://github.com/octocat/personal-site/tree/${sha}`,
     );
     expect(linkFor('direct_dependencies')).toBe(
       `https://github.com/octocat/personal-site/blob/${sha}/package.json`,

@@ -9,8 +9,8 @@ import {
   agePlaceholder,
   BIRTH_DATE,
   buildIdentity,
-  buildRepositoryUrl,
   buildSourceFileUrl,
+  buildSourceTreeUrl,
   builtCommit,
   builtCommitUrl,
   DEFAULT_SOURCE_REPOSITORY,
@@ -196,8 +196,8 @@ describe('build source links', () => {
     process.env.GITHUB_SHA = sha;
     process.env.GITHUB_REPOSITORY = 'octocat/personal-site';
 
-    expect(buildRepositoryUrl('/graphs/contributors')).toBe(
-      'https://github.com/octocat/personal-site/graphs/contributors',
+    expect(buildSourceTreeUrl()).toBe(
+      `https://github.com/octocat/personal-site/tree/${sha}`,
     );
     expect(buildSourceFileUrl('package.json')).toBe(
       `https://github.com/octocat/personal-site/blob/${sha}/package.json`,

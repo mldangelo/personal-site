@@ -1,7 +1,7 @@
 import type { StatDeclaration } from '@/lib/readings';
 import {
-  buildRepositoryUrl,
   buildSourceFileUrl,
+  buildSourceTreeUrl,
   builtCommitUrl,
   SHORT_SHA_LENGTH,
   utcDate,
@@ -64,7 +64,7 @@ const data: StatDeclaration[] = [
     label: 'Lines of TypeScript powering this website',
     key: 'source_lines',
     source: 'measured',
-    link: () => buildRepositoryUrl('/graphs/contributors'),
+    link: buildSourceTreeUrl,
   },
   {
     label: 'Dependencies declared directly',

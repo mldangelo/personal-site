@@ -129,13 +129,6 @@ export function builtCommitUrl(value: unknown): string {
   return `https://github.com/${identity.repository}/commit/${identity.sha}`;
 }
 
-/** Link to this build's repository, or the upstream source during local work. */
-export function buildRepositoryUrl(path = ''): string {
-  const repository = buildIdentity()?.repository ?? DEFAULT_SOURCE_REPOSITORY;
-
-  return `https://github.com/${repository}${path}`;
-}
-
 /**
  * Link to a file at the exact build commit.
  *
@@ -148,4 +141,13 @@ export function buildSourceFileUrl(path: string): string {
   const revision = identity?.sha ?? 'main';
 
   return `https://github.com/${repository}/blob/${revision}/${path}`;
+}
+
+/** Link to the complete source tree that the build measured. */
+export function buildSourceTreeUrl(): string {
+  const identity = buildIdentity();
+  const repository = identity?.repository ?? DEFAULT_SOURCE_REPOSITORY;
+  const revision = identity?.sha ?? 'main';
+
+  return `https://github.com/${repository}/tree/${revision}`;
 }
