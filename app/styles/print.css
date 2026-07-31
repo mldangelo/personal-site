@@ -88,7 +88,10 @@
      ResumePage rather than CSS content, so the line is selectable, linkable,
      and sourced from the same profile and contact data as the screen UI. */
   .resume-print-contact {
-    display: block;
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 0.75rem;
+    row-gap: 0;
     margin-top: 0.5rem;
     font-family: var(--font-mono);
     font-size: 8.5pt;
@@ -105,7 +108,11 @@
     color: inherit;
     text-decoration: none;
     background-image: none;
-    /* Break between entries, never through the middle of an address. */
+  }
+
+  .resume-print-contact > * {
+    /* Break only between complete entries. Punctuation separators can dangle
+       at either edge of a wrapped line, so spacing carries the separation. */
     white-space: nowrap;
   }
 

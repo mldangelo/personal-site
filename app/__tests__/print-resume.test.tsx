@@ -266,18 +266,21 @@ describe('print: contact block', () => {
     }
   });
 
-  it('wraps to a line that opens with an address, not a dot', () => {
-    // Five entries no longer fit one line on A4 or Letter, so the block wraps.
-    // A non-breaking space before each dot removes the break opportunity on
-    // that side, leaving the one after it.
-    const separators = [
-      ...contactBlock().querySelectorAll('[aria-hidden="true"]'),
-    ];
+  it('wraps only between complete entries without dangling punctuation', () => {
+    const block = contactBlock();
+    const blockRule = RULES.find((rule) =>
+      rule.selectors.includes('.resume-print-contact'),
+    );
+    const itemRule = RULES.find((rule) =>
+      rule.selectors.includes('.resume-print-contact > *'),
+    );
 
-    expect(separators).toHaveLength(4);
-    for (const separator of separators) {
-      expect(separator.textContent).toBe('\u00a0· ');
-    }
+    expect(block.children).toHaveLength(5);
+    expect(block.querySelector('[aria-hidden="true"]')).toBeNull();
+    expect(blockRule?.declarations).toMatch(/display\s*:\s*flex/);
+    expect(blockRule?.declarations).toMatch(/flex-wrap\s*:\s*wrap/);
+    expect(blockRule?.declarations).toMatch(/column-gap\s*:\s*0\.75rem/);
+    expect(itemRule?.declarations).toMatch(/white-space\s*:\s*nowrap/);
   });
 
   it('prints addresses without their protocol', () => {

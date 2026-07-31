@@ -23,14 +23,6 @@ export const metadata: Metadata = createPageMetadata({
   path: '/resume/',
 });
 
-/**
- * Separator between entries in the printed contact line. The space before the
- * dot is non-breaking and the one after it is not, so five entries that no
- * longer fit one line wrap to a line that opens with an address rather than
- * with a stray dot.
- */
-const PRINT_CONTACT_SEPARATOR = '\u00a0· ';
-
 /** A URL as it should read on paper: no protocol, no `www.`, no trailing slash. */
 function displayUrl(url: string): string {
   return url.replace(/^https?:\/\/(?:www\.)?/, '').replace(/\/$/, '');
@@ -80,13 +72,9 @@ export default function ResumePage() {
               data, while the location comes from the shared profile. */}
           <address className="resume-print-contact">
             <span>{profile.currentCity}</span>
-            <span aria-hidden="true">{PRINT_CONTACT_SEPARATOR}</span>
             <a href={`${SITE_URL}/`}>{displayUrl(SITE_URL)}</a>
-            <span aria-hidden="true">{PRINT_CONTACT_SEPARATOR}</span>
             <a href={`mailto:${profile.email}`}>{profile.email}</a>
-            <span aria-hidden="true">{PRINT_CONTACT_SEPARATOR}</span>
             <a href={github}>{displayUrl(github)}</a>
-            <span aria-hidden="true">{PRINT_CONTACT_SEPARATOR}</span>
             <a href={linkedin}>{displayUrl(linkedin)}</a>
           </address>
         </header>
