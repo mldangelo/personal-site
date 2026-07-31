@@ -11,7 +11,7 @@
  * follows it with a fresh render in `generate-og.mjs --check`, which proves the
  * committed pixels actually came from these inputs.
  *
- * It is also the gate on the one asset in `public/` that is derived from
+ * It is also the gate on the card set in `public/` that is derived from
  * `content/writing/`: a card left behind by a post that became a draft, or was
  * renamed, would stay publicly fetchable with its title rendered into it.
  */

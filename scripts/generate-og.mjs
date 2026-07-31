@@ -83,7 +83,8 @@ const { ink, paper, body, graphite, accent, hairline } = colors;
  * ticking value would be frozen and quietly wrong. For the same reason no card
  * carries amber — nothing on a PNG is live, and the signal colour only means
  * something while that stays true. The post cards follow the same rule: their
- * readouts are counted from the post, which does not change after publication.
+ * measured readouts do not drift merely because time passes, and the ledger
+ * makes a later edit to a published post require regeneration.
  */
 const READOUT = [
   { label: 'Countries visited', value: String(profile.countriesVisited) },

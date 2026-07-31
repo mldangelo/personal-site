@@ -22,8 +22,8 @@ import {
   assertCardFontDigest,
   CARD_FONTS,
   CARD_RENDERER_PACKAGES,
-  countExternalLinks,
   countProseWords,
+  countUniqueExternalLinks,
   formatCardDate,
   imageDigest,
   postCardPath,
@@ -134,7 +134,7 @@ describe('share card inputs', () => {
     for (const card of cards) {
       expect(card.readout.map((cell) => cell.label)).toEqual([
         'Words',
-        'External links',
+        'Unique external links',
         'Reading time',
       ]);
       for (const cell of card.readout) {
@@ -280,6 +280,9 @@ describe('post measurements', () => {
       countProseWords('A [link](https://example.com/very/long/path)'),
     ).toBe(2);
     expect(countProseWords('- one\n- two\n\n> quoted')).toBe(3);
+    expect(
+      countProseWords('1. one\n  2) two\n> 3. quoted\n\n2026 remains prose'),
+    ).toBe(6);
     expect(countProseWords('![alt text](/images/a.png)')).toBe(0);
     expect(countProseWords('latency < 50ms and throughput > 1k')).toBe(5);
     expect(countProseWords('<strong>Two words</strong>')).toBe(2);
@@ -287,22 +290,26 @@ describe('post measurements', () => {
 
   it('counts distinct inline external destinations', () => {
     expect(
-      countExternalLinks('[a](https://one.example) [b](https://two.example)'),
+      countUniqueExternalLinks(
+        '[a](https://one.example) [b](https://two.example)',
+      ),
     ).toBe(2);
     expect(
-      countExternalLinks(
+      countUniqueExternalLinks(
         '[a](https://one.example) again [b](https://one.example)',
       ),
     ).toBe(1);
-    expect(countExternalLinks('[internal](/writing/post/)')).toBe(0);
-    expect(countExternalLinks('![remote](https://one.example/a.png)')).toBe(0);
+    expect(countUniqueExternalLinks('[internal](/writing/post/)')).toBe(0);
     expect(
-      countExternalLinks(
+      countUniqueExternalLinks('![remote](https://one.example/a.png)'),
+    ).toBe(0);
+    expect(
+      countUniqueExternalLinks(
         '[![chart](/images/chart.png)](https://one.example/report)',
       ),
     ).toBe(1);
     expect(
-      countExternalLinks('```md\n[in code](https://one.example)\n```'),
+      countUniqueExternalLinks('```md\n[in code](https://one.example)\n```'),
     ).toBe(0);
   });
 });

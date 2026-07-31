@@ -194,7 +194,7 @@ build after the refactor.
 | Share-card generator       | `scripts/generate-og.mjs`               |
 
 After changing profile fields on the share cards, their design, the colour
-tokens, or the posts in `content/writing/`, run:
+tokens, or a published post in `content/writing/`, run:
 
 ```bash
 npm run og
@@ -209,6 +209,14 @@ them requires regeneration even when the card source itself did not change.
 `npm run og:check` then fetches the checksum-pinned fonts and compares a fresh
 render byte for byte, so changing an image and its editable ledger digest
 together does not pass verification.
+
+Keep draft-only screenshots and downloads outside `public/`, which is copied
+verbatim into the deployed export. Draft Markdown may retain root-relative
+references to those absent files for local editing; the development page
+reserves a fallback image ratio. `npm run verify-export` parses inline,
+reference-style, and relative resources, and parses or rejects raw HTML
+fail-closed. It fails if a file referenced only by a draft appears in `out/`;
+relative image paths still cannot be used by the page renderer.
 
 ## Audit the result
 

@@ -50,7 +50,11 @@ function measureImage(publicPath: string, alt: string): PostImage {
  * wants 1.91:1, and an article screenshot is whatever shape it is. It is the
  * article image below instead, which is what JSON-LD asks for.
  */
-function getShareImage(post: Post): PostImage {
+function getShareImage(post: Post): PostImage | undefined {
+  // Draft cards are intentionally never generated: public/ ships verbatim.
+  // Their development preview inherits the generic site card instead.
+  if (post.draft) return undefined;
+
   return measureImage(
     `/og/writing/${post.slug}.png`,
     `${post.title} — ${AUTHOR_NAME}`,
@@ -61,7 +65,10 @@ function getShareImage(post: Post): PostImage {
  * The image that represents the article itself, for structured data: the
  * screenshot or diagram the post names, and otherwise its share card.
  */
-function getArticleImage(post: Post): PostImage {
+function getArticleImage(post: Post): PostImage | undefined {
+  // A draft's selected image may also be deliberately absent from public/.
+  if (post.draft) return undefined;
+
   return post.image && post.imageAlt
     ? measureImage(post.image, post.imageAlt)
     : getShareImage(post);
@@ -89,16 +96,18 @@ export async function generateMetadata({
 
   // Built once and spread into both cards, so the two can never disagree about
   // the share image.
-  const shareImage = {
-    images: [
-      {
-        url: image.url,
-        width: image.width,
-        height: image.height,
-        alt: image.alt,
-      },
-    ],
-  };
+  const shareImage = image
+    ? {
+        images: [
+          {
+            url: image.url,
+            width: image.width,
+            height: image.height,
+            alt: image.alt,
+          },
+        ],
+      }
+    : {};
 
   // Spreading the shared blocks matters: a route-level `openGraph` replaces
   // the inherited one, so anything omitted here — images, siteName, locale,
@@ -106,15 +115,21 @@ export async function generateMetadata({
   return {
     title: post.title,
     description: post.description,
-    alternates: { canonical: url },
+    ...(post.draft
+      ? { robots: { index: false, follow: false } }
+      : { alternates: { canonical: url } }),
     openGraph: {
       ...sharedOpenGraph,
       type: 'article',
       title: post.title,
       description: post.description,
-      url,
-      publishedTime: post.date,
-      authors: [AUTHOR_NAME],
+      ...(post.draft
+        ? {}
+        : {
+            url,
+            publishedTime: post.date,
+            authors: [AUTHOR_NAME],
+          }),
       ...shareImage,
     },
     twitter: {
@@ -136,7 +151,10 @@ export default async function PostPage({ params }: PageProps) {
 
   const postUrl = `${SITE_URL}/writing/${post.slug}/`;
   const writingUrl = `${SITE_URL}/writing/`;
-  const imageSizes = readPostImageSizes(post.content);
+  const allowMissingLocalImages = post.draft === true;
+  const imageSizes = readPostImageSizes(post.content, {
+    allowMissingLocalImages,
+  });
   const articleImage = getArticleImage(post);
 
   return (
@@ -167,7 +185,11 @@ export default async function PostPage({ params }: PageProps) {
           <p className="post-description">{post.description}</p>
         </header>
         <div className="post-content prose">
-          <PostContent content={post.content} imageSizes={imageSizes} />
+          <PostContent
+            content={post.content}
+            imageSizes={imageSizes}
+            allowMissingLocalImages={allowMissingLocalImages}
+          />
         </div>
       </article>
     </PageWrapper>

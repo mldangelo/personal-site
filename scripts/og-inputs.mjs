@@ -205,6 +205,9 @@ export function countProseWords(markdown) {
       .replace(/`[^`\n]*`/g, ' ')
       .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
       .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+      // A leading numeral is syntax when Markdown renders an ordered list. It
+      // is not prose, including in nested lists and block quotes.
+      .replace(/^(?:[ \t]*>[ \t]*)*[ \t]*\d{1,9}[.)][ \t]+/gm, ' ')
       // Restrict this to recognizable HTML. A broad `<[^>]+>` expression also
       // erases technical prose such as `latency < 50ms and throughput > 1k`.
       .replace(
@@ -223,7 +226,7 @@ export function countProseWords(markdown) {
  * nested Markdown image, as in `[![chart](/chart.png)](https://example.com)`,
  * while the negative lookbehind keeps the image's own source from counting.
  */
-export function countExternalLinks(markdown) {
+export function countUniqueExternalLinks(markdown) {
   const links = markdown
     .replace(/```[\s\S]*?```/g, ' ')
     .replace(/`[^`\n]*`/g, ' ')
@@ -262,8 +265,8 @@ export function measurePost(markdown) {
   return [
     { label: 'Words', value: words.toLocaleString('en-US') },
     {
-      label: 'External links',
-      value: String(countExternalLinks(markdown)),
+      label: 'Unique external links',
+      value: String(countUniqueExternalLinks(markdown)),
     },
     {
       label: 'Reading time',

@@ -62,7 +62,7 @@
     "accent": "#1b2fbf",
     "hairline": "rgba(35, 39, 46, 0.14)"
   },
-  "generatorDigest": "675bf237392897837c97646c400788404704c209688a9acadeab318bcdd74690",
+  "generatorDigest": "4ab1eb74ef0f0f5a7ef6c7326f5dc976d6c00c3277fda373f4808f51a84e3537",
   "imageDigest": "9c76fd6b9be9ed5e8253a35ee7b741e219b2bfd5484b5bd29c90eb7a3241d4eb",
   "posts": [
     {
@@ -75,10 +75,10 @@
       "readout": [
         {
           "label": "Words",
-          "value": "409"
+          "value": "406"
         },
         {
-          "label": "External links",
+          "label": "Unique external links",
           "value": "9"
         },
         {
@@ -86,7 +86,7 @@
           "value": "2 min"
         }
       ],
-      "imageDigest": "3d77ffcc9d766054ee80aab11e015b769effc7dc78bcc7df885509409d1119e3"
+      "imageDigest": "5e5c96344427b0fa2ca767631fc47feabaaefa404986e14a7cad6d3730f8df28"
     },
     {
       "slug": "eurostar-chatbot-analysis",
@@ -98,10 +98,10 @@
       "readout": [
         {
           "label": "Words",
-          "value": "870"
+          "value": "868"
         },
         {
-          "label": "External links",
+          "label": "Unique external links",
           "value": "9"
         },
         {
@@ -109,7 +109,7 @@
           "value": "4 min"
         }
       ],
-      "imageDigest": "7d4e87009ffd843f5fd04c763d06f4be0991a716646ec84423d08a88bdddf35d"
+      "imageDigest": "a1f18c68bf7fb348b7d2cbe775953699f70db8a8833a4adc5c02d6fac1eb4227"
     },
     {
       "slug": "shipping-with-claude-code",
@@ -121,10 +121,10 @@
       "readout": [
         {
           "label": "Words",
-          "value": "1,930"
+          "value": "1,924"
         },
         {
-          "label": "External links",
+          "label": "Unique external links",
           "value": "17"
         },
         {
@@ -132,7 +132,7 @@
           "value": "9 min"
         }
       ],
-      "imageDigest": "071d10643434a0be7ec7810daa1712e627931f4696507910075f58b3ce68403b"
+      "imageDigest": "a46c1dfd2a4da87e8f532a11589745410d8af75c52eb67e6933d794376bcb394"
     }
   ]
 }

@@ -1,9 +1,18 @@
 import { renderToStaticMarkup } from 'react-dom/server';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { AUTHOR_NAME, SHARE_IMAGE_DIMENSIONS, SITE_URL } from '@/lib/utils';
+import {
+  AUTHOR_NAME,
+  SHARE_IMAGE_DIMENSIONS,
+  SHARE_IMAGE_PATH,
+  SITE_URL,
+} from '@/lib/utils';
 
 import PostPage, { generateMetadata } from './page';
+
+afterEach(() => {
+  vi.unstubAllEnvs();
+});
 
 /** The BlogPosting node the rendered page publishes as JSON-LD. */
 async function blogPostingFor(slug: string) {
@@ -52,6 +61,21 @@ describe('writing post metadata', () => {
     ]);
     expect(metadata.twitter?.images).toEqual(metadata.openGraph?.images);
   });
+
+  it('previews a draft without generating or referencing a public draft card', async () => {
+    vi.stubEnv('NODE_ENV', 'development');
+    const slug = 'why-i-mostly-switched-from-claude-code-to-codex-desktop-app';
+    const metadata = await generateMetadata({
+      params: Promise.resolve({ slug }),
+    });
+    const serialized = JSON.stringify(metadata);
+
+    expect(metadata.robots).toEqual({ index: false, follow: false });
+    expect(metadata.alternates).toBeUndefined();
+    expect(metadata.openGraph?.url).toBeUndefined();
+    expect(serialized).toContain(SHARE_IMAGE_PATH);
+    expect(serialized).not.toContain(`/og/writing/${slug}.png`);
+  });
 });
 
 describe('writing post structured data', () => {
@@ -80,5 +104,20 @@ describe('writing post structured data', () => {
       width: SHARE_IMAGE_DIMENSIONS.width,
       height: SHARE_IMAGE_DIMENSIONS.height,
     });
+  });
+
+  it('renders the real development draft when its private images are absent', async () => {
+    vi.stubEnv('NODE_ENV', 'development');
+    const slug = 'why-i-mostly-switched-from-claude-code-to-codex-desktop-app';
+    const markup = renderToStaticMarkup(
+      await PostPage({ params: Promise.resolve({ slug }) }),
+    );
+
+    expect(markup).toContain(
+      'Why I Mostly Switched From Claude Code to the Codex Desktop App',
+    );
+    expect(markup).toContain('width="1200"');
+    expect(markup).toContain('height="675"');
+    expect(markup).not.toContain(`/og/writing/${slug}.png`);
   });
 });
