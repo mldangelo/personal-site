@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useId, useMemo, useState } from 'react';
 
 import type { Category, Skill } from '@/data/resume/skills';
 
@@ -24,6 +24,9 @@ export const ALL_CATEGORY = 'All';
  */
 export default function Skills({ skills, categories }: SkillsProps) {
   const [activeCategory, setActiveCategory] = useState<string>(ALL_CATEGORY);
+  const groupsId = useId();
+  const statusId = useId();
+  const controlledIds = `${groupsId} ${statusId}`;
 
   // Selecting the category that is already active returns to All, which keeps
   // the toggle affordance the buttons' pressed state implies.
@@ -39,9 +42,10 @@ export default function Skills({ skills, categories }: SkillsProps) {
           key={name}
           isActive={activeCategory === name}
           handleClick={handleChildClick}
+          controls={controlledIds}
         />
       )),
-    [categories, activeCategory, handleChildClick],
+    [categories, activeCategory, controlledIds, handleChildClick],
   );
 
   /**
@@ -111,18 +115,24 @@ export default function Skills({ skills, categories }: SkillsProps) {
         <h2>Skills</h2>
       </div>
       <div className="skill-button-container">{buttonElements}</div>
-      <p className="sr-only" role="status" aria-live="polite">
+      <p
+        id={statusId}
+        className="sr-only"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+      >
         {filterStatus}
       </p>
       <p className="skill-tier-legend">
-        <span className="skill-tier-legend-label">Levels</span>
-        <span className="skill-tag--core">Core</span>
+        <span className="skill-tier-legend-label">Knowledge</span>
+        <span className="skill-tag--deep">Deep</span>
         <span aria-hidden="true">·</span>
         <span className="skill-tag--working">Working</span>
         <span aria-hidden="true">·</span>
         <span className="skill-tag--familiar">Familiar</span>
       </p>
-      <div className="skill-groups">
+      <div id={groupsId} className="skill-groups">
         {groupedSkills.map(({ category, skills: categorySkills }) => {
           const isVisible =
             activeCategory === ALL_CATEGORY || activeCategory === category.name;

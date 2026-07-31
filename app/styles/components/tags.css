@@ -41,7 +41,7 @@
 
 /* The old per-category tick resolved to the same accent in every category, so
    it communicated nothing. Competency was conveyed separately through the
-   tag's size and weight. */
+   tag's weight and text tone. */
 .skill-tag {
   display: inline-flex;
   align-items: center;
@@ -111,7 +111,7 @@
 
 /* Tier variations — the legend names these weights once, and each tag carries
    a visually hidden textual equivalent. */
-.skill-tag--core {
+.skill-tag--deep {
   font-weight: var(--font-weight-medium);
   color: var(--color-fg-bold);
 }

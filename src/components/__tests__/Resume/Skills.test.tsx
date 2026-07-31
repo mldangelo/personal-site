@@ -159,7 +159,7 @@ describe('Skills', () => {
 
     expect(container.querySelectorAll('.skill-tier-legend')).toHaveLength(1);
     expect(container.querySelector('.skill-tier-legend')).toHaveTextContent(
-      /Levels\s*Core\s*·\s*Working\s*·\s*Familiar/,
+      /Knowledge\s*Deep\s*·\s*Working\s*·\s*Familiar/,
     );
     expect(container.querySelectorAll('.skill-tag-tier')).toHaveLength(0);
   });
@@ -212,6 +212,24 @@ describe('Skills', () => {
       render(<Skills skills={mockSkills} categories={mockCategories} />);
 
       expect(screen.getByRole('status')).toHaveAttribute('aria-live', 'polite');
+      expect(screen.getByRole('status')).toHaveAttribute('aria-atomic', 'true');
+    });
+
+    it('associates every filter with the results and status regions', () => {
+      const { container } = render(
+        <Skills skills={mockSkills} categories={mockCategories} />,
+      );
+
+      const controls = screen
+        .getByRole('button', { name: 'Languages' })
+        .getAttribute('aria-controls')
+        ?.split(' ');
+
+      expect(controls).toHaveLength(2);
+      expect(controls?.map((id) => document.getElementById(id))).toEqual([
+        container.querySelector('.skill-groups'),
+        screen.getByRole('status'),
+      ]);
     });
 
     /**

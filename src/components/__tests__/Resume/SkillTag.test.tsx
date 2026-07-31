@@ -4,8 +4,8 @@ import { describe, expect, it } from 'vitest';
 import SkillTag, { tierFor } from '../../Resume/Skills/SkillTag';
 
 describe('tierFor', () => {
-  it('maps the top of the scale to core', () => {
-    expect(tierFor(5)).toBe('core');
+  it('maps the top of the scale to deep', () => {
+    expect(tierFor(5)).toBe('deep');
   });
 
   it('maps one below the top to working', () => {
@@ -38,9 +38,7 @@ describe('SkillTag', () => {
     render(<SkillTag data={skill} />);
 
     const tag = document.querySelector('.skill-tag') as HTMLElement;
-    expect(tag.querySelector('.sr-only')).toHaveTextContent(
-      ', proficiency: core',
-    );
+    expect(tag.querySelector('.sr-only')).toHaveTextContent(', deep knowledge');
     expect(tag.querySelector('.skill-tag-tier')).not.toBeInTheDocument();
   });
 
@@ -53,12 +51,12 @@ describe('SkillTag', () => {
     expect(tag).not.toHaveAttribute('aria-label');
   });
 
-  it('applies the core tier class for the top competency', () => {
+  it('applies the deep tier class for the top competency', () => {
     const skill = { title: 'Python', competency: 5, category: ['Languages'] };
 
     render(<SkillTag data={skill} />);
 
-    expect(document.querySelector('.skill-tag')).toHaveClass('skill-tag--core');
+    expect(document.querySelector('.skill-tag')).toHaveClass('skill-tag--deep');
   });
 
   it('applies the working tier class one below the top', () => {
@@ -73,7 +71,7 @@ describe('SkillTag', () => {
     const tag = document.querySelector('.skill-tag');
     expect(tag).toHaveClass('skill-tag--working');
     expect(tag?.querySelector('.sr-only')).toHaveTextContent(
-      'proficiency: working',
+      'working knowledge',
     );
   });
 
@@ -84,9 +82,7 @@ describe('SkillTag', () => {
 
     const tag = document.querySelector('.skill-tag');
     expect(tag).toHaveClass('skill-tag--familiar');
-    expect(tag?.querySelector('.sr-only')).toHaveTextContent(
-      'proficiency: familiar',
-    );
+    expect(tag?.querySelector('.sr-only')).toHaveTextContent('familiarity');
   });
 
   /**
