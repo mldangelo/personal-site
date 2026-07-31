@@ -8,7 +8,9 @@
     scroll-behavior: smooth;
   }
 
-  /* Respect reduced motion preference */
+  /* Respect reduced motion without removing static decoration. The paper
+     grain on `body::before` has no animation or transition; `body::after` is
+     not defined. */
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -18,17 +20,11 @@
       transition-duration: 0.01ms !important;
       scroll-behavior: auto !important;
     }
-
-    /* Hide heavy fixed overlays that cause repaints */
-    body::before,
-    body::after {
-      display: none;
-    }
   }
 
   /* Focus-visible styles for keyboard navigation */
   :focus-visible {
-    outline: 2px solid var(--color-accent);
+    outline: var(--rule-strong) solid var(--color-focus-ring);
     outline-offset: 3px;
     border-radius: var(--radius-xs);
   }

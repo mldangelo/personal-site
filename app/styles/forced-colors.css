@@ -1,0 +1,135 @@
+/* ========================================
+   FORCED COLORS
+   Windows High Contrast Mode, and any other user-forced palette.
+
+   A forced palette replaces author colours with system colours and removes
+   non-URL background images. That is fine for a design built out of filled
+   boxes and borders, and it is a problem for this one, because several things
+   here are drawn in colour or with a gradient background:
+
+     - global paragraph-link and hero-highlight underlines are
+       `linear-gradient` backgrounds, so those links lose their visible line;
+     - the current resume marker and active skill filter rely on filled state,
+       so they flatten toward their unselected appearance;
+     - the portrait is composited with `mix-blend-mode: multiply`, which
+       multiplies against a forced Canvas that is frequently pure black.
+
+   This file is a mode override in the same sense as dark-mode.css, so it is
+   imported after it and before print.css, and its rules are deliberately
+   unlayered so they win over the component and page files.
+
+   Rules here only address what the forced palette cannot do for itself.
+   `outline-color` and `border-color` are already remapped by the UA, so focus
+   rings and hairlines survive on their own and are left alone.
+   ======================================== */
+
+@media (forced-colors: active) {
+  /* ===================
+     LINKS
+     The persistent prose underline and the animated hover underline are both
+     `background-image` gradients (base/links.css, home.css `.hero-highlight`),
+     and a forced palette discards background images. `.prose a` and
+     `.about-content a` already draw a real one; these did not.
+     =================== */
+  p a,
+  .hero-highlight {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+  }
+
+  /* Navigation-like links opt out of the prose underline everywhere else and
+     have their own affordances; the rule above must not reintroduce it. */
+  p a.button,
+  p a.site-logo,
+  p a.nav-link {
+    text-decoration: none;
+  }
+
+  /* Desktop and resume navigation mark the active item with a
+     pseudo-element background, which otherwise flattens to Canvas. */
+  .nav-link::after,
+  .resume-nav-link.active::after {
+    background-color: LinkText;
+  }
+
+  /* Mobile navigation normally changes only the label colour. Forced colors
+     maps every navigation link to LinkText, so retain current-page state with
+     a non-colour cue. */
+  .hamburger-ul li a.active span {
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+
+  /* ===================
+     CONTROLS
+     `.button` is usually an `<a>`, so it gets no button treatment from the UA.
+     A filled control whose fill flattens to Canvas is indistinguishable from
+     an unfilled one, which is the whole of its state.
+     =================== */
+  .button {
+    background-color: ButtonFace;
+    color: ButtonText;
+    border-color: ButtonText;
+  }
+
+  /* A lit filter is a selection rather than a generic button, so use the
+     palette's semantic selection pair. */
+  .skillbutton-active:not(.skillbutton--all) {
+    background-color: Highlight;
+    color: HighlightText;
+    border-color: Highlight;
+  }
+
+  /* ===================
+     STATE THAT NEEDS MORE THAN COLOUR
+     Amber does not exist in a forced palette, so anything relying on it has
+     to survive as a shape. Filled-versus-hollow is the deliberate cue; the
+     9px-versus-7px size difference is too subtle to carry the state alone.
+     =================== */
+  .jobs-container--current .job-marker {
+    background-color: CanvasText;
+    border-color: CanvasText;
+  }
+
+  /* A 1px amber bar on a hairline track: both ends flatten to Canvas. */
+  .reading-progress-indicator {
+    background-color: Highlight;
+  }
+
+  /* The category tick is the only place a skill carries its group colour. */
+  .skill-tag::before {
+    background-color: CanvasText;
+  }
+
+  /* ===================
+     COMPOSITING
+     Images are not recoloured by a forced palette, but the blend and filter
+     stack around them still applies, and both were tuned for a paper or ink
+     backdrop rather than for Canvas.
+     =================== */
+  .theme-portrait img,
+  .hero-portrait img,
+  .hero-portrait:hover img,
+  [data-theme='dark'] .hero-portrait img,
+  [data-theme='dark'] .hero-portrait:hover img,
+  .site-footer-new .footer-avatar img {
+    mix-blend-mode: normal;
+    filter: none;
+  }
+
+  /* The header is a translucent wash over the page plus a 12px blur. The
+     palette forces the wash opaque; the blur then costs work and buys
+     nothing. */
+  .site-header {
+    background-color: Canvas;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  /* URL-backed background images are not removed automatically. The grain is
+     a data URL, so hide its fixed layer explicitly in the forced palette. */
+  body::before {
+    display: none;
+  }
+}

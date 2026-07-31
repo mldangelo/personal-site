@@ -32,11 +32,15 @@
   --color-accent-underline: color-mix(in srgb, var(--color-accent) 40%, transparent);
   --color-accent-underline-strong: color-mix(in srgb, var(--color-accent) 55%, transparent);
 
-  /* Signal — amber needs no correction against ink */
+  /* Signal — amber needs no correction against ink. Checked rather than
+     assumed: #f0a202 is 8.4:1 on --color-bg and 9.0:1 on --color-bg-alt, so
+     the same value serves as text and as a mark here. Only the light theme
+     had to split them. */
   --color-signal: #f0a202;
   --color-signal-mark: #f0a202;
 
-  /* 3:1 against the dark page, matching the light-mode control border. */
+  /* Clears the chosen 3:1 boundary floor with room: 5.7:1 against --color-bg
+     and 6.1:1 against --color-bg-alt. */
   --color-control-border: #8b929c;
 
   /* Borders */
