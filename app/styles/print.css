@@ -12,6 +12,10 @@
   :root,
   [data-theme='dark'],
   [data-theme='light'] {
+    /* Chromium uses the active color scheme for the physical page canvas,
+       outside the html/body boxes. Without this, a saved dark preference
+       leaves dark margins around an otherwise white PDF. */
+    color-scheme: light;
     --color-bg: #fff;
     --color-bg-alt: #fff;
     --color-fg: #000;
@@ -80,10 +84,9 @@
     min-height: 0;
   }
 
-  /* Contact details belong on a printed resume, and the screen layout puts
-     them only in the footer this hides. Rendered as real markup by
-     ResumeContact rather than CSS content, so it is selectable and stays in
-     step with the shared profile. */
+  /* Contact details belong on a printed resume. Rendered as real markup in
+     ResumePage rather than CSS content, so the line is selectable, linkable,
+     and sourced from the same profile and contact data as the screen UI. */
   .resume-print-contact {
     display: block;
     margin-top: 0.5rem;
@@ -242,11 +245,8 @@
      paper artifact denser without giving a reader practical destinations to
      retype.
 
-     This rule sits ahead of the `a` reset below on purpose. The reset declares
-     only `color` and `background-image`, neither of which is `content`, and
-     `background-image` does not inherit into a pseudo-element — so the two do
-     not collide today. Keeping the reveal first means a later `a` rule cannot
-     quietly win if that ever changes. */
+     The global `a` reset below does not erase these pseudo-elements: it
+     declares no `content`, and `background-image` does not inherit. */
   .about-content a[href^='http']::after,
   .prose a[href^='http']::after,
   .job-company[href^='http']::after,

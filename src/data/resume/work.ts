@@ -47,7 +47,7 @@ const work: Position[] = [
   {
     name: 'Smile ID',
     position: 'VP Engineering & Head of AI',
-    url: 'https://usesmileid.com',
+    url: 'https://smile.id',
     startDate: '2022-01-01',
     endDate: '2024-07-01',
     summary: `Smile Identity provides ML-powered identity verification APIs used by banks, fintechs, and
@@ -64,7 +64,7 @@ const work: Position[] = [
   {
     name: 'Skeptical Investments',
     position: 'Co-founder',
-    url: 'http://skepticalinvestments.biz',
+    url: 'https://skepticalinvestments.biz',
     startDate: '2017-04-01',
     commitment: 'part-time',
     summary: `Skeptical Investments is a micro-VC fund focused on early-stage technical founders,
@@ -77,7 +77,7 @@ const work: Position[] = [
   {
     name: 'Arthena',
     position: 'Co-founder & CTO',
-    url: 'https://arthena.com',
+    url: 'https://www.ycombinator.com/companies/arthena',
     startDate: '2014-01-01',
     endDate: '2022-01-01',
     summary: `Arthena was a quantitative art investment platform backed by <a href='https://www.anthemis.com/'>Anthemis</a>,
@@ -120,7 +120,7 @@ const work: Position[] = [
   {
     name: 'Planetary Resources',
     position: 'Avionics Intern',
-    url: 'https://www.planetaryresources.com',
+    url: 'https://en.wikipedia.org/wiki/Planetary_Resources',
     startDate: '2014-01-01',
     endDate: '2014-05-01',
     highlights: [

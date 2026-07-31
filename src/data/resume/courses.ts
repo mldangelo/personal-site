@@ -28,11 +28,10 @@ const courses: Course[] = [
     title: 'Numerical Linear Algebra',
     number: 'CME 302',
     // CME 302 has no standing class site (web.stanford.edu/class/cme302/ is a
-    // 404), so this points at Stanford's own course catalogue. The previous
-    // link was a 131-character SCPD URL carrying a `jsessionid`, which now
-    // redirects to cgoe.stanford.edu and answers 403 — a dead session URL that
-    // also wrapped across three lines once print started revealing hrefs.
-    link: 'https://explorecourses.stanford.edu/search?q=CME+302',
+    // 404), so this points at the course's Stanford Bulletin record. The
+    // previous SCPD URL embedded an obsolete `jsessionid` and now redirects to
+    // cgoe.stanford.edu before answering 403.
+    link: 'https://bulletin.stanford.edu/courses/1057521',
     university: 'Stanford',
   },
   {
@@ -48,9 +47,9 @@ const courses: Course[] = [
     university: 'Stanford',
   },
   {
-    title: 'Stochastic Methods in Engineering',
+    title: 'Numerical Solution of Partial Differential Equations',
     number: 'CME 306',
-    link: 'http://web.stanford.edu/class/cme306/',
+    link: 'https://web.stanford.edu/class/cme306/',
     university: 'Stanford',
   },
   {
@@ -60,15 +59,15 @@ const courses: Course[] = [
     university: 'Stanford',
   },
   {
-    title: 'Stochastic Processes',
+    title: 'Stochastic Methods in Engineering',
     number: 'CME 308',
-    link: 'http://web.stanford.edu/class/cme308/',
+    link: 'https://web.stanford.edu/class/cme308/',
     university: 'Stanford',
   },
   {
     title: 'Randomized Algorithms and Probabilistic Analysis',
-    number: 'CS 365',
-    link: 'http://web.stanford.edu/class/cs365/',
+    number: 'CS 265',
+    link: 'https://web.stanford.edu/class/cs265/',
     university: 'Stanford',
   },
   {

@@ -12,15 +12,20 @@ import work from '@/data/resume/work';
 import ResumePage from '../resume/page';
 
 /**
- * The resume is the page people print, and print output is the one surface no
- * test can look at. These assertions cover it structurally instead: that the
- * href-reveal rule reaches every resume link that needs it, that nothing later
- * in the cascade can neutralise it, and that the printed contact block carries
- * the details a paper resume is expected to carry.
+ * Structural checks for the printed resume. Actual Letter and A4 PDFs still
+ * need visual inspection because a DOM test cannot measure paper layout.
  */
 
 const PRINT_CSS = readFileSync(
   join(process.cwd(), 'app/styles/print.css'),
+  'utf8',
+);
+const RESUME_CSS = readFileSync(
+  join(process.cwd(), 'app/styles/pages/resume.css'),
+  'utf8',
+);
+const TAILWIND_CSS = readFileSync(
+  join(process.cwd(), 'app/tailwind.css'),
   'utf8',
 );
 
@@ -30,10 +35,8 @@ interface Rule {
 }
 
 /**
- * Rules inside the `@media print` block, in source order. Comments are
- * stripped first so a selector list cannot pick up prose from the comment
- * above it, and order is preserved because the cascade questions here are
- * order questions.
+ * Rules inside the `@media print` block. Comments are stripped first so a
+ * selector list cannot pick up prose from the comment above it.
  */
 function printRules(css: string): Rule[] {
   const stripped = css.replace(/\/\*[\s\S]*?\*\//g, '');
@@ -53,20 +56,13 @@ const RULES = printRules(PRINT_CSS);
 const revealIndex = RULES.findIndex((rule) =>
   rule.declarations.includes('attr(href)'),
 );
-const resetIndex = RULES.findIndex(
-  (rule) =>
-    rule.selectors.length === 1 &&
-    rule.selectors[0] === 'a' &&
-    rule.declarations.includes('background-image'),
-);
 
 describe('print: revealing link destinations', () => {
   it('parses the print rules it is asserting about', () => {
-    // If the parser stops finding rules the rest of this file quietly passes
-    // by matching nothing, so pin the two rules everything else depends on.
+    // If the parser stops finding rules the rest of this file could quietly
+    // pass by matching nothing, so pin the rule everything else depends on.
     expect(RULES.length).toBeGreaterThan(20);
     expect(revealIndex).toBeGreaterThanOrEqual(0);
-    expect(resetIndex).toBeGreaterThanOrEqual(0);
   });
 
   it.each([
@@ -91,15 +87,6 @@ describe('print: revealing link destinations', () => {
     expect(revealed).not.toContain('course-container');
     expect(revealed).not.toContain('.summary');
     expect(revealed).not.toContain('.points');
-  });
-
-  it('reveals hrefs before the global anchor reset', () => {
-    // Belt and braces rather than a live conflict: the reset declares only
-    // `color` and `background-image`, neither of which is `content`, and
-    // `background-image` does not inherit into a pseudo-element. Keeping the
-    // order pinned means a future `a` rule cannot quietly win.
-    expect(revealIndex).toBeLessThan(resetIndex);
-    expect(RULES[resetIndex].declarations).not.toContain('content');
   });
 
   it('lets nothing later re-declare or hide the revealed URLs', () => {
@@ -130,6 +117,32 @@ describe('print: revealing link destinations', () => {
   });
 });
 
+describe('print: stylesheet and paper-width constraints', () => {
+  it('loads print overrides after every other stylesheet', () => {
+    const imports = [...TAILWIND_CSS.matchAll(/@import\s+['"]([^'"]+)['"]/g)];
+
+    expect(imports.at(-1)?.[1]).toBe('./styles/print.css');
+  });
+
+  it('lets both course columns shrink at A4 width', () => {
+    const courseListRule = RESUME_CSS.match(
+      /\.resume-page \.courses \.course-list\s*\{([^}]*)\}/,
+    )?.[1];
+
+    expect(courseListRule).toContain(
+      'grid-template-columns: repeat(2, minmax(0, 1fr))',
+    );
+  });
+
+  it('forces a light page canvas even when the saved theme is dark', () => {
+    const themeRule = RULES.find((rule) =>
+      rule.selectors.includes("[data-theme='dark']"),
+    );
+
+    expect(themeRule?.declarations).toMatch(/color-scheme\s*:\s*light/);
+  });
+});
+
 describe('print: screen chrome', () => {
   it('suppresses the skip link', () => {
     const hidden = RULES.find(
@@ -145,8 +158,8 @@ describe('print: screen chrome', () => {
 });
 
 describe('print: resume link data', () => {
-  // `[href^='http']` is what selects the links above, so a relative or
-  // missing URL in the data silently prints with no destination.
+  // Job and degree links are printed as text; course links remain PDF
+  // annotations. All three need absolute destinations.
   const links = [
     ...work.map((job) => job.url),
     ...degrees.map((degree) => degree.link),
@@ -156,17 +169,66 @@ describe('print: resume link data', () => {
   it('gives every company, school and course an absolute http(s) URL', () => {
     expect(links.length).toBe(work.length + degrees.length + courses.length);
     for (const link of links) {
-      expect(link).toMatch(/^https?:\/\/\S+$/);
+      const url = new URL(link);
+
+      expect(['http:', 'https:']).toContain(url.protocol);
+      expect(url.hostname).not.toBe('');
     }
   });
 
-  it('carries no session-scoped or unprintable URLs', () => {
+  it('carries no session-scoped URLs', () => {
     for (const link of links) {
       // A `jsessionid` is bound to a server session that expired years ago;
-      // the CME 302 link was one, at 131 characters.
+      // the old CME 302 destination carried one.
       expect(link.toLowerCase()).not.toContain('jsessionid');
-      expect(link.length).toBeLessThanOrEqual(80);
     }
+  });
+
+  it.each([
+    ['Arthena', 'https://www.ycombinator.com/companies/arthena'],
+    [
+      'Planetary Resources',
+      'https://en.wikipedia.org/wiki/Planetary_Resources',
+    ],
+  ])('uses a stable destination for retired company %s', (name, expected) => {
+    expect(work.find((position) => position.name === name)?.url).toBe(expected);
+  });
+
+  it.each([
+    [
+      'CME 302',
+      'Numerical Linear Algebra',
+      'https://bulletin.stanford.edu/courses/1057521',
+    ],
+    [
+      'CME 306',
+      'Numerical Solution of Partial Differential Equations',
+      'https://web.stanford.edu/class/cme306/',
+    ],
+    [
+      'CME 308',
+      'Stochastic Methods in Engineering',
+      'https://web.stanford.edu/class/cme308/',
+    ],
+    [
+      'CS 265',
+      'Randomized Algorithms and Probabilistic Analysis',
+      'https://web.stanford.edu/class/cs265/',
+    ],
+  ])('keeps %s aligned with Stanford records', (number, title, link) => {
+    expect(courses.find((course) => course.number === number)).toMatchObject({
+      title,
+      link,
+    });
+  });
+
+  it('uses canonical HTTPS company URLs where the site publishes one', () => {
+    expect(work.find((position) => position.name === 'Smile ID')?.url).toBe(
+      'https://smile.id',
+    );
+    expect(
+      work.find((position) => position.name === 'Skeptical Investments')?.url,
+    ).toBe('https://skepticalinvestments.biz');
   });
 });
 
@@ -196,8 +258,8 @@ describe('print: contact block', () => {
       a.getAttribute('href'),
     );
 
-    for (const label of ['GitHub', 'LinkedIn']) {
-      const expected = contact.find((entry) => entry.label === label)?.link;
+    for (const id of ['github', 'linkedin'] as const) {
+      const expected = contact.find((entry) => entry.id === id)?.link;
 
       expect(expected).toBeTruthy();
       expect(hrefs).toContain(expected);

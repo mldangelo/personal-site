@@ -7,7 +7,7 @@ import References from '@/components/Resume/References';
 import ResumeNav from '@/components/Resume/ResumeNav';
 import Skills from '@/components/Resume/Skills';
 import PageWrapper from '@/components/Template/PageWrapper';
-import contact from '@/data/contact';
+import contact, { type ContactId } from '@/data/contact';
 import profile from '@/data/profile.json';
 import courses from '@/data/resume/courses';
 import degrees from '@/data/resume/degrees';
@@ -37,15 +37,15 @@ function displayUrl(url: string): string {
 }
 
 /**
- * Looks a destination up in the shared contact data rather than retyping it
- * here, so the printed header cannot drift from the links in the footer.
- * Throws rather than falling back, because a silently empty `href` on a
- * printed resume is worse than a failed build.
+ * Looks a destination up by its stable data key rather than its display label,
+ * so copy edits cannot break the printed header. Throws rather than falling
+ * back, because a silently empty `href` on a printed resume is worse than a
+ * failed build.
  */
-function contactLink(label: string): string {
-  const item = contact.find((entry) => entry.label === label);
+function contactLink(id: ContactId): string {
+  const item = contact.find((entry) => entry.id === id);
   if (!item) {
-    throw new Error(`No "${label}" entry in src/data/contact.ts`);
+    throw new Error(`No "${id}" entry in src/data/contact.ts`);
   }
   return item.link;
 }
@@ -57,8 +57,8 @@ export default function ResumePage() {
   // line count on /stats.
   const now = Date.now();
   const careerSpan = careerSpanYears(work, now);
-  const github = contactLink('GitHub');
-  const linkedin = contactLink('LinkedIn');
+  const github = contactLink('github');
+  const linkedin = contactLink('linkedin');
 
   return (
     <PageWrapper>
@@ -76,11 +76,8 @@ export default function ResumePage() {
             2026. Stanford MS, YC alum, previously VP Engineering.
           </p>
           {/* Print-only, but real markup rather than CSS `content`, so it is
-              selectable, linkable, and reads from the shared profile. The
-              screen layout carries these in the footer, which print hides.
-              Location and LinkedIn belong on a paper resume as much as the
-              email does; both were already in the repo and only this block
-              was missing them. */}
+              selectable and linkable. Destinations come from shared contact
+              data, while the location comes from the shared profile. */}
           <address className="resume-print-contact">
             <span>{profile.currentCity}</span>
             <span aria-hidden="true">{PRINT_CONTACT_SEPARATOR}</span>
