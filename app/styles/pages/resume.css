@@ -72,6 +72,41 @@
   margin-bottom: 2rem;
 }
 
+/* The title keeps its own bottom margin, so the row leaves the space below the
+   heading exactly where it was and only parks the JSON chip on its baseline. */
+.resume-header-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+/* Mono chip linking to the machine-readable résumé. Deliberately the same
+   affordance as `.writing-rss-link`: a label-sized control that opts out of the
+   accent underline `base/links.css` paints on prose links. `--text-ui`, not
+   `--text-2xs`, because it is interactive rather than annotation. */
+.resume-json-link {
+  font-family: var(--font-mono);
+  font-size: var(--text-ui);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--color-fg-light);
+  text-decoration: none;
+  background-image: none;
+  padding: 0.35rem 0.6rem;
+  border: var(--rule) solid var(--color-control-border);
+  border-radius: var(--radius-sm);
+  transition:
+    color var(--duration-instant) var(--ease-out),
+    border-color var(--duration-instant) var(--ease-out);
+}
+
+.resume-json-link:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
 .resume-title {
   font-family: var(--font-display);
   font-size: var(--text-3xl);
