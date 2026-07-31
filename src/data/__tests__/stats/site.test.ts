@@ -29,17 +29,18 @@ describe('site stats data', () => {
     for (const key of expectedKeys) {
       const stat = data.find((s) => s.key === key);
       expect(stat).toBeDefined();
+      expect(stat!.source).toBe('github');
     }
   });
 
-  it('has static stats without keys', () => {
-    const staticStats = data.filter((s) => !s.key);
+  it('keeps the one row that measures nothing', () => {
+    const joke = data.find((s) => s.label.includes('spoons'));
 
-    expect(staticStats.length).toBeGreaterThan(0);
-
-    // Check for known static stats
-    expect(staticStats.some((s) => s.label.includes('spoons'))).toBe(true);
-    expect(staticStats.some((s) => s.label.includes('linter'))).toBe(true);
+    expect(joke).toBeDefined();
+    expect(joke!.key).toBeUndefined();
+    // No provenance mark: the joke asserts nothing, so it has no source to
+    // name. Every other row does.
+    expect(joke!.source).toBeUndefined();
   });
 
   it('stats with links have valid URLs', () => {
@@ -63,6 +64,9 @@ describe('site stats data', () => {
     const formatted = pushedAt!.format!('2024-01-15T12:00:00Z');
 
     expect(formatted).toBe('January 15, 2024');
+    // Pin the day to UTC. In America/Los_Angeles this instant is still
+    // January 14, so a build-host-local formatter publishes the wrong date.
+    expect(pushedAt!.format!('2024-01-15T00:30:00Z')).toBe('January 15, 2024');
   });
 
   it('declares the lines-of-code stat without hardcoding a count', () => {
@@ -74,5 +78,46 @@ describe('site stats data', () => {
     // here is what let the old figure drift by nearly 2,000 lines.
     expect(locStat!.key).toBe('source_lines');
     expect(locStat!.value).toBeUndefined();
+  });
+
+  it('counts dependencies and lint rules rather than typing them in', () => {
+    // `Number of linter warnings: '0'` used to sit here with the comment
+    // "enforced via github workflow" beside it — a hand-typed number about
+    // this codebase, which is the one thing this file must never carry.
+    for (const key of [
+      'direct_dependencies',
+      'installed_non_dev_packages',
+      'locked_packages',
+      'lint_rules',
+    ]) {
+      const stat = data.find((s) => s.key === key);
+
+      expect(stat).toBeDefined();
+      expect(stat!.source).toBe('measured');
+      expect(stat!.value).toBeUndefined();
+    }
+  });
+
+  it('never hardcodes a value on a measured row', () => {
+    // The invariant, stated once: a measured row names a key and nothing else.
+    // Anything countable is counted at build.
+    for (const stat of data.filter((s) => s.source === 'measured')) {
+      expect(stat.key, stat.label).toBeDefined();
+      expect(stat.value, stat.label).toBeUndefined();
+    }
+  });
+
+  it('has no leftover string-typed numbers', () => {
+    for (const stat of data) {
+      expect(typeof stat.value, stat.label).not.toBe('string');
+    }
+  });
+
+  it('units appear only where the label does not already name them', () => {
+    for (const stat of data.filter((s) => s.unit)) {
+      expect(stat.label.toLowerCase(), stat.label).not.toContain(
+        stat.unit!.toLowerCase(),
+      );
+    }
   });
 });
