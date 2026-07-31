@@ -13,39 +13,235 @@
 }
 
 /* ========================================
-   PROJECT CARDS - Bento Grid
+   PROJECTS PAGE
+   A register in two parts: shipped work as dated rows, and the
+   student-era archive as cards. Only the archive has screenshots, so
+   the register row has to carry itself on the date gutter, display
+   type, and a hairline — no picture frame to hide behind.
    ======================================== */
 
 .projects-page {
+  max-width: var(--measure-page);
   padding-bottom: 2rem;
 }
 
 .projects-header {
   text-align: left;
-  margin-bottom: 3rem;
+  margin-bottom: 2.5rem;
 }
 
-.projects-section-title {
+.projects-group + .projects-group {
+  margin-top: 4rem;
+}
+
+/* A heavy rule opens each group; the count sits opposite the label. */
+.projects-group-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-top: 0.875rem;
+  margin-bottom: 1.25rem;
+  border-top: var(--rule) solid var(--color-fg-bold);
+}
+
+.projects-section-title,
+.projects-section-count {
+  margin: 0;
   font-family: var(--font-mono);
   font-size: var(--text-2xs);
   font-weight: var(--font-weight-medium);
   color: var(--color-fg-light);
   text-transform: uppercase;
   letter-spacing: var(--tracking-label);
-  margin-bottom: 1.25rem;
-  padding-top: 0.875rem;
-  border-top: var(--rule) solid var(--color-fg-bold);
 }
 
-.projects-featured {
-  margin-bottom: 4rem;
-  position: relative;
+.projects-section-count {
+  font-variant-numeric: tabular-nums;
+  color: var(--color-fg-muted);
 }
+
+.projects-group-note {
+  font-size: var(--text-sm);
+  color: var(--color-fg-light);
+  margin: -0.25rem 0 1.5rem;
+}
+
+/* ========================================
+   SHIPPED REGISTER
+   ======================================== */
+
+.projects-register {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.projects-register > li {
+  min-width: 0;
+  padding-left: 0;
+}
+
+.project-entry {
+  display: grid;
+  grid-template-columns: 9rem minmax(0, 1fr);
+  column-gap: 2rem;
+  padding: 1.5rem 0;
+  border-bottom: var(--rule) solid var(--color-border);
+  color: inherit;
+  text-decoration: none;
+  /* base/links.css paints an accent underline on links in prose. */
+  background-image: none;
+  transition: background-color var(--duration-instant) var(--ease-out);
+}
+
+a.project-entry:hover,
+a.project-entry:focus-visible {
+  background-color: var(--color-surface-subtle);
+}
+
+a.project-entry:hover .project-entry-title,
+a.project-entry:focus-visible .project-entry-title {
+  color: var(--color-accent);
+}
+
+.project-entry-meta {
+  grid-column: 1;
+  display: block;
+  padding-top: 0.4em;
+}
+
+/* Flex with a gap rather than a plain inline run: the separator between the
+   two ends of a range is a bare glyph and would otherwise sit flush against
+   both dates. */
+.project-dates {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 0.4em;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-fg-light);
+}
+
+.project-entry-role {
+  display: block;
+  margin-top: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--color-fg-muted);
+}
+
+.project-entry-body {
+  grid-column: 2;
+  min-width: 0;
+}
+
+.project-entry-title {
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-fg-bold);
+  margin: 0 0 0.4rem;
+  line-height: 1.25;
+  transition: color var(--duration-instant) var(--ease-out);
+}
+
+/* Live work leads, so it takes a size step. Derived from the data. */
+.project-entry--live .project-entry-title {
+  font-size: var(--text-lg);
+}
+
+.project-entry-desc {
+  font-size: var(--text-sm);
+  color: var(--color-fg-light);
+  margin: 0;
+  line-height: var(--leading-snug);
+}
+
+.project-entry-tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.875rem;
+}
+
+.project-entry-external {
+  display: inline-block;
+  margin-left: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-ui);
+  color: var(--color-fg-light);
+  transition:
+    color var(--duration-instant) var(--ease-out),
+    transform var(--duration-instant) var(--ease-out);
+}
+
+a.project-entry:hover .project-entry-external,
+a.project-entry:focus-visible .project-entry-external {
+  color: var(--color-accent);
+  transform: translate(1px, -1px);
+}
+
+/* An entry with nowhere to go says so, rather than looking clickable. */
+.project-note {
+  display: inline-block;
+  margin-top: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--color-fg-muted);
+}
+
+@media (max-width: 640px) {
+  .project-entry {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .project-entry-meta {
+    padding-top: 0;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0 0.75rem;
+  }
+
+  .project-entry-role {
+    margin-top: 0;
+  }
+
+  .project-entry-body {
+    grid-column: 1;
+  }
+}
+
+/* ========================================
+   ARCHIVE CARDS
+   ======================================== */
 
 .projects-grid {
   display: grid;
   gap: 1.75rem;
   grid-template-columns: 1fr;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.projects-grid > li {
+  display: flex;
+  min-width: 0;
+  padding-left: 0;
 }
 
 @media screen and (min-width: 600px) {
@@ -54,21 +250,8 @@
   }
 }
 
-.projects-grid--featured .project-card {
-  grid-column: 1 / -1;
-}
-
-@media screen and (min-width: 600px) {
-  .projects-grid--featured {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .projects-grid--featured .project-card {
-    grid-column: auto;
-  }
-}
-
 .project-card {
+  width: 100%;
   background: transparent;
   border-radius: 0;
   overflow: hidden;
@@ -86,6 +269,8 @@
   display: block;
   text-decoration: none;
   color: inherit;
+  /* This is a full-card control, not an inline prose link. */
+  background-image: none;
 }
 
 .project-card-link:focus-visible {
@@ -97,13 +282,20 @@
   outline-offset: 2px;
 }
 
-/* Static (non-linked) project cards */
+/* A card with no destination is not a failed link: the border drops back
+   so it reads as a record rather than as something to click. */
 .project-card--static {
   cursor: default;
+  border-color: var(--color-border-bg);
 }
 
 .project-card-static {
   display: block;
+}
+
+/* No screenshot in the repo, so the frame goes rather than an empty box. */
+.project-card--text .project-card-content {
+  padding-top: 1.75rem;
 }
 
 .project-card-image {
@@ -200,12 +392,18 @@
   margin-bottom: 1.25rem;
 }
 
-.project-card-date {
-  font-family: var(--font-mono);
-  font-size: var(--text-2xs);
-  font-variant-numeric: tabular-nums;
-  letter-spacing: var(--tracking-wide);
-  color: var(--color-fg-light);
+/* Dates sit opposite whatever the card has to say about its destination.
+   The typography comes from `.project-dates`, shared with the register. */
+.project-card-footer {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.75rem;
+}
+
+.project-card-footer .project-note {
+  margin-top: 0;
 }
 
 /* ========================================
