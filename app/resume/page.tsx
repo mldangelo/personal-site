@@ -7,6 +7,7 @@ import References from '@/components/Resume/References';
 import ResumeNav from '@/components/Resume/ResumeNav';
 import Skills from '@/components/Resume/Skills';
 import PageWrapper from '@/components/Template/PageWrapper';
+import contact, { type ContactId } from '@/data/contact';
 import profile from '@/data/profile.json';
 import courses from '@/data/resume/courses';
 import degrees from '@/data/resume/degrees';
@@ -22,6 +23,25 @@ export const metadata: Metadata = createPageMetadata({
   path: '/resume/',
 });
 
+/** A URL as it should read on paper: no protocol, no `www.`, no trailing slash. */
+function displayUrl(url: string): string {
+  return url.replace(/^https?:\/\/(?:www\.)?/, '').replace(/\/$/, '');
+}
+
+/**
+ * Looks a destination up by its stable data key rather than its display label,
+ * so copy edits cannot break the printed header. Throws rather than falling
+ * back, because a silently empty `href` on a printed resume is worse than a
+ * failed build.
+ */
+function contactLink(id: ContactId): string {
+  const item = contact.find((entry) => entry.id === id);
+  if (!item) {
+    throw new Error(`No "${id}" entry in src/data/contact.ts`);
+  }
+  return item.link;
+}
+
 export default function ResumePage() {
   // One clock read for the whole page, so the headline span and every tenure
   // on the spine are measured against the same instant. This is a server
@@ -29,6 +49,8 @@ export default function ResumePage() {
   // line count on /stats.
   const now = Date.now();
   const careerSpan = careerSpanYears(work, now);
+  const github = contactLink('github');
+  const linkedin = contactLink('linkedin');
 
   return (
     <PageWrapper>
@@ -46,14 +68,14 @@ export default function ResumePage() {
             2026. Stanford MS, YC alum, previously VP Engineering.
           </p>
           {/* Print-only, but real markup rather than CSS `content`, so it is
-              selectable, linkable, and reads from the shared profile. The
-              screen layout carries these in the footer, which print hides. */}
+              selectable and linkable. Destinations come from shared contact
+              data, while the location comes from the shared profile. */}
           <address className="resume-print-contact">
-            <a href={`${SITE_URL}/`}>{SITE_URL.replace(/^https?:\/\//, '')}</a>
-            <span aria-hidden="true"> · </span>
+            <span>{profile.currentCity}</span>
+            <a href={`${SITE_URL}/`}>{displayUrl(SITE_URL)}</a>
             <a href={`mailto:${profile.email}`}>{profile.email}</a>
-            <span aria-hidden="true"> · </span>
-            <a href="https://github.com/mldangelo">github.com/mldangelo</a>
+            <a href={github}>{displayUrl(github)}</a>
+            <a href={linkedin}>{displayUrl(linkedin)}</a>
           </address>
         </header>
 

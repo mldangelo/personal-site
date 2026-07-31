@@ -44,7 +44,9 @@
 
 .resume-page .courses .course-list {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  /* `1fr` keeps an automatic minimum, so long course names can force one
+     column through the other on A4. Let both tracks actually shrink. */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0 3rem;
   list-style: none;
   padding: 0;

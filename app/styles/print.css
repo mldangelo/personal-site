@@ -12,6 +12,10 @@
   :root,
   [data-theme='dark'],
   [data-theme='light'] {
+    /* Chromium uses the active color scheme for the physical page canvas,
+       outside the html/body boxes. Without this, a saved dark preference
+       leaves dark margins around an otherwise white PDF. */
+    color-scheme: light;
     --color-bg: #fff;
     --color-bg-alt: #fff;
     --color-fg: #000;
@@ -44,8 +48,12 @@
     padding-top: 0;
   }
 
-  /* Screen chrome has no meaning on paper. */
+  /* Screen chrome has no meaning on paper. `.skip-link` is a direct child of
+     `<body>`, not of `.site-header`, so hiding the header does not reach it.
+     Its fixed/translated screen treatment otherwise becomes a large dark
+     button in print. */
   body::before,
+  .skip-link,
   .site-header,
   .site-footer-new,
   .slide-menu,
@@ -76,17 +84,23 @@
     min-height: 0;
   }
 
-  /* Contact details belong on a printed resume, and the screen layout puts
-     them only in the footer this hides. Rendered as real markup by
-     ResumeContact rather than CSS content, so it is selectable and stays in
-     step with the shared profile. */
+  /* Contact details belong on a printed resume. Rendered as real markup in
+     ResumePage rather than CSS content, so the line is selectable, linkable,
+     and sourced from the same profile and contact data as the screen UI. */
   .resume-print-contact {
-    display: block;
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 0.75rem;
+    row-gap: 0;
     margin-top: 0.5rem;
     font-family: var(--font-mono);
     font-size: 8.5pt;
     font-style: normal;
-    letter-spacing: 0.04em;
+    /* Five entries at 0.04em no longer fit one line on Letter or A4. Tighter
+       tracking plus a real line-height means the block reads as one run
+       whether it takes one line or two. */
+    letter-spacing: 0.02em;
+    line-height: 1.5;
     color: #333;
   }
 
@@ -94,6 +108,12 @@
     color: inherit;
     text-decoration: none;
     background-image: none;
+  }
+
+  .resume-print-contact > * {
+    /* Break only between complete entries. Punctuation separators can dangle
+       at either edge of a wrapped line, so spacing carries the separation. */
+    white-space: nowrap;
   }
 
   .resume-title,
@@ -219,13 +239,39 @@
     display: none;
   }
 
-  /* Reveal destinations for links that are not obvious from their text. */
+  /* Reveal destinations for links that are not obvious from their text. On the
+     resume that is the identifying link on each professional or education
+     entry — the company or school — which otherwise prints as
+     undifferentiated black text and loses the destination entirely on paper.
+
+     Deliberately not the citations inside a role summary: three URLs inside
+     one sentence of 10pt serif cost more legibility than they return. And not
+     `.resume-print-contact`, whose link text is already the readable URL, so
+     revealing the href there would print every address twice. Course links
+     remain clickable in a PDF, but printing 13 raw catalogue URLs makes the
+     paper artifact denser without giving a reader practical destinations to
+     retype.
+
+     The global `a` reset below does not erase these pseudo-elements: it
+     declares no `content`, and `background-image` does not inherit. */
   .about-content a[href^='http']::after,
-  .prose a[href^='http']::after {
+  .prose a[href^='http']::after,
+  .job-company[href^='http']::after,
+  .degree-container .school a[href^='http']::after {
     content: ' (' attr(href) ')';
     font-family: var(--font-mono);
     font-size: 8pt;
+    /* The company sits in a bold display h3; a URL should read as an
+       annotation of it rather than as more of the heading. */
+    font-weight: var(--font-weight-normal);
+    letter-spacing: var(--tracking-normal);
+    color: var(--color-fg-light);
     word-break: break-all;
+  }
+
+  /* A screen touch-target floor has no meaning on paper. */
+  .course-container a {
+    min-height: 0;
   }
 
   a {
