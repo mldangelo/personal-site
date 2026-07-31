@@ -3,12 +3,13 @@
  * Generates the site icon set and `app/manifest.json`.
  *
  * The previous set was 29 files and 275 KiB in `public/images/favicon/`,
- * produced by an online generator before the redesign. Nothing reached it: it
- * sat under `/images/favicon/`, which no user agent probes by convention, and
- * no page linked it. It also still carried `#2e59ba`, an accent this palette
- * dropped. Rather than hand-edit binaries, the mark is rendered here from the
- * live design tokens, so a change to `--color-accent` cannot leave the icons
- * behind — `scripts/__tests__/generate-icons.test.ts` fails when it does.
+ * produced by an online generator before the redesign. The files remained
+ * directly addressable, but no page or manifest referenced them and browser
+ * conventions do not discover arbitrary `public/` subdirectories. They also
+ * still carried `#2e59ba`, an accent this palette dropped. Rather than
+ * hand-edit binaries, the mark is rendered here from the live design tokens,
+ * so a change to `--color-accent` cannot leave the icons behind —
+ * `scripts/__tests__/generate-icons.test.ts` fails when it does.
  *
  * Run with `npm run icons`. The output is committed, like `public/og.png`, so
  * builds stay deterministic and do not depend on Google Fonts being reachable
@@ -16,9 +17,9 @@
  * unless its bytes match the digest recorded below.
  *
  * What each output is for, and how it is reached:
- *   app/favicon.ico              /favicon.ico — requested by convention, with
- *                                no HTML reference, by old browsers and by
- *                                crawlers and feed readers.
+ *   app/favicon.ico              /favicon.ico — linked by Next and also
+ *                                requested directly by clients that do not
+ *                                inspect the page's icon links.
  *   app/icon.png                 <link rel="icon" type="image/png"> for the
  *                                browser tab, emitted by Next's file
  *                                convention. Oversized on purpose so a 32px
@@ -37,9 +38,13 @@ import { createRequire } from 'node:module';
 import { join } from 'node:path';
 import { createElement as h } from 'react';
 
+import { readLiteralColorToken } from './lib/color-token.mjs';
+
 // `next/og` ships as CommonJS with no ESM export condition, so it has to be
 // required rather than imported.
-const { ImageResponse } = createRequire(import.meta.url)('next/og');
+const require = createRequire(import.meta.url);
+const { ImageResponse } = require('next/og');
+const NEXT_VERSION = require('next/package.json').version;
 
 const root = process.cwd();
 const TOKENS = join(root, 'app', 'styles', 'tokens', 'colors.css');
@@ -76,15 +81,7 @@ const ICON_FONT = Object.freeze({
  */
 async function readColorToken(path, name) {
   const css = await readFile(path, 'utf8');
-  const match = css.match(
-    new RegExp(`^\\s*${name}:\\s*(#[0-9a-fA-F]{3,8})\\s*;`, 'm'),
-  );
-
-  if (!match) {
-    throw new Error(`No literal hex value for ${name} in ${path}`);
-  }
-
-  return match[1].toLowerCase();
+  return readLiteralColorToken(css, name, path);
 }
 
 /**
@@ -243,9 +240,8 @@ const RASTERS = [
   { size: 180, ratio: 0.46 },
   { size: 192, ratio: 0.46 },
   { size: 512, ratio: 0.46 },
-  // Android clips maskable icons to a circle 80% of the width, so the mark has
-  // to sit well inside that. At this ratio the monogram spans 57% of the tile,
-  // putting its corners on a 0.61-diameter circle — comfortably inside.
+  // Android guarantees a centered safe circle with a radius of 40% of the
+  // tile. The smaller ratio keeps the complete monogram inside that circle.
   { size: 512, ratio: 0.38, key: 'maskable512' },
 ];
 
@@ -266,7 +262,7 @@ const manifest = {
   // basePath resolves these without the generator knowing the prefix.
   start_url: '.',
   scope: '.',
-  // The site is a document, not an app. Keeping the URL bar is honest.
+  // Keep basic browser navigation available for this multi-page document.
   display: 'minimal-ui',
   background_color: bgLight,
   theme_color: bgLight,
@@ -318,7 +314,15 @@ await Promise.all(
  * beside its generator rather than in `public/`: nothing serves it, and the
  * point of this change was to stop shipping bytes nothing asks for.
  */
-const generatorSource = await readFile(new URL(import.meta.url), 'utf8');
+const generatorSources = await Promise.all(
+  [
+    ['scripts/generate-icons.mjs', new URL(import.meta.url)],
+    [
+      'scripts/lib/color-token.mjs',
+      new URL('./lib/color-token.mjs', import.meta.url),
+    ],
+  ].map(async ([path, url]) => [path, await readFile(url, 'utf8')]),
+);
 const inputs = {
   accent,
   onAccent,
@@ -327,6 +331,10 @@ const inputs = {
   monogram: MONOGRAM,
   name: profile.name,
   font: ICON_FONT,
+  renderer: {
+    package: 'next',
+    version: NEXT_VERSION,
+  },
 };
 
 await writeFile(
@@ -334,9 +342,12 @@ await writeFile(
   `${JSON.stringify(
     {
       inputs,
-      generatorDigest: createHash('sha256')
-        .update(generatorSource)
-        .update('\0')
+      generatorDigest: generatorSources
+        .reduce(
+          (digest, [path, source]) =>
+            digest.update(path).update('\0').update(source).update('\0'),
+          createHash('sha256'),
+        )
         .update(JSON.stringify(inputs))
         .digest('hex'),
       files: Object.fromEntries(

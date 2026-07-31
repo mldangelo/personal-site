@@ -1,5 +1,6 @@
 import { createHash } from 'node:crypto';
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import { join, posix } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
@@ -18,6 +19,18 @@ import { readColorToken } from '@/lib/tokens';
 
 const root = process.cwd();
 const META_PATH = join(root, 'scripts', 'icons.meta.json');
+const require = createRequire(import.meta.url);
+const nextVersion = require('next/package.json').version;
+
+const GENERATED_FILES = [
+  'app/apple-icon.png',
+  'app/favicon.ico',
+  'app/icon.png',
+  'app/manifest.json',
+  'public/images/icons/icon-192.png',
+  'public/images/icons/icon-512.png',
+  'public/images/icons/icon-maskable-512.png',
+] as const;
 
 type IconsMeta = {
   inputs: {
@@ -34,6 +47,10 @@ type IconsMeta = {
       style: string;
       url: string;
       sha256: string;
+    };
+    renderer: {
+      package: string;
+      version: string;
     };
   };
   generatorDigest: string;
@@ -99,21 +116,48 @@ describe('generated icon set', () => {
     expect(meta.inputs.font.sha256).toMatch(/^[0-9a-f]{64}$/);
   });
 
-  it('was produced by the committed generator', () => {
-    const source = readFileSync(
-      join(root, 'scripts', 'generate-icons.mjs'),
-      'utf8',
-    );
-    const digest = createHash('sha256')
-      .update(source)
-      .update('\0')
+  it('pins the renderer version that produces the pixels', () => {
+    expect(meta.inputs.renderer).toEqual({
+      package: 'next',
+      version: nextVersion,
+    });
+  });
+
+  it('was produced by the committed generator sources', () => {
+    const digest = ['scripts/generate-icons.mjs', 'scripts/lib/color-token.mjs']
+      .reduce(
+        (hash, path) =>
+          hash
+            .update(path)
+            .update('\0')
+            .update(readFileSync(join(root, path), 'utf8'))
+            .update('\0'),
+        createHash('sha256'),
+      )
       .update(JSON.stringify(meta.inputs))
       .digest('hex');
 
     expect(digest, STALE).toBe(meta.generatorDigest);
   });
 
-  it.each(Object.keys(meta.files))('has not been hand-edited: %s', (path) => {
+  it('tracks exactly the files this generator owns', () => {
+    expect(Object.keys(meta.files).sort()).toEqual([...GENERATED_FILES].sort());
+  });
+
+  it('leaves no obsolete files in the manifest icon directory', () => {
+    const expected = GENERATED_FILES.filter((path) =>
+      path.startsWith('public/images/icons/'),
+    )
+      .map((path) => posix.basename(path))
+      .sort();
+
+    expect(
+      readdirSync(join(root, 'public', 'images', 'icons')).sort(),
+      'Remove obsolete files from public/images/icons when the generated set changes.',
+    ).toEqual(expected);
+  });
+
+  it.each(GENERATED_FILES)('has not been hand-edited: %s', (path) => {
     const digest = createHash('sha256')
       .update(readFileSync(join(root, path)))
       .digest('hex');
@@ -122,7 +166,7 @@ describe('generated icon set', () => {
   });
 
   it('records portable repository paths in the ledger', () => {
-    for (const path of Object.keys(meta.files)) {
+    for (const path of GENERATED_FILES) {
       expect(path).not.toContain('\\');
       expect(path).toBe(posix.normalize(path));
     }
