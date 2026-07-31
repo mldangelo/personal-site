@@ -23,10 +23,14 @@ const PAGE_TITLE = 'Projects';
  * page no longer has. Capped at three names to keep the description short
  * enough to survive a search result.
  */
-const PROJECTS_DESCRIPTION = `Work ${AUTHOR_NAME} has shipped — ${shipped
+const PROJECTS_DESCRIPTION = `Selected work from ${AUTHOR_NAME} — ${shipped
   .slice(0, 3)
   .map((project) => project.title)
-  .join(', ')} — plus an archive of student-era experiments.`;
+  .join(', ')} — plus earlier projects and experiments.`;
+
+function projectCountLabel(count: number): string {
+  return `${count} ${count === 1 ? 'project' : 'projects'}`;
+}
 
 export const metadata: Metadata = createPageMetadata({
   title: PAGE_TITLE,
@@ -55,24 +59,28 @@ export default function ProjectsPage() {
         <header className="projects-header">
           <h1 className="page-title">{PAGE_TITLE}</h1>
           <p className="page-subtitle">
-            Projects I have built and led, plus the student-era experiments that
-            came first.
+            Work I have built, led, and contributed to, plus earlier student
+            projects.
           </p>
         </header>
 
-        <section className="projects-group" aria-labelledby="projects-shipped">
+        <section className="projects-group" aria-labelledby="projects-selected">
           <div className="projects-group-header">
-            <h2 id="projects-shipped" className="projects-section-title">
-              Shipped
+            <h2 id="projects-selected" className="projects-section-title">
+              Selected work
             </h2>
             {/* Counted, never typed. */}
-            <span className="projects-section-count">{shipped.length}</span>
+            <span className="projects-section-count">
+              {projectCountLabel(shipped.length)}
+            </span>
           </div>
-          <div className="projects-register">
+          <ol className="projects-register">
             {shipped.map((project) => (
-              <Entry data={project} key={project.title} />
+              <li key={project.title}>
+                <Entry data={project} />
+              </li>
             ))}
-          </div>
+          </ol>
         </section>
 
         <section className="projects-group" aria-labelledby="projects-archive">
@@ -80,17 +88,20 @@ export default function ProjectsPage() {
             <h2 id="projects-archive" className="projects-section-title">
               Archive
             </h2>
-            <span className="projects-section-count">{archive.length}</span>
+            <span className="projects-section-count">
+              {projectCountLabel(archive.length)}
+            </span>
           </div>
           <p className="projects-group-note">
-            Student-era hackathons and experiments, kept for the record rather
-            than deleted.
+            Student projects, hackathons, and experiments, kept for the record.
           </p>
-          <div className="projects-grid">
+          <ol className="projects-grid">
             {archive.map((project) => (
-              <Cell data={project} key={project.title} />
+              <li key={project.title}>
+                <Cell data={project} />
+              </li>
             ))}
-          </div>
+          </ol>
         </section>
       </div>
     </PageWrapper>

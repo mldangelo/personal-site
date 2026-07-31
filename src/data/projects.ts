@@ -3,15 +3,15 @@
  *
  * Two groups, both kept deliberately:
  *
- * - `shipped` — work that is or was in production, and can be pointed at.
+ * - `shipped` — selected production work Michael built, led, or contributed
+ *   to, and can be pointed at.
  * - `archive` — student-era experiments. A register that deletes its own
  *   history is a brochure, so these stay, stepped down rather than removed.
  *
- * Shipped entries that share a title with `src/data/resume/work.ts` are
- * cross-checked there for dates, destinations, and numeric claims. Archive
- * entries are maintained here directly. Those checks establish internal
- * consistency; factual claims and public destinations still need primary-
- * source and live-link review.
+ * Every shipped entry declares the role in `src/data/resume/work.ts` that
+ * backs its dates and numeric claims. Archive entries are maintained here
+ * directly. Those checks establish internal consistency; factual claims and
+ * public destinations still need primary-source and live-link review.
  */
 export type ProjectStatus = 'shipped' | 'archive';
 
@@ -20,10 +20,12 @@ export interface Project {
   /** Role, venue, or one-line positioning. Rendered as a mono label. */
   subtitle?: string;
   /**
-   * Where a reader can go and see it. Entries without one are rendered as
+   * Public destination for the work. Entries without one are rendered as
    * visibly inert rather than as cards that look clickable and are not.
    */
   link?: string;
+  /** Résumé role that backs a shipped entry's dates and numeric claims. */
+  sourceWork?: string;
   /**
    * Screenshot, where one exists. Optional: the card and the register row are
    * both designed to read on type and rules alone, so a new entry does not
@@ -60,6 +62,7 @@ const data: Project[] = [
     title: 'Codex Security',
     subtitle: 'OpenAI · Research preview',
     link: 'https://openai.com/index/codex-security-now-in-research-preview/',
+    sourceWork: 'OpenAI',
     // Michael's involvement began with his OpenAI role. The public research
     // preview launched three days earlier; month-precision UI shows Mar 2026.
     date: '2026-03-09',
@@ -71,6 +74,7 @@ const data: Project[] = [
     title: 'Promptfoo',
     subtitle: 'Co-founder & CTO through acquisition · Continued at OpenAI',
     link: 'https://promptfoo.dev',
+    sourceWork: 'Promptfoo',
     date: '2024-07-01',
     ongoing: true,
     desc: 'Started as a developer-first eval tool and grew into a platform for AI security, red-teaming, and compliance: evaluation framework, vulnerability scanning, static analysis, and automated red-teaming. Reached more than 350,000 developers, 130,000 monthly active users, and teams at more than 25% of the Fortune 500 before joining OpenAI in 2026.',
@@ -79,20 +83,22 @@ const data: Project[] = [
   {
     title: 'Smile ID',
     subtitle: 'VP Engineering & Head of AI',
-    link: 'https://usesmileid.com',
+    link: 'https://smile.id/',
+    sourceWork: 'Smile ID',
     date: '2022-01-01',
     endDate: '2024-07-01',
-    desc: 'ML-powered identity verification APIs used by banks, fintechs, and telcos across Africa. Re-architected inference to scale from 1,000 to more than 1M users per day, cutting job time from over 30 seconds to 7, and shipped a fraud detection product built on 1-N facial recognition.',
+    desc: 'ML-powered identity verification APIs used by banks, fintechs, and telcos across Africa. Re-architected inference to scale from 1,000 to more than 1M users per day, cutting job time from over 30 seconds to 7 seconds, and shipped a fraud detection product built on 1-N facial recognition.',
     tech: ['AWS Lambda', 'Computer vision', 'Embeddings', 'Vector search'],
     status: 'shipped',
   },
   {
     title: 'Arthena',
     subtitle: 'Co-founder & CTO',
-    link: 'https://www.arthena.co/',
+    link: 'https://www.ycombinator.com/companies/arthena',
+    sourceWork: 'Arthena',
     date: '2014-01-01',
     endDate: '2022-01-01',
-    desc: 'Quantitative art investment platform backed by Anthemis, Foundation Capital, and Y Combinator. Valuation models over irregularly-sampled time series, plus the data pipelines and research tools behind them. Built from idea to acquisition by Masterworks in 2023.',
+    desc: 'Quantitative art-investment platform backed by Anthemis, Foundation Capital, and Y Combinator. Built valuation models over irregularly sampled time series, plus the data pipelines and research tools behind them. Masterworks later acquired the company in 2023.',
     tech: [
       'Graph embeddings',
       'Probabilistic forecasting',
@@ -105,6 +111,7 @@ const data: Project[] = [
     title: 'Matroid',
     subtitle: 'Co-founder',
     link: 'https://matroid.com',
+    sourceWork: 'Matroid',
     date: '2015-09-01',
     endDate: '2016-06-01',
     desc: 'Computer vision platform for creating and deploying detectors. Architected and built the initial platform for identifying objects, events, and patterns in video, and carried it through the seed round.',

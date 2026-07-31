@@ -6,18 +6,28 @@ import routes from '@/data/routes';
 import ProjectsPage from '../projects/page';
 
 describe('projects page', () => {
-  it('presents shipped work and the archive as separate, labelled groups', () => {
+  it('presents selected work and the archive as separate, labelled groups', () => {
     render(<ProjectsPage />);
 
-    const shippedSection = screen.getByRole('region', { name: 'Shipped' });
+    const shippedSection = screen.getByRole('region', {
+      name: 'Selected work',
+    });
     const archiveSection = screen.getByRole('region', { name: 'Archive' });
 
     expect(
       within(shippedSection).getAllByRole('heading', { level: 3 }),
     ).toHaveLength(shipped.length);
+    expect(within(shippedSection).getByRole('list')).toBeInTheDocument();
+    expect(within(shippedSection).getAllByRole('listitem')).toHaveLength(
+      shipped.length,
+    );
     expect(
       within(archiveSection).getAllByRole('heading', { level: 3 }),
     ).toHaveLength(archive.length);
+    expect(within(archiveSection).getByRole('list')).toBeInTheDocument();
+    expect(within(archiveSection).getAllByRole('listitem')).toHaveLength(
+      archive.length,
+    );
   });
 
   it('counts each group rather than stating a number', () => {
@@ -26,7 +36,10 @@ describe('projects page', () => {
       ...container.querySelectorAll('.projects-section-count'),
     ].map((node) => node.textContent);
 
-    expect(counts).toEqual([String(shipped.length), String(archive.length)]);
+    expect(counts).toEqual([
+      `${shipped.length} projects`,
+      `${archive.length} projects`,
+    ]);
   });
 
   it('leads with the newest shipped work', () => {

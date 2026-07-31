@@ -74,6 +74,14 @@
 .projects-register {
   display: flex;
   flex-direction: column;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.projects-register > li {
+  min-width: 0;
+  padding-left: 0;
 }
 
 .project-entry {
@@ -225,6 +233,15 @@ a.project-entry:focus-visible .project-entry-external {
   display: grid;
   gap: 1.75rem;
   grid-template-columns: 1fr;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.projects-grid > li {
+  display: flex;
+  min-width: 0;
+  padding-left: 0;
 }
 
 @media screen and (min-width: 600px) {
@@ -234,6 +251,7 @@ a.project-entry:focus-visible .project-entry-external {
 }
 
 .project-card {
+  width: 100%;
   background: transparent;
   border-radius: 0;
   overflow: hidden;
@@ -251,6 +269,8 @@ a.project-entry:focus-visible .project-entry-external {
   display: block;
   text-decoration: none;
   color: inherit;
+  /* This is a full-card control, not an inline prose link. */
+  background-image: none;
 }
 
 .project-card-link:focus-visible {

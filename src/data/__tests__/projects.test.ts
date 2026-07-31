@@ -6,6 +6,8 @@ import { describe, expect, it } from 'vitest';
 import projects, { archive, type Project, shipped } from '../projects';
 import work from '../resume/work';
 
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+
 /** Complete register order: live first, then activity date, then title. */
 function compareActivity(a: Project, b: Project): number {
   const liveOrder = Number(Boolean(b.ongoing)) - Number(Boolean(a.ongoing));
@@ -14,6 +16,21 @@ function compareActivity(a: Project, b: Project): number {
   const dateOrder =
     Date.parse(b.endDate ?? b.date) - Date.parse(a.endDate ?? a.date);
   return dateOrder || a.title.localeCompare(b.title);
+}
+
+function isValidIsoDate(value: string): boolean {
+  if (!ISO_DATE.test(value)) return false;
+  const parsed = new Date(`${value}T00:00:00.000Z`);
+  return (
+    !Number.isNaN(parsed.valueOf()) &&
+    parsed.toISOString().slice(0, 10) === value
+  );
+}
+
+function numericClaims(value: string): string[] {
+  return (value.match(/\d[\d,]*(?:\.\d+)?(?:[KMB]\+?|%|-[A-Z])?\+?/gi) ?? [])
+    .map((claim) => claim.replaceAll(',', '').replace(/\+$/, '').toUpperCase())
+    .filter(Boolean);
 }
 
 describe('projects data', () => {
@@ -28,6 +45,16 @@ describe('projects data', () => {
       expect(typeof project.date).toBe('string');
       expect(typeof project.desc).toBe('string');
       expect(['shipped', 'archive']).toContain(project.status);
+
+      if (project.status === 'shipped') {
+        expect(typeof project.sourceWork, project.title).toBe('string');
+        expect(
+          project.sourceWork?.trim().length,
+          project.title,
+        ).toBeGreaterThan(0);
+      } else {
+        expect(project.sourceWork, project.title).toBeUndefined();
+      }
     }
   });
 
@@ -62,15 +89,23 @@ describe('projects data', () => {
 
   it('dates are valid date strings', () => {
     for (const project of projects) {
-      expect(Number.isNaN(Date.parse(project.date))).toBe(false);
+      expect(isValidIsoDate(project.date), `${project.title}: date`).toBe(true);
 
       if (project.endDate) {
-        expect(Number.isNaN(Date.parse(project.endDate))).toBe(false);
+        expect(
+          isValidIsoDate(project.endDate),
+          `${project.title}: endDate`,
+        ).toBe(true);
         expect(Date.parse(project.endDate)).toBeGreaterThan(
           Date.parse(project.date),
         );
       }
     }
+  });
+
+  it('rejects normalized and non-ISO calendar dates', () => {
+    expect(isValidIsoDate('2026-02-31')).toBe(false);
+    expect(isValidIsoDate('March 9, 2026')).toBe(false);
   });
 
   /** `ongoing` is what earns the amber "Present"; a finished thing cannot. */
@@ -81,11 +116,13 @@ describe('projects data', () => {
   });
 
   it('links are valid URLs when present', () => {
-    const urlRegex = /^https?:\/\/.+/;
-
     for (const project of projects) {
       if (project.link) {
-        expect(project.link).toMatch(urlRegex);
+        const url = new URL(project.link);
+
+        expect(url.protocol, project.title).toBe('https:');
+        expect(url.username, project.title).toBe('');
+        expect(url.password, project.title).toBe('');
       }
     }
   });
@@ -128,18 +165,22 @@ describe('projects data', () => {
    */
   describe('agreement with the résumé', () => {
     const byName = new Map(work.map((position) => [position.name, position]));
-    const crossReferenced = projects.filter((project) =>
-      byName.has(project.title),
-    );
+    const sourced = shipped.map((project) => ({
+      project,
+      position: byName.get(project.sourceWork ?? ''),
+    }));
 
-    it('cross-references the résumé at all', () => {
-      expect(crossReferenced.length).toBeGreaterThan(0);
+    it('maps every shipped entry to an existing résumé role', () => {
+      for (const { project, position } of sourced) {
+        expect(
+          position,
+          `${project.title}: ${project.sourceWork}`,
+        ).toBeDefined();
+      }
     });
 
     it('starts and ends when the résumé says it did', () => {
-      for (const project of crossReferenced) {
-        const position = byName.get(project.title);
-
+      for (const { project, position } of sourced) {
         expect(project.date, project.title).toBe(position?.startDate);
         if (project.endDate) {
           expect(project.endDate, project.title).toBe(position?.endDate);
@@ -147,39 +188,40 @@ describe('projects data', () => {
       }
     });
 
-    it('points shipped work at the destination the résumé points at', () => {
-      // Archive entries deliberately link to the project itself rather than to
-      // the organisation, so only the shipped register is held to this.
-      for (const project of crossReferenced) {
-        if (project.status !== 'shipped') continue;
-
-        expect(project.link, project.title).toBe(
-          byName.get(project.title)?.url,
-        );
+    it('keeps same-name project and résumé destinations aligned', () => {
+      for (const { project, position } of sourced) {
+        // Codex Security is backed by the OpenAI role but intentionally links
+        // to the product announcement rather than OpenAI's home page.
+        if (project.title !== project.sourceWork) continue;
+        expect(project.link, project.title).toBe(position?.url);
       }
     });
 
     /**
      * Every figure in the shipped register has to already exist in the
-     * résumé. This is the guard against the worst failure mode on this page:
-     * a plausible-looking metric nobody can source.
+     * associated résumé role. This guards against a plausible-looking metric
+     * that is absent from the repository's internal record.
      */
     it('quotes no figure the résumé does not already carry', () => {
-      const record = JSON.stringify(work);
-
-      for (const project of shipped) {
-        // Grouped digits, with sentence punctuation trimmed back off the end.
-        const figures = (project.desc.match(/\d[\d,.]*/g) ?? []).map((figure) =>
-          figure.replace(/[.,]+$/, ''),
-        );
+      for (const { project, position } of sourced) {
+        const record = new Set(numericClaims(JSON.stringify(position)));
+        const figures = numericClaims(project.desc);
 
         for (const figure of figures) {
           expect(
-            record.includes(figure),
+            record.has(figure),
             `${project.title}: "${figure}" is not in src/data/resume/work.ts`,
           ).toBe(true);
         }
       }
+    });
+
+    it('compares numeric claims as complete tokens', () => {
+      const record = new Set(numericClaims('2026 1M+ 30+ 25% 1-N'));
+
+      expect(record).toEqual(new Set(['2026', '1M', '30', '25%', '1-N']));
+      expect(record.has('20')).toBe(false);
+      expect(record.has('1%')).toBe(false);
     });
   });
 
@@ -193,7 +235,7 @@ describe('projects data', () => {
     expect(role?.endDate).toBe('2026-03-09');
   });
 
-  it('does not publish dead destinations or historically unsupported technology claims', () => {
+  it('keeps reviewed destination and chronology corrections in place', () => {
     const arthena = projects.find((project) => project.title === 'Arthena');
     const spacePotato = projects.find(
       (project) => project.title === 'Space Potato',
@@ -202,7 +244,7 @@ describe('projects data', () => {
       (project) => project.title === 'Cat Detector',
     );
 
-    expect(arthena?.link).toBe('https://www.arthena.co/');
+    expect(arthena?.link).toBe('https://www.ycombinator.com/companies/arthena');
     expect(spacePotato?.link).toBeUndefined();
     expect(catDetector?.tech).not.toContain('TensorFlow');
   });
