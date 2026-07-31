@@ -97,9 +97,11 @@
   gap: 0.75rem;
 }
 
-/* Theme Toggle */
+/* Theme Toggle — one control cycling light / dark / system.
+   The 44x44 box is the hit target and is reserved by the button itself, not by
+   a placeholder waiting on hydration. */
 .theme-toggle {
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   width: 44px;
@@ -115,6 +117,23 @@
     background-color var(--duration-fast) var(--ease-out);
 }
 
+/* The parser-blocking bootstrap stamps the choice before the body paints.
+   Without that attribute JavaScript did not run, so the button would be inert
+   and its "switch" label would promise an action it cannot perform. */
+:root[data-theme-choice] .theme-toggle {
+  display: flex;
+}
+
+/* The mobile menu is client-rendered too. Do not expose its trigger when the
+   same missing bootstrap attribute proves the click handler cannot hydrate. */
+.hamburger-button {
+  display: none;
+}
+
+:root[data-theme-choice] .hamburger-button {
+  display: flex;
+}
+
 .theme-toggle:hover {
   color: var(--color-fg-bold);
   background: var(--color-bg-alt);
@@ -127,19 +146,29 @@
   outline-offset: 2px;
 }
 
-.theme-toggle-icon {
-  display: flex;
+/* All three states ship in the HTML. `data-theme-choice` on <html> — stamped
+   by the head bootstrap before first paint — selects the visible one before
+   React hydrates. `data-theme` alone could not do this: it cannot tell a
+   forced dark theme from a followed one. */
+.theme-toggle-state {
+  display: none;
   align-items: center;
   justify-content: center;
 }
 
-.theme-toggle-placeholder {
-  width: 44px;
-  height: 44px;
+:root[data-theme-choice='system'] .theme-toggle-state[data-theme-state='system'],
+:root[data-theme-choice='light'] .theme-toggle-state[data-theme-state='light'],
+:root[data-theme-choice='dark'] .theme-toggle-state[data-theme-state='dark'] {
+  display: flex;
 }
 
 /* Hide hamburger on desktop */
 @media screen and (min-width: 736px) {
+  /* Match the logo rail even when no JavaScript means no theme control. */
+  .nav-actions {
+    min-width: 44px;
+  }
+
   .hamburger-button {
     display: none;
   }

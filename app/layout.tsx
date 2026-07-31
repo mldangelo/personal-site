@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Script from 'next/script';
 
 import { SiteSchema } from '@/components/Schema';
 import GoogleAnalytics from '@/components/Template/GoogleAnalytics';
@@ -7,6 +6,7 @@ import Navigation from '@/components/Template/Navigation';
 import { MAIN_CONTENT_ID } from '@/components/Template/PageWrapper';
 import ScrollToTop from '@/components/Template/ScrollToTop';
 import { sharedOpenGraph, sharedTwitter } from '@/lib/metadata';
+import { themeInitScript } from '@/lib/theme';
 import { AUTHOR_NAME, SITE_DESCRIPTION, SITE_URL } from '@/lib/utils';
 import { bricolage, jetbrainsMono, newsreader } from './fonts';
 import './tailwind.css';
@@ -73,10 +73,14 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        {/* CSP-safe theme initialization - prevents flash on load */}
-        <Script id="theme-init" strategy="beforeInteractive">
-          {`(function(){try{var t=window.localStorage.getItem('theme');if(t==='dark'||t==='light'){document.documentElement.setAttribute('data-theme',t)}else if(window.matchMedia('(prefers-color-scheme:dark)').matches){document.documentElement.setAttribute('data-theme','dark')}else{document.documentElement.setAttribute('data-theme','light')}}catch(e){}})();`}
-        </Script>
+        {/* Pre-paint theme initialization — prevents flash on load, and stamps
+            the *choice* alongside the resolved theme so the header's theme
+            control can render its own state from the HTML instead of waiting
+            for hydration. Built from the same constants the control uses. */}
+        <script
+          id="theme-init"
+          dangerouslySetInnerHTML={{ __html: themeInitScript() }}
+        />
         <SiteSchema />
       </head>
       <body>
