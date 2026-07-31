@@ -7,6 +7,7 @@ import {
   countLockedPackages,
 } from '../../lib/manifest';
 import { type Measurement, resolveReadings } from '../../lib/readings';
+import { builtCommit, utcDate } from '../../lib/telemetry';
 import Table from './Table';
 
 interface GitHubData {
@@ -23,31 +24,23 @@ interface GitHubStatsResult {
 }
 
 /**
- * Last-known values, used only when the GitHub API is unreachable at build
- * time (rate limit, offline CI). These go stale by definition — refresh them
- * when you notice, and treat a build that logs the warning below as a build
- * that shipped approximate numbers.
+ * Last-known upstream values for builds where the GitHub API is unavailable.
+ * The rendered note identifies them as approximate and dates this snapshot.
  *
- * Refreshed: 2026-07-25
+ * Refreshed: 2026-07-31
  */
 const FALLBACK_DATA: GitHubData = {
   stargazers_count: 1663,
   subscribers_count: 23,
   forks: 979,
-  open_issues_count: 2,
-  pushed_at: '2026-07-25T00:00:00Z',
+  open_issues_count: 21,
+  pushed_at: '2026-07-31T15:44:18Z',
 };
 
 /**
- * Fetch GitHub stats at build time.
- * Uses static fallback if API is unavailable (rate limit, offline, etc.)
- *
- * `revalidate: false` is required, not preferred: `output: 'export'` needs
- * every route statically renderable, and an uncached fetch forces the route
- * dynamic — which makes this fall back on every single build.
- *
- * The staleness risk that implies is handled where it actually lives: the
- * Pages workflow does not restore `.next/cache`, so each deploy refetches.
+ * Fetch public upstream statistics at build time. Static export requires a
+ * cacheable request; the Pages workflow avoids restoring Next's cache so each
+ * deployment attempts a fresh read.
  */
 async function fetchGitHubStats(): Promise<GitHubStatsResult> {
   try {
@@ -85,37 +78,26 @@ async function fetchGitHubStats(): Promise<GitHubStatsResult> {
   }
 }
 
-/**
- * Everything the page asserts about this codebase, counted from the working
- * tree and its manifests rather than typed in. A count that cannot be taken
- * comes back `null` and `resolveReadings` drops its row.
- */
+/** Take every first-hand reading this build can establish. */
 function measureThisBuild(): Record<string, Measurement> {
+  const builtAt = Date.now();
+
   return {
     source_lines: countSourceLines(),
     direct_dependencies: countDirectDependencies(),
     installed_non_dev_packages: countInstalledNonDevPackages(),
     locked_packages: countLockedPackages(),
     lint_rules: countLintRules(),
+    built_commit: builtCommit(),
+    built_at: utcDate(builtAt),
   };
 }
 
-/**
- * Site statistics component - fetches GitHub data at build time.
- * This table is a server component and adds no client-side JavaScript.
- */
+/** Site statistics are fully server-rendered and add no client JavaScript. */
 export default async function SiteStats() {
-  // Started before the measurements so the file reads happen during the
-  // network round trip rather than after it. The Pages build deliberately runs
-  // this fetch uncached every time, so the two costs would otherwise stack.
   const githubStats = fetchGitHubStats();
-
   const measurements = measureThisBuild();
   const { data: githubData, source } = await githubStats;
-
-  // Resolution — including the `format` functions, which cannot cross the RSC
-  // boundary — happens in `src/lib/readings.ts` so both stats tables describe
-  // their provenance the same way.
   const data = resolveReadings(declarations, {
     ...measurements,
     ...githubData,
@@ -126,8 +108,8 @@ export default async function SiteStats() {
       <Table data={data} />
       <p className="stats-source-note" data-source={source}>
         {source === 'github'
-          ? 'GitHub readings fetched at build time. Measured readings counted from this build’s checkout and installed dependency tree.'
-          : 'Approximate GitHub readings — API unavailable; fallback refreshed July 25, 2026. Measured readings counted from this build’s checkout and installed dependency tree.'}
+          ? 'GitHub readings describe mldangelo/personal-site and were fetched at build time. Measured readings came from this build and its checkout.'
+          : 'GitHub API unavailable; approximate mldangelo/personal-site readings use the fallback refreshed July 31, 2026. Measured readings came from this build and its checkout.'}
       </p>
     </>
   );

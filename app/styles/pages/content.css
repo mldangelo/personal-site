@@ -602,9 +602,31 @@
   color: var(--color-accent-hover);
 }
 
-/* The live reading — the same rule as the hero: amber means it moves. */
-.stat-live {
+/* The age starts as a dated server snapshot and upgrades in place. Reserve the
+   eleven-decimal width so that precision change cannot resize its table cell. */
+.stat-readout-value {
+  display: inline-block;
+  min-width: var(--readout-width, auto);
+}
+
+/* Amber means the value is actively ticking. Static and reduced-motion
+   snapshots remain ordinary ink. */
+.stat-readout-value[data-live='true'] {
   color: var(--color-signal);
+}
+
+/* The note always occupies one line: a snapshot date or an explicit Live
+   status. Keeping it mounted avoids a vertical shift during hydration. */
+.stat-readout-note {
+  display: block;
+  margin-top: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-weight: var(--font-weight-normal);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--color-fg-light);
 }
 
 .stats-source-note {

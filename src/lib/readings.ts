@@ -31,7 +31,13 @@ export interface StatDeclaration {
   key?: string;
   label: string;
   value?: ReactElement | number | string;
-  link?: string;
+  /**
+   * Where the value points. A function when the target depends on the
+   * measurement — the build commit links to itself — so that every URL on
+   * the page still lives in the declaration rather than in the component that
+   * happens to take the reading.
+   */
+  link?: string | ((value: unknown) => string);
   source?: ReadingSource;
   /**
    * Appended after the formatted count, and only where it tells the reader
@@ -50,7 +56,13 @@ export interface Reading {
   source?: ReadingSource;
 }
 
-export type Measurement = number | string | null | undefined;
+/**
+ * A value supplied for a keyed row by whoever took the reading.
+ *
+ * An element is a measurement too: the server supplies the live-age client
+ * leaf for the keyed age row rather than storing React in the data module.
+ */
+export type Measurement = ReactElement | number | string | null | undefined;
 
 /**
  * A count, formatted so it reads as an instrument rather than as a digit soup.
@@ -67,7 +79,7 @@ export function formatReading(count: number, unit?: string): string {
 }
 
 function resolveValue(
-  raw: NonNullable<Measurement> | ReactElement,
+  raw: NonNullable<Measurement>,
   unit?: string,
   format?: (value: unknown) => string | ReactElement,
 ): ReactElement | string {
@@ -115,7 +127,10 @@ export function resolveReadings(
     readings.push({
       label: declaration.label,
       value: resolveValue(raw, declaration.unit, declaration.format),
-      link: declaration.link,
+      link:
+        typeof declaration.link === 'function'
+          ? declaration.link(raw)
+          : declaration.link,
       source: declaration.source,
     });
   }
