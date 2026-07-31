@@ -125,18 +125,18 @@ describe('resolveReadings', () => {
   });
 
   it('derives a link from the reading when the declaration asks it to', () => {
-    // The deployed commit is the one row whose link target is its own value.
+    // The build commit is the one row whose link target is its own value.
     const declarations: StatDeclaration[] = [
       {
-        key: 'deployed_commit',
-        label: 'Deployed from commit',
+        key: 'built_commit',
+        label: 'Built from commit',
         format: (value) => String(value).slice(0, 7),
         link: (value) => `https://example.com/commit/${value}`,
       },
     ];
 
     const [reading] = resolveReadings(declarations, {
-      deployed_commit: 'abcdef1234567890',
+      built_commit: 'abcdef1234567890',
     });
 
     expect(reading.value).toBe('abcdef1');
@@ -147,12 +147,10 @@ describe('resolveReadings', () => {
     // Off CI there is no commit, so there is nothing to link to either.
     const link = vi.fn(() => 'https://example.com');
     const declarations: StatDeclaration[] = [
-      { key: 'deployed_commit', label: 'Deployed from commit', link },
+      { key: 'built_commit', label: 'Built from commit', link },
     ];
 
-    expect(resolveReadings(declarations, { deployed_commit: null })).toEqual(
-      [],
-    );
+    expect(resolveReadings(declarations, { built_commit: null })).toEqual([]);
     expect(link).not.toHaveBeenCalled();
   });
 

@@ -1,31 +1,81 @@
 'use client';
 
-import { useCallback } from 'react';
+import { type RefObject, useEffect, useRef, useState } from 'react';
 
 import { ageAt, ageIntervalFor, agePlaceholder } from '@/lib/telemetry';
 
-import useLiveReadout, { type LiveReadout } from './useLiveReadout';
+import usePrefersReducedMotion from './usePrefersReducedMotion';
+
+export interface LiveAgeState<T extends HTMLElement> {
+  /** True only while a visible-page timer is actively updating the value. */
+  live: boolean;
+  /** Attach to the element whose text contains the age. */
+  ref: RefObject<T | null>;
+}
 
 /**
- * A live age readout, written straight to the DOM.
+ * Upgrade a server-rendered age snapshot without re-rendering on every tick.
  *
- * Returns `{ ref, live }` from `useLiveReadout`, where the whole contract —
- * out-of-band `textContent` writes, no state per tick, reduced-motion and
- * visibility handling — is documented and shared with the build clock.
- *
- * `initial` is the content the element already shows. Pass the string the
- * server rendered: on `/stats` that is the age at `AGE_PRECISION_STATIC`,
- * threaded through as a prop so the client cannot compute a different one, and
- * this hook upgrades it to `AGE_PRECISION_FULL` on mount. It is also what the
- * element is restored to on cleanup. With nothing to pass, the default is
- * `agePlaceholder(precision)` — fixed-width and digit-free, so it cannot be
- * mistaken for a measurement.
+ * The hook writes only the text node. React state tracks the coarse
+ * static/live status, not the value, so the eleven-decimal display does not
+ * trigger 40 component renders a second. Hidden pages and readers who prefer
+ * reduced motion keep the dated server snapshot instead of a frozen value
+ * styled as live.
  */
 export default function useLiveAge<T extends HTMLElement = HTMLSpanElement>(
   precision: number,
   initial: string = agePlaceholder(precision),
-): LiveReadout<T> {
-  const read = useCallback((now: number) => ageAt(now, precision), [precision]);
+): LiveAgeState<T> {
+  const ref = useRef<T>(null);
+  const [live, setLive] = useState(false);
+  const prefersReducedMotion = usePrefersReducedMotion();
 
-  return useLiveReadout<T>(read, ageIntervalFor(precision), initial);
+  useEffect(() => {
+    const node = ref.current;
+
+    if (!node) {
+      return;
+    }
+
+    const interval = ageIntervalFor(precision);
+    let timer: ReturnType<typeof setInterval> | undefined;
+
+    const stop = () => {
+      clearInterval(timer);
+      timer = undefined;
+    };
+
+    const showSnapshot = () => {
+      node.textContent = initial;
+      setLive(false);
+    };
+
+    const tick = () => {
+      node.textContent = ageAt(Date.now(), precision);
+    };
+
+    const sync = () => {
+      stop();
+
+      if (document.hidden || prefersReducedMotion) {
+        showSnapshot();
+        return;
+      }
+
+      tick();
+      setLive(true);
+      timer = setInterval(tick, interval);
+    };
+
+    sync();
+    document.addEventListener('visibilitychange', sync);
+
+    return () => {
+      stop();
+      document.removeEventListener('visibilitychange', sync);
+      node.textContent = initial;
+    };
+  }, [initial, precision, prefersReducedMotion]);
+
+  return { live, ref };
 }

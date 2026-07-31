@@ -188,18 +188,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_ENV: production
           NEXT_PUBLIC_GA_TRACKING_ID: ${{ vars.NEXT_PUBLIC_GA_TRACKING_ID }}
-          # The commit these bytes were built from. /stats reports it so the
-          # page names the deploy the reader is looking at instead of the
-          # repository's last push, which is a different fact. Declared here
-          # rather than leaning on the runner's own GITHUB_SHA so the build's
-          # inputs are all visible in one place; `deployedCommit()` still falls
-          # back to the runner's GITHUB_SHA/GITHUB_REPOSITORY pair for forks
-          # that never touched this file, and to null off CI, where the row
-          # drops out.
-          BUILD_SHA: ${{ github.sha }}
-          # Keep the commit and its repository from the same build context.
-          # A fork's GITHUB_SHA does not exist in the upstream repository.
-          BUILD_REPOSITORY: ${{ github.repository }}
 
       - name: Verify static export
         shell: bash

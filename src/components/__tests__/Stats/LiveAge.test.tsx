@@ -7,7 +7,7 @@ import { AGE_PRECISION_FULL, agePlaceholder } from '@/lib/telemetry';
 import LiveAge from '../../Stats/LiveAge';
 
 const INITIAL = '36.42';
-const NOTE = 'as of 2026-07-28';
+const NOTE = 'as of 2026-07-31';
 
 function subject() {
   return (
@@ -15,18 +15,26 @@ function subject() {
   );
 }
 
+function setReducedMotion(matches: boolean) {
+  Object.defineProperty(window, 'matchMedia', {
+    writable: true,
+    configurable: true,
+    value: (query: string) => ({
+      matches,
+      media: query,
+      addEventListener: () => {},
+      removeEventListener: () => {},
+    }),
+  });
+}
+
 describe('LiveAge', () => {
   beforeEach(() => {
     vi.useFakeTimers();
-    Object.defineProperty(window, 'matchMedia', {
-      writable: true,
+    setReducedMotion(false);
+    Object.defineProperty(document, 'hidden', {
       configurable: true,
-      value: (query: string) => ({
-        matches: false,
-        media: query,
-        addEventListener: () => {},
-        removeEventListener: () => {},
-      }),
+      value: false,
     });
   });
 
@@ -34,34 +42,16 @@ describe('LiveAge', () => {
     vi.useRealTimers();
   });
 
-  it('reads as a real age with the power off', () => {
-    // The regression this exists for: `out/stats/index.html` shipped
-    // `--.-----------` as the site's most distinctive value to every crawler,
-    // every reader with JavaScript off, and every printed copy.
+  it('renders a real dated age with no JavaScript', () => {
     const html = renderToStaticMarkup(subject());
 
     expect(html).toContain(`>${INITIAL}<`);
-    expect(html).not.toContain('--.');
-    expect(html).toMatch(/\d+\.\d{2}/);
-  });
-
-  it('says when the unpowered reading was taken', () => {
-    // Without the note the build-time value reads as the current age, and it
-    // goes visibly stale between deploys.
-    const html = renderToStaticMarkup(subject());
-
     expect(html).toContain(NOTE);
-    expect(html).toContain('stat-readout-note');
-  });
-
-  it('does not paint the build-time reading as a live one', () => {
-    // Amber means live. The server's value is an ordinary measurement.
-    const html = renderToStaticMarkup(subject());
-
+    expect(html).not.toContain('--.');
     expect(html).toContain('data-live="false"');
   });
 
-  it('upgrades the reading to full precision on mount', () => {
+  it('upgrades to full precision and gives a non-color live cue', () => {
     render(subject());
 
     act(() => {
@@ -73,17 +63,36 @@ describe('LiveAge', () => {
       new RegExp(`^\\d+\\.\\d{${AGE_PRECISION_FULL}}$`),
     );
     expect(value).toHaveAttribute('data-live', 'true');
+    expect(screen.getByText('Live')).toHaveClass('stat-readout-note');
   });
 
-  it('drops the staleness note once the reading is live', () => {
+  it('keeps the note line mounted across the client upgrade', () => {
+    const { container } = render(subject());
+
+    expect(container.querySelectorAll('.stat-readout-note')).toHaveLength(1);
+    expect(screen.getByText('Live')).toBeInTheDocument();
+  });
+
+  it('keeps the snapshot and date under reduced motion', () => {
+    setReducedMotion(true);
     render(subject());
 
-    expect(screen.queryByText(NOTE)).not.toBeInTheDocument();
+    act(() => {
+      vi.advanceTimersByTime(5000);
+    });
+
+    expect(document.querySelector('.stat-readout-value')).toHaveTextContent(
+      INITIAL,
+    );
+    expect(document.querySelector('.stat-readout-value')).toHaveAttribute(
+      'data-live',
+      'false',
+    );
+    expect(screen.getByText(NOTE)).toBeInTheDocument();
+    expect(screen.queryByText('Live')).not.toBeInTheDocument();
   });
 
-  it('reserves the width the upgrade will need', () => {
-    // Two decimals become eleven. Without the reservation the swap can resize
-    // the cell the readout sits in.
+  it('reserves the full-precision width', () => {
     render(subject());
 
     const value = document.querySelector('.stat-readout-value');

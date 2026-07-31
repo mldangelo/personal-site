@@ -108,7 +108,7 @@ describe('Personal', () => {
     render(<Personal />);
 
     expect(screen.getByText(/profile readings come from/i).textContent).toMatch(
-      /no javascript/i,
+      /without javascript/i,
     );
   });
 
