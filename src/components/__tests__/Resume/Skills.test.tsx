@@ -4,9 +4,9 @@ import { describe, expect, it } from 'vitest';
 import Skills from '../../Resume/Skills';
 
 const mockCategories = [
-  { name: 'Languages', color: '#6968b3' },
-  { name: 'ML Engineering', color: '#37b1f5' },
-  { name: 'Web Development', color: '#40494e' },
+  { name: 'Languages' },
+  { name: 'ML Engineering' },
+  { name: 'Web Development' },
 ];
 
 const mockSkills = [
@@ -152,6 +152,109 @@ describe('Skills', () => {
     expect(groupTitles.length).toBeGreaterThan(0);
   });
 
+  it('explains competency tiers once instead of repeating them visibly on every tag', () => {
+    const { container } = render(
+      <Skills skills={mockSkills} categories={mockCategories} />,
+    );
+
+    expect(container.querySelectorAll('.skill-tier-legend')).toHaveLength(1);
+    expect(container.querySelector('.skill-tier-legend')).toHaveTextContent(
+      /Knowledge\s*Deep\s*·\s*Working\s*·\s*Familiar/,
+    );
+    expect(container.querySelectorAll('.skill-tag-tier')).toHaveLength(0);
+  });
+
+  /**
+   * Clicking a filter used to change most of the section with no announcement
+   * of any kind — `aria-pressed` reports the control, not the outcome — and
+   * there was no live region anywhere on the resume.
+   */
+  describe('filter status', () => {
+    it('reports the full set on first paint', () => {
+      render(<Skills skills={mockSkills} categories={mockCategories} />);
+
+      expect(screen.getByRole('status')).toHaveTextContent(
+        'Showing all 5 skills.',
+      );
+    });
+
+    it('announces the result of filtering, not the state of the button', () => {
+      render(<Skills skills={mockSkills} categories={mockCategories} />);
+
+      fireEvent.click(screen.getByRole('button', { name: 'Languages' }));
+
+      expect(screen.getByRole('status')).toHaveTextContent(
+        'Showing 3 of 5 skills in Languages.',
+      );
+    });
+
+    it('counts a skill in two categories once', () => {
+      render(<Skills skills={mockSkills} categories={mockCategories} />);
+
+      // Python, TypeScript and JavaScript each render in two groups.
+      expect(document.querySelectorAll('.skill-tag')).toHaveLength(8);
+      expect(screen.getByRole('status')).toHaveTextContent('all 5 skills');
+    });
+
+    it('returns to the full set when the filter is toggled off', () => {
+      render(<Skills skills={mockSkills} categories={mockCategories} />);
+
+      const languages = screen.getByRole('button', { name: 'Languages' });
+      fireEvent.click(languages);
+      fireEvent.click(languages);
+
+      expect(screen.getByRole('status')).toHaveTextContent(
+        'Showing all 5 skills.',
+      );
+    });
+
+    it('is polite so it never interrupts', () => {
+      render(<Skills skills={mockSkills} categories={mockCategories} />);
+
+      expect(screen.getByRole('status')).toHaveAttribute('aria-live', 'polite');
+      expect(screen.getByRole('status')).toHaveAttribute('aria-atomic', 'true');
+    });
+
+    it('associates every filter with the results and status regions', () => {
+      const { container } = render(
+        <Skills skills={mockSkills} categories={mockCategories} />,
+      );
+
+      const controls = screen
+        .getByRole('button', { name: 'Languages' })
+        .getAttribute('aria-controls')
+        ?.split(' ');
+
+      expect(controls).toHaveLength(2);
+      expect(controls?.map((id) => document.getElementById(id))).toEqual([
+        container.querySelector('.skill-groups'),
+        screen.getByRole('status'),
+      ]);
+    });
+
+    /**
+     * Printing shows every group regardless of the filter, so a visible count
+     * would contradict the paper it is printed on.
+     */
+    it('is not visible on the page', () => {
+      render(<Skills skills={mockSkills} categories={mockCategories} />);
+
+      expect(screen.getByRole('status')).toHaveClass('sr-only');
+    });
+
+    it('keeps the noun singular for a one-skill set', () => {
+      render(
+        <Skills
+          skills={[{ title: 'Python', competency: 5, category: ['Languages'] }]}
+          categories={[{ name: 'Languages' }]}
+        />,
+      );
+
+      expect(screen.getByRole('status')).toHaveTextContent(
+        'Showing all 1 skill.',
+      );
+    });
+  });
   it('sorts skills by competency (highest first)', () => {
     render(<Skills skills={mockSkills} categories={mockCategories} />);
 

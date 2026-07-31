@@ -3,12 +3,15 @@ import { describe, expect, it, vi } from 'vitest';
 
 import CategoryButton from '../../Resume/Skills/CategoryButton';
 
+const controls = 'skills-list skills-status';
+
 describe('CategoryButton', () => {
   it('renders button with label', () => {
     const handleClick = vi.fn();
 
     render(
       <CategoryButton
+        controls={controls}
         label="Languages"
         handleClick={handleClick}
         isActive={false}
@@ -25,6 +28,7 @@ describe('CategoryButton', () => {
 
     render(
       <CategoryButton
+        controls={controls}
         label="Languages"
         handleClick={handleClick}
         isActive={false}
@@ -40,6 +44,7 @@ describe('CategoryButton', () => {
 
     render(
       <CategoryButton
+        controls={controls}
         label="Languages"
         handleClick={handleClick}
         isActive={true}
@@ -55,6 +60,7 @@ describe('CategoryButton', () => {
 
     render(
       <CategoryButton
+        controls={controls}
         label="Languages"
         handleClick={handleClick}
         isActive={false}
@@ -70,16 +76,22 @@ describe('CategoryButton', () => {
 
     const { rerender } = render(
       <CategoryButton
+        controls={controls}
         label="Languages"
         handleClick={handleClick}
         isActive={false}
       />,
     );
 
+    expect(screen.getByRole('button')).toHaveAttribute(
+      'aria-controls',
+      controls,
+    );
     expect(screen.getByRole('button')).toHaveAttribute('aria-pressed', 'false');
 
     rerender(
       <CategoryButton
+        controls={controls}
         label="Languages"
         handleClick={handleClick}
         isActive={true}

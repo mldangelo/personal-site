@@ -39,12 +39,12 @@
   justify-content: flex-start;
 }
 
-/* Skills read as plotted values: the category colour is carried by a
-   short tick rather than a heavy left border on a floating pill. */
+/* The old per-category tick resolved to the same accent in every category, so
+   it communicated nothing. Competency was conveyed separately through the
+   tag's weight and text tone. */
 .skill-tag {
   display: inline-flex;
   align-items: center;
-  gap: 0.5em;
   padding: 0.4em 0.75em;
   background: transparent;
   border: var(--rule) solid var(--color-border);
@@ -58,14 +58,6 @@
     background-color var(--duration-fast) var(--ease-out);
 }
 
-.skill-tag::before {
-  content: '';
-  width: 6px;
-  height: var(--rule-strong);
-  background: var(--tag-color, var(--color-accent));
-  flex-shrink: 0;
-}
-
 .skill-tag:hover {
   border-color: var(--color-fg-light);
   background: var(--color-surface-subtle);
@@ -73,6 +65,26 @@
 
 .skill-tag-name {
   white-space: nowrap;
+}
+
+/* Explain the three visual weights once instead of repeating CORE / WORKING /
+   FAMILIAR inside every tag. Individual tags repeat their tier for assistive
+   technology with visually hidden text. */
+.skill-tier-legend {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.75rem 0 1.5rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--color-fg-light);
+}
+
+.skill-tier-legend-label {
+  color: var(--color-fg);
 }
 
 /* Tech tags — squared, quiet, mono. */
@@ -97,16 +109,17 @@
   border-color: var(--color-border-alt);
 }
 
-/* Size variations — weight, not scale. */
-.skill-tag--lg {
+/* Tier variations — the legend names these weights once, and each tag carries
+   a visually hidden textual equivalent. */
+.skill-tag--deep {
   font-weight: var(--font-weight-medium);
   color: var(--color-fg-bold);
 }
 
-.skill-tag--md {
+.skill-tag--working {
   font-weight: var(--font-weight-normal);
 }
 
-.skill-tag--sm {
+.skill-tag--familiar {
   color: var(--color-fg-light);
 }

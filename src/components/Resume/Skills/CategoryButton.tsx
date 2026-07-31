@@ -1,10 +1,12 @@
 interface CategoryButtonProps {
+  controls: string;
   label: string;
   handleClick: (label: string) => void;
   isActive: boolean;
 }
 
 export default function CategoryButton({
+  controls,
   handleClick,
   isActive,
   label,
@@ -22,6 +24,7 @@ export default function CategoryButton({
         .join(' ')}
       type="button"
       onClick={() => handleClick(label)}
+      aria-controls={controls}
       aria-pressed={isActive}
     >
       {label}
