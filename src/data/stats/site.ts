@@ -1,14 +1,22 @@
-import dayjs from 'dayjs';
-
 import type { StatDeclaration } from '@/lib/readings';
 
 const REPO = 'https://github.com/mldangelo/personal-site';
 const BLOB = `${REPO}/blob/main`;
+const PUSHED_DATE_FORMAT = new Intl.DateTimeFormat('en-US', {
+  day: 'numeric',
+  month: 'long',
+  timeZone: 'UTC',
+  year: 'numeric',
+});
+
+function formatPushedDate(value: unknown) {
+  return PUSHED_DATE_FORMAT.format(new Date(String(value)));
+}
 
 /* Keys are filled in by `src/components/Stats/Site.tsx`: `source: 'github'`
  * rows match keys returned by the GitHub API, `source: 'measured'` rows are
- * counted from the working tree at build time. To see everything returned by
- * the GitHub API, run:
+ * counted from this build's checkout and installed dependency tree. To see
+ * everything returned by the GitHub API, run:
  curl https://api.github.com/repos/mldangelo/personal-site
  *
  * Never type a figure about this codebase into this file. A `measured` row
@@ -50,7 +58,7 @@ const data: StatDeclaration[] = [
     key: 'pushed_at',
     source: 'github',
     link: `${REPO}/commits`,
-    format: (x: unknown) => dayjs(x as string).format('MMMM DD, YYYY'),
+    format: formatPushedDate,
   },
   {
     // Counted by `countSourceLines()`; see `src/lib/loc.ts`. No `unit` — the
@@ -71,27 +79,23 @@ const data: StatDeclaration[] = [
     link: `${BLOB}/package.json`,
   },
   {
-    label: 'Non-development dependencies on this build host',
+    label: 'Installed non-development package locations',
     key: 'installed_non_dev_packages',
     source: 'measured',
-    unit: 'packages',
-    link: `${BLOB}/package-lock.json`,
   },
   {
-    label: 'Resolved into the lockfile',
+    label: 'Lockfile package locations',
     key: 'locked_packages',
     source: 'measured',
-    unit: 'packages',
     link: `${BLOB}/package-lock.json`,
   },
   {
     // Replaces `Number of linter warnings: '0'`. How many rules are turned on
     // is checkable from the working tree; zero warnings is a property of a CI
     // run, which is not something this page can observe.
-    label: 'Enforced by CI on every push',
+    label: 'Biome lint rules enabled in CI',
     key: 'lint_rules',
     source: 'measured',
-    unit: 'lint rules',
     link: `${BLOB}/biome.json`,
   },
   {

@@ -132,9 +132,9 @@ describe('Site', () => {
     for (const label of [
       'Lines of TypeScript powering this website',
       'Dependencies declared directly',
-      'Non-development dependencies on this build host',
-      'Resolved into the lockfile',
-      'Enforced by CI on every push',
+      'Installed non-development package locations',
+      'Lockfile package locations',
+      'Biome lint rules enabled in CI',
     ]) {
       expect(screen.getByText(label)).toBeInTheDocument();
     }
@@ -153,15 +153,34 @@ describe('Site', () => {
     const Component = await Site();
     render(Component);
 
-    const rowFor = (label: string) =>
-      screen.getByText(label).closest('tr')?.textContent ?? '';
+    const valueFor = (label: string) =>
+      screen.getByText(label).closest('tr')?.querySelector('.stat-table-value')
+        ?.textContent ?? '';
 
-    expect(rowFor('Resolved into the lockfile')).toMatch(/[\d,]+ packages$/);
-    expect(rowFor('Enforced by CI on every push')).toMatch(/\d+ lint rules$/);
+    expect(valueFor('Dependencies declared directly')).toMatch(
+      /^[\d,]+ packages$/,
+    );
+    expect(valueFor('Installed non-development package locations')).toMatch(
+      /^[\d,]+$/,
+    );
+    expect(valueFor('Lockfile package locations')).toMatch(/^[\d,]+$/);
+    expect(valueFor('Biome lint rules enabled in CI')).toMatch(/^\d+$/);
     // The label already says "Lines of", so repeating the unit would be noise.
-    expect(rowFor('Lines of TypeScript powering this website')).toMatch(
+    expect(valueFor('Lines of TypeScript powering this website')).toMatch(
       /[\d,]+$/,
     );
+  });
+
+  it('does not link the build-host dependency count to the portable lockfile', async () => {
+    const Component = await Site();
+    render(Component);
+
+    const value = screen
+      .getByText('Installed non-development package locations')
+      .closest('tr')
+      ?.querySelector('.stat-table-value');
+
+    expect(value?.querySelector('a')).toBeNull();
   });
 
   it('marks every reading with its provenance except the joke', async () => {

@@ -8,8 +8,9 @@ import { join } from 'node:path';
  * assert `Number of linter warnings: 0` from a string literal with the comment
  * "enforced via github workflow" beside it. A page whose entire premise is
  * measurement cannot carry a figure nobody re-checks, so the dependency and
- * lint-rule figures are taken from `package.json`, npm's installed-tree
- * lockfile, `package-lock.json`, and `biome.json` on every build.
+ * lint-rule figures are taken from `package.json`,
+ * `node_modules/.package-lock.json`, `package-lock.json`, and `biome.json` on
+ * every build.
  *
  * Every function returns `null` rather than a guess when its manifest is
  * missing or unreadable — a fork that installs with pnpm has neither npm

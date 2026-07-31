@@ -21,10 +21,11 @@ export const SOURCE_LABELS: Record<ReadingSource, string> = {
 /**
  * A row as declared in `src/data/stats/*`.
  *
- * `key` names the measurement that fills the row; a declaration with a `key`
- * must not also carry a `value`, or the hand-typed number wins and drifts.
- * That is precisely how `Lines of TypeScript` came to be wrong by nearly
- * 2,000 lines.
+ * `key` names the measurement that fills the row. A measured site reading must
+ * not also carry a `value`: the literal would hide a missing measurement and
+ * could drift. Profile readings may use `key` with a maintained value so
+ * callers can replace it deliberately; when both exist, the supplied
+ * measurement wins.
  */
 export interface StatDeclaration {
   key?: string;
@@ -35,7 +36,7 @@ export interface StatDeclaration {
   /**
    * Appended after the formatted count, and only where it tells the reader
    * something the label does not. `53 countries` beside `Countries visited`
-   * is noise; `301 packages` beside `Resolved into the lockfile` is the unit.
+   * is noise; `29 packages` beside `Dependencies declared directly` is useful.
    */
   unit?: string;
   format?: (value: unknown) => string | ReactElement;

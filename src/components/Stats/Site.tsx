@@ -102,7 +102,7 @@ function measureThisBuild(): Record<string, Measurement> {
 
 /**
  * Site statistics component - fetches GitHub data at build time.
- * Server component, no client-side JavaScript shipped.
+ * This table is a server component and adds no client-side JavaScript.
  */
 export default async function SiteStats() {
   // Started before the measurements so the file reads happen during the
@@ -126,8 +126,8 @@ export default async function SiteStats() {
       <Table data={data} />
       <p className="stats-source-note" data-source={source}>
         {source === 'github'
-          ? 'GitHub readings fetched at build time. Measured readings counted from the working tree of this build.'
-          : 'Approximate GitHub readings — API unavailable; fallback refreshed July 25, 2026. Measured readings counted from the working tree of this build.'}
+          ? 'GitHub readings fetched at build time. Measured readings counted from this build’s checkout and installed dependency tree.'
+          : 'Approximate GitHub readings — API unavailable; fallback refreshed July 25, 2026. Measured readings counted from this build’s checkout and installed dependency tree.'}
       </p>
     </>
   );

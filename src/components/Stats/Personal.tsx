@@ -15,8 +15,8 @@ export default function PersonalStats() {
     <>
       <Table data={readings} />
       <p className="stats-source-note" data-source="profile">
-        Profile readings come from src/data/profile.json. The age is computed in
-        your browser from the birth instant recorded there.
+        Profile readings come from the site&apos;s maintained profile data. The
+        age is computed in your browser from the recorded birth instant.
       </p>
     </>
   );

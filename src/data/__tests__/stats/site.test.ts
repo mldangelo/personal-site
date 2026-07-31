@@ -64,6 +64,9 @@ describe('site stats data', () => {
     const formatted = pushedAt!.format!('2024-01-15T12:00:00Z');
 
     expect(formatted).toBe('January 15, 2024');
+    // Pin the day to UTC. In America/Los_Angeles this instant is still
+    // January 14, so a build-host-local formatter publishes the wrong date.
+    expect(pushedAt!.format!('2024-01-15T00:30:00Z')).toBe('January 15, 2024');
   });
 
   it('declares the lines-of-code stat without hardcoding a count', () => {
