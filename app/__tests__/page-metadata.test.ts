@@ -20,7 +20,7 @@ describe('page metadata', () => {
   it.each([
     ['about', aboutMetadata, `${SITE_URL}/about/`],
     ['contact', contactMetadata, `${SITE_URL}/contact/`],
-    ['archive', projectsMetadata, `${SITE_URL}/projects/`],
+    ['projects', projectsMetadata, `${SITE_URL}/projects/`],
     ['resume', resumeMetadata, `${SITE_URL}/resume/`],
     ['stats', statsMetadata, `${SITE_URL}/stats/`],
     ['writing', writingMetadata, `${SITE_URL}/writing/`],
@@ -35,7 +35,7 @@ describe('page metadata', () => {
   it.each([
     ['about', aboutMetadata],
     ['contact', contactMetadata],
-    ['archive', projectsMetadata],
+    ['projects', projectsMetadata],
     ['resume', resumeMetadata],
     ['stats', statsMetadata],
     ['writing', writingMetadata],
@@ -52,7 +52,7 @@ describe('page metadata', () => {
   it.each([
     ['about', aboutMetadata],
     ['contact', contactMetadata],
-    ['archive', projectsMetadata],
+    ['projects', projectsMetadata],
     ['resume', resumeMetadata],
     ['stats', statsMetadata],
     ['writing', writingMetadata],
@@ -73,7 +73,7 @@ describe('page metadata', () => {
   it.each([
     ['about', aboutMetadata, `${SITE_URL}/about/`],
     ['contact', contactMetadata, `${SITE_URL}/contact/`],
-    ['archive', projectsMetadata, `${SITE_URL}/projects/`],
+    ['projects', projectsMetadata, `${SITE_URL}/projects/`],
     ['resume', resumeMetadata, `${SITE_URL}/resume/`],
     ['stats', statsMetadata, `${SITE_URL}/stats/`],
     ['writing', writingMetadata, `${SITE_URL}/writing/`],

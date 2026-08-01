@@ -50,4 +50,31 @@ describe('Cell', () => {
       document.querySelector('.project-card-affordance'),
     ).not.toBeInTheDocument();
   });
+
+  it('renders report links outside the main project link', () => {
+    render(
+      <Cell
+        data={{
+          ...mockProject,
+          reports: [
+            { href: '/reports/test-project.pdf', label: 'Final report' },
+            { href: '/reports/test-project-appendix.pdf' },
+          ],
+        }}
+      />,
+    );
+
+    const projectLink = screen.getByRole('link', { name: mockProject.title });
+    const reportLinks = screen.getAllByRole('link', { name: /report/i });
+
+    expect(projectLink).toHaveAttribute('href', mockProject.link);
+    expect(reportLinks).toHaveLength(2);
+    expect(reportLinks[0]).toHaveAttribute(
+      'href',
+      '/reports/test-project.pdf',
+    );
+    expect(reportLinks[0]).toHaveAttribute('target', '_blank');
+    expect(reportLinks[1]).toHaveTextContent('View report');
+    expect(projectLink).not.toContainElement(reportLinks[0]);
+  });
 });

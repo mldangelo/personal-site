@@ -20,12 +20,6 @@ export const BIRTH_DATE = profile.birthDate;
 /** Milliseconds in an average year, accounting for leap years. */
 export const MS_PER_YEAR = 1000 * 60 * 60 * 24 * 365.2421897;
 
-/** Year the first computer arrived in the bedroom. See `src/data/about.ts`. */
-export const COMPUTING_SINCE = profile.computingSince;
-
-/** Countries visited to date. */
-export const COUNTRIES_VISITED = profile.countriesVisited;
-
 /** Current home city. */
 export const CURRENT_CITY = profile.currentCity;
 

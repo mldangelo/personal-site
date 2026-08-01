@@ -51,10 +51,8 @@ describe('Navigation', () => {
     expect(screen.getByRole('link', { name: /about/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /resume/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /writing/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /projects/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /contact/i })).toBeInTheDocument();
-    expect(
-      screen.queryByRole('link', { name: /archive/i }),
-    ).not.toBeInTheDocument();
     expect(
       screen.queryByRole('link', { name: /stats/i }),
     ).not.toBeInTheDocument();

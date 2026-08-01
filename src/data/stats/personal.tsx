@@ -4,7 +4,6 @@ import useLiveAge from '@/hooks/useLiveAge';
 import {
   AGE_PRECISION_FULL,
   agePlaceholder,
-  COUNTRIES_VISITED,
   CURRENT_CITY,
 } from '@/lib/telemetry';
 
@@ -31,12 +30,6 @@ const data: StatData[] = [
     key: 'age',
     label: 'Current age',
     value: <Age />,
-  },
-  {
-    key: 'countries',
-    label: 'Countries visited',
-    value: COUNTRIES_VISITED,
-    link: 'https://www.google.com/maps/d/embed?mid=1iBBTscqateQ93pWFVfHCUZXoDu8&z=2',
   },
   {
     key: 'location',

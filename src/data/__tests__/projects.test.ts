@@ -57,6 +57,20 @@ describe('projects data', () => {
     }
   });
 
+  it('report hrefs start with / when present', () => {
+    for (const project of projects) {
+      if (project.reports) {
+        expect(Array.isArray(project.reports)).toBe(true);
+        expect(project.reports.length).toBeGreaterThan(0);
+
+        for (const report of project.reports) {
+          expect(report.href.startsWith('/')).toBe(true);
+          expect(report.href.trim().length).toBeGreaterThan(0);
+        }
+      }
+    }
+  });
+
   it('tech is an array when present', () => {
     for (const project of projects) {
       if (project.tech) {

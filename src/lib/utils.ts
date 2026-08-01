@@ -5,14 +5,14 @@
 import profile from '@/data/profile.json';
 
 // Site configuration
-export const SITE_URL = 'https://mldangelo.com';
+export const SITE_URL = 'https://henrymatar.github.io';
 export const AUTHOR_NAME = profile.name;
-export const TWITTER_HANDLE = '@dangelosaurus';
+export const TWITTER_HANDLE = ''; // PLACEHOLDER - add your handle (e.g. '@henrymatar') or leave blank if you don't use X/Twitter
 /**
  * The portrait. Used for JSON-LD `image`, where the value should be a picture
  * of the person, not a designed card.
  */
-export const SITE_IMAGE_PATH = '/images/me.jpg';
+export const SITE_IMAGE_PATH = 'Headshot_temp.png';
 export const SITE_IMAGE_DIMENSIONS = {
   width: 1024,
   height: 1024,
@@ -35,7 +35,7 @@ export const SHARE_IMAGE_DIMENSIONS = {
 
 // Canonical one-line bio, shared across page metadata, OpenGraph, and JSON-LD.
 export const SITE_DESCRIPTION =
-  'Member of the Technical Staff at OpenAI, working on Promptfoo and Codex Security. Co-founded Promptfoo before it joined OpenAI in 2026.';
+  'Electrical Engineering student at CU Boulder, currently a Systems Engineering Intern at Lockheed Martin. Focused on hardware design, embedded systems, and PCB design.';
 
 // Image dimension constants
 export const PROJECT_IMAGE = {

@@ -9,9 +9,11 @@ interface CellProps {
 }
 
 export default function Cell({ data }: CellProps) {
-  const { title, subtitle, link, image, date, desc, tech, featured } = data;
+  const { title, subtitle, link, image, date, desc, tech, featured, reports } =
+    data;
 
   const hasLink = Boolean(link);
+  const hasReports = Boolean(reports?.length);
 
   const cardContent = (
     <>
@@ -65,6 +67,23 @@ export default function Cell({ data }: CellProps) {
         </a>
       ) : (
         <div className="project-card-static">{cardContent}</div>
+      )}
+
+      {hasReports && (
+        <div className="project-card-reports">
+          {reports!.map((report) => (
+            <a
+              key={report.href}
+              href={report.href}
+              className="project-card-report"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {report.label ?? 'View report'}
+              <span className="sr-only"> (PDF, opens in new tab)</span>
+            </a>
+          ))}
+        </div>
       )}
     </article>
   );

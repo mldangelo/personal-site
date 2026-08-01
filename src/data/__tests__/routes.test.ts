@@ -70,6 +70,6 @@ describe('routes', () => {
       .filter((route) => route.primary === false)
       .map((route) => route.path);
 
-    expect(secondaryPaths).toEqual(['/stats', '/projects']);
+    expect(secondaryPaths).toEqual(['/stats']);
   });
 });

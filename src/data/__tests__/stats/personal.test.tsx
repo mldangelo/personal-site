@@ -34,21 +34,12 @@ describe('personal stats data', () => {
     expect(ageStat!.value).toBeDefined();
   });
 
-  it('has a countries visited stat', () => {
-    const countriesStat = data.find((s) => s.key === 'countries');
-
-    expect(countriesStat).toBeDefined();
-    expect(countriesStat!.label).toBe('Countries visited');
-    expect(countriesStat!.value).toBe(53);
-    expect(countriesStat!.link).toContain('google.com/maps');
-  });
-
   it('has a current location stat', () => {
     const locationStat = data.find((s) => s.key === 'location');
 
     expect(locationStat).toBeDefined();
     expect(locationStat!.label).toBe('Current city');
-    expect(locationStat!.value).toBe('New York, NY');
+    expect(locationStat!.value).toBe('Boulder, CO');
   });
 
   it('Age component renders and updates', () => {
