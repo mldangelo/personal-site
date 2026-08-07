@@ -4,100 +4,72 @@ export interface ISkill {
   category: string[];
 }
 
-const skills: ISkill[] = [
-  {
-    title: 'Java',
-    competency: 5,
-    category: ['Web Development', 'Languages']
-  },
-  {
-    title: 'AWS',
-    competency: 5,
-    category: ['Web Development', 'Tools']
-  },
-  {
-    title: 'Spring',
-    competency: 4,
-    category: ['Web Development', 'Java']
-  },
-  {
-    title: 'Postgres',
-    competency: 4,
-    category: ['Web Development', 'Databases']
-  },
-  {
-    title: 'MySQL',
-    competency: 4,
-    category: ['Web Development', 'Databases']
-  },
-  {
-    title: 'TypeScript',
-    competency: 3,
-    category: ['Web Development', 'Languages']
-  },
-  {
-    title: 'Vue',
-    competency: 3,
-    category: ['Web Development', 'JavaScript']
-  },
-  {
-    title: 'Databricks',
-    competency: 3,
-    category: ['Data Engineering', 'ML Engineering']
-  },
-  {
-    title: 'Python',
-    competency: 5,
-    category: ['Languages', 'Python', 'ML Engineering']
-  },
-  {
-    title: 'Machine Learning',
-    competency: 4,
-    category: ['ML Engineering']
-  },
-  {
-    title: 'Stripe',
-    competency: 3,
-    category: ['Web Development', 'Tools']
-  },
-  {
-    title: 'Auth0/Okta',
-    competency: 3,
-    category: ['Web Development', 'Tools']
-  }
-].map((skill) => ({ ...skill, category: skill.category.sort() }));
+/**
+ * Five categories, each bound to a palette token so the bars stay inside the
+ * design system and flip with the theme. Adding a category means adding a
+ * --color-cat-* token in theme.css alongside it.
+ */
+const CATEGORY_COLORS: Record<string, string> = {
+  'AI & ML': 'var(--color-cat-ai)',
+  Languages: 'var(--color-cat-lang)',
+  Web: 'var(--color-cat-web)',
+  Data: 'var(--color-cat-data)',
+  Platform: 'var(--color-cat-platform)'
+};
 
-// this is a list of colors that I like. The length should be === to the
-// number of categories. Re-arrange this list until you find a pattern you like.
-const colors = [
-  '#6968b3',
-  '#37b1f5',
-  '#40494e',
-  '#515dd4',
-  '#e47272',
-  '#cc7b94',
-  '#3896e2',
-  '#c3423f',
-  '#d75858',
-  '#747fff',
-  '#64cb7b'
-];
+const skills: ISkill[] = [
+  { title: 'Java', competency: 5, category: ['Languages'] },
+  { title: 'Python', competency: 5, category: ['Languages', 'AI & ML'] },
+  { title: 'TypeScript', competency: 4, category: ['Languages', 'Web'] },
+  { title: 'SQL', competency: 4, category: ['Languages', 'Data'] },
+  { title: 'Anthropic / Claude API', competency: 5, category: ['AI & ML'] },
+  { title: 'OpenAI API', competency: 4, category: ['AI & ML'] },
+  { title: 'AWS Bedrock', competency: 4, category: ['AI & ML', 'Platform'] },
+  { title: 'RAG & evals', competency: 4, category: ['AI & ML'] },
+  { title: 'Machine learning', competency: 4, category: ['AI & ML'] },
+  { title: 'React', competency: 4, category: ['Web'] },
+  { title: 'Next.js', competency: 4, category: ['Web'] },
+  { title: 'Spring Boot', competency: 5, category: ['Web'] },
+  { title: 'Vue', competency: 4, category: ['Web'] },
+  { title: 'GraphQL', competency: 3, category: ['Web'] },
+  { title: 'Postgres', competency: 5, category: ['Data'] },
+  { title: 'Databricks', competency: 3, category: ['Data', 'AI & ML'] },
+  { title: 'AWS', competency: 5, category: ['Platform'] },
+  { title: 'Vercel', competency: 5, category: ['Platform'] },
+  { title: 'Stripe', competency: 4, category: ['Platform'] },
+  { title: 'Auth0 / Okta', competency: 4, category: ['Platform'] }
+].map((skill) => ({ ...skill, category: skill.category.sort() }));
 
 export interface ICategory {
   name: string;
   color: string;
 }
 
+/**
+ * Deduplicate the names before building objects — a Set of freshly created
+ * objects never collapses duplicates, which previously produced one entry per
+ * occurrence and left most of them without a color.
+ */
 const categories: ICategory[] = [
-  ...new Set(
-    skills
-      .flatMap((skill) => skill.category)
-      .sort()
-      .map((category, index) => ({
-        name: category,
-        color: colors[index]
-      }))
-  )
+  ...new Set(skills.flatMap((skill) => skill.category))
+]
+  .sort()
+  .map((name) => ({
+    name,
+    color: CATEGORY_COLORS[name] ?? 'var(--color-accent)'
+  }));
+
+/** The homepage's quiet slash-separated row: headline skills, no numbers. */
+export const headlineSkills: string[] = [
+  'Java',
+  'TypeScript',
+  'Python',
+  'AWS',
+  'Vercel',
+  'Postgres',
+  'Machine learning',
+  'Spring Boot',
+  'React / Next.js'
 ];
 
 export { categories, skills };

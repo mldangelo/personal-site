@@ -9,10 +9,10 @@ const CategoryButton = ({ handleClick, active, label }: ICategoryButton) => (
     type="button"
     aria-pressed={active[label]}
     onClick={() => handleClick(label)}
-    className={`rounded-md border px-3 py-1.5 font-mono text-xs transition-colors ${
+    className={`border px-3 py-1.5 font-mono text-[0.72rem] tracking-nav uppercase transition-colors ${
       active[label]
         ? 'border-accent bg-accent-subtle text-accent'
-        : 'border-border text-muted hover:border-accent hover:text-accent'
+        : 'border-rule text-muted hover:border-accent hover:text-fg'
     }`}
   >
     {label}

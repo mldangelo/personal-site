@@ -10,6 +10,8 @@
  * If undefined, the position is still active.
  * @property {string|undefined} summary - html/markdown summary of the position
  * @property {string[]} highlights - plain text highlights of the position (bulleted list)
+ * @property {string|undefined} blurb - one plain sentence, used by the homepage
+ * "Recently" list where the full summary is too long. Not part of the schema.
  */
 
 export interface IWorkExperience {
@@ -20,6 +22,7 @@ export interface IWorkExperience {
   endDate?: string;
   summary: string;
   highlights: string[];
+  blurb?: string;
 }
 
 const work: IWorkExperience[] = [
@@ -28,6 +31,9 @@ const work: IWorkExperience[] = [
     position: 'Director of Engineering',
     url: 'https://fundrise.com',
     startDate: '2026-01-01',
+    blurb:
+      "Leading the engineering behind Fundrise's AI-enabled products, " +
+      'including RealAI.',
     summary:
       'Director of Engineering at [Fundrise](https://fundrise.com/), leading engineering strategy and teams building AI-enabled products including [RealAI](https://realai.com). Set technical direction and architecture, standardized modern stack (React, Next.js, TypeScript, Vercel) to improve shipping velocity, and built high-performing teams delivering customer-facing products.',
     highlights: [
@@ -42,6 +48,8 @@ const work: IWorkExperience[] = [
     url: 'https://fundrise.com',
     startDate: '2022-01-01',
     endDate: '2025-12-31',
+    blurb:
+      'Took RealAI from early prototype through launch, and shipped Equitize.',
     summary:
       "Led engineering team shipping new products, including [RealAI](https://realai.com), Fundrise's flagship AI product. Drove product strategy and team structure to match technical requirements; managed all phases from conception through go-to-market.",
     highlights: [
@@ -58,6 +66,9 @@ const work: IWorkExperience[] = [
     url: 'https://fundrise.com',
     startDate: '2021-01-01',
     endDate: '2022-01-01',
+    blurb:
+      "Owned the platform's payments systems, including ACH processing and a " +
+      'new debit funding integration with Stripe.',
     summary:
       'Owned Daily Processing infrastructure handling payments, KYC, and share issuance. Led three major system overhauls: ACH processing architecture rewrite, transfer agent reconciliation automation, and new payment methods integration.',
     highlights: [
@@ -88,9 +99,9 @@ const work: IWorkExperience[] = [
     startDate: '2019-04-01',
     endDate: '2019-11-01',
     summary:
-      'Built internal tools and ML pipeline systems. Developed deployment execution management platform using Java, Spring Boot, and Python.',
+      'Built proprietary software and ML pipeline systems. Developed deployment execution management platform using Java, Spring Boot, and Python.',
     highlights: [
-      'Shipped internal tools and platforms using Java, Spring Boot, Python.',
+      'Shipped proprietary software and platforms using Java, Spring Boot, Python.',
       'Built ML pipeline components working with SQLServer and Oracle data systems.'
     ]
   },
@@ -104,7 +115,7 @@ const work: IWorkExperience[] = [
       'Owned development of internal applications and tools using Java and Spring Boot. Led modernization effort, migrating legacy systems to modern tech stack.',
     highlights: [
       'Migrated legacy Perl tooling suite to modern Python and Java/Spring Boot applications, reducing maintenance overhead and improving developer experience.',
-      'Shipped Python and Java applications replacing legacy Perl systems across internal tools.'
+      'Shipped Python and Java applications replacing legacy Perl systems across proprietary software.'
     ]
   },
   {
@@ -114,9 +125,9 @@ const work: IWorkExperience[] = [
     startDate: '2016-03-01',
     endDate: '2017-04-01',
     summary:
-      'Developed internal tools and systems using Java, Python, and SQL. Owned release process and production deployment execution.',
+      'Developed proprietary software and systems using Java, Python, and SQL. Owned release process and production deployment execution.',
     highlights: [
-      'Shipped internal tools using Perl, Java, Spring Boot.',
+      'Shipped proprietary software using Perl, Java, Spring Boot.',
       'Owned release process, executing nightly production deployments as part of deployment train.'
     ]
   }

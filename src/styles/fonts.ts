@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Geist, Geist_Mono, Newsreader } from 'next/font/google';
 
 const geistSans = Geist({
   subsets: ['latin'],
@@ -12,4 +12,11 @@ const geistMono = Geist_Mono({
   display: 'swap'
 });
 
-export { geistMono, geistSans };
+// Display face: the name, page titles, and entry headings.
+const newsreader = Newsreader({
+  subsets: ['latin'],
+  variable: '--font-newsreader',
+  display: 'swap'
+});
+
+export { geistMono, geistSans, newsreader };

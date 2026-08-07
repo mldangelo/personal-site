@@ -6,7 +6,7 @@ The software I've shipped has powered billions in transactions, launched new rev
 and streamlined complex financial operations. I focus on building high-performing teams and driving innovation at the
 intersection of web development, data engineering, and AI/ML—most recently driving AI-first product development.
 
-Before Fundrise, I sharpened my skills at [Travelers](https://travelers.com), working on internal tools, rating
+Before Fundrise, I sharpened my skills at [Travelers](https://travelers.com), working on proprietary software, rating
 software, and machine learning projects that deepened my technical expertise.
 
 Outside of work, I’m an avid podcast listener, enjoying shows

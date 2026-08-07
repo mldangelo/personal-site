@@ -22,7 +22,7 @@ const Resume = () => (
           <a
             key={sec}
             href={`#${sec.toLowerCase()}`}
-            className="rounded-md border border-border px-3 py-1.5 font-mono text-xs transition-colors hover:border-accent hover:text-accent"
+            className="border border-rule px-3 py-1.5 font-mono text-[0.72rem] tracking-nav uppercase transition-colors hover:border-accent hover:text-fg"
           >
             {sec}
           </a>
@@ -30,11 +30,9 @@ const Resume = () => (
       </nav>
     </PageHeader>
 
-    <div className="flex flex-col gap-16">
-      {Object.entries(sections).map(([name, Section]) => (
-        <Section key={name} />
-      ))}
-    </div>
+    {Object.entries(sections).map(([name, Section]) => (
+      <Section key={name} />
+    ))}
   </Main>
 );
 

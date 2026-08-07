@@ -1,14 +1,21 @@
+import dayjs from 'dayjs';
 import Link from 'next/link';
-import ContactIcons from '../components/Contact/ContactIcons';
-import { bio, email, location, name, role } from '../data/bio';
+import Entry from '../components/Template/Entry';
+import Section from '../components/Template/Section';
+import { bio, earlier, email, meta, name, role } from '../data/bio';
+import { headlineSkills } from '../data/resume/skills';
+import work from '../data/resume/work';
 import Main from '../layouts/Main';
 
-const shortcuts = [
-  { href: '/about', label: 'About', desc: 'Background and how I got here' },
-  { href: '/resume', label: 'Resume', desc: 'Experience, education, skills' },
-  { href: '/projects', label: 'Projects', desc: 'Talks and published papers' },
-  { href: '/stats', label: 'Stats', desc: 'Live numbers about this site' }
-];
+/** Only the current arc belongs on the cover; the resume carries the rest. */
+const RECENT_COUNT = 3;
+
+const period = (startDate: string, endDate?: string) => {
+  const start = dayjs(startDate).format('YYYY');
+  if (!endDate) return `${start}—`;
+  const end = dayjs(endDate).format('YYYY');
+  return start === end ? start : `${start}—${end}`;
+};
 
 const Index = () => (
   <Main
@@ -17,61 +24,68 @@ const Index = () => (
       'Director of Engineering at Fundrise.'
     }
   >
-    <section>
-      <p className="font-mono text-sm tracking-widest text-accent uppercase">
-        {location}
-      </p>
-      <h1 className="mt-3 text-[length:var(--text-hero)] leading-[1.05] font-semibold">
-        {name}
-      </h1>
-      <p className="mt-4 max-w-2xl text-lg text-muted">{role}</p>
-      <p className="mt-6 max-w-2xl leading-relaxed text-muted [&_a]:text-accent [&_a]:underline [&_a]:underline-offset-2">
-        {bio}
-      </p>
+    <div className="pt-14 pb-12">
+      <p className="font-mono text-[0.82rem] text-faint">{role}</p>
 
-      <div className="mt-8 flex flex-wrap items-center gap-4">
-        <Link
-          href="/resume"
-          className="rounded-md bg-accent px-5 py-2.5 text-sm font-medium text-accent-fg transition-opacity hover:opacity-90"
-        >
+      <h1 className="mt-5 text-hero leading-[1.05] font-serif">{name}</h1>
+
+      <div className="mt-6 flex max-w-2xl flex-col gap-4">
+        {bio.map((paragraph) => (
+          <p key={paragraph.id} className="leading-[1.75] text-muted">
+            {paragraph.body}
+          </p>
+        ))}
+      </div>
+
+      <div className="sep-dot mt-8 font-mono text-[0.78rem] text-faint">
+        {meta.map((fact, idx) => (
+          <span key={idx}>{fact}</span>
+        ))}
+      </div>
+
+      <div className="mt-9 flex flex-wrap gap-4">
+        <Link href="/resume" className="btn btn-primary">
           View resume
         </Link>
-        <a
-          href={`mailto:${email}`}
-          className="rounded-md border border-border px-5 py-2.5 font-mono text-sm transition-colors hover:border-accent hover:text-accent"
-        >
-          {email}
+        <a href={`mailto:${email}`} className="btn">
+          Get in touch
         </a>
       </div>
+    </div>
 
-      <div className="mt-8">
-        <ContactIcons />
-      </div>
-    </section>
+    <Section title="Recently">
+      {work.slice(0, RECENT_COUNT).map((job) => (
+        <Entry
+          key={`${job.name}-${job.position}`}
+          period={period(job.startDate, job.endDate)}
+        >
+          <h3 className="font-serif text-[1.2rem]">{job.position}</h3>
+          <a
+            href={job.url}
+            className="mt-1.5 mb-2.5 block font-mono text-[0.8rem] text-accent hover:underline"
+          >
+            {job.name}
+          </a>
+          {job.blurb && (
+            <p className="text-[0.92rem] leading-relaxed text-muted">
+              {job.blurb}
+            </p>
+          )}
+        </Entry>
+      ))}
 
-    <nav aria-label="Site sections" className="mt-16">
-      <ul className="grid gap-3 sm:grid-cols-2">
-        {shortcuts.map((s) => (
-          <li key={s.href}>
-            <Link
-              href={s.href}
-              className="group block rounded-xl border border-border p-5 transition-colors hover:border-accent hover:bg-surface/60"
-            >
-              <span className="flex items-center justify-between font-medium">
-                {s.label}
-                <span
-                  aria-hidden="true"
-                  className="font-mono text-muted transition-transform group-hover:translate-x-0.5 group-hover:text-accent"
-                >
-                  →
-                </span>
-              </span>
-              <span className="mt-1 block text-sm text-muted">{s.desc}</span>
-            </Link>
-          </li>
+      <p className="mt-1 border-t border-dashed border-rule pt-5 font-mono text-[0.85rem] text-faint">
+        {earlier}
+      </p>
+    </Section>
+
+    <Section title="What I work with">
+      <div className="sep-slash font-mono text-[0.9rem] text-muted">
+        {headlineSkills.map((skill) => (
+          <span key={skill}>{skill}</span>
         ))}
-      </ul>
-    </nav>
+      </div>
+    </Section>
   </Main>
 );
 

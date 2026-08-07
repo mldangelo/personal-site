@@ -25,29 +25,29 @@ const Cell: React.FC<ICell> = ({ data, id }) => {
   const kind = data.youtube ? 'talk' : data.pdf ? 'paper' : 'project';
 
   return (
-    <article className="overflow-hidden rounded-xl border border-border transition-colors hover:border-accent/60">
+    <article className="border-t border-rule first:border-t-0">
       <details
         open={isOpen}
         onToggle={(e) => setIsOpen(id, e.currentTarget.open)}
       >
-        <summary className="flex cursor-pointer list-none items-start justify-between gap-4 p-5 [&::-webkit-details-marker]:hidden">
+        <summary className="flex cursor-pointer list-none items-start justify-between gap-6 py-6 [&::-webkit-details-marker]:hidden">
           <div className="min-w-0">
-            <p className="font-mono text-xs tracking-widest text-accent uppercase">
-              {kind}
-            </p>
-            <h3 className="mt-1.5 font-medium">{data.title}</h3>
+            <p className="label text-accent">{kind}</p>
+            <h3 className="mt-2 font-serif text-[1.2rem]">{data.title}</h3>
             {data.subtitle && (
-              <p className="mt-1 text-sm text-muted">{data.subtitle}</p>
+              <p className="mt-1.5 text-[0.92rem] text-muted">
+                {data.subtitle}
+              </p>
             )}
             {data.date && (
-              <time className="mt-2 block font-mono text-xs text-muted">
+              <time className="mt-2.5 block font-mono text-[0.76rem] text-faint">
                 {dayjs(data.date).format('MMMM YYYY')}
               </time>
             )}
           </div>
           <span
             aria-hidden="true"
-            className={`mt-1 shrink-0 font-mono text-muted transition-transform ${
+            className={`mt-1 shrink-0 font-mono text-faint transition-transform ${
               isOpen ? 'rotate-90' : ''
             }`}
           >
@@ -55,9 +55,9 @@ const Cell: React.FC<ICell> = ({ data, id }) => {
           </span>
         </summary>
 
-        <div className="border-t border-border p-5">
+        <div className="pb-8">
           {data.desc && (
-            <p className="mb-4 text-sm leading-relaxed text-muted">
+            <p className="mb-5 max-w-2xl text-[0.92rem] leading-[1.65] text-muted">
               {data.desc}
             </p>
           )}
@@ -69,9 +69,13 @@ const Cell: React.FC<ICell> = ({ data, id }) => {
 
           {isOpen && data.pdf && (
             <Suspense
-              fallback={<p className="text-sm text-muted">Loading PDF…</p>}
+              fallback={
+                <p className="font-mono text-[0.8rem] text-faint">
+                  Loading PDF…
+                </p>
+              }
             >
-              <div className="h-[70vh] overflow-hidden rounded-lg border border-border">
+              <div className="h-[70vh] overflow-hidden border border-rule">
                 <PdfViewer data={{ path: data.pdf }} title={data.title} />
               </div>
             </Suspense>
@@ -80,7 +84,7 @@ const Cell: React.FC<ICell> = ({ data, id }) => {
           {data.link && (
             <a
               href={data.link}
-              className="mt-4 inline-block font-mono text-sm text-accent hover:underline"
+              className="mt-5 inline-block font-mono text-[0.8rem] text-accent hover:underline"
             >
               Visit project →
             </a>

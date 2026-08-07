@@ -13,18 +13,15 @@ const SkillBar = ({ data, categories }: ISkillBar) => {
   return (
     <div>
       <div className="flex items-baseline justify-between gap-3">
-        <span className="text-sm">{title}</span>
-        <span className="font-mono text-xs text-muted tabular-nums">
+        <span className="text-[0.92rem]">{title}</span>
+        <span className="font-mono text-[0.72rem] text-faint tabular-nums">
           {competency}/5
         </span>
       </div>
       {/* Decorative: the competency is already announced as text above. */}
-      <div
-        aria-hidden="true"
-        className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-surface"
-      >
+      <div aria-hidden="true" className="mt-2 h-[3px] bg-panel">
         <div
-          className="h-full rounded-full"
+          className="h-full"
           style={{
             width: `${pct}%`,
             background: color ?? 'var(--color-accent)'

@@ -9,7 +9,7 @@ const Projects = () => (
       <p>Talks and papers. Expand any card to read or watch it inline.</p>
     </PageHeader>
 
-    <div className="grid gap-4">
+    <div className="border-t border-rule">
       {data.map((project) => (
         <Cell data={project} key={project.title} id={project.title} />
       ))}

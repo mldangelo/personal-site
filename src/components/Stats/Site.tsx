@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import initialData from '../../data/stats/site';
+import Section from '../Template/Section';
 import Table from './Table';
 
 const Stats = () => {
@@ -28,12 +29,9 @@ const Stats = () => {
   }, [fetchData]);
 
   return (
-    <section className="rounded-xl border border-border p-5">
-      <h2 className="mb-3 font-mono text-xs tracking-widest text-accent uppercase">
-        This site
-      </h2>
+    <Section title="This site">
       <Table data={data} />
-    </section>
+    </Section>
   );
 };
 

@@ -6,34 +6,68 @@
 /* The theme-init script in _document.tsx stamps data-theme on <html> before paint. */
 @custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
 
+/*
+ * "Ledger, quiet" — a warm paper palette, three type families, and hairline
+ * rules instead of cards. Light is the default; [data-theme='dark'] overrides
+ * the same token names below, so every consumer is theme-agnostic.
+ */
 @theme {
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-serif: var(--font-newsreader), ui-serif, Georgia, serif;
 
-  --color-bg: #fcfcfd;
-  --color-surface: #f3f4f7;
-  --color-fg: #14161c;
-  --color-muted: #5c6472;
-  --color-border: #e2e4ea;
-  --color-accent: #2b5fd9;
-  --color-accent-fg: #ffffff;
-  --color-accent-subtle: #eaf0fe;
+  --color-bg: #f6f2ea;
+  --color-panel: #efe8db;
+  --color-fg: #211b12;
+  --color-muted: #5b5142;
+  /* Darkened from the mockup's #94897490, which fell short of 4.5:1 on --color-bg. */
+  --color-faint: #6b614f;
+  --color-rule: #ddd2bc;
+  --color-accent: #93611f;
+  --color-accent-soft: #b8863c;
+  --color-accent-fg: #f6f2ea;
+  --color-accent-subtle: #ece0c9;
+  --color-glow: #1f8f78;
 
-  --text-hero: clamp(2.25rem, 1.4rem + 3.6vw, 3.75rem);
-  --text-section: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
+  /* Skill categories. Warm ramp drawn from the palette, teal reserved for AI. */
+  --color-cat-ai: #1f8f78;
+  --color-cat-lang: #93611f;
+  --color-cat-web: #9a5540;
+  --color-cat-data: #6b7546;
+  --color-cat-platform: #7d6a4e;
+
+  --text-hero: clamp(2.4rem, 1.6rem + 3.2vw, 3.8rem);
+  --text-display: clamp(1.9rem, 1.4rem + 2vw, 2.6rem);
+  --text-section: 0.95rem;
+  --text-label: 0.74rem;
+
+  --tracking-label: 0.14em;
+  --tracking-nav: 0.06em;
+
+  --container-measure: 48rem;
 
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 [data-theme='dark'] {
-  --color-bg: #0b0e14;
-  --color-surface: #141924;
-  --color-fg: #e7e9ef;
-  --color-muted: #98a1b2;
-  --color-border: #232936;
-  --color-accent: #7da4ff;
-  --color-accent-fg: #0b0e14;
-  --color-accent-subtle: #172033;
+  --color-bg: #15120e;
+  --color-panel: #1c1813;
+  --color-fg: #f1ebe0;
+  --color-muted: #b3a898;
+  /* Lightened from the mockup's #736858 for the same contrast reason. */
+  --color-faint: #8a7d68;
+  --color-rule: #372f24;
+  --color-accent: #c08a3e;
+  --color-accent-soft: #8a6229;
+  --color-accent-fg: #1a1509;
+  --color-accent-subtle: #241d12;
+  --color-glow: #7fd9c4;
+
+  --color-cat-ai: #7fd9c4;
+  --color-cat-lang: #c08a3e;
+  --color-cat-web: #b3705a;
+  --color-cat-data: #8a9463;
+  --color-cat-platform: #a08a6a;
 }
 
 @layer base {
@@ -64,8 +98,9 @@
   h3,
   h4 {
     color: var(--color-fg);
-    font-weight: 600;
-    letter-spacing: -0.02em;
+    font-family: var(--font-serif);
+    font-weight: 500;
+    letter-spacing: -0.01em;
     text-wrap: balance;
   }
 
@@ -75,9 +110,8 @@
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-accent);
-    outline-offset: 2px;
-    border-radius: 2px;
+    outline: 1px solid var(--color-accent);
+    outline-offset: 3px;
   }
 
   ::selection {
@@ -97,6 +131,120 @@
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
     }
+  }
+}
+
+/* Prose reads from the palette tokens, which already flip on data-theme —
+   so /about needs no dark:prose-invert. Deliberately unlayered: the typography
+   plugin defines .prose in the utilities layer, which would otherwise win. */
+.prose {
+    --tw-prose-body: var(--color-muted);
+    --tw-prose-headings: var(--color-fg);
+    --tw-prose-lead: var(--color-muted);
+    --tw-prose-links: var(--color-accent);
+    --tw-prose-bold: var(--color-fg);
+    --tw-prose-counters: var(--color-faint);
+    --tw-prose-bullets: var(--color-accent-soft);
+    --tw-prose-hr: var(--color-rule);
+    --tw-prose-quotes: var(--color-fg);
+    --tw-prose-quote-borders: var(--color-rule);
+    --tw-prose-captions: var(--color-faint);
+    --tw-prose-code: var(--color-fg);
+    --tw-prose-pre-code: var(--color-fg);
+    --tw-prose-pre-bg: var(--color-panel);
+    --tw-prose-th-borders: var(--color-rule);
+    --tw-prose-td-borders: var(--color-rule);
+  }
+
+.prose :where(a):not(:where(.not-prose *)) {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+/* The uppercase mono micro-label used for eyebrows, section kickers and nav. */
+@utility label {
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+/* An emphasized term inside prose: full ink, underscored in accent. Kept rare
+   on purpose — it is the only decoration in the system. */
+@utility mark {
+  color: var(--color-fg);
+  font-style: normal;
+  font-weight: 600;
+  border-bottom: 1px solid var(--color-accent-soft);
+}
+
+/* Inline lists whose items are separated by a rule-colored glyph rather than
+   by a bullet element, so they wrap naturally. */
+@utility sep-dot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.4rem;
+
+  & > *::before {
+    content: '·';
+    margin-right: 1.4rem;
+    color: var(--color-rule);
+  }
+
+  & > *:first-child::before {
+    display: none;
+  }
+}
+
+@utility sep-slash {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem 1.25rem;
+
+  & > * {
+    white-space: nowrap;
+  }
+
+  & > *::after {
+    content: '/';
+    margin-left: 1.25rem;
+    color: var(--color-rule);
+  }
+
+  & > *:last-child::after {
+    display: none;
+  }
+}
+
+/* Square hairline button. No radius anywhere in this system. */
+@utility btn {
+  display: inline-block;
+  border: 1px solid var(--color-rule);
+  padding: 0.625rem 1.125rem;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  transition:
+    color 0.2s var(--ease-out-soft),
+    border-color 0.2s var(--ease-out-soft);
+
+  &:hover {
+    border-color: var(--color-accent);
+    color: var(--color-fg);
+  }
+}
+
+@utility btn-primary {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-accent-fg);
+
+  &:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent-fg);
+    opacity: 0.9;
   }
 }
 

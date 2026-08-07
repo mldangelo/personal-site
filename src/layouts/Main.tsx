@@ -89,10 +89,10 @@ const Main: React.FC<MainProps> = ({
       </Helmet>
       <div className="flex min-h-screen flex-col">
         <Navigation />
-        <main className="mx-auto w-full max-w-5xl flex-1 px-5 py-12 md:py-16">
+        <main className="mx-auto w-full max-w-measure flex-1 px-[22px] pb-16 sm:px-10">
           {children}
           {showProfile && (
-            <div className="mt-16">
+            <div className="mt-14">
               <ProfileCard />
             </div>
           )}

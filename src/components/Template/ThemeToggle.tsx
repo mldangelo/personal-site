@@ -22,7 +22,7 @@ const ThemeToggle = () => {
       onClick={() => setPreference(isDark ? 'light' : 'dark')}
       aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
       title={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
-      className="grid size-9 place-items-center rounded-md border border-border text-muted transition-colors hover:border-accent hover:text-accent"
+      className="grid size-9 place-items-center border border-rule text-muted transition-colors hover:border-accent hover:text-accent"
     >
       {/* Rendered only once the client resolves the theme, avoiding a mismatched icon. */}
       {resolved && (

@@ -12,10 +12,8 @@ const Stats = () => (
       <p>Numbers about me and this site, most of them fetched live.</p>
     </PageHeader>
 
-    <div className="grid gap-6 sm:grid-cols-2">
-      <Personal />
-      <Site />
-    </div>
+    <Personal />
+    <Site />
   </Main>
 );
 

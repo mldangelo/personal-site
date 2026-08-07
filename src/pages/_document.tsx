@@ -1,4 +1,10 @@
 import { Head, Html, Main, NextScript } from 'next/document';
+import { geistMono, geistSans, newsreader } from '../styles/fonts';
+
+// The font variables must land on <html>, not on a wrapper element: theme.css
+// declares --font-sans/serif/mono at :root, and a var() that cannot resolve
+// where it is declared poisons the whole declaration for every descendant.
+const fontVariables = `${geistSans.variable} ${geistMono.variable} ${newsreader.variable}`;
 
 // Runs before first paint so the correct theme is applied without a flash.
 // Must stay in sync with the persisted shape of src/store/theme-store.ts.
@@ -23,7 +29,7 @@ const themeInitScript = `
 `;
 
 const Document = () => (
-  <Html lang="en">
+  <Html lang="en" className={fontVariables}>
     <Head>
       <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
     </Head>

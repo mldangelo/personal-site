@@ -13,11 +13,11 @@ const PdfViewer = ({ data, title }: IPdf) => {
 
   return (
     <object data={src} type="application/pdf" className="h-full w-full">
-      <div className="p-5 text-sm text-muted">
+      <div className="p-5 text-[0.92rem] text-muted">
         <p>Your browser can&apos;t display this PDF inline.</p>
         <a
           href={src}
-          className="mt-2 inline-block font-mono text-accent hover:underline"
+          className="mt-2 inline-block font-mono text-[0.8rem] text-accent hover:underline"
         >
           Open {title ?? 'the PDF'} →
         </a>

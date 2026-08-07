@@ -28,10 +28,10 @@ export const getStaticProps = async () => {
 const About = ({ markdown, wordCount }: AboutProps) => (
   <Main title="About" description="Learn about Austin Dase">
     <PageHeader eyebrow="About" title="About me">
-      <p className="font-mono text-sm">in about {wordCount} words</p>
+      <p className="label text-faint">in about {wordCount} words</p>
     </PageHeader>
 
-    <div className="prose prose-neutral dark:prose-invert prose-headings:font-semibold prose-a:text-accent prose-a:underline-offset-2 max-w-none">
+    <div className="prose max-w-none border-t border-rule pt-11">
       <Markdown>{markdown}</Markdown>
     </div>
   </Main>

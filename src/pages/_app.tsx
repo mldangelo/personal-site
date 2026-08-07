@@ -1,7 +1,10 @@
 import type { AppProps } from 'next/app';
 import React, { useEffect } from 'react';
 import useThemeStore, { applyTheme } from '../store/theme-store';
-import { geistMono, geistSans } from '../styles/fonts';
+// Imported for its side effect: this is what pulls the next/font stylesheets
+// into the page bundle. The class names themselves are applied to <html> in
+// _document.tsx — see the comment there.
+import '../styles/fonts';
 import '../styles/theme.css';
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
@@ -21,11 +24,11 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
     return () => media.removeEventListener('change', onChange);
   }, []);
 
+  // Font variables are applied to <html> in _document.tsx; the base layer in
+  // theme.css sets body's font-family from them.
   return (
     <React.StrictMode>
-      <div className={`${geistSans.variable} ${geistMono.variable} font-sans`}>
-        <Component {...pageProps} />
-      </div>
+      <Component {...pageProps} />
     </React.StrictMode>
   );
 };

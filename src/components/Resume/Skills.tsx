@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { ICategory, ISkill } from '../../data/resume/skills';
+import Section from '../Template/Section';
 import CategoryButton from './Skills/CategoryButton';
 import SkillBar from './Skills/SkillBar';
 
@@ -49,7 +50,8 @@ const Skills = (data: ISkillsComponent) => {
       return ret;
     };
 
-    return data.skills
+    // Copy before sorting: the source array is a module-level import.
+    return [...data.skills]
       .sort(comparator)
       .filter((skill) => actCat === 'All' || skill.category.includes(actCat))
       .map((skill) => (
@@ -68,16 +70,13 @@ const Skills = (data: ISkillsComponent) => {
     ));
 
   return (
-    <section id="skills">
-      <h2 className="mb-2 text-[length:var(--text-section)] font-semibold">
-        Skills
-      </h2>
-      <p className="mb-5 text-muted">
+    <Section id="skills" title="Skills">
+      <p className="mb-6 max-w-2xl text-[0.92rem] leading-relaxed text-muted">
         Some of my primary professional skills. Filter by category.
       </p>
-      <div className="mb-6 flex flex-wrap gap-2">{getButtons()}</div>
-      <div className="grid gap-4 sm:grid-cols-2">{getRows()}</div>
-    </section>
+      <div className="mb-8 flex flex-wrap gap-2">{getButtons()}</div>
+      <div className="grid gap-x-10 gap-y-5 sm:grid-cols-2">{getRows()}</div>
+    </Section>
   );
 };
 

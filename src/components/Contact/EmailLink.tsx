@@ -80,7 +80,7 @@ const EmailLink = (loopMessage: ILoopMessage) => {
       onMouseLeave={() => idx < messages.length && setIsActive(true)}
       onFocus={() => setIsActive(false)}
       onBlur={() => idx < messages.length && setIsActive(true)}
-      className="inline-flex items-baseline rounded-md border border-border px-4 py-2.5 font-mono text-lg transition-colors hover:border-accent hover:text-accent"
+      className="inline-flex items-baseline border border-rule px-5 py-3 font-mono text-lg transition-colors hover:border-accent hover:text-accent"
     >
       <span>{message}</span>
       <span

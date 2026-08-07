@@ -15,7 +15,7 @@ const Contact = () => (
       </p>
     </PageHeader>
 
-    <div className="flex flex-col items-start gap-6">
+    <div className="flex flex-col items-start gap-8 border-t border-rule pt-11">
       <EmailLink />
       <ContactIcons />
     </div>

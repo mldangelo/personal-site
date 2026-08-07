@@ -23,28 +23,28 @@ const Navigation = () => {
   }, [pathname]);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-bg/80 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-5xl items-center justify-between gap-4 px-5">
+    <header className="sticky top-0 z-50 border-b border-rule bg-bg/80 backdrop-blur-md">
+      <div className="mx-auto flex h-16 max-w-measure items-center justify-between gap-4 px-[22px] sm:px-10">
         {indexRoute && (
           <Link
             href={indexRoute.path}
-            className="font-mono text-sm font-medium tracking-tight transition-colors hover:text-accent"
+            className="label font-semibold text-accent transition-opacity hover:opacity-80"
           >
-            dase<span className="text-accent">.dev</span>
+            dase.dev
           </Link>
         )}
 
         <nav aria-label="Main" className="hidden md:block">
-          <ul className="flex items-center gap-1">
+          <ul className="flex items-center gap-6">
             {pageRoutes.map((r) => (
               <li key={r.label}>
                 <Link
                   href={r.path}
                   aria-current={isActive(r.path) ? 'page' : undefined}
-                  className={`rounded-md px-3 py-2 text-sm transition-colors hover:text-accent ${
+                  className={`block border-b pb-[3px] font-mono text-[0.72rem] tracking-nav uppercase transition-colors hover:border-accent hover:text-fg ${
                     isActive(r.path)
-                      ? 'bg-accent-subtle font-medium text-accent'
-                      : 'text-muted'
+                      ? 'border-accent text-fg'
+                      : 'border-transparent text-muted'
                   }`}
                 >
                   {r.label}
@@ -62,7 +62,7 @@ const Navigation = () => {
             aria-expanded={open}
             aria-controls={menuId}
             aria-label={open ? 'Close navigation menu' : 'Open navigation menu'}
-            className="grid size-9 place-items-center rounded-md border border-border text-muted transition-colors hover:border-accent hover:text-accent md:hidden"
+            className="grid size-9 place-items-center border border-rule text-muted transition-colors hover:border-accent hover:text-accent md:hidden"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -88,17 +88,17 @@ const Navigation = () => {
         <nav
           id={menuId}
           aria-label="Main"
-          className="border-t border-border md:hidden"
+          className="border-t border-rule md:hidden"
         >
-          <ul className="mx-auto flex max-w-5xl flex-col gap-1 px-5 py-3">
+          <ul className="mx-auto flex max-w-measure flex-col px-[22px] py-2 sm:px-10">
             {pageRoutes.map((r) => (
               <li key={r.label}>
                 <Link
                   href={r.path}
                   aria-current={isActive(r.path) ? 'page' : undefined}
-                  className={`block rounded-md px-3 py-2 transition-colors hover:text-accent ${
+                  className={`block px-2 py-2.5 font-mono text-[0.72rem] tracking-nav uppercase transition-colors hover:text-accent ${
                     isActive(r.path)
-                      ? 'bg-accent-subtle font-medium text-accent'
+                      ? 'bg-accent-subtle text-accent'
                       : 'text-muted'
                   }`}
                 >
