@@ -52,3 +52,9 @@ nohup.out
 .next
 out
 .dist
+# Next.js / TypeScript build artifacts
+tsconfig.tsbuildinfo
+next-env.d.ts
+
+# Vercel
+.vercel

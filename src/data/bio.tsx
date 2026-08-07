@@ -1,4 +1,3 @@
-import Link from 'next/dist/client/link';
 import type { ReactNode } from 'react';
 
 export const name = 'Austin Dase';
@@ -12,10 +11,18 @@ const CAREER_START = 2016;
 const yearsInSoftware = new Date().getFullYear() - CAREER_START;
 
 /** Facts thin enough to sit on one line, rendered as a `·`-separated row. */
-export const meta: ReactNode[] = [
-  `${yearsInSoftware} yrs in software`,
-  <>M.S. Computer Science, <Link href="https://www.towson.edu">Towson '19</Link></>,
-  location
+export const meta: { id: string; body: ReactNode }[] = [
+  { id: 'tenure', body: `${yearsInSoftware} yrs in software` },
+  {
+    id: 'degree',
+    body: (
+      <>
+        M.S. Computer Science,{' '}
+        <a href="https://www.towson.edu">Towson &rsquo;19</a>
+      </>
+    )
+  },
+  { id: 'location', body: location }
 ];
 
 export const earlier =
@@ -26,6 +33,9 @@ export const earlier =
  * aside takes only the first paragraph. Emphasis marks the two things worth
  * remembering rather than linking every proper noun; the underline is the
  * accent, so it has to stay rare.
+ *
+ * These all point off-site, so they are plain anchors: next/link is for
+ * in-app navigation and buys nothing here.
  */
 export const bio: { id: string; body: ReactNode }[] = [
   {
@@ -33,10 +43,16 @@ export const bio: { id: string; body: ReactNode }[] = [
     body: (
       <>
         I&apos;m a software engineer working at the intersection of fintech and
-        applied AI. At <Link href="https://fundrise.com" className="mark">Fundrise</Link>, I lead the
-        engineering behind AI-enabled products including{' '}
-        <Link href="https://realai.com" className="mark">RealAI</Link>, alongside a background in the payments
-        and compliance systems the Fundrise platform runs on.
+        applied AI. At{' '}
+        <a href="https://fundrise.com" className="mark">
+          Fundrise
+        </a>
+        , I lead the engineering behind AI-enabled products including{' '}
+        <a href="https://realai.com" className="mark">
+          RealAI
+        </a>
+        , alongside a background in the payments and compliance systems the
+        Fundrise platform runs on.
       </>
     )
   },
@@ -45,7 +61,11 @@ export const bio: { id: string; body: ReactNode }[] = [
     body: (
       <>
         Before Fundrise, I worked on proprietary software and machine learning
-        pipelines at <Link href="https://www.travelers.com" className="mark">Travelers</Link>.
+        pipelines at{' '}
+        <a href="https://www.travelers.com" className="mark">
+          Travelers
+        </a>
+        .
       </>
     )
   }

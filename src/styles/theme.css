@@ -248,6 +248,38 @@
   }
 }
 
+/* The uppercase mono link used in the header nav, the footer colophon, and the
+   resume jump list. Typography and transition only — the colour and any
+   underline differ per context, so callers own those. */
+@utility nav-link {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: var(--tracking-nav);
+  text-transform: uppercase;
+  transition:
+    color 0.2s var(--ease-out-soft),
+    border-color 0.2s var(--ease-out-soft),
+    background-color 0.2s var(--ease-out-soft);
+}
+
+/* Square hairline icon button. Size stays a separate utility (size-9/size-10)
+   because the nav and the contact row use different ones. */
+@utility icon-btn {
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--color-rule);
+  color: var(--color-muted);
+  transition:
+    color 0.2s var(--ease-out-soft),
+    border-color 0.2s var(--ease-out-soft);
+
+  &:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+}
+
 @utility reveal {
   opacity: 0;
   translate: 0 12px;

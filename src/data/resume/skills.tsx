@@ -59,6 +59,16 @@ const categories: ICategory[] = [
     color: CATEGORY_COLORS[name] ?? 'var(--color-accent)'
   }));
 
+/**
+ * Ordering for the skills grid: strongest first, then by primary category, then
+ * alphabetically. Lives with the data rather than in the filter component —
+ * it describes the collection, not the view.
+ */
+export const byCompetency = (a: ISkill, b: ISkill): number =>
+  b.competency - a.competency ||
+  b.category[0].localeCompare(a.category[0]) ||
+  a.title.localeCompare(b.title);
+
 /** The homepage's quiet slash-separated row: headline skills, no numbers. */
 export const headlineSkills: string[] = [
   'Java',
