@@ -12,20 +12,65 @@ const PROFILE_ROUTES = new Set(['/about']);
 
 const SITE_URL = 'https://dase.dev';
 const SITE_NAME = 'Austin Dase';
-const OG_IMAGE = `${SITE_URL}/images/favicon/web-app-manifest-512x512.png`;
+const TWITTER_HANDLE = '@adase01';
+const OG_IMAGE_PATH = '/images/social/og-default.jpg';
+
+interface SocialMeta {
+  card?: 'summary' | 'summary_large_image';
+  description?: string;
+  image?: string;
+  imageAlt?: string;
+  noindex?: boolean;
+  title?: string;
+  type?: 'article' | 'website';
+}
+
+const ROUTE_SOCIAL: Record<string, SocialMeta> = {
+  '/': {
+    imageAlt: 'Portrait of Austin Dase',
+    title: 'Austin Dase | Director of Engineering'
+  },
+  '/about': {
+    imageAlt: 'Portrait of Austin Dase'
+  },
+  '/contact': {
+    imageAlt: 'Austin Dase contact details and social links'
+  },
+  '/projects': {
+    imageAlt: 'Preview card for Austin Dase projects and papers'
+  },
+  '/resume': {
+    imageAlt: 'Preview card for Austin Dase resume and experience'
+  },
+  '/stats': {
+    imageAlt: 'Preview card for Austin Dase website and personal stats'
+  },
+  '/404': {
+    card: 'summary',
+    noindex: true,
+    title: '404 | Austin Dase'
+  }
+};
+
+const toAbsoluteUrl = (value: string) =>
+  /^https?:\/\//i.test(value)
+    ? value
+    : `${SITE_URL}${value.startsWith('/') ? '' : '/'}${value}`;
 
 interface MainProps {
   children?: React.ReactNode | React.ReactNode[];
   fullPage?: boolean;
   title?: string;
   description?: string;
+  social?: SocialMeta;
 }
 
 const Main: React.FC<MainProps> = ({
   children = null,
   fullPage = false,
   title = null,
-  description = "Austin Dase's personal website."
+  description = "Austin Dase's personal website.",
+  social = {}
 }) => {
   const { pathname } = useRouter();
   // Page files are PascalCase, so Next routes are /About, /Index, etc. post-export.cjs
@@ -33,7 +78,17 @@ const Main: React.FC<MainProps> = ({
   const lower = pathname.toLowerCase();
   const path = lower === '/index' || lower === '/' ? '' : lower;
   const canonical = `${SITE_URL}${path}`;
-  const socialTitle = title ? `${title} | ${SITE_NAME}` : SITE_NAME;
+  const routeSocial = ROUTE_SOCIAL[lower] ?? {};
+  const mergedSocial = { ...routeSocial, ...social };
+  const socialTitle =
+    mergedSocial.title ?? (title ? `${title} | ${SITE_NAME}` : SITE_NAME);
+  const socialDescription = mergedSocial.description ?? description;
+  const socialImage = toAbsoluteUrl(mergedSocial.image ?? OG_IMAGE_PATH);
+  const socialImageAlt =
+    mergedSocial.imageAlt ?? `${SITE_NAME} website social preview`;
+  const socialCard = mergedSocial.card ?? 'summary_large_image';
+  const socialType = mergedSocial.type ?? 'website';
+  const robots = mergedSocial.noindex ? 'noindex,nofollow' : 'index,follow';
   const showProfile = !fullPage && PROFILE_ROUTES.has(lower);
 
   return (
@@ -53,16 +108,23 @@ const Main: React.FC<MainProps> = ({
           content="width=device-width, initial-scale=1.0"
         />
 
-        <meta property="og:type" content="website" />
+        <meta property="og:type" content={socialType} />
         <meta property="og:site_name" content={SITE_NAME} />
         <meta property="og:title" content={socialTitle} />
-        <meta property="og:description" content={description} />
-        <meta property="og:image" content={OG_IMAGE} />
+        <meta property="og:description" content={socialDescription} />
+        <meta property="og:image" content={socialImage} />
+        <meta property="og:image:alt" content={socialImageAlt} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
         <meta property="og:url" content={canonical} />
-        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:card" content={socialCard} />
+        <meta name="twitter:site" content={TWITTER_HANDLE} />
+        <meta name="twitter:creator" content={TWITTER_HANDLE} />
         <meta name="twitter:title" content={socialTitle} />
-        <meta name="twitter:description" content={description} />
-        <meta name="twitter:image" content={OG_IMAGE} />
+        <meta name="twitter:description" content={socialDescription} />
+        <meta name="twitter:image" content={socialImage} />
+        <meta name="twitter:image:alt" content={socialImageAlt} />
+        <meta name="robots" content={robots} />
         <link rel="canonical" href={canonical} />
 
         <link
@@ -85,7 +147,7 @@ const Main: React.FC<MainProps> = ({
         <meta name="apple-mobile-web-app-title" content="Dase.dev" />
         <link rel="manifest" href="/images/favicon/site.webmanifest" />
         {title && <title>{title}</title>}
-        <meta name="description" content={description} />
+        <meta name="description" content={socialDescription} />
       </Helmet>
       <div className="flex min-h-screen flex-col">
         <Navigation />
