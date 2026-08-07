@@ -6,6 +6,8 @@ const ScrollToTop = () => {
   const { pathname } = router;
 
   useEffect(() => {
+    // pathname is the navigation trigger, not a value read inside the effect.
+    void pathname;
     window.scrollTo(0, 0);
   }, [pathname]);
 

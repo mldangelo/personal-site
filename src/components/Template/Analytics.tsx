@@ -1,33 +1,46 @@
 import { useRouter } from 'next/router';
+import Script from 'next/script';
 import { useEffect } from 'react';
-import { initialize, pageview, set } from 'react-ga';
 
-// Use NEXT_PUBLIC_ for public environment variables in Next.js
-const { NEXT_PUBLIC_GA_TRACKING_ID } = process.env;
+const GA_TRACKING_ID = process.env.NEXT_PUBLIC_GA_TRACKING_ID;
 const isProduction = process.env.NODE_ENV === 'production';
+const enabled = isProduction && Boolean(GA_TRACKING_ID);
 
-// Only initialize Google Analytics if in production
-if (isProduction && NEXT_PUBLIC_GA_TRACKING_ID) {
-  initialize(NEXT_PUBLIC_GA_TRACKING_ID);
-}
-
-// Initialize Google Analytics in production
-if (isProduction) {
-  initialize(NEXT_PUBLIC_GA_TRACKING_ID!);
+declare global {
+  interface Window {
+    gtag?: (...args: unknown[]) => void;
+  }
 }
 
 const Analytics = () => {
-  const router = useRouter();
-  const { pathname } = router;
+  const { pathname } = useRouter();
 
   useEffect(() => {
-    if (isProduction) {
-      set({ page: pathname });
-      pageview(pathname);
+    if (enabled) {
+      window.gtag?.('config', GA_TRACKING_ID, { page_path: pathname });
     }
   }, [pathname]);
 
-  return null;
+  if (!enabled) {
+    return null;
+  }
+
+  return (
+    <>
+      <Script
+        src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
+        strategy="afterInteractive"
+      />
+      <Script id="gtag-init" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', '${GA_TRACKING_ID}');
+        `}
+      </Script>
+    </>
+  );
 };
 
 export default Analytics;

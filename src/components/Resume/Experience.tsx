@@ -1,5 +1,5 @@
-import React from 'react';
-import { IWorkExperience } from '../../data/resume/work';
+import type React from 'react';
+import type { IWorkExperience } from '../../data/resume/work';
 import Job from './Experience/Job';
 
 export interface IExperience {
@@ -7,15 +7,16 @@ export interface IExperience {
 }
 
 const Experience: React.FC<IExperience> = ({ data }) => (
-  <div className="experience">
-    <div className="link-to" id="experience" />
-    <div className="title">
-      <h3>Experience</h3>
+  <section id="experience">
+    <h2 className="mb-6 text-[length:var(--text-section)] font-semibold">
+      Experience
+    </h2>
+    <div className="flex flex-col gap-8">
+      {data.map((job) => (
+        <Job data={job} key={`${job.name}-${job.position}`} />
+      ))}
     </div>
-    {data.map((job) => (
-      <Job data={job} key={`${job.name}-${job.position}`} />
-    ))}
-  </div>
+  </section>
 );
 
 export default Experience;

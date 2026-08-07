@@ -15,9 +15,10 @@ const Stats = () => {
       initialData.map((field) => ({
         ...field,
         // update value if value was returned by call to github
-        value: Object.keys(resData).includes(field.key!)
-          ? resData[field.key!]
-          : field.value
+        value:
+          field.key && Object.hasOwn(resData, field.key)
+            ? resData[field.key]
+            : field.value
       }))
     );
   }, []);
@@ -27,10 +28,12 @@ const Stats = () => {
   }, [fetchData]);
 
   return (
-    <div>
-      <h3>Some stats about this site</h3>
+    <section className="rounded-xl border border-border p-5">
+      <h2 className="mb-3 font-mono text-xs tracking-widest text-accent uppercase">
+        This site
+      </h2>
       <Table data={data} />
-    </div>
+    </section>
   );
 };
 

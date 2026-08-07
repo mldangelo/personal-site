@@ -1,4 +1,4 @@
-import { IDegree } from '../../data/resume/degrees';
+import type { IDegree } from '../../data/resume/degrees';
 import Degree from './Education/Degree';
 
 export interface IEducation {
@@ -6,15 +6,16 @@ export interface IEducation {
 }
 
 const Education = (data: IEducation) => (
-  <div className="education">
-    <div className="link-to" id="education" />
-    <div className="title">
-      <h3>Education</h3>
+  <section id="education">
+    <h2 className="mb-6 text-[length:var(--text-section)] font-semibold">
+      Education
+    </h2>
+    <div className="flex flex-col gap-6">
+      {data.data.map((d) => (
+        <Degree data={d} key={d.school} />
+      ))}
     </div>
-    {data.data.map((d) => (
-      <Degree data={d} key={d.school} />
-    ))}
-  </div>
+  </section>
 );
 
 export default Education;

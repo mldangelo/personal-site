@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { ITableData } from '../../components/Stats/Table';
+import type { ITableData } from '../../components/Stats/Table';
 
 export interface IGitHubData extends ITableData {}
 

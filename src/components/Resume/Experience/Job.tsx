@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import Markdown from 'markdown-to-jsx';
-import React from 'react';
-import { IWorkExperience } from '../../../data/resume/work';
+import type React from 'react';
+import type { IWorkExperience } from '../../../data/resume/work';
 
 export interface IJob {
   data: IWorkExperience;
@@ -10,41 +10,33 @@ export interface IJob {
 const Job: React.FC<IJob> = ({
   data: { name, position, url, startDate, endDate, summary, highlights }
 }) => (
-  <article className="jobs-container">
+  <article className="border-l-2 border-border pl-5">
     <header>
-      <h4>
-        <a href={url}>{name}</a> - {position}
-      </h4>
-      <p className="daterange">
-        {' '}
-        {dayjs(startDate).format('MMMM YYYY')} -{' '}
-        {endDate ? dayjs(endDate).format('MMMM YYYY') : 'PRESENT'}
+      <h3 className="font-medium">
+        <a href={url} className="hover:text-accent">
+          {name}
+        </a>
+        <span className="text-muted"> · {position}</span>
+      </h3>
+      <p className="mt-1 font-mono text-xs text-muted">
+        {dayjs(startDate).format('MMMM YYYY')} —{' '}
+        {endDate ? dayjs(endDate).format('MMMM YYYY') : 'Present'}
       </p>
     </header>
-    {summary ? (
-      <Markdown
-        options={{
-          overrides: {
-            p: {
-              props: {
-                className: 'summary'
-              }
-            }
-          }
-        }}
-      >
-        {summary}
-      </Markdown>
-    ) : null}
-    {highlights ? (
-      <ul className="points">
+    {summary && (
+      <div className="mt-3 text-sm leading-relaxed text-muted">
+        <Markdown>{summary}</Markdown>
+      </div>
+    )}
+    {highlights && (
+      <ul className="mt-3 flex list-disc flex-col gap-1.5 pl-5 text-sm leading-relaxed text-muted marker:text-accent">
         {highlights.map((highlight) => (
           <li key={highlight}>
-            <Markdown>{highlight}</Markdown>
+            <Markdown options={{ forceInline: true }}>{highlight}</Markdown>
           </li>
         ))}
       </ul>
-    ) : null}
+    )}
   </article>
 );
 

@@ -2,16 +2,11 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "dev",
+      "name": "personal-site",
       "runtimeExecutable": "/Users/austindase/.nvm/versions/node/v24.17.0/bin/node",
-      "runtimeArgs": ["/Users/austindase/.nvm/versions/node/v24.17.0/lib/node_modules/pnpm/bin/pnpm.cjs", "dev"],
-      "port": 3000
-    },
-    {
-      "name": "prod",
-      "runtimeExecutable": "/Users/austindase/.nvm/versions/node/v24.17.0/bin/node",
-      "runtimeArgs": ["/Users/austindase/.nvm/versions/node/v24.17.0/lib/node_modules/pnpm/bin/pnpm.cjs", "dlx", "serve@latest", "out", "-p", "3001"],
-      "port": 3001
+      "runtimeArgs": ["node_modules/next/dist/bin/next", "dev", "--webpack"],
+      "port": 3000,
+      "autoPort": true
     }
   ]
 }

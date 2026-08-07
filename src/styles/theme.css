@@ -1,0 +1,114 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+
+@source '../';
+
+/* The theme-init script in _document.tsx stamps data-theme on <html> before paint. */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+@theme {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --color-bg: #fcfcfd;
+  --color-surface: #f3f4f7;
+  --color-fg: #14161c;
+  --color-muted: #5c6472;
+  --color-border: #e2e4ea;
+  --color-accent: #2b5fd9;
+  --color-accent-fg: #ffffff;
+  --color-accent-subtle: #eaf0fe;
+
+  --text-hero: clamp(2.25rem, 1.4rem + 3.6vw, 3.75rem);
+  --text-section: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-theme='dark'] {
+  --color-bg: #0b0e14;
+  --color-surface: #141924;
+  --color-fg: #e7e9ef;
+  --color-muted: #98a1b2;
+  --color-border: #232936;
+  --color-accent: #7da4ff;
+  --color-accent-fg: #0b0e14;
+  --color-accent-subtle: #172033;
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  [data-theme='dark'] {
+    color-scheme: dark;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    /* Offset anchor jumps so headings clear the sticky nav. */
+    scroll-padding-top: 6rem;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    color: var(--color-fg);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-accent-fg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@utility reveal {
+  opacity: 0;
+  translate: 0 12px;
+  transition:
+    opacity 0.6s var(--ease-out-soft),
+    translate 0.6s var(--ease-out-soft);
+}
+
+@utility reveal-visible {
+  opacity: 1;
+  translate: 0 0;
+}

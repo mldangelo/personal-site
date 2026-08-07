@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 import TableRow from './TableRow';
 
 export interface ITableData {
@@ -14,7 +14,7 @@ export interface ITable {
 }
 
 const Table = (data: ITable) => (
-  <table>
+  <table className="w-full">
     <tbody>
       {data.data.map((pair: ITableData) => (
         <TableRow

@@ -1,24 +1,20 @@
 import { useEffect, useState } from 'react';
-import { ITableData } from '../../components/Stats/Table';
+import type { ITableData } from '../../components/Stats/Table';
 
 export interface IPersonalData extends ITableData {}
 
 const Age = () => {
   const [age, setAge] = useState<string>();
 
-  const tick = () => {
+  useEffect(() => {
     const divisor = 1000 * 60 * 60 * 24 * 365.2421897; // ms in an average year
     const birthTime = new Date('1993-03-25T00:00:00');
 
-    // Directly compute the age and set it
-    const ageString = ((Date.now() - birthTime.getTime()) / divisor).toFixed(
-      11
-    );
-    setAge(ageString);
-  };
+    const tick = () => {
+      setAge(((Date.now() - birthTime.getTime()) / divisor).toFixed(11));
+    };
 
-  useEffect(() => {
-    const timer = setInterval(() => tick(), 25);
+    const timer = setInterval(tick, 25);
     return () => {
       clearInterval(timer);
     };

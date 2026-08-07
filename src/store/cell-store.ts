@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { persist, PersistStorage } from 'zustand/middleware';
+import { type PersistStorage, persist } from 'zustand/middleware';
 
 interface CellState {
   isOpen: boolean;

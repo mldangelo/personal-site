@@ -1,4 +1,4 @@
-import { University } from '../../constants/University';
+import type { University } from '../../constants/University';
 
 export interface ICourseInfo {
   title: string;

@@ -1,6 +1,6 @@
 import {
   TowsonUniversity,
-  University,
+  type University,
   UniversityOfMaryland
 } from '../../constants/University';
 

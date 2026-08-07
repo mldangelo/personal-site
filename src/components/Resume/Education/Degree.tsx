@@ -1,17 +1,18 @@
-import { IDegree } from '../../../data/resume/degrees';
+import type { IDegree } from '../../../data/resume/degrees';
 
 export interface IDegreeComponent {
   data: IDegree;
 }
 
 const Degree = (data: IDegreeComponent) => (
-  <article className="degree-container">
-    <header>
-      <h4 className="degree">{data.data.degree}</h4>
-      <p className="school">
-        <a href={data.data.link}>{data.data.school}</a>, {data.data.year}
-      </p>
-    </header>
+  <article className="border-l-2 border-border pl-5">
+    <h3 className="font-medium">{data.data.degree}</h3>
+    <p className="mt-1 text-sm text-muted">
+      <a href={data.data.link} className="hover:text-accent">
+        {data.data.school}
+      </a>
+      <span className="font-mono text-xs"> · {data.data.year}</span>
+    </p>
   </article>
 );
 

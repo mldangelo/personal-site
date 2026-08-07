@@ -1,4 +1,4 @@
-import { ICourseInfo } from '../../../data/resume/courses';
+import type { ICourseInfo } from '../../../data/resume/courses';
 
 export interface ICourse {
   data: ICourseInfo;

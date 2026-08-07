@@ -1,25 +1,22 @@
-import PropTypes from 'prop-types';
-
 export interface ICategoryButton {
   handleClick: (label: string) => void;
-  active: any;
+  active: Record<string, boolean>;
   label: string;
 }
 
-const CategoryButton = (data: ICategoryButton) => (
+const CategoryButton = ({ handleClick, active, label }: ICategoryButton) => (
   <button
-    className={`skillbutton ${data.active[data.label] ? 'skillbutton-active' : ''}`}
     type="button"
-    onClick={() => data.handleClick(data.label)}
+    aria-pressed={active[label]}
+    onClick={() => handleClick(label)}
+    className={`rounded-md border px-3 py-1.5 font-mono text-xs transition-colors ${
+      active[label]
+        ? 'border-accent bg-accent-subtle text-accent'
+        : 'border-border text-muted hover:border-accent hover:text-accent'
+    }`}
   >
-    {data.label}
+    {label}
   </button>
 );
-
-CategoryButton.propTypes = {
-  label: PropTypes.string.isRequired,
-  handleClick: PropTypes.func.isRequired,
-  active: PropTypes.objectOf(PropTypes.bool.isRequired).isRequired
-};
 
 export default CategoryButton;

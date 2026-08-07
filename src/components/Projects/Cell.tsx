@@ -1,10 +1,9 @@
 import dayjs from 'dayjs';
-import React, { Suspense, lazy, useEffect } from 'react';
-import Collapsible from 'react-collapsible';
+import type React from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import LiteYouTubeEmbed from 'react-lite-youtube-embed';
 import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css';
-import { Tooltip } from 'react-tooltip';
-import { IProject } from '../../data/projects';
+import type { IProject } from '../../data/projects';
 import useCellStore from '../../store/cell-store';
 
 const PdfViewer = lazy(() => import('./PdfViewer'));
@@ -15,79 +14,80 @@ export interface ICell {
 }
 
 const Cell: React.FC<ICell> = ({ data, id }) => {
-  const { cells, setIsOpen } = useCellStore();
+  const cells = useCellStore((s) => s.cells);
+  const setIsOpen = useCellStore((s) => s.setIsOpen);
+  const [mounted, setMounted] = useState(false);
 
-  // Initialize the cell state in Zustand if it doesn't exist yet
-  useEffect(() => {
-    if (!cells[id]) {
-      setIsOpen(id, false); // Initialize as collapsed
-    }
-  }, [id, cells, setIsOpen]);
+  // The store is persisted with skipHydration, so only trust it after mount.
+  useEffect(() => setMounted(true), []);
 
-  const isOpen = cells[id]?.isOpen || false; // Safely access isOpen
-
-  function handleToggle() {
-    setIsOpen(id, !isOpen); // Toggle open/close state
-  }
-
-  // Ensure this component behaves consistently on both client and server
-  const isClient = typeof window !== 'undefined';
+  const isOpen = mounted && (cells[id]?.isOpen ?? false);
+  const kind = data.youtube ? 'talk' : data.pdf ? 'paper' : 'project';
 
   return (
-    <div className="cell-container">
-      <article className="mini-post">
-        <Collapsible
-          open={isOpen}
-          transitionTime={1}
-          trigger={
-            <header onClick={handleToggle} style={{ cursor: 'pointer' }}>
-              <div>
-                <h3
-                  data-tooltip-id="custom-tooltip"
-                  data-tooltip-content={isOpen ? 'collapse' : 'expand'}
-                >
-                  <a href={data.link}>{data.title}</a>
-                </h3>
-                {isClient && (
-                  <Tooltip
-                    id="custom-tooltip"
-                    className="custom-tooltip"
-                    place="top-start"
-                  />
-                )}
-              </div>
-              {data.date ? (
-                <time className="published">
-                  {dayjs(data.date).format('MMMM, YYYY')}
-                </time>
-              ) : (
-                <div></div>
-              )}
-            </header>
-          }
-        >
-          {isClient && data.youtube ? (
-            <a href={data.link} className="image">
-              <LiteYouTubeEmbed id={data.youtube} title={data.title} />
-            </a>
-          ) : (
-            <div></div>
-          )}
-
-          {isClient && data.pdf ? (
-            <Suspense fallback={<div>Loading PDF...</div>}>
-              <PdfViewer data={{ path: data.pdf }} />
-            </Suspense>
-          ) : (
-            <div></div>
-          )}
-
-          <div className="description">
-            <p>{data.desc}</p>
+    <article className="overflow-hidden rounded-xl border border-border transition-colors hover:border-accent/60">
+      <details
+        open={isOpen}
+        onToggle={(e) => setIsOpen(id, e.currentTarget.open)}
+      >
+        <summary className="flex cursor-pointer list-none items-start justify-between gap-4 p-5 [&::-webkit-details-marker]:hidden">
+          <div className="min-w-0">
+            <p className="font-mono text-xs tracking-widest text-accent uppercase">
+              {kind}
+            </p>
+            <h3 className="mt-1.5 font-medium">{data.title}</h3>
+            {data.subtitle && (
+              <p className="mt-1 text-sm text-muted">{data.subtitle}</p>
+            )}
+            {data.date && (
+              <time className="mt-2 block font-mono text-xs text-muted">
+                {dayjs(data.date).format('MMMM YYYY')}
+              </time>
+            )}
           </div>
-        </Collapsible>
-      </article>
-    </div>
+          <span
+            aria-hidden="true"
+            className={`mt-1 shrink-0 font-mono text-muted transition-transform ${
+              isOpen ? 'rotate-90' : ''
+            }`}
+          >
+            ›
+          </span>
+        </summary>
+
+        <div className="border-t border-border p-5">
+          {data.desc && (
+            <p className="mb-4 text-sm leading-relaxed text-muted">
+              {data.desc}
+            </p>
+          )}
+
+          {/* Heavy embeds are only mounted once the card is actually opened. */}
+          {isOpen && data.youtube && (
+            <LiteYouTubeEmbed id={data.youtube} title={data.title} />
+          )}
+
+          {isOpen && data.pdf && (
+            <Suspense
+              fallback={<p className="text-sm text-muted">Loading PDF…</p>}
+            >
+              <div className="h-[70vh] overflow-hidden rounded-lg border border-border">
+                <PdfViewer data={{ path: data.pdf }} title={data.title} />
+              </div>
+            </Suspense>
+          )}
+
+          {data.link && (
+            <a
+              href={data.link}
+              className="mt-4 inline-block font-mono text-sm text-accent hover:underline"
+            >
+              Visit project →
+            </a>
+          )}
+        </div>
+      </details>
+    </article>
   );
 };
 

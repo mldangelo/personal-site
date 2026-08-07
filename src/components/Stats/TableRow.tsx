@@ -1,10 +1,16 @@
-import { ITableData } from './Table';
+import type { ITableData } from './Table';
 
 const TableRow = ({ label, link, value, format }: ITableData) => (
-  <tr>
-    <td width="70%">{label}</td>
-    <td>
-      {link && format && value ? <a href={link}>{format(value)}</a> : value}
+  <tr className="border-b border-border last:border-0">
+    <td className="py-2.5 pr-4 text-sm text-muted">{label}</td>
+    <td className="py-2.5 text-right font-mono text-sm tabular-nums">
+      {link && format && value ? (
+        <a href={link} className="hover:text-accent">
+          {format(value)}
+        </a>
+      ) : (
+        value
+      )}
     </td>
   </tr>
 );

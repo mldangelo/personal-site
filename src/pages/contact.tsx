@@ -1,6 +1,6 @@
-import Link from 'next/link';
 import ContactIcons from '../components/Contact/ContactIcons';
 import EmailLink from '../components/Contact/EmailLink';
+import PageHeader from '../components/Template/PageHeader';
 import Main from '../layouts/Main';
 
 const Contact = () => (
@@ -8,22 +8,17 @@ const Contact = () => (
     title="Contact"
     description="Contact Austin Dase via email @ hi@dase.dev"
   >
-    <article className="post" id="contact">
-      <header>
-        <div className="title">
-          <h2>
-            <Link href="/contact" passHref>
-              Contact
-            </Link>
-          </h2>
-        </div>
-      </header>
-      <div className="email-at">
-        <p>Feel free to get in touch. You can email me at: </p>
-        <EmailLink />
-      </div>
+    <PageHeader eyebrow="Contact" title="Get in touch">
+      <p>
+        The fastest way to reach me is email. I read everything, and reply to
+        most of it.
+      </p>
+    </PageHeader>
+
+    <div className="flex flex-col items-start gap-6">
+      <EmailLink />
       <ContactIcons />
-    </article>
+    </div>
   </Main>
 );
 

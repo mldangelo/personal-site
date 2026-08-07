@@ -1,7 +1,7 @@
-import Link from 'next/link';
 import Education from '../components/Resume/Education';
 import Experience from '../components/Resume/Experience';
 import Skills from '../components/Resume/Skills';
+import PageHeader from '../components/Template/PageHeader';
 import degrees from '../data/resume/degrees';
 import { categories, skills } from '../data/resume/skills';
 import work from '../data/resume/work';
@@ -9,36 +9,32 @@ import Main from '../layouts/Main';
 
 // NOTE: sections are displayed in order defined.
 const sections = {
-  Education: () => <Education data={degrees} />,
   Experience: () => <Experience data={work} />,
+  Education: () => <Education data={degrees} />,
   Skills: () => <Skills skills={skills} categories={categories} />
-  // Courses: () => <Courses data={courses} />,
-  // References: () => <References />,
 };
 
 const Resume = () => (
   <Main title="Resume" description="Austin Dase's Resume.">
-    <article className="post" id="resume">
-      <header>
-        <div className="title">
-          <h2>
-            <Link href="resume" passHref>
-              Resume
-            </Link>
-          </h2>
-          <div className="link-container">
-            {Object.keys(sections).map((sec) => (
-              <h4 key={sec}>
-                <a href={`#${sec.toLowerCase()}`}>{sec}</a>
-              </h4>
-            ))}
-          </div>
-        </div>
-      </header>
+    <PageHeader eyebrow="Resume" title="Resume">
+      <nav aria-label="Resume sections" className="flex flex-wrap gap-2">
+        {Object.keys(sections).map((sec) => (
+          <a
+            key={sec}
+            href={`#${sec.toLowerCase()}`}
+            className="rounded-md border border-border px-3 py-1.5 font-mono text-xs transition-colors hover:border-accent hover:text-accent"
+          >
+            {sec}
+          </a>
+        ))}
+      </nav>
+    </PageHeader>
+
+    <div className="flex flex-col gap-16">
       {Object.entries(sections).map(([name, Section]) => (
         <Section key={name} />
       ))}
-    </article>
+    </div>
   </Main>
 );
 

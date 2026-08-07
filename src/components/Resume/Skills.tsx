@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ICategory, ISkill } from '../../data/resume/skills';
+import type { ICategory, ISkill } from '../../data/resume/skills';
 import CategoryButton from './Skills/CategoryButton';
 import SkillBar from './Skills/SkillBar';
 
@@ -22,15 +22,10 @@ const Skills = (data: ISkillsComponent) => {
 
   const handleChildClick = (label: string) => {
     // Toggle button that was clicked. Turn all other buttons off.
-    const newButtons: INewButtons = Object.keys(buttons).reduce(
-      (obj: INewButtons, key) => ({
-        ...obj,
-        [key]: label === key && !buttons[key]
-      }),
-      {
-        All: false
-      }
-    );
+    const newButtons: INewButtons = { All: false };
+    for (const key of Object.keys(buttons)) {
+      newButtons[key] = label === key && !buttons[key];
+    }
     // Turn on 'All' button if other buttons are off
     newButtons.All = !Object.keys(buttons).some((key) => newButtons[key]);
     setButtons(newButtons);
@@ -73,15 +68,16 @@ const Skills = (data: ISkillsComponent) => {
     ));
 
   return (
-    <div className="skills">
-      <div className="link-to" id="skills" />
-      <div className="title">
-        <h3>Skills</h3>
-        <p>Here&apos;s some of my primary professional skills.</p>
-      </div>
-      <div className="skill-button-container">{getButtons()}</div>
-      <div className="skill-row-container">{getRows()}</div>
-    </div>
+    <section id="skills">
+      <h2 className="mb-2 text-[length:var(--text-section)] font-semibold">
+        Skills
+      </h2>
+      <p className="mb-5 text-muted">
+        Some of my primary professional skills. Filter by category.
+      </p>
+      <div className="mb-6 flex flex-wrap gap-2">{getButtons()}</div>
+      <div className="grid gap-4 sm:grid-cols-2">{getRows()}</div>
+    </section>
   );
 };
 

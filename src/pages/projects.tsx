@@ -1,24 +1,19 @@
-import Link from 'next/link';
 import Cell from '../components/Projects/Cell';
+import PageHeader from '../components/Template/PageHeader';
 import data from '../data/projects';
 import Main from '../layouts/Main';
 
 const Projects = () => (
   <Main title="Projects" description="Learn about Austin Dase's projects.">
-    <article className="post" id="projects">
-      <header>
-        <div className="title">
-          <h2>
-            <Link href="/projects" passHref>
-              Projects
-            </Link>
-          </h2>
-        </div>
-      </header>
+    <PageHeader eyebrow="Projects" title="Projects">
+      <p>Talks and papers. Expand any card to read or watch it inline.</p>
+    </PageHeader>
+
+    <div className="grid gap-4">
       {data.map((project) => (
         <Cell data={project} key={project.title} id={project.title} />
       ))}
-    </article>
+    </div>
   </Main>
 );
 

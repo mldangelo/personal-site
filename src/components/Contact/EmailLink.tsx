@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import type React from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 // Validates the first half of an email address.
 const validateText = (text: string) => {
   // NOTE: Passes RFC 5322 but not tested on google's standard.
   // eslint-disable-next-line no-useless-escape
-  const re = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))$/;
+  const re = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))$/;
   return re.test(text) || text.length === 0;
 };
 
@@ -69,18 +70,25 @@ const EmailLink = (loopMessage: ILoopMessage) => {
     isActive ? delay : null
   );
 
+  const valid = validateText(message);
+
   return (
-    <div
-      className="inline-container"
-      style={validateText(message) ? {} : { color: 'red' }}
+    <a
+      href={valid ? `mailto:${message}@dase.dev` : undefined}
+      // Pause the animation while the address is being read or clicked.
       onMouseEnter={() => setIsActive(false)}
       onMouseLeave={() => idx < messages.length && setIsActive(true)}
+      onFocus={() => setIsActive(false)}
+      onBlur={() => idx < messages.length && setIsActive(true)}
+      className="inline-flex items-baseline rounded-md border border-border px-4 py-2.5 font-mono text-lg transition-colors hover:border-accent hover:text-accent"
     >
-      <a href={validateText(message) ? `mailto:${message}@dase.dev` : ''}>
-        <span>{message}</span>
-        <span>@dase.dev</span>
-      </a>
-    </div>
+      <span>{message}</span>
+      <span
+        aria-hidden="true"
+        className="ml-px inline-block w-px self-stretch bg-accent"
+      />
+      <span>@dase.dev</span>
+    </a>
   );
 };
 

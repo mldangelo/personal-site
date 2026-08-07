@@ -1,5 +1,5 @@
-import React from 'react';
-import { ICourseInfo } from '../../data/resume/courses';
+import type React from 'react';
+import type { ICourseInfo } from '../../data/resume/courses';
 import Course from './Courses/Course';
 
 const getRows = (courses: ICourseInfo[]) =>

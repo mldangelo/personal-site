@@ -2,10 +2,12 @@ import data from '../../data/stats/personal';
 import Table from './Table';
 
 const PersonalStats = () => (
-  <>
-    <h3>Some stats about me</h3>
+  <section className="rounded-xl border border-border p-5">
+    <h2 className="mb-3 font-mono text-xs tracking-widest text-accent uppercase">
+      About me
+    </h2>
     <Table data={data} />
-  </>
+  </section>
 );
 
 export default PersonalStats;
