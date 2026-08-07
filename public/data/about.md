@@ -1,5 +1,3 @@
-## Intro
-
 I'm Austin, Director of Engineering at [Fundrise](https://fundrise.com), leading engineering strategy and teams
 building AI-enabled products. I set technical direction and shipping velocity for platforms that democratize finance.
 The software I've shipped has powered billions in transactions, launched new revenue streams, scaled core systems,
