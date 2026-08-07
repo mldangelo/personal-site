@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "dev",
+      "runtimeExecutable": "/Users/austindase/.nvm/versions/node/v24.17.0/bin/node",
+      "runtimeArgs": ["/Users/austindase/.nvm/versions/node/v24.17.0/lib/node_modules/pnpm/bin/pnpm.cjs", "dev"],
+      "port": 3000
+    },
+    {
+      "name": "prod",
+      "runtimeExecutable": "/Users/austindase/.nvm/versions/node/v24.17.0/bin/node",
+      "runtimeArgs": ["/Users/austindase/.nvm/versions/node/v24.17.0/lib/node_modules/pnpm/bin/pnpm.cjs", "dlx", "serve@latest", "out", "-p", "3001"],
+      "port": 3001
+    }
+  ]
+}

@@ -23,7 +23,7 @@ jobs:
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 24.2.0
+          node-version: 24.17.0
           cache: "pnpm"
       - run: pnpm install --frozen-lockfile
       - name: Lint
@@ -35,7 +35,7 @@ jobs:
     timeout-minutes: 10
     strategy:
       matrix:
-        node-version: [24.2.0]
+        node-version: [24.17.0]
         os: [ubuntu-20.04, windows-latest, macos-latest]
     steps:
       - uses: actions/checkout@v4
