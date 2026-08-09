@@ -33,7 +33,6 @@ const skills: ISkill[] = [
   { title: 'Vue', competency: 4, category: ['Web'] },
   { title: 'GraphQL', competency: 3, category: ['Web'] },
   { title: 'Postgres', competency: 5, category: ['Data'] },
-  { title: 'Databricks', competency: 3, category: ['Data', 'AI & ML'] },
   { title: 'AWS', competency: 5, category: ['Platform'] },
   { title: 'Vercel', competency: 5, category: ['Platform'] },
   { title: 'Stripe', competency: 4, category: ['Platform'] },

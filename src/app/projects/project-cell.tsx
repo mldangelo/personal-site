@@ -24,7 +24,8 @@ const ProjectCell = ({ data, id }: ProjectCellProps) => {
   useEffect(() => setMounted(true), []);
 
   const isOpen = mounted && (cells[id]?.isOpen ?? false);
-  const kind = data.youtube ? 'talk' : data.pdf ? 'paper' : 'project';
+  const kind =
+    data.kind ?? (data.youtube ? 'talk' : data.pdf ? 'paper' : 'project');
 
   return (
     <article className="border-t border-rule first:border-t-0">

@@ -20,7 +20,7 @@ export const metadata: Metadata = pageMetadata({
 });
 
 /** Only the current arc belongs on the cover; the resume carries the rest. */
-const RECENT_COUNT = 3;
+const RECENT_COUNT = 4;
 
 const period = (startDate: string, endDate?: string) => {
   const start = dayjs(startDate).format('YYYY');

@@ -6,9 +6,24 @@ export interface IProject {
   link?: string;
   pdf?: string;
   youtube?: string;
+  kind?: string;
 }
 
 const data: IProject[] = [
+  {
+    title: 'Spring AI: Anthropic tool_choice support',
+    date: '2025-10-16',
+    desc: "Added tool_choice controls (auto, any, tool, none) for Claude function calling to Spring AI's AnthropicChatOptions, merged into the framework.",
+    link: 'https://github.com/spring-projects/spring-ai/pull/4637',
+    kind: 'open source contribution'
+  },
+  {
+    title: 'Spring AI: Anthropic prompt cache management',
+    date: '2025-09-22',
+    desc: 'Added per-message TTL and configurable cache-block usage for Anthropic prompt caching, shipped in Spring AI 1.1.0-M2.',
+    link: 'https://github.com/spring-projects/spring-ai/pull/4342',
+    kind: 'open source contribution'
+  },
   {
     title: 'Testcontainers Live',
     date: '2023-08-09',
