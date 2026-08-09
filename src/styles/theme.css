@@ -179,20 +179,29 @@
 }
 
 /* Inline lists whose items are separated by a rule-colored glyph rather than
-   by a bullet element, so they wrap naturally. */
+   by a bullet element. Below `sm` the row can't fit on one line, and a
+   wrapped item would carry the dot's margin as a stray indent that the first
+   (dot-less) item doesn't have — so mobile stacks flush-left with no dots
+   instead of wrapping. */
 @utility sep-dot {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem 1.4rem;
+  flex-direction: column;
+  gap: 0.5rem;
 
-  & > *::before {
-    content: '·';
-    margin-right: 1.4rem;
-    color: var(--color-rule);
-  }
+  @media (width >= 40rem) {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.6rem 1.4rem;
 
-  & > *:first-child::before {
-    display: none;
+    & > *::before {
+      content: '·';
+      margin-right: 1.4rem;
+      color: var(--color-rule);
+    }
+
+    & > *:first-child::before {
+      display: none;
+    }
   }
 }
 

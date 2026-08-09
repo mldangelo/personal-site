@@ -5,6 +5,7 @@ import Section from '@/components/ui/section';
 import Table from '@/components/ui/table';
 import personal from '@/data/stats/personal';
 import { pageMetadata } from '@/lib/metadata';
+import GithubActivity from './github-activity';
 import SiteStats from './site-stats';
 
 export const metadata: Metadata = pageMetadata({
@@ -23,6 +24,16 @@ const Stats = () => (
     <Section title="About me">
       <Table data={personal} />
     </Section>
+
+    <Suspense
+      fallback={
+        <Section title="GitHub activity">
+          <p className="font-mono text-[0.8rem] text-faint">Loading…</p>
+        </Section>
+      }
+    >
+      <GithubActivity />
+    </Suspense>
 
     <Suspense
       fallback={
