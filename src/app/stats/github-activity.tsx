@@ -7,7 +7,7 @@ const GithubActivity = async () => {
   const data = await getGithubActivity();
 
   return (
-    <Section title="GitHub activity">
+    <Section title="(public) GitHub activity">
       <Table data={data} />
     </Section>
   );
