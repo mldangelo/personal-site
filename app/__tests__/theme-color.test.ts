@@ -1,3 +1,4 @@
+import { HeadManagerContext } from 'next/dist/shared/lib/head-manager-context.shared-runtime';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
@@ -18,12 +19,24 @@ vi.mock('next/font/local', () => ({
 const LIGHT = readColorToken(THEME_COLOR_TOKEN, 'light');
 const DARK = readColorToken(THEME_COLOR_TOKEN, 'dark');
 
+/**
+ * `next/script` reads `appDir` off `HeadManagerContext`, and only that branch
+ * emits the deferred `self.__next_s` queue. Next's own renderer supplies the
+ * context; a bare `renderToStaticMarkup` does not, so a `beforeInteractive`
+ * `<Script>` renders to *nothing at all* and every assertion about how the
+ * bootstrap was queued passes vacuously. Providing it here is what makes the
+ * regression reachable.
+ */
 function renderedHead(): string {
-  return (
-    /<head>([\s\S]*?)<\/head>/.exec(
-      renderToStaticMarkup(createElement(RootLayout, { children: null })),
-    )?.[1] ?? ''
+  const markup = renderToStaticMarkup(
+    createElement(
+      HeadManagerContext.Provider,
+      { value: { appDir: true } },
+      createElement(RootLayout, { children: null }),
+    ),
   );
+
+  return /<head>([\s\S]*?)<\/head>/.exec(markup)?.[1] ?? '';
 }
 
 describe('theme-color', () => {
