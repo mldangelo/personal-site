@@ -66,6 +66,35 @@ export function sortPositions(positions: Position[]): Position[] {
 }
 
 /**
+ * The role to name wherever the site says what its author does now — the
+ * footer on every page and the JSON-LD `Person` node.
+ *
+ * Prefers an ongoing primary role: no `endDate`, and not a `part-time` side
+ * engagement running alongside the career. Between jobs there is no such role,
+ * so it falls back to the lead of the sorted spine — the most recent
+ * involvement — rather than reporting nothing.
+ *
+ * Stated independently of `sortPositions` even though an ongoing primary role
+ * always sorts first today: this answers "the job I hold now", and a later
+ * change to `timelineKey` should not quietly change who the site says employs
+ * its author.
+ *
+ * Returns `undefined` only for an empty career, which is a state a fork of
+ * this repo passes through; callers render nothing rather than crashing.
+ * Reading `work[0]` instead is what let the footer and the JSON-LD keep naming
+ * the previous employer after a job change was recorded the natural way.
+ */
+export function currentPosition(positions: Position[]): Position | undefined {
+  const ordered = sortPositions(positions);
+
+  return (
+    ordered.find(
+      (position) => !position.endDate && position.commitment !== 'part-time',
+    ) ?? ordered[0]
+  );
+}
+
+/**
  * Whole months from `start` to `end`, truncated rather than rounded — a role
  * of eleven months and twenty-nine days has not lasted a year.
  *

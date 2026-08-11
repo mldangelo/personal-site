@@ -135,7 +135,8 @@ describe('Experience', () => {
       document.querySelectorAll('.daterange-duration [aria-hidden="true"]'),
     ).map((node) => node.textContent);
 
-    // 2020-01-01 and 2018-01-01 respectively, both measured to `now`.
-    expect(durations).toEqual(['6 yr 6 mo', '8 yr 6 mo']);
+    // 2020-01-01 and 2018-01-01 respectively, both measured to `now`, and
+    // both hedged because an ongoing tenure is only a floor once built.
+    expect(durations).toEqual(['6 yr 6 mo+', '8 yr 6 mo+']);
   });
 });

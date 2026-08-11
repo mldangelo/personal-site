@@ -4,6 +4,7 @@ import type { Position } from '@/data/resume/work';
 import work from '@/data/resume/work';
 import {
   careerSpanYears,
+  currentPosition,
   formatDuration,
   formatDurationLong,
   monthsBetween,
@@ -135,6 +136,63 @@ describe('sortPositions', () => {
 
     expect(sideRole).toBeGreaterThan(ordered.indexOf('Arthena'));
     expect(sideRole).toBeLessThan(ordered.indexOf('Matroid'));
+  });
+});
+
+describe('currentPosition', () => {
+  it('finds the ongoing role wherever it sits in the array', () => {
+    // A job change recorded the natural way: close the old role, append the
+    // new one. Indexing `work[0]` reports the old employer here.
+    const found = currentPosition([
+      position({ name: 'Previous', startDate: '2019-01-01' }),
+      position({
+        name: 'Appended last',
+        startDate: '2026-01-01',
+        endDate: undefined,
+      }),
+    ]);
+
+    expect(found?.name).toBe('Appended last');
+  });
+
+  it('does not promote an open-ended side role over a primary career', () => {
+    const found = currentPosition([
+      position({
+        name: 'Side fund',
+        startDate: '2017-04-01',
+        endDate: undefined,
+        commitment: 'part-time',
+      }),
+      position({
+        name: 'Day job',
+        startDate: '2022-01-01',
+        endDate: undefined,
+      }),
+    ]);
+
+    expect(found?.name).toBe('Day job');
+  });
+
+  it('falls back to the most recent involvement between jobs', () => {
+    const found = currentPosition([
+      position({
+        name: 'Side fund',
+        startDate: '2017-04-01',
+        endDate: undefined,
+        commitment: 'part-time',
+      }),
+      position({ name: 'Just ended', startDate: '2022-01-01' }),
+    ]);
+
+    expect(found?.name).toBe('Just ended');
+  });
+
+  it('names the same role the spine leads with', () => {
+    expect(currentPosition(work)).toBe(sortPositions(work)[0]);
+  });
+
+  it('reports nothing for an empty career rather than throwing', () => {
+    expect(currentPosition([])).toBeUndefined();
   });
 });
 

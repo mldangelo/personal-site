@@ -1,6 +1,7 @@
 import contact from '@/data/contact';
 import degrees from '@/data/resume/degrees';
 import work from '@/data/resume/work';
+import { currentPosition } from '@/lib/career';
 import type { Post } from '@/lib/posts';
 import {
   AUTHOR_NAME,
@@ -65,7 +66,10 @@ export function personNode(): SchemaNode {
   const emailItem = contact.find((item) => item.link.startsWith('mailto:'));
   const email = emailItem?.link.replace('mailto:', '');
 
-  const currentJob = work[0];
+  // Derived, not `work[0]`: source order in the work data is not load-bearing,
+  // so the employer this node claims has to be found rather than assumed to be
+  // first. An empty career emits neither property instead of a broken node.
+  const currentJob = currentPosition(work);
 
   const [givenName, ...familyParts] = AUTHOR_NAME.split(' ');
   const familyName = familyParts.join(' ');
@@ -86,14 +90,16 @@ export function personNode(): SchemaNode {
       caption: AUTHOR_NAME,
     },
     description: SITE_DESCRIPTION,
-    jobTitle: currentJob.position,
+    ...(currentJob && { jobTitle: currentJob.position }),
     ...(email && { email }),
     sameAs: socialLinks,
-    worksFor: {
-      '@type': 'Organization',
-      name: currentJob.name,
-      url: currentJob.url,
-    },
+    ...(currentJob && {
+      worksFor: {
+        '@type': 'Organization',
+        name: currentJob.name,
+        url: currentJob.url,
+      },
+    }),
     alumniOf: degrees.map((degree) => ({
       '@type': 'CollegeOrUniversity',
       name: degree.school,

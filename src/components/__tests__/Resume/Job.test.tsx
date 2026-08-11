@@ -113,13 +113,45 @@ describe('Job', () => {
     );
   });
 
-  it('measures an ongoing role to the instant it is given', () => {
+  /**
+   * The instant is build time on a static export with no scheduled rebuild,
+   * so an ongoing tenure is a floor by the time anyone reads it. It is hedged
+   * the way the career span in the resume header is; a closed role, measured
+   * between two dates that will not move, is not (see the test above).
+   */
+  it('measures an ongoing role to the instant it is given, hedged', () => {
     render(<Job data={{ ...mockJob, endDate: undefined }} now={NOW} />);
 
-    expect(
-      document.querySelector('.daterange-duration [aria-hidden="true"]')
-        ?.textContent,
-    ).toBe('6 yr 6 mo');
+    const duration = document.querySelector('.daterange-duration');
+    expect(duration?.querySelector('[aria-hidden="true"]')?.textContent).toBe(
+      '6 yr 6 mo+',
+    );
+    expect(duration?.querySelector('.sr-only')).toHaveTextContent(
+      'Duration: 6 years 6 months or more',
+    );
+  });
+
+  /**
+   * "<1 mo" is already an upper bound, so hedging it upward would read "less
+   * than 1 month or more" — a claim bracketed from both sides at once. This is
+   * reachable in the first month of exactly the newly appended role the
+   * derivation exists to place, so it is pinned rather than left to judgement.
+   */
+  it('does not hedge an ongoing role that has not run a whole month', () => {
+    render(
+      <Job
+        data={{ ...mockJob, startDate: '2026-08-01', endDate: undefined }}
+        now={new Date('2026-08-11T12:00:00Z').getTime()}
+      />,
+    );
+
+    const duration = document.querySelector('.daterange-duration');
+    expect(duration?.querySelector('[aria-hidden="true"]')?.textContent).toBe(
+      '<1 mo',
+    );
+    expect(duration?.querySelector('.sr-only')).toHaveTextContent(
+      'Duration: less than 1 month',
+    );
   });
 
   it('keeps the tenure inside the date range so it shares the gutter', () => {

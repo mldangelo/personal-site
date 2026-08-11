@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 import type { Position } from '@/data/resume/work';
 import {
   type DateInput,
+  monthsBetween,
   positionDuration,
   positionDurationLong,
 } from '@/lib/career';
@@ -27,8 +28,21 @@ export default function Job({ data, tier = 'primary', now }: JobProps) {
   const isCurrent = !endDate;
   // Derived from the dates rather than written out per role, so it cannot
   // contradict the range beside it.
-  const duration = positionDuration(data, now);
-  const durationLong = positionDurationLong(data, now);
+  //
+  // An ongoing tenure is measured to the instant the page was built, and this
+  // is a static export with no scheduled rebuild, so by the time it is read it
+  // is a floor rather than a fact. It carries the same `+` the career span in
+  // the resume header does. A closed role is exact and takes no hedge.
+  //
+  // Below a month there is no floor to raise: `formatDuration` reports an
+  // upper bound ("<1 mo"), and hedging that would announce "less than 1 month
+  // or more", which brackets the value from both sides at once. A role in its
+  // first month is left unhedged until there is a whole month to stand on.
+  const hedged = isCurrent && monthsBetween(startDate, now) >= 1;
+  const duration = `${positionDuration(data, now)}${hedged ? '+' : ''}`;
+  const durationLong = `${positionDurationLong(data, now)}${
+    hedged ? ' or more' : ''
+  }`;
 
   return (
     <article

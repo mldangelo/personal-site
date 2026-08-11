@@ -3,12 +3,15 @@ import Link from 'next/link';
 import ContactIcons from '@/components/Contact/ContactIcons';
 import work from '@/data/resume/work';
 import routes from '@/data/routes';
+import { currentPosition } from '@/lib/career';
 import { AUTHOR_NAME } from '@/lib/utils';
 
 import ThemePortrait from './ThemePortrait';
 
 export default function Footer() {
-  const currentRole = `${work[0].position} at ${work[0].name}`;
+  // Derived, not `work[0]`: source order in the work data is not load-bearing,
+  // so the job held now has to be found rather than assumed to be first.
+  const current = currentPosition(work);
 
   return (
     <footer className="site-footer-new">
@@ -19,7 +22,9 @@ export default function Footer() {
           </Link>
           <div className="footer-info">
             <span className="footer-name">{AUTHOR_NAME}</span>
-            <p className="footer-role">{currentRole}</p>
+            {current ? (
+              <p className="footer-role">{`${current.position} at ${current.name}`}</p>
+            ) : null}
             <p className="footer-copyright">
               &copy; {new Date().getFullYear()} ·{' '}
               <a
