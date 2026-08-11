@@ -45,9 +45,14 @@ function repoPath(file: string): string {
  * Relative `@import` targets in a stylesheet, resolved to absolute paths,
  * whether or not the file exists. Bare specifiers such as `tailwindcss`
  * resolve from node_modules and are not the graph's business.
+ *
+ * Comments are stripped first: a commented-out `@import` ships nothing, so
+ * counting it would mark its target reachable and hide the orphan this suite
+ * exists to catch — and would report a dangling edge the build never sees if
+ * that target were later deleted.
  */
 function importTargetsOf(file: string): string[] {
-  const contents = readFileSync(file, 'utf8');
+  const contents = readFileSync(file, 'utf8').replace(COMMENT_PATTERN, '');
 
   return [...contents.matchAll(IMPORT_PATTERN)]
     .map((match) => match[1])
