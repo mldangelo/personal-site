@@ -237,9 +237,12 @@ function buildEducation(): ResumeEducation[] {
   return degrees.map((degree) => {
     // Every course carries the university it was taken at; attach it to the
     // degree from that school instead of listing courses in a section the
-    // schema has no room for.
+    // schema has no room for. Matched whole rather than by containment: a
+    // substring test attaches every Stanford course to a second degree from a
+    // school whose name merely contains "Stanford", publishing the same
+    // coursework twice.
     const schoolCourses = courses
-      .filter((course) => degree.school.includes(course.university))
+      .filter((course) => course.university === degree.school)
       .map((course) => `${course.number} - ${course.title}`);
 
     return {

@@ -456,6 +456,12 @@ describe('verify-export', () => {
       expected: 'work[0].summary has uncollapsed whitespace',
     },
     {
+      name: 'an HTML element the plain-text conversion does not strip',
+      change: (json: string) =>
+        json.replace('Did the work.', 'Shipped a <canvas> renderer.'),
+      expected: 'work[0].summary carries markup rather than plain text',
+    },
+    {
       name: 'a key the JSON Resume schema does not define',
       change: (json: string) => json.replace('"work"', '"jobs"'),
       expected: 'key is not part of the JSON Resume schema: jobs',
@@ -473,6 +479,24 @@ describe('verify-export', () => {
     const result = runVerifier(root);
     expect(result.status).toBe(1);
     expect(result.output).toContain(expected);
+  });
+
+  // The exact string `src/lib/__tests__/resumeJson.test.ts` asserts survives
+  // `toPlainText` untouched. Kept identical on purpose: the conversion and this
+  // gate have to make the same promise, or technical prose passes `npm test`
+  // and then fails the export in CI naming markup that was never there.
+  it('accepts angle-bracket comparisons and generic types in resume prose', () => {
+    const root = createFixture();
+    mutate(root, 'out/resume.json', (json) =>
+      json.replace(
+        'Did the work.',
+        'latency < 50ms and throughput > 1k with Map<string, number>',
+      ),
+    );
+
+    const result = runVerifier(root);
+    expect(result.status).toBe(0);
+    expect(result.output).toContain('3 pages OK');
   });
 
   it('requires the sitemap to cover every indexable route', () => {

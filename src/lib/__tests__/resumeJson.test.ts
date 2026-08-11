@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import contact from '@/data/contact';
 import profile from '@/data/profile.json';
@@ -221,6 +221,46 @@ describe('json resume document', () => {
     // Every course in the data is a Stanford course, so Buffalo carries none
     // rather than an empty array.
     expect(resume.education[1]).not.toHaveProperty('courses');
+  });
+
+  it('files each course under exactly one degree', async () => {
+    // Cardinality across the whole document, not per entry: attaching courses
+    // by substring containment published all 13 Stanford courses under every
+    // degree whose school name merely contained "Stanford", and the per-entry
+    // assertions above never looked at the extra entry. A second school with a
+    // superstring name is the case the current data cannot express.
+    expect(
+      resume.education.flatMap((entry) => entry.courses ?? []),
+    ).toHaveLength(courses.length);
+
+    vi.resetModules();
+    vi.doMock('@/data/resume/degrees', () => ({
+      default: [
+        ...degrees,
+        {
+          school: 'Stanford University Graduate School of Business',
+          degree: 'M.B.A.',
+          link: 'https://gsb.stanford.edu',
+          year: 2018,
+        },
+      ],
+    }));
+
+    try {
+      const { buildJsonResume: buildWithSecondSchool } = await import(
+        '@/lib/resumeJson'
+      );
+      const education = buildWithSecondSchool().education;
+
+      expect(education).toHaveLength(degrees.length + 1);
+      expect(education.flatMap((entry) => entry.courses ?? [])).toHaveLength(
+        courses.length,
+      );
+      expect(education.at(-1)).not.toHaveProperty('courses');
+    } finally {
+      vi.doUnmock('@/data/resume/degrees');
+      vi.resetModules();
+    }
   });
 
   it('groups skills by category with keywords ordered by competency', () => {

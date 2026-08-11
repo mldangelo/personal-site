@@ -611,6 +611,29 @@ const JSON_RESUME_ROOT_KEYS = new Set([
   'meta',
 ]);
 
+/**
+ * An HTML tag left in prose that should be plain text.
+ *
+ * Deliberately an element-name whitelist rather than `<[a-z/]...>`: résumé
+ * prose is technical, and the broad form fires on generic and type syntax such
+ * as `Map<string, number>` or `vector<int>` — exactly the strings `toPlainText`
+ * in `src/lib/resumeJson.ts` preserves on purpose, and which
+ * `src/lib/__tests__/resumeJson.test.ts` asserts survive untouched. The two
+ * have to make the same promise or a summary mentioning a generic passes
+ * `npm test` and then fails this gate with a message naming the wrong cause.
+ *
+ * The name must be followed by whitespace, `/`, or `>`, which rules out the
+ * common generics (`Map<string, number>`, `Set<T>`, `Promise<Response>`). It
+ * does not rule out all of them: a single-letter type parameter that happens
+ * to spell an element name still matches, so `List<b>` and `Array<U>` read as
+ * tags. That residue is deliberate — the alternative is letting a real `<b>`
+ * through — and it is why this is a whitelist and not `<[a-z/]...>`, which
+ * fires on every generic. Unhandled elements stay in the list so a construct
+ * `toPlainText` does not yet strip still surfaces here rather than shipping.
+ */
+const HTML_TAG =
+  /<\/[a-z][a-z0-9]*>|<(a|abbr|b|br|code|em|i|li|ol|p|span|strong|sub|sup|u|ul|canvas|div|img)(\s[^>]*)?\/?>/i;
+
 /** Every string leaf, with a dotted path, so failures name the field. */
 function stringLeaves(value, path = '') {
   if (typeof value === 'string') return [[path, value]];
@@ -689,7 +712,7 @@ if (!existsSync(resumeJsonPath)) {
       }
       // JSON Resume prose is plain text. The work summaries are Markdown with
       // inline anchors in source, so this is the gate on that conversion.
-      if (/<[a-z/][^>]*>/i.test(value) || /\[[^\]]+\]\([^)]*\)/.test(value)) {
+      if (HTML_TAG.test(value) || /\[[^\]]+\]\([^)]*\)/.test(value)) {
         fail('resume.json', `${path} carries markup rather than plain text`);
       }
       if (/\s{2,}|[\n\r\t]/.test(value)) {
