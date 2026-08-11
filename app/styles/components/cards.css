@@ -58,7 +58,6 @@
 
 .projects-section-count {
   font-variant-numeric: tabular-nums;
-  color: var(--color-fg-muted);
 }
 
 .projects-group-note {
@@ -129,14 +128,20 @@ a.project-entry:focus-visible .project-entry-title {
   color: var(--color-fg-light);
 }
 
+/* Every 11px label on this page sits at --color-fg-light: --color-fg-muted
+   measures 3.41:1 on paper, under the 4.5:1 AA floor, and is for non-text
+   marks only. The step away from the dates above is carried by weight and
+   tracking rather than tone — the same treatment `.project-card-subtitle`
+   gives the identical line on an archive card. */
 .project-entry-role {
   display: block;
   margin-top: 0.4rem;
   font-family: var(--font-mono);
   font-size: var(--text-2xs);
+  font-weight: var(--font-weight-medium);
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;
-  color: var(--color-fg-muted);
+  color: var(--color-fg-light);
 }
 
 .project-entry-body {
@@ -199,7 +204,7 @@ a.project-entry:focus-visible .project-entry-external {
   font-size: var(--text-2xs);
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;
-  color: var(--color-fg-muted);
+  color: var(--color-fg-light);
 }
 
 @media (max-width: 640px) {
