@@ -135,6 +135,33 @@ describe('extractLogMarker', () => {
     }
   });
 
+  it('does not read a measured quantity after "I was" as an age', () => {
+    // "6 months into" is a duration, not an age. Reading it as one invents the
+    // precision the gutter exists to avoid, so the entry gets an empty gutter.
+    for (const text of [
+      'I was 6 months into building Promptfoo when the acquisition closed.',
+      'I was 1 of 3 founders on that team.',
+      'I was 3 hours from the border.',
+      'I was 50 miles out and still climbing.',
+      'I was 20 percent of the way through the list.',
+    ]) {
+      expect(extractLogMarker(text)).toBeNull();
+    }
+  });
+
+  it('still reads an age stated without a comma after it', () => {
+    // The measure-noun guard must not take valid phrasing down with it.
+    expect(extractLogMarker('When I was 12 I set a record.')?.age).toBe(
+      'Age 12',
+    );
+    expect(extractLogMarker('I was 9 and it rained all week.')?.age).toBe(
+      'Age 9',
+    );
+    expect(
+      extractLogMarker('At the age of 16 I drove across the country.')?.age,
+    ).toBe('Age 16');
+  });
+
   it('does not read a model number as a year', () => {
     expect(
       extractLogMarker('It was an old Tandy 2000 with a turbo button.'),

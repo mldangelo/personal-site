@@ -78,13 +78,20 @@ const LEADING_PATTERNS: Array<{
  * Both are anchored to a preposition or to "I was" so that stray numbers such
  * as "approximately 50 countries" and model names such as "Tandy 2000" are not
  * read as dates.
+ *
+ * "I was" is followed by plenty of numbers that are not ages — "I was 6 months
+ * into it", "I was 1 of 3 founders", "I was 50 miles out" — so the age is
+ * rejected when a measure noun or a second number follows it. The gutter is
+ * left empty in those cases, which is the fallback an unmarked entry already
+ * gets; inventing "Age 6" from "6 months" would be exactly the fabricated
+ * precision these patterns exist to avoid.
  */
 const INLINE_YEAR = new RegExp(
   `\\b(?:in|of|since|during|by)\\s+(${YEAR_PATTERN.source})\\b`,
   'i',
 );
 const INLINE_AGE =
-  /\b(?:when\s+I\s+was|I\s+was|at\s+the\s+age\s+of)\s+(\d{1,2})\b/i;
+  /\b(?:when\s+I\s+was|I\s+was|at\s+the\s+age\s+of)\s+(\d{1,2})\b(?!\s*[-–—]?\s*\d|\s+(?:months?|weeks?|days?|hours?|minutes?|seconds?|miles?|kilometers?|blocks?|of\b|percent\b))/i;
 
 function num(value: string) {
   return Number.parseInt(value, 10);
