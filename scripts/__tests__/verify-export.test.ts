@@ -52,7 +52,7 @@ function htmlPage({
 </html>`;
 }
 
-function createFixture({ basePath = '' } = {}) {
+function createFixture({ basePath = '', draftSlug = 'secret-draft' } = {}) {
   const root = mkdtempSync(join(tmpdir(), 'verify-export-'));
   fixtureRoots.push(root);
   const siteRoot = `https://example.com${basePath}/`;
@@ -60,7 +60,7 @@ function createFixture({ basePath = '' } = {}) {
   write(root, 'package.json', JSON.stringify({ homepage: siteRoot }));
   write(
     root,
-    'content/writing/secret-draft.md',
+    `content/writing/${draftSlug}.md`,
     [
       '---',
       'title: Secret draft',
@@ -349,31 +349,47 @@ describe('verify-export', () => {
     );
   });
 
-  it('rejects any other export named after a draft', () => {
+  it('rejects any other export on a draft route', () => {
     const root = createFixture();
-    write(root, 'out/downloads/secret-draft/notes.pdf');
+    write(root, 'out/writing/secret-draft/notes.pdf');
 
     const result = runVerifier(root);
     expect(result.status).toBe(1);
     expect(result.output).toContain(
-      'exports a file named after a draft post: /downloads/secret-draft/notes.pdf',
+      'exports a file named after a draft post: /writing/secret-draft/notes.pdf',
     );
   });
 
-  it('rejects noindex HTML named after a draft outside the writing route', () => {
+  it('rejects noindex HTML named after a draft on the writing route', () => {
     const root = createFixture();
     write(
       root,
-      'out/secret-draft.html',
+      'out/writing/secret-draft.html',
       '<!doctype html><html><head><meta name="robots" content="noindex"></head><body>Draft-derived page</body></html>',
     );
 
     const result = runVerifier(root);
     expect(result.status).toBe(1);
     expect(result.output).toContain(
-      'exports a file named after a draft post: /secret-draft.html',
+      'exports a file named after a draft post: /writing/secret-draft.html',
     );
   });
+
+  /**
+   * Post slugs are ordinary words. Matching a draft slug against every path
+   * segment in the export failed the site's own pages: a draft called `about`
+   * made `/about/index.html` an error, and one called `sitemap` or `og` did the
+   * same to `/sitemap.xml` and `/og.png`.
+   */
+  it.each(['about', 'og', 'sitemap', 'feed', 'photo', 'index'])(
+    'accepts the site\'s own routes and assets against a draft called "%s"',
+    (draftSlug) => {
+      const result = runVerifier(createFixture({ draftSlug }));
+
+      expect(result.output).toContain('2 pages OK');
+      expect(result.status).toBe(0);
+    },
+  );
 
   it.each([
     ['a nested-alt inline image', '![nested [alt]](/images/private.png)'],

@@ -40,12 +40,15 @@ import {
   PADDING_TOP,
   PADDING_X,
   READOUT_RULE,
+  readoutTop,
   TITLE_GAP,
   TITLE_LINE_HEIGHT,
+  TITLE_TRACKING,
   TOP_RULE,
   titleFontSize,
   WORD_BREAK,
 } from './og-layout.mjs';
+import { assertCardGeometry } from './og-measure.mjs';
 
 // `next/og` ships as CommonJS with no ESM export condition, so it has to be
 // required rather than imported.
@@ -67,6 +70,24 @@ const {
 } = await readCardInputs(root);
 
 const { ink, paper, body, graphite, accent, hairline } = colors;
+
+// `next/og`'s Node renderer rasterizes with Sharp when `import('sharp')`
+// resolves and silently falls back to a bundled resvg.wasm when it does not,
+// producing different bytes for the same element tree. Sharp is an optional
+// dependency, so `npm ci --omit=optional` is enough to switch rasterizers —
+// and the ledger records Sharp's lock entry either way, which would leave
+// `--check` failing for everyone who does have it. Refuse rather than compare
+// pixels against a rasterizer nothing recorded.
+try {
+  await import('sharp');
+} catch (error) {
+  throw new Error(
+    'Share cards require Sharp as the rasterizer, and it is not installed. ' +
+      'Reinstall without --omit=optional (`npm ci`) before generating or ' +
+      'checking cards.',
+    { cause: error },
+  );
+}
 
 /* ---------------------------------------------------------------------------
  * Layout.
@@ -264,7 +285,7 @@ function postCard(post) {
           fontFamily: 'Display',
           fontSize: titleFontSize(post, size),
           fontWeight: 800,
-          letterSpacing: '-0.035em',
+          letterSpacing: `${TITLE_TRACKING}em`,
           lineHeight: TITLE_LINE_HEIGHT,
           color: ink,
           display: 'block',
@@ -299,21 +320,44 @@ function postCard(post) {
 // cannot silently choose a newer font revision.
 const fonts = await Promise.all(fontSources.map(loadCardFont));
 
-async function render(element) {
+/**
+ * Renders one card and reads back the geometry it actually drew.
+ *
+ * `titleFontSize` picks a size from an estimate of how copy will wrap, and
+ * satori neither takes instruction from that estimate nor reports when it
+ * disagrees. Measuring the rendered rows is what turns "should fit" into
+ * "did fit", for the site card and post cards alike.
+ */
+async function render(element, label) {
   const response = new ImageResponse(element, { ...size, fonts });
-  return Buffer.from(await response.arrayBuffer());
+  const image = Buffer.from(await response.arrayBuffer());
+
+  try {
+    assertCardGeometry(image, {
+      size,
+      paper,
+      topRule: TOP_RULE,
+      readoutTop: readoutTop(size),
+    });
+  } catch (error) {
+    throw new Error(`${label}: ${error.message}`, { cause: error });
+  }
+
+  return image;
 }
 
 // Every card is rendered before anything is written. A font fetch or a render
 // that fails halfway through would otherwise leave `public/` holding a mixed
 // set — some cards from this run, some from the last — with a ledger that
 // matches neither.
-const rendered = [{ path: HOME_CARD_PATH, image: await render(siteCard()) }];
+const rendered = [
+  { path: HOME_CARD_PATH, image: await render(siteCard(), 'The site card') },
+];
 for (const post of posts) {
   rendered.push({
     slug: post.slug,
     path: post.path,
-    image: await render(postCard(post)),
+    image: await render(postCard(post), `The share card for ${post.slug}`),
   });
 }
 

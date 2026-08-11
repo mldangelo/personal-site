@@ -18,6 +18,7 @@ import {
   readMarkdownReferences,
 } from '../src/lib/markdown-assets.mjs';
 import { validatePostFrontmatterData } from '../src/lib/post-frontmatter.mjs';
+import { POST_CARD_DIRECTORY } from './og-inputs.mjs';
 
 const ROOT = process.cwd();
 const OUT = resolve(ROOT, 'out');
@@ -174,29 +175,48 @@ function isDraftPath(pathname) {
   );
 }
 
+/** `out/` holds no base path, so a public path maps to a file path directly. */
+const CARD_DIRECTORY = POST_CARD_DIRECTORY.replace(/^\/+/, '');
+
 /**
- * Nothing in the export may be named after a draft, not only writing routes.
+ * Files the export can only have derived from a draft's Markdown source.
  *
  * The route and metadata checks below see HTML and XML. `public/` is copied
  * into the export verbatim, so anything generated from `content/writing/` — a
  * per-post share card, say — reaches the site as a plain file that no metadata
  * gate looks at, carrying an unpublished title in its name and its pixels.
- * Writing-route HTML is skipped here only because `isDraftPath` covers it
- * below. HTML elsewhere still needs this name check: a noindex page called
- * after a draft is public even though it is absent from the sitemap.
+ *
+ * Scoped to the two places a draft slug can only be a draft, rather than to any
+ * segment anywhere: post slugs are ordinary words, so a draft called `about`
+ * made the site's own `/about/index.html`, `/og.png`, and `/sitemap.xml` fail a
+ * clean export. Assets a draft references without naming are the job of the
+ * reference walk below, which does not depend on filenames at all.
  */
+function isDraftDerivedPath(path) {
+  const segments = path.split('/');
+  const file = segments.pop();
+  const directory = segments.join('/');
+  const name = basename(file, extname(file));
+
+  return draftSlugs.some(
+    (slug) =>
+      // A generated share card: one file per post, named for its slug.
+      (directory === CARD_DIRECTORY && name === slug) ||
+      // Anything at all exported on the draft's own route.
+      (directory === 'writing' && name === slug) ||
+      directory === `writing/${slug}` ||
+      directory.startsWith(`writing/${slug}/`),
+  );
+}
+
 if (draftSlugs.length > 0) {
   for (const file of walk(OUT, () => true)) {
     const path = toUrlPath(relative(OUT, file));
+    // Draft-route HTML is skipped only because `isDraftPath` reports it below,
+    // with the route it exposes rather than the file that carries it.
     if (file.endsWith('.html') && isDraftPath(routeForHtml(path))) continue;
 
-    const named = path
-      .split('/')
-      .some((segment) =>
-        draftSlugs.includes(basename(segment, extname(segment))),
-      );
-
-    if (named) {
+    if (isDraftDerivedPath(path)) {
       fail(path, `exports a file named after a draft post: /${path}`);
     }
   }

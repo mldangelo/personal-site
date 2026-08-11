@@ -100,6 +100,7 @@ npm run build           # Build the production static export
 npm run verify-export   # Inspect the generated HTML and XML
 npm run og              # Regenerate the site and per-post share cards
 npm run og:check        # Verify the card ledger and a fresh byte-for-byte render
+npm run og:check:ledger # Verify the ledger alone, with no network access
 ```
 
 CI checks formatting, linting, types, the share cards, tests, the production

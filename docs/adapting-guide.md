@@ -208,7 +208,12 @@ the locked Next, React, and Sharp renderer packages, so an upgrade to one of
 them requires regeneration even when the card source itself did not change.
 `npm run og:check` then fetches the checksum-pinned fonts and compares a fresh
 render byte for byte, so changing an image and its editable ledger digest
-together does not pass verification.
+together does not pass verification. That render is the only step that needs
+network access, and the only one that needs Sharp installed — `next/og`
+rasterizes with Sharp when it is present and with a bundled WebAssembly renderer
+when it is not, which changes every byte — so it refuses to run without it. Use
+`npm run og:check:ledger` for the offline half when fonts.gstatic.com is
+unreachable.
 
 Keep draft-only screenshots and downloads outside `public/`, which is copied
 verbatim into the deployed export. Draft Markdown may retain root-relative

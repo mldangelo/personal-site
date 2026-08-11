@@ -288,6 +288,25 @@ describe('post measurements', () => {
     expect(countProseWords('<strong>Two words</strong>')).toBe(2);
   });
 
+  /**
+   * The renderer treats all three of these as a code block. Counting two of
+   * them as prose inflated both the words and the reading time by the size of
+   * the code, and the ledger pinned the wrong number, so nothing failed.
+   */
+  it.each([
+    [
+      'a fenced block',
+      'Intro\n\n```js\nconst ignored = "one two three";\n```\n',
+    ],
+    [
+      'a tilde-fenced block',
+      'Intro\n\n~~~js\nconst ignored = "one two three";\n~~~\n',
+    ],
+    ['an indented block', 'Intro\n\n    const ignored = "one two three";\n'],
+  ])('leaves %s out of the word count', (_, markdown) => {
+    expect(countProseWords(markdown)).toBe(1);
+  });
+
   it('counts distinct inline external destinations', () => {
     expect(
       countUniqueExternalLinks(
@@ -312,6 +331,35 @@ describe('post measurements', () => {
       countUniqueExternalLinks('```md\n[in code](https://one.example)\n```'),
     ).toBe(0);
   });
+
+  /**
+   * Every one of these is a link on the rendered page, and every one of them
+   * counted as zero while the figure was matched out of the Markdown source
+   * with an expression instead of read off the parsed document.
+   */
+  it.each([
+    ['a reference-style link', '[a][ref]\n\n[ref]: https://one.example'],
+    [
+      'a collapsed reference link',
+      '[one.example][]\n\n[one.example]: https://one.example',
+    ],
+    ['an autolink', '<https://one.example>'],
+    ['a raw HTML anchor', '<a href="https://one.example">raw</a>'],
+    ['a bare URL', 'Bare https://one.example link'],
+  ])('counts %s', (_, markdown) => {
+    expect(countUniqueExternalLinks(markdown)).toBe(1);
+  });
+
+  it('does not count a link back to this site as external', () => {
+    const { homepage } = JSON.parse(
+      readFileSync(join(ROOT, 'package.json'), 'utf8'),
+    );
+
+    expect(countUniqueExternalLinks(`[home](${homepage}about/)`)).toBe(0);
+    expect(
+      countUniqueExternalLinks('[write](mailto:someone@example.com)'),
+    ).toBe(0);
+  });
 });
 
 describe('post card fitting', () => {
@@ -321,6 +369,35 @@ describe('post card fitting', () => {
         titleFontSize(card, { width: 1200, height: 630 }),
       );
     }
+  });
+
+  /**
+   * A single average character width, calibrated on mixed-case copy, sized this
+   * title for two lines; satori wrapped it onto three and drew the third
+   * through the readout. Capitals really are wider, so the estimate has to say
+   * so — the same copy in sentence case still earns the larger size.
+   */
+  it('steps an all-caps title down for the width of its capitals', () => {
+    const size = { width: 1200, height: 630 };
+    const description = 'A short description.';
+    const caps = titleFontSize(
+      {
+        slug: 'caps',
+        title: 'WHY THE MODEL KEEPS MISSING THE OB',
+        description,
+      },
+      size,
+    );
+    const sentence = titleFontSize(
+      {
+        slug: 'sentence',
+        title: 'Why the model keeps missing the ob',
+        description,
+      },
+      size,
+    );
+
+    expect(caps).toBeLessThan(sentence);
   });
 
   it('rejects copy that cannot fit instead of rendering a cropped card', () => {

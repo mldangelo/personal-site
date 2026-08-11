@@ -8,11 +8,14 @@
  * here, once.
  */
 import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
 import { readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
 import matter from 'gray-matter';
+import { parser, RuleType } from 'markdown-to-jsx/markdown';
 
+import { readMarkdownReferences } from '../src/lib/markdown-assets.mjs';
 import { validatePostFrontmatterData } from '../src/lib/post-frontmatter.mjs';
 import { ogProfileSnapshot } from './og-profile.mjs';
 
@@ -81,6 +84,7 @@ const GENERATOR_SOURCES = [
   'scripts/og-inputs.mjs',
   'scripts/og-layout.mjs',
   'scripts/og-profile.mjs',
+  'src/lib/markdown-assets.mjs',
   'src/lib/post-frontmatter.mjs',
 ];
 
@@ -193,48 +197,104 @@ function assertSafeSlug(slug, file) {
 }
 
 /**
- * Words of prose, with code, URLs, and markup left out.
+ * The site's own origin, from the one place the rest of the build reads it —
+ * `verify-export.mjs` takes the same field for the same reason.
  *
- * Only tokens containing a letter or digit count, so list bullets, heading
- * marks, and table pipes do not inflate the number.
+ * Resolved on demand rather than at import, so that reading a constant out of
+ * this module never depends on the working directory having a package.json.
  */
-export function countProseWords(markdown) {
+let cachedSiteOrigin;
+function siteOrigin() {
+  if (cachedSiteOrigin === undefined) {
+    const { homepage } = JSON.parse(
+      readFileSync(join(process.cwd(), 'package.json'), 'utf8'),
+    );
+    cachedSiteOrigin = new URL(homepage).origin;
+  }
+
+  return cachedSiteOrigin;
+}
+
+/** A link whose visible label is its own target prints a URL, not prose. */
+function isAutolink(node) {
+  const [child, ...rest] = node.children ?? [];
   return (
-    markdown
-      .replace(/```[\s\S]*?```/g, ' ')
-      .replace(/`[^`\n]*`/g, ' ')
-      .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
-      .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
-      // A leading numeral is syntax when Markdown renders an ordered list. It
-      // is not prose, including in nested lists and block quotes.
-      .replace(/^(?:[ \t]*>[ \t]*)*[ \t]*\d{1,9}[.)][ \t]+/gm, ' ')
-      // Restrict this to recognizable HTML. A broad `<[^>]+>` expression also
-      // erases technical prose such as `latency < 50ms and throughput > 1k`.
-      .replace(
-        /<\/?(?:a|abbr|b|blockquote|br|cite|code|del|details|div|em|figcaption|figure|h[1-6]|hr|i|img|kbd|li|mark|ol|p|pre|s|small|span|strong|sub|summary|sup|table|tbody|td|th|thead|tr|ul)(?:\s+[^<>]*?)?\s*\/?>/gi,
-        ' ',
-      )
-      .split(/\s+/)
-      .filter((token) => /[\p{L}\p{N}]/u.test(token)).length
+    rest.length === 0 &&
+    child?.type === RuleType.text &&
+    child.text === node.target
   );
 }
 
 /**
- * Distinct inline external destinations.
+ * Words of prose, with code, URLs, and markup left out.
  *
- * A linked image is still a link. The label expression therefore accepts one
- * nested Markdown image, as in `[![chart](/chart.png)](https://example.com)`,
- * while the negative lookbehind keeps the image's own source from counting.
+ * Counted off the same Markdown AST the site renders from, rather than by
+ * unwriting the syntax with expressions. Stripping ``` fences and inline code
+ * by hand missed both of the other ways to write a code block — `~~~` fences
+ * and four-space indentation — and counted them as prose, inflating the words
+ * and the reading time by the size of the code. The parser classifies all three
+ * as `codeBlock`, and only text nodes are counted, so image alt text, link
+ * targets, reference definitions, list markers, and table pipes stay out.
+ */
+export function countProseWords(markdown) {
+  const prose = [];
+
+  function visit(value) {
+    if (Array.isArray(value)) {
+      for (const item of value) visit(item);
+      return;
+    }
+    if (!value || typeof value !== 'object') return;
+
+    if (value.type === RuleType.text) {
+      prose.push(value.text);
+      return;
+    }
+    if (value.type === RuleType.link && isAutolink(value)) return;
+
+    for (const child of Object.values(value)) visit(child);
+  }
+
+  visit(parser(markdown));
+
+  return prose
+    .join(' ')
+    .split(/\s+/)
+    .filter((token) => /[\p{L}\p{N}]/u.test(token)).length;
+}
+
+/**
+ * Distinct external destinations linked from the post.
+ *
+ * Also read from the AST, through the resolver `verify-export.mjs` uses, so the
+ * figure covers every form the renderer turns into a link: reference-style
+ * links, autolinks, bare URLs, and raw HTML anchors as well as inline ones. An
+ * expression matching only `[text](https://…)` published `0` for a post written
+ * entirely in reference style, and both scripts agreed on the wrong number.
+ * A linked image is a link; the image's own source is not.
  */
 export function countUniqueExternalLinks(markdown) {
-  const links = markdown
-    .replace(/```[\s\S]*?```/g, ' ')
-    .replace(/`[^`\n]*`/g, ' ')
-    .matchAll(
-      /(?<!!)\[(?:[^\[\]]|!\[[^\]]*\]\([^)]*\))*\]\(\s*<?(https?:\/\/[^)\s>]+)>?(?:\s+(?:"[^"]*"|'[^']*'|\([^)]*\)))?\s*\)/g,
-    );
+  const origin = siteOrigin();
+  const external = new Set();
 
-  return new Set([...links].map((match) => match[1])).size;
+  for (const { kind, target } of readMarkdownReferences(markdown)) {
+    if (kind !== 'link') continue;
+
+    let url;
+    try {
+      url = new URL(target, origin);
+    } catch {
+      continue;
+    }
+
+    // Same-origin absolute links are navigation, not outbound references.
+    if (!['http:', 'https:'].includes(url.protocol)) continue;
+    if (url.origin === origin) continue;
+
+    external.add(url.href);
+  }
+
+  return external.size;
 }
 
 /**
