@@ -34,6 +34,16 @@ function isShown(el: HTMLElement) {
   return el.closest('[hidden]') === null;
 }
 
+/**
+ * Everything in the element except its `.sr-only` equivalents — what a sighted
+ * reader actually sees.
+ */
+function visibleText(el: HTMLElement) {
+  const clone = el.cloneNode(true) as HTMLElement;
+  for (const hidden of clone.querySelectorAll('.sr-only')) hidden.remove();
+  return clone.textContent;
+}
+
 describe('Skills', () => {
   it('renders the skills section with title', () => {
     render(<Skills skills={mockSkills} categories={mockCategories} />);
@@ -161,7 +171,18 @@ describe('Skills', () => {
     expect(container.querySelector('.skill-tier-legend')).toHaveTextContent(
       /Knowledge\s*Deep\s*·\s*Working\s*·\s*Familiar/,
     );
-    expect(container.querySelectorAll('.skill-tag-tier')).toHaveLength(0);
+
+    // Every tag shows its name and nothing else. Pinning the absence of one
+    // class name would not notice a tier badge reintroduced under another.
+    const tags = Array.from(
+      container.querySelectorAll<HTMLElement>('.skill-tag'),
+    );
+    expect(tags.length).toBeGreaterThan(0);
+    for (const tag of tags) {
+      expect(visibleText(tag)).toBe(
+        tag.querySelector('.skill-tag-name')?.textContent,
+      );
+    }
   });
 
   /**

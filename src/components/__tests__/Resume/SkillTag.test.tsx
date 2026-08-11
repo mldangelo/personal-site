@@ -3,6 +3,18 @@ import { describe, expect, it } from 'vitest';
 
 import SkillTag, { tierFor } from '../../Resume/Skills/SkillTag';
 
+/**
+ * Everything in the tag except its `.sr-only` equivalents — what a sighted
+ * reader actually sees. Asserting on this rather than on the absence of some
+ * class name is what makes "the tier is explained once, not printed on every
+ * tag" a property a future badge can violate.
+ */
+function visibleText(el: HTMLElement) {
+  const clone = el.cloneNode(true) as HTMLElement;
+  for (const hidden of clone.querySelectorAll('.sr-only')) hidden.remove();
+  return clone.textContent;
+}
+
 describe('tierFor', () => {
   it('maps the top of the scale to deep', () => {
     expect(tierFor(5)).toBe('deep');
@@ -39,7 +51,11 @@ describe('SkillTag', () => {
 
     const tag = document.querySelector('.skill-tag') as HTMLElement;
     expect(tag.querySelector('.sr-only')).toHaveTextContent(', deep knowledge');
-    expect(tag.querySelector('.skill-tag-tier')).not.toBeInTheDocument();
+    // The tier reaches assistive technology through that hidden text and
+    // nowhere else: the whole tag reads as one phrase, and its visible half is
+    // the title alone.
+    expect(tag.textContent).toBe('Python, deep knowledge');
+    expect(visibleText(tag)).toBe('Python');
   });
 
   it('does not lean on an accessible name a generic element would discard', () => {
