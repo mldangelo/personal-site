@@ -53,16 +53,25 @@ function printRules(css: string): Rule[] {
 
 const RULES = printRules(PRINT_CSS);
 
-const revealIndex = RULES.findIndex((rule) =>
+/**
+ * Every rule that reveals a destination, not just the first one. Exclusions are
+ * a property of the whole stylesheet: a second `attr(href)` rule added lower
+ * down would print contact addresses twice while a first-match check stayed
+ * green.
+ */
+const REVEAL_RULES = RULES.filter((rule) =>
   rule.declarations.includes('attr(href)'),
 );
+const REVEALED = REVEAL_RULES.flatMap((rule) => rule.selectors);
 
 describe('print: revealing link destinations', () => {
   it('parses the print rules it is asserting about', () => {
     // If the parser stops finding rules the rest of this file could quietly
     // pass by matching nothing, so pin the rule everything else depends on.
     expect(RULES.length).toBeGreaterThan(20);
-    expect(revealIndex).toBeGreaterThanOrEqual(0);
+    // One reveal rule, so the exclusions below cover the whole stylesheet.
+    // Adding a second has to be a deliberate edit to this line.
+    expect(REVEAL_RULES).toHaveLength(1);
   });
 
   it.each([
@@ -73,7 +82,7 @@ describe('print: revealing link destinations', () => {
     ".about-content a[href^='http']::after",
     ".prose a[href^='http']::after",
   ])('reveals %s', (selector) => {
-    expect(RULES[revealIndex].selectors).toContain(selector);
+    expect(REVEALED).toContain(selector);
   });
 
   it('does not reveal hrefs the reader can already read', () => {
@@ -81,7 +90,7 @@ describe('print: revealing link destinations', () => {
     // revealing the href there would print every address twice. Role
     // summaries are prose: three citation URLs inside one sentence of 10pt
     // serif cost more legibility than they return.
-    const revealed = RULES[revealIndex].selectors.join(' ');
+    const revealed = REVEALED.join(' ');
 
     expect(revealed).not.toContain('resume-print-contact');
     expect(revealed).not.toContain('course-container');
@@ -91,9 +100,10 @@ describe('print: revealing link destinations', () => {
 
   it('lets nothing later re-declare or hide the revealed URLs', () => {
     const surfaces =
-      /job-company|degree-container|course-container|about-content|prose/;
+      /job-company|degree-container|course-container|about-content|prose|resume-print-contact|\.summary/;
+    const lastReveal = RULES.lastIndexOf(REVEAL_RULES[REVEAL_RULES.length - 1]);
 
-    const clobbering = RULES.slice(revealIndex + 1).filter(
+    const clobbering = RULES.slice(lastReveal + 1).filter(
       (rule) =>
         rule.selectors.some(
           (selector) => selector.includes('::after') && surfaces.test(selector),
@@ -104,10 +114,9 @@ describe('print: revealing link destinations', () => {
   });
 
   it('keeps course links clickable without dumping raw URLs onto paper', () => {
-    const revealed = RULES[revealIndex].selectors.join(' ');
     const { container } = render(<ResumePage />);
 
-    expect(revealed).not.toContain('course-container');
+    expect(REVEALED.join(' ')).not.toContain('course-container');
     expect(PRINT_CSS).not.toMatch(
       /\.course-container\s+a\[href\^=['"]http['"]\]::after/,
     );
@@ -124,13 +133,21 @@ describe('print: stylesheet and paper-width constraints', () => {
     expect(imports.at(-1)?.[1]).toBe('./styles/print.css');
   });
 
-  it('lets both course columns shrink at A4 width', () => {
-    const courseListRule = RESUME_CSS.match(
-      /\.resume-page \.courses \.course-list\s*\{([^}]*)\}/,
+  it('keeps the course list in two columns on paper', () => {
+    // The print viewport is ~710px on Letter and ~690px on A4 at the `@page`
+    // margins print.css declares, so the 735px screen breakpoint in
+    // pages/resume.css fires on paper and would stack all thirteen courses.
+    // Print has to re-declare the grid; the screen rule alone is not enough.
+    const screenBreakpoint = RESUME_CSS.match(
+      /@media \(max-width: 735px\) \{\s*\.resume-page \.courses \.course-list\s*\{([^}]*)\}/,
     )?.[1];
+    const printRule = RULES.find((rule) =>
+      rule.selectors.includes('.resume-page .courses .course-list'),
+    );
 
-    expect(courseListRule).toContain(
-      'grid-template-columns: repeat(2, minmax(0, 1fr))',
+    expect(screenBreakpoint).toMatch(/grid-template-columns\s*:\s*1fr/);
+    expect(printRule?.declarations).toMatch(
+      /grid-template-columns\s*:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/,
     );
   });
 
@@ -202,8 +219,8 @@ describe('print: resume link data', () => {
     ],
     [
       'CME 306',
-      'Numerical Solution of Partial Differential Equations',
-      'https://web.stanford.edu/class/cme306/',
+      'Computational Methods of Applied Mathematics',
+      'https://bulletin.stanford.edu/courses/1174062',
     ],
     [
       'CME 308',
@@ -233,6 +250,9 @@ describe('print: resume link data', () => {
 });
 
 describe('print: contact block', () => {
+  /** A separator character at the very start or end of an entry's text. */
+  const SEPARATOR_AT_EDGE = /^\s*[·•,;|/]|[·•,;|/]\s*$/;
+
   function contactBlock() {
     const { container } = render(<ResumePage />);
     const block = container.querySelector('.resume-print-contact');
@@ -277,10 +297,26 @@ describe('print: contact block', () => {
 
     expect(block.children).toHaveLength(5);
     expect(block.querySelector('[aria-hidden="true"]')).toBeNull();
+
+    // A separator carried inside an entry lands wherever that entry lands, so
+    // a wrap can strand it at the end of one line or the start of the next.
+    // Nothing may sit at either edge of an entry's text.
+    for (const child of block.children) {
+      expect(child.textContent ?? '').not.toMatch(SEPARATOR_AT_EDGE);
+    }
+
+    // Which leaves the layout to carry the separation: a wrapping flex row of
+    // unbreakable items, with a real gap between them.
     expect(blockRule?.declarations).toMatch(/display\s*:\s*flex/);
     expect(blockRule?.declarations).toMatch(/flex-wrap\s*:\s*wrap/);
-    expect(blockRule?.declarations).toMatch(/column-gap\s*:\s*0\.75rem/);
     expect(itemRule?.declarations).toMatch(/white-space\s*:\s*nowrap/);
+
+    // The value is cosmetic and free to change; that there is one is not.
+    const columnGap = blockRule?.declarations.match(
+      /column-gap\s*:\s*([\d.]+)(rem|em|px|pt)/,
+    );
+
+    expect(Number(columnGap?.[1])).toBeGreaterThan(0);
   });
 
   it('prints addresses without their protocol', () => {

@@ -47,9 +47,13 @@ const courses: Course[] = [
     university: 'Stanford',
   },
   {
-    title: 'Numerical Solution of Partial Differential Equations',
+    // Both fields come from the Bulletin record. The old class site
+    // (web.stanford.edu/class/cme306/) is a Spring 2009 archive still titled
+    // "Mathematical Methods for Fluids, Solids and Interfaces", and
+    // cme306.stanford.edu redirects back to it over cleartext.
+    title: 'Computational Methods of Applied Mathematics',
     number: 'CME 306',
-    link: 'https://web.stanford.edu/class/cme306/',
+    link: 'https://bulletin.stanford.edu/courses/1174062',
     university: 'Stanford',
   },
   {

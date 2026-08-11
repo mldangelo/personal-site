@@ -269,6 +269,15 @@
     word-break: break-all;
   }
 
+  /* The print viewport is narrower than it looks: at the `@page` margins above
+     it measures ~710px on Letter and ~690px on A4, so the 735px mobile
+     breakpoint in `pages/resume.css` fires on paper and stacks all thirteen
+     courses into one column. Re-declare the grid here — same specificity, but
+     print.css is imported last, so source order settles it. */
+  .resume-page .courses .course-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   /* A screen touch-target floor has no meaning on paper. */
   .course-container a {
     min-height: 0;
