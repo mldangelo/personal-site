@@ -59,7 +59,7 @@ describe('PostContent', () => {
 });
 
 describe('PostContent figures', () => {
-  it('promotes the site caption convention while preserving the image title', () => {
+  it('promotes the site caption convention without repeating it as a tooltip', () => {
     const html = renderToStaticMarkup(
       <PostContent
         content={'Intro.\n\n![Alt](/og.png "July API spend: $9,986.20")\n'}
@@ -70,8 +70,22 @@ describe('PostContent figures', () => {
     expect(html).toContain(
       '<figcaption class="prose-figcaption">July API spend: $9,986.20</figcaption>',
     );
-    expect(html).toContain('title="July API spend: $9,986.20"');
+    // The caption is visible copy; keeping the title would say it a second
+    // time as a native tooltip and as the image's accessible description.
+    expect(html).not.toContain('title="July API spend: $9,986.20"');
     expect(html).toContain('<figure class="prose-figure"');
+  });
+
+  it('keeps the tooltip on an image that stays inline', () => {
+    const html = renderToStaticMarkup(
+      <PostContent
+        content={'Intro.\n\nInline ![Alt](/og.png "Hover copy") in a line.\n'}
+        imageSizes={OG_SIZE}
+      />,
+    );
+
+    expect(html).not.toContain('<figure');
+    expect(html).toContain('title="Hover copy"');
   });
 
   it('does not emit an empty caption for a whitespace-only title', () => {
@@ -98,6 +112,7 @@ describe('PostContent figures', () => {
     expect(html).toContain(
       '<figcaption class="prose-figcaption">GitHub counts commits, pull requests, reviews, and issue activity here; I use the total as a rough proxy for output.</figcaption>',
     );
+    expect(html).not.toContain('title="GitHub counts');
   });
 
   it('promotes a standalone image to a figure without emitting one inside a paragraph', () => {
@@ -126,6 +141,22 @@ describe('PostContent figures', () => {
     expect(html).toContain('<figure class="prose-figure"');
     expect(html).toContain('<a href="https://example.com">');
     expect(html).toContain('8,482 contributions</figcaption>');
+    // The caption reaches an image one level down, so the tooltip must go too.
+    expect(html).not.toContain('title="8,482 contributions"');
+  });
+
+  it('leaves a standalone raw-HTML embed alone', () => {
+    const html = renderToStaticMarkup(
+      <PostContent
+        content={'Intro.\n\n<video src="/demo.mp4" controls></video>\n'}
+      />,
+    );
+
+    // A `src` is not an image. Promoting one routes it through the build-time
+    // image sizer, which only ever measures Markdown image syntax, so a local
+    // clip took the whole static export down.
+    expect(html).toContain('<video src="/demo.mp4"');
+    expect(html).not.toContain('<figure');
   });
 
   it('leaves a paragraph that merely contains an image as a paragraph', () => {
@@ -234,6 +265,36 @@ describe('PostContent code fences', () => {
     expect(pre.scrollLeft).toBe(40);
 
     fireEvent.keyDown(pre, { key: 'ArrowLeft' });
+    expect(pre.scrollLeft).toBe(0);
+  });
+
+  it('leaves Shift+Arrow to the browser so a selection can still extend', () => {
+    const { container } = render(
+      <PostContent content={'```text\nA deliberately long line\n```\n'} />,
+    );
+    const pre = container.querySelector('pre');
+    if (!pre) {
+      throw new Error('expected a rendered code fence');
+    }
+
+    Object.defineProperties(pre, {
+      clientWidth: {
+        configurable: true,
+        value: 320,
+      },
+      scrollWidth: {
+        configurable: true,
+        value: 640,
+      },
+    });
+
+    // fireEvent returns false once the handler cancels the default action.
+    const notCancelled = fireEvent.keyDown(pre, {
+      key: 'ArrowRight',
+      shiftKey: true,
+    });
+
+    expect(notCancelled).toBe(true);
     expect(pre.scrollLeft).toBe(0);
   });
 
