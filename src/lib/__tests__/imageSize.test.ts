@@ -127,7 +127,7 @@ describe('readImageSize', () => {
   it('reads the WebP encoding used by article assets', () => {
     expect(
       readImageSize(
-        '/images/writing/codex-desktop-app-post/codex-app-overview.webp',
+        '/images/writing/codex-desktop-app-post/codex-dark-mode-review.webp',
       ),
     ).toEqual({ width: 1166, height: 656 });
   });

@@ -17,14 +17,15 @@ describe('writing information architecture', () => {
     const { container } = render(<HomePage />);
     const section = screen.getByRole('region', { name: 'Latest writing' });
     const cards = container.querySelectorAll('.home-writing-item');
+    const viewAll = within(section).getByRole('link', { name: 'View all' });
 
     expect(cards).toHaveLength(3);
     expect(
       [...cards].map((card) => card.querySelector('h3')?.textContent),
     ).toEqual(expected.map((item) => item.title));
-    expect(
-      within(section).getByRole('link', { name: 'View all' }),
-    ).toHaveAttribute('href', '/writing');
+    // `next/link` drops the configured trailing slash in this environment; see
+    // the featured-item test below. Normalise rather than pin the shape.
+    expect(stripTrailingSlash(viewAll.getAttribute('href'))).toBe('/writing');
   });
 
   it('groups owned essays, external articles, and guides under real headings', () => {
