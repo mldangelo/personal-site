@@ -11,7 +11,9 @@ import {
 describe('formatReading', () => {
   it('separates thousands so magnitude reads at a glance', () => {
     // `5411` shipped unformatted next to `53` in an identical mono cell, which
-    // made the two typographically interchangeable.
+    // made the two typographically interchangeable. These literals also pin
+    // the locale: a build host set to de-DE publishes `5.411`, so an
+    // unpinned `toLocaleString()` fails here rather than silently shipping.
     expect(formatReading(5411)).toBe('5,411');
     expect(formatReading(1663)).toBe('1,663');
   });
@@ -23,12 +25,6 @@ describe('formatReading', () => {
 
   it('appends a unit when one is given', () => {
     expect(formatReading(301, 'packages')).toBe('301 packages');
-  });
-
-  it('pins the locale so the published figure cannot follow the build host', () => {
-    // A build machine set to de-DE would otherwise publish "5.411".
-    expect(formatReading(5411)).toBe((5411).toLocaleString('en-US'));
-    expect(formatReading(5411)).not.toContain('.');
   });
 });
 
