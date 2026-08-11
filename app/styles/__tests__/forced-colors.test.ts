@@ -35,8 +35,23 @@ describe('forced-colors stylesheet', () => {
   });
 
   it('keeps portrait filters disabled in higher-specificity states', () => {
-    expect(css).toContain('.hero-portrait:hover img,');
-    expect(css).toContain("[data-theme='dark'] .hero-portrait:hover img,");
-    expect(css).toContain('.site-footer-new .footer-avatar img {');
+    expect(css).toMatch(
+      /\.theme-portrait img,[\s\S]*?\[data-theme='dark'\] \.hero-portrait:hover img,[\s\S]*?\.site-footer-new \.footer-avatar img\s*\{[^}]*mix-blend-mode:\s*normal;[^}]*filter:\s*none;/,
+    );
+  });
+
+  it('keeps the mobile menu glyph drawn, including while focused', () => {
+    expect(css).toMatch(
+      /^\s*\.hamburger-icon span\s*\{[^}]*background-color:\s*CanvasText;/m,
+    );
+    expect(css).toMatch(
+      /\.hamburger-button:focus-visible \.hamburger-icon span\s*\{[^}]*background-color:\s*Highlight;/,
+    );
+  });
+
+  it('keeps the timeline spines its markers sit on', () => {
+    expect(css).toMatch(
+      /\.jobs-container::before,[\s\S]*?\.jobs-container:last-child::before,[\s\S]*?\.about-section--log \.log-entry::before\s*\{[^}]*background:\s*CanvasText;/,
+    );
   });
 });

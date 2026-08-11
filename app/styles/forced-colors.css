@@ -30,20 +30,16 @@
      `background-image` gradients (base/links.css, home.css `.hero-highlight`),
      and a forced palette discards background images. `.prose a` and
      `.about-content a` already draw a real one; these did not.
+
+     No opt-out is needed for navigation-like links: `.button`, `.site-logo`
+     and `.nav-link` set `text-decoration: none` at (0,1,0), which already
+     out-specifies `p a` at (0,0,2), and `.button` sets it `!important`.
      =================== */
   p a,
   .hero-highlight {
     text-decoration: underline;
     text-decoration-thickness: 1px;
     text-underline-offset: 2px;
-  }
-
-  /* Navigation-like links opt out of the prose underline everywhere else and
-     have their own affordances; the rule above must not reintroduce it. */
-  p a.button,
-  p a.site-logo,
-  p a.nav-link {
-    text-decoration: none;
   }
 
   /* Desktop and resume navigation mark the active item with a
@@ -73,6 +69,18 @@
     border-color: ButtonText;
   }
 
+  /* The menu glyph is three background-drawn bars on a transparent,
+     borderless button — a forced palette leaves nothing visible at all. */
+  .hamburger-icon span {
+    background-color: CanvasText;
+  }
+
+  /* header.css draws the focused glyph at (0,3,1), so it out-specifies the
+     rule above and would flatten to Canvas again on focus. */
+  .hamburger-button:focus-visible .hamburger-icon span {
+    background-color: Highlight;
+  }
+
   /* A lit filter is a selection rather than a generic button, so use the
      palette's semantic selection pair. */
   .skillbutton-active:not(.skillbutton--all) {
@@ -90,6 +98,19 @@
   .jobs-container--current .job-marker {
     background-color: CanvasText;
     border-color: CanvasText;
+  }
+
+  /* Both spines are background-drawn and their tails are gradients, so the
+     line those markers sit on vanishes entirely and the ticks read as
+     free-floating specks. `.jobs-container:last-child::before` is listed
+     because cards.css declares it at (0,2,1); solid CanvasText is right there
+     because that rule terminates at the last entry. The log's last segment is
+     a fixed 2.5em stub with nothing to terminate against, so it is left to
+     fade out rather than draw a dangling line past the final tick. */
+  .jobs-container::before,
+  .jobs-container:last-child::before,
+  .about-section--log .log-entry::before {
+    background: CanvasText;
   }
 
   /* A 1px amber bar on a hairline track: both ends flatten to Canvas. */
