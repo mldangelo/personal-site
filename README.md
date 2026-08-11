@@ -98,12 +98,14 @@ npm run type-check      # Run TypeScript
 npm test                # Run Vitest
 npm run build           # Build the production static export
 npm run verify-export   # Inspect the generated HTML and XML
+npm run measure-export  # Weigh the export against scripts/budget.json
 npm run og              # Regenerate the share card
 npm run og:check        # Verify the committed share card is current
 ```
 
 CI checks formatting, linting, types, the share card, tests, the production
-build, and the exported site on every pull request.
+build, the exported site, and its size against the budget in
+`scripts/budget.json` on every pull request.
 
 ## Deploy
 

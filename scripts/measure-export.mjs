@@ -271,6 +271,13 @@ function referencedBootstrapFiles(html, route) {
 const bytesByPath = new Map(files.map((file) => [file.path, file.bytes]));
 
 const documents = files.filter((file) => file.group === 'documents');
+if (documents.length === 0) {
+  // Every per-route metric reads off this list, and the missing-bootstrap-asset
+  // check only runs inside the loop below. An export with assets but no HTML
+  // would otherwise report two gates at zero bytes and pass.
+  die('no HTML documents found in out/. Did the build finish?');
+}
+
 const inlineSvgCounts = new Map();
 
 const routes = documents
@@ -301,21 +308,34 @@ const routes = documents
 
 /**
  * Icon markup is inlined into every document that renders it, so a set of
- * icons in the header or footer is paid for once per page. Count full inline
- * markup repeated past the first. This is an upper bound on a deduplication
- * opportunity, not exact sprite savings: a sprite still needs its definition
- * and a reference element at every use site.
+ * icons in the header or footer is paid for once per page.
+ *
+ * `distinctBytes` is the icon set itself, each distinct markup string counted
+ * once. That is the number worth gating: it moves when an icon is added,
+ * swapped, or the library changes, and it does not move when a page is added.
+ *
+ * `repeatedBytes` is the same markup past its first use, which is arithmetically
+ * `distinctBytes` times the page count, so it is reported rather than gated. It
+ * is an upper bound on a deduplication opportunity, not exact sprite savings: a
+ * sprite still needs its definition and a reference element at every use site.
  */
 const inlineSvg = [...inlineSvgCounts.entries()].reduce(
   (summary, [markup, count]) => {
     const bytes = Buffer.byteLength(markup);
     summary.bytes += bytes * count;
     summary.distinct += 1;
+    summary.distinctBytes += bytes;
     summary.repeatedBytes += bytes * (count - 1);
     summary.widestSpread = Math.max(summary.widestSpread, count);
     return summary;
   },
-  { bytes: 0, distinct: 0, repeatedBytes: 0, widestSpread: 0 },
+  {
+    bytes: 0,
+    distinct: 0,
+    distinctBytes: 0,
+    repeatedBytes: 0,
+    widestSpread: 0,
+  },
 );
 
 const report = {
@@ -342,6 +362,10 @@ const report = {
  * red, so each metric gets room for the change it is expected to absorb before
  * a human has to look. Subsystems that only move when a dependency or the
  * design moves get the least; the total gets enough for content to land.
+ *
+ * No metric gated here may be a function of the page count. A gate that a third
+ * blog post trips is a gate people learn to ratchet without reading it, which is
+ * why repeated inline SVG bytes are reported rather than gated.
  */
 const BUDGET_METRICS = [
   {
@@ -381,10 +405,10 @@ const BUDGET_METRICS = [
     read: (data) => data.routes[0]?.bootstrapBytes ?? 0,
   },
   {
-    id: 'repeatedInlineSvgBytes',
-    label: 'inline SVG repeated across documents',
+    id: 'distinctInlineSvgBytes',
+    label: 'distinct inline SVG markup',
     headroom: 0.2,
-    read: (data) => data.inlineSvg.repeatedBytes,
+    read: (data) => data.inlineSvg.distinctBytes,
   },
 ];
 
@@ -581,9 +605,12 @@ section(
 );
 
 log(
-  `\n  inline SVG: ${count(inlineSvg.bytes)} bytes across ${count(inlineSvg.distinct)} ` +
-    `distinct icons, ${count(inlineSvg.repeatedBytes)} of it repeat ` +
-    `(widest spread: ${count(inlineSvg.widestSpread)} documents)`,
+  `\n  inline SVG: ${count(inlineSvg.distinctBytes)} bytes of distinct markup ` +
+    `across ${count(inlineSvg.distinct)} icons`,
+);
+log(
+  `  ${count(inlineSvg.bytes)} bytes emitted in total, ${count(inlineSvg.repeatedBytes)} ` +
+    `of it repeated past first use (widest spread: ${count(inlineSvg.widestSpread)} documents)`,
 );
 
 section(

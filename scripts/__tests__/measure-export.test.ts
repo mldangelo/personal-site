@@ -34,6 +34,9 @@ const RSC_PAGE = 'p'.repeat(50);
 /** Stands in for one inlined FontAwesome icon. */
 const ICON =
   '<svg class="svg-inline--fa" viewBox="0 0 512 512"><path d="M0 0h512v512H0z"></path></svg>';
+/** A second icon, as a design change adding one to the set would produce. */
+const SECOND_ICON =
+  '<svg class="svg-inline--fa" viewBox="0 0 512 512"><path d="M64 64h384v384H64z"></path></svg>';
 
 const LINKED_ASSET_BYTES = CSS.length + JS.length + FONT.length;
 
@@ -46,7 +49,7 @@ const GENEROUS_BUDGET = {
   fontBytes: 1_000_000,
   maxFileBytes: 1_000_000,
   maxRouteBootstrapBytes: 1_000_000,
-  repeatedInlineSvgBytes: 1_000_000,
+  distinctInlineSvgBytes: 1_000_000,
 };
 
 type Report = {
@@ -63,6 +66,7 @@ type Report = {
   inlineSvg: {
     bytes: number;
     distinct: number;
+    distinctBytes: number;
     repeatedBytes: number;
     widestSpread: number;
   };
@@ -291,9 +295,57 @@ describe('measure-export', () => {
     expect(report.inlineSvg).toEqual({
       bytes: Buffer.byteLength(ICON) * 2,
       distinct: 1,
+      distinctBytes: Buffer.byteLength(ICON),
       repeatedBytes: Buffer.byteLength(ICON),
       widestSpread: 2,
     });
+  });
+
+  it('gates the distinct icon set, which a new page does not move', () => {
+    const { root } = createFixture();
+    write(
+      root,
+      'out/writing/a-new-post/index.html',
+      htmlPage('', 'A new post'),
+    );
+
+    const { status, report } = reportFor(root);
+
+    // The emitted and repeated totals are page counts wearing a byte costume;
+    // gating either of them would turn a content-only pull request red. The
+    // distinct total is the icon set itself and holds still.
+    expect(status).toBe(0);
+    expect(report.inlineSvg).toEqual({
+      bytes: Buffer.byteLength(ICON) * 3,
+      distinct: 1,
+      distinctBytes: Buffer.byteLength(ICON),
+      repeatedBytes: Buffer.byteLength(ICON) * 2,
+      widestSpread: 3,
+    });
+    expect(checkIn(report, 'distinctInlineSvgBytes')).toMatchObject({
+      actual: Buffer.byteLength(ICON),
+      ok: true,
+    });
+  });
+
+  it('trips the distinct icon budget when the icon set grows', () => {
+    const { root } = createFixture({
+      budget: {
+        ...GENEROUS_BUDGET,
+        distinctInlineSvgBytes: Buffer.byteLength(ICON),
+      },
+    });
+    write(root, 'out/icons/index.html', htmlPage('', SECOND_ICON));
+
+    const { status, output } = runMeasurer(root);
+
+    expect(status).toBe(1);
+    expect(output).toContain(
+      'distinct inline SVG markup (distinctInlineSvgBytes)',
+    );
+    expect(output).toContain(
+      `${Buffer.byteLength(ICON) + Buffer.byteLength(SECOND_ICON)} bytes exceeds`,
+    );
   });
 
   it('fails when a budget is exceeded and names the overage', () => {
@@ -410,7 +462,7 @@ describe('measure-export', () => {
       'fontBytes',
       'maxFileBytes',
       'maxRouteBootstrapBytes',
-      'repeatedInlineSvgBytes',
+      'distinctInlineSvgBytes',
     ]);
     expect(runMeasurer(root).status).toBe(0);
   });
@@ -445,6 +497,20 @@ describe('measure-export', () => {
     const { status, output } = runMeasurer(root);
     expect(status).toBe(1);
     expect(output).toContain('no files found in out/');
+  });
+
+  it('fails on an export that has assets but no HTML', () => {
+    const { root } = createFixture();
+    rmSync(join(root, 'out/index.html'));
+    rmSync(join(root, 'out/about/index.html'));
+
+    // Assets survive, so the empty-export guard does not fire. Every per-route
+    // metric reads `?? 0` off an empty list, and the missing-bootstrap-asset
+    // check only runs per document: without this guard the run reports success.
+    const { status, output } = runMeasurer(root);
+    expect(status).toBe(1);
+    expect(output).toContain('no HTML documents found in out/');
+    expect(output).not.toContain('budget(s) within limits');
   });
 
   it.each([['--json='], ['--json', '']])(
