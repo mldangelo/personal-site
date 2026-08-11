@@ -7,10 +7,33 @@ import { describe, expect, it } from 'vitest';
 import { THEME_CHOICE_ATTRIBUTE } from '@/lib/theme';
 import Hamburger from '../../Template/Hamburger';
 
-const NAVIGATION_CSS = readFileSync(
-  join(process.cwd(), 'app/styles/layout/navigation.css'),
-  'utf8',
-);
+const layoutCss = (file: string) =>
+  readFileSync(join(process.cwd(), 'app/styles/layout', file), 'utf8');
+
+/** header.css declares `.hamburger-button { display: flex }`; navigation.css
+ *  gates it. Both have to be present for the gate to be tested against what
+ *  actually competes with it in the bundle, and the gate must not depend on
+ *  which of the two `@import` lines in app/tailwind.css comes first. */
+const HEADER_CSS = layoutCss('header.css');
+const NAVIGATION_CSS = layoutCss('navigation.css');
+
+const IMPORT_ORDERS: [name: string, sheets: string[]][] = [
+  ['header.css then navigation.css', [HEADER_CSS, NAVIGATION_CSS]],
+  ['navigation.css then header.css', [NAVIGATION_CSS, HEADER_CSS]],
+];
+
+function injectSheets(sheets: string[]): () => void {
+  const nodes = sheets.map((css) => {
+    const style = document.createElement('style');
+    style.textContent = css;
+    document.head.appendChild(style);
+    return style;
+  });
+
+  return () => {
+    for (const node of nodes) node.remove();
+  };
+}
 
 describe('Hamburger', () => {
   it('renders the hamburger button', () => {
@@ -30,34 +53,33 @@ describe('Hamburger', () => {
     expect(button).toHaveAttribute('aria-controls', 'mobile-nav-menu');
   });
 
-  it('stays hidden until the pre-paint bootstrap proves scripts ran', () => {
-    const root = document.documentElement;
-    root.removeAttribute(THEME_CHOICE_ATTRIBUTE);
-    const style = document.createElement('style');
-    style.textContent = NAVIGATION_CSS;
-    document.head.appendChild(style);
-
-    try {
-      render(<Hamburger />);
-      const button =
-        document.querySelector<HTMLButtonElement>('.hamburger-button');
-
-      expect(button).not.toBeNull();
-      expect(button).not.toBeVisible();
-      expect(
-        screen.queryByRole('button', { name: 'Open navigation menu' }),
-      ).toBeNull();
-
-      root.setAttribute(THEME_CHOICE_ATTRIBUTE, 'system');
-      expect(button).toBeVisible();
-      expect(screen.getByRole('button', { name: 'Open navigation menu' })).toBe(
-        button,
-      );
-    } finally {
+  // Asserts the button's own `display`, not `toBeVisible()`: jsdom evaluates a
+  // media list only when its text is literally `all` or `screen`, so it drops
+  // header.css's `@media (max-width: 735px)` and leaves the ancestor
+  // `.hamburger-container { display: none }` in force in every branch.
+  it.each(IMPORT_ORDERS)(
+    'stays hidden until the pre-paint bootstrap proves scripts ran (%s)',
+    (_order, sheets) => {
+      const root = document.documentElement;
       root.removeAttribute(THEME_CHOICE_ATTRIBUTE);
-      style.remove();
-    }
-  });
+      const removeSheets = injectSheets(sheets);
+
+      try {
+        render(<Hamburger />);
+        const button =
+          document.querySelector<HTMLButtonElement>('.hamburger-button');
+        if (!button) throw new Error('no hamburger button rendered');
+
+        expect(window.getComputedStyle(button).display).toBe('none');
+
+        root.setAttribute(THEME_CHOICE_ATTRIBUTE, 'system');
+        expect(window.getComputedStyle(button).display).toBe('flex');
+      } finally {
+        root.removeAttribute(THEME_CHOICE_ATTRIBUTE);
+        removeSheets();
+      }
+    },
+  );
 
   it('toggles menu open on click', () => {
     render(<Hamburger />);

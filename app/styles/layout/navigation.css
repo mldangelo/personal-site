@@ -101,7 +101,7 @@
    The 44x44 box is the hit target and is reserved by the button itself, not by
    a placeholder waiting on hydration. */
 .theme-toggle {
-  display: none;
+  display: flex;
   align-items: center;
   justify-content: center;
   width: 44px;
@@ -119,19 +119,22 @@
 
 /* The parser-blocking bootstrap stamps the choice before the body paints.
    Without that attribute JavaScript did not run, so the button would be inert
-   and its "switch" label would promise an action it cannot perform. */
-:root[data-theme-choice] .theme-toggle {
-  display: flex;
-}
+   and its "switch" label would promise an action it cannot perform. The mobile
+   menu trigger is client-rendered for the same reason.
 
-/* The mobile menu is client-rendered too. Do not expose its trigger when the
-   same missing bootstrap attribute proves the click handler cannot hydrate. */
-.hamburger-button {
+   Both gates hide on the absence of the attribute rather than restoring on its
+   presence. A restore has to out-specify `.hamburger-button { display: flex }`
+   in header.css: at equal specificity the gate would be decided by @import
+   order alone, and at higher specificity it would silently outrank the desktop
+   hide further down this file. Hiding from `:not()` competes with neither.
+   `print.css` hides `.theme-toggle` with `!important`, so the `display: flex`
+   base above stays hidden on paper. */
+:root:not([data-theme-choice]) .theme-toggle {
   display: none;
 }
 
-:root[data-theme-choice] .hamburger-button {
-  display: flex;
+:root:not([data-theme-choice]) .hamburger-button {
+  display: none;
 }
 
 .theme-toggle:hover {
