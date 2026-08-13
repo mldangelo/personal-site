@@ -5,6 +5,9 @@ import { getWritingItems } from '@/lib/writing';
 import HomePage from '../page';
 import WritingPage from '../writing/page';
 
+const stripTrailingSlash = (href: string | null | undefined) =>
+  href?.replace(/\/$/, '');
+
 describe('writing information architecture', () => {
   it('surfaces the three newest dated items on the homepage', () => {
     const expected = getWritingItems()
@@ -14,14 +17,15 @@ describe('writing information architecture', () => {
     const { container } = render(<HomePage />);
     const section = screen.getByRole('region', { name: 'Latest writing' });
     const cards = container.querySelectorAll('.home-writing-item');
+    const viewAll = within(section).getByRole('link', { name: 'View all' });
 
     expect(cards).toHaveLength(3);
     expect(
       [...cards].map((card) => card.querySelector('h3')?.textContent),
     ).toEqual(expected.map((item) => item.title));
-    expect(
-      within(section).getByRole('link', { name: 'View all' }),
-    ).toHaveAttribute('href', '/writing');
+    // `next/link` drops the configured trailing slash in this environment; see
+    // the featured-item test below. Normalise rather than pin the shape.
+    expect(stripTrailingSlash(viewAll.getAttribute('href'))).toBe('/writing');
   });
 
   it('groups owned essays, external articles, and guides under real headings', () => {
@@ -51,7 +55,15 @@ describe('writing information architecture', () => {
     const featured = container.querySelectorAll('.writing-item--featured');
 
     expect(featured).toHaveLength(1);
-    expect(featured[0]).toHaveAttribute('href', newest?.url);
+    // Compared exactly while the newest dated item happened to be an external
+    // link, which renders as a plain anchor. An on-site post renders through
+    // `next/link`, which drops the canonical trailing slash here because
+    // `trailingSlash: true` is build-time config the unit-test environment
+    // never applies — the export itself keeps the slash. Normalise it away so
+    // this asserts which item is featured, not which element type renders it.
+    expect(stripTrailingSlash(featured[0]?.getAttribute('href'))).toBe(
+      stripTrailingSlash(newest?.url),
+    );
   });
 
   it('shows provenance beside every external-link arrow', () => {
