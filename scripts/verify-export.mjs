@@ -593,6 +593,190 @@ if (!existsSync(feedPath)) {
   }
 }
 
+/** Root properties JSON Resume v1.0.0 allows; the schema forbids the rest. */
+const JSON_RESUME_ROOT_KEYS = new Set([
+  '$schema',
+  'basics',
+  'work',
+  'volunteer',
+  'education',
+  'awards',
+  'certificates',
+  'publications',
+  'skills',
+  'languages',
+  'interests',
+  'references',
+  'projects',
+  'meta',
+]);
+
+/**
+ * An HTML tag left in prose that should be plain text.
+ *
+ * Deliberately an element-name whitelist rather than `<[a-z/]...>`: résumé
+ * prose is technical, and the broad form fires on generic and type syntax such
+ * as `Map<string, number>` or `vector<int>` — exactly the strings `toPlainText`
+ * in `src/lib/resumeJson.ts` preserves on purpose, and which
+ * `src/lib/__tests__/resumeJson.test.ts` asserts survive untouched. The two
+ * have to make the same promise or a summary mentioning a generic passes
+ * `npm test` and then fails this gate with a message naming the wrong cause.
+ *
+ * The name must be followed by whitespace, `/`, or `>`, which rules out the
+ * common generics (`Map<string, number>`, `Set<T>`, `Promise<Response>`). It
+ * does not rule out all of them: a single-letter type parameter that happens
+ * to spell an element name still matches, so `List<b>` and `Array<U>` read as
+ * tags. That residue is deliberate — the alternative is letting a real `<b>`
+ * through — and it is why this is a whitelist and not `<[a-z/]...>`, which
+ * fires on every generic. Unhandled elements stay in the list so a construct
+ * `toPlainText` does not yet strip still surfaces here rather than shipping.
+ */
+const HTML_TAG =
+  /<\/[a-z][a-z0-9]*>|<(a|abbr|b|br|code|em|i|li|ol|p|span|strong|sub|sup|u|ul|canvas|div|img)(\s[^>]*)?\/?>/i;
+
+/** Every string leaf, with a dotted path, so failures name the field. */
+function stringLeaves(value, path = '') {
+  if (typeof value === 'string') return [[path, value]];
+  if (Array.isArray(value)) {
+    return value.flatMap((item, index) =>
+      stringLeaves(item, `${path}[${index}]`),
+    );
+  }
+  if (value && typeof value === 'object') {
+    return Object.entries(value).flatMap(([key, item]) =>
+      stringLeaves(item, path ? `${path}.${key}` : key),
+    );
+  }
+  return [];
+}
+
+const resumeJsonPath = join(OUT, 'resume.json');
+if (!existsSync(resumeJsonPath)) {
+  fail('resume.json', 'missing from export');
+} else {
+  let resume;
+  let parsed = false;
+  try {
+    resume = JSON.parse(readFileSync(resumeJsonPath, 'utf8'));
+    parsed = true;
+  } catch (error) {
+    fail('resume.json', `is not valid JSON: ${error.message}`);
+  }
+
+  if (
+    parsed &&
+    (resume === null || typeof resume !== 'object' || Array.isArray(resume))
+  ) {
+    fail('resume.json', 'root must be a JSON object');
+  } else if (parsed) {
+    for (const key of Object.keys(resume)) {
+      if (!JSON_RESUME_ROOT_KEYS.has(key)) {
+        fail(
+          'resume.json',
+          `key is not part of the JSON Resume schema: ${key}`,
+        );
+      }
+    }
+    if (
+      typeof resume.basics?.name !== 'string' ||
+      resume.basics.name.trim() === ''
+    ) {
+      fail('resume.json', 'basics.name must be a non-empty string');
+    }
+    if (!Array.isArray(resume.work) || resume.work.length === 0) {
+      fail('resume.json', 'work is missing or empty');
+    } else {
+      resume.work.forEach((entry, index) => {
+        if (
+          entry === null ||
+          typeof entry !== 'object' ||
+          Array.isArray(entry)
+        ) {
+          fail('resume.json', `work[${index}] must be a JSON object`);
+        }
+      });
+    }
+
+    const expectedCanonical = siteUrlForRoute('/resume.json');
+    if (resume.meta?.canonical !== expectedCanonical) {
+      fail(
+        'resume.json',
+        `meta.canonical is ${resume.meta?.canonical}; expected ${expectedCanonical}`,
+      );
+    }
+
+    for (const [path, value] of stringLeaves(resume)) {
+      if (/^https?:\/\//i.test(value)) {
+        validateXmlUrl(value, 'resume.json');
+        continue;
+      }
+      // JSON Resume prose is plain text. The work summaries are Markdown with
+      // inline anchors in source, so this is the gate on that conversion.
+      if (HTML_TAG.test(value) || /\[[^\]]+\]\([^)]*\)/.test(value)) {
+        fail('resume.json', `${path} carries markup rather than plain text`);
+      }
+      if (/\s{2,}|[\n\r\t]/.test(value)) {
+        fail('resume.json', `${path} has uncollapsed whitespace`);
+      }
+    }
+  }
+
+  // The artifact is only discoverable if the page still points at it. The
+  // internal-link pass proves the target exists; this proves the link is there.
+  // `pageAt` takes a public path, which carries the base path on a
+  // repository site.
+  const resumePage = pageAt(publicPathForRoute('/resume/'));
+  if (!resumePage) {
+    fail('resume.json', 'no exported /resume/ page to link the artifact');
+  } else if (
+    !tags(resumePage.html, 'a').some((tag) => {
+      const href = attribute(tag, 'href');
+      const url = href
+        ? parseHttpUrl(
+            href,
+            resumePage.route,
+            resumePage.relativePath,
+            'resume JSON link',
+          )
+        : undefined;
+      return url?.href === siteUrlForRoute('/resume.json');
+    })
+  ) {
+    fail(
+      'resume.json',
+      '/resume/ does not link to the machine-readable resume',
+    );
+  }
+
+  if (
+    resumePage &&
+    !tags(resumePage.html, 'link').some((tag) => {
+      const rel = (attribute(tag, 'rel') ?? '').toLowerCase().split(/\s+/);
+      if (
+        !rel.includes('alternate') ||
+        attribute(tag, 'type')?.toLowerCase() !== 'application/json'
+      ) {
+        return false;
+      }
+      const href = attribute(tag, 'href');
+      const url = href
+        ? parseHttpUrl(
+            href,
+            resumePage.route,
+            resumePage.relativePath,
+            'resume JSON alternate',
+          )
+        : undefined;
+      return url?.href === siteUrlForRoute('/resume.json');
+    })
+  ) {
+    fail(
+      'resume.json',
+      '/resume/ does not advertise the machine-readable resume',
+    );
+  }
+}
+
 if (failures.length > 0) {
   console.error(`\nverify-export: ${failures.length} problem(s)\n`);
   for (const { page, message } of failures) {
@@ -603,5 +787,5 @@ if (failures.length > 0) {
 
 console.log(
   `verify-export: ${pages.length} pages OK ` +
-    '(drafts, robots, ids/fragments, canonicals, complete share metadata, local images, internal links, sitemap/RSS)',
+    '(drafts, robots, ids/fragments, canonicals, complete share metadata, local images, internal links, sitemap/RSS, resume.json)',
 );
