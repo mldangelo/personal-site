@@ -80,13 +80,13 @@ const work: Position[] = [
     endDate: '2022-01-01',
     summary: `Arthena was a quantitative art investment platform backed by <a href='https://www.anthemis.com/'>Anthemis</a>,
     <a href='https://foundationcapital.com'>Foundation Capital</a>, and <a href='https://ycombinator.com'>Y Combinator</a>.
-    Built Arthena from idea to acquisition by Masterworks in 2023.`,
+    Built Arthena from idea into a quantitative art-investment platform; Masterworks later acquired the company in 2023.`,
     highlights: [
       'Co-founded Arthena and led technical strategy; sat on board and led fundraising, including debt financing for a 9-figure investment vehicle in the auction guarantee market.',
       'Built and managed a cross-functional team of 20 engineers, data scientists, and analysts.',
       'Built data pipelines, quantitative research tools, and visualization systems to scale investment research and augment analyst decision-making.',
       'Developed valuation models on irregularly-sampled time series using graph embeddings, probabilistic forecasting with calibrated prediction intervals, and online learning with walk-forward validation.',
-      'Designed micro-service architecture for data collection, feature engineering, backtesting, and reporting.',
+      'Designed a microservices architecture for data collection, feature engineering, backtesting, and reporting.',
     ],
   },
   {
