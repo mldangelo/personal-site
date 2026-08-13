@@ -26,18 +26,25 @@ describe('Table', () => {
     expect(screen.getByText('Row 3')).toBeInTheDocument();
   });
 
-  it('passes format function to rows', () => {
+  it('passes provenance to rows', () => {
+    // Formatting used to be passed down as a `format` function; it now happens
+    // in `resolveReadings` before a row reaches the table, because functions
+    // cannot cross the RSC boundary the site table renders on.
     const data = [
       {
-        label: 'Count',
-        value: 1000,
-        format: (v: unknown) => `${v} items`,
+        label: 'Counted',
+        value: '1,000 packages',
+        source: 'measured' as const,
       },
+      { label: 'Fetched', value: '23', source: 'github' as const },
     ];
 
     render(<Table data={data} />);
 
-    expect(screen.getByText('1000 items')).toBeInTheDocument();
+    const marks = document.querySelectorAll('.stat-provenance');
+    expect(
+      Array.from(marks, (mark) => mark.getAttribute('data-source')),
+    ).toEqual(['measured', 'github']);
   });
 
   it('passes link to rows', () => {
