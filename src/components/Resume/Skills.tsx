@@ -72,17 +72,16 @@ export default function Skills({ skills, categories }: SkillsProps) {
   }, [skills, categories]);
 
   /**
-   * Counted from the groups that are actually rendered, never stated, so the
-   * announcement cannot drift from what is on screen. A skill in two categories
-   * renders twice, hence the de-duplication by title.
+   * Both counts are of rendered tags, not distinct titles: a skill listed under
+   * two categories renders in both groups, and the announcement has to match
+   * what a reader tabbing the group actually encounters.
    */
   const totalSkillCount = useMemo(
     () =>
-      new Set(
-        groupedSkills.flatMap(({ skills: groupSkills }) =>
-          groupSkills.map(({ title }) => title),
-        ),
-      ).size,
+      groupedSkills.reduce(
+        (total, { skills: groupSkills }) => total + groupSkills.length,
+        0,
+      ),
     [groupedSkills],
   );
 

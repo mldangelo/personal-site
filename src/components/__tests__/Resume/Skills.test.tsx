@@ -191,30 +191,35 @@ describe('Skills', () => {
    * there was no live region anywhere on the resume.
    */
   describe('filter status', () => {
-    it('reports the full set on first paint', () => {
-      render(<Skills skills={mockSkills} categories={mockCategories} />);
+    it('counts the tags it renders, not distinct titles', () => {
+      const { container } = render(
+        <Skills skills={mockSkills} categories={mockCategories} />,
+      );
 
+      // Python, TypeScript and JavaScript each render in two groups, so the
+      // announced total is read back off the DOM rather than restated here.
+      const tags = container.querySelectorAll('.skill-tag');
+      expect(tags).toHaveLength(8);
       expect(screen.getByRole('status')).toHaveTextContent(
-        'Showing all 5 skills.',
+        `Showing all ${tags.length} skills.`,
       );
     });
 
     it('announces the result of filtering, not the state of the button', () => {
-      render(<Skills skills={mockSkills} categories={mockCategories} />);
+      const { container } = render(
+        <Skills skills={mockSkills} categories={mockCategories} />,
+      );
 
       fireEvent.click(screen.getByRole('button', { name: 'Languages' }));
 
-      expect(screen.getByRole('status')).toHaveTextContent(
-        'Showing 3 of 5 skills in Languages.',
+      const tags = Array.from(
+        container.querySelectorAll<HTMLElement>('.skill-tag'),
       );
-    });
-
-    it('counts a skill in two categories once', () => {
-      render(<Skills skills={mockSkills} categories={mockCategories} />);
-
-      // Python, TypeScript and JavaScript each render in two groups.
-      expect(document.querySelectorAll('.skill-tag')).toHaveLength(8);
-      expect(screen.getByRole('status')).toHaveTextContent('all 5 skills');
+      const shown = tags.filter(isShown);
+      expect(shown).toHaveLength(3);
+      expect(screen.getByRole('status')).toHaveTextContent(
+        `Showing ${shown.length} of ${tags.length} skills in Languages.`,
+      );
     });
 
     it('returns to the full set when the filter is toggled off', () => {
@@ -225,7 +230,7 @@ describe('Skills', () => {
       fireEvent.click(languages);
 
       expect(screen.getByRole('status')).toHaveTextContent(
-        'Showing all 5 skills.',
+        'Showing all 8 skills.',
       );
     });
 
