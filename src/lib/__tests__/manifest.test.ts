@@ -1,4 +1,10 @@
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import {
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
@@ -193,5 +199,18 @@ describe('countLintRules', () => {
     // The preset is "none", so every rule is named and the count means
     // something rather than tracking whichever Biome release is installed.
     expect(countLintRules()).toBeGreaterThan(10);
+  });
+
+  it("holds this repository's preset at none, which the count assumes", () => {
+    // `countLintRules` counts only rules opted into by name, and it ignores
+    // `preset` entirely. Biome's default is `recommended` — so changing this
+    // field, or dropping it, switches on hundreds of rules the counter will
+    // never see and /stats keeps publishing the small explicit count. Fail
+    // here, loudly, rather than let the published figure drift.
+    const config = JSON.parse(
+      readFileSync(join(process.cwd(), 'biome.json'), 'utf8'),
+    ) as { linter?: { rules?: { preset?: string } } };
+
+    expect(config.linter?.rules?.preset).toBe('none');
   });
 });
