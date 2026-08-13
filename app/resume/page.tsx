@@ -57,10 +57,7 @@ function contactLink(id: ContactId): string {
 }
 
 export default function ResumePage() {
-  // One clock read for the whole page, so the headline span and every tenure
-  // on the spine are measured against the same instant. This is a server
-  // component, so the value is baked at build time — the same contract as the
-  // line count on /stats.
+  // One read, shared by the headline span and every tenure; baked at build time.
   const now = Date.now();
   const careerSpan = careerSpanYears(work, now);
   const github = contactLink('github');
@@ -85,8 +82,6 @@ export default function ResumePage() {
               JSON
             </a>
           </div>
-          {/* This is elapsed span from the earliest role, not summed active
-              tenure — see `careerSpanYears`. */}
           <p className="resume-summary">
             Engineering leader with a career spanning {careerSpan}+ years across
             AI, security, and infrastructure. I&apos;m currently a Member of the

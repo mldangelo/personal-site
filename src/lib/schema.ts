@@ -66,9 +66,6 @@ export function personNode(): SchemaNode {
   const emailItem = contact.find((item) => item.link.startsWith('mailto:'));
   const email = emailItem?.link.replace('mailto:', '');
 
-  // Derived, not `work[0]`: source order in the work data is not load-bearing,
-  // so the employer this node claims has to be found rather than assumed to be
-  // first. An empty career emits neither property instead of a broken node.
   const currentJob = currentPosition(work);
 
   const [givenName, ...familyParts] = AUTHOR_NAME.split(' ');

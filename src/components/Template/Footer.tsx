@@ -9,8 +9,6 @@ import { AUTHOR_NAME } from '@/lib/utils';
 import ThemePortrait from './ThemePortrait';
 
 export default function Footer() {
-  // Derived, not `work[0]`: source order in the work data is not load-bearing,
-  // so the job held now has to be found rather than assumed to be first.
   const current = currentPosition(work);
 
   return (

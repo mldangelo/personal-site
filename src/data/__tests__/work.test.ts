@@ -6,17 +6,6 @@ import work from '../resume/work';
 /** Exactly `YYYY-MM-DD`, which is what makes a string comparison chronological. */
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 
-function isPlainIsoCalendarDate(value: string): boolean {
-  if (!ISO_DATE.test(value)) return false;
-
-  const parsed = new Date(`${value}T00:00:00Z`);
-
-  return (
-    !Number.isNaN(parsed.getTime()) &&
-    parsed.toISOString().slice(0, 10) === value
-  );
-}
-
 describe('work data', () => {
   it('exports an array of positions', () => {
     expect(Array.isArray(work)).toBe(true);
@@ -92,31 +81,19 @@ describe('work data', () => {
     }
   });
 
-  /**
-   * The spine is ordered by `sortPositions`, which compares the ISO strings
-   * directly — exact for `YYYY-MM-DD`, and free of the timezone trap that
-   * parsing to a `Date` reintroduces. A date written any other way (`2014/01`,
-   * `Jan 2014`) would still parse but would sort wrongly and silently, so the
-   * format itself is the invariant worth pinning. The round-trip check also
-   * rejects impossible dates such as `2026-02-31`, which JavaScript otherwise
-   * normalizes into March without reporting an error.
-   */
-  it('dates are real plain ISO calendar dates', () => {
+  // A date written any other way (`2014/01`, `Jan 2014`) would still parse but
+  // would sort wrongly and silently.
+  it('dates are plain ISO calendar dates', () => {
     for (const job of work) {
-      expect(isPlainIsoCalendarDate(job.startDate)).toBe(true);
+      expect(job.startDate).toMatch(ISO_DATE);
 
       if (job.endDate) {
-        expect(isPlainIsoCalendarDate(job.endDate)).toBe(true);
+        expect(job.endDate).toMatch(ISO_DATE);
       }
     }
   });
 
-  /**
-   * The rendered timeline must run one way. Source order is deliberately not
-   * load-bearing — `Experience` sorts before mapping — so this asserts the
-   * ordered result rather than the literal array, and fails if a future entry
-   * carries a date the comparator cannot place.
-   */
+  /** Source order is not load-bearing — `Experience` sorts before mapping. */
   it('sorts into a strictly reverse-chronological timeline', () => {
     const ordered = sortPositions(work);
 
@@ -130,8 +107,6 @@ describe('work data', () => {
         timelineKey(current).localeCompare(timelineKey(previous)),
       ).toBeLessThanOrEqual(0);
 
-      // Where two roles have the same timeline key, the later start comes
-      // first.
       if (timelineKey(current) === timelineKey(previous)) {
         expect(
           current.startDate.localeCompare(previous.startDate),

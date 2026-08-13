@@ -2,61 +2,20 @@ import dayjs from 'dayjs';
 
 import type { Position } from '@/data/resume/work';
 
-/**
- * Career chronology — ordering the experience spine and deriving tenure from
- * the dates already present in `src/data/resume/work.ts`.
- *
- * Nothing in here reads the clock. Every function that needs "now" takes it as
- * an argument, mirroring `ageAt()` in `src/lib/telemetry.ts`, so the derived
- * figures are deterministic and a test can pin a fixed instant.
- */
-
 /** Anything dayjs accepts: an ISO date string, epoch milliseconds, or a Date. */
 export type DateInput = string | number | Date;
 
-/**
- * Sort key standing in for the end of a role that has not ended.
- *
- * An ongoing full-time role has no `endDate` and should sort ahead of one that
- * has already closed, so it sorts as though it ends later than any real date.
- */
+/** Sort key for a role that has not ended, so it outranks every real date. */
 const ONGOING_END = '9999-12-31';
 
-/**
- * Recency key for the rendered career spine.
- *
- * Closed roles are placed by when the work ended. An ongoing full-time role
- * leads. An open-ended side role is placed by when it began: "still active" is
- * true, but it should not permanently outrank every later primary job.
- */
+/** Recency of involvement: an open-ended side role is placed by its start. */
 export function timelineKey(position: Position): string {
   if (position.endDate) return position.endDate;
 
   return position.commitment === 'part-time' ? position.startDate : ONGOING_END;
 }
 
-/**
- * Roles by recency of involvement: newest timeline key first, with ties broken
- * by the later start date.
- *
- * End date is primary because long overlapping roles otherwise fall below
- * short roles that merely began later. In the real data, start-date sorting
- * buried the 2014–2022 Arthena tenure below Matroid and Planet.
- *
- * The source array is hand-maintained and had drifted out of sequence, running
- * 2022 → 2017 → 2014 → 2015 → 2014 through the middle, so a section that reads
- * as a timeline was not one. Ordering here rather than in the data file means
- * source order is no longer load-bearing: a new entry can be appended anywhere
- * and still land in the right place.
- *
- * Comparison is on the ISO strings rather than parsed dates. That is exact for
- * `YYYY-MM-DD` and sidesteps the timezone trap documented on `isoYear()` in
- * `src/components/Resume/Experience.tsx`, where UTC midnight reads as the
- * previous day west of Greenwich. `src/data/__tests__/work.test.ts` pins the
- * date format the comparison depends on.
- *
- * Returns a new array; the input is not mutated.
- */
+/** Newest first by end date, not start, so long roles outrank later short ones. */
 export function sortPositions(positions: Position[]): Position[] {
   return [...positions].sort(
     (a, b) =>
@@ -65,25 +24,7 @@ export function sortPositions(positions: Position[]): Position[] {
   );
 }
 
-/**
- * The role to name wherever the site says what its author does now — the
- * footer on every page and the JSON-LD `Person` node.
- *
- * Prefers an ongoing primary role: no `endDate`, and not a `part-time` side
- * engagement running alongside the career. Between jobs there is no such role,
- * so it falls back to the lead of the sorted spine — the most recent
- * involvement — rather than reporting nothing.
- *
- * Stated independently of `sortPositions` even though an ongoing primary role
- * always sorts first today: this answers "the job I hold now", and a later
- * change to `timelineKey` should not quietly change who the site says employs
- * its author.
- *
- * Returns `undefined` only for an empty career, which is a state a fork of
- * this repo passes through; callers render nothing rather than crashing.
- * Reading `work[0]` instead is what let the footer and the JSON-LD keep naming
- * the previous employer after a job change was recorded the natural way.
- */
+/** The job held now, wherever it sits in the array — never `work[0]`. */
 export function currentPosition(positions: Position[]): Position | undefined {
   const ordered = sortPositions(positions);
 
@@ -94,103 +35,34 @@ export function currentPosition(positions: Position[]): Position | undefined {
   );
 }
 
-/**
- * Whole months from `start` to `end`, truncated rather than rounded — a role
- * of eleven months and twenty-nine days has not lasted a year.
- *
- * Clamped at zero so a reversed range reports nothing rather than a negative
- * tenure.
- */
 export function monthsBetween(start: DateInput, end: DateInput): number {
   return Math.max(0, dayjs(end).diff(dayjs(start), 'month'));
 }
 
-/**
- * A month count as `8 yr`, `3 mo`, or `7 yr 11 mo`.
- *
- * Deliberately abbreviated: this sits in the resume's mono date gutter, where
- * "7 years 11 months" would wrap onto a third line.
- */
-export function formatDuration(months: number): string {
+/** `7 yr 11 mo` for the date gutter, or spelled out for a `.sr-only` label. */
+export function formatDuration(months: number, long = false): string {
   const total = Math.max(0, Math.trunc(months));
 
-  if (total < 1) {
-    return '<1 mo';
-  }
+  if (total < 1) return long ? 'less than 1 month' : '<1 mo';
+
+  const unit = (value: number, short: string, word: string) =>
+    long ? `${value} ${word}${value === 1 ? '' : 's'}` : `${value} ${short}`;
 
   const years = Math.floor(total / 12);
   const remainingMonths = total % 12;
+  const parts: string[] = [];
 
-  if (years === 0) {
-    return `${remainingMonths} mo`;
-  }
+  if (years > 0) parts.push(unit(years, 'yr', 'year'));
+  if (remainingMonths > 0) parts.push(unit(remainingMonths, 'mo', 'month'));
 
-  if (remainingMonths === 0) {
-    return `${years} yr`;
-  }
-
-  return `${years} yr ${remainingMonths} mo`;
+  return parts.join(' ');
 }
 
-/** A month count written out for an accessible duration label. */
-export function formatDurationLong(months: number): string {
-  const total = Math.max(0, Math.trunc(months));
-
-  if (total < 1) {
-    return 'less than 1 month';
-  }
-
-  const years = Math.floor(total / 12);
-  const remainingMonths = total % 12;
-  const yearText = years === 1 ? '1 year' : `${years} years`;
-  const monthText =
-    remainingMonths === 1 ? '1 month' : `${remainingMonths} months`;
-
-  if (years === 0) return monthText;
-  if (remainingMonths === 0) return yearText;
-
-  return `${yearText} ${monthText}`;
-}
-
-/**
- * How long a role lasted, formatted. A role with no `endDate` is measured to
- * `now`, which the caller supplies.
- */
-export function positionDuration(position: Position, now: DateInput): string {
-  return formatDuration(
-    monthsBetween(position.startDate, position.endDate ?? now),
-  );
-}
-
-/** The same tenure written without abbreviations for assistive technology. */
-export function positionDurationLong(
-  position: Position,
-  now: DateInput,
-): string {
-  return formatDurationLong(
-    monthsBetween(position.startDate, position.endDate ?? now),
-  );
-}
-
-/**
- * Completed whole years from the earliest role to now.
- *
- * This is elapsed career span, not a sum of active months and not a claim that
- * every month in the interval was spent in a listed role. The public copy uses
- * that exact meaning.
- */
+/** Elapsed span since the earliest role began — not summed active experience. */
 export function careerSpanYears(positions: Position[], now: DateInput): number {
-  const earliestStart = positions.reduce<string | null>(
-    (earliest, position) =>
-      earliest === null || position.startDate.localeCompare(earliest) < 0
-        ? position.startDate
-        : earliest,
-    null,
-  );
+  const [earliestStart] = positions
+    .map((position) => position.startDate)
+    .sort((a, b) => a.localeCompare(b));
 
-  if (earliestStart === null) {
-    return 0;
-  }
-
-  return Math.floor(monthsBetween(earliestStart, now) / 12);
+  return earliestStart ? Math.floor(monthsBetween(earliestStart, now) / 12) : 0;
 }

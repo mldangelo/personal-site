@@ -1,12 +1,7 @@
 import dayjs from 'dayjs';
 
 import type { Position } from '@/data/resume/work';
-import {
-  type DateInput,
-  monthsBetween,
-  positionDuration,
-  positionDurationLong,
-} from '@/lib/career';
+import { type DateInput, formatDuration, monthsBetween } from '@/lib/career';
 
 import JobSummary from './JobSummary';
 
@@ -16,33 +11,18 @@ export type JobTier = 'lead' | 'primary' | 'early';
 interface JobProps {
   data: Position;
   tier?: JobTier;
-  /**
-   * Instant an ongoing role is measured to. Required so the parent owns the
-   * one clock read shared by the whole spine.
-   */
+  /** Instant an ongoing role is measured to; the parent owns the clock read. */
   now: DateInput;
 }
 
 export default function Job({ data, tier = 'primary', now }: JobProps) {
   const { name, position, url, startDate, endDate, summary, highlights } = data;
   const isCurrent = !endDate;
-  // Derived from the dates rather than written out per role, so it cannot
-  // contradict the range beside it.
-  //
-  // An ongoing tenure is measured to the instant the page was built, and this
-  // is a static export with no scheduled rebuild, so by the time it is read it
-  // is a floor rather than a fact. It carries the same `+` the career span in
-  // the resume header does. A closed role is exact and takes no hedge.
-  //
-  // Below a month there is no floor to raise: `formatDuration` reports an
-  // upper bound ("<1 mo"), and hedging that would announce "less than 1 month
-  // or more", which brackets the value from both sides at once. A role in its
-  // first month is left unhedged until there is a whole month to stand on.
-  const hedged = isCurrent && monthsBetween(startDate, now) >= 1;
-  const duration = `${positionDuration(data, now)}${hedged ? '+' : ''}`;
-  const durationLong = `${positionDurationLong(data, now)}${
-    hedged ? ' or more' : ''
-  }`;
+  const months = monthsBetween(startDate, endDate ?? now);
+  // An ongoing tenure is a build-time floor, but "<1 mo" is already an upper bound.
+  const hedged = isCurrent && months >= 1;
+  const duration = `${formatDuration(months)}${hedged ? '+' : ''}`;
+  const durationLong = `${formatDuration(months, true)}${hedged ? ' or more' : ''}`;
 
   return (
     <article
