@@ -15,13 +15,27 @@ import { categories, skills } from '@/data/resume/skills';
 import work from '@/data/resume/work';
 import { careerSpanYears } from '@/lib/career';
 import { createPageMetadata } from '@/lib/metadata';
+import { RESUME_JSON_PATH, RESUME_JSON_URL } from '@/lib/resumeJson';
 import { AUTHOR_NAME, SITE_URL } from '@/lib/utils';
 
-export const metadata: Metadata = createPageMetadata({
+const resumeMetadata = createPageMetadata({
   title: 'Resume',
   description: `${AUTHOR_NAME}'s Resume. OpenAI, Promptfoo, Smile ID, Arthena, Matroid, Stanford ICME, YC alum.`,
   path: '/resume/',
 });
+
+export const metadata: Metadata = {
+  ...resumeMetadata,
+  // The visible chip serves readers; the alternate lets tools discover the
+  // machine-readable document without scraping page copy. Keep the canonical
+  // that createPageMetadata already supplied when adding the new type.
+  alternates: {
+    ...resumeMetadata.alternates,
+    types: {
+      'application/json': RESUME_JSON_URL,
+    },
+  },
+};
 
 /** A URL as it should read on paper: no protocol, no `www.`, no trailing slash. */
 function displayUrl(url: string): string {
@@ -56,7 +70,21 @@ export default function ResumePage() {
     <PageWrapper>
       <section className="resume-page">
         <header className="resume-header">
-          <h1 className="resume-title">Resume</h1>
+          <div className="resume-header-row">
+            <h1 className="resume-title">Resume</h1>
+            {/* The same affordance as the RSS chip on /writing. The href is
+                document-relative on purpose: /resume/ may live below a
+                repository base path, while a root-relative href would escape
+                it. ../resume.json resolves correctly in both deployments. */}
+            <a
+              href={`..${RESUME_JSON_PATH}`}
+              className="resume-json-link"
+              title="JSON Resume"
+              aria-label="JSON Resume"
+            >
+              JSON
+            </a>
+          </div>
           {/* This is elapsed span from the earliest role, not summed active
               tenure — see `careerSpanYears`. */}
           <p className="resume-summary">
