@@ -309,6 +309,12 @@
   font-weight: var(--font-weight-medium);
 }
 
+/* Own line in the gutter, so the tenure reads as an annotation on the range. */
+.daterange-duration {
+  flex-basis: 100%;
+  margin-top: 0.15em;
+}
+
 .jobs-container header h3 {
   display: flex;
   flex-direction: column;

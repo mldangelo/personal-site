@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 
 import type { Position } from '@/data/resume/work';
+import { type DateInput, formatDuration, monthsBetween } from '@/lib/career';
 
 import JobSummary from './JobSummary';
 
@@ -10,11 +11,18 @@ export type JobTier = 'lead' | 'primary' | 'early';
 interface JobProps {
   data: Position;
   tier?: JobTier;
+  /** Instant an ongoing role is measured to; the parent owns the clock read. */
+  now: DateInput;
 }
 
-export default function Job({ data, tier = 'primary' }: JobProps) {
+export default function Job({ data, tier = 'primary', now }: JobProps) {
   const { name, position, url, startDate, endDate, summary, highlights } = data;
   const isCurrent = !endDate;
+  const months = monthsBetween(startDate, endDate ?? now);
+  // An ongoing tenure is a build-time floor, but "<1 mo" is already an upper bound.
+  const hedged = isCurrent && months >= 1;
+  const duration = `${formatDuration(months)}${hedged ? '+' : ''}`;
+  const durationLong = `${formatDuration(months, true)}${hedged ? ' or more' : ''}`;
 
   return (
     <article
@@ -37,6 +45,10 @@ export default function Job({ data, tier = 'primary' }: JobProps) {
         ) : (
           <span className="daterange-present">Present</span>
         )}
+        <span className="daterange-duration">
+          <span aria-hidden="true">{duration}</span>
+          <span className="sr-only">Duration: {durationLong}</span>
+        </span>
       </p>
 
       <div className="job-body">

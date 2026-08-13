@@ -87,7 +87,26 @@ describe('tierFor', () => {
     expect(tierFor(role, [newer, role])).toBe('primary');
   });
 
-  it('treats an ongoing role as primary when it is not the newest', () => {
+  it('keeps a newer part-time side role primary instead of making it lead', () => {
+    const currentJob = position({
+      name: 'Current Job',
+      startDate: '2026-01-01',
+      endDate: undefined,
+    });
+    const sideRole = position({
+      name: 'Side Fund',
+      position: 'Co-founder',
+      startDate: '2027-01-01',
+      endDate: undefined,
+      commitment: 'part-time',
+    });
+    const positions = [sideRole, currentJob];
+
+    expect(tierFor(sideRole, positions)).toBe('primary');
+    expect(tierFor(currentJob, positions)).toBe('lead');
+  });
+
+  it('treats an older ongoing role as primary when it is not the newest', () => {
     expect(
       tierFor(
         position({
