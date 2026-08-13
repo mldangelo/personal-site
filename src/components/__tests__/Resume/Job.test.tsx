@@ -113,32 +113,34 @@ describe('Job', () => {
     );
   });
 
-  it('measures an ongoing role to the instant it is given', () => {
+  it('measures an ongoing role to the instant it is given, hedged', () => {
     render(<Job data={{ ...mockJob, endDate: undefined }} now={NOW} />);
-
-    expect(
-      document.querySelector('.daterange-duration [aria-hidden="true"]')
-        ?.textContent,
-    ).toBe('6 yr 6 mo');
-  });
-
-  it('keeps the tenure inside the date range so it shares the gutter', () => {
-    render(<Job data={mockJob} now={NOW} />);
 
     const duration = document.querySelector('.daterange-duration');
-    expect(duration?.parentElement).toHaveClass('daterange');
+    expect(duration?.querySelector('[aria-hidden="true"]')?.textContent).toBe(
+      '6 yr 6 mo+',
+    );
+    expect(duration?.querySelector('.sr-only')).toHaveTextContent(
+      'Duration: 6 years 6 months or more',
+    );
   });
 
-  /**
-   * Amber is reserved for live values and is already spent on "Present" one
-   * word earlier. Marking the same fact twice is what makes the signal stop
-   * meaning anything, so the tenure stays quiet on every role.
-   */
-  it('does not claim the live signal for the tenure', () => {
-    render(<Job data={{ ...mockJob, endDate: undefined }} now={NOW} />);
+  // "<1 mo" is already an upper bound; hedging it would read "less than 1
+  // month or more", bracketing the value from both sides at once.
+  it('does not hedge an ongoing role that has not run a whole month', () => {
+    render(
+      <Job
+        data={{ ...mockJob, startDate: '2026-08-01', endDate: undefined }}
+        now={new Date('2026-08-11T12:00:00Z').getTime()}
+      />,
+    );
 
-    expect(document.querySelector('.daterange-duration')).not.toHaveClass(
-      'daterange-present',
+    const duration = document.querySelector('.daterange-duration');
+    expect(duration?.querySelector('[aria-hidden="true"]')?.textContent).toBe(
+      '<1 mo',
+    );
+    expect(duration?.querySelector('.sr-only')).toHaveTextContent(
+      'Duration: less than 1 month',
     );
   });
 });

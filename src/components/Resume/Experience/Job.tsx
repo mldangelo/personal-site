@@ -1,11 +1,7 @@
 import dayjs from 'dayjs';
 
 import type { Position } from '@/data/resume/work';
-import {
-  type DateInput,
-  positionDuration,
-  positionDurationLong,
-} from '@/lib/career';
+import { type DateInput, formatDuration, monthsBetween } from '@/lib/career';
 
 import JobSummary from './JobSummary';
 
@@ -15,20 +11,18 @@ export type JobTier = 'lead' | 'primary' | 'early';
 interface JobProps {
   data: Position;
   tier?: JobTier;
-  /**
-   * Instant an ongoing role is measured to. Required so the parent owns the
-   * one clock read shared by the whole spine.
-   */
+  /** Instant an ongoing role is measured to; the parent owns the clock read. */
   now: DateInput;
 }
 
 export default function Job({ data, tier = 'primary', now }: JobProps) {
   const { name, position, url, startDate, endDate, summary, highlights } = data;
   const isCurrent = !endDate;
-  // Derived from the dates rather than written out per role, so it cannot
-  // contradict the range beside it.
-  const duration = positionDuration(data, now);
-  const durationLong = positionDurationLong(data, now);
+  const months = monthsBetween(startDate, endDate ?? now);
+  // An ongoing tenure is a build-time floor, but "<1 mo" is already an upper bound.
+  const hedged = isCurrent && months >= 1;
+  const duration = `${formatDuration(months)}${hedged ? '+' : ''}`;
+  const durationLong = `${formatDuration(months, true)}${hedged ? ' or more' : ''}`;
 
   return (
     <article

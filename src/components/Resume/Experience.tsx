@@ -5,11 +5,7 @@ import Job, { type JobTier } from './Experience/Job';
 
 interface ExperienceProps {
   data: Position[];
-  /**
-   * Instant every ongoing role's tenure is measured to. A caller can supply a
-   * shared value for determinism; otherwise this component reads the clock
-   * once and threads that value to every role.
-   */
+  /** Instant every ongoing tenure is measured to. Defaults to one clock read. */
   now?: DateInput;
 }
 
@@ -36,16 +32,12 @@ function isEarlyCareer(job: Position): boolean {
 }
 
 /**
- * How much weight a role should carry on the spine.
- *
- * The lead is derived from the newest substantive, non-side-role start date,
- * not array position. This keeps reordering the source data from silently
- * changing the visual hierarchy while ensuring a newly added part-time
- * engagement cannot outrank the primary career.
+ * How much weight a role should carry on the spine. The lead is the newest
+ * substantive, non-side-role start date rather than array position, so
+ * reordering the source data cannot change the visual hierarchy.
  */
 export function tierFor(job: Position, positions: Position[]): JobTier {
   if (isEarlyCareer(job)) return 'early';
-  if (job.commitment === 'part-time') return 'primary';
 
   const newestStartDate = positions
     .filter(
@@ -64,13 +56,8 @@ export function tierFor(job: Position, positions: Position[]): JobTier {
 
 export default function Experience({
   data,
-  // The single fallback read. `Job` requires the resulting instant so this
-  // cannot quietly become one read per role.
   now = Date.now(),
 }: ExperienceProps) {
-  // `tierFor` was written not to depend on array position; sorting here is the
-  // other half of that decision. Without it the spine rendered in whatever
-  // order the data file happened to be in, which ran backwards in the middle.
   const positions = sortPositions(data);
 
   return (
