@@ -61,9 +61,11 @@
      CONTROLS
      `.button` is usually an `<a>`, so it gets no button treatment from the UA.
      A filled control whose fill flattens to Canvas is indistinguishable from
-     an unfilled one, which is the whole of its state.
+     an unfilled one, which is the whole of its state. `.button-secondary` is
+     the unfilled variant and is left to the UA — painting both the same pair
+     is what makes the 404's two actions read as one control.
      =================== */
-  .button {
+  .button:not(.button-secondary) {
     background-color: ButtonFace;
     color: ButtonText;
     border-color: ButtonText;
