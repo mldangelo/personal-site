@@ -149,7 +149,13 @@
     padding-left: 0;
   }
 
+  /* On paper the entry is a list item again, so any explicit year-age pair
+     runs inline instead of stacking in a gutter that no longer exists. */
   .log-entry-marker {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 0 0.4em;
     text-align: left;
     padding-top: 0;
     margin-right: 0.5em;
