@@ -28,7 +28,8 @@
     "og:check": "npm run og:check:ledger && npm run og:check:render",
     "og:check:ledger": "node scripts/check-og.mjs",
     "og:check:render": "node scripts/generate-og.mjs --check",
-    "verify-export": "node scripts/verify-export.mjs"
+    "verify-export": "node scripts/verify-export.mjs",
+    "measure-export": "node scripts/measure-export.mjs"
   },
   "dependencies": {
     "@fontsource-variable/bricolage-grotesque": "^5.3.0",

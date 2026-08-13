@@ -252,6 +252,7 @@ npm test
 npm run og:check
 npm run build
 npm run verify-export
+npm run measure-export
 ```
 
 ## Deployment reference
