@@ -1,13 +1,13 @@
-import initialData from '../../data/stats/site';
+import declarations from '../../data/stats/site';
 import { countSourceLines } from '../../lib/loc';
+import {
+  countDirectDependencies,
+  countInstalledNonDevPackages,
+  countLintRules,
+  countLockedPackages,
+} from '../../lib/manifest';
+import { type Measurement, resolveReadings } from '../../lib/readings';
 import Table from './Table';
-
-type GitHubCacheKey =
-  | 'stargazers_count'
-  | 'subscribers_count'
-  | 'forks'
-  | 'open_issues_count'
-  | 'pushed_at';
 
 interface GitHubData {
   stargazers_count: number;
@@ -86,38 +86,39 @@ async function fetchGitHubStats(): Promise<GitHubStatsResult> {
 }
 
 /**
+ * Everything the page asserts about this codebase, counted from the working
+ * tree and its manifests rather than typed in. A count that cannot be taken
+ * comes back `null` and `resolveReadings` drops its row.
+ */
+function measureThisBuild(): Record<string, Measurement> {
+  return {
+    source_lines: countSourceLines(),
+    direct_dependencies: countDirectDependencies(),
+    installed_non_dev_packages: countInstalledNonDevPackages(),
+    locked_packages: countLockedPackages(),
+    lint_rules: countLintRules(),
+  };
+}
+
+/**
  * Site statistics component - fetches GitHub data at build time.
- * Server component, no client-side JavaScript shipped.
+ * This table is a server component and adds no client-side JavaScript.
  */
 export default async function SiteStats() {
-  // Started before the walk so the directory scan happens during the network
-  // round trip rather than after it. The Pages build deliberately runs this
-  // fetch uncached every time, so the two costs would otherwise stack.
+  // Started before the measurements so the file reads happen during the
+  // network round trip rather than after it. The Pages build deliberately runs
+  // this fetch uncached every time, so the two costs would otherwise stack.
   const githubStats = fetchGitHubStats();
 
-  // Measured from the working tree rather than typed in, so the figure
-  // cannot drift away from the code it describes.
-  const sourceLines = countSourceLines();
+  const measurements = measureThisBuild();
   const { data: githubData, source } = await githubStats;
 
-  // Apply formatting and resolve values - functions can't be serialized in RSC
-  const data = initialData.map((field) => {
-    const rawValue =
-      field.key === 'source_lines'
-        ? sourceLines
-        : field.key && field.key in githubData
-          ? (githubData[field.key as GitHubCacheKey] ?? field.value)
-          : field.value;
-
-    // Apply format function if present, otherwise use raw value
-    const value = field.format ? field.format(rawValue) : rawValue;
-
-    // Return only serializable properties (no functions)
-    return {
-      label: field.label,
-      value,
-      link: field.link,
-    };
+  // Resolution — including the `format` functions, which cannot cross the RSC
+  // boundary — happens in `src/lib/readings.ts` so both stats tables describe
+  // their provenance the same way.
+  const data = resolveReadings(declarations, {
+    ...measurements,
+    ...githubData,
   });
 
   return (
@@ -125,8 +126,8 @@ export default async function SiteStats() {
       <Table data={data} />
       <p className="stats-source-note" data-source={source}>
         {source === 'github'
-          ? 'GitHub readings fetched at build time.'
-          : 'Approximate GitHub readings — API unavailable; fallback refreshed July 25, 2026.'}
+          ? 'GitHub readings fetched at build time. Measured readings counted from this build’s checkout and installed dependency tree.'
+          : 'Approximate GitHub readings — API unavailable; fallback refreshed July 25, 2026. Measured readings counted from this build’s checkout and installed dependency tree.'}
       </p>
     </>
   );

@@ -59,20 +59,6 @@ describe('TableRow', () => {
     expect(screen.getByText('Plain text')).toBeInTheDocument();
   });
 
-  it('applies format function to value', () => {
-    const format = (v: unknown) => `$${v}`;
-
-    render(
-      <table>
-        <tbody>
-          <TableRow label="Price" value={100} format={format} />
-        </tbody>
-      </table>,
-    );
-
-    expect(screen.getByText('$100')).toBeInTheDocument();
-  });
-
   it('renders numeric values correctly', () => {
     render(
       <table>
@@ -125,23 +111,60 @@ describe('TableRow', () => {
     expect(screen.getByText('null')).toBeInTheDocument();
   });
 
-  it('uses format function result with link', () => {
-    const format = (v: unknown) => `View ${v}`;
-
+  it('renders a provenance mark for the row source', () => {
     render(
       <table>
         <tbody>
-          <TableRow
-            label="Details"
-            value="more"
-            format={format}
-            link="https://example.com"
-          />
+          <TableRow label="Lines" value="5,411" source="measured" />
         </tbody>
       </table>,
     );
 
-    const link = screen.getByRole('link', { name: /view more/i });
-    expect(link).toHaveAttribute('href', 'https://example.com');
+    const mark = document.querySelector('.stat-provenance');
+    expect(mark).toHaveAttribute('data-source', 'measured');
+    expect(mark).toHaveTextContent('Measured');
+  });
+
+  it('names the mark for screen readers without labelling the value', () => {
+    render(
+      <table>
+        <tbody>
+          <TableRow label="Stars" value="1,663" source="github" />
+        </tbody>
+      </table>,
+    );
+
+    expect(document.querySelector('.stat-provenance')).toHaveTextContent(
+      'Source: GitHub',
+    );
+  });
+
+  it('keeps the label text queryable beside the mark', () => {
+    // The mark lives in the row header, so without its own element the label
+    // text would merge into the header's text content and every `getByText`
+    // for a label on this page would stop matching.
+    render(
+      <table>
+        <tbody>
+          <TableRow label="Countries visited" value="53" source="profile" />
+        </tbody>
+      </table>,
+    );
+
+    expect(screen.getByText('Countries visited')).toHaveClass(
+      'stat-table-label-text',
+    );
+  });
+
+  it('omits the mark entirely when a row has no source', () => {
+    render(
+      <table>
+        <tbody>
+          <TableRow label="Number of spoons" value="0" />
+        </tbody>
+      </table>,
+    );
+
+    expect(document.querySelector('.stat-provenance')).toBeNull();
   });
 });
