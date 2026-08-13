@@ -4,9 +4,9 @@ import { describe, expect, it } from 'vitest';
 import Skills from '../../Resume/Skills';
 
 const mockCategories = [
-  { name: 'Languages', color: '#6968b3' },
-  { name: 'ML Engineering', color: '#37b1f5' },
-  { name: 'Web Development', color: '#40494e' },
+  { name: 'Languages' },
+  { name: 'ML Engineering' },
+  { name: 'Web Development' },
 ];
 
 const mockSkills = [
@@ -150,6 +150,65 @@ describe('Skills', () => {
     // Should have group titles
     const groupTitles = document.querySelectorAll('.skill-group-title');
     expect(groupTitles.length).toBeGreaterThan(0);
+  });
+
+  it('explains competency tiers once instead of repeating them on every tag', () => {
+    const { container } = render(
+      <Skills skills={mockSkills} categories={mockCategories} />,
+    );
+
+    expect(container.querySelectorAll('.skill-tier-legend')).toHaveLength(1);
+    expect(container.querySelector('.skill-tier-legend')).toHaveTextContent(
+      /Knowledge\s*Deep\s*·\s*Working\s*·\s*Familiar/,
+    );
+  });
+
+  // `aria-pressed` reports the control, not the outcome, and pressing a filter
+  // hides most of the section.
+  describe('filter status', () => {
+    it('counts the tags it renders, not distinct titles', () => {
+      const { container } = render(
+        <Skills skills={mockSkills} categories={mockCategories} />,
+      );
+
+      // Python, TypeScript and JavaScript each render in two groups, so the
+      // announced total is read back off the DOM rather than restated here.
+      const tags = container.querySelectorAll('.skill-tag');
+      expect(tags).toHaveLength(8);
+      expect(screen.getByRole('status')).toHaveTextContent(
+        `Showing all ${tags.length} skills.`,
+      );
+    });
+
+    it('announces the result of filtering, not the state of the button', () => {
+      const { container } = render(
+        <Skills skills={mockSkills} categories={mockCategories} />,
+      );
+
+      fireEvent.click(screen.getByRole('button', { name: 'Languages' }));
+
+      const tags = Array.from(
+        container.querySelectorAll<HTMLElement>('.skill-tag'),
+      );
+      const shown = tags.filter(isShown);
+      expect(shown).toHaveLength(3);
+      expect(screen.getByRole('status')).toHaveTextContent(
+        `Showing ${shown.length} of ${tags.length} skills in Languages.`,
+      );
+    });
+
+    it('keeps the noun singular for a one-skill set', () => {
+      render(
+        <Skills
+          skills={[{ title: 'Python', competency: 5, category: ['Languages'] }]}
+          categories={[{ name: 'Languages' }]}
+        />,
+      );
+
+      expect(screen.getByRole('status')).toHaveTextContent(
+        'Showing all 1 skill.',
+      );
+    });
   });
 
   it('sorts skills by competency (highest first)', () => {

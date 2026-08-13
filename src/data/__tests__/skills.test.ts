@@ -61,21 +61,7 @@ describe('categories data', () => {
   it('each category has required properties', () => {
     for (const category of categories) {
       expect(category).toHaveProperty('name');
-      expect(category).toHaveProperty('color');
-
       expect(typeof category.name).toBe('string');
-      expect(typeof category.color).toBe('string');
-    }
-  });
-
-  it('category colors are valid CSS colors (hex or CSS variable)', () => {
-    const hexColorRegex = /^#[0-9a-fA-F]{6}$/;
-    const cssVarRegex = /^var\(--[\w-]+\)$/;
-
-    for (const category of categories) {
-      const isValidColor =
-        hexColorRegex.test(category.color) || cssVarRegex.test(category.color);
-      expect(isValidColor).toBe(true);
     }
   });
 
