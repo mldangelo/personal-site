@@ -52,14 +52,21 @@ export function metaValues(html, key, value) {
     .filter((content) => content !== undefined);
 }
 
+/**
+ * `<link>` tags carrying one `rel` token.
+ *
+ * `rel` is a space-separated token list, so it is matched by token rather than
+ * by string: `rel="apple-touch-icon precomposed"` is an apple-touch-icon, and
+ * `rel="icon"` must not be found inside `apple-touch-icon`.
+ */
+export function linkTagsForRel(html, value) {
+  return tags(html, 'link').filter((tag) =>
+    (attribute(tag, 'rel') ?? '').toLowerCase().split(/\s+/).includes(value),
+  );
+}
+
 export function canonicalValues(html) {
-  return tags(html, 'link')
-    .filter((tag) =>
-      (attribute(tag, 'rel') ?? '')
-        .toLowerCase()
-        .split(/\s+/)
-        .includes('canonical'),
-    )
+  return linkTagsForRel(html, 'canonical')
     .map((tag) => attribute(tag, 'href'))
     .filter((href) => href !== undefined);
 }

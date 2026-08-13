@@ -28,6 +28,7 @@
     "og:check": "npm run og:check:ledger && npm run og:check:render",
     "og:check:ledger": "node scripts/check-og.mjs",
     "og:check:render": "node scripts/generate-og.mjs --check",
+    "icons": "node scripts/generate-icons.mjs",
     "verify-export": "node scripts/verify-export.mjs",
     "measure-export": "node scripts/measure-export.mjs"
   },

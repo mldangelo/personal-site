@@ -54,6 +54,10 @@ function htmlPage({
     <meta name="twitter:title" content="Fixture">
     <meta name="twitter:description" content="Fixture description">
     <meta name="twitter:image" content="${siteRoot}og.png">
+    <link rel="manifest" href="${siteRoot}manifest.json">
+    <link rel="icon" href="${siteRoot}favicon.ico">
+    <link rel="icon" href="${siteRoot}icon.png">
+    <link rel="apple-touch-icon" href="${siteRoot}apple-icon.png">
     ${head}
   </head>
   <body>${content}</body>
@@ -143,6 +147,20 @@ function createFixture({ basePath = '', draftSlug = 'secret-draft' } = {}) {
     )}\n`,
   );
   write(root, 'out/og.png');
+  write(root, 'out/favicon.ico');
+  write(root, 'out/icon.png');
+  write(root, 'out/apple-icon.png');
+  write(root, 'out/images/icons/app.png');
+  write(
+    root,
+    'out/manifest.json',
+    JSON.stringify({
+      name: 'Fixture',
+      start_url: '.',
+      scope: '.',
+      icons: [{ src: 'images/icons/app.png' }],
+    }),
+  );
   write(root, 'out/images/photo.png');
   write(
     root,
@@ -232,6 +250,45 @@ describe('verify-export', () => {
     expect(result.status).toBe(1);
     expect(result.output).toContain(
       'internal link points outside configured base path /personal-site/',
+    );
+  });
+
+  it('rejects a missing exported icon target', () => {
+    const root = createFixture();
+    mutate(root, 'out/index.html', (html) =>
+      html.replace('href="https://example.com/icon.png"', 'href="/gone.png"'),
+    );
+
+    const result = runVerifier(root);
+    expect(result.status).toBe(1);
+    expect(result.output).toContain(
+      'icon link points at missing export: /gone.png',
+    );
+  });
+
+  it('rejects a manifest icon outside the configured base path', () => {
+    const root = createFixture({ basePath: '/personal-site' });
+    mutate(root, 'out/manifest.json', (json) =>
+      json.replace('images/icons/app.png', '/images/icons/app.png'),
+    );
+
+    const result = runVerifier(root);
+    expect(result.status).toBe(1);
+    expect(result.output).toContain(
+      'icons[0].src points outside configured base path /personal-site/',
+    );
+  });
+
+  it('rejects a manifest start URL outside the configured base path', () => {
+    const root = createFixture({ basePath: '/personal-site' });
+    mutate(root, 'out/manifest.json', (json) =>
+      json.replace('"start_url":"."', '"start_url":"/"'),
+    );
+
+    const result = runVerifier(root);
+    expect(result.status).toBe(1);
+    expect(result.output).toContain(
+      'start_url points outside configured base path /personal-site/',
     );
   });
 

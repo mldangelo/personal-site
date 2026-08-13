@@ -7,10 +7,15 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
   DARK_SCHEME_QUERY,
+  RESOLVED_THEME_COLOR_SELECTOR,
   THEME_ATTRIBUTE,
   THEME_CHOICE_ATTRIBUTE,
+  THEME_COLOR_META_SELECTOR,
+  THEME_COLOR_TOKEN,
   THEME_STORAGE_KEY,
+  themeInitScript,
 } from '@/lib/theme';
+import { readColorToken } from '@/lib/tokens';
 import ThemeToggle from '../../Template/ThemeToggle';
 
 const SYSTEM_LABEL = 'Theme preference: system. Switch to light.';
@@ -71,6 +76,12 @@ const NAVIGATION_CSS = readFileSync(
   'utf8',
 );
 
+/** The real chrome colours, one per theme, as `app/layout.tsx` reads them. */
+const CHROME_COLORS = {
+  light: readColorToken(THEME_COLOR_TOKEN, 'light'),
+  dark: readColorToken(THEME_COLOR_TOKEN, 'dark'),
+} as const;
+
 const unhydrated: Element[] = [];
 
 /**
@@ -96,6 +107,63 @@ function renderUnhydrated(choice: string | null): Element {
   return button;
 }
 
+/**
+ * The `<head>` a real page has: the token declarations `data-theme` switches
+ * between, and the `theme-color` tag the pre-paint bootstrap prepends.
+ *
+ * The bootstrap is run rather than imitated, because the tag it creates is the
+ * one the component then writes to — a stand-in could agree with the component
+ * while disagreeing with what actually ships.
+ */
+function renderHead(): void {
+  const style = document.createElement('style');
+  style.textContent =
+    `:root{${THEME_COLOR_TOKEN}:${CHROME_COLORS.light};}` +
+    `[${THEME_ATTRIBUTE}='dark']{${THEME_COLOR_TOKEN}:${CHROME_COLORS.dark};}`;
+  document.head.append(style);
+  unhydrated.push(style);
+
+  new Function(themeInitScript(CHROME_COLORS))();
+}
+
+/**
+ * The tags React hoists for a `viewport.themeColor` declaration, re-created
+ * from the build-time payload the way a client-side navigation re-creates them.
+ */
+function hoistThemeColorPair(): Element[] {
+  return (['light', 'dark'] as const).map((scheme) => {
+    const meta = document.createElement('meta');
+    meta.setAttribute('name', 'theme-color');
+    meta.setAttribute('media', `(prefers-color-scheme: ${scheme})`);
+    meta.setAttribute('content', CHROME_COLORS[scheme]);
+    document.head.append(meta);
+    unhydrated.push(meta);
+    return meta;
+  });
+}
+
+/** What the address bar is painted with, according to every tag on the page. */
+function chromeColors(): string[] {
+  return [...document.querySelectorAll(THEME_COLOR_META_SELECTOR)].map(
+    (meta) => meta.getAttribute('content') ?? '',
+  );
+}
+
+/**
+ * What the browser would paint, modelled the way the spec reads it: the first
+ * tag in tree order that carries no `media` or whose `media` matches.
+ */
+function paintedChromeColor(prefersDark: boolean): string | null {
+  const query = `(prefers-color-scheme: ${prefersDark ? 'dark' : 'light'})`;
+
+  for (const meta of document.querySelectorAll(THEME_COLOR_META_SELECTOR)) {
+    const media = meta.getAttribute('media');
+    if (media === null || media === query) return meta.getAttribute('content');
+  }
+
+  return null;
+}
+
 function visibleStates(): (string | null)[] {
   return [...document.querySelectorAll('.theme-toggle-state')]
     .filter((el) => window.getComputedStyle(el).display !== 'none')
@@ -115,6 +183,11 @@ describe('ThemeToggle', () => {
   afterEach(() => {
     clearRoot();
     for (const node of unhydrated.splice(0)) node.remove();
+    // The bootstrap and the component both create their tag rather than taking
+    // one from a helper, so it is not in `unhydrated` to sweep.
+    for (const node of document.querySelectorAll(THEME_COLOR_META_SELECTOR)) {
+      node.remove();
+    }
   });
 
   describe('server-rendered markup', () => {
@@ -292,6 +365,20 @@ describe('ThemeToggle', () => {
       expect(root().getAttribute(THEME_ATTRIBUTE)).toBe('dark');
     });
 
+    it('repaints the browser chrome when the device flips', () => {
+      // A media-scoped tag would follow this on its own, but the tag that
+      // carries the rendered theme is unscoped by design — so nothing but this
+      // moves it, and a stale reading would last the rest of the visit.
+      const media = stubColorScheme(false);
+      renderHead();
+      render(<ThemeToggle />);
+      expect(paintedChromeColor(false)).toBe(CHROME_COLORS.light);
+
+      media.flipTo(true);
+
+      expect(paintedChromeColor(true)).toBe(CHROME_COLORS.dark);
+    });
+
     it('leaves the bootstrap theme alone when the device cannot be read', () => {
       // Guessing light here is exactly the flash the bootstrap exists to avoid.
       root().setAttribute(THEME_ATTRIBUTE, 'dark');
@@ -306,6 +393,117 @@ describe('ThemeToggle', () => {
 
       expect(root().getAttribute(THEME_ATTRIBUTE)).toBe('dark');
       expect(root().getAttribute(THEME_CHOICE_ATTRIBUTE)).toBe('system');
+    });
+  });
+
+  describe('browser chrome', () => {
+    // The address bar and the toolbar are painted from `theme-color`, which
+    // cannot be styled and can only be scoped by the device preference. A
+    // visitor who picks a theme is saying the device preference does not apply
+    // to this page, so every change of `data-theme` has to be carried across.
+    it('follows a chosen theme against the device', () => {
+      stubColorScheme(true);
+      renderHead();
+      render(<ThemeToggle />);
+      expect(paintedChromeColor(true)).toBe(CHROME_COLORS.dark);
+
+      // system -> light, on a device that prefers dark.
+      fireEvent.click(toggle());
+
+      expect(root().getAttribute(THEME_ATTRIBUTE)).toBe('light');
+      expect(paintedChromeColor(true)).toBe(CHROME_COLORS.light);
+    });
+
+    it('hands the chrome back to the device on the way round to system', () => {
+      const media = stubColorScheme(false);
+      renderHead();
+      render(<ThemeToggle />);
+
+      // system -> light -> dark, pinned against a light device.
+      fireEvent.click(toggle());
+      fireEvent.click(toggle());
+      expect(paintedChromeColor(false)).toBe(CHROME_COLORS.dark);
+
+      fireEvent.click(toggle());
+      expect(root().getAttribute(THEME_CHOICE_ATTRIBUTE)).toBe('system');
+      expect(paintedChromeColor(false)).toBe(CHROME_COLORS.light);
+
+      media.flipTo(true);
+      expect(paintedChromeColor(true)).toBe(CHROME_COLORS.dark);
+    });
+
+    it('never names a colour the page is not painted with', () => {
+      stubColorScheme(true);
+      renderHead();
+      render(<ThemeToggle />);
+
+      for (let press = 0; press < 6; press += 1) {
+        const painted =
+          root().getAttribute(THEME_ATTRIBUTE) === 'dark'
+            ? CHROME_COLORS.dark
+            : CHROME_COLORS.light;
+
+        expect(paintedChromeColor(true)).toBe(painted);
+        fireEvent.click(toggle());
+      }
+    });
+
+    it('paints from exactly one tag, however many the page ships', () => {
+      // Repointing the page's own tags left React unable to match its hoisted
+      // metas back up — it keys them by `content` — so it built another and the
+      // live document carried three where the export declared two.
+      stubColorScheme(true);
+      renderHead();
+      hoistThemeColorPair();
+      render(<ThemeToggle />);
+
+      expect(
+        document.querySelectorAll(RESOLVED_THEME_COLOR_SELECTOR),
+      ).toHaveLength(1);
+      expect(chromeColors()[0]).toBe(CHROME_COLORS.dark);
+    });
+
+    /**
+     * The bug this file did not catch: `syncThemeColor` runs on `[choice,
+     * systemScheme]`, and neither changes on a client-side navigation — but
+     * React re-creates every hoisted `<meta>` from the build-time payload on
+     * each one. Anything written into those tags is reverted by the first
+     * `<Link>` press, and it was: measured in Chrome against the export, a
+     * light device with dark pinned had the light chrome colour painted back
+     * over a dark page and kept it for the rest of the session.
+     */
+    it('survives a navigation that rebuilds the tags React owns', () => {
+      stubColorScheme(false);
+      renderHead();
+      const pair = hoistThemeColorPair();
+      render(<ThemeToggle />);
+
+      // system -> light -> dark: dark pinned on a light-preferring device,
+      // which is the direction that broke.
+      fireEvent.click(toggle());
+      fireEvent.click(toggle());
+      expect(root().getAttribute(THEME_ATTRIBUTE)).toBe('dark');
+      expect(paintedChromeColor(false)).toBe(CHROME_COLORS.dark);
+
+      // A client transition: the same tags, destroyed and rebuilt from the
+      // build-time values, with no state change to re-run the effect.
+      for (const meta of pair) meta.remove();
+      hoistThemeColorPair();
+
+      expect(paintedChromeColor(false)).toBe(CHROME_COLORS.dark);
+      expect(paintedChromeColor(true)).toBe(CHROME_COLORS.dark);
+    });
+
+    it('leaves the declared fallback in place when no token resolves', () => {
+      // No stylesheet — a fork mid-rename, or styles that failed to load.
+      // Degrading to what the document declares beats naming a colour from a
+      // palette that is not on the page.
+      hoistThemeColorPair();
+
+      render(<ThemeToggle />);
+      fireEvent.click(toggle());
+
+      expect(chromeColors()).toEqual([CHROME_COLORS.light, CHROME_COLORS.dark]);
     });
   });
 });
