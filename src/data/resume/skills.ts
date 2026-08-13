@@ -124,13 +124,6 @@ const skills: Skill[] = [
 /**
  * The distinct category names, sorted, so the filter row and the group order
  * both fall out of the skill list itself.
- *
- * This used to hand every category a `color` as well — and it handed all of
- * them the same `var(--color-accent)`, so the per-tag tick it painted came out
- * identical on every rendered tag. A whole prop chain carried a value that
- * distinguished neither categories nor competency. Competency was derived
- * independently from the numeric score; see `tierFor` in
- * `Skills/SkillTag.tsx`.
  */
 function buildCategories(skillsList: Skill[]): Category[] {
   const uniqueCategories = Array.from(

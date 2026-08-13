@@ -39,9 +39,7 @@
   justify-content: flex-start;
 }
 
-/* The old per-category tick resolved to the same accent in every category, so
-   it communicated nothing. Competency was conveyed separately through the
-   tag's weight and text tone. */
+/* Skills read as plotted values: quiet, squared, weighted by knowledge tier. */
 .skill-tag {
   display: inline-flex;
   align-items: center;
@@ -67,9 +65,8 @@
   white-space: nowrap;
 }
 
-/* Explain the three visual weights once instead of repeating DEEP / WORKING /
-   FAMILIAR inside every tag. Individual tags repeat their tier for assistive
-   technology with visually hidden text. */
+/* Names the three tag weights once, so no tag has to carry a visible badge.
+   The samples inherit the mid tone; the tier modifiers move them from it. */
 .skill-tier-legend {
   display: flex;
   align-items: baseline;
@@ -80,11 +77,11 @@
   font-size: var(--text-2xs);
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;
-  color: var(--color-fg-light);
+  color: var(--color-fg);
 }
 
 .skill-tier-legend-label {
-  color: var(--color-fg);
+  color: var(--color-fg-light);
 }
 
 /* Tech tags — squared, quiet, mono. */
@@ -109,21 +106,11 @@
   border-color: var(--color-border-alt);
 }
 
-/* Tier variations — the legend names these weights once, and each tag carries
-   a visually hidden textual equivalent.
-
-   Each modifier states its own colour. The legend samples wear the modifier
-   without `.skill-tag`, so a modifier that only sets a weight inherits the
-   legend's `--color-fg-light` and shows the reader the familiar tier under the
-   working label — including on paper, where `print.css` remaps both tokens. */
+/* Tier variations — weight and tone, not scale. The working tier is the
+   inherited middle, so only the outer two need a rule. */
 .skill-tag--deep {
   font-weight: var(--font-weight-medium);
   color: var(--color-fg-bold);
-}
-
-.skill-tag--working {
-  font-weight: var(--font-weight-normal);
-  color: var(--color-fg);
 }
 
 .skill-tag--familiar {

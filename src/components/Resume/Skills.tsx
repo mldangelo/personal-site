@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useId, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import type { Category, Skill } from '@/data/resume/skills';
 
@@ -24,9 +24,6 @@ export const ALL_CATEGORY = 'All';
  */
 export default function Skills({ skills, categories }: SkillsProps) {
   const [activeCategory, setActiveCategory] = useState<string>(ALL_CATEGORY);
-  const groupsId = useId();
-  const statusId = useId();
-  const controlledIds = `${groupsId} ${statusId}`;
 
   // Selecting the category that is already active returns to All, which keeps
   // the toggle affordance the buttons' pressed state implies.
@@ -42,10 +39,9 @@ export default function Skills({ skills, categories }: SkillsProps) {
           key={name}
           isActive={activeCategory === name}
           handleClick={handleChildClick}
-          controls={controlledIds}
         />
       )),
-    [categories, activeCategory, controlledIds, handleChildClick],
+    [categories, activeCategory, handleChildClick],
   );
 
   /**
@@ -71,38 +67,19 @@ export default function Skills({ skills, categories }: SkillsProps) {
       .filter((group) => group.skills.length > 0);
   }, [skills, categories]);
 
-  /**
-   * Counted from the groups that are actually rendered, never stated, so the
-   * announcement cannot drift from what is on screen. A skill in two categories
-   * renders twice, hence the de-duplication by title.
-   */
-  const totalSkillCount = useMemo(
-    () =>
-      new Set(
-        groupedSkills.flatMap(({ skills: groupSkills }) =>
-          groupSkills.map(({ title }) => title),
-        ),
-      ).size,
-    [groupedSkills],
+  // Both counts are of rendered tags, not distinct titles: a skill listed under
+  // two categories renders in both groups.
+  const totalSkillCount = groupedSkills.reduce(
+    (total, { skills: groupSkills }) => total + groupSkills.length,
+    0,
   );
 
-  const visibleSkillCount = useMemo(() => {
-    if (activeCategory === ALL_CATEGORY) return totalSkillCount;
+  const visibleSkillCount =
+    activeCategory === ALL_CATEGORY
+      ? totalSkillCount
+      : (groupedSkills.find(({ category }) => category.name === activeCategory)
+          ?.skills.length ?? 0);
 
-    return (
-      groupedSkills.find(({ category }) => category.name === activeCategory)
-        ?.skills.length ?? 0
-    );
-  }, [activeCategory, groupedSkills, totalSkillCount]);
-
-  /**
-   * `aria-pressed` on the buttons reports the state of the control; it says
-   * nothing about the result of pressing it, and the result here is that most
-   * of the section silently disappears. This states the outcome instead.
-   *
-   * It stays `.sr-only`: printing un-hides every group regardless of the filter,
-   * so a visible count would contradict the page it is printed on.
-   */
   const noun = totalSkillCount === 1 ? 'skill' : 'skills';
   const filterStatus =
     activeCategory === ALL_CATEGORY
@@ -115,13 +92,9 @@ export default function Skills({ skills, categories }: SkillsProps) {
         <h2>Skills</h2>
       </div>
       <div className="skill-button-container">{buttonElements}</div>
-      <p
-        id={statusId}
-        className="sr-only"
-        role="status"
-        aria-live="polite"
-        aria-atomic="true"
-      >
+      {/* Stays hidden: print.css un-hides every group, so a visible count
+          would contradict the page it is printed on. */}
+      <p className="sr-only" role="status">
         {filterStatus}
       </p>
       <p className="skill-tier-legend">
@@ -132,7 +105,7 @@ export default function Skills({ skills, categories }: SkillsProps) {
         <span aria-hidden="true">·</span>
         <span className="skill-tag--familiar">Familiar</span>
       </p>
-      <div id={groupsId} className="skill-groups">
+      <div className="skill-groups">
         {groupedSkills.map(({ category, skills: categorySkills }) => {
           const isVisible =
             activeCategory === ALL_CATEGORY || activeCategory === category.name;
