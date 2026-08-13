@@ -111,7 +111,7 @@
 }
 
 .hero-resume-link:focus-visible {
-  outline: var(--rule-strong) solid var(--color-accent);
+  outline: var(--rule-strong) solid var(--color-focus-ring);
   outline-offset: 2px;
 }
 

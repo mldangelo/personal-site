@@ -34,14 +34,34 @@
   --color-accent-underline-strong: color-mix(in srgb, var(--color-accent) 55%, transparent);
 
   /* ===================
+     FOCUS RING
+     A ring only works if it contrasts with what it surrounds, so there are two:
+
+     --color-focus-ring       the accent, for controls on the page surface.
+     --color-focus-ring-fill  ink, for accent-filled controls. In light mode
+                              --color-accent-fill resolves to --color-accent,
+                              so an accent ring on a filled button is the
+                              fill's own colour (1.00:1) and reads as a fatter
+                              button rather than as focus. Ink instead:
+                              18.3:1 on paper, 16.3:1 on ink.
+     =================== */
+  --color-focus-ring: var(--color-accent);
+  --color-focus-ring-fill: var(--color-fg-bold);
+
+  /* ===================
      SIGNAL — amber
      Reserved for live/measured values and the
      current-position marker. Never decorative.
-     --color-signal      text-safe on page bg (AA)
+     --color-signal      text-safe on page bg (5.5:1 raised, 5.0:1 page)
      --color-signal-mark graphic use only (ticks, dots, rules)
+
+     The visible "Present" text already carries the state, so WCAG 1.4.11 does
+     not require the redundant dot to clear 3:1; the design chooses that floor
+     anyway. The previous #e8930c measured 2.36:1 and 2.16:1 on those two
+     surfaces, this same-hue replacement 3.5:1 and 3.2:1.
      =================== */
   --color-signal: #9a5600;
-  --color-signal-mark: #e8930c;
+  --color-signal-mark: #bc770a;
 
   /* ===================
      BORDER COLORS
@@ -52,8 +72,10 @@
   --color-border-bg: rgba(35, 39, 46, 0.08);
 
   /* Structural hairlines are meant to be quiet and sit near 1.5:1, which is
-     fine for dividing content but not for the only visible edge of a
-     control. Interactive boundaries use this instead, at 3:1 against paper. */
+     fine for dividing content but not for the only visible edge of a control.
+     Interactive boundaries use this instead: 4.1:1 on --color-bg, 3.8:1 on
+     --color-bg-alt. A deliberate 3:1 floor, not a claim that SC 1.4.11
+     requires it of every labelled boundary. */
   --color-control-border: #767b83;
   --color-border-alt: rgba(35, 39, 46, 0.24);
 

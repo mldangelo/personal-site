@@ -43,5 +43,8 @@
 /* Theme Overrides */
 @import './styles/dark-mode.css';
 
+/* Forced colors — overrides whichever theme is active; print still wins */
+@import './styles/forced-colors.css';
+
 /* Print — must come last so it can override both themes */
 @import './styles/print.css';
