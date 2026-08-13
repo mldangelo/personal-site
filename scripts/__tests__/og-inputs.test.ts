@@ -82,17 +82,27 @@ describe('share card inputs', () => {
     expect(cards.map((card) => card.slug)).toEqual(getPostSlugs());
   });
 
-  it('leaves drafts out of the card set, the ledger, and public/', () => {
+  it('leaves drafts out of the card set, the ledger, and public/', async () => {
+    // Proven against a fixture rather than against whichever posts happen to
+    // be drafts today. This assertion used to require the repository to
+    // contain at least one draft, which meant publishing the last one turned
+    // the guard red instead of leaving it to keep working.
+    const draftOnly = (await readPostCards(
+      postFixture({
+        title: 'Fixture title',
+        date: '2026-01-08',
+        description: 'Fixture description.',
+        draft: true,
+      }),
+    )) as PostCard[];
+    expect(draftOnly).toEqual([]);
+
+    // And the real tree agrees, for however many drafts it currently holds.
     const drafts = readdirSync(join(ROOT, 'content', 'writing'))
       .filter((file) => file.endsWith('.md'))
       .map((file) => file.replace(/\.md$/, ''))
       .filter((slug) => !getPostSlugs().includes(slug));
     const ledger = readFileSync(LEDGER, 'utf8');
-
-    // The fixture this protects against is real: one post in the repository is
-    // a draft, so an empty list here means the test has stopped proving
-    // anything.
-    expect(drafts.length).toBeGreaterThan(0);
 
     for (const slug of drafts) {
       expect(cards.map((card) => card.slug)).not.toContain(slug);

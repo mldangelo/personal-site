@@ -1,5 +1,15 @@
+import { rmSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import {
+  afterAll,
+  afterEach,
+  beforeAll,
+  describe,
+  expect,
+  it,
+  vi,
+} from 'vitest';
 
 import {
   AUTHOR_NAME,
@@ -9,6 +19,49 @@ import {
 } from '@/lib/utils';
 
 import PostPage, { generateMetadata } from './page';
+
+/**
+ * The draft path is read from `content/writing/` by slug, with no seam to
+ * inject a fixture through, so the draft has to be a real file for the length
+ * of this suite.
+ *
+ * It used to be whichever post happened to be unpublished, which made these
+ * tests fail the moment that post was published — and the behaviour they pin
+ * is not decoration: a draft once shipped carrying `index, follow`. Writing
+ * the fixture keeps the guard independent of what the repository publishes.
+ *
+ * Safe to run alongside the other suites: every reader of the post set
+ * (`getPostSlugs`, `getAllPosts`, the card generator, `verify-export`) filters
+ * drafts out, so nothing else sees this file.
+ */
+const DRAFT_SLUG = 'zz-draft-preview-fixture';
+const DRAFT_TITLE = 'A Draft Held Back From Publication';
+const DRAFT_FILE = join(process.cwd(), 'content/writing', `${DRAFT_SLUG}.md`);
+
+beforeAll(() => {
+  writeFileSync(
+    DRAFT_FILE,
+    [
+      '---',
+      `title: '${DRAFT_TITLE}'`,
+      "date: '2026-01-08'",
+      "description: 'Unpublished while it is being written.'",
+      'draft: true',
+      '---',
+      '',
+      'Body copy.',
+      '',
+      // Deliberately absent from `public/`: a draft may reference an image
+      // that has not been committed yet, and the page must still render.
+      `![Screenshot](/images/writing/${DRAFT_SLUG}/absent.png)`,
+      '',
+    ].join('\n'),
+  );
+});
+
+afterAll(() => {
+  rmSync(DRAFT_FILE, { force: true });
+});
 
 afterEach(() => {
   vi.unstubAllEnvs();
@@ -64,7 +117,7 @@ describe('writing post metadata', () => {
 
   it('previews a draft without generating or referencing a public draft card', async () => {
     vi.stubEnv('NODE_ENV', 'development');
-    const slug = 'why-i-mostly-switched-from-claude-code-to-codex-desktop-app';
+    const slug = DRAFT_SLUG;
     const metadata = await generateMetadata({
       params: Promise.resolve({ slug }),
     });
@@ -106,16 +159,14 @@ describe('writing post structured data', () => {
     });
   });
 
-  it('renders the real development draft when its private images are absent', async () => {
+  it('renders a draft in development when its private images are absent', async () => {
     vi.stubEnv('NODE_ENV', 'development');
-    const slug = 'why-i-mostly-switched-from-claude-code-to-codex-desktop-app';
+    const slug = DRAFT_SLUG;
     const markup = renderToStaticMarkup(
       await PostPage({ params: Promise.resolve({ slug }) }),
     );
 
-    expect(markup).toContain(
-      'Why I Mostly Switched From Claude Code to the Codex Desktop App',
-    );
+    expect(markup).toContain(DRAFT_TITLE);
     expect(markup).toContain('width="1200"');
     expect(markup).toContain('height="675"');
     expect(markup).not.toContain(`/og/writing/${slug}.png`);

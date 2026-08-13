@@ -66,6 +66,29 @@
   "imageDigest": "9c76fd6b9be9ed5e8253a35ee7b741e219b2bfd5484b5bd29c90eb7a3241d4eb",
   "posts": [
     {
+      "slug": "why-i-mostly-switched-from-claude-code-to-codex-desktop-app",
+      "path": "/og/writing/why-i-mostly-switched-from-claude-code-to-codex-desktop-app.png",
+      "title": "Why I Mostly Switched From Claude Code to the Codex Desktop App",
+      "description": "How the Codex desktop app became my default coding workspace, and where Claude Code still wins.",
+      "date": "2026-07-30",
+      "dateLabel": "July 30, 2026",
+      "readout": [
+        {
+          "label": "Words",
+          "value": "2,632"
+        },
+        {
+          "label": "Unique external links",
+          "value": "18"
+        },
+        {
+          "label": "Reading time",
+          "value": "12 min"
+        }
+      ],
+      "imageDigest": "b2fe5fa57c49537a826e409371a6efee3fe97f481c5f371b2b166c7bfc1b6bda"
+    },
+    {
       "slug": "claude-code-outage",
       "path": "/og/writing/claude-code-outage.png",
       "title": "Notes on the Claude Code 2.1.0 outage",
@@ -121,7 +144,7 @@
       "readout": [
         {
           "label": "Words",
-          "value": "1,924"
+          "value": "1,911"
         },
         {
           "label": "Unique external links",
@@ -129,10 +152,10 @@
         },
         {
           "label": "Reading time",
-          "value": "9 min"
+          "value": "8 min"
         }
       ],
-      "imageDigest": "a46c1dfd2a4da87e8f532a11589745410d8af75c52eb67e6933d794376bcb394"
+      "imageDigest": "4587658c363afea0b63ab90977964c687e339d14615b60f72224bb538b96f3b8"
     }
   ]
 }
