@@ -33,6 +33,11 @@ interface PostContentProps {
    * each one reserved the wrong ratio and shifted the page as it loaded.
    */
   imageSizes?: Record<string, ImageSize>;
+  /**
+   * Draft previews may point at intentionally unpublished local images. The
+   * production path remains strict and refuses invented dimensions.
+   */
+  allowMissingLocalImages?: boolean;
 }
 
 /** Remote/data images cannot be inspected from the repository at build time. */
@@ -270,12 +275,13 @@ function CodeFence({ children }: { children?: ReactNode }) {
 }
 
 export default function PostContent({
+  allowMissingLocalImages = false,
   content,
   imageSizes = {},
 }: PostContentProps) {
   function sizeFor(src: string): ImageSize {
     const measuredSize = imageSizes[src];
-    if (isRootLocalImage(src) && !measuredSize) {
+    if (isRootLocalImage(src) && !measuredSize && !allowMissingLocalImages) {
       throw new Error(
         `Missing measured dimensions for local article image: ${src}`,
       );
