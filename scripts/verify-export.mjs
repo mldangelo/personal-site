@@ -94,6 +94,12 @@ function canonicalValues(html) {
     .filter((href) => href !== undefined);
 }
 
+function linkTagsForRel(html, value) {
+  return tags(html, 'link').filter((tag) =>
+    (attribute(tag, 'rel') ?? '').toLowerCase().split(/\s+/).includes(value),
+  );
+}
+
 function readSiteConfig() {
   const packagePath = resolve(ROOT, 'package.json');
   try {
@@ -195,20 +201,28 @@ function pageAt(pathname) {
   );
 }
 
-function exportedFileExists(pathname) {
+function exportedFileForPathname(pathname) {
   let decoded;
   try {
     decoded = decodeURIComponent(pathname);
   } catch {
-    return false;
+    return undefined;
   }
 
   const route = routeForPublicPath(decoded);
-  if (route === undefined) return false;
+  if (route === undefined) return undefined;
 
   const candidate = resolve(OUT, route.replace(/^\/+/, ''));
-  if (candidate !== OUT && !candidate.startsWith(`${OUT}${sep}`)) return false;
-  return existsSync(candidate) && statSync(candidate).isFile();
+  if (candidate !== OUT && !candidate.startsWith(`${OUT}${sep}`)) {
+    return undefined;
+  }
+  return existsSync(candidate) && statSync(candidate).isFile()
+    ? candidate
+    : undefined;
+}
+
+function exportedFileExists(pathname) {
+  return exportedFileForPathname(pathname) !== undefined;
 }
 
 function parseHttpUrl(raw, baseRoute, page, label) {
@@ -277,6 +291,32 @@ function validateInternalTarget(raw, source, label) {
       `${label} points at missing fragment: ${url.pathname}#${fragment}`,
     );
   }
+}
+
+function validateExportedHeadAsset(raw, source, label) {
+  const url = parseHttpUrl(raw, source.route, source.relativePath, label);
+  if (!url) {
+    fail(source.relativePath, `${label} must use HTTP or HTTPS: ${raw}`);
+    return undefined;
+  }
+  if (url.origin !== SITE_ORIGIN) {
+    fail(
+      source.relativePath,
+      `${label} uses ${url.origin}; expected ${SITE_ORIGIN}`,
+    );
+    return url;
+  }
+  if (routeForPublicPath(url.pathname) === undefined) {
+    fail(
+      source.relativePath,
+      `${label} points outside configured base path ${SITE_BASE_PATH}/: ${raw}`,
+    );
+    return url;
+  }
+  if (!exportedFileExists(url.pathname)) {
+    fail(source.relativePath, `${label} points at missing export: ${raw}`);
+  }
+  return url;
 }
 
 function validateAbsoluteMetadataUrl(raw, source, label) {
@@ -484,6 +524,154 @@ for (const record of records) {
   if (isIndexable && !tags(html, 'title').length) {
     fail(relativePath, 'no <title>');
   }
+
+  const manifestLinks = linkTagsForRel(html, 'manifest');
+  const iconLinks = linkTagsForRel(html, 'icon');
+  const appleIconLinks = linkTagsForRel(html, 'apple-touch-icon');
+
+  for (const [label, links, expected] of [
+    ['manifest link', manifestLinks, 1],
+    ['icon links', iconLinks, 2],
+    ['apple-touch-icon link', appleIconLinks, 1],
+  ]) {
+    if (links.length !== expected) {
+      fail(relativePath, `has ${links.length} ${label}; expected ${expected}`);
+    }
+  }
+
+  for (const [label, links] of [
+    ['manifest link', manifestLinks],
+    ['icon link', iconLinks],
+    ['apple-touch-icon link', appleIconLinks],
+  ]) {
+    for (const tag of links) {
+      const href = attribute(tag, 'href');
+      if (href === undefined) {
+        fail(relativePath, `${label} has no href`);
+      } else {
+        validateExportedHeadAsset(href, record, label);
+      }
+    }
+  }
+}
+
+const home = recordsByRoute.get('/');
+if (!home) {
+  fail('manifest.json', 'cannot validate manifest without exported home page');
+} else {
+  const manifestTag = linkTagsForRel(home.html, 'manifest')[0];
+  const manifestHref = manifestTag ? attribute(manifestTag, 'href') : undefined;
+  const manifestUrl = manifestHref
+    ? validateExportedHeadAsset(manifestHref, home, 'manifest link')
+    : undefined;
+  const manifestFile = manifestUrl
+    ? exportedFileForPathname(manifestUrl.pathname)
+    : undefined;
+
+  if (manifestFile && manifestUrl) {
+    let manifest;
+    try {
+      manifest = JSON.parse(readFileSync(manifestFile, 'utf8'));
+    } catch (error) {
+      fail('manifest.json', `is not valid JSON: ${error.message}`);
+    }
+
+    const memberUrl = (name) => {
+      const raw = manifest?.[name];
+      if (typeof raw !== 'string' || !raw.trim()) {
+        fail('manifest.json', `${name} must be a non-empty URL string`);
+        return undefined;
+      }
+
+      let url;
+      try {
+        url = new URL(raw, manifestUrl);
+      } catch {
+        fail('manifest.json', `${name} is not a valid URL: ${raw}`);
+        return undefined;
+      }
+
+      if (url.origin !== SITE_ORIGIN) {
+        fail('manifest.json', `${name} uses a foreign origin: ${url.origin}`);
+      } else if (routeForPublicPath(url.pathname) === undefined) {
+        fail(
+          'manifest.json',
+          `${name} points outside configured base path ${SITE_BASE_PATH}/: ${raw}`,
+        );
+      }
+      return url;
+    };
+
+    const startUrl = memberUrl('start_url');
+    const scopeUrl = memberUrl('scope');
+
+    if (
+      startUrl &&
+      !pageAt(startUrl.pathname) &&
+      !exportedFileExists(startUrl.pathname)
+    ) {
+      fail(
+        'manifest.json',
+        `start_url points at missing export: ${startUrl.pathname}`,
+      );
+    }
+    if (scopeUrl && !scopeUrl.pathname.endsWith('/')) {
+      fail('manifest.json', `scope must end in "/": ${scopeUrl.pathname}`);
+    }
+    if (
+      startUrl &&
+      scopeUrl &&
+      (startUrl.origin !== scopeUrl.origin ||
+        !startUrl.pathname.startsWith(scopeUrl.pathname))
+    ) {
+      fail(
+        'manifest.json',
+        `start_url ${startUrl.pathname} is outside scope ${scopeUrl.pathname}`,
+      );
+    }
+
+    if (!Array.isArray(manifest?.icons) || manifest.icons.length === 0) {
+      fail('manifest.json', 'icons must contain at least one entry');
+    } else {
+      for (const [index, icon] of manifest.icons.entries()) {
+        if (typeof icon?.src !== 'string' || !icon.src.trim()) {
+          fail(
+            'manifest.json',
+            `icons[${index}].src must be a non-empty URL string`,
+          );
+          continue;
+        }
+
+        let iconUrl;
+        try {
+          iconUrl = new URL(icon.src, manifestUrl);
+        } catch {
+          fail(
+            'manifest.json',
+            `icons[${index}].src is not a valid URL: ${icon.src}`,
+          );
+          continue;
+        }
+
+        if (iconUrl.origin !== SITE_ORIGIN) {
+          fail(
+            'manifest.json',
+            `icons[${index}].src uses a foreign origin: ${iconUrl.origin}`,
+          );
+        } else if (routeForPublicPath(iconUrl.pathname) === undefined) {
+          fail(
+            'manifest.json',
+            `icons[${index}].src points outside configured base path ${SITE_BASE_PATH}/: ${icon.src}`,
+          );
+        } else if (!exportedFileExists(iconUrl.pathname)) {
+          fail(
+            'manifest.json',
+            `icons[${index}].src points at missing export: ${icon.src}`,
+          );
+        }
+      }
+    }
+  }
 }
 
 function validateXmlUrl(raw, documentName, options = {}) {
@@ -603,5 +791,5 @@ if (failures.length > 0) {
 
 console.log(
   `verify-export: ${pages.length} pages OK ` +
-    '(drafts, robots, ids/fragments, canonicals, complete share metadata, local images, internal links, sitemap/RSS)',
+    '(drafts, robots, ids/fragments, canonicals, complete share metadata, icons/manifest, local images, internal links, sitemap/RSS)',
 );
