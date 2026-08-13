@@ -241,10 +241,6 @@
     border-color: rgba(0, 0, 0, 0.35);
   }
 
-  .skill-tag::before {
-    display: none;
-  }
-
   /* Reveal destinations for links that are not obvious from their text. On the
      resume that is the identifying link on each professional or education
      entry — the company or school — which otherwise prints as
