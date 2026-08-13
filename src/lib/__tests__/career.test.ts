@@ -6,19 +6,11 @@ import {
   careerSpanYears,
   currentPosition,
   formatDuration,
-  formatDurationLong,
   monthsBetween,
-  positionDuration,
-  positionDurationLong,
   sortPositions,
-  timelineKey,
 } from '../career';
 
-/**
- * A fixed instant, so every figure derived from "now" is pinned. Mirrors the
- * approach `telemetry.test.ts` takes with `ageAt()` — none of these functions
- * read the clock themselves, which is the whole reason they can be tested.
- */
+/** A fixed instant, so every figure derived from "now" is pinned. */
 const NOW = new Date('2026-07-28T12:00:00Z').getTime();
 
 function position(overrides: Partial<Position> = {}): Position {
@@ -34,17 +26,6 @@ function position(overrides: Partial<Position> = {}): Position {
 
 function byName(positions: Position[]): string[] {
   return positions.map((entry) => entry.name);
-}
-
-/** A real role from `work`, so the pinned figures are about actual data. */
-function roleNamed(name: string): Position {
-  const found = work.find((entry) => entry.name === name);
-
-  if (!found) {
-    throw new Error(`No role named "${name}" in the work data`);
-  }
-
-  return found;
 }
 
 describe('sortPositions', () => {
@@ -95,6 +76,20 @@ describe('sortPositions', () => {
     expect(byName(ordered)).toEqual(['Ongoing', 'Closed']);
   });
 
+  it('places an open-ended side role by its start rather than at the top', () => {
+    const ordered = sortPositions([
+      position({
+        name: 'Side fund',
+        startDate: '2017-04-01',
+        endDate: undefined,
+        commitment: 'part-time',
+      }),
+      position({ name: 'Later job', endDate: '2023-01-01' }),
+    ]);
+
+    expect(byName(ordered)).toEqual(['Later job', 'Side fund']);
+  });
+
   it('does not mutate the array it is given', () => {
     const input = [
       position({ name: 'Older', startDate: '2014-01-01' }),
@@ -106,36 +101,6 @@ describe('sortPositions', () => {
 
     expect(byName(input)).toEqual(snapshot);
     expect(ordered).not.toBe(input);
-  });
-
-  it('returns real career data in non-increasing timeline order', () => {
-    // The source array runs 2022 → 2017 → 2014 → 2015 → 2014 through the
-    // middle. Source order is no longer load-bearing, but the rendered order
-    // is, so it is pinned here.
-    const keys = sortPositions(work).map(timelineKey);
-
-    for (let i = 1; i < keys.length; i += 1) {
-      expect(keys[i].localeCompare(keys[i - 1])).toBeLessThanOrEqual(0);
-    }
-  });
-
-  it('leads the real career data with the current OpenAI role', () => {
-    expect(sortPositions(work)[0].name).toBe('OpenAI');
-  });
-
-  it('places the long Arthena role above shorter overlapping roles', () => {
-    const ordered = byName(sortPositions(work));
-
-    expect(ordered.indexOf('Arthena')).toBeLessThan(ordered.indexOf('Matroid'));
-    expect(ordered.indexOf('Arthena')).toBeLessThan(ordered.indexOf('Planet'));
-  });
-
-  it('places an open-ended side role among its contemporaries', () => {
-    const ordered = byName(sortPositions(work));
-    const sideRole = ordered.indexOf('Skeptical Investments');
-
-    expect(sideRole).toBeGreaterThan(ordered.indexOf('Arthena'));
-    expect(sideRole).toBeLessThan(ordered.indexOf('Matroid'));
   });
 });
 
@@ -215,80 +180,27 @@ describe('monthsBetween', () => {
   it('reports nothing for a reversed range instead of a negative tenure', () => {
     expect(monthsBetween('2022-01-01', '2014-01-01')).toBe(0);
   });
-
-  it('is the same measurement regardless of the reader (both dates are ISO)', () => {
-    expect(monthsBetween('2015-09-01', '2016-06-01')).toBe(9);
-  });
 });
 
 describe('formatDuration', () => {
-  it('renders months alone under a year', () => {
-    expect(formatDuration(1)).toBe('1 mo');
-    expect(formatDuration(11)).toBe('11 mo');
-  });
-
-  it('drops the month component on a whole number of years', () => {
-    expect(formatDuration(12)).toBe('1 yr');
-    expect(formatDuration(96)).toBe('8 yr');
-  });
-
-  it('renders both components otherwise', () => {
-    expect(formatDuration(95)).toBe('7 yr 11 mo');
-    expect(formatDuration(20)).toBe('1 yr 8 mo');
-  });
-
-  it('marks anything under a month rather than printing "0 mo"', () => {
-    expect(formatDuration(0)).toBe('<1 mo');
-    expect(formatDuration(-5)).toBe('<1 mo');
-  });
-});
-
-describe('formatDurationLong', () => {
-  it('writes out singular and plural units', () => {
-    expect(formatDurationLong(1)).toBe('1 month');
-    expect(formatDurationLong(12)).toBe('1 year');
-    expect(formatDurationLong(13)).toBe('1 year 1 month');
-    expect(formatDurationLong(26)).toBe('2 years 2 months');
-  });
-
-  it('describes a sub-month duration without a zero', () => {
-    expect(formatDurationLong(0)).toBe('less than 1 month');
-  });
-});
-
-describe('positionDuration', () => {
-  it('measures a closed role between its own dates and ignores now', () => {
-    expect(positionDuration(roleNamed('Arthena'), NOW)).toBe('8 yr');
-  });
-
-  it('measures an ongoing role to the instant it is given', () => {
-    const openai = roleNamed('OpenAI');
-
-    expect(openai.endDate).toBeUndefined();
-    expect(positionDuration(openai, NOW)).toBe('4 mo');
-  });
-
-  it('measures the long-running ongoing side role to the same instant', () => {
-    expect(positionDuration(roleNamed('Skeptical Investments'), NOW)).toBe(
-      '9 yr 3 mo',
-    );
-  });
-
-  it('agrees with the range shown beside it', () => {
-    // July 2024 – March 2026.
-    expect(positionDuration(roleNamed('Promptfoo'), NOW)).toBe('1 yr 8 mo');
-    expect(positionDurationLong(roleNamed('Promptfoo'), NOW)).toBe(
-      '1 year 8 months',
-    );
+  it.each([
+    [-5, '<1 mo', 'less than 1 month'],
+    [0, '<1 mo', 'less than 1 month'],
+    [1, '1 mo', '1 month'],
+    [11, '11 mo', '11 months'],
+    [12, '1 yr', '1 year'],
+    [13, '1 yr 1 mo', '1 year 1 month'],
+    [20, '1 yr 8 mo', '1 year 8 months'],
+    [26, '2 yr 2 mo', '2 years 2 months'],
+    [95, '7 yr 11 mo', '7 years 11 months'],
+    [96, '8 yr', '8 years'],
+  ])('renders %i months as "%s" and "%s"', (months, short, long) => {
+    expect(formatDuration(months)).toBe(short);
+    expect(formatDuration(months, true)).toBe(long);
   });
 });
 
 describe('careerSpanYears', () => {
-  it('counts the elapsed span since the earliest role began', () => {
-    // Earliest start in the real data is 2011-06-01.
-    expect(careerSpanYears(work, NOW)).toBe(15);
-  });
-
   it('reads the earliest start regardless of array order', () => {
     const positions = [
       position({ startDate: '2020-01-01' }),

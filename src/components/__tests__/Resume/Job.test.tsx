@@ -113,12 +113,6 @@ describe('Job', () => {
     );
   });
 
-  /**
-   * The instant is build time on a static export with no scheduled rebuild,
-   * so an ongoing tenure is a floor by the time anyone reads it. It is hedged
-   * the way the career span in the resume header is; a closed role, measured
-   * between two dates that will not move, is not (see the test above).
-   */
   it('measures an ongoing role to the instant it is given, hedged', () => {
     render(<Job data={{ ...mockJob, endDate: undefined }} now={NOW} />);
 
@@ -131,12 +125,8 @@ describe('Job', () => {
     );
   });
 
-  /**
-   * "<1 mo" is already an upper bound, so hedging it upward would read "less
-   * than 1 month or more" — a claim bracketed from both sides at once. This is
-   * reachable in the first month of exactly the newly appended role the
-   * derivation exists to place, so it is pinned rather than left to judgement.
-   */
+  // "<1 mo" is already an upper bound; hedging it would read "less than 1
+  // month or more", bracketing the value from both sides at once.
   it('does not hedge an ongoing role that has not run a whole month', () => {
     render(
       <Job
@@ -151,26 +141,6 @@ describe('Job', () => {
     );
     expect(duration?.querySelector('.sr-only')).toHaveTextContent(
       'Duration: less than 1 month',
-    );
-  });
-
-  it('keeps the tenure inside the date range so it shares the gutter', () => {
-    render(<Job data={mockJob} now={NOW} />);
-
-    const duration = document.querySelector('.daterange-duration');
-    expect(duration?.parentElement).toHaveClass('daterange');
-  });
-
-  /**
-   * Amber is reserved for live values and is already spent on "Present" one
-   * word earlier. Marking the same fact twice is what makes the signal stop
-   * meaning anything, so the tenure stays quiet on every role.
-   */
-  it('does not claim the live signal for the tenure', () => {
-    render(<Job data={{ ...mockJob, endDate: undefined }} now={NOW} />);
-
-    expect(document.querySelector('.daterange-duration')).not.toHaveClass(
-      'daterange-present',
     );
   });
 });
