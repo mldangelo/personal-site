@@ -70,6 +70,25 @@ describe('routes', () => {
       .filter((route) => route.primary === false)
       .map((route) => route.path);
 
-    expect(secondaryPaths).toEqual(['/stats', '/projects']);
+    expect(secondaryPaths).toEqual(['/stats']);
+  });
+
+  /**
+   * Pinned as a list, because `/projects` used to be secondary and so was
+   * reachable only through the footer — which `/contact` hides. A route
+   * dropping out of the primary nav now has to be a deliberate edit here.
+   */
+  it('names every primary navigation destination', () => {
+    const primaryPaths = routes
+      .filter((route) => !route.index && route.primary !== false)
+      .map((route) => route.path);
+
+    expect(primaryPaths).toEqual([
+      '/about',
+      '/resume',
+      '/projects',
+      '/writing',
+      '/contact',
+    ]);
   });
 });

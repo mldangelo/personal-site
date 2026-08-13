@@ -83,8 +83,14 @@ jobs:
       - name: Format Check
         run: npm run format:check
 
-      - name: Verify generated share card
-        run: npm run og:check
+      # Split so a font-fetch failure reads as a network problem rather than as
+      # a stale card: the ledger half is hermetic, the render half reaches
+      # fonts.gstatic.com for the three checksum-pinned TTFs.
+      - name: Verify share-card ledger
+        run: npm run og:check:ledger
+
+      - name: Verify share cards against a fresh render
+        run: npm run og:check:render
 
   # Run tests
   test:
@@ -203,6 +209,13 @@ jobs:
       # sitemap/RSS integrity. None of these are visible to component tests.
       - name: Verify export
         run: npm run verify-export
+
+      # Weighs what Pages actually serves, most of which is not JavaScript, and
+      # fails when a subsystem crosses the ratchet in scripts/budget.json. The
+      # budgets carry documented headroom so ordinary changes stay green; a
+      # deliberate increase is `--update-budget` plus a note in the pull request.
+      - name: Measure export against size budget
+        run: npm run measure-export
 
       - name: Upload build artifacts
         if: >-

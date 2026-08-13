@@ -7,43 +7,98 @@ import References from '@/components/Resume/References';
 import ResumeNav from '@/components/Resume/ResumeNav';
 import Skills from '@/components/Resume/Skills';
 import PageWrapper from '@/components/Template/PageWrapper';
+import contact, { type ContactId } from '@/data/contact';
 import profile from '@/data/profile.json';
 import courses from '@/data/resume/courses';
 import degrees from '@/data/resume/degrees';
 import { categories, skills } from '@/data/resume/skills';
 import work from '@/data/resume/work';
+import { careerSpanYears } from '@/lib/career';
 import { createPageMetadata } from '@/lib/metadata';
+import { RESUME_JSON_PATH, RESUME_JSON_URL } from '@/lib/resumeJson';
 import { AUTHOR_NAME, SITE_URL } from '@/lib/utils';
 
-export const metadata: Metadata = createPageMetadata({
+const resumeMetadata = createPageMetadata({
   title: 'Resume',
   description: `${AUTHOR_NAME}'s Resume. OpenAI, Promptfoo, Smile ID, Arthena, Matroid, Stanford ICME, YC alum.`,
   path: '/resume/',
 });
 
+export const metadata: Metadata = {
+  ...resumeMetadata,
+  // The visible chip serves readers; the alternate lets tools discover the
+  // machine-readable document without scraping page copy. Keep the canonical
+  // that createPageMetadata already supplied when adding the new type.
+  alternates: {
+    ...resumeMetadata.alternates,
+    types: {
+      'application/json': RESUME_JSON_URL,
+    },
+  },
+};
+
+/** A URL as it should read on paper: no protocol, no `www.`, no trailing slash. */
+function displayUrl(url: string): string {
+  return url.replace(/^https?:\/\/(?:www\.)?/, '').replace(/\/$/, '');
+}
+
+/**
+ * Looks a destination up by its stable data key rather than its display label,
+ * so copy edits cannot break the printed header. Throws rather than falling
+ * back, because a silently empty `href` on a printed resume is worse than a
+ * failed build.
+ */
+function contactLink(id: ContactId): string {
+  const item = contact.find((entry) => entry.id === id);
+  if (!item) {
+    throw new Error(`No "${id}" entry in src/data/contact.ts`);
+  }
+  return item.link;
+}
+
 export default function ResumePage() {
+  // One read, shared by the headline span and every tenure; baked at build time.
+  const now = Date.now();
+  const careerSpan = careerSpanYears(work, now);
+  const github = contactLink('github');
+  const linkedin = contactLink('linkedin');
+
   return (
     <PageWrapper>
       <section className="resume-page">
         <header className="resume-header">
-          <h1 className="resume-title">Resume</h1>
+          <div className="resume-header-row">
+            <h1 className="resume-title">Resume</h1>
+            {/* The same affordance as the RSS chip on /writing. The href is
+                document-relative on purpose: /resume/ may live below a
+                repository base path, while a root-relative href would escape
+                it. ../resume.json resolves correctly in both deployments. */}
+            <a
+              href={`..${RESUME_JSON_PATH}`}
+              className="resume-json-link"
+              title="JSON Resume"
+              aria-label="JSON Resume"
+            >
+              JSON
+            </a>
+          </div>
           <p className="resume-summary">
-            Engineering leader with 15+ years building products across AI,
-            security, and infrastructure. I&apos;m currently a Member of the
+            Engineering leader with a career spanning {careerSpan}+ years across
+            AI, security, and infrastructure. I&apos;m currently a Member of the
             Technical Staff at OpenAI, working on Promptfoo and Codex Security.
             I help secure AI systems and use AI to find software
             vulnerabilities. I co-founded Promptfoo before it joined OpenAI in
             2026. Stanford MS, YC alum, previously VP Engineering.
           </p>
           {/* Print-only, but real markup rather than CSS `content`, so it is
-              selectable, linkable, and reads from the shared profile. The
-              screen layout carries these in the footer, which print hides. */}
+              selectable and linkable. Destinations come from shared contact
+              data, while the location comes from the shared profile. */}
           <address className="resume-print-contact">
-            <a href={`${SITE_URL}/`}>{SITE_URL.replace(/^https?:\/\//, '')}</a>
-            <span aria-hidden="true"> · </span>
+            <span>{profile.currentCity}</span>
+            <a href={`${SITE_URL}/`}>{displayUrl(SITE_URL)}</a>
             <a href={`mailto:${profile.email}`}>{profile.email}</a>
-            <span aria-hidden="true"> · </span>
-            <a href="https://github.com/mldangelo">github.com/mldangelo</a>
+            <a href={github}>{displayUrl(github)}</a>
+            <a href={linkedin}>{displayUrl(linkedin)}</a>
           </address>
         </header>
 
@@ -51,7 +106,7 @@ export default function ResumePage() {
 
         <div className="resume-content">
           <section id="experience" className="resume-section">
-            <Experience data={work} />
+            <Experience data={work} now={now} />
           </section>
 
           <section id="education" className="resume-section">

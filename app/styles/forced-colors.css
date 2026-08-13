@@ -1,0 +1,123 @@
+/* ========================================
+   FORCED COLORS
+   Windows High Contrast Mode, and any other user-forced palette.
+
+   A forced palette replaces author colours and drops non-URL background
+   images, so gradient underlines, filled state, and blended portraits lose
+   their meaning. It remaps `border-color` and `outline-color` for you;
+   everything below is what it cannot do for itself. A mode override like
+   dark-mode.css: unlayered, and ordered in tailwind.css.
+   ======================================== */
+
+@media (forced-colors: active) {
+  /* ===================
+     LINKS
+     These underlines are `background-image` gradients (base/links.css,
+     home.css), which the palette discards. Navigation-like links set
+     `text-decoration: none` at (0,1,0) and do not pick this up.
+     =================== */
+  p a,
+  .hero-highlight {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+  }
+
+  /* Active-item bars are pseudo-element backgrounds, which flatten to Canvas. */
+  .nav-link::after,
+  .resume-nav-link.active::after {
+    background-color: LinkText;
+  }
+
+  /* Every navigation link maps to LinkText, losing the current-page colour. */
+  .hamburger-ul li a.active span {
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+
+  /* ===================
+     CONTROLS
+     `.button` is usually an `<a>`, so the UA gives it no button treatment and
+     its fill flattens to Canvas. `.button-secondary` is the unfilled variant,
+     left to the UA, or the two variants become one control.
+     =================== */
+  .button:not(.button-secondary) {
+    background-color: ButtonFace;
+    color: ButtonText;
+    border-color: ButtonText;
+  }
+
+  /* Three background-drawn bars on a transparent, borderless button. */
+  .hamburger-icon span {
+    background-color: CanvasText;
+  }
+
+  /* header.css draws the focused glyph at (0,3,1). CanvasText again, because
+     Highlight is only guaranteed against HighlightText, not Canvas. */
+  .hamburger-button:focus-visible .hamburger-icon span {
+    background-color: CanvasText;
+  }
+
+  /* A lit filter is a selection, so it takes the palette's selection pair. */
+  .skillbutton-active:not(.skillbutton--all) {
+    background-color: Highlight;
+    color: HighlightText;
+    border-color: Highlight;
+  }
+
+  /* ===================
+     STATE THAT NEEDS MORE THAN COLOUR
+     Amber does not survive, so filled-versus-hollow carries the current role;
+     the 9px-versus-7px size difference cannot.
+     =================== */
+  .jobs-container--current .job-marker {
+    background-color: CanvasText;
+    border-color: CanvasText;
+  }
+
+  /* Both spines are background-drawn, so the markers would read as free
+     specks. `:last-child` is restated because cards.css declares it at
+     (0,2,1). The log's last segment is a stub, so it is left to fade out. */
+  .jobs-container::before,
+  .jobs-container:last-child::before,
+  .about-section--log .log-entry::before {
+    background: CanvasText;
+  }
+
+  /* A 1px amber bar on a hairline track: only CanvasText reads on Canvas. */
+  .reading-progress-indicator {
+    background-color: CanvasText;
+  }
+
+  /* The category tick is the only place a skill carries its group colour. */
+  .skill-tag::before {
+    background-color: CanvasText;
+  }
+
+  /* ===================
+     COMPOSITING
+     Images keep their colours, but the blend and filter stack around them was
+     tuned for paper or ink, not for Canvas.
+     =================== */
+  .theme-portrait img,
+  .hero-portrait img,
+  .hero-portrait:hover img,
+  [data-theme='dark'] .hero-portrait img,
+  [data-theme='dark'] .hero-portrait:hover img,
+  .site-footer-new .footer-avatar img {
+    mix-blend-mode: normal;
+    filter: none;
+  }
+
+  /* The palette forces the header wash opaque, so its blur buys nothing. */
+  .site-header {
+    background-color: Canvas;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  /* URL-backed background images survive; the grain is a data URL. */
+  body::before {
+    display: none;
+  }
+}

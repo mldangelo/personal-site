@@ -1,41 +1,36 @@
-import type { CSSProperties } from 'react';
-
-import type { Category, Skill } from '@/data/resume/skills';
+import type { Skill } from '@/data/resume/skills';
 import { MAX_COMPETENCY } from '@/lib/utils';
 
 interface SkillTagProps {
   data: Skill;
-  categories: Category[];
 }
 
-export default function SkillTag({ data, categories }: SkillTagProps) {
-  const { category, competency, title } = data;
+export type SkillTier = 'deep' | 'working' | 'familiar';
 
-  // Get the primary category color
-  const categoryColor = categories.find((cat) =>
-    category.includes(cat.name),
-  )?.color;
+const TIER_DESCRIPTION: Record<SkillTier, string> = {
+  deep: 'deep knowledge',
+  working: 'working knowledge',
+  familiar: 'familiarity',
+};
 
-  // Size based on competency (5 = large, 4 = medium, 3 = small)
-  const sizeClass =
-    competency >= 5
-      ? 'skill-tag--lg'
-      : competency >= 4
-        ? 'skill-tag--md'
-        : 'skill-tag--sm';
+/**
+ * The 1–5 score is a self-assessment, so it is reported at the precision it
+ * has: a coarse tier, not a plotted value with an axis.
+ */
+export function knowledgeTier(competency: number): SkillTier {
+  if (competency >= MAX_COMPETENCY) return 'deep';
+  if (competency >= 4) return 'working';
+  return 'familiar';
+}
+
+export default function SkillTag({ data }: SkillTagProps) {
+  const { competency, title } = data;
+  const tier = knowledgeTier(competency);
 
   return (
-    <span
-      className={`skill-tag ${sizeClass}`}
-      style={
-        {
-          '--tag-color': categoryColor,
-        } as CSSProperties
-      }
-      title={`${title}: ${competency} out of ${MAX_COMPETENCY}`}
-      aria-label={`${title}: proficiency ${competency} out of ${MAX_COMPETENCY}`}
-    >
+    <span className={`skill-tag skill-tag--${tier}`}>
       <span className="skill-tag-name">{title}</span>
+      <span className="sr-only">, {TIER_DESCRIPTION[tier]}</span>
     </span>
   );
 }

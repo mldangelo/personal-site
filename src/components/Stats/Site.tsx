@@ -1,13 +1,14 @@
-import initialData from '../../data/stats/site';
+import declarations from '../../data/stats/site';
 import { countSourceLines } from '../../lib/loc';
+import {
+  countDirectDependencies,
+  countInstalledNonDevPackages,
+  countLintRules,
+  countLockedPackages,
+} from '../../lib/manifest';
+import { type Measurement, resolveReadings } from '../../lib/readings';
+import { builtCommit, utcDate } from '../../lib/telemetry';
 import Table from './Table';
-
-type GitHubCacheKey =
-  | 'stargazers_count'
-  | 'subscribers_count'
-  | 'forks'
-  | 'open_issues_count'
-  | 'pushed_at';
 
 interface GitHubData {
   stargazers_count: number;
@@ -23,31 +24,23 @@ interface GitHubStatsResult {
 }
 
 /**
- * Last-known values, used only when the GitHub API is unreachable at build
- * time (rate limit, offline CI). These go stale by definition — refresh them
- * when you notice, and treat a build that logs the warning below as a build
- * that shipped approximate numbers.
+ * Last-known upstream values for builds where the GitHub API is unavailable.
+ * The rendered note identifies them as approximate and dates this snapshot.
  *
- * Refreshed: 2026-07-25
+ * Refreshed: 2026-07-31
  */
 const FALLBACK_DATA: GitHubData = {
   stargazers_count: 1663,
   subscribers_count: 23,
   forks: 979,
-  open_issues_count: 2,
-  pushed_at: '2026-07-25T00:00:00Z',
+  open_issues_count: 21,
+  pushed_at: '2026-07-31T15:44:18Z',
 };
 
 /**
- * Fetch GitHub stats at build time.
- * Uses static fallback if API is unavailable (rate limit, offline, etc.)
- *
- * `revalidate: false` is required, not preferred: `output: 'export'` needs
- * every route statically renderable, and an uncached fetch forces the route
- * dynamic — which makes this fall back on every single build.
- *
- * The staleness risk that implies is handled where it actually lives: the
- * Pages workflow does not restore `.next/cache`, so each deploy refetches.
+ * Fetch public upstream statistics at build time. Static export requires a
+ * cacheable request; the Pages workflow avoids restoring Next's cache so each
+ * deployment attempts a fresh read.
  */
 async function fetchGitHubStats(): Promise<GitHubStatsResult> {
   try {
@@ -85,39 +78,29 @@ async function fetchGitHubStats(): Promise<GitHubStatsResult> {
   }
 }
 
-/**
- * Site statistics component - fetches GitHub data at build time.
- * Server component, no client-side JavaScript shipped.
- */
+/** Take every first-hand reading this build can establish. */
+function measureThisBuild(): Record<string, Measurement> {
+  const builtAt = Date.now();
+
+  return {
+    source_lines: countSourceLines(),
+    direct_dependencies: countDirectDependencies(),
+    installed_non_dev_packages: countInstalledNonDevPackages(),
+    locked_packages: countLockedPackages(),
+    lint_rules: countLintRules(),
+    built_commit: builtCommit(),
+    built_at: utcDate(builtAt),
+  };
+}
+
+/** Site statistics are fully server-rendered and add no client JavaScript. */
 export default async function SiteStats() {
-  // Started before the walk so the directory scan happens during the network
-  // round trip rather than after it. The Pages build deliberately runs this
-  // fetch uncached every time, so the two costs would otherwise stack.
   const githubStats = fetchGitHubStats();
-
-  // Measured from the working tree rather than typed in, so the figure
-  // cannot drift away from the code it describes.
-  const sourceLines = countSourceLines();
+  const measurements = measureThisBuild();
   const { data: githubData, source } = await githubStats;
-
-  // Apply formatting and resolve values - functions can't be serialized in RSC
-  const data = initialData.map((field) => {
-    const rawValue =
-      field.key === 'source_lines'
-        ? sourceLines
-        : field.key && field.key in githubData
-          ? (githubData[field.key as GitHubCacheKey] ?? field.value)
-          : field.value;
-
-    // Apply format function if present, otherwise use raw value
-    const value = field.format ? field.format(rawValue) : rawValue;
-
-    // Return only serializable properties (no functions)
-    return {
-      label: field.label,
-      value,
-      link: field.link,
-    };
+  const data = resolveReadings(declarations, {
+    ...measurements,
+    ...githubData,
   });
 
   return (
@@ -125,8 +108,8 @@ export default async function SiteStats() {
       <Table data={data} />
       <p className="stats-source-note" data-source={source}>
         {source === 'github'
-          ? 'GitHub readings fetched at build time.'
-          : 'Approximate GitHub readings — API unavailable; fallback refreshed July 25, 2026.'}
+          ? 'GitHub readings describe mldangelo/personal-site and were fetched at build time. Measured readings came from this build and its checkout.'
+          : 'GitHub API unavailable; approximate mldangelo/personal-site readings use the fallback refreshed July 31, 2026. Measured readings came from this build and its checkout.'}
       </p>
     </>
   );

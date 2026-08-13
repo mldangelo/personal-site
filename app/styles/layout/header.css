@@ -26,7 +26,7 @@
 .skip-link:focus-visible {
   transform: translateY(0);
   color: var(--color-on-accent);
-  outline: var(--rule-strong) solid var(--color-fg-bold);
+  outline: var(--rule-strong) solid var(--color-focus-ring-fill);
   outline-offset: 2px;
 }
 
@@ -267,7 +267,7 @@
 }
 
 .slide-menu-close:focus-visible {
-  outline: var(--rule-strong) solid var(--color-accent);
+  outline: var(--rule-strong) solid var(--color-focus-ring);
   outline-offset: 2px;
 }
 
@@ -306,7 +306,7 @@
 /* `outline: none` here removed the only keyboard affordance inside a
    focus-trapped dialog. The global :focus-visible ring applies instead. */
 .hamburger-ul li a:focus-visible {
-  outline: var(--rule-strong) solid var(--color-accent);
+  outline: var(--rule-strong) solid var(--color-focus-ring);
   outline-offset: -2px;
 }
 

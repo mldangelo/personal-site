@@ -1,12 +1,16 @@
-/**
- * Conforms to https://jsonresume.org/schema/
- */
+/** Based on the JSON Resume work item, with a local `commitment` extension. */
 export interface Position {
   name: string;
   position: string;
   url: string;
   startDate: string;
   endDate?: string;
+  /**
+   * Marks an open-ended role that ran alongside the primary career. Omitted
+   * means full-time; `sortPositions` uses this to keep an enduring side role
+   * from outranking every later full-time position.
+   */
+  commitment?: 'part-time';
   summary?: string;
   highlights?: string[];
 }
@@ -41,7 +45,7 @@ const work: Position[] = [
   {
     name: 'Smile ID',
     position: 'VP Engineering & Head of AI',
-    url: 'https://usesmileid.com',
+    url: 'https://smile.id',
     startDate: '2022-01-01',
     endDate: '2024-07-01',
     summary: `Smile Identity provides ML-powered identity verification APIs used by banks, fintechs, and
@@ -58,8 +62,9 @@ const work: Position[] = [
   {
     name: 'Skeptical Investments',
     position: 'Co-founder',
-    url: 'http://skepticalinvestments.biz',
+    url: 'https://skepticalinvestments.biz',
     startDate: '2017-04-01',
+    commitment: 'part-time',
     summary: `Skeptical Investments is a micro-VC fund focused on early-stage technical founders,
     with investments in ML, infrastructure, and space startups.`,
     highlights: [
@@ -70,18 +75,18 @@ const work: Position[] = [
   {
     name: 'Arthena',
     position: 'Co-founder & CTO',
-    url: 'https://arthena.com',
+    url: 'https://www.ycombinator.com/companies/arthena',
     startDate: '2014-01-01',
     endDate: '2022-01-01',
     summary: `Arthena was a quantitative art investment platform backed by <a href='https://www.anthemis.com/'>Anthemis</a>,
     <a href='https://foundationcapital.com'>Foundation Capital</a>, and <a href='https://ycombinator.com'>Y Combinator</a>.
-    Built Arthena from idea to acquisition by Masterworks in 2023.`,
+    Built Arthena from idea into a quantitative art-investment platform; Masterworks later acquired the company in 2023.`,
     highlights: [
       'Co-founded Arthena and led technical strategy; sat on board and led fundraising, including debt financing for a 9-figure investment vehicle in the auction guarantee market.',
       'Built and managed a cross-functional team of 20 engineers, data scientists, and analysts.',
       'Built data pipelines, quantitative research tools, and visualization systems to scale investment research and augment analyst decision-making.',
       'Developed valuation models on irregularly-sampled time series using graph embeddings, probabilistic forecasting with calibrated prediction intervals, and online learning with walk-forward validation.',
-      'Designed micro-service architecture for data collection, feature engineering, backtesting, and reporting.',
+      'Designed a microservices architecture for data collection, feature engineering, backtesting, and reporting.',
     ],
   },
   {
@@ -113,7 +118,7 @@ const work: Position[] = [
   {
     name: 'Planetary Resources',
     position: 'Avionics Intern',
-    url: 'https://www.planetaryresources.com',
+    url: 'https://en.wikipedia.org/wiki/Planetary_Resources',
     startDate: '2014-01-01',
     endDate: '2014-05-01',
     highlights: [

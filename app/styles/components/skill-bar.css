@@ -33,8 +33,14 @@
   }
 
   .skillbutton:focus-visible {
-    outline: var(--rule-strong) solid var(--color-accent);
+    outline: var(--rule-strong) solid var(--color-focus-ring);
     outline-offset: 2px;
+  }
+
+  /* A lit filter is accent-filled, so it cannot take the accent ring. `--all`
+     is drawn as a rule rather than a chip, so it stays unfilled. */
+  .skillbutton-active:not(.skillbutton--all):focus-visible {
+    outline-color: var(--color-focus-ring-fill);
   }
 
   .skillbutton-active {

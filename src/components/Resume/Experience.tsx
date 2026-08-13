@@ -1,9 +1,12 @@
 import type { Position } from '@/data/resume/work';
+import { type DateInput, sortPositions } from '@/lib/career';
 
 import Job, { type JobTier } from './Experience/Job';
 
 interface ExperienceProps {
   data: Position[];
+  /** Instant every ongoing tenure is measured to. Defaults to one clock read. */
+  now?: DateInput;
 }
 
 /** Year before which a role is treated as student-era. */
@@ -29,17 +32,18 @@ function isEarlyCareer(job: Position): boolean {
 }
 
 /**
- * How much weight a role should carry on the spine.
- *
- * The lead is derived from the newest substantive start date, not array
- * position. This keeps reordering the source data from silently changing the
- * visual hierarchy while still letting ongoing side roles remain primary.
+ * How much weight a role should carry on the spine. The lead is the newest
+ * substantive, non-side-role start date rather than array position, so
+ * reordering the source data cannot change the visual hierarchy.
  */
 export function tierFor(job: Position, positions: Position[]): JobTier {
   if (isEarlyCareer(job)) return 'early';
 
   const newestStartDate = positions
-    .filter((position) => !isEarlyCareer(position))
+    .filter(
+      (position) =>
+        !isEarlyCareer(position) && position.commitment !== 'part-time',
+    )
     .map((position) => position.startDate)
     .sort((a, b) => b.localeCompare(a))[0];
 
@@ -50,18 +54,24 @@ export function tierFor(job: Position, positions: Position[]): JobTier {
   return 'primary';
 }
 
-export default function Experience({ data }: ExperienceProps) {
+export default function Experience({
+  data,
+  now = Date.now(),
+}: ExperienceProps) {
+  const positions = sortPositions(data);
+
   return (
     <div className="experience">
       <div className="title">
         <h2>Experience</h2>
       </div>
       <div className="experience-spine">
-        {data.map((job) => (
+        {positions.map((job) => (
           <Job
             data={job}
             key={`${job.name}-${job.position}`}
-            tier={tierFor(job, data)}
+            now={now}
+            tier={tierFor(job, positions)}
           />
         ))}
       </div>

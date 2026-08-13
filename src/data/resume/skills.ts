@@ -6,7 +6,6 @@ export interface Skill {
 
 export interface Category {
   name: string;
-  color: string;
 }
 
 const skills: Skill[] = [
@@ -123,17 +122,15 @@ const skills: Skill[] = [
 ].map((skill) => ({ ...skill, category: skill.category.sort() }));
 
 /**
- * Build categories from skills, all using the accent color token.
+ * The distinct category names, sorted, so the filter row and the group order
+ * both fall out of the skill list itself.
  */
 function buildCategories(skillsList: Skill[]): Category[] {
   const uniqueCategories = Array.from(
     new Set(skillsList.flatMap(({ category }) => category)),
   ).sort();
 
-  return uniqueCategories.map((category) => ({
-    name: category,
-    color: 'var(--color-accent)',
-  }));
+  return uniqueCategories.map((category) => ({ name: category }));
 }
 
 const categories: Category[] = buildCategories(skills);

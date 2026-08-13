@@ -117,9 +117,7 @@ Running 6 panes in parallel lets work proceed concurrently: one agent implements
 
 In 2025 I merged 1,000+ PRs to Promptfoo:
 
-[![8,482 GitHub contributions in 2025](/images/writing/github-contributions-2025.png)](https://github.com/mldangelo?tab=overview&from=2025-01-01&to=2025-12-31)
-
-_This graph includes commits, PRs, reviews, and issue activity. I'm using it as a rough proxy for output._
+[![8,482 GitHub contributions in 2025](/images/writing/github-contributions-2025.png 'GitHub counts commits, pull requests, reviews, and issue activity here; I use the total as a rough proxy for output.')](https://github.com/mldangelo?tab=overview&from=2025-01-01&to=2025-12-31)
 
 For comparison, I had [5,396 contributions in 2024](https://github.com/mldangelo?tab=overview&from=2024-01-01&to=2024-12-31), before these workflows were mature. Same person, different tooling.
 
@@ -177,7 +175,7 @@ The AGENTS.md file has the actual rules:
 
 An agent with the wrong plan rarely gets better. When the initial approach is flawed, more iterations usually make things worse. The agent doubles down on the wrong abstraction, adds complexity to work around problems it created, or quietly changes behavior to make tests pass. I've learned to reset the context and try again instead of pushing through.
 
-Compounding mistakes happen when one session makes an error and another session builds on that work. The second agent inherits the first agent's bad assumptions, and the errors multiply. This is why verification passes are critical before merging anything.
+Compounding mistakes happen when one session makes an error and another session builds on that work. The second agent inherits the first agent's bad assumptions, and the errors multiply. A verification pass before merge stops one agent's mistake from becoming the next agent's premise.
 
 ## What's changed
 

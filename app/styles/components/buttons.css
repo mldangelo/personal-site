@@ -46,8 +46,14 @@
   }
 
   .button:focus-visible {
-    outline: var(--rule-strong) solid var(--color-accent);
+    outline: var(--rule-strong) solid var(--color-focus-ring);
     outline-offset: 2px;
+  }
+
+  /* The filled variant cannot take the accent ring — in light mode that is
+     the fill's own colour. `.button-secondary` is unfilled and keeps it. */
+  .button:not(.button-secondary):focus-visible {
+    outline-color: var(--color-focus-ring-fill);
   }
 
   /* Secondary — the same switch, unlit. */
