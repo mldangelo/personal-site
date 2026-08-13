@@ -25,6 +25,19 @@ describe('PostContent', () => {
     );
   });
 
+  it('uses a draft-only fallback for an intentionally unpublished image', () => {
+    const html = renderToStaticMarkup(
+      <PostContent
+        content="![Private draft screenshot](/private-draft.png)"
+        allowMissingLocalImages
+      />,
+    );
+
+    expect(html).toContain('alt="Private draft screenshot"');
+    expect(html).toContain('width="1200"');
+    expect(html).toContain('height="675"');
+  });
+
   it('retains a fallback for remote images', () => {
     const html = renderToStaticMarkup(
       <PostContent content="![Remote](https://example.com/image.png)" />,
