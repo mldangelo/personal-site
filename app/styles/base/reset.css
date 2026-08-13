@@ -8,9 +8,8 @@
     scroll-behavior: smooth;
   }
 
-  /* Respect reduced motion without removing static decoration. The paper
-     grain on `body::before` has no animation or transition; `body::after` is
-     not defined. */
+  /* Respect reduced motion without removing static decoration: the paper
+     grain on `body::before` neither animates nor transitions. */
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,

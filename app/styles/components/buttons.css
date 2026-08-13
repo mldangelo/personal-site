@@ -50,11 +50,8 @@
     outline-offset: 2px;
   }
 
-  /* A filled control cannot take the accent ring. --color-accent-fill
-     resolves to --color-accent in light mode, so the ring is the button's own
-     colour and the entire indicator is the 2px of paper the offset leaves
-     behind. Ink instead — the same choice .skip-link already makes over its
-     accent fill. `.button-secondary` is unfilled and keeps the accent. */
+  /* The filled variant cannot take the accent ring — in light mode that is
+     the fill's own colour. `.button-secondary` is unfilled and keeps it. */
   .button:not(.button-secondary):focus-visible {
     outline-color: var(--color-focus-ring-fill);
   }

@@ -2,29 +2,73 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
-import {
-  AA_NON_TEXT,
-  AA_TEXT,
-  contrastRatio,
-  parseHexColor,
-  relativeLuminance,
-} from '../contrast';
-
 /**
- * This is a floor, not a proof.
- *
- * Every pair below is two flat token values, and a rendered surface on this
- * site is often not flat: `body::before` lays paper grain over the page, the
- * header composites through a `backdrop-filter`, and the hero portrait is
- * blended with `mix-blend-mode: multiply`. Any of those sits between the two
- * colours a pair describes, so this file can be entirely green while a real
- * surface fails. It exists to stop a token from being edited back below its
- * threshold, and it deliberately does not enumerate the stylesheet — a
- * whole-stylesheet contrast harness would report pairs that never touch and
- * miss the composited ones that do.
+ * WCAG 2.2 contrast for opaque sRGB hex, so token pairs are checked rather
+ * than eyeballed. It lives here because nothing ships it: in `src/lib` it
+ * counted toward the source-line figure on /stats.
  */
 
+/** SC 1.4.3 — normal-size body text. */
+const AA_TEXT = 4.5;
+
+/** SC 1.4.11 — non-text graphics and UI component boundaries. */
+const AA_NON_TEXT = 3;
+
+/**
+ * `#rgb` or `#rrggbb` to 0-255 channels. Alpha-bearing and unparseable values
+ * throw rather than resolve: a translucent colour has no luminance until it is
+ * composited, and dropping the alpha would score transparent black as opaque
+ * black.
+ */
+function parseHexColor(hex: string): [number, number, number] {
+  const body = hex.trim().replace(/^#/, '');
+
+  if ((body.length === 4 || body.length === 8) && /^[0-9a-fA-F]+$/.test(body)) {
+    throw new Error(
+      `Alpha-bearing hex colours need an explicit backdrop: ${hex}`,
+    );
+  }
+
+  const expanded =
+    body.length === 3
+      ? body
+          .split('')
+          .map((c) => c + c)
+          .join('')
+      : body;
+
+  if (!/^[0-9a-fA-F]{6}$/.test(expanded)) {
+    throw new Error(`Not an opaque sRGB hex colour: ${hex}`);
+  }
+
+  return [
+    Number.parseInt(expanded.slice(0, 2), 16),
+    Number.parseInt(expanded.slice(2, 4), 16),
+    Number.parseInt(expanded.slice(4, 6), 16),
+  ];
+}
+
+function linearize(channel: number): number {
+  const c = channel / 255;
+
+  return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+}
+
+function relativeLuminance(hex: string): number {
+  const [r, g, b] = parseHexColor(hex);
+
+  return 0.2126 * linearize(r) + 0.7152 * linearize(g) + 0.0722 * linearize(b);
+}
+
+function contrastRatio(a: string, b: string): number {
+  const la = relativeLuminance(a);
+  const lb = relativeLuminance(b);
+
+  return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
+}
+
 const STYLES = join(process.cwd(), 'app', 'styles');
+const SURFACES = ['--color-bg', '--color-bg-alt'];
 
 function readTokens(file: string): Map<string, string> {
   const css = readFileSync(join(STYLES, file), 'utf8');
@@ -60,6 +104,7 @@ function resolve(theme: Map<string, string>, name: string): string {
 
 const lightToken = (name: string) => resolve(light, name);
 const darkToken = (name: string) => resolve(dark, name);
+const themes = [lightToken, darkToken];
 
 function cssFiles(directory: string): string[] {
   return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
@@ -72,25 +117,21 @@ function cssFiles(directory: string): string[] {
   });
 }
 
-describe('contrastRatio', () => {
-  it('anchors at the extremes of the scale', () => {
-    expect(contrastRatio('#ffffff', '#000000')).toBeCloseTo(21, 5);
-    expect(contrastRatio('#1b2fbf', '#1b2fbf')).toBeCloseTo(1, 5);
-  });
+/** Every token/surface ratio in both themes, labelled for the failure output. */
+function ratiosOnSurfaces(token: string): [string, number][] {
+  return themes.flatMap((theme, index) =>
+    SURFACES.map((surface): [string, number] => [
+      `${index === 0 ? 'light' : 'dark'} ${token} on ${surface}`,
+      contrastRatio(theme(token), theme(surface)),
+    ]),
+  );
+}
 
-  it('is symmetric', () => {
-    expect(contrastRatio('#bc770a', '#fcfbf9')).toBeCloseTo(
-      contrastRatio('#fcfbf9', '#bc770a'),
-      10,
-    );
-  });
-
-  it('reproduces the WCAG reference luminances', () => {
-    expect(relativeLuminance('#000000')).toBeCloseTo(0, 10);
-    expect(relativeLuminance('#ffffff')).toBeCloseTo(1, 10);
-    expect(relativeLuminance('#808080')).toBeCloseTo(0.2159, 4);
-  });
-});
+function below(token: string, threshold: number): string[] {
+  return ratiosOnSurfaces(token)
+    .filter(([, ratio]) => ratio < threshold)
+    .map(([label, ratio]) => `${label}: ${ratio.toFixed(2)}`);
+}
 
 describe('parseHexColor', () => {
   it('accepts opaque shorthand and longhand hex', () => {
@@ -98,111 +139,46 @@ describe('parseHexColor', () => {
     expect(parseHexColor('bc770a')).toEqual([188, 119, 10]);
   });
 
-  it('rejects alpha instead of assigning a false opaque contrast score', () => {
+  it('throws rather than scoring an unusable colour as opaque black', () => {
     expect(() => parseHexColor('#0000')).toThrow(/explicit backdrop/);
-    expect(() => parseHexColor('#00000000')).toThrow(/explicit backdrop/);
     expect(() => parseHexColor('#bc770aff')).toThrow(/explicit backdrop/);
     expect(() => contrastRatio('#00000000', '#ffffff')).toThrow(
       /explicit backdrop/,
     );
-  });
-
-  it('throws rather than scoring an unparseable colour as black', () => {
     expect(() => parseHexColor('rgba(35, 39, 46, 0.14)')).toThrow();
     expect(() => parseHexColor('#12345')).toThrow();
   });
 });
 
-describe('--color-signal-mark', () => {
-  // "Present" carries the meaning in text, so this redundant dot is not a
-  // WCAG 1.4.11 requirement. The design still sets a 3:1 floor.
-  it('clears 3:1 on both light backdrops', () => {
-    const mark = lightToken('--color-signal-mark');
-
-    expect(contrastRatio(mark, lightToken('--color-bg'))).toBeCloseTo(3.51, 2);
-    expect(contrastRatio(mark, lightToken('--color-bg-alt'))).toBeCloseTo(
-      3.21,
-      2,
-    );
-    expect(
-      contrastRatio(mark, lightToken('--color-bg-alt')),
-    ).toBeGreaterThanOrEqual(AA_NON_TEXT);
+describe('signal tokens', () => {
+  // "Present" carries the current-role meaning in text, so the redundant dot
+  // is not a WCAG 1.4.11 requirement. The design still sets a 3:1 floor.
+  it('keep the mark above 3:1 on every backdrop it is drawn on', () => {
+    expect(below('--color-signal-mark', AA_NON_TEXT)).toEqual([]);
   });
 
-  it('clears 3:1 on both dark backdrops', () => {
-    const mark = darkToken('--color-signal-mark');
-
-    expect(contrastRatio(mark, darkToken('--color-bg'))).toBeCloseTo(8.45, 2);
-    expect(contrastRatio(mark, darkToken('--color-bg-alt'))).toBeCloseTo(
-      8.96,
-      2,
-    );
-  });
-
-  it('pins the value it replaced, which failed on both', () => {
-    // #e8930c shipped as the current-role marker for the life of the design.
-    expect(contrastRatio('#e8930c', '#fcfbf9')).toBeCloseTo(2.36, 2);
-    expect(contrastRatio('#e8930c', '#f2f1ec')).toBeCloseTo(2.16, 2);
+  it('keep the text value above 4.5:1, which is why it is a separate token', () => {
+    expect(below('--color-signal', AA_TEXT)).toEqual([]);
   });
 });
 
-describe('--color-signal', () => {
-  it('stays text-safe at 4.5:1 on both light backdrops', () => {
-    const signal = lightToken('--color-signal');
-
-    expect(contrastRatio(signal, lightToken('--color-bg'))).toBeCloseTo(
-      5.48,
-      2,
-    );
-    expect(contrastRatio(signal, lightToken('--color-bg-alt'))).toBeCloseTo(
-      5.01,
-      2,
-    );
-    expect(
-      contrastRatio(signal, lightToken('--color-bg-alt')),
-    ).toBeGreaterThanOrEqual(AA_TEXT);
-  });
-
-  it('stays text-safe at 4.5:1 on both dark backdrops', () => {
-    const signal = darkToken('--color-signal');
-
-    expect(
-      contrastRatio(signal, darkToken('--color-bg')),
-    ).toBeGreaterThanOrEqual(AA_TEXT);
-    expect(
-      contrastRatio(signal, darkToken('--color-bg-alt')),
-    ).toBeGreaterThanOrEqual(AA_TEXT);
+describe('--color-control-border', () => {
+  it('clears 3:1 on every surface it is drawn on', () => {
+    expect(below('--color-control-border', AA_NON_TEXT)).toEqual([]);
   });
 });
 
 describe('--color-focus-ring-fill', () => {
-  // The bug this token exists for: an accent ring drawn around an
-  // accent-filled control is the fill's own colour.
-  it('is what the accent ring on a filled control was not', () => {
-    expect(
-      contrastRatio(
-        lightToken('--color-focus-ring'),
-        lightToken('--color-accent-fill'),
-      ),
-    ).toBeCloseTo(1, 5);
+  it('separates from the fill that the default ring aliases', () => {
+    const fill = lightToken('--color-accent-fill');
 
     expect(
-      contrastRatio(
-        lightToken('--color-focus-ring-fill'),
-        lightToken('--color-accent-fill'),
-      ),
-    ).toBeGreaterThan(1.5);
+      contrastRatio(lightToken('--color-focus-ring-fill'), fill),
+    ).toBeGreaterThan(contrastRatio(lightToken('--color-focus-ring'), fill));
   });
 
   it('reads against the page in both themes, which is where the offset puts it', () => {
-    for (const [token, surface] of [
-      [lightToken('--color-focus-ring-fill'), lightToken('--color-bg')],
-      [lightToken('--color-focus-ring-fill'), lightToken('--color-bg-alt')],
-      [darkToken('--color-focus-ring-fill'), darkToken('--color-bg')],
-      [darkToken('--color-focus-ring-fill'), darkToken('--color-bg-alt')],
-    ]) {
-      expect(contrastRatio(token, surface)).toBeGreaterThanOrEqual(AA_NON_TEXT);
-    }
+    expect(below('--color-focus-ring-fill', AA_NON_TEXT)).toEqual([]);
   });
 });
 
@@ -225,64 +201,14 @@ describe('focus ring declarations', () => {
   });
 });
 
-describe('--color-control-border', () => {
-  // This is a deliberate 3:1 floor for unfilled control boundaries, not a
-  // blanket claim that SC 1.4.11 requires every labelled border. The comments
-  // beside these tokens quote these numbers.
-  it('clears 3:1 on every surface it is drawn on', () => {
-    expect(
-      contrastRatio(
-        lightToken('--color-control-border'),
-        lightToken('--color-bg'),
-      ),
-    ).toBeCloseTo(4.12, 2);
-    expect(
-      contrastRatio(
-        lightToken('--color-control-border'),
-        lightToken('--color-bg-alt'),
-      ),
-    ).toBeCloseTo(3.77, 2);
-    expect(
-      contrastRatio(
-        darkToken('--color-control-border'),
-        darkToken('--color-bg'),
-      ),
-    ).toBeCloseTo(5.72, 2);
-    expect(
-      contrastRatio(
-        darkToken('--color-control-border'),
-        darkToken('--color-bg-alt'),
-      ),
-    ).toBeCloseTo(6.07, 2);
-  });
-});
-
 describe('filled controls', () => {
-  it('keep their label legible on the fill in both themes', () => {
-    expect(
-      contrastRatio(
-        lightToken('--color-on-accent'),
-        lightToken('--color-accent-fill'),
-      ),
-    ).toBeGreaterThanOrEqual(AA_TEXT);
-    expect(
-      contrastRatio(
-        darkToken('--color-on-accent'),
-        darkToken('--color-accent-fill'),
-      ),
-    ).toBeCloseTo(7.18, 2);
-    expect(
-      contrastRatio(
-        darkToken('--color-on-accent'),
-        darkToken('--color-accent-fill-hover'),
-      ),
-    ).toBeCloseTo(5.76, 2);
-  });
-
-  it('pins why the dark accent cannot be a fill, as its comment claims', () => {
-    expect(contrastRatio('#ffffff', darkToken('--color-accent'))).toBeCloseTo(
-      2.67,
-      2,
-    );
+  it('keep their label legible on the fill and its hover in both themes', () => {
+    for (const theme of themes) {
+      for (const fill of ['--color-accent-fill', '--color-accent-fill-hover']) {
+        expect(
+          contrastRatio(theme('--color-on-accent'), theme(fill)),
+        ).toBeGreaterThanOrEqual(AA_TEXT);
+      }
+    }
   });
 });

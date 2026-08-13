@@ -2,38 +2,19 @@
    FORCED COLORS
    Windows High Contrast Mode, and any other user-forced palette.
 
-   A forced palette replaces author colours with system colours and removes
-   non-URL background images. That is fine for a design built out of filled
-   boxes and borders, and it is a problem for this one, because several things
-   here are drawn in colour or with a gradient background:
-
-     - global paragraph-link and hero-highlight underlines are
-       `linear-gradient` backgrounds, so those links lose their visible line;
-     - the current resume marker and active skill filter rely on filled state,
-       so they flatten toward their unselected appearance;
-     - the portrait is composited with `mix-blend-mode: multiply`, which
-       multiplies against a forced Canvas that is frequently pure black.
-
-   This file is a mode override in the same sense as dark-mode.css, so it is
-   imported after it and before print.css, and its rules are deliberately
-   unlayered so they win over the component and page files.
-
-   Rules here only address what the forced palette cannot do for itself.
-   `outline-color` and `border-color` are already remapped by the UA, so focus
-   rings and hairlines survive on their own and are left alone.
+   A forced palette replaces author colours and drops non-URL background
+   images, so gradient underlines, filled state, and blended portraits lose
+   their meaning. It remaps `border-color` and `outline-color` for you;
+   everything below is what it cannot do for itself. A mode override like
+   dark-mode.css: unlayered, and ordered in tailwind.css.
    ======================================== */
 
 @media (forced-colors: active) {
   /* ===================
      LINKS
-     The persistent prose underline and the animated hover underline are both
-     `background-image` gradients (base/links.css, home.css `.hero-highlight`),
-     and a forced palette discards background images. `.prose a` and
-     `.about-content a` already draw a real one; these did not.
-
-     No opt-out is needed for navigation-like links: `.button`, `.site-logo`
-     and `.nav-link` set `text-decoration: none` at (0,1,0), which already
-     out-specifies `p a` at (0,0,2), and `.button` sets it `!important`.
+     These underlines are `background-image` gradients (base/links.css,
+     home.css), which the palette discards. Navigation-like links set
+     `text-decoration: none` at (0,1,0) and do not pick this up.
      =================== */
   p a,
   .hero-highlight {
@@ -42,16 +23,13 @@
     text-underline-offset: 2px;
   }
 
-  /* Desktop and resume navigation mark the active item with a
-     pseudo-element background, which otherwise flattens to Canvas. */
+  /* Active-item bars are pseudo-element backgrounds, which flatten to Canvas. */
   .nav-link::after,
   .resume-nav-link.active::after {
     background-color: LinkText;
   }
 
-  /* Mobile navigation normally changes only the label colour. Forced colors
-     maps every navigation link to LinkText, so retain current-page state with
-     a non-colour cue. */
+  /* Every navigation link maps to LinkText, losing the current-page colour. */
   .hamburger-ul li a.active span {
     text-decoration: underline;
     text-underline-offset: 0.25em;
@@ -59,30 +37,28 @@
 
   /* ===================
      CONTROLS
-     `.button` is usually an `<a>`, so it gets no button treatment from the UA.
-     A filled control whose fill flattens to Canvas is indistinguishable from
-     an unfilled one, which is the whole of its state.
+     `.button` is usually an `<a>`, so the UA gives it no button treatment and
+     its fill flattens to Canvas. `.button-secondary` is the unfilled variant,
+     left to the UA, or the two variants become one control.
      =================== */
-  .button {
+  .button:not(.button-secondary) {
     background-color: ButtonFace;
     color: ButtonText;
     border-color: ButtonText;
   }
 
-  /* The menu glyph is three background-drawn bars on a transparent,
-     borderless button — a forced palette leaves nothing visible at all. */
+  /* Three background-drawn bars on a transparent, borderless button. */
   .hamburger-icon span {
     background-color: CanvasText;
   }
 
-  /* header.css draws the focused glyph at (0,3,1), so it out-specifies the
-     rule above and would flatten to Canvas again on focus. */
+  /* header.css draws the focused glyph at (0,3,1). CanvasText again, because
+     Highlight is only guaranteed against HighlightText, not Canvas. */
   .hamburger-button:focus-visible .hamburger-icon span {
-    background-color: Highlight;
+    background-color: CanvasText;
   }
 
-  /* A lit filter is a selection rather than a generic button, so use the
-     palette's semantic selection pair. */
+  /* A lit filter is a selection, so it takes the palette's selection pair. */
   .skillbutton-active:not(.skillbutton--all) {
     background-color: Highlight;
     color: HighlightText;
@@ -91,31 +67,26 @@
 
   /* ===================
      STATE THAT NEEDS MORE THAN COLOUR
-     Amber does not exist in a forced palette, so anything relying on it has
-     to survive as a shape. Filled-versus-hollow is the deliberate cue; the
-     9px-versus-7px size difference is too subtle to carry the state alone.
+     Amber does not survive, so filled-versus-hollow carries the current role;
+     the 9px-versus-7px size difference cannot.
      =================== */
   .jobs-container--current .job-marker {
     background-color: CanvasText;
     border-color: CanvasText;
   }
 
-  /* Both spines are background-drawn and their tails are gradients, so the
-     line those markers sit on vanishes entirely and the ticks read as
-     free-floating specks. `.jobs-container:last-child::before` is listed
-     because cards.css declares it at (0,2,1); solid CanvasText is right there
-     because that rule terminates at the last entry. The log's last segment is
-     a fixed 2.5em stub with nothing to terminate against, so it is left to
-     fade out rather than draw a dangling line past the final tick. */
+  /* Both spines are background-drawn, so the markers would read as free
+     specks. `:last-child` is restated because cards.css declares it at
+     (0,2,1). The log's last segment is a stub, so it is left to fade out. */
   .jobs-container::before,
   .jobs-container:last-child::before,
   .about-section--log .log-entry::before {
     background: CanvasText;
   }
 
-  /* A 1px amber bar on a hairline track: both ends flatten to Canvas. */
+  /* A 1px amber bar on a hairline track: only CanvasText reads on Canvas. */
   .reading-progress-indicator {
-    background-color: Highlight;
+    background-color: CanvasText;
   }
 
   /* The category tick is the only place a skill carries its group colour. */
@@ -125,9 +96,8 @@
 
   /* ===================
      COMPOSITING
-     Images are not recoloured by a forced palette, but the blend and filter
-     stack around them still applies, and both were tuned for a paper or ink
-     backdrop rather than for Canvas.
+     Images keep their colours, but the blend and filter stack around them was
+     tuned for paper or ink, not for Canvas.
      =================== */
   .theme-portrait img,
   .hero-portrait img,
@@ -139,17 +109,14 @@
     filter: none;
   }
 
-  /* The header is a translucent wash over the page plus a 12px blur. The
-     palette forces the wash opaque; the blur then costs work and buys
-     nothing. */
+  /* The palette forces the header wash opaque, so its blur buys nothing. */
   .site-header {
     background-color: Canvas;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
 
-  /* URL-backed background images are not removed automatically. The grain is
-     a data URL, so hide its fixed layer explicitly in the forced palette. */
+  /* URL-backed background images survive; the grain is a data URL. */
   body::before {
     display: none;
   }
