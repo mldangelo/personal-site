@@ -79,7 +79,7 @@
 
 .nav-link:focus-visible {
   color: var(--color-fg-bold);
-  outline: 2px solid var(--color-accent);
+  outline: var(--rule-strong) solid var(--color-focus-ring);
   outline-offset: 4px;
 }
 
@@ -123,7 +123,7 @@
 .theme-toggle:focus-visible {
   color: var(--color-accent);
   background: var(--color-bg-alt);
-  outline: 2px solid var(--color-accent);
+  outline: var(--rule-strong) solid var(--color-focus-ring);
   outline-offset: 2px;
 }
 

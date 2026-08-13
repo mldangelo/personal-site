@@ -33,8 +33,15 @@
   }
 
   .skillbutton:focus-visible {
-    outline: var(--rule-strong) solid var(--color-accent);
+    outline: var(--rule-strong) solid var(--color-focus-ring);
     outline-offset: 2px;
+  }
+
+  /* Once a filter is lit its fill is the accent, so the ring has to stop
+     being the accent — see the note on --color-focus-ring-fill. `--all` is
+     drawn as a rule rather than a chip, so it stays unfilled and keeps it. */
+  .skillbutton-active:not(.skillbutton--all):focus-visible {
+    outline-color: var(--color-focus-ring-fill);
   }
 
   .skillbutton-active {
