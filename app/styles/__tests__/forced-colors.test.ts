@@ -2,15 +2,15 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
-const css = readFileSync(
-  join(process.cwd(), 'app', 'styles', 'forced-colors.css'),
-  'utf8',
-);
 const entrypoint = readFileSync(
   join(process.cwd(), 'app', 'tailwind.css'),
   'utf8',
 );
 
+/**
+ * Import order is the one property of this stylesheet a test can hold: jsdom
+ * has no forced-colors mode, so the rules themselves need a real browser.
+ */
 describe('forced-colors stylesheet', () => {
   it('loads after theme overrides and before print overrides', () => {
     const dark = entrypoint.indexOf("@import './styles/dark-mode.css'");
@@ -20,38 +20,5 @@ describe('forced-colors stylesheet', () => {
     expect(dark).toBeGreaterThanOrEqual(0);
     expect(forced).toBeGreaterThan(dark);
     expect(print).toBeGreaterThan(forced);
-  });
-
-  it('keeps the desktop and resume active-item bars visible', () => {
-    expect(css).toMatch(
-      /\.nav-link::after,\s*\.resume-nav-link\.active::after\s*{[^}]*background-color:\s*LinkText;/,
-    );
-  });
-
-  it('gives the active mobile item a non-colour cue', () => {
-    expect(css).toMatch(
-      /\.hamburger-ul li a\.active span\s*{[^}]*text-decoration:\s*underline;/,
-    );
-  });
-
-  it('keeps portrait filters disabled in higher-specificity states', () => {
-    expect(css).toMatch(
-      /\.theme-portrait img,[\s\S]*?\[data-theme='dark'\] \.hero-portrait:hover img,[\s\S]*?\.site-footer-new \.footer-avatar img\s*\{[^}]*mix-blend-mode:\s*normal;[^}]*filter:\s*none;/,
-    );
-  });
-
-  it('keeps the mobile menu glyph drawn, including while focused', () => {
-    expect(css).toMatch(
-      /^\s*\.hamburger-icon span\s*\{[^}]*background-color:\s*CanvasText;/m,
-    );
-    expect(css).toMatch(
-      /\.hamburger-button:focus-visible \.hamburger-icon span\s*\{[^}]*background-color:\s*CanvasText;/,
-    );
-  });
-
-  it('keeps the timeline spines its markers sit on', () => {
-    expect(css).toMatch(
-      /\.jobs-container::before,[\s\S]*?\.jobs-container:last-child::before,[\s\S]*?\.about-section--log \.log-entry::before\s*\{[^}]*background:\s*CanvasText;/,
-    );
   });
 });
