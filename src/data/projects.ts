@@ -83,7 +83,7 @@ const data: Project[] = [
   {
     title: 'Smile ID',
     subtitle: 'VP Engineering & Head of AI',
-    link: 'https://smile.id/',
+    link: 'https://smile.id',
     sourceWork: 'Smile ID',
     date: '2022-01-01',
     endDate: '2024-07-01',
