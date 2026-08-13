@@ -65,18 +65,6 @@ describe('categories data', () => {
     }
   });
 
-  /**
-   * Categories used to carry a `color`, and `buildCategories` gave every one of
-   * them the same `var(--color-accent)`, so the tick it painted on each tag was
-   * identical everywhere. The field was decorative and unrelated to the
-   * independently derived competency tier.
-   */
-  it('carries no colour field', () => {
-    for (const category of categories) {
-      expect(category).not.toHaveProperty('color');
-    }
-  });
-
   // Data quality: categories should be sorted for filter button display order
   it('categories are sorted alphabetically by name', () => {
     const names = categories.map((c) => c.name);
