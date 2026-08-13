@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
+import routes from '@/data/routes';
 import Hamburger from '../../Template/Hamburger';
 
 describe('Hamburger', () => {
@@ -70,9 +71,25 @@ describe('Hamburger', () => {
     expect(screen.getByRole('link', { name: /about/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /resume/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /contact/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /projects/i })).toBeInTheDocument();
+  });
+
+  /**
+   * The mobile menu is the only nav a phone gets, so a demoted route has to
+   * be missing from it and every promoted one has to be present. Pinning the
+   * count as well means a future demotion cannot pass by going unmentioned.
+   */
+  it('lists every primary route and no demoted one', () => {
+    render(<Hamburger />);
+
+    fireEvent.click(screen.getByRole('button'));
+
     expect(
-      screen.queryByRole('link', { name: /archive/i }),
+      screen.queryByRole('link', { name: /stats/i }),
     ).not.toBeInTheDocument();
+    expect(screen.getAllByRole('link')).toHaveLength(
+      routes.filter((route) => route.primary !== false).length,
+    );
   });
 
   it('closes menu when a link is clicked', () => {

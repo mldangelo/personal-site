@@ -21,6 +21,13 @@ const routes: Route[] = [
     label: 'Resume',
     path: '/resume',
   },
+  // Was labelled "Archive" and kept out of the nav, which left the register of
+  // shipped work reachable only through the footer — and `/contact` hides the
+  // footer, so from there it was unreachable entirely.
+  {
+    label: 'Projects',
+    path: '/projects',
+  },
   {
     label: 'Writing',
     path: '/writing',
@@ -33,11 +40,6 @@ const routes: Route[] = [
   {
     label: 'Contact',
     path: '/contact',
-  },
-  {
-    label: 'Archive',
-    path: '/projects',
-    primary: false,
   },
 ];
 
