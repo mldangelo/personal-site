@@ -36,10 +36,6 @@
 @import './styles/pages/writing.css';
 @import './styles/pages/content.css';
 
-/* Page transitions are not part of the current interaction design. Next
-   `<Link>` routes use client navigation, while native same-origin links can
-   take a separate cross-document path. See AGENTS.md before adding either. */
-
 /* Theme Overrides */
 @import './styles/dark-mode.css';
 
