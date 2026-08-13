@@ -76,9 +76,12 @@
   }
 
   /* header.css draws the focused glyph at (0,3,1), so it out-specifies the
-     rule above and would flatten to Canvas again on focus. */
+     rule above and would flatten to Canvas again on focus. Redraw it in
+     CanvasText, not Highlight: Highlight is only guaranteed to contrast with
+     HighlightText, so on a theme where it sits near Canvas the glyph would
+     disappear exactly when focused. The UA supplies the focus ring itself. */
   .hamburger-button:focus-visible .hamburger-icon span {
-    background-color: Highlight;
+    background-color: CanvasText;
   }
 
   /* A lit filter is a selection rather than a generic button, so use the
@@ -113,9 +116,11 @@
     background: CanvasText;
   }
 
-  /* A 1px amber bar on a hairline track: both ends flatten to Canvas. */
+  /* A 1px amber bar on a hairline track: both ends flatten to Canvas. Same
+     reasoning as the menu glyph — the filled portion has to read against
+     Canvas, which only CanvasText is guaranteed to do. */
   .reading-progress-indicator {
-    background-color: Highlight;
+    background-color: CanvasText;
   }
 
   /* The category tick is the only place a skill carries its group colour. */

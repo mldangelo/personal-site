@@ -45,7 +45,7 @@ describe('forced-colors stylesheet', () => {
       /^\s*\.hamburger-icon span\s*\{[^}]*background-color:\s*CanvasText;/m,
     );
     expect(css).toMatch(
-      /\.hamburger-button:focus-visible \.hamburger-icon span\s*\{[^}]*background-color:\s*Highlight;/,
+      /\.hamburger-button:focus-visible \.hamburger-icon span\s*\{[^}]*background-color:\s*CanvasText;/,
     );
   });
 
