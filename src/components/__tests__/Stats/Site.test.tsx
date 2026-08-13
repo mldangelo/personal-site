@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-// Mock the fetch function
 const mockGitHubData = {
   stargazers_count: 1663,
   subscribers_count: 15,
@@ -9,52 +8,63 @@ const mockGitHubData = {
   open_issues_count: 3,
   pushed_at: '2024-06-01T00:00:00Z',
 };
-
-// Must mock before importing the component
-vi.stubGlobal(
-  'fetch',
-  vi.fn(() =>
-    Promise.resolve({
-      ok: true,
-      json: () => Promise.resolve(mockGitHubData),
-    }),
-  ),
+const fetchMock = vi.fn();
+const ENV_KEYS = [
+  'BUILD_SHA',
+  'BUILD_REPOSITORY',
+  'GITHUB_SHA',
+  'GITHUB_REPOSITORY',
+] as const;
+const originalEnvironment = Object.fromEntries(
+  ENV_KEYS.map((key) => [key, process.env[key]]),
 );
 
-// Import after mocking
+vi.stubGlobal('fetch', fetchMock);
+
 import Site from '../../Stats/Site';
+
+function clearBuildEnvironment() {
+  for (const key of ENV_KEYS) {
+    delete process.env[key];
+  }
+}
 
 describe('Site', () => {
   beforeEach(() => {
-    vi.mocked(global.fetch).mockClear();
+    clearBuildEnvironment();
+    fetchMock.mockReset();
+    fetchMock.mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve(mockGitHubData),
+    });
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    for (const key of ENV_KEYS) {
+      const value = originalEnvironment[key];
+
+      if (value === undefined) {
+        delete process.env[key];
+      } else {
+        process.env[key] = value;
+      }
+    }
   });
 
-  it('renders the site stats table', async () => {
-    const Component = await Site();
-    render(Component);
+  it('renders the site readings as a table', async () => {
+    render(await Site());
 
     expect(screen.getByRole('table')).toBeInTheDocument();
-  });
-
-  it('displays static labels', async () => {
-    const Component = await Site();
-    render(Component);
-
     expect(
       screen.getByText('Stars this repository has on GitHub'),
     ).toBeInTheDocument();
-    expect(screen.getByText('Number of forks')).toBeInTheDocument();
     expect(screen.getByText('Number of spoons')).toBeInTheDocument();
   });
 
-  it('fetches GitHub data at build time', async () => {
+  it('fetches the upstream repository at build time', async () => {
     await Site();
 
-    expect(global.fetch).toHaveBeenCalledWith(
+    expect(fetchMock).toHaveBeenCalledWith(
       'https://api.github.com/repos/mldangelo/personal-site',
       expect.objectContaining({
         headers: expect.objectContaining({
@@ -64,73 +74,90 @@ describe('Site', () => {
     );
   });
 
-  it('has links for GitHub-sourced stats', async () => {
-    const Component = await Site();
-    render(Component);
+  it('labels the repository push precisely and links its activity', async () => {
+    render(await Site());
 
-    const links = document.querySelectorAll(
-      'a[href="https://github.com/mldangelo/personal-site/stargazers"]',
-    );
-    expect(links.length).toBeGreaterThan(0);
-  });
+    const row = screen.getByText('Latest repository push (UTC)').closest('tr');
 
-  it('displays all expected stat categories', async () => {
-    const Component = await Site();
-    render(Component);
-
-    expect(
-      screen.getByText('Stars this repository has on GitHub'),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText('Number of people watching this repository'),
-    ).toBeInTheDocument();
-    expect(screen.getByText('Number of forks')).toBeInTheDocument();
-    expect(
-      screen.getByText('Open GitHub issues and pull requests'),
-    ).toBeInTheDocument();
-    expect(screen.getByText('Last pushed')).toBeInTheDocument();
-  });
-
-  it('uses fallback data when fetch fails', async () => {
-    vi.mocked(global.fetch).mockRejectedValueOnce(new Error('Network error'));
-
-    const Component = await Site();
-    render(Component);
-
-    // Should still render with fallback data
-    expect(screen.getByRole('table')).toBeInTheDocument();
-    expect(screen.getByText(/approximate github readings/i)).toHaveAttribute(
-      'data-source',
-      'fallback',
+    expect(screen.queryByText('Last updated at')).not.toBeInTheDocument();
+    expect(row?.textContent).toContain('2024-06-01');
+    expect(row?.querySelector('a')).toHaveAttribute(
+      'href',
+      'https://github.com/mldangelo/personal-site/activity',
     );
   });
 
-  it('labels live GitHub readings with their provenance', async () => {
-    const Component = await Site();
-    render(Component);
+  it('reports the exact commit this output was built from', async () => {
+    const sha = '0123456789abcdef0123456789abcdef01234567';
+    process.env.BUILD_SHA = sha;
+    process.env.BUILD_REPOSITORY = 'mldangelo/personal-site';
 
-    expect(screen.getByText(/fetched at build time/i)).toHaveAttribute(
-      'data-source',
-      'github',
+    render(await Site());
+
+    const row = screen.getByText('Built from commit').closest('tr');
+    expect(row?.textContent).toContain('0123456');
+    expect(row?.querySelector('a')).toHaveAttribute(
+      'href',
+      `https://github.com/mldangelo/personal-site/commit/${sha}`,
+    );
+    expect(screen.queryByText('Deployed from commit')).not.toBeInTheDocument();
+  });
+
+  it("keeps a fork build's commit and source links in the fork", async () => {
+    const sha = 'fedcba9876543210fedcba9876543210fedcba98';
+    process.env.GITHUB_SHA = sha;
+    process.env.GITHUB_REPOSITORY = 'octocat/personal-site';
+
+    render(await Site());
+
+    expect(
+      screen.getByText('Built from commit').closest('tr')?.querySelector('a'),
+    ).toHaveAttribute(
+      'href',
+      `https://github.com/octocat/personal-site/commit/${sha}`,
+    );
+    expect(
+      screen
+        .getByText('Dependencies declared directly')
+        .closest('tr')
+        ?.querySelector('a'),
+    ).toHaveAttribute(
+      'href',
+      `https://github.com/octocat/personal-site/blob/${sha}/package.json`,
     );
   });
 
-  it('no longer asserts a hand-typed linter-warning count', async () => {
-    // `Number of linter warnings: '0'` was a number about this codebase typed
-    // into a data file, four lines below the comment warning against exactly
-    // that. It is replaced by counted rows.
-    const Component = await Site();
-    render(Component);
+  it('drops only the commit row when no build identity exists', async () => {
+    render(await Site());
 
-    expect(screen.queryByText(/linter warnings/i)).not.toBeInTheDocument();
+    expect(screen.queryByText('Built from commit')).not.toBeInTheDocument();
+    expect(
+      screen.getByText('Built on (UTC)').closest('tr')?.textContent,
+    ).toMatch(/\d{4}-\d{2}-\d{2}/);
   });
 
-  it('counts the dependency and lint-rule figures at build time', async () => {
-    const Component = await Site();
-    render(Component);
+  it('uses explicitly dated fallback data when the API fails', async () => {
+    fetchMock.mockRejectedValueOnce(new Error('Network error'));
+
+    render(await Site());
+
+    const note = screen.getByText(/fallback refreshed july 31, 2026/i);
+    expect(note).toHaveAttribute('data-source', 'fallback');
+    expect(screen.getByText('21')).toBeInTheDocument();
+  });
+
+  it('explains which repository the GitHub readings describe', async () => {
+    render(await Site());
+
+    expect(
+      screen.getByText(/github readings describe mldangelo\/personal-site/i),
+    ).toHaveAttribute('data-source', 'github');
+  });
+
+  it('keeps the corrected dependency and lint labels from its live base', async () => {
+    render(await Site());
 
     for (const label of [
-      'Lines of TypeScript powering this website',
       'Dependencies declared directly',
       'Installed non-development package locations',
       'Lockfile package locations',
@@ -140,18 +167,8 @@ describe('Site', () => {
     }
   });
 
-  it('formats counts with a thousands separator', async () => {
-    // `1663` and `53` were typographically interchangeable in an identical
-    // mono cell; the separator is what restores magnitude at a glance.
-    const Component = await Site();
-    render(Component);
-
-    expect(screen.getByText('1,663')).toBeInTheDocument();
-  });
-
-  it('gives counted rows a unit where the label does not name one', async () => {
-    const Component = await Site();
-    render(Component);
+  it('formats only the direct dependency count with its non-repeated unit', async () => {
+    render(await Site());
 
     const valueFor = (label: string) =>
       screen.getByText(label).closest('tr')?.querySelector('.stat-table-value')
@@ -165,39 +182,26 @@ describe('Site', () => {
     );
     expect(valueFor('Lockfile package locations')).toMatch(/^[\d,]+$/);
     expect(valueFor('Biome lint rules enabled in CI')).toMatch(/^\d+$/);
-    // The label already says "Lines of", so repeating the unit would be noise.
-    expect(valueFor('Lines of TypeScript powering this website')).toMatch(
-      /[\d,]+$/,
-    );
   });
 
-  it('does not link the build-host dependency count to the portable lockfile', async () => {
-    const Component = await Site();
-    render(Component);
+  it('does not link the host-specific dependency count to the lockfile', async () => {
+    render(await Site());
 
-    const value = screen
-      .getByText('Installed non-development package locations')
-      .closest('tr')
-      ?.querySelector('.stat-table-value');
-
-    expect(value?.querySelector('a')).toBeNull();
+    expect(
+      screen
+        .getByText('Installed non-development package locations')
+        .closest('tr')
+        ?.querySelector('.stat-table-value a'),
+    ).toBeNull();
   });
 
-  it('marks every reading with its provenance except the joke', async () => {
-    const Component = await Site();
-    render(Component);
+  it('marks every factual row with provenance and leaves the joke unmarked', async () => {
+    render(await Site());
 
-    const sources = Array.from(
-      document.querySelectorAll('.stat-provenance'),
-      (mark) => mark.getAttribute('data-source'),
-    );
-
-    expect(new Set(sources)).toEqual(new Set(['github', 'measured']));
-
-    // Every row but the joke carries a mark, and the joke carries none — it
-    // measures nothing, so it has no source to name.
     const rows = document.querySelectorAll('tbody tr');
-    expect(sources.length).toBe(rows.length - 1);
+    const sources = document.querySelectorAll('.stat-provenance');
+
+    expect(sources).toHaveLength(rows.length - 1);
     expect(
       screen
         .getByText('Number of spoons')

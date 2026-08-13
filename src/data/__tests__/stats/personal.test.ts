@@ -1,17 +1,8 @@
-import { act, render } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import data from '../../stats/personal';
 
 describe('personal stats data', () => {
-  beforeEach(() => {
-    vi.useFakeTimers();
-  });
-
-  afterEach(() => {
-    vi.useRealTimers();
-  });
-
   it('exports an array of stats', () => {
     expect(Array.isArray(data)).toBe(true);
     expect(data.length).toBeGreaterThan(0);
@@ -25,13 +16,17 @@ describe('personal stats data', () => {
     }
   });
 
-  it('has an age stat with a React component', () => {
+  it('declares the age without holding the readout that renders it', () => {
+    // This file used to carry `'use client'` and a live `<Age />` component as
+    // the value, which made every consumer of the declarations a client module.
+    // The reading the server can render depends on when the build ran, so only
+    // the renderer can supply it: the declaration names a key and nothing else.
     const ageStat = data.find((s) => s.key === 'age');
 
     expect(ageStat).toBeDefined();
     expect(ageStat!.label).toBe('Current age');
-    // Age value is a React element
-    expect(ageStat!.value).toBeDefined();
+    expect(ageStat!.value).toBeUndefined();
+    expect(ageStat!.source).toBe('profile');
   });
 
   it('has a countries visited stat', () => {
@@ -51,19 +46,17 @@ describe('personal stats data', () => {
     expect(locationStat!.value).toBe('New York, NY');
   });
 
-  it('Age component renders and updates', () => {
-    const ageStat = data.find((s) => s.key === 'age');
-    const AgeComponent = () => <>{ageStat!.value}</>;
+  it('stays a plain data module with no React in it', () => {
+    // The point of moving the readout out. If a declaration holds an element
+    // again, the whole table becomes a client component again with it.
+    for (const stat of data) {
+      expect(typeof stat.value, stat.label).not.toBe('object');
+    }
+  });
 
-    render(<AgeComponent />);
-
-    // Advance timer to trigger age calculation
-    act(() => {
-      vi.advanceTimersByTime(50);
-    });
-
-    // The age should be a number with decimal places
-    const textContent = document.body.textContent || '';
-    expect(textContent).toMatch(/\d+\.\d+/);
+  it('names the source of every reading', () => {
+    for (const stat of data) {
+      expect(stat.source, stat.label).toBe('profile');
+    }
   });
 });
