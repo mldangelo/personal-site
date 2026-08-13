@@ -44,13 +44,15 @@
 
 .resume-page .courses .course-list {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0 3rem;
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
+/* Paper falls under this breakpoint too — the print viewport is ~690-710px —
+   so `print.css` re-declares the two-column grid for print. */
 @media (max-width: 735px) {
   .resume-page .courses .course-list {
     grid-template-columns: 1fr;
