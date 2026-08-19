@@ -40,7 +40,7 @@
     "@tailwindcss/postcss": "^4.3.3",
     "dayjs": "^1.11.21",
     "gray-matter": "^4.0.3",
-    "markdown-to-jsx": "^9.9.0",
+    "markdown-to-jsx": "^9.10.2",
     "next": "^16.2.12",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
