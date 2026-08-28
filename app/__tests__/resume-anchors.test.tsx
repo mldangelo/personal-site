@@ -1,17 +1,16 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
-
-import Courses from '@/components/Resume/Courses';
+import Certifications from '@/components/Resume/Certifications';
 import Education from '@/components/Resume/Education';
 import Experience from '@/components/Resume/Experience';
-import References from '@/components/Resume/References';
 import Skills from '@/components/Resume/Skills';
-import courses from '@/data/resume/courses';
+import certifications from '@/data/resume/certifications';
 import degrees from '@/data/resume/degrees';
 import { categories, skills } from '@/data/resume/skills';
 import work from '@/data/resume/work';
+import ResumePage from '../resume/page';
 
-const SECTIONS = ['experience', 'education', 'skills', 'courses', 'references'];
+const SECTIONS = ['experience', 'education', 'skills', 'certifications'];
 
 /**
  * The section components used to render their own `<div class="link-to" id>`
@@ -30,11 +29,8 @@ function renderResumeSections() {
       <section id="skills">
         <Skills skills={skills} categories={categories} />
       </section>
-      <section id="courses">
-        <Courses data={courses} />
-      </section>
-      <section id="references">
-        <References />
+      <section id="certifications">
+        <Certifications data={certifications} />
       </section>
     </>,
   );
@@ -62,5 +58,20 @@ describe('resume section anchors', () => {
     // section list rather than a literal, so adding one cannot drift.
     expect(html.match(/<h2[ >]/g)).toHaveLength(SECTIONS.length);
     expect(html).not.toMatch(/<h4[ >]/);
+  });
+
+  it('prints Pavan’s GitHub profile', () => {
+    const html = renderToStaticMarkup(<ResumePage />);
+
+    expect(html).toContain('href="https://github.com/PavankalyanDosa"');
+    expect(html).toContain('github.com/PavankalyanDosa');
+  });
+
+  it('publishes the IAM resume sections only', () => {
+    const html = renderToStaticMarkup(<ResumePage />);
+
+    expect(html).toContain('Certifications');
+    expect(html).not.toContain('Selected Courses');
+    expect(html).not.toContain('References');
   });
 });

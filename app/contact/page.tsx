@@ -23,7 +23,10 @@ export default function ContactPage() {
         <div className="contact-content">
           <div className="contact-email-block">
             <EmailLink />
-            <p className="contact-hint">Usually respond within 24 hours</p>
+            <p className="contact-hint">
+              For IAM and identity governance conversations, please get in
+              touch.
+            </p>
           </div>
 
           <div className="contact-divider">

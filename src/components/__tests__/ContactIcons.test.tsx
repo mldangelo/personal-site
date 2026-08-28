@@ -27,7 +27,13 @@ describe('ContactIcons', () => {
   it('has correct number of contact links', () => {
     render(<ContactIcons />);
     const links = screen.getAllByRole('link');
-    expect(links.length).toBeGreaterThan(0);
+    expect(links).toHaveLength(3);
+    expect(screen.getByRole('link', { name: /linkedin/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /github/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /email/i })).toHaveAttribute(
+      'href',
+      'mailto:hello@pavankalyandosa.com',
+    );
   });
 
   it('can omit email when the page already has a primary email action', () => {

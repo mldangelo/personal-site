@@ -102,20 +102,18 @@ needs.
 
 Identity data starts in shared files, but some text and links are hard-coded.
 
-| Content                                                        | Location                                                            |
-| -------------------------------------------------------------- | ------------------------------------------------------------------- |
-| Name, role, employer, location, email, and personal statistics | `src/data/profile.json`                                             |
-| Canonical URL, social handle, descriptions, and image settings | `src/lib/utils.ts`                                                  |
-| Social links                                                   | `src/data/contact.ts`                                               |
-| Homepage biography and employer links                          | `src/components/Template/Hero.tsx`                                  |
-| Logo initials                                                  | `src/components/Template/Navigation.tsx`                            |
-| Footer source link                                             | `src/components/Template/Footer.tsx`                                |
-| Portrait and its alt text                                      | `public/images/me.jpg`, `src/components/Template/ThemePortrait.tsx` |
-| Favicon files and web app name                                 | `public/images/favicon/`                                            |
-| Sitemap URL for crawlers                                       | `public/robots.txt`                                                 |
-| RSS title and description                                      | `app/feed.xml/route.ts`                                             |
-| Repository statistics and GitHub API URL                       | `src/components/Stats/Site.tsx`, `src/data/stats/site.ts`           |
-| Countries map                                                  | `src/data/stats/personal.tsx`                                       |
+| Content                                | Location                                                       |
+| -------------------------------------- | -------------------------------------------------------------- |
+| Name, role, employer, focus, and email | `src/data/profile.json`                                        |
+| Canonical URL and shared descriptions  | `src/lib/utils.ts`                                             |
+| Social links                           | `src/data/contact.ts`                                          |
+| Homepage biography and employer links  | `src/components/Template/Hero.tsx`                             |
+| Logo initials                          | `src/components/Template/Navigation.tsx`                       |
+| Footer source link                     | `src/components/Template/Footer.tsx`                           |
+| Portrait (when one has been supplied)  | Add a portrait asset and a dedicated themed portrait component |
+| Favicon files and web app name         | `public/images/favicon/`                                       |
+| Sitemap URL for crawlers               | `public/robots.txt`                                            |
+| RSS title and description              | `app/feed.xml/route.ts`                                        |
 
 Page titles and descriptions also contain personal copy in `app/layout.tsx` and
 the `page.tsx` files under `app/`. Structured data is assembled in

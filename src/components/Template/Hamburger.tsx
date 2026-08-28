@@ -39,6 +39,22 @@ export default function Hamburger() {
         {routes
           .filter((l) => l.primary !== false)
           .map((l) => {
+            if (l.external) {
+              return (
+                <li key={l.label}>
+                  <a
+                    href={l.path}
+                    onClick={closeMenu}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <span>{l.label}</span>
+                    <span className="sr-only"> (opens in new tab)</span>
+                  </a>
+                </li>
+              );
+            }
+
             const active = isActiveRoute(pathname, l.path);
 
             return (

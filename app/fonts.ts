@@ -35,19 +35,3 @@ export const jetbrainsMono = localFont({
   fallback: ['SFMono-Regular', 'Consolas'],
   adjustFontFallback: 'Arial',
 });
-
-/**
- * Long-form writing is the only current surface that uses authored italics.
- * Its separate route-level instance avoids preloading a 64 KB face on every
- * page while preserving a real italic rather than browser synthesis.
- */
-export const newsreaderItalic = localFont({
-  src: '../node_modules/@fontsource-variable/newsreader/files/newsreader-latin-wght-italic.woff2',
-  variable: '--font-newsreader-italic',
-  weight: '200 800',
-  style: 'italic',
-  display: 'swap',
-  preload: false,
-  fallback: ['Georgia', 'Times New Roman'],
-  adjustFontFallback: 'Times New Roman',
-});

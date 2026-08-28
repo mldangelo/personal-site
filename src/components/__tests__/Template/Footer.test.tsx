@@ -14,9 +14,9 @@ describe('Footer', () => {
   it('displays the name and role', () => {
     render(<Footer />);
 
-    expect(screen.getByText("Michael D'Angelo")).toBeInTheDocument();
+    expect(screen.getByText('Pavankalyan Dosa')).toBeInTheDocument();
     expect(
-      screen.getByText('Member of the Technical Staff at OpenAI'),
+      screen.getByText(/identity and access management/i),
     ).toBeInTheDocument();
   });
 
@@ -67,10 +67,21 @@ describe('Footer', () => {
     expect(screen.getByText('Connect')).toBeInTheDocument();
   });
 
-  it('has link to home from avatar', () => {
+  it('renders the external Photography destination safely', () => {
     render(<Footer />);
 
-    const avatarLink = document.querySelector('.footer-avatar');
-    expect(avatarLink).toHaveAttribute('href', '/');
+    const photography = screen.getByRole('link', { name: /photography/i });
+    expect(photography).toHaveAttribute(
+      'href',
+      'https://photos.pavankalyandosa.com',
+    );
+    expect(photography).toHaveAttribute('target', '_blank');
+    expect(photography).toHaveAttribute('rel', 'noopener noreferrer');
+  });
+
+  it('does not render a portrait before one is supplied', () => {
+    const { container } = render(<Footer />);
+
+    expect(container.querySelector('.footer-avatar')).not.toBeInTheDocument();
   });
 });

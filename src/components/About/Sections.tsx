@@ -3,7 +3,7 @@
 import Markdown from 'markdown-to-jsx';
 import { Children, type ReactNode } from 'react';
 import { createUniqueHeadingIds } from '@/lib/anchors';
-import { extractLogMarker } from '@/lib/logEntry';
+import { extractLogMarker } from './logEntry';
 
 interface AboutContentProps {
   markdown: string;

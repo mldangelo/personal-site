@@ -1,8 +1,4 @@
-import Link from 'next/link';
-
 import profile from '@/data/profile.json';
-
-import ThemePortrait from './ThemePortrait';
 
 export default function Hero() {
   return (
@@ -14,39 +10,19 @@ export default function Hero() {
           </h1>
 
           <p className="hero-tagline">
-            I&apos;m a {profile.role} at{' '}
-            <a href="https://openai.com" className="hero-highlight">
-              {profile.employer}
-            </a>
-            , working on{' '}
-            <a href="https://promptfoo.dev" className="hero-highlight">
-              Promptfoo
-            </a>{' '}
-            and{' '}
-            <a
-              href="https://openai.com/index/codex-security-now-in-research-preview/"
-              className="hero-highlight"
-            >
-              Codex Security
-            </a>
-            . I help secure AI systems and use AI to find software
-            vulnerabilities. I co-founded Promptfoo before it joined OpenAI in
-            2026.
+            I&apos;m an Identity and Access Management professional focused on
+            building secure, reliable identity solutions.
           </p>
 
           <div className="hero-cta">
-            <Link href="/about" className="button">
+            <a href="/about" className="button">
               About Me
-            </Link>
-            <Link href="/resume" className="hero-resume-link">
+            </a>
+            <a href="/resume" className="hero-resume-link">
               View Resume
               <span aria-hidden="true">→</span>
-            </Link>
+            </a>
           </div>
-        </div>
-
-        <div className="hero-portrait">
-          <ThemePortrait width={320} height={320} priority />
         </div>
       </div>
 

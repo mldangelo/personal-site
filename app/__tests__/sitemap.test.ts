@@ -13,32 +13,30 @@ describe('sitemap', () => {
         expect.objectContaining({ url: `${SITE_URL}/about/` }),
         expect.objectContaining({ url: `${SITE_URL}/resume/` }),
         expect.objectContaining({ url: `${SITE_URL}/projects/` }),
-        expect.objectContaining({ url: `${SITE_URL}/writing/` }),
-        expect.objectContaining({ url: `${SITE_URL}/stats/` }),
         expect.objectContaining({ url: `${SITE_URL}/contact/` }),
       ]),
     );
   });
 
-  it('does not invent modification dates for static pages', () => {
-    const staticEntries = sitemap().filter(
-      (entry) => !entry.url.startsWith(`${SITE_URL}/writing/`),
+  it('does not publish the retired stats route', () => {
+    expect(sitemap()).not.toContainEqual(
+      expect.objectContaining({ url: `${SITE_URL}/stats/` }),
     );
-
-    expect(
-      staticEntries.every((entry) => entry.lastModified === undefined),
-    ).toBe(true);
   });
 
-  it('uses trailing slashes for post routes', () => {
-    const entries = sitemap();
-    const postEntries = entries.filter(
-      (entry) =>
-        entry.url.startsWith(`${SITE_URL}/writing/`) &&
-        entry.url !== `${SITE_URL}/writing/`,
+  it('does not include retired writing routes', () => {
+    expect(sitemap()).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          url: expect.stringContaining('/writing/'),
+        }),
+      ]),
     );
+  });
 
-    expect(postEntries.length).toBeGreaterThan(0);
-    expect(postEntries.every((entry) => entry.url.endsWith('/'))).toBe(true);
+  it('does not invent modification dates for static pages', () => {
+    expect(sitemap().every((entry) => entry.lastModified === undefined)).toBe(
+      true,
+    );
   });
 });

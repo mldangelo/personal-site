@@ -10,12 +10,10 @@
  * Run with `npm run verify-export` after `npm run build`.
  */
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
-import { basename, extname, join, relative, resolve, sep } from 'node:path';
-import matter from 'gray-matter';
+import { extname, join, relative, resolve, sep } from 'node:path';
 
 const ROOT = process.cwd();
 const OUT = resolve(ROOT, 'out');
-const CONTENT = resolve(ROOT, 'content/writing');
 
 const failures = [];
 const fail = (page, message) => failures.push({ page, message });
@@ -145,21 +143,6 @@ if (pages.length === 0) {
   process.exit(1);
 }
 
-const draftSlugs = walk(CONTENT, (name) => name.endsWith('.md'))
-  // Use the same YAML parser as the application. A line regex misses valid
-  // forms such as `draft: true # keep private`, weakening the fault-injection
-  // gate precisely when the route layer regresses.
-  .filter((path) => matter(readFileSync(path, 'utf8')).data.draft === true)
-  .map((path) => basename(path, '.md'));
-
-function isDraftPath(pathname) {
-  const route = routeForPublicPath(pathname) ?? pathname;
-  return draftSlugs.some(
-    (slug) =>
-      route === `/writing/${slug}` || route.startsWith(`/writing/${slug}/`),
-  );
-}
-
 const records = pages.map((file) => {
   const relativePath = toUrlPath(relative(OUT, file));
   const html = readFileSync(file, 'utf8');
@@ -246,13 +229,6 @@ function validateInternalTarget(raw, source, label) {
     return;
   }
 
-  if (isDraftPath(url.pathname)) {
-    fail(
-      source.relativePath,
-      `${label} exposes a draft route: ${url.pathname}`,
-    );
-  }
-
   const targetPage = pageAt(url.pathname);
   const targetExists = targetPage || exportedFileExists(url.pathname);
   if (!targetExists) {
@@ -306,13 +282,6 @@ function validateAbsoluteMetadataUrl(raw, source, label) {
       `${label} must have no query/hash and use the canonical trailing-slash form: ${raw}`,
     );
   }
-  if (isDraftPath(url.pathname)) {
-    fail(
-      source.relativePath,
-      `${label} exposes a draft route: ${url.pathname}`,
-    );
-  }
-
   return url;
 }
 
@@ -335,10 +304,6 @@ const REQUIRED_SOCIAL_META = [
 for (const record of records) {
   const { directives, html, ids, isIndexable, relativePath, robots, route } =
     record;
-
-  if (isDraftPath(route)) {
-    fail(relativePath, `exports draft route: ${route}`);
-  }
 
   if (robots.length > 1) {
     fail(relativePath, `${robots.length} robots tags: ${robots.join(' | ')}`);
@@ -511,9 +476,6 @@ function validateXmlUrl(raw, documentName, options = {}) {
       );
       return url;
     }
-    if (isDraftPath(url.pathname)) {
-      fail(documentName, `exposes draft route: ${url.pathname}`);
-    }
     if (!hasCanonicalPathFormat(raw.trim(), url)) {
       fail(
         documentName,
@@ -573,26 +535,6 @@ if (!existsSync(sitemapPath)) {
   }
 }
 
-const feedPath = join(OUT, 'feed.xml');
-if (!existsSync(feedPath)) {
-  fail('feed.xml', 'missing from export');
-} else {
-  const feed = readFileSync(feedPath, 'utf8');
-  const textLinks = [...feed.matchAll(/<link>\s*([^<]+?)\s*<\/link>/gi)].map(
-    (match) => match[1],
-  );
-  const guids = [...feed.matchAll(/<guid\b[^>]*>\s*([^<]+?)\s*<\/guid>/gi)].map(
-    (match) => match[1],
-  );
-  const atomLinks = tags(feed, 'atom:link')
-    .map((tag) => attribute(tag, 'href'))
-    .filter((href) => href !== undefined);
-
-  for (const url of [...textLinks, ...guids, ...atomLinks]) {
-    validateXmlUrl(url, 'feed.xml');
-  }
-}
-
 if (failures.length > 0) {
   console.error(`\nverify-export: ${failures.length} problem(s)\n`);
   for (const { page, message } of failures) {
@@ -603,5 +545,5 @@ if (failures.length > 0) {
 
 console.log(
   `verify-export: ${pages.length} pages OK ` +
-    '(drafts, robots, ids/fragments, canonicals, complete share metadata, local images, internal links, sitemap/RSS)',
+    '(robots, ids/fragments, canonicals, complete share metadata, local images, internal links, sitemap)',
 );

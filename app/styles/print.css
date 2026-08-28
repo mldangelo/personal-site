@@ -55,7 +55,6 @@
   .reading-progress,
   .resume-nav,
   .hero-bg,
-  .writing-rss-link,
   .about-section-nav,
   .about-section-heading-hash {
     display: none !important;
@@ -64,9 +63,7 @@
   .page-main,
   .page-main--hero,
   .resume-page,
-  .about-page,
-  .writing-page,
-  .post-page {
+  .about-page {
     max-width: none;
     margin: 0;
     padding: 0;
@@ -115,9 +112,7 @@
   /* Keep a role and its bullets on one page wherever the page allows. */
   .jobs-container,
   .degree-container,
-  .about-section--log li,
-  .writing-item,
-  .course-container {
+  .about-section--log li {
     break-inside: avoid;
     page-break-inside: avoid;
   }

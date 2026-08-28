@@ -1,9 +1,7 @@
 import type { Metadata } from 'next';
 
-import Cell from '@/components/Projects/Cell';
 import { SchemaGraph } from '@/components/Schema';
 import PageWrapper from '@/components/Template/PageWrapper';
-import data from '@/data/projects';
 import { createPageMetadata } from '@/lib/metadata';
 import {
   breadcrumbNode,
@@ -15,63 +13,51 @@ import { AUTHOR_NAME } from '@/lib/utils';
 
 const PROJECTS_URL = `${SITE_URL}/projects/`;
 
-const PROJECTS_DESCRIPTION = `Early projects and experiments from ${AUTHOR_NAME} (2015 and earlier).`;
+const PROJECTS_DESCRIPTION = `Professional IAM and IGA work from ${AUTHOR_NAME}.`;
 
 export const metadata: Metadata = createPageMetadata({
-  title: 'Archive',
+  title: 'Projects',
   description: PROJECTS_DESCRIPTION,
   path: '/projects/',
 });
 
 export default function ProjectsPage() {
-  const featuredProjects = data.filter((p) => p.featured);
-  const otherProjects = data.filter((p) => !p.featured);
-
   return (
     <PageWrapper>
       <SchemaGraph
         nodes={[
           collectionPageNode({
             url: PROJECTS_URL,
-            name: 'Archive',
+            name: 'Projects',
             description: PROJECTS_DESCRIPTION,
             hasBreadcrumb: true,
           }),
           breadcrumbNode(PROJECTS_URL, [
             { name: 'Home', url: HOME_URL },
-            { name: 'Archive', url: PROJECTS_URL },
+            { name: 'Projects', url: PROJECTS_URL },
           ]),
         ]}
       />
       <section className="projects-page">
         <header className="projects-header">
-          <h1 className="page-title">Archive</h1>
+          <h1 className="page-title">Projects</h1>
           <p className="page-subtitle">
-            Early projects and experiments from my student years
+            My professional work focuses on IAM and IGA implementations,
+            integrations, and automation.
           </p>
         </header>
-
-        {featuredProjects.length > 0 && (
-          <section className="projects-featured">
-            <h2 className="projects-section-title">Hackathons &amp; Awards</h2>
-            <div className="projects-grid projects-grid--featured">
-              {featuredProjects.map((project) => (
-                <Cell data={project} key={project.title} />
-              ))}
-            </div>
-          </section>
-        )}
-
-        {otherProjects.length > 0 && (
-          <section className="projects-other">
-            <h2 className="projects-section-title">Side Projects</h2>
-            <div className="projects-grid">
-              {otherProjects.map((project) => (
-                <Cell data={project} key={project.title} />
-              ))}
-            </div>
-          </section>
-        )}
+        <p className="projects-statement">
+          For code and open-source work, visit my GitHub profile.
+        </p>
+        <a
+          className="projects-github-link"
+          href="https://github.com/PavankalyanDosa"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          View GitHub profile <span aria-hidden="true">↗</span>
+          <span className="sr-only"> (opens in a new tab)</span>
+        </a>
       </section>
     </PageWrapper>
   );

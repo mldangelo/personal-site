@@ -27,9 +27,9 @@ describe('routes', () => {
     expect(indexRoute?.path).toBe('/');
   });
 
-  it('all paths start with /', () => {
+  it('uses root-relative paths except for explicitly external destinations', () => {
     for (const route of routes) {
-      expect(route.path.startsWith('/')).toBe(true);
+      expect(route.path.startsWith('/')).toBe(!route.external);
     }
   });
 
@@ -41,6 +41,13 @@ describe('routes', () => {
     expect(paths).toContain('/resume');
     expect(paths).toContain('/projects');
     expect(paths).toContain('/contact');
+    expect(routes).toContainEqual(
+      expect.objectContaining({
+        label: 'Photography',
+        path: 'https://photos.pavankalyandosa.com',
+        external: true,
+      }),
+    );
   });
 
   it('has unique paths', () => {
@@ -70,6 +77,10 @@ describe('routes', () => {
       .filter((route) => route.primary === false)
       .map((route) => route.path);
 
-    expect(secondaryPaths).toEqual(['/stats', '/projects']);
+    expect(secondaryPaths).toEqual(['/projects']);
+  });
+
+  it('does not publish a Stats destination', () => {
+    expect(routes.map((route) => route.path)).not.toContain('/stats');
   });
 });

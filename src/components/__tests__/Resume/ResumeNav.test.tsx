@@ -11,7 +11,7 @@ describe('ResumeNav', () => {
     expect(nav).toBeInTheDocument();
   });
 
-  it('renders links to all resume sections', () => {
+  it('renders links to the published resume sections', () => {
     render(<ResumeNav />);
 
     expect(screen.getByRole('link', { name: /experience/i })).toHaveAttribute(
@@ -26,21 +26,22 @@ describe('ResumeNav', () => {
       'href',
       '#skills',
     );
-    expect(screen.getByRole('link', { name: /courses/i })).toHaveAttribute(
-      'href',
-      '#courses',
-    );
-    expect(screen.getByRole('link', { name: /references/i })).toHaveAttribute(
-      'href',
-      '#references',
-    );
+    expect(
+      screen.getByRole('link', { name: /certifications/i }),
+    ).toHaveAttribute('href', '#certifications');
+    expect(
+      screen.queryByRole('link', { name: /courses/i }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('link', { name: /references/i }),
+    ).not.toBeInTheDocument();
   });
 
-  it('renders 5 navigation links', () => {
+  it('renders 4 navigation links', () => {
     render(<ResumeNav />);
 
     const links = screen.getAllByRole('link');
-    expect(links.length).toBe(5);
+    expect(links.length).toBe(4);
   });
 
   it('has correct CSS class', () => {

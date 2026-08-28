@@ -5,7 +5,12 @@ import work from '../resume/work';
 describe('work data', () => {
   it('exports an array of positions', () => {
     expect(Array.isArray(work)).toBe(true);
-    expect(work.length).toBeGreaterThan(0);
+    expect(work.map(({ name }) => name)).toEqual([
+      'Avancer Corp',
+      'PwC',
+      'KPMG',
+      'Cotelligent',
+    ]);
   });
 
   it('each position has required properties', () => {
@@ -71,17 +76,12 @@ describe('work data', () => {
     }
   });
 
-  it('has positions from different years', () => {
-    const years = work.map((job) => new Date(job.startDate).getFullYear());
-    const uniqueYears = new Set(years);
-
-    // Resume should contain work from multiple years
-    expect(uniqueYears.size).toBeGreaterThan(1);
-  });
-
-  it('company names are non-empty', () => {
-    for (const job of work) {
-      expect(job.name.trim().length).toBeGreaterThan(0);
-    }
+  it('keeps the Avancer role current', () => {
+    expect(work[0]).toMatchObject({
+      name: 'Avancer Corp',
+      position: 'Information Security Analyst',
+      startDate: '2024-06-01',
+    });
+    expect(work[0]?.endDate).toBeUndefined();
   });
 });

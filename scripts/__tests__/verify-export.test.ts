@@ -60,11 +60,6 @@ function createFixture({ basePath = '' } = {}) {
   write(root, 'package.json', JSON.stringify({ homepage: siteRoot }));
   write(
     root,
-    'content/writing/secret-draft.md',
-    '---\ntitle: Secret draft\ndraft: true # keep private\n---\n',
-  );
-  write(
-    root,
     'out/index.html',
     htmlPage({
       canonical: siteRoot,
@@ -101,22 +96,6 @@ function createFixture({ basePath = '' } = {}) {
   <url><loc>${siteRoot}about/</loc></url>
 </urlset>`,
   );
-  write(
-    root,
-    'out/feed.xml',
-    `<?xml version="1.0"?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <link>${siteRoot}</link>
-    <atom:link href="${siteRoot}feed.xml" rel="self"/>
-    <item>
-      <link>${siteRoot}about/</link>
-      <guid isPermaLink="true">${siteRoot}about/</guid>
-    </item>
-  </channel>
-</rss>`,
-  );
-
   return root;
 }
 
@@ -147,6 +126,12 @@ afterEach(() => {
 });
 
 describe('verify-export', () => {
+  it('does not inspect retired writing content', () => {
+    const exportVerifierSource = readFileSync(verifier, 'utf8');
+
+    expect(exportVerifierSource).not.toContain('content/writing');
+  });
+
   it('accepts valid root-relative, document-relative, and fragment links', () => {
     const result = runVerifier(createFixture());
 
@@ -280,38 +265,6 @@ describe('verify-export', () => {
     expect(result.status).toBe(1);
     expect(result.output).toContain(
       `indexable page has 0 ${tagName} tags; expected 1`,
-    );
-  });
-
-  it('rejects draft and missing routes in the sitemap', () => {
-    const root = createFixture();
-    mutate(root, 'out/sitemap.xml', (xml) =>
-      xml.replace(
-        '</urlset>',
-        '<url><loc>https://example.com/writing/secret-draft/</loc></url></urlset>',
-      ),
-    );
-
-    const result = runVerifier(root);
-    expect(result.status).toBe(1);
-    expect(result.output).toContain(
-      'sitemap.xml\n    exposes draft route: /writing/secret-draft/',
-    );
-  });
-
-  it('rejects draft routes in the RSS feed', () => {
-    const root = createFixture();
-    mutate(root, 'out/feed.xml', (xml) =>
-      xml.replace(
-        '</channel>',
-        '<item><link>https://example.com/writing/secret-draft/</link></item></channel>',
-      ),
-    );
-
-    const result = runVerifier(root);
-    expect(result.status).toBe(1);
-    expect(result.output).toContain(
-      'feed.xml\n    exposes draft route: /writing/secret-draft/',
     );
   });
 

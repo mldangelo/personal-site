@@ -32,9 +32,10 @@ describe('Navigation', () => {
   it('renders the logo link to home', () => {
     render(<Navigation />);
     const logo = screen.getByRole('link', {
-      name: /michael d'angelo.*home/i,
+      name: /pavankalyan dosa.*home/i,
     });
     expect(logo).toHaveAttribute('href', '/');
+    expect(logo).toHaveTextContent('PK');
   });
 
   it('labels the primary navigation landmark', () => {
@@ -50,14 +51,29 @@ describe('Navigation', () => {
 
     expect(screen.getByRole('link', { name: /about/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /resume/i })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /writing/i })).toBeInTheDocument();
+    expect(
+      screen.queryByRole('link', { name: /writing/i }),
+    ).not.toBeInTheDocument();
     expect(screen.getByRole('link', { name: /contact/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /photography/i })).toHaveAttribute(
+      'href',
+      'https://photos.pavankalyandosa.com',
+    );
     expect(
       screen.queryByRole('link', { name: /archive/i }),
     ).not.toBeInTheDocument();
     expect(
       screen.queryByRole('link', { name: /stats/i }),
     ).not.toBeInTheDocument();
+  });
+
+  it('opens external navigation routes safely in a new tab', () => {
+    render(<Navigation />);
+
+    const photography = screen.getByRole('link', { name: /photography/i });
+    expect(photography).toHaveAttribute('target', '_blank');
+    expect(photography).toHaveAttribute('rel', 'noopener noreferrer');
+    expect(photography).toHaveTextContent('(opens in new tab)');
   });
 
   it('marks home route as active when on homepage', () => {

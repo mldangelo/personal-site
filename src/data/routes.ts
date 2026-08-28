@@ -5,6 +5,7 @@ export interface Route {
   path: string;
   index?: boolean;
   primary?: boolean;
+  external?: boolean;
 }
 
 const routes: Route[] = [
@@ -22,13 +23,9 @@ const routes: Route[] = [
     path: '/resume',
   },
   {
-    label: 'Writing',
-    path: '/writing',
-  },
-  {
-    label: 'Stats',
-    path: '/stats',
-    primary: false,
+    label: 'Photography',
+    path: 'https://photos.pavankalyandosa.com',
+    external: true,
   },
   {
     label: 'Contact',

@@ -1,11 +1,11 @@
 {
   "name": "personal-site",
   "version": "4.1.0",
-  "homepage": "https://mldangelo.com/",
+  "homepage": "https://pavankalyandosa.com/",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mldangelo/personal-site.git"
+    "url": "https://github.com/pavankalyandosa/personal-site.git"
   },
   "engines": {
     "node": "^22.22.2 || ^24.15.0 || >=26.0.0"
@@ -39,7 +39,6 @@
     "@next/third-parties": "^16.2.12",
     "@tailwindcss/postcss": "^4.3.3",
     "dayjs": "^1.11.21",
-    "gray-matter": "^4.0.3",
     "markdown-to-jsx": "^9.9.0",
     "next": "^16.2.12",
     "react": "^19.2.8",
@@ -64,7 +63,6 @@
   "overrides": {
     "postcss": "^8.5.23",
     "sharp": "^0.35.3",
-    "js-yaml": "^3.15.1",
     "nanoid": "^3.3.18"
   },
   "browserslist": {

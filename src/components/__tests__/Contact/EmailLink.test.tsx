@@ -92,7 +92,11 @@ describe('EmailLink', () => {
       // already several characters long. Looping re-types the address
       // legitimately, but that grows "h" -> "hi", so the previous frame is a
       // single character and this guard leaves it alone.
-      if (previous.length > 1 && previous !== localPart) {
+      if (
+        previous.length > 1 &&
+        previous !== localPart &&
+        !localPart.startsWith(previous)
+      ) {
         expect(shown).not.toBe(localPart);
       }
 

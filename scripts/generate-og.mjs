@@ -26,8 +26,6 @@ import { ogProfileSnapshot } from './og-profile.mjs';
 // required rather than imported.
 const { ImageResponse } = createRequire(import.meta.url)('next/og');
 
-// The stats page reads the same profile file, so the card cannot silently
-// drift from the public facts elsewhere on the site.
 const profile = JSON.parse(
   await readFile(join(process.cwd(), 'src/data/profile.json'), 'utf8'),
 );
@@ -47,21 +45,10 @@ const INK = '#0e1116';
 const PAPER = '#f2f1ec';
 const GRAPHITE = '#545a63';
 const ULTRAMARINE = '#1b2fbf';
-const HAIRLINE = 'rgba(35, 39, 46, 0.18)';
 
 /**
- * The card reports selected static profile facts.
- *
- * The live age is deliberately absent: the card is baked ahead of time, so a
- * ticking value would be frozen and quietly wrong. For the same reason the
- * card carries no amber — nothing on it is live, and the signal colour only
- * means something while that stays true.
+ * The card reports only supplied, stable professional identity facts.
  */
-const READOUT = [
-  { label: 'Countries visited', value: String(profile.countriesVisited) },
-  { label: 'Computing since', value: String(profile.computingSince) },
-  { label: 'Based in', value: profile.currentCity },
-];
 
 const [FIRST_NAME, ...REST_OF_NAME] = profile.name.split(' ');
 
@@ -89,41 +76,6 @@ async function loadGoogleFont(family, weight) {
   return font.arrayBuffer();
 }
 
-function readoutCell(cell, index) {
-  return h(
-    'div',
-    {
-      key: cell.label,
-      style: {
-        display: 'flex',
-        flexDirection: 'column',
-        flex: 1,
-        padding: index === 0 ? '26px 32px 40px 0' : '26px 32px 40px',
-        borderLeft: index === 0 ? 'none' : `1px solid ${HAIRLINE}`,
-      },
-    },
-    h(
-      'span',
-      {
-        style: {
-          fontFamily: 'Mono',
-          fontSize: 17,
-          letterSpacing: '0.14em',
-          textTransform: 'uppercase',
-          color: GRAPHITE,
-          marginBottom: 14,
-        },
-      },
-      cell.label,
-    ),
-    h(
-      'span',
-      { style: { fontFamily: 'Mono', fontSize: 30, color: INK } },
-      cell.value,
-    ),
-  );
-}
-
 function card() {
   return h(
     'div',
@@ -135,7 +87,7 @@ function card() {
         flexDirection: 'column',
         justifyContent: 'space-between',
         background: PAPER,
-        padding: '72px 80px 0',
+        padding: '72px 80px',
         borderTop: `10px solid ${INK}`,
       },
     },
@@ -177,11 +129,7 @@ function card() {
         h('span', { style: { marginLeft: '0.5em' } }, `— ${profile.focus}`),
       ),
     ),
-    h(
-      'div',
-      { style: { display: 'flex', borderTop: `2px solid ${INK}` } },
-      ...READOUT.map(readoutCell),
-    ),
+    h('div', { style: { borderTop: `2px solid ${INK}` } }),
   );
 }
 

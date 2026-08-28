@@ -6,6 +6,11 @@ describe('skills data', () => {
   it('exports an array of skills', () => {
     expect(Array.isArray(skills)).toBe(true);
     expect(skills.length).toBeGreaterThan(0);
+    expect(categories.map(({ name }) => name)).toEqual([
+      'IAM',
+      'Languages & Frameworks',
+      'Tools & Infrastructure',
+    ]);
   });
 
   it('each skill has required properties', () => {
@@ -43,8 +48,7 @@ describe('skills data', () => {
     }
   });
 
-  // Data quality: categories should be sorted for consistent UI display
-  it('skill categories are sorted alphabetically for UI consistency', () => {
+  it('keeps each skill category sorted for consistent UI display', () => {
     for (const skill of skills) {
       const sorted = [...skill.category].sort();
       expect(skill.category).toEqual(sorted);
@@ -77,14 +81,6 @@ describe('categories data', () => {
         hexColorRegex.test(category.color) || cssVarRegex.test(category.color);
       expect(isValidColor).toBe(true);
     }
-  });
-
-  // Data quality: categories should be sorted for filter button display order
-  it('categories are sorted alphabetically by name', () => {
-    const names = categories.map((c) => c.name);
-    const sorted = [...names].sort();
-
-    expect(names).toEqual(sorted);
   });
 
   it('all skill categories are represented', () => {

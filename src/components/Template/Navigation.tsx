@@ -16,13 +16,28 @@ export default function Navigation() {
   return (
     <header className="site-header">
       <Link href="/" className="site-logo" aria-label={`${AUTHOR_NAME} — home`}>
-        <span className="logo-text">MD</span>
+        <span className="logo-text">PK</span>
       </Link>
 
       <nav className="nav-links" aria-label="Primary">
         {routes
           .filter((l) => !l.index && l.primary !== false)
           .map((l) => {
+            if (l.external) {
+              return (
+                <a
+                  key={l.label}
+                  href={l.path}
+                  className="nav-link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {l.label}
+                  <span className="sr-only"> (opens in new tab)</span>
+                </a>
+              );
+            }
+
             const active = isActiveRoute(pathname, l.path);
 
             return (

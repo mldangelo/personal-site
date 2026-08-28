@@ -9,129 +9,49 @@ export interface Category {
   color: string;
 }
 
-const skills: Skill[] = [
-  // Languages
-  {
-    title: 'Python',
-    competency: 5,
-    category: ['Languages', 'ML Engineering'],
-  },
-  {
-    title: 'TypeScript',
-    competency: 5,
-    category: ['Languages', 'Web Development'],
-  },
-  {
-    title: 'SQL',
-    competency: 4,
-    category: ['Languages', 'Databases'],
-  },
-  // AI & LLM
-  {
-    title: 'AI Agents',
-    competency: 5,
-    category: ['ML Engineering'],
-  },
-  {
-    title: 'LLM Evaluation',
-    competency: 5,
-    category: ['ML Engineering'],
-  },
-  {
-    title: 'AI Red-teaming',
-    competency: 5,
-    category: ['ML Engineering'],
-  },
-  {
-    title: 'LLM APIs',
-    competency: 5,
-    category: ['ML Engineering'],
-  },
-  {
-    title: 'RAG',
-    competency: 4,
-    category: ['ML Engineering'],
-  },
-  {
-    title: 'Prompt Engineering',
-    competency: 4,
-    category: ['ML Engineering'],
-  },
-  {
-    title: 'Vector Databases',
-    competency: 4,
-    category: ['ML Engineering', 'Databases'],
-  },
-  {
-    title: 'PyTorch',
-    competency: 4,
-    category: ['ML Engineering'],
-  },
-  {
-    title: 'Pandas',
-    competency: 5,
-    category: ['ML Engineering', 'Data Engineering'],
-  },
-  // Web Development
-  {
-    title: 'Node.js',
-    competency: 5,
-    category: ['Web Development'],
-  },
-  {
-    title: 'FastAPI',
-    competency: 4,
-    category: ['Web Development'],
-  },
-  {
-    title: 'Next.js',
-    competency: 3,
-    category: ['Web Development'],
-  },
-  // Databases
-  {
-    title: 'PostgreSQL',
-    competency: 4,
-    category: ['Databases'],
-  },
-  {
-    title: 'Redis',
-    competency: 3,
-    category: ['Databases'],
-  },
-  // Infrastructure
-  {
-    title: 'AWS',
-    competency: 4,
-    category: ['Infrastructure'],
-  },
-  {
-    title: 'Docker',
-    competency: 4,
-    category: ['Infrastructure'],
-  },
-  {
-    title: 'Kubernetes',
-    competency: 3,
-    category: ['Infrastructure'],
-  },
-  {
-    title: 'Observability',
-    competency: 4,
-    category: ['Infrastructure', 'ML Engineering'],
-  },
-].map((skill) => ({ ...skill, category: skill.category.sort() }));
+const skillDefinitions: Array<[string, number, string]> = [
+  ['SailPoint ISC', 5, 'IAM'],
+  ['IdentityIQ', 5, 'IAM'],
+  ['NERM', 4, 'IAM'],
+  ['Okta', 4, 'IAM'],
+  ['Active Directory', 4, 'IAM'],
+  ['LDAP', 4, 'IAM'],
+  ['Entra ID', 4, 'IAM'],
+  ['Java', 5, 'Languages & Frameworks'],
+  ['Spring Boot', 4, 'Languages & Frameworks'],
+  ['JAX-RS', 4, 'Languages & Frameworks'],
+  ['Python', 4, 'Languages & Frameworks'],
+  ['JavaScript', 4, 'Languages & Frameworks'],
+  ['TypeScript', 4, 'Languages & Frameworks'],
+  ['SQL', 4, 'Languages & Frameworks'],
+  ['PowerShell', 5, 'Languages & Frameworks'],
+  ['Shell', 4, 'Languages & Frameworks'],
+  ['BeanShell', 4, 'Languages & Frameworks'],
+  ['AWS Lambda', 4, 'Languages & Frameworks'],
+  ['Azure Functions', 4, 'Languages & Frameworks'],
+  ['Oracle / MySQL / DB2 / MongoDB', 4, 'Tools & Infrastructure'],
+  ['Tomcat / JBoss / WebLogic', 4, 'Tools & Infrastructure'],
+  ['Jenkins / Ansible / Git', 4, 'Tools & Infrastructure'],
+  ['Splunk / Jira / Confluence', 4, 'Tools & Infrastructure'],
+  ['Lucidchart / Visio / PuTTY / WinSCP', 4, 'Tools & Infrastructure'],
+  ['AWS / Azure / GCP', 4, 'Tools & Infrastructure'],
+];
 
-/**
- * Build categories from skills, all using the accent color token.
- */
+const skills: Skill[] = skillDefinitions.map(
+  ([title, competency, category]) => ({
+    title,
+    competency,
+    category: [category],
+  }),
+);
+
 function buildCategories(skillsList: Skill[]): Category[] {
   const uniqueCategories = Array.from(
     new Set(skillsList.flatMap(({ category }) => category)),
   ).sort();
 
-  return uniqueCategories.map((category) => ({
-    name: category,
+  return uniqueCategories.map((name) => ({
+    name,
     color: 'var(--color-accent)',
   }));
 }

@@ -7,8 +7,7 @@
 .resume-page .education .title,
 .resume-page .experience .title,
 .resume-page .skills .title,
-.resume-page .courses .title,
-.resume-page .references .title {
+.resume-page .certifications .title {
   margin-bottom: 2.5rem;
   text-align: left;
 }
@@ -16,8 +15,7 @@
 .resume-page .education .title h2,
 .resume-page .experience .title h2,
 .resume-page .skills .title h2,
-.resume-page .courses .title h2,
-.resume-page .references .title h2 {
+.resume-page .certifications .title h2 {
   font-family: var(--font-mono);
   font-size: var(--text-2xs);
   font-weight: var(--font-weight-medium);
@@ -38,27 +36,26 @@
   font-size: var(--text-md);
 }
 
-.resume-page .courses {
-  padding-top: 1em;
-}
-
-.resume-page .courses .course-list {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0 3rem;
+.certification-list {
   list-style: none;
-  padding: 0;
   margin: 0;
+  padding: 0;
 }
 
-@media (max-width: 735px) {
-  .resume-page .courses .course-list {
-    grid-template-columns: 1fr;
-  }
+.certification-list li {
+  margin-bottom: var(--spacing-3);
 }
 
-.resume-page .references {
-  margin: var(--spacing-8) 0;
+.certification-date {
+  color: var(--color-fg-light);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+}
+
+.certification-subtitle {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  margin: var(--spacing-6) 0 var(--spacing-3);
 }
 
 /* Resume page specific */
