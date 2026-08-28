@@ -25,6 +25,8 @@ The original portrait will be removed from the visible hero and footer until Pav
 
 Primary navigation will contain About, Resume, Photography, Projects, and Contact. Photography is a normal external anchor with an explicit new-tab indication. It is not a gallery and does not host photo assets in this repository.
 
+The homepage keeps Pavan's IAM role and professional summary as its headline. Its primary call to action is **View Photography**, linking directly to the photography subdomain; **View Resume** remains the supporting action. This makes photography an immediately visible priority without replacing the portfolio's professional identity.
+
 Writing will be removed completely: navigation, homepage promotion, writing routes, RSS route, post loaders, local and external writing content, sitemap/schema references, styles, tests, and static-export validation assumptions. This avoids publishing original-author articles and removes the upstream requirement to retain a published post.
 
 ## Domain and deployment
