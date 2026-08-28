@@ -2,35 +2,41 @@
 
 ## Purpose
 
-Convert the inherited React portfolio into Pavan Kalyan Dosa's professional IAM portfolio. The site will present a factual SailPoint-focused profile, résumé, public contact details, and a future-facing photography destination.
+Convert the current Next.js portfolio into Pavan Kalyan Dosa's professional IAM portfolio. The result presents a factual SailPoint-focused profile, résumé, contact details, and an external photography destination while retaining the upstream site's accessible static-export architecture.
 
-## Scope
+## Content scope
 
-- Replace all public inherited identity, biography, résumé, contact, metadata, deployment-domain, and repository references.
+- Replace all inherited identity, biography, résumé, contact, metadata, schema, deployment-domain, repository, and site-copy references.
 - Use the supplied résumé as the source of truth for the professional summary, experience, skills, education, certifications, and achievements.
-- Preserve only GitHub, LinkedIn, and `hello@pavankalyandosa.com` as public contact methods.
-- Remove visible inherited personal photo, site statistics, legacy courses/references, and project cards/images.
-- Make the Projects page a concise professional work page that links to `https://github.com/PavankalyanDosa`.
-- Add a clearly labeled Photography link to `https://photos.pavankalyandosa.com`. It opens in a new tab and is not a gallery implementation.
+- Publish only GitHub, LinkedIn, and `hello@pavankalyandosa.com` as contact methods.
+- Remove visible inherited portrait imagery, personal statistics, original projects, writing, and all original-author personal details.
+- Keep the Projects route as a concise professional-work page that points visitors to `https://github.com/PavankalyanDosa`.
+- Add Photography as an external navigation and footer link to `https://photos.pavankalyandosa.com`.
 
-## Content and navigation
+## Architecture
 
-The navigation will contain About, Resume, Projects, Photography, and Contact. Photography is an external link; the other items are internal routes.
+The site remains a Next.js 16 static export. Profile fields are centralized in `src/data/profile.json`; shared identity constants, canonical URLs, and metadata are in `src/lib/utils.ts` and `src/lib/metadata.ts`.
 
-The home page and sidebar will introduce Pavan as a Senior SailPoint Engineer specializing in IdentityIQ and Identity Security Cloud. The About page will describe identity governance, lifecycle management, integrations, access governance, automation, and collaboration without adding personal facts not supplied by Pavan.
+Page content is data-driven: About content is in `src/data/about.ts`, résumé entries live under `src/data/resume/`, contact links live in `src/data/contact.ts`, and project content lives in `src/data/projects.ts`. The hero, navigation, footer, schema, and page metadata consume those shared values or receive targeted copy updates where the upstream site has hard-coded original-author text.
 
-The résumé will show experience at Avancer Corp, PwC, KPMG, and Cotelligent; the University of South Dakota master's degree; the listed SailPoint and Okta certifications; key achievements; and grouped technology skills. Existing template Courses and References sections will be removed.
+The original portrait will be removed from the visible hero and footer until Pavan supplies an appropriate replacement. Site and personal statistics will be removed rather than replaced with unsupported values.
+
+## Navigation and writing removal
+
+Primary navigation will contain About, Resume, Photography, Projects, and Contact. Photography is a normal external anchor with an explicit new-tab indication. It is not a gallery and does not host photo assets in this repository.
+
+Writing will be removed completely: navigation, homepage promotion, writing routes, RSS route, post loaders, local and external writing content, sitemap/schema references, styles, tests, and static-export validation assumptions. This avoids publishing original-author articles and removes the upstream requirement to retain a published post.
 
 ## Domain and deployment
 
-The primary site identity and repository configuration will use `pavankalyandosa.com` and `https://github.com/PavankalyanDosa/personal-site`.
+The primary site uses `https://pavankalyandosa.com` and `https://github.com/PavankalyanDosa/personal-site`. Its production setup remains a GitHub Pages static export.
 
-This repository remains the primary GitHub Pages deployment. The `photos.pavankalyandosa.com` subdomain will be a future, separately deployed static photo site. It requires its own GitHub Pages site and DNS configuration; this repository only links to it. The link remains valid before the photo site goes live, but visitors may see a DNS or hosting error until it is deployed.
+`https://photos.pavankalyandosa.com` is a future, separate static photo-site deployment. This repository links to it only. Its DNS and hosting configuration are external follow-up steps; visitors may see a host error until that photo site exists.
 
-## Error handling and accessibility
+## Accessibility and failure behavior
 
-External GitHub, LinkedIn, and Photography links will use descriptive labels. The removed portrait avoids exposing an unrelated image. No new runtime service or API dependency is introduced, so the existing site continues to function when the photography subdomain is unavailable.
+External links have descriptive labels, safe `rel` attributes, and a new-tab announcement where applicable. Removing the inherited portrait prevents an unrelated image from representing Pavan. No runtime API or photo-host dependency is introduced, so the portfolio continues to work when the photo subdomain is unavailable.
 
 ## Verification
 
-Automated tests will assert the new site identity, public contact links, Photography destination, and the visible navigation without Stats. The existing suite, linter, and production build will run after the migration.
+Tests will cover Pavan's public identity, contact links, navigation, photography destination, writing removal, and removed stats. Full repository checks will include formatting, linting, type checking, unit tests, Open Graph verification, production build, and static-export verification.
