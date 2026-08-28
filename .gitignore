@@ -1,6 +1,8 @@
 # Dependencies
 node_modules/
 yarn.lock
+.worktrees/
+.superpowers/
 
 # Logs
 logs/
