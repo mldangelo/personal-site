@@ -51,7 +51,7 @@
 
   h1 {
     font-size: var(--text-3xl);
-    font-weight: var(--font-weight-black);
+    font-weight: var(--font-weight-semibold);
     letter-spacing: var(--tracking-display);
   }
 

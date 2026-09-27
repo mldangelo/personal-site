@@ -2,6 +2,7 @@
 
 import Markdown from 'markdown-to-jsx';
 import { Children, type ReactNode } from 'react';
+import MarkdownLink from '@/components/MarkdownLink';
 import { createUniqueHeadingIds } from '@/lib/anchors';
 import { extractLogMarker } from '@/lib/logEntry';
 
@@ -44,8 +45,12 @@ function LogEntry({ children }: { children?: ReactNode }) {
   );
 }
 
+const MARKDOWN_OVERRIDES = {
+  a: { component: MarkdownLink },
+};
+
 const LOG_MARKDOWN_OPTIONS = {
-  overrides: { li: { component: LogEntry } },
+  overrides: { ...MARKDOWN_OVERRIDES, li: { component: LogEntry } },
 };
 
 interface AboutSection {
@@ -142,7 +147,9 @@ export default function AboutContent({ markdown }: AboutContentProps) {
     <article className="about-content">
       {intro ? (
         <div className="about-intro">
-          <Markdown>{intro}</Markdown>
+          <Markdown options={{ overrides: MARKDOWN_OVERRIDES }}>
+            {intro}
+          </Markdown>
         </div>
       ) : null}
       {sections.length > 0 ? (
@@ -174,7 +181,9 @@ export default function AboutContent({ markdown }: AboutContentProps) {
           {isLogSection(section.title) ? (
             <Markdown options={LOG_MARKDOWN_OPTIONS}>{section.body}</Markdown>
           ) : (
-            <Markdown>{section.body}</Markdown>
+            <Markdown options={{ overrides: MARKDOWN_OVERRIDES }}>
+              {section.body}
+            </Markdown>
           )}
         </section>
       ))}

@@ -15,7 +15,7 @@ describe('writing information architecture', () => {
     const section = screen.getByRole('region', { name: 'Latest writing' });
     const cards = container.querySelectorAll('.home-writing-item');
 
-    expect(cards).toHaveLength(3);
+    expect(cards).toHaveLength(expected.length);
     expect(
       [...cards].map((card) => card.querySelector('h3')?.textContent),
     ).toEqual(expected.map((item) => item.title));
@@ -31,14 +31,14 @@ describe('writing information architecture', () => {
       screen.getByRole('heading', { level: 2, name: 'Essays on this site' }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole('heading', {
+      screen.queryByRole('heading', {
         level: 2,
         name: 'Selected writing elsewhere',
       }),
-    ).toBeInTheDocument();
+    ).not.toBeInTheDocument();
     expect(
-      screen.getByRole('heading', { level: 2, name: 'Guides' }),
-    ).toBeInTheDocument();
+      screen.queryByRole('heading', { level: 2, name: 'Guides' }),
+    ).not.toBeInTheDocument();
 
     expect(container.querySelectorAll('.writing-item h3')).toHaveLength(
       getWritingItems().length,
@@ -51,7 +51,9 @@ describe('writing information architecture', () => {
     const featured = container.querySelectorAll('.writing-item--featured');
 
     expect(featured).toHaveLength(1);
-    expect(featured[0]).toHaveAttribute('href', newest?.url);
+    expect(featured[0].getAttribute('href')?.replace(/\/$/, '')).toBe(
+      newest?.url.replace(/\/$/, ''),
+    );
   });
 
   it('shows provenance beside every external-link arrow', () => {

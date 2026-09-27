@@ -109,6 +109,7 @@ describe('Course', () => {
 
     const link = screen.getByRole('link');
     expect(link).toHaveAttribute('href', mockCourse.link);
+    expect(link).toHaveAttribute('target', '_blank');
   });
 
   it('renders as list item', () => {

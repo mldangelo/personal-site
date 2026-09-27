@@ -1,26 +1,27 @@
 import dayjs from 'dayjs';
 
+import { GITHUB_REPO, GITHUB_REPO_URL } from '@/lib/utils';
 import { StatData } from '../../components/Stats/types';
 
 /* Keys match keys returned by the github api. Fields without keys are
  * mostly jokes. To see everything returned by the github api, run:
- curl https://api.github.com/repos/mldangelo/personal-site
+ curl https://api.github.com/repos/vsricharan16/personal-site
  */
 const data: StatData[] = [
   {
     label: 'Stars this repository has on github',
     key: 'stargazers_count',
-    link: 'https://github.com/mldangelo/personal-site/stargazers',
+    link: `${GITHUB_REPO_URL}/stargazers`,
   },
   {
     label: 'Number of people watching this repository',
     key: 'subscribers_count',
-    link: 'https://github.com/mldangelo/personal-site/watchers',
+    link: `${GITHUB_REPO_URL}/watchers`,
   },
   {
     label: 'Number of forks',
     key: 'forks',
-    link: 'https://github.com/mldangelo/personal-site/network',
+    link: `${GITHUB_REPO_URL}/network`,
   },
   {
     label: 'Number of spoons',
@@ -35,12 +36,12 @@ const data: StatData[] = [
     // says what the number actually counts rather than overstating issues.
     label: 'Open github issues and pull requests',
     key: 'open_issues_count',
-    link: 'https://github.com/search?q=repo%3Amldangelo%2Fpersonal-site+is%3Aopen&type=issues',
+    link: `https://github.com/search?q=repo%3A${GITHUB_REPO.replace('/', '%2F')}+is%3Aopen&type=issues`,
   },
   {
     label: 'Last updated at',
     key: 'pushed_at',
-    link: 'https://github.com/mldangelo/personal-site/commits',
+    link: `${GITHUB_REPO_URL}/commits`,
     format: (x: unknown) => dayjs(x as string).format('MMMM DD, YYYY'),
   },
   {
@@ -49,7 +50,7 @@ const data: StatData[] = [
     // drifted by nearly 2,000 lines before anyone noticed.
     label: 'Lines of TypeScript powering this website',
     key: 'source_lines',
-    link: 'https://github.com/mldangelo/personal-site/graphs/contributors',
+    link: `${GITHUB_REPO_URL}/graphs/contributors`,
   },
 ];
 

@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
-const sections = [
+const ALL_SECTIONS = [
   { name: 'Experience', id: 'experience' },
   { name: 'Education', id: 'education' },
   { name: 'Skills', id: 'skills' },
@@ -10,12 +10,23 @@ const sections = [
   { name: 'References', id: 'references' },
 ] as const;
 
-type SectionId = (typeof sections)[number]['id'];
+type SectionId = (typeof ALL_SECTIONS)[number]['id'];
 
 /** Offset from top of viewport for intersection detection (header height + nav) */
 const INTERSECTION_MARGIN = '-20% 0px -75% 0px';
 
-export default function ResumeNav() {
+interface ResumeNavProps {
+  includeCourses?: boolean;
+}
+
+export default function ResumeNav({ includeCourses = true }: ResumeNavProps) {
+  const sections = useMemo(
+    () =>
+      includeCourses
+        ? ALL_SECTIONS
+        : ALL_SECTIONS.filter((section) => section.id !== 'courses'),
+    [includeCourses],
+  );
   const [activeSection, setActiveSection] = useState<SectionId>('experience');
 
   useEffect(() => {
@@ -72,7 +83,7 @@ export default function ResumeNav() {
     return () => {
       observer.disconnect();
     };
-  }, []);
+  }, [includeCourses, sections]);
 
   return (
     <nav className="resume-nav" aria-label="Resume sections">

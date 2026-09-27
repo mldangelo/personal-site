@@ -1,9 +1,11 @@
 import contact from '@/data/contact';
+import profile from '@/data/profile.json';
 import degrees from '@/data/resume/degrees';
 import work from '@/data/resume/work';
 import type { Post } from '@/lib/posts';
 import {
   AUTHOR_NAME,
+  GITHUB_USER,
   SHARE_IMAGE_DIMENSIONS,
   SHARE_IMAGE_PATH,
   SITE_DESCRIPTION,
@@ -34,7 +36,7 @@ export const HOME_URL = `${SITE_URL}/`;
 
 // Shared so the /writing metadata and the Blog node stay in sync.
 export const WRITING_DESCRIPTION =
-  'Articles on AI security, LLM red teaming, and trust & safety.';
+  'Notes on distributed systems, storage infrastructure, and software engineering.';
 
 type SchemaNode = Record<string, unknown>;
 
@@ -67,8 +69,8 @@ export function personNode(): SchemaNode {
 
   const currentJob = work[0];
 
-  const [givenName, ...familyParts] = AUTHOR_NAME.split(' ');
-  const familyName = familyParts.join(' ');
+  const givenName = profile.givenName;
+  const familyName = profile.familyName;
 
   return {
     '@type': 'Person',
@@ -112,7 +114,7 @@ export function websiteNode(): SchemaNode {
     '@id': WEBSITE_ID,
     url: HOME_URL,
     name: AUTHOR_NAME,
-    alternateName: ['mldangelo.com', 'mldangelo'],
+    alternateName: [GITHUB_USER, AUTHOR_NAME],
     description: SITE_DESCRIPTION,
     inLanguage: SITE_LANGUAGE,
     publisher: personRef(),

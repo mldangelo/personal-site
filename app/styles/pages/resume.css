@@ -2,14 +2,14 @@
    RESUME PAGE STYLES
    ======================================== */
 
-/* Section headers sit left, under a heavy rule — the same device
-   that opens the readout strip on the home page. */
+/* Section headers match About: display type under a heavy rule, not
+   a second set of tiny nav labels. */
 .resume-page .education .title,
 .resume-page .experience .title,
 .resume-page .skills .title,
 .resume-page .courses .title,
 .resume-page .references .title {
-  margin-bottom: 2.5rem;
+  margin-bottom: 1.5rem;
   text-align: left;
 }
 
@@ -18,28 +18,17 @@
 .resume-page .skills .title h2,
 .resume-page .courses .title h2,
 .resume-page .references .title h2 {
-  font-family: var(--font-mono);
-  font-size: var(--text-2xs);
-  font-weight: var(--font-weight-medium);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
-  color: var(--color-fg-light);
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.15;
+  letter-spacing: var(--tracking-display);
+  text-transform: none;
+  color: var(--color-fg-bold);
   display: block;
   margin: 0;
-  padding-top: 0.875rem;
+  padding-top: var(--spacing-5);
   border-top: var(--rule) solid var(--color-fg-bold);
-}
-
-.resume-page .skills {
-  margin-top: 2em;
-}
-
-.resume-page .skills .title p {
-  font-size: var(--text-md);
-}
-
-.resume-page .courses {
-  padding-top: 1em;
 }
 
 .resume-page .courses .course-list {
@@ -57,10 +46,6 @@
   }
 }
 
-.resume-page .references {
-  margin: var(--spacing-8) 0;
-}
-
 /* Resume page specific */
 .resume-page {
   max-width: var(--measure-page);
@@ -75,7 +60,7 @@
 .resume-title {
   font-family: var(--font-display);
   font-size: var(--text-3xl);
-  font-weight: var(--font-weight-black);
+  font-weight: var(--font-weight-semibold);
   letter-spacing: var(--tracking-display);
   margin-bottom: 1.25rem;
   color: var(--color-fg-bold);

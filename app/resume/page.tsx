@@ -12,12 +12,18 @@ import courses from '@/data/resume/courses';
 import degrees from '@/data/resume/degrees';
 import { categories, skills } from '@/data/resume/skills';
 import work from '@/data/resume/work';
+import { newTabProps } from '@/lib/links';
 import { createPageMetadata } from '@/lib/metadata';
-import { AUTHOR_NAME, SITE_URL } from '@/lib/utils';
+import {
+  AUTHOR_NAME,
+  GITHUB_PROFILE_URL,
+  GITHUB_USER,
+  SITE_URL,
+} from '@/lib/utils';
 
 export const metadata: Metadata = createPageMetadata({
   title: 'Resume',
-  description: `${AUTHOR_NAME}'s Resume. OpenAI, Promptfoo, Smile ID, Arthena, Matroid, Stanford ICME, YC alum.`,
+  description: `${AUTHOR_NAME}'s Resume. Nutanix Core Data Path, Amazon, Sprinklr, UC Irvine, IIT Hyderabad.`,
   path: '/resume/',
 });
 
@@ -28,12 +34,11 @@ export default function ResumePage() {
         <header className="resume-header">
           <h1 className="resume-title">Resume</h1>
           <p className="resume-summary">
-            Engineering leader with 15+ years building products across AI,
-            security, and infrastructure. I&apos;m currently a Member of the
-            Technical Staff at OpenAI, working on Promptfoo and Codex Security.
-            I help secure AI systems and use AI to find software
-            vulnerabilities. I co-founded Promptfoo before it joined OpenAI in
-            2026. Stanford MS, YC alum, previously VP Engineering.
+            Software engineer with 5 years of experience architecting
+            petabyte-scale storage control planes and data-path infrastructure.
+            I&apos;m currently a Member of Technical Staff at Nutanix, working
+            on Core Data Path. Deep expertise in C++, gRPC, OS internals, and
+            high-concurrency systems. UC Irvine MCS, IIT Hyderabad B.Tech.
           </p>
           {/* Print-only, but real markup rather than CSS `content`, so it is
               selectable, linkable, and reads from the shared profile. The
@@ -43,11 +48,13 @@ export default function ResumePage() {
             <span aria-hidden="true"> · </span>
             <a href={`mailto:${profile.email}`}>{profile.email}</a>
             <span aria-hidden="true"> · </span>
-            <a href="https://github.com/mldangelo">github.com/mldangelo</a>
+            <a href={GITHUB_PROFILE_URL} {...newTabProps(GITHUB_PROFILE_URL)}>
+              github.com/{GITHUB_USER}
+            </a>
           </address>
         </header>
 
-        <ResumeNav />
+        <ResumeNav includeCourses={courses.length > 0} />
 
         <div className="resume-content">
           <section id="experience" className="resume-section">
@@ -62,9 +69,11 @@ export default function ResumePage() {
             <Skills skills={skills} categories={categories} />
           </section>
 
-          <section id="courses" className="resume-section">
-            <Courses data={courses} />
-          </section>
+          {courses.length > 0 ? (
+            <section id="courses" className="resume-section">
+              <Courses data={courses} />
+            </section>
+          ) : null}
 
           <section id="references" className="resume-section">
             <References />

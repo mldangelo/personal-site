@@ -3,6 +3,8 @@
 import Markdown from 'markdown-to-jsx';
 import type { ReactNode } from 'react';
 
+import MarkdownLink from '@/components/MarkdownLink';
+
 function MarkdownPassthrough({ children }: { children?: ReactNode }) {
   return <>{children}</>;
 }
@@ -16,6 +18,7 @@ export default function JobSummary({ summary }: JobSummaryProps) {
     <Markdown
       options={{
         overrides: {
+          a: { component: MarkdownLink },
           p: {
             props: {
               className: 'summary',

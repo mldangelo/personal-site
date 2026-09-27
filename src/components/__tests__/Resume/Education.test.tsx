@@ -67,6 +67,7 @@ describe('Degree', () => {
 
     const link = screen.getByRole('link', { name: /stanford/i });
     expect(link).toHaveAttribute('href', 'https://stanford.edu');
+    expect(link).toHaveAttribute('target', '_blank');
   });
 
   it('displays year', () => {

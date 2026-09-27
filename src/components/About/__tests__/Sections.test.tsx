@@ -57,6 +57,10 @@ Lead paragraph.
     expect(sections).toHaveLength(2);
     expect(sections[0]).toHaveClass('about-section--compact');
     expect(sections[1]).toHaveClass('about-section--links');
+    expect(screen.getByRole('link', { name: 'Example' })).toHaveAttribute(
+      'target',
+      '_blank',
+    );
   });
 
   it('adds stable heading ids for deep links', () => {
@@ -115,6 +119,9 @@ Lead paragraph.
     expect(html).toContain('id="some-history"');
     expect(html).toContain('href="#travel-geography"');
     expect(html).toContain('id="travel-geography"');
+    expect(html).toContain('target="_blank"');
+    expect(html).toContain('href="/contact"');
+    expect(html).not.toMatch(/href="\/contact"[^>]*target="_blank"/);
   });
 
   it('supports same-page hash navigation from section links', async () => {

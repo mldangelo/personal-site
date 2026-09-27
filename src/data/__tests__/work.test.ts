@@ -84,4 +84,12 @@ describe('work data', () => {
       expect(job.name.trim().length).toBeGreaterThan(0);
     }
   });
+
+  it('logos are root-relative when present', () => {
+    for (const job of work) {
+      if (job.logo) {
+        expect(job.logo.startsWith('/')).toBe(true);
+      }
+    }
+  });
 });

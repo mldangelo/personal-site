@@ -8,7 +8,7 @@ import { MAIN_CONTENT_ID } from '@/components/Template/PageWrapper';
 import ScrollToTop from '@/components/Template/ScrollToTop';
 import { sharedOpenGraph, sharedTwitter } from '@/lib/metadata';
 import { AUTHOR_NAME, SITE_DESCRIPTION, SITE_URL } from '@/lib/utils';
-import { bricolage, jetbrainsMono, newsreader } from './fonts';
+import { inter, jetbrainsMono, sourceSerif } from './fonts';
 import './tailwind.css';
 
 export const metadata: Metadata = {
@@ -19,15 +19,13 @@ export const metadata: Metadata = {
   description: SITE_DESCRIPTION,
   keywords: [
     AUTHOR_NAME,
-    'OpenAI',
-    'Promptfoo',
-    'Codex Security',
-    'AI security',
-    'application security',
-    'LLM security',
-    'machine learning',
-    'startup founder',
-    'YC',
+    'Nutanix',
+    'storage',
+    'distributed systems',
+    'C++',
+    'gRPC',
+    'data path',
+    'software engineer',
   ],
   authors: [{ name: AUTHOR_NAME }],
   creator: AUTHOR_NAME,
@@ -69,7 +67,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${bricolage.variable} ${newsreader.variable} ${jetbrainsMono.variable}`}
+      className={`${sourceSerif.variable} ${inter.variable} ${jetbrainsMono.variable}`}
       suppressHydrationWarning
     >
       <head>

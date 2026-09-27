@@ -3,7 +3,7 @@ import Link from 'next/link';
 import ContactIcons from '@/components/Contact/ContactIcons';
 import work from '@/data/resume/work';
 import routes from '@/data/routes';
-import { AUTHOR_NAME } from '@/lib/utils';
+import { AUTHOR_NAME, GITHUB_REPO_URL } from '@/lib/utils';
 
 import ThemePortrait from './ThemePortrait';
 
@@ -23,7 +23,7 @@ export default function Footer() {
             <p className="footer-copyright">
               &copy; {new Date().getFullYear()} ·{' '}
               <a
-                href="https://github.com/mldangelo/personal-site"
+                href={GITHUB_REPO_URL}
                 target="_blank"
                 rel="noopener noreferrer"
               >

@@ -1,5 +1,7 @@
 import { isValidElement } from 'react';
 
+import { newTabProps } from '@/lib/links';
+
 import type { TableRowProps } from './types';
 
 export default function TableRow({
@@ -23,7 +25,13 @@ export default function TableRow({
         {label}
       </th>
       <td className="stat-table-value">
-        {link ? <a href={link}>{displayValue}</a> : displayValue}
+        {link ? (
+          <a href={link} {...newTabProps(link)}>
+            {displayValue}
+          </a>
+        ) : (
+          displayValue
+        )}
       </td>
     </tr>
   );

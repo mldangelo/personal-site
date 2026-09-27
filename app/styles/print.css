@@ -163,13 +163,15 @@
     display: inline;
   }
 
-  .jobs-container--lead header h3 {
-    font-size: 14pt;
-  }
-
   .jobs-container header h3 {
     font-size: 12pt;
     margin-bottom: 0.35rem;
+  }
+
+  .job-logo {
+    width: 14pt;
+    height: 14pt;
+    padding: 1pt;
   }
 
   .jobs-container .points li {
@@ -177,8 +179,7 @@
     margin-bottom: 0.25rem;
   }
 
-  .summary,
-  .jobs-container--lead .summary {
+  .summary {
     font-size: 10pt;
   }
 

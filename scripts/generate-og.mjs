@@ -63,7 +63,9 @@ const READOUT = [
   { label: 'Based in', value: profile.currentCity },
 ];
 
-const [FIRST_NAME, ...REST_OF_NAME] = profile.name.split(' ');
+const [FIRST_NAME, ...REST_OF_NAME] = (
+  profile.ogDisplayName ?? profile.name
+).split(' ');
 
 /**
  * Fetches a font from Google as TTF, which is what satori accepts.
@@ -148,8 +150,8 @@ function card() {
           style: {
             fontFamily: 'Display',
             fontSize: 128,
-            fontWeight: 800,
-            letterSpacing: '-0.045em',
+            fontWeight: 600,
+            letterSpacing: '-0.02em',
             lineHeight: 0.92,
             color: INK,
             display: 'flex',
@@ -186,14 +188,14 @@ function card() {
 }
 
 const [display, mono] = await Promise.all([
-  loadGoogleFont('Bricolage+Grotesque', 800),
+  loadGoogleFont('Source+Serif+4', 600),
   loadGoogleFont('JetBrains+Mono', 500),
 ]);
 
 const response = new ImageResponse(card(), {
   ...SIZE,
   fonts: [
-    { name: 'Display', data: display, weight: 800, style: 'normal' },
+    { name: 'Display', data: display, weight: 600, style: 'normal' },
     { name: 'Mono', data: mono, weight: 500, style: 'normal' },
   ],
 });

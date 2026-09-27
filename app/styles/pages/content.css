@@ -330,7 +330,8 @@
   max-width: 100%;
   padding: 0.875rem 0;
   font-family: var(--font-mono);
-  font-size: clamp(var(--text-xl), 4vw, var(--text-3xl));
+  font-size: clamp(var(--text-base), 2.8vw, var(--text-md));
+  min-height: 2.75rem;
   font-weight: var(--font-weight-medium);
   letter-spacing: var(--tracking-tight);
   line-height: var(--leading-tight);
@@ -340,9 +341,6 @@
   border-radius: 0;
   border-bottom: var(--rule-strong) solid var(--color-accent);
   text-decoration: none;
-  /* The animated alias runs long — "you-can-email-me-at-literally-anything!"
-     pushed 438px of content into a 320px viewport. It has to be allowed to
-     break, mid-token if necessary. */
   overflow-wrap: anywhere;
   transition:
     color var(--duration-fast) var(--ease-out),
@@ -596,7 +594,7 @@
 .stats-title {
   font-family: var(--font-display);
   font-size: var(--text-3xl);
-  font-weight: var(--font-weight-black);
+  font-weight: var(--font-weight-semibold);
   letter-spacing: var(--tracking-display);
   margin-bottom: 0.5rem;
   color: var(--color-fg-bold);
@@ -632,7 +630,7 @@
 
 @media (max-width: 480px) {
   .contact-email-link {
-    font-size: var(--text-lg);
+    font-size: var(--text-base);
   }
 
   .stat-table-value {
@@ -679,7 +677,7 @@
 .not-found-title {
   font-family: var(--font-display);
   font-size: var(--text-2xl);
-  font-weight: var(--font-weight-black);
+  font-weight: var(--font-weight-semibold);
   color: var(--color-fg-bold);
   margin-bottom: 0.75rem;
   letter-spacing: var(--tracking-display);

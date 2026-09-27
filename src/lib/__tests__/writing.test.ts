@@ -11,7 +11,6 @@ describe('getWritingItems', () => {
     const items = getWritingItems();
 
     expect(items.some((item) => !item.isExternal)).toBe(true);
-    expect(items.some((item) => item.isExternal)).toBe(true);
 
     const dated = items.filter((item) => item.date);
     expect(

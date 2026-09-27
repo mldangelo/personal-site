@@ -3,6 +3,8 @@
 import Markdown from 'markdown-to-jsx';
 import Image from 'next/image';
 
+import MarkdownLink from '@/components/MarkdownLink';
+
 interface PostContentProps {
   content: string;
   /**
@@ -28,6 +30,7 @@ export default function PostContent({
     <Markdown
       options={{
         overrides: {
+          a: { component: MarkdownLink },
           img: {
             component: ({ alt, src }: { alt?: string; src?: string }) => {
               if (!src) {

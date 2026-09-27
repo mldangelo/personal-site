@@ -32,7 +32,7 @@ describe('Navigation', () => {
   it('renders the logo link to home', () => {
     render(<Navigation />);
     const logo = screen.getByRole('link', {
-      name: /michael d'angelo.*home/i,
+      name: /v sri charan reddy.*home/i,
     });
     expect(logo).toHaveAttribute('href', '/');
   });

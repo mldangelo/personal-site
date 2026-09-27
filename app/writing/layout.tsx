@@ -1,9 +1,9 @@
-import { newsreaderItalic } from '../fonts';
+import { interItalic } from '../fonts';
 
 export default function WritingLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return <div className={newsreaderItalic.variable}>{children}</div>;
+  return <div className={interItalic.variable}>{children}</div>;
 }

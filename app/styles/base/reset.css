@@ -6,6 +6,9 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    overflow-x: clip;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 
   /* Respect reduced motion preference */
@@ -55,8 +58,16 @@
     font-weight: var(--font-weight-normal);
     line-height: var(--leading-normal);
     padding-top: var(--header-height);
+    overflow-x: clip;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  img,
+  video,
+  canvas {
+    max-width: 100%;
+    height: auto;
   }
 
   /* Paper grain. The only ambient texture on the page —

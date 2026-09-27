@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
 import profile from '@/data/profile.json';
+import { newTabProps } from '@/lib/links';
 
 import ThemePortrait from './ThemePortrait';
 
@@ -15,23 +16,25 @@ export default function Hero() {
 
           <p className="hero-tagline">
             I&apos;m a {profile.role} at{' '}
-            <a href="https://openai.com" className="hero-highlight">
+            <a
+              href="https://www.nutanix.com"
+              className="hero-highlight"
+              {...newTabProps('https://www.nutanix.com')}
+            >
               {profile.employer}
             </a>
             , working on{' '}
-            <a href="https://promptfoo.dev" className="hero-highlight">
-              Promptfoo
-            </a>{' '}
-            and{' '}
             <a
-              href="https://openai.com/index/codex-security-now-in-research-preview/"
+              href="https://www.nutanix.com/products/cloud-platform"
               className="hero-highlight"
+              {...newTabProps(
+                'https://www.nutanix.com/products/cloud-platform',
+              )}
             >
-              Codex Security
+              Core Data Path
             </a>
-            . I help secure AI systems and use AI to find software
-            vulnerabilities. I co-founded Promptfoo before it joined OpenAI in
-            2026.
+            . I build petabyte-scale storage control planes and high-concurrency
+            systems in C++ and gRPC.
           </p>
 
           <div className="hero-cta">

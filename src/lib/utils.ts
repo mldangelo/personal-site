@@ -5,9 +5,13 @@
 import profile from '@/data/profile.json';
 
 // Site configuration
-export const SITE_URL = 'https://mldangelo.com';
+export const SITE_URL = 'https://vsricharan16.github.io';
 export const AUTHOR_NAME = profile.name;
-export const TWITTER_HANDLE = '@dangelosaurus';
+export const GITHUB_USER = 'vsricharan16';
+export const GITHUB_REPO = `${GITHUB_USER}/personal-site`;
+export const GITHUB_PROFILE_URL = `https://github.com/${GITHUB_USER}`;
+export const GITHUB_REPO_URL = `https://github.com/${GITHUB_REPO}`;
+export const TWITTER_HANDLE = '';
 /**
  * The portrait. Used for JSON-LD `image`, where the value should be a picture
  * of the person, not a designed card.
@@ -35,7 +39,7 @@ export const SHARE_IMAGE_DIMENSIONS = {
 
 // Canonical one-line bio, shared across page metadata, OpenGraph, and JSON-LD.
 export const SITE_DESCRIPTION =
-  'Member of the Technical Staff at OpenAI, working on Promptfoo and Codex Security. Co-founded Promptfoo before it joined OpenAI in 2026.';
+  'Software engineer at Nutanix, building petabyte-scale storage control planes and data-path infrastructure.';
 
 // Image dimension constants
 export const PROJECT_IMAGE = {

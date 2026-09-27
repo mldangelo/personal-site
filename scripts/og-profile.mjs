@@ -17,5 +17,6 @@ export function ogProfileSnapshot(profile) {
     countriesVisited: profile.countriesVisited,
     computingSince: profile.computingSince,
     currentCity: profile.currentCity,
+    ogDisplayName: profile.ogDisplayName ?? profile.name,
   };
 }

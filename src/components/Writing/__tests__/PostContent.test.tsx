@@ -33,4 +33,15 @@ describe('PostContent', () => {
     expect(html).toContain('width="1200"');
     expect(html).toContain('height="675"');
   });
+
+  it('opens off-site markdown links in a new tab', () => {
+    const html = renderToStaticMarkup(
+      <PostContent content="See [Nutanix](https://www.nutanix.com) and [home](/)." />,
+    );
+
+    expect(html).toContain('href="https://www.nutanix.com"');
+    expect(html).toContain('target="_blank"');
+    expect(html).toContain('href="/"');
+    expect(html).not.toMatch(/href="\/"[^>]*target="_blank"/);
+  });
 });

@@ -45,8 +45,7 @@ export const sharedOpenGraph: Metadata['openGraph'] = {
 
 export const sharedTwitter: Metadata['twitter'] = {
   card: 'summary_large_image',
-  site: TWITTER_HANDLE,
-  creator: TWITTER_HANDLE,
+  ...(TWITTER_HANDLE ? { site: TWITTER_HANDLE, creator: TWITTER_HANDLE } : {}),
   images: [SHARE_IMAGE_PATH],
 };
 

@@ -9,7 +9,7 @@ import { AUTHOR_NAME } from '@/lib/utils';
 
 export const metadata: Metadata = createPageMetadata({
   title: 'Stats',
-  description: `Some statistics about ${AUTHOR_NAME} and mldangelo.com`,
+  description: `Some statistics about ${AUTHOR_NAME} and this site`,
   path: '/stats/',
 });
 

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400" role="img">
+  <rect width="600" height="400" fill="#f2f1ec"/>
+  <rect width="600" height="10" fill="#0e1116"/>
+  <text x="40" y="200" fill="#0e1116" font-family="ui-monospace, monospace" font-size="28">Linux Slab Allocator</text>
+  <text x="40" y="240" fill="#545a63" font-family="ui-monospace, monospace" font-size="18">OS internals</text>
+</svg>

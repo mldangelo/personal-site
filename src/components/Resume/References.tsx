@@ -8,7 +8,7 @@ export default function References() {
       <div className="title">
         <h2>References</h2>
       </div>
-      <p className="text-sm text-[var(--color-fg-light)] text-center">
+      <p className="text-sm text-[var(--color-fg-light)]">
         References available upon request.{' '}
         <Link
           href="/contact"

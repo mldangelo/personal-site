@@ -60,7 +60,7 @@ export default function Experience({ data }: ExperienceProps) {
         {data.map((job) => (
           <Job
             data={job}
-            key={`${job.name}-${job.position}`}
+            key={`${job.name}-${job.position}-${job.startDate}`}
             tier={tierFor(job, data)}
           />
         ))}

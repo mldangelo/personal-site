@@ -1,11 +1,14 @@
 {
-  "name": "Michael D'Angelo",
-  "role": "Member of the Technical Staff",
-  "employer": "OpenAI",
-  "focus": "Promptfoo and Codex Security",
-  "birthDate": "1990-02-05T09:24:00-05:00",
-  "computingSince": 1993,
-  "countriesVisited": 53,
-  "currentCity": "New York, NY",
-  "email": "hi@mldangelo.com"
+  "name": "V Sri Charan Reddy",
+  "givenName": "Sri Charan",
+  "familyName": "Reddy",
+  "ogDisplayName": "Charan Reddy",
+  "role": "Member of Technical Staff",
+  "employer": "Nutanix",
+  "focus": "Core Data Path",
+  "birthDate": "1998-01-01T00:00:00-08:00",
+  "computingSince": 2016,
+  "countriesVisited": 2,
+  "currentCity": "San Jose, CA",
+  "email": "charan.reddy.1605@gmail.com"
 }

@@ -15,31 +15,26 @@ describe('Hero', () => {
     render(<Hero />);
 
     const heading = screen.getByRole('heading', { level: 1 });
-    expect(heading).toHaveTextContent("Michael D'Angelo");
+    expect(heading).toHaveTextContent('V Sri Charan Reddy');
   });
 
-  it('describes the current work and Promptfoo joining OpenAI', () => {
+  it('describes the current work at Nutanix', () => {
     const { container } = render(<Hero />);
 
-    const openAiLink = screen.getByRole('link', { name: /openai/i });
-    expect(openAiLink).toHaveAttribute('href', 'https://openai.com');
-    expect(openAiLink).toHaveClass('hero-highlight');
+    const nutanixLink = screen.getByRole('link', { name: /nutanix/i });
+    expect(nutanixLink).toHaveAttribute('href', 'https://www.nutanix.com');
+    expect(nutanixLink).toHaveAttribute('target', '_blank');
+    expect(nutanixLink).toHaveClass('hero-highlight');
 
-    const promptfooLink = screen.getByRole('link', { name: /promptfoo/i });
-    expect(promptfooLink).toHaveAttribute('href', 'https://promptfoo.dev');
-    expect(promptfooLink).toHaveClass('hero-highlight');
-
-    const codexSecurityLink = screen.getByRole('link', {
-      name: 'Codex Security',
-    });
-    expect(codexSecurityLink).toHaveAttribute(
+    const dataPathLink = screen.getByRole('link', { name: /core data path/i });
+    expect(dataPathLink).toHaveAttribute(
       'href',
-      'https://openai.com/index/codex-security-now-in-research-preview/',
+      'https://www.nutanix.com/products/cloud-platform',
     );
-    expect(codexSecurityLink).toHaveClass('hero-highlight');
+    expect(dataPathLink).toHaveClass('hero-highlight');
 
     expect(container.querySelector('.hero-tagline')).toHaveTextContent(
-      "I'm a Member of the Technical Staff at OpenAI, working on Promptfoo and Codex Security. I help secure AI systems and use AI to find software vulnerabilities. I co-founded Promptfoo before it joined OpenAI in 2026.",
+      "I'm a Member of Technical Staff at Nutanix, working on Core Data Path. I build petabyte-scale storage control planes and high-concurrency systems in C++ and gRPC.",
     );
   });
 
@@ -60,6 +55,7 @@ describe('Hero', () => {
 
     const aboutButton = screen.getByRole('link', { name: /about me/i });
     expect(aboutButton).toHaveAttribute('href', '/about');
+    expect(aboutButton).not.toHaveAttribute('target');
     expect(aboutButton).toHaveClass('button');
 
     const resumeButton = screen.getByRole('link', { name: /view resume/i });

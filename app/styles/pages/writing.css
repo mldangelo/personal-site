@@ -260,7 +260,7 @@
 .post-title {
   font-family: var(--font-display);
   font-size: var(--text-2xl);
-  font-weight: var(--font-weight-black);
+  font-weight: var(--font-weight-semibold);
   letter-spacing: var(--tracking-display);
   line-height: 1.1;
   margin: 0 0 0.75rem;
@@ -371,13 +371,13 @@
   padding-left: 1.25rem;
   margin: 1.5rem 0;
   color: var(--color-fg-light);
-  font-family: var(--font-newsreader-italic), var(--font-body);
+  font-family: var(--font-inter-italic), var(--font-body);
   font-style: italic;
 }
 
 .prose em,
 .prose i {
-  font-family: var(--font-newsreader-italic), var(--font-body);
+  font-family: var(--font-inter-italic), var(--font-body);
 }
 
 .prose code {

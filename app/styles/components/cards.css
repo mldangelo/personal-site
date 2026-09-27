@@ -277,6 +277,35 @@
   min-width: 0;
 }
 
+.job-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.job-logo {
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+  padding: 0.15rem;
+  border: var(--rule) solid var(--color-border);
+  background: var(--color-bg);
+  object-fit: contain;
+}
+
+.jobs-container header h3 {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--tracking-tight);
+  margin: 0;
+  line-height: 1.15;
+}
+
 /* Dates sit in the gutter, in mono, so the column scans as a
    timeline rather than as a caption under each heading. */
 .daterange {
@@ -307,18 +336,6 @@
 .daterange-present {
   color: var(--color-signal);
   font-weight: var(--font-weight-medium);
-}
-
-.jobs-container header h3 {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-  font-family: var(--font-display);
-  font-size: var(--text-lg);
-  font-weight: var(--font-weight-bold);
-  letter-spacing: var(--tracking-tight);
-  margin-bottom: 0.75rem;
-  line-height: 1.15;
 }
 
 .jobs-container header h3 a.job-company {
@@ -367,50 +384,19 @@
   background: var(--color-border-alt);
 }
 
-/* Lead — hierarchy through breathing room and a measured size step, rather
-   than making the first company twice as loud as the rest of the history. */
+/* Current role is marked on the spine, not by enlarging the heading. */
 .jobs-container--lead {
-  padding-top: 1.5rem;
-  padding-bottom: 4.5rem;
+  padding-top: 0;
+  padding-bottom: 3rem;
 }
 
 .jobs-container--lead .job-marker {
-  top: calc(1.5rem + 0.6rem);
+  top: 0.6rem;
 }
 
-.jobs-container--lead header h3 {
-  font-size: var(--text-xl);
-  font-weight: var(--font-weight-black);
-  letter-spacing: var(--tracking-display);
-}
-
-.jobs-container--lead .summary {
-  font-size: var(--text-lg);
-  color: var(--color-fg);
-}
-
-/* Early — internships and student-era work, stepped down so a
-   decade of history stays on the page without competing. */
+/* Early — internships stay on the same type scale as every other role. */
 .jobs-container--early {
-  padding-bottom: 2rem;
-}
-
-.jobs-container--early header h3 {
-  font-size: var(--text-md);
-  margin-bottom: 0.5rem;
-}
-
-.jobs-container--early .summary,
-.jobs-container--early .points li {
-  font-size: var(--text-sm);
-  line-height: var(--leading-snug);
-  margin-bottom: 0.4rem;
-}
-
-.jobs-container--early .job-marker {
-  width: 5px;
-  height: 5px;
-  border-width: var(--rule);
+  padding-bottom: 3rem;
 }
 
 @media (max-width: 760px) {
@@ -432,15 +418,6 @@
 
   .daterange {
     padding-top: 0;
-  }
-
-  .jobs-container--lead {
-    padding-top: 1rem;
-    padding-bottom: 3.5rem;
-  }
-
-  .jobs-container--lead .job-marker {
-    top: calc(1rem + 0.6rem);
   }
 }
 

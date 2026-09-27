@@ -136,35 +136,42 @@ export default function WritingPage() {
           </div>
         </header>
 
-        <section className="writing-group" aria-labelledby="writing-here">
-          <h2 id="writing-here" className="writing-section-label">
-            Essays on this site
-          </h2>
-          <div className="writing-list">
-            {internal.map((item) => (
-              <WritingItem
-                key={item.url}
-                item={item}
-                featured={item.url === latestDatedItem?.url}
-              />
-            ))}
-          </div>
-        </section>
+        {internal.length > 0 && (
+          <section className="writing-group" aria-labelledby="writing-here">
+            <h2 id="writing-here" className="writing-section-label">
+              Essays on this site
+            </h2>
+            <div className="writing-list">
+              {internal.map((item) => (
+                <WritingItem
+                  key={item.url}
+                  item={item}
+                  featured={item.url === latestDatedItem?.url}
+                />
+              ))}
+            </div>
+          </section>
+        )}
 
-        <section className="writing-group" aria-labelledby="writing-elsewhere">
-          <h2 id="writing-elsewhere" className="writing-section-label">
-            Selected writing elsewhere
-          </h2>
-          <div className="writing-list">
-            {external.map((item) => (
-              <WritingItem
-                key={item.url}
-                item={item}
-                featured={item.url === latestDatedItem?.url}
-              />
-            ))}
-          </div>
-        </section>
+        {external.length > 0 && (
+          <section
+            className="writing-group"
+            aria-labelledby="writing-elsewhere"
+          >
+            <h2 id="writing-elsewhere" className="writing-section-label">
+              Selected writing elsewhere
+            </h2>
+            <div className="writing-list">
+              {external.map((item) => (
+                <WritingItem
+                  key={item.url}
+                  item={item}
+                  featured={item.url === latestDatedItem?.url}
+                />
+              ))}
+            </div>
+          </section>
+        )}
 
         {guides.length > 0 && (
           <section className="writing-group" aria-labelledby="writing-guides">

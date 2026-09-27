@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 
 import type { Position } from '@/data/resume/work';
+import { newTabProps } from '@/lib/links';
 
 import JobSummary from './JobSummary';
 
@@ -13,7 +14,8 @@ interface JobProps {
 }
 
 export default function Job({ data, tier = 'primary' }: JobProps) {
-  const { name, position, url, startDate, endDate, summary, highlights } = data;
+  const { name, position, url, startDate, endDate, summary, highlights, logo } =
+    data;
   const isCurrent = !endDate;
 
   return (
@@ -40,9 +42,19 @@ export default function Job({ data, tier = 'primary' }: JobProps) {
       </p>
 
       <div className="job-body">
-        <header>
+        <header className="job-header">
+          {logo ? (
+            // biome-ignore lint/performance/noImgElement: Static export; avoid next/image runtime for a 32px mark.
+            <img
+              src={logo}
+              alt=""
+              width={32}
+              height={32}
+              className="job-logo"
+            />
+          ) : null}
           <h3>
-            <a href={url} className="job-company">
+            <a href={url} className="job-company" {...newTabProps(url)}>
               {name}
             </a>
             <span className="job-position">{position}</span>

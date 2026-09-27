@@ -43,7 +43,7 @@
 /* Page header styles */
 .page-title {
   font-size: var(--text-3xl);
-  font-weight: var(--font-weight-black);
+  font-weight: var(--font-weight-semibold);
   margin-bottom: 0.5rem;
 }
 

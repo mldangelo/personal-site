@@ -19,6 +19,8 @@ describe('Job', () => {
 
     const link = screen.getByRole('link', { name: /acme corp/i });
     expect(link).toHaveAttribute('href', 'https://acme.com');
+    expect(link).toHaveAttribute('target', '_blank');
+    expect(link).toHaveAttribute('rel', 'noopener noreferrer');
   });
 
   it('renders position title', () => {
@@ -96,5 +98,19 @@ describe('Job', () => {
 
     const article = document.querySelector('article.jobs-container');
     expect(article).toBeInTheDocument();
+  });
+
+  it('renders a company mark when a logo is provided', () => {
+    render(<Job data={{ ...mockJob, logo: '/images/companies/amazon.png' }} />);
+
+    const logo = document.querySelector('.job-logo');
+    expect(logo).toHaveAttribute('src', '/images/companies/amazon.png');
+    expect(logo).toHaveAttribute('alt', '');
+  });
+
+  it('omits the mark when no logo is provided', () => {
+    render(<Job data={mockJob} />);
+
+    expect(document.querySelector('.job-logo')).not.toBeInTheDocument();
   });
 });

@@ -37,7 +37,7 @@
   max-width: 12ch;
   font-family: var(--font-display);
   font-size: var(--text-display);
-  font-weight: var(--font-weight-black);
+  font-weight: var(--font-weight-semibold);
   letter-spacing: var(--tracking-display);
   line-height: var(--leading-display);
   color: var(--color-fg-bold);
@@ -133,39 +133,13 @@
   height: auto;
 }
 
-/* The source portrait sits on a white field. Multiply drops that field
-   into the paper so the frame holds a photograph, not a white tile. */
 .hero-portrait img {
-  filter: grayscale(1) contrast(1.05);
-  mix-blend-mode: multiply;
-  transition: filter var(--duration-normal) var(--ease-out);
-}
-
-.hero-portrait:hover img {
-  filter: grayscale(0) contrast(1);
-}
-
-/* On ink the portrait must not out-shout the name, so the white
-   field is pulled well down rather than multiplied away. */
-[data-theme='dark'] .hero-portrait img {
+  filter: none;
   mix-blend-mode: normal;
-  filter: grayscale(1) brightness(0.66) contrast(1.08);
 }
 
-[data-theme='dark'] .hero-portrait:hover img {
-  filter: grayscale(0) brightness(0.78) contrast(1);
-}
-
-/* Touch users cannot reveal the portrait with hover. Keep it developed in
-   both themes, after the dark-theme rules so the cascade cannot re-grey it. */
-@media (hover: none) {
-  .hero-portrait img {
-    filter: none;
-  }
-
-  [data-theme='dark'] .hero-portrait img {
-    filter: brightness(0.78) contrast(1);
-  }
+[data-theme='dark'] .hero-portrait img {
+  filter: brightness(0.92);
 }
 
 /* ========================================
@@ -338,6 +312,12 @@
 @media (max-width: 760px) {
   .home-writing {
     margin-top: 3.5rem;
+  }
+
+  .home-writing-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
   }
 
   .home-writing-list {

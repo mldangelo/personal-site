@@ -12,96 +12,84 @@ export interface Category {
 const skills: Skill[] = [
   // Languages
   {
-    title: 'Python',
+    title: 'C++',
     competency: 5,
-    category: ['Languages', 'ML Engineering'],
+    category: ['Languages', 'Systems'],
   },
   {
-    title: 'TypeScript',
-    competency: 5,
-    category: ['Languages', 'Web Development'],
+    title: 'C',
+    competency: 4,
+    category: ['Languages', 'Systems'],
+  },
+  {
+    title: 'Go',
+    competency: 4,
+    category: ['Languages', 'Systems'],
+  },
+  {
+    title: 'Python',
+    competency: 4,
+    category: ['Languages'],
+  },
+  {
+    title: 'Java',
+    competency: 3,
+    category: ['Languages'],
   },
   {
     title: 'SQL',
-    competency: 4,
+    competency: 3,
     category: ['Languages', 'Databases'],
   },
-  // AI & LLM
+  // Systems
   {
-    title: 'AI Agents',
+    title: 'Distributed Systems',
     competency: 5,
-    category: ['ML Engineering'],
+    category: ['Systems'],
   },
   {
-    title: 'LLM Evaluation',
+    title: 'Storage Internals',
     competency: 5,
-    category: ['ML Engineering'],
+    category: ['Systems'],
   },
   {
-    title: 'AI Red-teaming',
+    title: 'OS Internals',
+    competency: 4,
+    category: ['Systems'],
+  },
+  {
+    title: 'Concurrency & Multithreading',
     competency: 5,
-    category: ['ML Engineering'],
+    category: ['Systems'],
   },
   {
-    title: 'LLM APIs',
+    title: 'Networking (TCP/IP)',
+    competency: 4,
+    category: ['Systems'],
+  },
+  {
+    title: 'gRPC',
     competency: 5,
-    category: ['ML Engineering'],
+    category: ['Systems'],
   },
   {
-    title: 'RAG',
+    title: 'REST APIs',
     competency: 4,
-    category: ['ML Engineering'],
+    category: ['Systems'],
   },
   {
-    title: 'Prompt Engineering',
+    title: 'Microservices',
     competency: 4,
-    category: ['ML Engineering'],
+    category: ['Systems'],
   },
-  {
-    title: 'Vector Databases',
-    competency: 4,
-    category: ['ML Engineering', 'Databases'],
-  },
-  {
-    title: 'PyTorch',
-    competency: 4,
-    category: ['ML Engineering'],
-  },
-  {
-    title: 'Pandas',
-    competency: 5,
-    category: ['ML Engineering', 'Data Engineering'],
-  },
-  // Web Development
-  {
-    title: 'Node.js',
-    competency: 5,
-    category: ['Web Development'],
-  },
-  {
-    title: 'FastAPI',
-    competency: 4,
-    category: ['Web Development'],
-  },
-  {
-    title: 'Next.js',
-    competency: 3,
-    category: ['Web Development'],
-  },
-  // Databases
-  {
-    title: 'PostgreSQL',
-    competency: 4,
-    category: ['Databases'],
-  },
-  {
-    title: 'Redis',
-    competency: 3,
-    category: ['Databases'],
-  },
-  // Infrastructure
+  // Cloud & Infra
   {
     title: 'AWS',
+    competency: 4,
+    category: ['Infrastructure'],
+  },
+  {
+    title: 'Kubernetes',
     competency: 4,
     category: ['Infrastructure'],
   },
@@ -111,14 +99,20 @@ const skills: Skill[] = [
     category: ['Infrastructure'],
   },
   {
-    title: 'Kubernetes',
+    title: 'Grafana',
     competency: 3,
     category: ['Infrastructure'],
   },
   {
-    title: 'Observability',
-    competency: 4,
-    category: ['Infrastructure', 'ML Engineering'],
+    title: 'Elasticsearch',
+    competency: 3,
+    category: ['Infrastructure', 'Databases'],
+  },
+  // Databases
+  {
+    title: 'MongoDB',
+    competency: 3,
+    category: ['Databases'],
   },
 ].map((skill) => ({ ...skill, category: skill.category.sort() }));
 

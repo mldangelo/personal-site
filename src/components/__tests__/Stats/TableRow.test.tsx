@@ -44,6 +44,7 @@ describe('TableRow', () => {
 
     const link = screen.getByRole('link', { name: /click here/i });
     expect(link).toHaveAttribute('href', 'https://example.com');
+    expect(link).toHaveAttribute('target', '_blank');
   });
 
   it('does not render link when link prop is null', () => {

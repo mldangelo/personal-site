@@ -17,6 +17,8 @@ describe('Cell', () => {
     render(<Cell data={mockProject} />);
     const link = screen.getByRole('link', { name: mockProject.title });
     expect(link).toHaveAttribute('href', mockProject.link);
+    expect(link).toHaveAttribute('target', '_blank');
+    expect(link).toHaveAttribute('rel', 'noopener noreferrer');
     expect(link).toHaveClass('project-card-link');
     expect(
       document.querySelector('.project-card-affordance'),

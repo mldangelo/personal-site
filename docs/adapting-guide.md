@@ -298,5 +298,5 @@ assets and absolute URL construction.
 
 ## Getting help
 
-Open an [issue](https://github.com/mldangelo/personal-site/issues) when the
+Open an [issue](https://github.com/vsricharan16/personal-site/issues) when the
 instructions are unclear or appear to be wrong.
