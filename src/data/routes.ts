@@ -2,6 +2,8 @@ export interface Route {
   label: string;
   path: string;
   index?: boolean;
+  /** Id of the home page section this route jumps to */
+  sectionId?: string;
 }
 
 const routes: Route[] = [
@@ -12,19 +14,23 @@ const routes: Route[] = [
   },
   {
     label: 'About',
-    path: '/about',
+    path: '/#about',
+    sectionId: 'about',
   },
   {
     label: 'Resume',
-    path: '/resume',
+    path: '/#resume',
+    sectionId: 'resume',
   },
   {
     label: 'Projects',
-    path: '/projects',
+    path: '/#projects',
+    sectionId: 'projects',
   },
   {
     label: 'Contact',
-    path: '/contact',
+    path: '/#contact',
+    sectionId: 'contact',
   },
 ];
 

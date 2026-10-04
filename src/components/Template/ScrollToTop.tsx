@@ -18,6 +18,9 @@ export default function ScrollToTop() {
       return;
     }
 
+    // Links like /#about should land on their section, not the top
+    if (window.location.hash) return;
+
     // Instant scroll to top on route change
     window.scrollTo({ top: 0, behavior: 'instant' });
   }, [pathname]);

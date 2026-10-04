@@ -13,10 +13,10 @@ export default function Footer() {
               Explore
             </h4>
             <div className="footer-links-grid">
-              <Link href="/about">About</Link>
-              <Link href="/resume">Resume</Link>
-              <Link href="/projects">Projects</Link>
-              <Link href="/contact">Contact</Link>
+              <Link href="/#about">About</Link>
+              <Link href="/#resume">Resume</Link>
+              <Link href="/#projects">Projects</Link>
+              <Link href="/#contact">Contact</Link>
             </div>
           </nav>
 

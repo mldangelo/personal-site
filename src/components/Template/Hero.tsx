@@ -175,10 +175,10 @@ export default function Hero() {
             </div>
 
             <div className="hero-cta">
-              <Link href="/about" className="button button-primary">
+              <Link href="/#about" className="button button-primary">
                 About Me
               </Link>
-              <Link href="/resume" className="button button-secondary">
+              <Link href="/#resume" className="button button-secondary">
                 View Resume
               </Link>
             </div>

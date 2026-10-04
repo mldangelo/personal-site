@@ -20,12 +20,21 @@ export default function Hamburger() {
   const toggleMenu = useCallback(() => setOpen((prev) => !prev), []);
   const closeMenu = useCallback(() => setOpen(false), []);
 
+  const handleLinkClick = useCallback((sectionId?: string) => {
+    setOpen(false);
+    if (!sectionId) return;
+    // Closing the menu restores the old scroll position, so jump afterwards
+    window.setTimeout(() => {
+      document.getElementById(sectionId)?.scrollIntoView();
+    }, 0);
+  }, []);
+
   const slideMenu = (
     <SlideMenu id={MENU_ID} isOpen={open} onClose={closeMenu} position="right">
       <ul className="hamburger-ul">
         {routes.map((l) => (
           <li key={l.label}>
-            <Link href={l.path} onClick={closeMenu}>
+            <Link href={l.path} onClick={() => handleLinkClick(l.sectionId)}>
               <h3 className={l.index ? 'index-li' : undefined}>{l.label}</h3>
             </Link>
           </li>

@@ -4,17 +4,27 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 import routes from '@/data/routes';
+import { useActiveSection } from '@/hooks/useActiveSection';
 
 import AudioToggle from './AudioToggle';
 import Hamburger from './Hamburger';
 import ThemeToggle from './ThemeToggle';
 
+const NAV_ROUTES = routes.filter((l) => !l.index);
+const SECTION_IDS = NAV_ROUTES.flatMap((l) => l.sectionId ?? []);
+const NO_SECTIONS: string[] = [];
+
 export default function Navigation() {
   const pathname = usePathname();
+  const isHome = pathname === '/';
+  const activeSection = useActiveSection(isHome ? SECTION_IDS : NO_SECTIONS);
 
-  const isActive = (path: string) => {
-    if (path === '/') return pathname === '/';
-    return pathname?.startsWith(path);
+  // On the home page the active link follows the scroll position;
+  // on standalone pages (/about, /resume, ...) it follows the URL.
+  const isActive = (sectionId?: string) => {
+    if (!sectionId) return isHome && activeSection === null;
+    if (isHome) return activeSection === sectionId;
+    return pathname?.startsWith(`/${sectionId}`) ?? false;
   };
 
   const HouseIcon = (
@@ -46,29 +56,28 @@ export default function Navigation() {
 
   return (
     <header className="site-header">
-      <div className="nav-spacer" aria-hidden="true" />
+      <Link
+        href="/"
+        className={`site-logo nav-link nav-link--home ${isActive() ? 'active' : ''}`}
+        aria-label="Home"
+        aria-current={isActive() ? 'page' : undefined}
+      >
+        {HouseIcon}
+      </Link>
 
-      <nav className="nav-links">
-        <Link
-          href="/"
-          className={`nav-link nav-link--home ${isActive('/') ? 'active' : ''}`}
-          aria-label="Home"
-          aria-current={isActive('/') ? 'page' : undefined}
-        >
-          {HouseIcon}
-        </Link>
-        {routes
-          .filter((l) => !l.index)
-          .map((l) => (
-            <Link
-              key={l.label}
-              href={l.path}
-              className={`nav-link ${isActive(l.path) ? 'active' : ''}`}
-              aria-current={isActive(l.path) ? 'page' : undefined}
-            >
-              {l.label}
-            </Link>
-          ))}
+      <nav className="nav-links" aria-label="Sections">
+        {NAV_ROUTES.map((l) => (
+          <Link
+            key={l.label}
+            href={l.path}
+            className={`nav-link ${isActive(l.sectionId) ? 'active' : ''}`}
+            aria-current={
+              isActive(l.sectionId) ? (isHome ? 'location' : 'page') : undefined
+            }
+          >
+            {l.label}
+          </Link>
+        ))}
         <AudioToggle />
         <ThemeToggle />
       </nav>

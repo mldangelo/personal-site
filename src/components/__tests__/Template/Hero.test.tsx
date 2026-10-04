@@ -44,11 +44,11 @@ describe('Hero', () => {
     render(<Hero />);
 
     const aboutButton = screen.getByRole('link', { name: /about me/i });
-    expect(aboutButton).toHaveAttribute('href', '/about');
+    expect(aboutButton).toHaveAttribute('href', '/#about');
     expect(aboutButton).toHaveClass('button-primary');
 
     const resumeButton = screen.getByRole('link', { name: /view resume/i });
-    expect(resumeButton).toHaveAttribute('href', '/resume');
+    expect(resumeButton).toHaveAttribute('href', '/#resume');
     expect(resumeButton).toHaveClass('button-secondary');
   });
 

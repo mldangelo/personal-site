@@ -27,12 +27,6 @@
   transform: translateY(-2px);
 }
 
-.nav-spacer {
-  /* Mirrors the .nav-actions row width so the centered .nav-links truly sits in the middle */
-  width: var(--nav-actions-width, 9rem);
-  flex-shrink: 0;
-}
-
 .logo-text {
   font-family: var(--font-heading);
   font-size: var(--text-lg);
@@ -44,6 +38,8 @@
 .nav-links {
   display: none;
   align-items: center;
+  /* Section links sit on the right; the home icon stays on the left */
+  margin-left: auto;
   flex-wrap: nowrap;
   gap: 0.625rem;
 }
