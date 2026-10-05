@@ -42,8 +42,8 @@
     "gray-matter": "^4.0.3",
     "markdown-to-jsx": "^9.10.2",
     "next": "^16.3.8",
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
@@ -52,8 +52,8 @@
     "@testing-library/jest-dom": "^7.0.0",
     "@testing-library/react": "^16.3.2",
     "@types/node": "^26.1.2",
-    "@types/react": "^19.2.18",
-    "@types/react-dom": "^19.2.4",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.0.5",
     "@vitest/coverage-v8": "^5.0.3",
     "jsdom": "^30.0.0",
