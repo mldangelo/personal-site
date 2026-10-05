@@ -23,6 +23,8 @@
     --color-fg-light: #333;
     --color-accent: #000;
     --color-accent-hover: #000;
+    --color-celadon: transparent;
+    --color-celadon-surface: transparent;
     --color-signal: #000;
     --color-signal-mark: #000;
     --color-border: rgba(0, 0, 0, 0.28);
@@ -62,7 +64,6 @@
   .theme-toggle,
   .reading-progress,
   .resume-nav,
-  .hero-bg,
   .writing-rss-link,
   .resume-json-link,
   .about-section-nav,

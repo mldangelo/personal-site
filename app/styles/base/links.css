@@ -32,7 +32,7 @@
      menu shipped looking broken for exactly this reason. Prose lists get
      their underline from their own container rules (`.about-content a`,
      `.prose a`) instead. */
-  p a:not(.hero-highlight) {
+  p a {
     background-image: linear-gradient(
       transparent calc(100% - 1.5px),
       var(--color-accent-underline) 1.5px
@@ -44,7 +44,7 @@
       background-image var(--duration-fast) var(--ease-out);
   }
 
-  p a:not(.hero-highlight):hover {
+  p a:hover {
     color: var(--color-accent-hover);
     background-image: linear-gradient(transparent calc(100% - 1.5px), var(--color-accent) 1.5px);
   }

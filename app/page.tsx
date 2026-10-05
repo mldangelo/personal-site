@@ -33,12 +33,9 @@ export default function HomePage() {
       <Hero />
       <section className="home-writing" aria-labelledby="home-writing-title">
         <div className="home-writing-header">
-          <div>
-            <span className="home-section-kicker">Recent signal</span>
-            <h2 id="home-writing-title">Latest writing</h2>
-          </div>
+          <h2 id="home-writing-title">Notes &amp; essays</h2>
           <Link href="/writing/" className="home-writing-all">
-            View all
+            All writing <span aria-hidden="true">↗</span>
           </Link>
         </div>
         <div className="home-writing-list">
@@ -48,8 +45,10 @@ export default function HomePage() {
                 <span className="home-writing-meta">
                   {formatDate(item.date)} · {item.source}
                 </span>
-                <h3>{item.title}</h3>
-                <p>{item.description}</p>
+                <div className="home-writing-copy">
+                  <h3>{item.title}</h3>
+                  <p>{item.description}</p>
+                </div>
               </>
             );
 

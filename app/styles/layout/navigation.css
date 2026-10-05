@@ -16,15 +16,14 @@
 
 .logo-text {
   font-family: var(--font-display);
-  font-size: var(--text-lg);
-  font-weight: var(--font-weight-black);
-  color: var(--color-fg-bold);
+  font-size: var(--text-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-accent);
   letter-spacing: var(--tracking-display);
   line-height: 1;
 }
 
-/* Nav labels are instrument annotation, not prose:
-   mono, uppercase, wide-tracked, and small. */
+/* Sentence-case display type keeps navigation distinct from data labels. */
 .nav-links {
   display: none;
   gap: 1.75rem;
@@ -39,12 +38,14 @@
 
 .nav-link {
   position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   padding: 0.5rem 0;
-  font-family: var(--font-mono);
+  font-family: var(--font-display);
   font-size: var(--text-ui);
   font-weight: var(--font-weight-medium);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
+  letter-spacing: var(--tracking-normal);
   color: var(--color-fg-light);
   text-decoration: none;
   background-image: none;

@@ -212,3 +212,24 @@ describe('filled controls', () => {
     }
   });
 });
+
+describe('reading surfaces', () => {
+  it('keeps body text, annotations, and links readable on paper and celadon in both themes', () => {
+    for (const theme of themes) {
+      for (const surface of [...SURFACES, '--color-celadon-surface']) {
+        for (const text of [
+          '--color-fg',
+          '--color-fg-bold',
+          '--color-fg-light',
+          '--color-accent',
+          '--color-accent-hover',
+        ]) {
+          expect(
+            contrastRatio(theme(text), theme(surface)),
+            `${text} on ${surface}`,
+          ).toBeGreaterThanOrEqual(AA_TEXT);
+        }
+      }
+    }
+  });
+});

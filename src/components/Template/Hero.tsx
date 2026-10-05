@@ -9,6 +9,7 @@ export default function Hero() {
     <section className="hero">
       <div className="hero-grid">
         <div className="hero-primary">
+          <p className="hero-kicker">Software &amp; security</p>
           <h1 className="hero-title">
             <span className="hero-name">{profile.name}</span>
           </h1>
@@ -29,28 +30,33 @@ export default function Hero() {
             >
               Codex Security
             </a>
-            . I help secure AI systems and use AI to find software
+            .
+          </p>
+
+          <p className="hero-summary">
+            I help secure AI systems and use AI to find software
             vulnerabilities. I co-founded Promptfoo before it joined OpenAI in
             2026.
           </p>
 
           <div className="hero-cta">
             <Link href="/about" className="button">
-              About Me
+              About me <span aria-hidden="true">↗</span>
             </Link>
             <Link href="/resume" className="hero-resume-link">
-              View Resume
+              View resume
               <span aria-hidden="true">→</span>
             </Link>
           </div>
         </div>
 
-        <div className="hero-portrait">
-          <ThemePortrait width={320} height={320} priority />
-        </div>
+        <figure className="hero-portrait">
+          <div className="hero-portrait-frame">
+            <ThemePortrait width={320} height={320} priority />
+          </div>
+          <figcaption>{profile.currentCity}</figcaption>
+        </figure>
       </div>
-
-      <div className="hero-bg" aria-hidden="true" />
     </section>
   );
 }

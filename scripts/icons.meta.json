@@ -1,9 +1,9 @@
 {
   "inputs": {
-    "accent": "#1b2fbf",
+    "accent": "#214dcc",
     "onAccent": "#ffffff",
-    "backgroundLight": "#f2f1ec",
-    "backgroundDark": "#0d1015",
+    "backgroundLight": "#fcfbf6",
+    "backgroundDark": "#22252a",
     "monogram": "MD",
     "name": "Michael D'Angelo",
     "font": {
@@ -32,14 +32,14 @@
       }
     ]
   },
-  "generatorDigest": "9e5e16adebdd616055a12ed446a658596a2c3758555cb0ee1209af490de11094",
+  "generatorDigest": "a53065caa90e5ac761c4394549c16f06ecee7ba41e31dc53768b7bdf5acf8e24",
   "files": {
-    "app/favicon.ico": "e0423a29796f0de8e4c42155d5765fcfcf390bbd563a52e7bd43a12f87002a5b",
-    "app/icon.png": "224596726d08380ce1699ffd56b3bd00f610dcb52f663ae750ea6ca2dc3d7e69",
-    "app/apple-icon.png": "3781164a36d1d2bd296ca457b9ee442d81fc6143fabdf7e97f272da046fae3d2",
-    "public/images/icons/icon-192.png": "6be44646a28a01356ab60e7628fae568ae066d6c44023379ca9bb02d9c152749",
-    "public/images/icons/icon-512.png": "ae923388e39e883b6796016b7ae7bb48c9aa05ca1a79e0d9325db4c17a9d252b",
-    "public/images/icons/icon-maskable-512.png": "85d2a76c26ec68d3584631e522f8815a928cb1d64a79a349924f469198eb5678",
-    "app/manifest.json": "344a3ab20d1d4d49bac37e190816a69c0d68a2031ae5f572d73d003549f8af22"
+    "app/favicon.ico": "499ea217dbd5803adc110095f3f3dd83f36e65b431f5f0d9a4a85f3049d10f3a",
+    "app/icon.png": "db44e73fea88fa9fd42740a43971a0af3cbb07441b697c016f0463c1b73f03af",
+    "app/apple-icon.png": "c0aeddf0f3c354d8f78ba356111af6ea9d123d255c7aa48207293c27c3430e49",
+    "public/images/icons/icon-192.png": "66dbba2393999ab48bb2abbd39348517c955c100cd692d5af9214dd12495381a",
+    "public/images/icons/icon-512.png": "be8674e6645501e4275f467340024f5e73bd1b22b7683f5ae5a1871ab273405c",
+    "public/images/icons/icon-maskable-512.png": "53d646addb59de65446a6a291fec3a2ca45c6ed34e87adf0a79020e5c95cca5a",
+    "app/manifest.json": "c35b2b8986f3df3f24f846de2b9f43ca30c97ee4f04eb8949cd356959142429d"
   }
 }

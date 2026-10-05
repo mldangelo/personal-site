@@ -34,10 +34,17 @@ migration.
 
 ## Visual design
 
-The visual system uses display type for headings, serif type for prose, and
-monospace type for labels and data. Hairlines and spacing establish structure.
-Ultramarine handles links, structure, and controls. Amber is reserved for live
-or in-progress values.
+The visual system pairs cobalt with celadon on warm paper, with a charcoal
+palette at night. Display type handles headings, navigation, and buttons;
+serif type handles prose; monospace identifies dates, data, and annotations.
+Hairlines and spacing establish structure. The color portrait and its arched
+frame provide a restrained mid-century influence.
+
+Cobalt handles links and controls. Celadon frames the portrait and the homepage
+writing section; it is decorative, not a text or status color. Amber remains
+reserved for live or in-progress values. Portraits and project imagery stay in
+color without requiring hover. New surface colors must retain readable text and
+links in both themes, and print resets them to ink on paper.
 
 The implementation lives in [`app/styles/tokens/`](../app/styles/tokens/).
 

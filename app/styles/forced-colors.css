@@ -109,9 +109,7 @@
      =================== */
   .theme-portrait img,
   .hero-portrait img,
-  .hero-portrait:hover img,
   [data-theme='dark'] .hero-portrait img,
-  [data-theme='dark'] .hero-portrait:hover img,
   .site-footer-new .footer-avatar img {
     mix-blend-mode: normal;
     filter: none;

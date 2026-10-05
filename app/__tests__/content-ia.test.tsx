@@ -15,9 +15,9 @@ describe('writing information architecture', () => {
       .slice(0, 3);
 
     const { container } = render(<HomePage />);
-    const section = screen.getByRole('region', { name: 'Latest writing' });
+    const section = screen.getByRole('region', { name: 'Notes & essays' });
     const cards = container.querySelectorAll('.home-writing-item');
-    const viewAll = within(section).getByRole('link', { name: 'View all' });
+    const viewAll = within(section).getByRole('link', { name: 'All writing' });
 
     expect(cards).toHaveLength(3);
     expect(

@@ -55,15 +55,15 @@
     "currentCity": "New York, NY"
   },
   "colors": {
-    "ink": "#0e1116",
-    "paper": "#f2f1ec",
-    "body": "#23272e",
-    "graphite": "#545a63",
-    "accent": "#1b2fbf",
+    "ink": "#24282e",
+    "paper": "#fcfbf6",
+    "body": "#292d33",
+    "graphite": "#5d6269",
+    "accent": "#214dcc",
     "hairline": "rgba(35, 39, 46, 0.14)"
   },
   "generatorDigest": "d6275fc1aab9b26b844d868cd16d02f2a8c0db811ebe56269478dad254fee74e",
-  "imageDigest": "9c76fd6b9be9ed5e8253a35ee7b741e219b2bfd5484b5bd29c90eb7a3241d4eb",
+  "imageDigest": "b101afe78bac4e83d38ee9729f389537a0ee67381e109cd69cc23220ccf34190",
   "posts": [
     {
       "slug": "why-i-mostly-switched-from-claude-code-to-codex-desktop-app",
@@ -86,7 +86,7 @@
           "value": "12 min"
         }
       ],
-      "imageDigest": "427bc57b8fa6e95dddc8ba0a99553ff673859ca727ec1bdca479b9438e45a21a"
+      "imageDigest": "0c2067d6eee1d64f06bcb0e69dbabc3dc72d1e871122aad1a3be7d7ead268f2a"
     },
     {
       "slug": "claude-code-outage",
@@ -109,7 +109,7 @@
           "value": "2 min"
         }
       ],
-      "imageDigest": "2a06165bbaea3fbff75fc614a123519c9974d7bee9ee98e9a3fe0358501b93ae"
+      "imageDigest": "8f5a646f2e90a2e964ff147822e66496fe4205234b9dda347098625223a2d190"
     },
     {
       "slug": "eurostar-chatbot-analysis",
@@ -132,7 +132,7 @@
           "value": "4 min"
         }
       ],
-      "imageDigest": "a1f18c68bf7fb348b7d2cbe775953699f70db8a8833a4adc5c02d6fac1eb4227"
+      "imageDigest": "4d9e630562050b6b084152634981d62606c68a766b279432e1a67f0293b3d1e4"
     },
     {
       "slug": "shipping-with-claude-code",
@@ -155,7 +155,7 @@
           "value": "8 min"
         }
       ],
-      "imageDigest": "4587658c363afea0b63ab90977964c687e339d14615b60f72224bb538b96f3b8"
+      "imageDigest": "36a76a596b0ed681507d8c295f939c514340b072316925d4b121afb2d89fe51e"
     }
   ]
 }
