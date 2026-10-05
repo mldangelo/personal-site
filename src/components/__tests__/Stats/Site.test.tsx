@@ -27,10 +27,12 @@ import Site from '../../Stats/Site';
 describe('Site', () => {
   beforeEach(() => {
     vi.mocked(global.fetch).mockClear();
+    vi.stubEnv('GITHUB_TOKEN', undefined);
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
+    vi.unstubAllEnvs();
   });
 
   it('renders the site stats table', async () => {
@@ -68,10 +70,39 @@ describe('Site', () => {
     expect(global.fetch).toHaveBeenCalledWith(
       'https://api.github.com/repos/mldangelo/personal-site',
       expect.objectContaining({
-        headers: expect.objectContaining({
+        headers: {
           Accept: 'application/vnd.github.v3+json',
+        },
+        next: { revalidate: false },
+      }),
+    );
+  });
+
+  it('still supports an explicitly supplied local read-only token', async () => {
+    vi.stubEnv('GITHUB_TOKEN', 'test-read-only-token');
+    await Site();
+
+    expect(global.fetch).toHaveBeenCalledWith(
+      'https://api.github.com/repos/mldangelo/personal-site',
+      expect.objectContaining({
+        headers: expect.objectContaining({
+          Authorization: 'Bearer test-read-only-token',
         }),
       }),
+    );
+  });
+
+  it('exports labeled fallback readings when anonymous requests are rate limited', async () => {
+    vi.mocked(global.fetch).mockResolvedValueOnce(
+      new Response(null, { status: 403 }),
+    );
+    const Component = await Site();
+    render(Component);
+
+    expect(screen.getByRole('table')).toBeInTheDocument();
+    expect(screen.getByText(/approximate github readings/i)).toHaveAttribute(
+      'data-source',
+      'fallback',
     );
   });
 
