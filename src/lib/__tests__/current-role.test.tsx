@@ -4,6 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 import Experience from '@/components/Resume/Experience';
 import Footer from '@/components/Template/Footer';
 import type { Position } from '@/data/resume/work';
+import { buildJsonResume } from '@/lib/resumeJson';
 import { personNode } from '@/lib/schema';
 
 /**
@@ -58,6 +59,14 @@ function leadOfSpine() {
 }
 
 describe('the role the site says its author holds now', () => {
+  it('leads the JSON Resume even when appended last in source data', () => {
+    expect(buildJsonResume().work.map((job) => job.name)).toEqual([
+      'Current Co',
+      'Previous Co',
+      'Side Fund',
+    ]);
+  });
+
   it('is not the first entry in the source data, so indexing cannot pass', () => {
     expect(leadOfSpine().company).not.toBe(career[0].name);
     expect(leadOfSpine().company).toBe('Current Co');

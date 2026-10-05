@@ -408,6 +408,11 @@
   border-radius: var(--radius-xs);
 }
 
+/* Long configuration names must wrap in prose without changing code fences. */
+.prose :not(pre) > code {
+  overflow-wrap: anywhere;
+}
+
 /* The wrapper carries the block's margin so the language plate can be
    positioned against the fence's own top hairline. */
 .prose-fence {

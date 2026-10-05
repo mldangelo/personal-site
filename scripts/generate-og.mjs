@@ -333,7 +333,7 @@ async function render(element, label) {
   const image = Buffer.from(await response.arrayBuffer());
 
   try {
-    assertCardGeometry(image, {
+    await assertCardGeometry(image, {
       size,
       paper,
       topRule: TOP_RULE,

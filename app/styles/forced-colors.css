@@ -89,11 +89,6 @@
     background-color: CanvasText;
   }
 
-  /* The category tick is the only place a skill carries its group colour. */
-  .skill-tag::before {
-    background-color: CanvasText;
-  }
-
   /* ===================
      COMPOSITING
      Images keep their colours, but the blend and filter stack around them was

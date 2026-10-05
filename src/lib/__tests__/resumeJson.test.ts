@@ -6,6 +6,7 @@ import courses from '@/data/resume/courses';
 import degrees from '@/data/resume/degrees';
 import { categories, skills } from '@/data/resume/skills';
 import work from '@/data/resume/work';
+import { sortPositions } from '@/lib/career';
 import {
   buildJsonResume,
   RESUME_JSON_PATH,
@@ -146,7 +147,7 @@ describe('json resume document', () => {
 
   it('carries every position in résumé order', () => {
     expect(resume.work.map((position) => position.name)).toEqual(
-      work.map((position) => position.name),
+      sortPositions(work).map((position) => position.name),
     );
     expect(resume.work[0]).toMatchObject({
       name: 'OpenAI',

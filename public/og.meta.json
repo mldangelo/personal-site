@@ -62,7 +62,7 @@
     "accent": "#1b2fbf",
     "hairline": "rgba(35, 39, 46, 0.14)"
   },
-  "generatorDigest": "ad5a11ce9da8b00f36c63bce9f88c00350c3d018acd468dce250974c9b61e8c0",
+  "generatorDigest": "24919b697a6b5d6a0c48ee98022bcd24aaa49441674d2fbaa517c515efa1e723",
   "imageDigest": "9c76fd6b9be9ed5e8253a35ee7b741e219b2bfd5484b5bd29c90eb7a3241d4eb",
   "posts": [
     {
@@ -75,7 +75,7 @@
       "readout": [
         {
           "label": "Words",
-          "value": "2,632"
+          "value": "2,623"
         },
         {
           "label": "Unique external links",
@@ -86,7 +86,7 @@
           "value": "12 min"
         }
       ],
-      "imageDigest": "b2fe5fa57c49537a826e409371a6efee3fe97f481c5f371b2b166c7bfc1b6bda"
+      "imageDigest": "427bc57b8fa6e95dddc8ba0a99553ff673859ca727ec1bdca479b9438e45a21a"
     },
     {
       "slug": "claude-code-outage",

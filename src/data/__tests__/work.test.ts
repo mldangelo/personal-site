@@ -85,10 +85,13 @@ describe('work data', () => {
   // would sort wrongly and silently.
   it('dates are plain ISO calendar dates', () => {
     for (const job of work) {
-      expect(job.startDate).toMatch(ISO_DATE);
-
-      if (job.endDate) {
-        expect(job.endDate).toMatch(ISO_DATE);
+      for (const date of [job.startDate, job.endDate].filter(
+        (date) => date !== undefined,
+      )) {
+        expect(date).toMatch(ISO_DATE);
+        const parsed = new Date(`${date}T00:00:00.000Z`);
+        expect(Number.isNaN(parsed.valueOf())).toBe(false);
+        expect(parsed.toISOString().slice(0, 10)).toBe(date);
       }
     }
   });

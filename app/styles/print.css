@@ -136,6 +136,7 @@
   /* Keep a role and its bullets on one page wherever the page allows. */
   .jobs-container,
   .degree-container,
+  .skill-group,
   .about-section--log li,
   .writing-item,
   .course-container {
@@ -233,8 +234,12 @@
     display: none;
   }
 
-  .skill-group[hidden] {
-    display: block !important;
+  /* Tailwind's hidden rule is important in its base layer. Important layer
+     rules outrank unlayered ones, so this override must share that layer. */
+  @layer base {
+    .skill-group[hidden] {
+      display: block !important;
+    }
   }
 
   .skill-tag,

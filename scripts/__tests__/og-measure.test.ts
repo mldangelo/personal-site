@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { deflateSync } from 'node:zlib';
 import { beforeAll, describe, expect, it } from 'vitest';
@@ -13,13 +13,12 @@ import {
 import { assertCardGeometry, inkBands, parseColor } from '../og-measure.mjs';
 
 const ROOT = process.cwd();
+const CARD_DIR = join(ROOT, 'public', 'og', 'writing');
 const CARDS = [
   join(ROOT, 'public', 'og.png'),
-  ...[
-    'claude-code-outage',
-    'eurostar-chatbot-analysis',
-    'shipping-with-claude-code',
-  ].map((slug) => join(ROOT, 'public', 'og', 'writing', `${slug}.png`)),
+  ...readdirSync(CARD_DIR)
+    .filter((name) => name.endsWith('.png'))
+    .map((name) => join(CARD_DIR, name)),
 ];
 
 let paper = '';
@@ -96,8 +95,8 @@ const fits = (image: Buffer) =>
  * had, and nothing failed, because nothing looked at a card.
  */
 describe('committed card geometry', () => {
-  it.each(CARDS)('matches the budgeted rows in %s', (path) => {
-    const bands = inkBands(readFileSync(path), paper);
+  it.each(CARDS)('matches the budgeted rows in %s', async (path) => {
+    const bands = await inkBands(readFileSync(path), paper);
     const readout = bands[bands.length - 1];
 
     expect(bands[0]).toEqual([0, TOP_RULE - 1]);
@@ -106,9 +105,9 @@ describe('committed card geometry', () => {
     expect(READOUT_HEIGHT + READOUT_RULE).toBe(CARD_SIZE.height - readout[0]);
   });
 
-  it('leaves the copy clear of the readout on every committed card', () => {
+  it('leaves the copy clear of the readout on every committed card', async () => {
     for (const path of CARDS) {
-      const bands = inkBands(readFileSync(path), paper);
+      const bands = await inkBands(readFileSync(path), paper);
       const copy = bands[bands.length - 2];
 
       expect(copy[1]).toBeLessThan(readoutTop(CARD_SIZE));
@@ -117,8 +116,8 @@ describe('committed card geometry', () => {
 });
 
 describe('rendered card geometry', () => {
-  it('accepts a card whose copy stops above the readout', () => {
-    expect(() =>
+  it('accepts a card whose copy stops above the readout', async () => {
+    await expect(
       fits(
         cardFixture([
           [0, TOP_RULE - 1],
@@ -126,24 +125,24 @@ describe('rendered card geometry', () => {
           [readoutTop(CARD_SIZE), CARD_SIZE.height - 1],
         ]),
       ),
-    ).not.toThrow();
+    ).resolves.toBeDefined();
   });
 
-  it('rejects copy that has run into the readout', () => {
+  it('rejects copy that has run into the readout', async () => {
     // The failure satori does not report: the title's last line and the
     // readout rule become one unbroken band of ink.
-    expect(() =>
+    await expect(
       fits(
         cardFixture([
           [0, TOP_RULE - 1],
           [90, CARD_SIZE.height - 1],
         ]),
       ),
-    ).toThrow(/Copy has run into the readout/);
+    ).rejects.toThrow(/Copy has run into the readout/);
   });
 
-  it('rejects a readout pushed down the card', () => {
-    expect(() =>
+  it('rejects a readout pushed down the card', async () => {
+    await expect(
       fits(
         cardFixture([
           [0, TOP_RULE - 1],
@@ -151,11 +150,11 @@ describe('rendered card geometry', () => {
           [559, CARD_SIZE.height - 1],
         ]),
       ),
-    ).toThrow(/readout should be the last band of ink/);
+    ).rejects.toThrow(/readout should be the last band of ink/);
   });
 
-  it('rejects a card that does not open with its rule', () => {
-    expect(() =>
+  it('rejects a card that does not open with its rule', async () => {
+    await expect(
       fits(
         cardFixture([
           [2, TOP_RULE - 1],
@@ -163,13 +162,13 @@ describe('rendered card geometry', () => {
           [readoutTop(CARD_SIZE), CARD_SIZE.height - 1],
         ]),
       ),
-    ).toThrow(/does not open with its/);
+    ).rejects.toThrow(/does not open with its/);
   });
 
-  it('refuses to measure anything but the renderer’s own PNG format', () => {
-    expect(() => inkBands(Buffer.from('not a png at all'), paper)).toThrow(
-      /not a PNG/,
-    );
+  it('refuses to measure non-PNG input', async () => {
+    await expect(
+      inkBands(Buffer.from('not a png at all'), paper),
+    ).rejects.toThrow(/not a PNG/);
   });
 });
 

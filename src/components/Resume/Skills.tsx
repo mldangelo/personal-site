@@ -67,18 +67,16 @@ export default function Skills({ skills, categories }: SkillsProps) {
       .filter((group) => group.skills.length > 0);
   }, [skills, categories]);
 
-  // Both counts are of rendered tags, not distinct titles: a skill listed under
-  // two categories renders in both groups.
-  const totalSkillCount = groupedSkills.reduce(
-    (total, { skills: groupSkills }) => total + groupSkills.length,
-    0,
-  );
-
-  const visibleSkillCount =
+  // A skill can appear in several category groups; announce it only once.
+  const allSkills = groupedSkills.flatMap((group) => group.skills);
+  const visibleSkills =
     activeCategory === ALL_CATEGORY
-      ? totalSkillCount
+      ? allSkills
       : (groupedSkills.find(({ category }) => category.name === activeCategory)
-          ?.skills.length ?? 0);
+          ?.skills ?? []);
+  const totalSkillCount = new Set(allSkills.map((skill) => skill.title)).size;
+  const visibleSkillCount = new Set(visibleSkills.map((skill) => skill.title))
+    .size;
 
   const noun = totalSkillCount === 1 ? 'skill' : 'skills';
   const filterStatus =

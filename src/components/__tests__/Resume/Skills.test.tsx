@@ -166,17 +166,16 @@ describe('Skills', () => {
   // `aria-pressed` reports the control, not the outcome, and pressing a filter
   // hides most of the section.
   describe('filter status', () => {
-    it('counts the tags it renders, not distinct titles', () => {
+    it('counts each skill once even when it renders in multiple groups', () => {
       const { container } = render(
         <Skills skills={mockSkills} categories={mockCategories} />,
       );
 
-      // Python, TypeScript and JavaScript each render in two groups, so the
-      // announced total is read back off the DOM rather than restated here.
+      // Five distinct skills render as eight tags across the categories.
       const tags = container.querySelectorAll('.skill-tag');
       expect(tags).toHaveLength(8);
       expect(screen.getByRole('status')).toHaveTextContent(
-        `Showing all ${tags.length} skills.`,
+        'Showing all 5 skills.',
       );
     });
 
@@ -193,7 +192,7 @@ describe('Skills', () => {
       const shown = tags.filter(isShown);
       expect(shown).toHaveLength(3);
       expect(screen.getByRole('status')).toHaveTextContent(
-        `Showing ${shown.length} of ${tags.length} skills in Languages.`,
+        'Showing 3 of 5 skills in Languages.',
       );
     });
 
