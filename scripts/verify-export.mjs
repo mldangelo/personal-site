@@ -579,6 +579,20 @@ for (const record of records) {
     }
   }
 
+  // Raw HTML forms survive Markdown rendering. Submit controls can override
+  // their form's destination, so checking only action misses broken targets.
+  for (const [elements, name] of [
+    ['form', 'action'],
+    ['button|input', 'formaction'],
+  ]) {
+    for (const tag of tags(html, elements)) {
+      const target = attribute(tag, name);
+      if (target !== undefined) {
+        validateInternalTarget(target, record, 'form target');
+      }
+    }
+  }
+
   // Validate the same resource forms collected above for public ownership.
   // An absent file must fail even when no draft also references it.
   for (const tag of tags(
@@ -1052,5 +1066,5 @@ if (failures.length > 0) {
 
 console.log(
   `verify-export: ${pages.length} pages OK ` +
-    '(draft routes and referenced assets, robots, ids/fragments, canonicals, complete share metadata, icons/manifest, local images/media, internal links, sitemap/RSS, resume.json)',
+    '(draft routes and referenced assets, robots, ids/fragments, canonicals, complete share metadata, icons/manifest, local images/media, internal links and form targets, sitemap/RSS, resume.json)',
 );

@@ -358,6 +358,51 @@ describe('verify-export', () => {
     expect(runVerifier(root).status).toBe(0);
   });
 
+  describe.each(['', '/personal-site'])(
+    'form targets at base path "%s"',
+    (basePath) => {
+      it.each([
+        ['form action', '<form action="missing/"></form>'],
+        [
+          'button override',
+          '<form action="about/"><button formaction="missing/">Submit</button></form>',
+        ],
+        [
+          'input override',
+          '<form action="about/"><input type="submit" formaction="missing/"></form>',
+        ],
+      ])('rejects a missing %s', (_name, markup) => {
+        const root = createFixture({ basePath });
+        mutate(root, 'out/index.html', (html) =>
+          html.replace('</body>', `${markup}</body>`),
+        );
+        const result = runVerifier(root);
+        expect(result.status).toBe(1);
+        expect(result.output).toContain(
+          'form target points at missing export: missing/',
+        );
+      });
+
+      it('accepts existing, empty, and external submission targets', () => {
+        const root = createFixture({ basePath });
+        mutate(root, 'out/index.html', (html) =>
+          html.replace(
+            '</body>',
+            `
+          <form action="about/?q=hello">
+            <button formaction="${basePath}/about/#section">Submit</button>
+            <input type="submit" formaction="https://forms.example/submit">
+          </form>
+          <form action=""><button formaction="">Submit here</button></form>
+          <form action="https://forms.example/submit"></form>
+        </body>`,
+          ),
+        );
+        expect(runVerifier(root).status).toBe(0);
+      });
+    },
+  );
+
   it('rejects missing relative routes and local image files', () => {
     const root = createFixture();
     mutate(root, 'out/index.html', (html) =>
