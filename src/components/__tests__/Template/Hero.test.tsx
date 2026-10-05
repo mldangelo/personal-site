@@ -39,7 +39,10 @@ describe('Hero', () => {
     expect(codexSecurityLink).toHaveClass('hero-highlight');
 
     expect(container.querySelector('.hero-tagline')).toHaveTextContent(
-      "I'm a Member of the Technical Staff at OpenAI, working on Promptfoo and Codex Security. I help secure AI systems and use AI to find software vulnerabilities. I co-founded Promptfoo before it joined OpenAI in 2026.",
+      "I'm a Member of the Technical Staff at OpenAI, working on Promptfoo and Codex Security.",
+    );
+    expect(container.querySelector('.hero-summary')).toHaveTextContent(
+      'I help secure AI systems and use AI to find software vulnerabilities. I co-founded Promptfoo before it joined OpenAI in 2026.',
     );
   });
 
@@ -66,13 +69,5 @@ describe('Hero', () => {
     expect(resumeButton).toHaveAttribute('href', '/resume');
     expect(resumeButton).toHaveClass('hero-resume-link');
     expect(resumeButton).not.toHaveClass('button');
-  });
-
-  it('has decorative background elements', () => {
-    render(<Hero />);
-
-    const bg = document.querySelector('.hero-bg');
-    expect(bg).toBeInTheDocument();
-    expect(bg).toHaveAttribute('aria-hidden', 'true');
   });
 });

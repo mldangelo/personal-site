@@ -1,7 +1,7 @@
 /* ========================================
    COLOR TOKENS
-   Warm neutral paper, ultramarine structure,
-   amber reserved for live instrument readouts.
+   Warm paper, cobalt links and controls, celadon framing.
+   Amber remains reserved for live or in-progress values.
    ======================================== */
 
 @theme {
@@ -10,18 +10,22 @@
      --color-bg     = raised surface (cards, header)
      --color-bg-alt = page background
      =================== */
-  --color-bg: #fcfbf9;
-  --color-bg-alt: #f2f1ec;
-  --color-fg: #23272e;
-  --color-fg-bold: #0e1116;
-  --color-fg-light: #545a63;
+  --color-bg: #fffefb;
+  --color-bg-alt: #fcfbf6;
+  --color-fg: #292d33;
+  --color-fg-bold: #24282e;
+  --color-fg-light: #5d6269;
 
   /* ===================
-     ACCENT — ultramarine
+     ACCENT — cobalt
      Structure, links, active state.
      =================== */
-  --color-accent: #1b2fbf;
-  --color-accent-hover: #16249c;
+  --color-accent: #214dcc;
+  --color-accent-hover: #193ca5;
+
+  /* Celadon is decorative framing, never text or a status indicator. */
+  --color-celadon: #b7d6c9;
+  --color-celadon-surface: #edf3ed;
 
   /* Filled controls need their own pair. A link accent is tuned for contrast
      against the page; reusing it as a button background put white text on it,
@@ -34,14 +38,25 @@
   --color-accent-underline-strong: color-mix(in srgb, var(--color-accent) 55%, transparent);
 
   /* ===================
+     FOCUS RING
+     Cobalt for controls on paper; ink around cobalt-filled controls so
+     the ring remains distinct from the fill. Contrast is tested below.
+     =================== */
+  --color-focus-ring: var(--color-accent);
+  --color-focus-ring-fill: var(--color-fg-bold);
+
+  /* ===================
      SIGNAL — amber
      Reserved for live/measured values and the
      current-position marker. Never decorative.
-     --color-signal      text-safe on page bg (AA)
+     --color-signal      text-safe on page backgrounds
      --color-signal-mark graphic use only (ticks, dots, rules)
+
+     "Present" also carries the state in text. Contrast tests hold the
+     redundant mark to 3:1 and text to 4.5:1 on both page surfaces.
      =================== */
   --color-signal: #9a5600;
-  --color-signal-mark: #e8930c;
+  --color-signal-mark: #bc770a;
 
   /* ===================
      BORDER COLORS
@@ -51,9 +66,8 @@
   --color-border: rgba(35, 39, 46, 0.14);
   --color-border-bg: rgba(35, 39, 46, 0.08);
 
-  /* Structural hairlines are meant to be quiet and sit near 1.5:1, which is
-     fine for dividing content but not for the only visible edge of a
-     control. Interactive boundaries use this instead, at 3:1 against paper. */
+  /* Quiet structural hairlines cannot be a control's only visible edge.
+     Interactive boundaries use a tested 3:1 floor on both page surfaces. */
   --color-control-border: #767b83;
   --color-border-alt: rgba(35, 39, 46, 0.24);
 

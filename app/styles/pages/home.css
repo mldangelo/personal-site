@@ -1,85 +1,67 @@
-/* ========================================
-   HOME PAGE STYLES
-   Hero and home sections
-   ======================================== */
-
-/* ========================================
-   HERO
-   Asymmetric: type holds the left and the portrait anchors the right.
-   ======================================== */
-
+/* Cobalt leads the page; celadon frames the portrait and writing.
+   The introduction stays readable without decorative layers or motion. */
 .hero {
-  position: relative;
-  padding: 3rem 0 0;
-  text-align: left;
+  padding: 2rem 0 0;
 }
 
 .hero-grid {
-  position: relative;
-  z-index: 1;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) 16rem;
   gap: 3rem;
-  align-items: start;
+  align-items: center;
 }
 
 .hero-primary {
   min-width: 0;
 }
 
-/* Name */
+.hero-kicker {
+  margin: 0 0 1.5rem;
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  color: var(--color-fg-light);
+}
+
 .hero-title {
-  margin: 0 0 1.25rem;
+  margin: 0 0 1.75rem;
 }
 
 .hero-name {
   display: block;
-  max-width: 12ch;
+  max-width: 10ch;
   font-family: var(--font-display);
   font-size: var(--text-display);
-  font-weight: var(--font-weight-black);
-  letter-spacing: var(--tracking-display);
-  line-height: var(--leading-display);
-  color: var(--color-fg-bold);
-  text-wrap: balance;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.055em;
+  line-height: 0.94;
+  color: var(--color-accent);
+  overflow-wrap: anywhere;
 }
 
-/* Tagline — set in the body serif at reading size, measure-constrained. */
-.hero-tagline {
+.hero-tagline,
+.hero-summary {
+  max-width: 42ch;
   font-family: var(--font-body);
   font-size: var(--text-lg);
-  color: var(--color-fg);
-  max-width: 46ch;
-  margin: 0 0 2rem;
   line-height: var(--leading-snug);
-  font-weight: var(--font-weight-normal);
-  text-wrap: pretty;
+  margin: 0 0 1rem;
+}
+
+.hero-summary {
+  max-width: 46ch;
+  font-size: var(--text-md);
+  color: var(--color-fg-light);
+  margin-bottom: 1.75rem;
 }
 
 .hero-highlight {
   color: var(--color-accent);
-  font-weight: var(--font-weight-medium);
-  text-decoration: none;
-  background-image: linear-gradient(
-    transparent calc(100% - 2px),
-    var(--color-accent-underline) 2px
-  );
-  background-size: 100% 100%;
-  transition:
-    background-image var(--duration-fast) var(--ease-out),
-    color var(--duration-fast) var(--ease-out);
 }
 
-.hero-highlight:hover {
-  color: var(--color-accent-hover);
-  background-image: linear-gradient(transparent calc(100% - 2px), var(--color-accent) 2px);
-}
-
-/* CTA */
 .hero-cta {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 1.5rem;
   flex-wrap: wrap;
 }
 
@@ -88,42 +70,29 @@
   align-items: center;
   gap: 0.5rem;
   min-height: 2.75rem;
-  padding: 0.5rem 0.25rem;
-  font-family: var(--font-mono);
+  font-family: var(--font-display);
   font-size: var(--text-ui);
   font-weight: var(--font-weight-medium);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
   color: var(--color-fg-bold);
-  text-decoration: underline;
-  text-decoration-color: var(--color-border-alt);
-  text-underline-offset: 0.3rem;
   background-image: none;
-  transition:
-    color var(--duration-fast) var(--ease-out),
-    text-decoration-color var(--duration-fast) var(--ease-out);
+  text-decoration: none;
 }
 
 .hero-resume-link:hover {
   color: var(--color-accent);
-  text-decoration-color: var(--color-accent);
-  background-image: none;
+  text-decoration: underline;
+  text-underline-offset: 0.3rem;
 }
 
-.hero-resume-link:focus-visible {
-  outline: var(--rule-strong) solid var(--color-accent);
-  outline-offset: 2px;
-}
-
-/* Portrait — squared off. A circular avatar is the one shape this
-   layout cannot use without reading as a profile card. */
 .hero-portrait {
-  position: relative;
-  width: 280px;
-  max-width: 100%;
-  border: var(--rule) solid var(--color-border);
-  background: var(--color-bg);
-  padding: 0.5rem;
+  width: 100%;
+  margin: 0;
+}
+
+.hero-portrait-frame {
+  padding: 0.875rem;
+  background: var(--color-celadon);
+  border-radius: 50% 50% var(--radius-sm) var(--radius-sm);
 }
 
 .hero-portrait .theme-portrait,
@@ -133,221 +102,171 @@
   height: auto;
 }
 
-/* The source portrait sits on a white field. Multiply drops that field
-   into the paper so the frame holds a photograph, not a white tile. */
 .hero-portrait img {
-  filter: grayscale(1) contrast(1.05);
-  mix-blend-mode: multiply;
-  transition: filter var(--duration-normal) var(--ease-out);
+  border-radius: 50% 50% var(--radius-sm) var(--radius-sm);
 }
 
-.hero-portrait:hover img {
-  filter: grayscale(0) contrast(1);
+.hero-portrait figcaption {
+  margin-top: 0.875rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  color: var(--color-fg-light);
+  text-align: right;
 }
-
-/* On ink the portrait must not out-shout the name, so the white
-   field is pulled well down rather than multiplied away. */
-[data-theme='dark'] .hero-portrait img {
-  mix-blend-mode: normal;
-  filter: grayscale(1) brightness(0.66) contrast(1.08);
-}
-
-[data-theme='dark'] .hero-portrait:hover img {
-  filter: grayscale(0) brightness(0.78) contrast(1);
-}
-
-/* Touch users cannot reveal the portrait with hover. Keep it developed in
-   both themes, after the dark-theme rules so the cascade cannot re-grey it. */
-@media (hover: none) {
-  .hero-portrait img {
-    filter: none;
-  }
-
-  [data-theme='dark'] .hero-portrait img {
-    filter: brightness(0.78) contrast(1);
-  }
-}
-
-/* ========================================
-   HERO BACKGROUND
-   A faint ruled field, drawn to the same hairline weight as
-   everything else. Replaces the accent-coloured blur.
-   ======================================== */
-
-.hero-bg {
-  position: absolute;
-  inset: 0;
-  overflow: clip;
-  pointer-events: none;
-  z-index: 0;
-  background-image:
-    linear-gradient(to right, var(--color-border-bg) var(--rule), transparent var(--rule)),
-    linear-gradient(to bottom, var(--color-border-bg) var(--rule), transparent var(--rule));
-  background-size: 96px 96px;
-  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), transparent 55%);
-  -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), transparent 55%);
-}
-
-/* ========================================
-   HERO — RESPONSIVE
-   ======================================== */
-
-/* Tablet — keep two columns, just narrower.
-   Collapsing straight to a stack at 860px left a 180px portrait alone at the
-   far left with several hundred pixels of dead space beside it before the
-   name resumed below. */
-@media (max-width: 940px) and (min-width: 641px) {
-  .hero-grid {
-    gap: 2.5rem;
-  }
-
-  .hero-portrait {
-    width: 220px;
-  }
-
-  .hero-name {
-    max-width: 10ch;
-  }
-}
-
-/* Stacked — below this the two columns genuinely stop fitting. */
-@media (max-width: 640px) {
-  .hero {
-    padding-top: 3rem;
-  }
-
-  .hero-grid {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 2rem;
-  }
-
-  .hero-portrait {
-    order: -1;
-    width: 180px;
-  }
-
-  .hero-name {
-    max-width: none;
-  }
-
-  .hero-tagline {
-    font-size: var(--text-md);
-  }
-}
-
-/* ========================================
-   RECENT WRITING — proof of current work
-   ======================================== */
 
 .home-writing {
-  margin-top: 5rem;
-  padding-top: 1.5rem;
-  border-top: var(--rule-strong) solid var(--color-fg-bold);
+  margin-top: 3.5rem;
+  padding: 1.5rem 2rem 0.5rem;
+  background: var(--color-celadon-surface);
 }
 
 .home-writing-header {
   display: flex;
-  align-items: end;
+  align-items: center;
   justify-content: space-between;
-  gap: 2rem;
-  margin-bottom: 1.5rem;
-}
-
-.home-section-kicker,
-.home-writing-meta {
-  display: block;
-  font-family: var(--font-mono);
-  font-size: var(--text-2xs);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
-  color: var(--color-fg-light);
+  gap: 1.5rem;
+  margin-bottom: 0.75rem;
 }
 
 .home-writing h2 {
-  margin: 0.35rem 0 0;
-  font-family: var(--font-display);
+  margin: 0;
+  font-family: var(--font-body);
   font-size: var(--text-xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-fg-bold);
+  font-weight: var(--font-weight-medium);
   letter-spacing: var(--tracking-tight);
 }
 
 .home-writing-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
   flex: none;
-  padding: 0.5rem 0;
-  font-family: var(--font-mono);
+  font-family: var(--font-display);
   font-size: var(--text-ui);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
-  text-decoration: none;
+  color: var(--color-accent);
   background-image: none;
-}
-
-.home-writing-list {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  border-top: var(--rule) solid var(--color-border);
 }
 
 .home-writing-item {
+  display: grid;
+  grid-template-columns: 10rem minmax(0, 1fr);
+  gap: 1.5rem;
   min-width: 0;
-  padding: 1.5rem;
+  padding: 1.25rem 0;
   color: inherit;
   text-decoration: none;
   background-image: none;
-  border-right: var(--rule) solid var(--color-border);
-  border-bottom: var(--rule) solid var(--color-border);
-  transition: background-color var(--duration-instant) var(--ease-out);
 }
 
-.home-writing-item:first-child {
-  padding-left: 0;
+.home-writing-item + .home-writing-item {
+  border-top: var(--rule) solid var(--color-border);
 }
 
-.home-writing-item:last-child {
-  padding-right: 0;
-  border-right: 0;
+.home-writing-meta {
+  padding-top: 0.25rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  color: var(--color-fg-light);
 }
 
-.home-writing-item:hover,
-.home-writing-item:focus-visible {
-  background-color: var(--color-surface-subtle);
+.home-writing-copy {
+  min-width: 0;
 }
 
 .home-writing-item h3 {
-  margin: 0.75rem 0 0.5rem;
-  font-family: var(--font-display);
+  margin: 0 0 0.375rem;
   font-size: var(--text-md);
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--font-weight-semibold);
   line-height: var(--leading-snug);
-  color: var(--color-fg-bold);
+  text-wrap: pretty;
 }
 
 .home-writing-item:hover h3,
 .home-writing-item:focus-visible h3 {
   color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 0.2rem;
 }
 
 .home-writing-item p {
   margin: 0;
-  font-size: var(--text-sm);
+  font-size: var(--text-base);
   line-height: var(--leading-snug);
   color: var(--color-fg-light);
 }
 
-@media (max-width: 760px) {
-  .home-writing {
-    margin-top: 3.5rem;
+@media (max-width: 940px) and (min-width: 641px) {
+  .hero-grid {
+    grid-template-columns: minmax(0, 1fr) 13rem;
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero {
+    padding-top: 0.5rem;
   }
 
-  .home-writing-list {
+  .hero-grid {
     grid-template-columns: minmax(0, 1fr);
+    gap: 0;
   }
 
-  .home-writing-item,
-  .home-writing-item:first-child,
-  .home-writing-item:last-child {
-    padding: 1.25rem 0;
-    border-right: 0;
+  /* Keep the name before the photograph on narrow screens without
+     duplicating either the image or the introduction. */
+  .hero-primary {
+    display: contents;
+  }
+
+  .hero-kicker {
+    order: 0;
+    margin-bottom: 1rem;
+  }
+
+  .hero-title {
+    order: 1;
+  }
+
+  .hero-portrait {
+    order: 2;
+    width: 10rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-portrait-frame {
+    padding: 0.625rem;
+  }
+
+  .hero-portrait figcaption {
+    text-align: left;
+  }
+
+  .hero-tagline {
+    order: 3;
+    font-size: var(--text-lg);
+  }
+
+  .hero-summary {
+    order: 4;
+  }
+
+  .hero-cta {
+    order: 5;
+  }
+
+  .home-writing {
+    margin: 2.5rem -1.5rem 0;
+    padding: 1.25rem 1.5rem 0.5rem;
+  }
+
+  .home-writing-header {
+    gap: 1rem;
+    margin-bottom: 0;
+  }
+
+  .home-writing-item {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.5rem;
   }
 }

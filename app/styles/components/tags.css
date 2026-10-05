@@ -39,12 +39,10 @@
   justify-content: flex-start;
 }
 
-/* Skills read as plotted values: the category colour is carried by a
-   short tick rather than a heavy left border on a floating pill. */
+/* Skills read as plotted values: quiet, squared, weighted by knowledge tier. */
 .skill-tag {
   display: inline-flex;
   align-items: center;
-  gap: 0.5em;
   padding: 0.4em 0.75em;
   background: transparent;
   border: var(--rule) solid var(--color-border);
@@ -58,14 +56,6 @@
     background-color var(--duration-fast) var(--ease-out);
 }
 
-.skill-tag::before {
-  content: '';
-  width: 6px;
-  height: var(--rule-strong);
-  background: var(--tag-color, var(--color-accent));
-  flex-shrink: 0;
-}
-
 .skill-tag:hover {
   border-color: var(--color-fg-light);
   background: var(--color-surface-subtle);
@@ -73,6 +63,25 @@
 
 .skill-tag-name {
   white-space: nowrap;
+}
+
+/* Names the three tag weights once, so no tag has to carry a visible badge.
+   The samples inherit the mid tone; the tier modifiers move them from it. */
+.skill-tier-legend {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.75rem 0 1.5rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--color-fg);
+}
+
+.skill-tier-legend-label {
+  color: var(--color-fg-light);
 }
 
 /* Tech tags — squared, quiet, mono. */
@@ -97,16 +106,13 @@
   border-color: var(--color-border-alt);
 }
 
-/* Size variations — weight, not scale. */
-.skill-tag--lg {
+/* Tier variations — weight and tone, not scale. The working tier is the
+   inherited middle, so only the outer two need a rule. */
+.skill-tag--deep {
   font-weight: var(--font-weight-medium);
   color: var(--color-fg-bold);
 }
 
-.skill-tag--md {
-  font-weight: var(--font-weight-normal);
-}
-
-.skill-tag--sm {
+.skill-tag--familiar {
   color: var(--color-fg-light);
 }

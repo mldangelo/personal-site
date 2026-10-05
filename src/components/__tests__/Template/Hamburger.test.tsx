@@ -1,7 +1,40 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
+import routes from '@/data/routes';
+import { THEME_CHOICE_ATTRIBUTE } from '@/lib/theme';
 import Hamburger from '../../Template/Hamburger';
+
+const layoutCss = (file: string) =>
+  readFileSync(join(process.cwd(), 'app/styles/layout', file), 'utf8');
+
+/** header.css declares `.hamburger-button { display: flex }`; navigation.css
+ *  gates it. Both have to be present for the gate to be tested against what
+ *  actually competes with it in the bundle, and the gate must not depend on
+ *  which of the two `@import` lines in app/tailwind.css comes first. */
+const HEADER_CSS = layoutCss('header.css');
+const NAVIGATION_CSS = layoutCss('navigation.css');
+
+const IMPORT_ORDERS: [name: string, sheets: string[]][] = [
+  ['header.css then navigation.css', [HEADER_CSS, NAVIGATION_CSS]],
+  ['navigation.css then header.css', [NAVIGATION_CSS, HEADER_CSS]],
+];
+
+function injectSheets(sheets: string[]): () => void {
+  const nodes = sheets.map((css) => {
+    const style = document.createElement('style');
+    style.textContent = css;
+    document.head.appendChild(style);
+    return style;
+  });
+
+  return () => {
+    for (const node of nodes) node.remove();
+  };
+}
 
 describe('Hamburger', () => {
   it('renders the hamburger button', () => {
@@ -20,6 +53,34 @@ describe('Hamburger', () => {
     expect(button).toHaveAttribute('aria-expanded', 'false');
     expect(button).toHaveAttribute('aria-controls', 'mobile-nav-menu');
   });
+
+  // Asserts the button's own `display`, not `toBeVisible()`: jsdom evaluates a
+  // media list only when its text is literally `all` or `screen`, so it drops
+  // header.css's `@media (max-width: 735px)` and leaves the ancestor
+  // `.hamburger-container { display: none }` in force in every branch.
+  it.each(IMPORT_ORDERS)(
+    'stays hidden until the pre-paint bootstrap proves scripts ran (%s)',
+    (_order, sheets) => {
+      const root = document.documentElement;
+      root.removeAttribute(THEME_CHOICE_ATTRIBUTE);
+      const removeSheets = injectSheets(sheets);
+
+      try {
+        render(<Hamburger />);
+        const button =
+          document.querySelector<HTMLButtonElement>('.hamburger-button');
+        if (!button) throw new Error('no hamburger button rendered');
+
+        expect(window.getComputedStyle(button).display).toBe('none');
+
+        root.setAttribute(THEME_CHOICE_ATTRIBUTE, 'system');
+        expect(window.getComputedStyle(button).display).toBe('flex');
+      } finally {
+        root.removeAttribute(THEME_CHOICE_ATTRIBUTE);
+        removeSheets();
+      }
+    },
+  );
 
   it('toggles menu open on click', () => {
     render(<Hamburger />);
@@ -70,9 +131,25 @@ describe('Hamburger', () => {
     expect(screen.getByRole('link', { name: /about/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /resume/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /contact/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /projects/i })).toBeInTheDocument();
+  });
+
+  /**
+   * The mobile menu is the only nav a phone gets, so a demoted route has to
+   * be missing from it and every promoted one has to be present. Pinning the
+   * count as well means a future demotion cannot pass by going unmentioned.
+   */
+  it('lists every primary route and no demoted one', () => {
+    render(<Hamburger />);
+
+    fireEvent.click(screen.getByRole('button'));
+
     expect(
-      screen.queryByRole('link', { name: /archive/i }),
+      screen.queryByRole('link', { name: /stats/i }),
     ).not.toBeInTheDocument();
+    expect(screen.getAllByRole('link')).toHaveLength(
+      routes.filter((route) => route.primary !== false).length,
+    );
   });
 
   it('closes menu when a link is clicked', () => {

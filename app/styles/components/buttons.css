@@ -4,8 +4,7 @@
    ======================================== */
 
 @layer components {
-  /* Button — a switch on a panel: squared, labelled in mono,
-     and it depresses rather than floats. */
+  /* Plain display labels and near-square controls match the navigation. */
   .button {
     appearance: none;
     background: var(--color-accent-fill);
@@ -18,11 +17,10 @@
     align-items: center;
     justify-content: center;
     gap: 0.5em;
-    font-family: var(--font-mono);
+    font-family: var(--font-display);
     font-size: var(--text-ui);
     font-weight: var(--font-weight-medium);
-    letter-spacing: var(--tracking-label);
-    text-transform: uppercase;
+    letter-spacing: var(--tracking-normal);
     height: 2.875rem;
     padding: 0 1.75rem;
     text-align: center;
@@ -46,8 +44,14 @@
   }
 
   .button:focus-visible {
-    outline: var(--rule-strong) solid var(--color-accent);
+    outline: var(--rule-strong) solid var(--color-focus-ring);
     outline-offset: 2px;
+  }
+
+  /* The filled variant cannot take the accent ring — in light mode that is
+     the fill's own colour. `.button-secondary` is unfilled and keeps it. */
+  .button:not(.button-secondary):focus-visible {
+    outline-color: var(--color-focus-ring-fill);
   }
 
   /* Secondary — the same switch, unlit. */

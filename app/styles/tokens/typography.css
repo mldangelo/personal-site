@@ -41,7 +41,7 @@
   --text-xl: 1.75rem; /* 28px */
   --text-2xl: 2.25rem; /* 36px */
   --text-3xl: 3rem; /* 48px */
-  --text-display: clamp(3rem, 9vw, 5.75rem);
+  --text-display: clamp(3.5rem, 8.4vw, 5.5rem);
 }
 
 @theme inline {

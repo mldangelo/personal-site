@@ -19,9 +19,10 @@ const DESCRIPTION = 'This post moved to a new URL.';
  * title, description, and og:url, and shipped indexable.
  *
  * The canonical and og:url are emitted only once the replacement is actually
- * published. It is a draft today and therefore absent from the export, so
- * pointing at it unconditionally advertised a canonical target that returns
- * 404 — worse for a crawler than declaring none at all.
+ * published. It is published today, so both are emitted; the conditional stays
+ * as a guard for the un-publish case, because pointing at an unexported post
+ * advertises a canonical target that returns 404 — worse for a crawler than
+ * declaring none at all.
  */
 export function generateMetadata(): Metadata {
   const replacementUrl = getPostBySlug(NEW_SLUG)
@@ -49,9 +50,10 @@ export function generateMetadata(): Metadata {
 }
 
 export default function LegacyPostSlugPage() {
-  // The replacement is a draft, so it does not exist in a production export.
-  // Sending readers to a URL that 404s would be worse than sending them to
-  // the index; this corrects itself the moment the post is published.
+  // The replacement is published, so this renders the direct link. The branch
+  // stays as a guard: if the post is ever un-published it drops out of the
+  // export, and sending readers to a URL that 404s would be worse than
+  // sending them to the index.
   const replacement = getPostBySlug(NEW_SLUG);
 
   return (

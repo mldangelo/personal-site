@@ -1,42 +1,33 @@
 'use client';
 
-import { type RefObject, useEffect, useRef } from 'react';
+import { type RefObject, useEffect, useRef, useState } from 'react';
 
 import { ageAt, ageIntervalFor, agePlaceholder } from '@/lib/telemetry';
 
 import usePrefersReducedMotion from './usePrefersReducedMotion';
 
+export interface LiveAgeState<T extends HTMLElement> {
+  /** True only while a visible-page timer is actively updating the value. */
+  live: boolean;
+  /** Attach to the element whose text contains the age. */
+  ref: RefObject<T | null>;
+}
+
 /**
- * A live age readout, written straight to the DOM.
+ * Upgrade a server-rendered age snapshot without re-rendering on every tick.
  *
- * Returns a ref to attach to the element that shows the reading. Render
- * `agePlaceholder(precision)` as that element's content: it is fixed-width and
- * digit-free, so server and client markup agree and the readout does not reflow
- * when the first real value lands.
- *
- * The ticked value is assigned to `textContent` rather than held in state. At
- * `AGE_PRECISION_FULL` the last digit turns over roughly every 0.32ms, so the
- * timer runs at the `AGE_MIN_INTERVAL` floor and every tick genuinely changes
- * the string — through `useState` that was 40 React renders a second for as
- * long as `/stats` was the visible tab. Writing one text node costs the same
- * whether it happens 40 times a second or once, and nothing else on the page
- * depends on the value, so there is nothing for React to reconcile.
- *
- * Because the placeholder React renders never changes between renders, React
- * leaves the text node alone on re-render and the live value survives. This is
- * the same arrangement `ReadingProgress` uses for scroll position.
- *
- * Two other things keep this from being wasteful or unpleasant:
- *
- * - Under reduced motion the reading is taken once and left to stand. Digits
- *   changing several times a second is precisely the motion that setting asks
- *   us to avoid.
- * - Ticking pauses while the tab is hidden, and resyncs on return.
+ * The hook writes only the text node. React state tracks the coarse
+ * static/live status, not the value, so the eleven-decimal display does not
+ * trigger 40 component renders a second. Hidden pages and readers who prefer
+ * reduced motion keep the dated server snapshot instead of a frozen value
+ * styled as live.
  */
 export default function useLiveAge<T extends HTMLElement = HTMLSpanElement>(
   precision: number,
-): RefObject<T | null> {
+  initial: string = agePlaceholder(precision),
+): LiveAgeState<T> {
   const ref = useRef<T>(null);
+  const [live, setLive] = useState(false);
   const prefersReducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
@@ -46,29 +37,33 @@ export default function useLiveAge<T extends HTMLElement = HTMLSpanElement>(
       return;
     }
 
-    const tick = () => {
-      node.textContent = ageAt(Date.now(), precision);
-    };
     const interval = ageIntervalFor(precision);
     let timer: ReturnType<typeof setInterval> | undefined;
 
-    const sync = () => {
+    const stop = () => {
       clearInterval(timer);
       timer = undefined;
+    };
 
-      // A visibility change to hidden should only stop work. Taking one last
-      // reading here creates a race at the display precision boundary and
-      // contradicts the promise that the value holds still while hidden.
-      if (document.hidden) {
+    const showSnapshot = () => {
+      node.textContent = initial;
+      setLive(false);
+    };
+
+    const tick = () => {
+      node.textContent = ageAt(Date.now(), precision);
+    };
+
+    const sync = () => {
+      stop();
+
+      if (document.hidden || prefersReducedMotion) {
+        showSnapshot();
         return;
       }
 
       tick();
-
-      if (prefersReducedMotion) {
-        return;
-      }
-
+      setLive(true);
       timer = setInterval(tick, interval);
     };
 
@@ -76,13 +71,11 @@ export default function useLiveAge<T extends HTMLElement = HTMLSpanElement>(
     document.addEventListener('visibilitychange', sync);
 
     return () => {
-      clearInterval(timer);
+      stop();
       document.removeEventListener('visibilitychange', sync);
-      // Hand the element back in the state React thinks it is in, so a later
-      // remount does not inherit a stale reading.
-      node.textContent = agePlaceholder(precision);
+      node.textContent = initial;
     };
-  }, [precision, prefersReducedMotion]);
+  }, [initial, precision, prefersReducedMotion]);
 
-  return ref;
+  return { live, ref };
 }

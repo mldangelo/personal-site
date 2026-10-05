@@ -3,40 +3,37 @@
    Supports both system preference and manual toggle
    ======================================== */
 
-/* Night shift — the same instrument, backlit.
-   Ink and paper invert; amber holds its position as the
-   only colour permitted to carry a live value. */
+/* Warm charcoal keeps the same cobalt/celadon hierarchy after dark. */
 [data-theme='dark'] {
   /* Core colors */
-  --color-bg: #14171c;
-  --color-bg-alt: #0d1015;
-  --color-fg: #d8dbe0;
-  --color-fg-bold: #f2f4f7;
-  --color-fg-light: #949aa4;
+  --color-bg: #292d33;
+  --color-bg-alt: #22252a;
+  --color-fg: #e4e5df;
+  --color-fg-bold: #f2f1eb;
+  --color-fg-light: #bfc4ca;
 
   /* Overlay colors for dark mode */
   --color-overlay-darker: rgba(0, 0, 0, 0.6);
 
-  /* Accent — ultramarine lifted to hold contrast on ink.
-     This value is for text and rules on the page background; it is far too
-     light to sit behind white text (2.67:1), so filled controls keep a deep
-     fill and light text of their own. */
-  --color-accent: #8098ff;
-  --color-accent-hover: #a3b3ff;
+  /* Links and filled controls keep separate, contrast-tested color pairs. */
+  --color-accent: #afc2ff;
+  --color-accent-hover: #c6d3ff;
 
-  /* #2a3ad4 behind #f2f4f7 is 7.2:1; hover holds at 5.8:1. */
-  --color-accent-fill: #2a3ad4;
-  --color-accent-fill-hover: #3d4ce0;
-  --color-on-accent: #f2f4f7;
+  --color-celadon: #577b70;
+  --color-celadon-surface: #293630;
+
+  --color-accent-fill: #b6c7ff;
+  --color-accent-fill-hover: #c6d3ff;
+  --color-on-accent: #1b2a52;
   --color-accent-light: color-mix(in srgb, var(--color-accent) 18%, transparent);
   --color-accent-underline: color-mix(in srgb, var(--color-accent) 40%, transparent);
   --color-accent-underline-strong: color-mix(in srgb, var(--color-accent) 55%, transparent);
 
-  /* Signal — amber needs no correction against ink */
+  /* Signal stays separate from the decorative celadon. */
   --color-signal: #f0a202;
   --color-signal-mark: #f0a202;
 
-  /* 3:1 against the dark page, matching the light-mode control border. */
+  /* Interactive boundaries meet the same 3:1 floor as the light theme. */
   --color-control-border: #8b929c;
 
   /* Borders */
@@ -48,8 +45,6 @@
   --color-surface-subtle: rgba(255, 255, 255, 0.04);
   --color-surface-hover: rgba(255, 255, 255, 0.07);
   --color-fg-muted: rgba(255, 255, 255, 0.5);
-
-  /* Shadows */
 }
 
 /* Header, navigation, hero, and the experience spine read their
@@ -59,13 +54,9 @@
   background: var(--color-bg-alt);
 }
 
-/* Portrait — soften the white field for dark mode.
-   Scoped with :where() so it carries zero specificity and cannot override
-   the per-context treatments in home.css and footer.css. Unscoped, this rule
-   won on source order and silently reduced the hero portrait to
-   brightness(0.85), discarding its greyscale entirely. */
+/* Keep the portrait in color while softening its white field at night. */
 [data-theme='dark'] :where(.theme-portrait) img {
-  filter: brightness(0.85);
+  filter: brightness(0.9);
 }
 
 /* Course rows, skill tags, and the contact readout are all transparent and
@@ -89,14 +80,14 @@
 }
 
 /* Link underlines — scoped to `p` to match base/links.css */
-[data-theme='dark'] p a:not(.hero-highlight) {
+[data-theme='dark'] p a {
   background-image: linear-gradient(
     transparent calc(100% - 1.5px),
     var(--color-accent-underline) 1.5px
   );
 }
 
-[data-theme='dark'] p a:not(.hero-highlight):hover {
+[data-theme='dark'] p a:hover {
   background-image: linear-gradient(transparent calc(100% - 1.5px), var(--color-accent) 1.5px);
 }
 

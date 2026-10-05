@@ -11,13 +11,13 @@ export default function Table({ data }: TableProps) {
         </tr>
       </thead>
       <tbody>
-        {data.map((pair) => (
+        {data.map((reading) => (
           <TableRow
-            format={pair.format}
-            key={pair.label}
-            label={pair.label}
-            link={pair.link}
-            value={pair.value}
+            key={reading.label}
+            label={reading.label}
+            link={reading.link}
+            source={reading.source}
+            value={reading.value}
           />
         ))}
       </tbody>

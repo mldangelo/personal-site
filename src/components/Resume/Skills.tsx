@@ -67,12 +67,42 @@ export default function Skills({ skills, categories }: SkillsProps) {
       .filter((group) => group.skills.length > 0);
   }, [skills, categories]);
 
+  // A skill can appear in several category groups; announce it only once.
+  const allSkills = groupedSkills.flatMap((group) => group.skills);
+  const visibleSkills =
+    activeCategory === ALL_CATEGORY
+      ? allSkills
+      : (groupedSkills.find(({ category }) => category.name === activeCategory)
+          ?.skills ?? []);
+  const totalSkillCount = new Set(allSkills.map((skill) => skill.title)).size;
+  const visibleSkillCount = new Set(visibleSkills.map((skill) => skill.title))
+    .size;
+
+  const noun = totalSkillCount === 1 ? 'skill' : 'skills';
+  const filterStatus =
+    activeCategory === ALL_CATEGORY
+      ? `Showing all ${totalSkillCount} ${noun}.`
+      : `Showing ${visibleSkillCount} of ${totalSkillCount} ${noun} in ${activeCategory}.`;
+
   return (
     <div className="skills">
       <div className="title">
         <h2>Skills</h2>
       </div>
       <div className="skill-button-container">{buttonElements}</div>
+      {/* Stays hidden: print.css un-hides every group, so a visible count
+          would contradict the page it is printed on. */}
+      <p className="sr-only" role="status">
+        {filterStatus}
+      </p>
+      <p className="skill-tier-legend">
+        <span className="skill-tier-legend-label">Knowledge</span>
+        <span className="skill-tag--deep">Deep</span>
+        <span aria-hidden="true">·</span>
+        <span className="skill-tag--working">Working</span>
+        <span aria-hidden="true">·</span>
+        <span className="skill-tag--familiar">Familiar</span>
+      </p>
       <div className="skill-groups">
         {groupedSkills.map(({ category, skills: categorySkills }) => {
           const isVisible =
@@ -87,11 +117,7 @@ export default function Skills({ skills, categories }: SkillsProps) {
               <h3 className="skill-group-title">{category.name}</h3>
               <div className="skill-tags">
                 {categorySkills.map((skill) => (
-                  <SkillTag
-                    key={skill.title}
-                    data={skill}
-                    categories={categories}
-                  />
+                  <SkillTag key={skill.title} data={skill} />
                 ))}
               </div>
             </div>

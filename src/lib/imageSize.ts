@@ -1,6 +1,8 @@
 import { readFileSync } from 'node:fs';
 import { isAbsolute, relative, resolve, sep } from 'node:path';
 
+import { readMarkdownImageSources } from './markdown-assets.mjs';
+
 export interface ImageSize {
   width: number;
   height: number;
@@ -296,23 +298,49 @@ function jpeg(buffer: Buffer): ImageSize | null {
 }
 
 /**
- * Extracts root-local Markdown images, including optional CommonMark titles.
+ * Measures every local image the Markdown renderer can emit.
  *
- * Remote, protocol-relative, and data URLs are left to the renderer. Local
- * images are build inputs, so every one must exist and have a supported,
- * measurable header.
+ * The renderer's parser resolves nested alt text, reference-style images, and
+ * raw HTML before this boundary sees them. Remote, protocol-relative, and data
+ * URLs stay with the renderer. Repository images must use unambiguous
+ * root-relative public paths; published posts require every one to exist with
+ * a supported, measurable header.
  */
+interface ReadPostImageSizeOptions {
+  /**
+   * Drafts may deliberately refer to images kept outside public/. Let their
+   * development preview render with a fallback ratio, without weakening the
+   * published-post build boundary.
+   */
+  allowMissingLocalImages?: boolean;
+}
+
 export function readPostImageSizes(
   markdown: string,
+  options: ReadPostImageSizeOptions = {},
 ): Record<string, ImageSize> {
   const sizes: Record<string, ImageSize> = {};
-  const imagePattern =
-    /!\[(?:\\.|[^\]\\])*\]\(\s*(?:<([^>\r\n]+)>|((?:\\.|[^\s()])+))(?:\s+(?:"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|\((?:\\.|[^)\\])*\)))?\s*\)/g;
 
-  for (const match of markdown.matchAll(imagePattern)) {
-    const src = match[1] ?? match[2];
+  for (const src of readMarkdownImageSources(markdown)) {
     if (isRootLocalImage(src)) {
-      sizes[src] = readImageSize(src);
+      try {
+        sizes[src] = readImageSize(src);
+      } catch (error) {
+        if (
+          options.allowMissingLocalImages &&
+          error instanceof ImageSizeError &&
+          error.code === 'NOT_FOUND'
+        ) {
+          continue;
+        }
+        throw error;
+      }
+    } else if (!isExternalImage(src)) {
+      throw new ImageSizeError(
+        'INVALID_PATH',
+        src,
+        `Local article image path must be root-relative: ${src}`,
+      );
     }
   }
 
@@ -321,4 +349,8 @@ export function readPostImageSizes(
 
 export function isRootLocalImage(src: string): boolean {
   return src.startsWith('/') && !src.startsWith('//');
+}
+
+function isExternalImage(src: string): boolean {
+  return src.startsWith('//') || /^[a-z][a-z\d+.-]*:/i.test(src);
 }
