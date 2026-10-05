@@ -1,11 +1,10 @@
 import { createHash } from 'node:crypto';
 import { readdirSync, readFileSync } from 'node:fs';
-import { createRequire } from 'node:module';
 import { join, posix } from 'node:path';
 import { describe, expect, it } from 'vitest';
-
 import profile from '@/data/profile.json';
 import { readColorToken } from '@/lib/tokens';
+import { readImageRenderer } from '../lib/image-renderer.mjs';
 
 /**
  * Keeps the committed icon set bound to the inputs that produced it, the way
@@ -19,8 +18,6 @@ import { readColorToken } from '@/lib/tokens';
 
 const root = process.cwd();
 const META_PATH = join(root, 'scripts', 'icons.meta.json');
-const require = createRequire(import.meta.url);
-const nextVersion = require('next/package.json').version;
 
 const GENERATED_FILES = [
   'app/apple-icon.png',
@@ -49,9 +46,10 @@ type IconsMeta = {
       sha256: string;
     };
     renderer: {
-      package: string;
+      name: string;
       version: string;
-    };
+      integrity: string;
+    }[];
   };
   generatorDigest: string;
   files: Record<string, string>;
@@ -116,15 +114,16 @@ describe('generated icon set', () => {
     expect(meta.inputs.font.sha256).toMatch(/^[0-9a-f]{64}$/);
   });
 
-  it('pins the renderer version that produces the pixels', () => {
-    expect(meta.inputs.renderer).toEqual({
-      package: 'next',
-      version: nextVersion,
-    });
+  it('pins every locked package that produces the pixels', async () => {
+    expect(meta.inputs.renderer, STALE).toEqual(await readImageRenderer(root));
   });
 
   it('was produced by the committed generator sources', () => {
-    const digest = ['scripts/generate-icons.mjs', 'scripts/lib/color-token.mjs']
+    const digest = [
+      'scripts/generate-icons.mjs',
+      'scripts/lib/image-renderer.mjs',
+      'scripts/lib/color-token.mjs',
+    ]
       .reduce(
         (hash, path) =>
           hash

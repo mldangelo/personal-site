@@ -37,6 +37,45 @@ const FALLBACK_DATA: GitHubData = {
   pushed_at: '2026-07-31T15:44:18Z',
 };
 
+/** Narrow untrusted JSON before any formatter can observe it. */
+function isGitHubData(value: unknown): value is GitHubData {
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+    return false;
+  }
+  const data = value as Record<string, unknown>;
+  const counts = [
+    'stargazers_count',
+    'subscribers_count',
+    'forks',
+    'open_issues_count',
+  ];
+  if (
+    !counts.every(
+      (key) =>
+        typeof data[key] === 'number' &&
+        Number.isSafeInteger(data[key]) &&
+        data[key] >= 0,
+    )
+  ) {
+    return false;
+  }
+
+  const timestamp = data.pushed_at;
+  if (
+    typeof timestamp !== 'string' ||
+    !/^\d{4}-\d{2}-\d{2}T[0-2]\d:[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|[+-][0-2]\d:[0-5]\d)$/.test(
+      timestamp,
+    ) ||
+    Number(timestamp.slice(11, 13)) > 23 ||
+    !Number.isFinite(Date.parse(timestamp))
+  ) {
+    return false;
+  }
+  // Date.parse normalizes impossible days, so check the calendar date too.
+  const day = timestamp.slice(0, 10);
+  return new Date(`${day}T00:00:00Z`).toISOString().slice(0, 10) === day;
+}
+
 /**
  * Fetch public upstream statistics at build time. Static export requires a
  * cacheable request; the Pages workflow avoids restoring Next's cache so each
@@ -61,7 +100,11 @@ async function fetchGitHubStats(): Promise<GitHubStatsResult> {
       return { data: FALLBACK_DATA, source: 'fallback' };
     }
 
-    const data = await response.json();
+    const data: unknown = await response.json();
+    if (!isGitHubData(data)) {
+      console.warn('GitHub API returned malformed statistics, using fallback');
+      return { data: FALLBACK_DATA, source: 'fallback' };
+    }
     return {
       data: {
         stargazers_count: data.stargazers_count,

@@ -318,6 +318,46 @@ describe('verify-export', () => {
     );
   });
 
+  it.each([
+    ['video', '<video src="media/missing.mp4"></video>'],
+    ['audio', '<audio src="media/missing.mp3"></audio>'],
+    ['source', '<video><source src="media/missing.webm"></video>'],
+    ['poster', '<video poster="media/missing.png"></video>'],
+    ['track', '<video><track src="media/missing.vtt"></video>'],
+    ['object', '<object data="media/missing.pdf"></object>'],
+    ['embed', '<embed src="media/missing.pdf">'],
+    ['iframe', '<iframe src="media/missing.html"></iframe>'],
+    [
+      'srcset',
+      '<picture><source srcset="images/photo.png 1x, media/missing.png 2x"></picture>',
+    ],
+  ])(
+    'rejects missing %s targets under a deployment base path',
+    (_name, markup) => {
+      const root = createFixture({ basePath: '/personal-site' });
+      mutate(root, 'out/index.html', (html) =>
+        html.replace('</body>', `${markup}</body>`),
+      );
+      const result = runVerifier(root);
+      expect(result.status).toBe(1);
+      expect(result.output).toContain(
+        'points at missing export: media/missing.',
+      );
+    },
+  );
+
+  it('accepts existing relative media and external media under a base path', () => {
+    const root = createFixture({ basePath: '/personal-site' });
+    write(root, 'out/media/demo.mp4');
+    mutate(root, 'out/index.html', (html) =>
+      html.replace(
+        '</body>',
+        '<video src="media/demo.mp4" poster="images/photo.png"><source src="https://media.example/demo.webm"></video></body>',
+      ),
+    );
+    expect(runVerifier(root).status).toBe(0);
+  });
+
   it('rejects missing relative routes and local image files', () => {
     const root = createFixture();
     mutate(root, 'out/index.html', (html) =>

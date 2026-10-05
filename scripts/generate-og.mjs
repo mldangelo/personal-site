@@ -22,7 +22,7 @@ import { mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { join } from 'node:path';
 import { createElement as h } from 'react';
-
+import { requireSharp } from './lib/image-renderer.mjs';
 import {
   assertCardFontDigest,
   HOME_CARD_PATH,
@@ -71,23 +71,7 @@ const {
 
 const { ink, paper, body, graphite, accent, hairline } = colors;
 
-// `next/og`'s Node renderer rasterizes with Sharp when `import('sharp')`
-// resolves and silently falls back to a bundled resvg.wasm when it does not,
-// producing different bytes for the same element tree. Sharp is an optional
-// dependency, so `npm ci --omit=optional` is enough to switch rasterizers —
-// and the ledger records Sharp's lock entry either way, which would leave
-// `--check` failing for everyone who does have it. Refuse rather than compare
-// pixels against a rasterizer nothing recorded.
-try {
-  await import('sharp');
-} catch (error) {
-  throw new Error(
-    'Share cards require Sharp as the rasterizer, and it is not installed. ' +
-      'Reinstall without --omit=optional (`npm ci`) before generating or ' +
-      'checking cards.',
-    { cause: error },
-  );
-}
+await requireSharp();
 
 /* ---------------------------------------------------------------------------
  * Layout.

@@ -39,12 +39,13 @@ import { join } from 'node:path';
 import { createElement as h } from 'react';
 
 import { readLiteralColorToken } from './lib/color-token.mjs';
+import { readImageRenderer, requireSharp } from './lib/image-renderer.mjs';
 
 // `next/og` ships as CommonJS with no ESM export condition, so it has to be
 // required rather than imported.
 const require = createRequire(import.meta.url);
 const { ImageResponse } = require('next/og');
-const NEXT_VERSION = require('next/package.json').version;
+await requireSharp();
 
 const root = process.cwd();
 const TOKENS = join(root, 'app', 'styles', 'tokens', 'colors.css');
@@ -318,6 +319,10 @@ const generatorSources = await Promise.all(
   [
     ['scripts/generate-icons.mjs', new URL(import.meta.url)],
     [
+      'scripts/lib/image-renderer.mjs',
+      new URL('./lib/image-renderer.mjs', import.meta.url),
+    ],
+    [
       'scripts/lib/color-token.mjs',
       new URL('./lib/color-token.mjs', import.meta.url),
     ],
@@ -331,10 +336,7 @@ const inputs = {
   monogram: MONOGRAM,
   name: profile.name,
   font: ICON_FONT,
-  renderer: {
-    package: 'next',
-    version: NEXT_VERSION,
-  },
+  renderer: await readImageRenderer(root),
 };
 
 await writeFile(

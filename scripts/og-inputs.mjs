@@ -17,6 +17,7 @@ import { parser, RuleType } from 'markdown-to-jsx/markdown';
 
 import { readMarkdownReferences } from '../src/lib/markdown-assets.mjs';
 import { validatePostFrontmatterData } from '../src/lib/post-frontmatter.mjs';
+import { readImageRenderer } from './lib/image-renderer.mjs';
 import { ogProfileSnapshot } from './og-profile.mjs';
 
 /** Every card is a `summary_large_image`, so every card is this size. */
@@ -26,16 +27,6 @@ export const HOME_CARD_PATH = '/og.png';
 /** One card per published post, named after its slug. */
 export const POST_CARD_DIRECTORY = '/og/writing';
 export const LEDGER_PATH = '/og.meta.json';
-
-/**
- * Installed packages whose exact locked bytes can change rendered pixels.
- *
- * `next/og` bundles satori and the OG renderer, React supplies the element
- * tree, and the Node renderer dynamically loads Sharp when it is installed.
- * The lock entries are therefore inputs just as surely as the generator source
- * and fonts are.
- */
-export const CARD_RENDERER_PACKAGES = ['next', 'react', 'sharp'];
 
 /**
  * Exact font files used by satori.
@@ -81,6 +72,7 @@ export const CARD_FONTS = [
  */
 const GENERATOR_SOURCES = [
   'scripts/generate-og.mjs',
+  'scripts/lib/image-renderer.mjs',
   'scripts/og-inputs.mjs',
   'scripts/og-layout.mjs',
   'scripts/og-profile.mjs',
@@ -381,39 +373,6 @@ export async function readPostCards(root = process.cwd()) {
   );
 }
 
-/** Exact lockfile identities of the packages that render card pixels. */
-export async function readCardRenderer(root = process.cwd()) {
-  const lockPath = join(root, 'package-lock.json');
-  let lock;
-
-  try {
-    lock = JSON.parse(await readFile(lockPath, 'utf8'));
-  } catch (error) {
-    throw new Error(
-      'Cannot read the share-card renderer from package-lock.json',
-      { cause: error },
-    );
-  }
-
-  return CARD_RENDERER_PACKAGES.map((name) => {
-    const entry = lock?.packages?.[`node_modules/${name}`];
-    if (
-      typeof entry?.version !== 'string' ||
-      typeof entry?.integrity !== 'string'
-    ) {
-      throw new Error(
-        `package-lock.json has no complete node_modules/${name} lock entry for the share-card renderer`,
-      );
-    }
-
-    return {
-      name,
-      version: entry.version,
-      integrity: entry.integrity,
-    };
-  });
-}
-
 /**
  * Everything the committed cards are derived from.
  *
@@ -428,7 +387,7 @@ export async function readCardInputs(root = process.cwd()) {
     Promise.all(
       GENERATOR_SOURCES.map((source) => readFile(join(root, source), 'utf8')),
     ),
-    readCardRenderer(root),
+    readImageRenderer(root),
   ]);
 
   const profileSnapshot = ogProfileSnapshot(profile);

@@ -579,13 +579,22 @@ for (const record of records) {
     }
   }
 
-  // Checking every local image is deliberately stronger than checking only
-  // article images. It catches Markdown typos as well as broken portraits and
-  // project thumbnails, with no network dependency.
-  for (const tag of tags(html, 'img')) {
-    const src = attribute(tag, 'src');
-    if (src !== undefined) {
-      validateInternalTarget(src, record, 'image');
+  // Validate the same resource forms collected above for public ownership.
+  // An absent file must fail even when no draft also references it.
+  for (const tag of tags(
+    html,
+    'img|source|audio|embed|iframe|object|track|video',
+  )) {
+    const label = /^<img\b/i.test(tag) ? 'image' : 'media';
+    for (const name of ['src', 'data', 'poster']) {
+      const target = attribute(tag, name);
+      if (target !== undefined) validateInternalTarget(target, record, label);
+    }
+    const srcset = attribute(tag, 'srcset');
+    if (srcset) {
+      for (const target of parseSrcset(srcset)) {
+        validateInternalTarget(target, record, 'srcset candidate');
+      }
     }
   }
 
@@ -1043,5 +1052,5 @@ if (failures.length > 0) {
 
 console.log(
   `verify-export: ${pages.length} pages OK ` +
-    '(draft routes and referenced assets, robots, ids/fragments, canonicals, complete share metadata, icons/manifest, local images, internal links, sitemap/RSS, resume.json)',
+    '(draft routes and referenced assets, robots, ids/fragments, canonicals, complete share metadata, icons/manifest, local images/media, internal links, sitemap/RSS, resume.json)',
 );

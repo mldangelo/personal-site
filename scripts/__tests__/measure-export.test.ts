@@ -43,7 +43,6 @@ const LINKED_ASSET_BYTES = CSS.length + JS.length + FONT.length;
 /** Generous enough that only the budget under test can trip. */
 const GENEROUS_BUDGET = {
   _policy: ['fixture'],
-  totalBytes: 10_000_000,
   javascriptBytes: 1_000_000,
   cssBytes: 1_000_000,
   fontBytes: 1_000_000,
@@ -204,7 +203,7 @@ describe('measure-export', () => {
     const { status, output, report } = reportFor(root);
 
     expect(status).toBe(0);
-    expect(output).toContain('7 budget(s) within limits');
+    expect(output).toContain('6 budget(s) within limits');
 
     expect(groupIn(report, 'documents')).toMatchObject({
       files: 2,
@@ -299,6 +298,25 @@ describe('measure-export', () => {
       repeatedBytes: Buffer.byteLength(ICON),
       widestSpread: 2,
     });
+  });
+
+  it('reports ordinary post growth without moving any budget checks', () => {
+    const { root } = createFixture();
+    expect(runMeasurer(root, ['--update-budget']).status).toBe(0);
+    const before = reportFor(root).report;
+    for (let index = 0; index < 10; index += 1) {
+      write(
+        root,
+        `out/writing/post-${index}/index.html`,
+        htmlPage('', 'New post'),
+      );
+      write(root, `out/writing/post-${index}/index.txt`, RSC_FULL);
+      write(root, `out/og/post-${index}.png`, IMAGE);
+    }
+    const { status, report } = reportFor(root);
+    expect(status).toBe(0);
+    expect(report.total.bytes).toBeGreaterThan(before.total.bytes * 1.2);
+    expect(report.budget.checks).toEqual(before.budget.checks);
   });
 
   it('gates the distinct icon set, which a new page does not move', () => {
@@ -456,7 +474,6 @@ describe('measure-export', () => {
     );
     expect(Object.keys(budget)).toEqual([
       '_policy',
-      'totalBytes',
       'javascriptBytes',
       'cssBytes',
       'fontBytes',
@@ -535,7 +552,7 @@ describe('measure-export', () => {
     expect(JSON.parse(stdout).total.files).toBe(11);
     expect(stdout).not.toContain('by subsystem');
     expect(stderr).toContain('by subsystem');
-    expect(stderr).toContain('7 budget(s) within limits');
+    expect(stderr).toContain('6 budget(s) within limits');
   });
 
   it('rejects a JSON report inside the export being measured', () => {

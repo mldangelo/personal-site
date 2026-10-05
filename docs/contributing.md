@@ -47,7 +47,9 @@ npm run measure-export
 `npm run verify-export` and `npm run measure-export` both read the files
 produced by `npm run build`, so keep that order. `measure-export` weighs the
 export against the size budget in `scripts/budget.json` and fails when a budget
-is exceeded. Add or update tests when behavior changes.
+is exceeded. Total export size is reported without a gate because it grows with
+publishing; subsystem, largest-file, route-bootstrap, and distinct-icon limits
+still catch regressions. Add or update tests when behavior changes.
 
 ## Open the pull request
 

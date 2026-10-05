@@ -14,12 +14,25 @@
       "url": "https://fonts.gstatic.com/s/bricolagegrotesque/v9/3y9U6as8bTXq_nANBjzKo3IeZx8z6up5BeSl5jBNz_19PpbpMXuECpwUxJBOm_OJWiaaD30YfKfjZZoLvZvlyM0.ttf",
       "sha256": "50fe1039eb3ff208d027a4867d3f53bd288bba76273a718578f7b3ec0feec388"
     },
-    "renderer": {
-      "package": "next",
-      "version": "16.3.8"
-    }
+    "renderer": [
+      {
+        "name": "next",
+        "version": "16.3.8",
+        "integrity": "sha512-U7QEZaTini6wKrb8A8hqLLqYQyCetegKjCpJOyxk642vWoMoU1x5PyZCJFvgYgiptA8xc5j/9xYlZFO7w9Sjmw=="
+      },
+      {
+        "name": "react",
+        "version": "19.3.0",
+        "integrity": "sha512-E8LUcbtBWt20bbl2YoHfx4ZDBdxVTfOKtCZn9cDSJ4l6/nuoApcpIBcj47t2wZoVX8g2ZHuMHbiShgCR1T5Sog=="
+      },
+      {
+        "name": "sharp",
+        "version": "0.35.5",
+        "integrity": "sha512-Ywn4OnzGukp7CDMrp08RQ50YKmuwG47brZgIVPTvBaaAfQlRlygrRqSrxdCiL9M+LlzLBiJ68IR1QqvzHyjC7g=="
+      }
+    ]
   },
-  "generatorDigest": "e26157bc742c1502c1c92c67e510375b6ebc1f362f12001a6ee7e66f3ec347a5",
+  "generatorDigest": "9e5e16adebdd616055a12ed446a658596a2c3758555cb0ee1209af490de11094",
   "files": {
     "app/favicon.ico": "e0423a29796f0de8e4c42155d5765fcfcf390bbd563a52e7bd43a12f87002a5b",
     "app/icon.png": "224596726d08380ce1699ffd56b3bd00f610dcb52f663ae750ea6ca2dc3d7e69",

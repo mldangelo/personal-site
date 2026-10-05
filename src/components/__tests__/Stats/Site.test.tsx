@@ -171,6 +171,104 @@ describe('Site', () => {
     expect(screen.getByText('21')).toBeInTheDocument();
   });
 
+  it.each([
+    ['invalid date', { ...mockGitHubData, pushed_at: 'not-a-date' }],
+    [
+      'impossible date',
+      { ...mockGitHubData, pushed_at: '2024-02-30T00:00:00Z' },
+    ],
+    ['missing date', { ...mockGitHubData, pushed_at: undefined }],
+    ['null date', { ...mockGitHubData, pushed_at: null }],
+    ['numeric date', { ...mockGitHubData, pushed_at: 0 }],
+    [
+      'array date',
+      { ...mockGitHubData, pushed_at: [mockGitHubData.pushed_at] },
+    ],
+    ['object date', { ...mockGitHubData, pushed_at: { toString: null } }],
+    ['empty object', {}],
+    ['array root', []],
+    ['null root', null],
+    ['primitive root', 'unexpected'],
+    ...[
+      'stargazers_count',
+      'subscribers_count',
+      'forks',
+      'open_issues_count',
+    ].flatMap((key) =>
+      [
+        undefined,
+        null,
+        '12',
+        -1,
+        0.5,
+        Number.POSITIVE_INFINITY,
+        { toString: null },
+      ].map((value): [string, unknown] => [
+        `${key}: ${JSON.stringify(value)}`,
+        { ...mockGitHubData, [key]: value },
+      ]),
+    ),
+  ])(
+    'uses complete dated fallback for a malformed successful response: %s',
+    async (_label, payload) => {
+      fetchMock.mockResolvedValueOnce({ ok: true, json: async () => payload });
+      render(await Site());
+      expect(
+        screen.getByText(/fallback refreshed july 31, 2026/i),
+      ).toHaveAttribute('data-source', 'fallback');
+      expect(
+        screen.getByText('Latest repository push (UTC)').closest('tr'),
+      ).toHaveTextContent('2026-07-31');
+      expect(
+        screen
+          .getByText('Number of people watching this repository')
+          .closest('tr'),
+      ).toHaveTextContent('23');
+      expect(screen.getByText('Built on (UTC)')).toBeInTheDocument();
+    },
+  );
+
+  it('keeps zero counts and valid offset timestamps as live data', async () => {
+    fetchMock.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        stargazers_count: 0,
+        subscribers_count: 0,
+        forks: 0,
+        open_issues_count: 0,
+        pushed_at: '2024-06-01T23:30:00-04:00',
+      }),
+    });
+    render(await Site());
+    expect(screen.getByText(/github readings describe/i)).toHaveAttribute(
+      'data-source',
+      'github',
+    );
+    expect(
+      screen
+        .getByText('Stars this repository has on GitHub')
+        .closest('tr')
+        ?.querySelector('.stat-table-value'),
+    ).toHaveTextContent(/^0$/);
+    expect(
+      screen.getByText('Latest repository push (UTC)').closest('tr'),
+    ).toHaveTextContent('2024-06-02');
+  });
+
+  it('falls back when a successful response is not JSON', async () => {
+    fetchMock.mockResolvedValueOnce({
+      ok: true,
+      json: async () => {
+        throw new SyntaxError('Invalid JSON');
+      },
+    });
+    render(await Site());
+    expect(screen.getByText(/fallback refreshed/i)).toHaveAttribute(
+      'data-source',
+      'fallback',
+    );
+  });
+
   it('explains which repository the GitHub readings describe', async () => {
     render(await Site());
 

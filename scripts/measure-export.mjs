@@ -361,19 +361,13 @@ const report = {
  * A budget pinned to the current byte count turns every honest pull request
  * red, so each metric gets room for the change it is expected to absorb before
  * a human has to look. Subsystems that only move when a dependency or the
- * design moves get the least; the total gets enough for content to land.
+ * design moves get the least; content totals are reported without a gate.
  *
  * No metric gated here may be a function of the page count. A gate that a third
  * blog post trips is a gate people learn to ratchet without reading it, which is
  * why repeated inline SVG bytes are reported rather than gated.
  */
 const BUDGET_METRICS = [
-  {
-    id: 'totalBytes',
-    label: 'total export',
-    headroom: 0.2,
-    read: (data) => data.total.bytes,
-  },
   {
     id: 'javascriptBytes',
     label: 'JavaScript',

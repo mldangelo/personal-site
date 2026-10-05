@@ -11,7 +11,6 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import matter from 'gray-matter';
 import { afterEach, beforeAll, describe, expect, it } from 'vitest';
-
 import {
   getAllPosts,
   getPostSlugs,
@@ -19,15 +18,17 @@ import {
 } from '@/lib/posts';
 import { formatDate } from '@/lib/utils';
 import {
+  IMAGE_RENDERER_PACKAGES,
+  readImageRenderer,
+} from '../lib/image-renderer.mjs';
+import {
   assertCardFontDigest,
   CARD_FONTS,
-  CARD_RENDERER_PACKAGES,
   countProseWords,
   countUniqueExternalLinks,
   formatCardDate,
   imageDigest,
   postCardPath,
-  readCardRenderer,
   readPostCards,
 } from '../og-inputs.mjs';
 import { TITLE_SIZES, titleFontSize } from '../og-layout.mjs';
@@ -185,43 +186,48 @@ describe('share card fonts', () => {
 describe('share card renderer', () => {
   it('records the exact locked renderer packages in the ledger', async () => {
     const ledger = JSON.parse(readFileSync(LEDGER, 'utf8'));
-    const renderer = await readCardRenderer(ROOT);
+    const renderer = await readImageRenderer(ROOT);
 
     expect(ledger.renderer).toEqual(renderer);
-    expect(renderer.map((entry) => entry.name)).toEqual(CARD_RENDERER_PACKAGES);
+    expect(renderer.map((entry) => entry.name)).toEqual(
+      IMAGE_RENDERER_PACKAGES,
+    );
     for (const entry of renderer) {
       expect(entry.version).toMatch(/^\d+\.\d+\.\d+/);
       expect(entry.integrity).toMatch(/^sha512-/);
     }
   });
 
-  it('changes the renderer snapshot when a locked renderer changes', async () => {
-    const root = mkdtempSync(join(tmpdir(), 'post-card-renderer-'));
-    temporaryRoots.push(root);
-    const entries = Object.fromEntries(
-      CARD_RENDERER_PACKAGES.map((name) => [
-        `node_modules/${name}`,
-        {
-          version: '1.0.0',
-          integrity: `sha512-${name}-one`,
-        },
-      ]),
-    );
+  it.each(IMAGE_RENDERER_PACKAGES)(
+    'changes the renderer snapshot when %s changes',
+    async (name) => {
+      const root = mkdtempSync(join(tmpdir(), 'post-card-renderer-'));
+      temporaryRoots.push(root);
+      const entries = Object.fromEntries(
+        IMAGE_RENDERER_PACKAGES.map((name) => [
+          `node_modules/${name}`,
+          {
+            version: '1.0.0',
+            integrity: `sha512-${name}-one`,
+          },
+        ]),
+      );
 
-    writeFileSync(
-      join(root, 'package-lock.json'),
-      JSON.stringify({ packages: entries }),
-    );
-    const before = await readCardRenderer(root);
+      writeFileSync(
+        join(root, 'package-lock.json'),
+        JSON.stringify({ packages: entries }),
+      );
+      const before = await readImageRenderer(root);
 
-    entries['node_modules/next'].integrity = 'sha512-next-two';
-    writeFileSync(
-      join(root, 'package-lock.json'),
-      JSON.stringify({ packages: entries }),
-    );
+      entries[`node_modules/${name}`].integrity = `sha512-${name}-two`;
+      writeFileSync(
+        join(root, 'package-lock.json'),
+        JSON.stringify({ packages: entries }),
+      );
 
-    await expect(readCardRenderer(root)).resolves.not.toEqual(before);
-  });
+      await expect(readImageRenderer(root)).resolves.not.toEqual(before);
+    },
+  );
 });
 
 describe('share card frontmatter validation', () => {
