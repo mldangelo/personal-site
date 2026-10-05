@@ -8,10 +8,21 @@ updates:
     schedule:
       interval: 'weekly'
     groups:
+      # Coverage providers require the exact Vitest version as a peer.
+      vitest:
+        patterns:
+          - 'vitest'
+          - '@vitest/*'
+      next:
+        patterns:
+          - 'next'
+          - '@next/*'
       react:
         patterns:
           - 'react'
           - 'react-dom'
+          - '@types/react'
+          - '@types/react-dom'
       # Each package carries its own copy of fontawesome-common-types, whose
       # IconName union grows every release. Bumped singly, the copies diverge
       # and IconDefinition stops being assignable — type-check fails.

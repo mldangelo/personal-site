@@ -16,10 +16,10 @@
     },
     "renderer": {
       "package": "next",
-      "version": "16.2.12"
+      "version": "16.3.8"
     }
   },
-  "generatorDigest": "1ad7189f2096b81b5b30386b316e592cb9caa6b12f44a48ac55de96c2e6c561c",
+  "generatorDigest": "e26157bc742c1502c1c92c67e510375b6ebc1f362f12001a6ee7e66f3ec347a5",
   "files": {
     "app/favicon.ico": "e0423a29796f0de8e4c42155d5765fcfcf390bbd563a52e7bd43a12f87002a5b",
     "app/icon.png": "224596726d08380ce1699ffd56b3bd00f610dcb52f663ae750ea6ca2dc3d7e69",

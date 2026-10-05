@@ -32,6 +32,7 @@ function clearBuildEnvironment() {
 describe('Site', () => {
   beforeEach(() => {
     clearBuildEnvironment();
+    vi.stubEnv('GITHUB_TOKEN', undefined);
     fetchMock.mockReset();
     fetchMock.mockResolvedValue({
       ok: true,
@@ -40,6 +41,7 @@ describe('Site', () => {
   });
 
   afterEach(() => {
+    vi.unstubAllEnvs();
     for (const key of ENV_KEYS) {
       const value = originalEnvironment[key];
 
@@ -71,6 +73,29 @@ describe('Site', () => {
           Accept: 'application/vnd.github.v3+json',
         }),
       }),
+    );
+  });
+
+  it('still supports an explicitly supplied local read-only token', async () => {
+    vi.stubEnv('GITHUB_TOKEN', 'test-read-only-token');
+    await Site();
+    expect(fetchMock).toHaveBeenCalledWith(
+      'https://api.github.com/repos/mldangelo/personal-site',
+      expect.objectContaining({
+        headers: expect.objectContaining({
+          Authorization: 'Bearer test-read-only-token',
+        }),
+      }),
+    );
+  });
+
+  it('exports labeled fallback readings when anonymous requests are rate limited', async () => {
+    fetchMock.mockResolvedValueOnce(new Response(null, { status: 403 }));
+    render(await Site());
+    expect(screen.getByRole('table')).toBeInTheDocument();
+    expect(screen.getByText(/fallback refreshed/i)).toHaveAttribute(
+      'data-source',
+      'fallback',
     );
   });
 
