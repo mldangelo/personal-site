@@ -8,6 +8,15 @@ updates:
     schedule:
       interval: 'weekly'
     groups:
+      # Coverage providers require the exact Vitest version as a peer.
+      vitest:
+        patterns:
+          - 'vitest'
+          - '@vitest/*'
+      next:
+        patterns:
+          - 'next'
+          - '@next/*'
       react:
         patterns:
           - 'react'
