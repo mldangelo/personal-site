@@ -146,6 +146,11 @@ Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4 · Biome ·
 
 Tests live in `__tests__/` directories adjacent to the code they test. Run `npm test` before committing.
 
+Test application behavior, not third-party library internals or installed package
+versions. Validate dependency upgrades with lockfile resolution, `npm audit`,
+the build, and existing application tests; do not add suites that repeat a
+dependency's parser or sanitizer tests.
+
 ```bash
 npm test                        # Run all tests
 npm test -- --watch             # Watch mode
