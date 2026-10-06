@@ -4,9 +4,6 @@ import profile from '@/data/profile.json';
 
 import ThemePortrait from './ThemePortrait';
 
-// A static plotter-like study: generated at build time, with no canvas or client JS.
-const parallelCurves = `M0 5q90 24 180 0${'m-180 3.5q90 24 180 0'.repeat(7)}`;
-
 export default function Hero() {
   return (
     <section className="hero">
@@ -56,14 +53,6 @@ export default function Hero() {
             <ThemePortrait width={320} height={320} priority />
           </div>
           <figcaption>{profile.currentCity}</figcaption>
-          <svg
-            className="hero-line-study"
-            viewBox="0 0 180 45"
-            fill="none"
-            aria-hidden="true"
-          >
-            <path d={parallelCurves} stroke="currentColor" strokeWidth="0.7" />
-          </svg>
         </figure>
       </div>
     </section>

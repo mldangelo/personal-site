@@ -1,5 +1,4 @@
-/* One ink-blue field, a square portrait, and a quiet editorial register.
-   The line study is static SVG; the layout needs no client-side code. */
+/* One ink-blue field, a square portrait, and a quiet editorial register. */
 .hero {
   --color-focus-ring: var(--color-on-hero);
   --color-focus-ring-fill: var(--color-on-hero);
@@ -121,14 +120,6 @@
   font-size: var(--text-2xs);
 }
 
-.hero-line-study {
-  display: block;
-  width: 100%;
-  height: auto;
-  margin-top: 1.25rem;
-  opacity: 0.58;
-}
-
 .home-writing {
   display: grid;
   grid-template-columns: 23% minmax(0, 1fr);
@@ -242,10 +233,6 @@
 
   .hero-portrait figcaption {
     margin: 0;
-  }
-
-  .hero-line-study {
-    display: none;
   }
 
   .home-writing {

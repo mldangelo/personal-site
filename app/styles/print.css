@@ -54,7 +54,6 @@
      `<body>`, not of `.site-header`, so hiding the header does not reach it.
      Its fixed/translated screen treatment otherwise becomes a large dark
      button in print. */
-  .hero-line-study,
   .skip-link,
   .site-header,
   .site-footer-new,

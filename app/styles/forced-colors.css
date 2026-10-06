@@ -121,9 +121,4 @@
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
-
-  /* The line study is decorative, so it need not compete with system ink. */
-  .hero-line-study {
-    display: none;
-  }
 }
