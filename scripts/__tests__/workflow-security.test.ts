@@ -1,7 +1,7 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import matter from 'gray-matter';
 import { describe, expect, it } from 'vitest';
+import { parseFrontmatter } from '../../src/lib/frontmatter.mjs';
 
 interface Step {
   uses?: string;
@@ -28,7 +28,7 @@ const workflows = readdirSync(directory)
   .map((name) => {
     const yaml = readFileSync(join(directory, name), 'utf8');
     // Reuse the YAML parser already used for post frontmatter.
-    const workflow = matter(`---\n${yaml}\n---`).data as Workflow;
+    const workflow = parseFrontmatter(`---\n${yaml}\n---`).data as Workflow;
     return { name, workflow };
   });
 
