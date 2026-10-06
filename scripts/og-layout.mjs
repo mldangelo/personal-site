@@ -45,21 +45,19 @@ export const BOTTOM_GAP = 44;
  * Character advance as a fraction of point size, by class, for each face.
  *
  * Read out of the `hmtx` tables of the exact TTF files `og-inputs.mjs` pins,
- * then rounded up: capitals and digits are the alphabet mean, lower case is the
- * mean weighted by English letter frequency, and punctuation sits well above
- * its own mean without charging every comma for an em dash. One average across
- * all of it was measurably unsafe —
- * Bricolage 800 sets a capital at 0.674em against 0.549em for typical lower
- * case, so a 0.5em constant calibrated on mixed-case copy under-counted an
+ * then rounded up conservatively by character class. Inter 500 has an average
+ * capital advance of 0.688em, lower case 0.545em, digits 0.602em, and spaces
+ * 0.267em. Punctuation has extra headroom for unusually wide marks.
+ * A single 0.5em constant calibrated on mixed-case copy under-counted an
  * all-caps title by a whole line, and an under-count is the error that crops a
  * card, since satori reports nothing when copy overflows.
  */
 const DISPLAY_ADVANCE = {
-  upper: 0.68,
+  upper: 0.69,
   lower: 0.55,
   digit: 0.61,
   punctuation: 0.45,
-  space: 0.24,
+  space: 0.27,
 };
 const BODY_ADVANCE = {
   upper: 0.7,

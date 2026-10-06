@@ -1,7 +1,7 @@
 /* ========================================
    TYPOGRAPHY TOKENS
    Three voices:
-     display — Bricolage Grotesque, names and headings
+     display — Inter, names, headings, and controls
      body    — Newsreader, prose and reading
      mono    — JetBrains Mono, data, labels, measurements
    ======================================== */
@@ -10,7 +10,7 @@
   /* ===================
      FONT FAMILIES
      =================== */
-  --font-display: var(--font-bricolage), 'Helvetica Neue', sans-serif;
+  --font-display: var(--font-inter), 'Helvetica Neue', sans-serif;
   --font-body: var(--font-newsreader), Georgia, serif;
   --font-mono: var(--font-jetbrains), ui-monospace, 'SF Mono', monospace;
 

@@ -34,17 +34,20 @@ migration.
 
 ## Visual design
 
-The visual system pairs cobalt with celadon on warm paper, with a charcoal
-palette at night. Display type handles headings, navigation, and buttons;
-serif type handles prose; monospace identifies dates, data, and annotations.
-Hairlines and spacing establish structure. The color portrait and its arched
-frame provide a restrained mid-century influence.
+The visual system pairs ink blue with porcelain paper, with neutral charcoal
+at night. Inter handles headings, navigation, and buttons; Newsreader handles
+prose and the homepage writing titles; JetBrains Mono identifies dates, data,
+and annotations. Flat surfaces, hairlines, and spacing keep the composition
+crisp. The homepage uses one blue poster field, a square color portrait, and
+a small static line study inspired by early plotter art.
 
-Cobalt handles links and controls. Celadon frames the portrait and the homepage
-writing section; it is decorative, not a text or status color. Amber remains
-reserved for live or in-progress values. Portraits and project imagery stay in
-color without requiring hover. New surface colors must retain readable text and
-links in both themes, and print resets them to ink on paper.
+Blue handles links and controls on paper. The poster has its own surface/text
+pair so its pale copy and inverted button remain readable in both themes.
+The writing register stays on paper; green framing and background grain are
+absent. Amber remains reserved for live or in-progress values. Portraits and
+project imagery stay in color without requiring hover. New surface colors
+must retain readable text and links in both themes, and print resets them to
+ink on paper.
 
 The implementation lives in [`app/styles/tokens/`](../app/styles/tokens/).
 

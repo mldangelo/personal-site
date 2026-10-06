@@ -102,15 +102,13 @@ describe('generated icon set', () => {
 
     expect(meta.inputs.font).toMatchObject({
       name: 'Display',
-      family: 'Bricolage Grotesque',
-      weight: 800,
+      family: 'Inter',
+      weight: 500,
       style: 'normal',
     });
     expect(fontUrl.protocol).toBe('https:');
     expect(fontUrl.hostname).toBe('fonts.gstatic.com');
-    expect(fontUrl.pathname).toMatch(
-      /^\/s\/bricolagegrotesque\/v\d+\/[^/]+\.ttf$/,
-    );
+    expect(fontUrl.pathname).toMatch(/^\/s\/inter\/v\d+\/[^/]+\.ttf$/);
     expect(meta.inputs.font.sha256).toMatch(/^[0-9a-f]{64}$/);
   });
 

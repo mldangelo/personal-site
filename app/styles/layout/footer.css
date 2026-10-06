@@ -70,11 +70,11 @@
   }
 }
 
-/* A small color portrait repeats the celadon framing from the hero. */
+/* A quiet square portrait closes the page. */
 .footer-avatar {
   width: 48px;
   height: 48px;
-  border: 2px solid var(--color-celadon);
+  border: var(--rule) solid var(--color-border);
   border-radius: var(--radius-sm);
   overflow: hidden;
   flex-shrink: 0;

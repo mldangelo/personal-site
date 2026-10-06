@@ -31,7 +31,7 @@ export const LEDGER_PATH = '/og.meta.json';
 /**
  * Exact font files used by satori.
  *
- * Google Fonts' family CSS is mutable: resolving "Bricolage Grotesque 800" on
+ * Google Fonts' family CSS is mutable: resolving "Inter 500" on
  * two different days can return different bytes under the same generator
  * source. These versioned TTF URLs and their digests make a changed response a
  * hard failure instead of silently redrawing every committed card.
@@ -39,11 +39,11 @@ export const LEDGER_PATH = '/og.meta.json';
 export const CARD_FONTS = [
   {
     name: 'Display',
-    family: 'Bricolage Grotesque',
-    weight: 800,
+    family: 'Inter',
+    weight: 500,
     style: 'normal',
-    url: 'https://fonts.gstatic.com/s/bricolagegrotesque/v9/3y9U6as8bTXq_nANBjzKo3IeZx8z6up5BeSl5jBNz_19PpbpMXuECpwUxJBOm_OJWiaaD30YfKfjZZoLvZvlyM0.ttf',
-    sha256: '50fe1039eb3ff208d027a4867d3f53bd288bba76273a718578f7b3ec0feec388',
+    url: 'https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZg.ttf',
+    sha256: '8c883f63b2c4157d997319f2c8bc6995ed4357ef371940d31ca159004a4aae63',
   },
   {
     name: 'Mono',

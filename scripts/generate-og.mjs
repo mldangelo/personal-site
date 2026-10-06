@@ -234,7 +234,7 @@ function siteCard() {
         style: {
           fontFamily: 'Display',
           fontSize: 128,
-          fontWeight: 800,
+          fontWeight: 500,
           letterSpacing: '-0.045em',
           lineHeight: 0.92,
           color: ink,
@@ -268,7 +268,7 @@ function postCard(post) {
           marginTop: TITLE_GAP,
           fontFamily: 'Display',
           fontSize: titleFontSize(post, size),
-          fontWeight: 800,
+          fontWeight: 500,
           letterSpacing: `${TITLE_TRACKING}em`,
           lineHeight: TITLE_LINE_HEIGHT,
           color: ink,

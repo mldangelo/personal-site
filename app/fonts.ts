@@ -6,10 +6,10 @@ import localFont from 'next/font/local';
  * the build. Keep these paths on the Latin variable files so adding a family
  * does not silently preload every script Fontsource ships.
  */
-export const bricolage = localFont({
-  src: '../node_modules/@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2',
-  variable: '--font-bricolage',
-  weight: '200 800',
+export const inter = localFont({
+  src: '../node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2',
+  variable: '--font-inter',
+  weight: '100 900',
   style: 'normal',
   display: 'swap',
   fallback: ['Helvetica Neue', 'Arial'],

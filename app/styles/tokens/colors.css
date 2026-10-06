@@ -1,6 +1,6 @@
 /* ========================================
    COLOR TOKENS
-   Warm paper, cobalt links and controls, celadon framing.
+   Porcelain paper, neutral ink, and a single ink-blue poster field.
    Amber remains reserved for live or in-progress values.
    ======================================== */
 
@@ -10,22 +10,23 @@
      --color-bg     = raised surface (cards, header)
      --color-bg-alt = page background
      =================== */
-  --color-bg: #fffefb;
-  --color-bg-alt: #fcfbf6;
-  --color-fg: #292d33;
-  --color-fg-bold: #24282e;
-  --color-fg-light: #5d6269;
+  --color-bg: #faf7f1;
+  --color-bg-alt: #f6f3ed;
+  --color-fg: #292a2e;
+  --color-fg-bold: #292a2e;
+  --color-fg-light: #646269;
 
   /* ===================
-     ACCENT — cobalt
+     ACCENT — ink blue
      Structure, links, active state.
      =================== */
-  --color-accent: #214dcc;
-  --color-accent-hover: #193ca5;
+  --color-accent: #36559a;
+  --color-accent-hover: #29447f;
 
-  /* Celadon is decorative framing, never text or a status indicator. */
-  --color-celadon: #b7d6c9;
-  --color-celadon-surface: #edf3ed;
+  /* The poster stays deep blue in both themes; page links lighten at night.
+     Keep this surface and its text separate from the control palette. */
+  --color-hero: #36559a;
+  --color-on-hero: #faf7ef;
 
   /* Filled controls need their own pair. A link accent is tuned for contrast
      against the page; reusing it as a button background put white text on it,
@@ -39,7 +40,7 @@
 
   /* ===================
      FOCUS RING
-     Cobalt for controls on paper; ink around cobalt-filled controls so
+     Blue for controls on paper; ink around blue-filled controls so
      the ring remains distinct from the fill. Contrast is tested below.
      =================== */
   --color-focus-ring: var(--color-accent);
@@ -68,7 +69,7 @@
 
   /* Quiet structural hairlines cannot be a control's only visible edge.
      Interactive boundaries use a tested 3:1 floor on both page surfaces. */
-  --color-control-border: #767b83;
+  --color-control-border: #74747c;
   --color-border-alt: rgba(35, 39, 46, 0.24);
 
   /* ===================

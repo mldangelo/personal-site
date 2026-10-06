@@ -214,9 +214,9 @@ describe('filled controls', () => {
 });
 
 describe('reading surfaces', () => {
-  it('keeps body text, annotations, and links readable on paper and celadon in both themes', () => {
+  it('keeps body text, annotations, and links readable on both paper surfaces in both themes', () => {
     for (const theme of themes) {
-      for (const surface of [...SURFACES, '--color-celadon-surface']) {
+      for (const surface of SURFACES) {
         for (const text of [
           '--color-fg',
           '--color-fg-bold',
@@ -230,6 +230,16 @@ describe('reading surfaces', () => {
           ).toBeGreaterThanOrEqual(AA_TEXT);
         }
       }
+    }
+  });
+
+  it('keeps poster text, links, its inverted button, and focus rings readable in both themes', () => {
+    // The hero uses this pair in both directions: pale text on blue, then
+    // blue text on the pale CTA. Its offset focus rings use the pale token.
+    for (const theme of themes) {
+      expect(
+        contrastRatio(theme('--color-on-hero'), theme('--color-hero')),
+      ).toBeGreaterThanOrEqual(AA_TEXT);
     }
   });
 });

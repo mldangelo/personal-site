@@ -47,8 +47,10 @@ export default function HomePage() {
                 </span>
                 <div className="home-writing-copy">
                   <h3>{item.title}</h3>
-                  <p>{item.description}</p>
                 </div>
+                <span className="home-writing-arrow" aria-hidden="true">
+                  ↗
+                </span>
               </>
             );
 
