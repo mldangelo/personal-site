@@ -6,11 +6,11 @@
   "fonts": [
     {
       "name": "Display",
-      "family": "Bricolage Grotesque",
-      "weight": 800,
+      "family": "Inter",
+      "weight": 500,
       "style": "normal",
-      "url": "https://fonts.gstatic.com/s/bricolagegrotesque/v9/3y9U6as8bTXq_nANBjzKo3IeZx8z6up5BeSl5jBNz_19PpbpMXuECpwUxJBOm_OJWiaaD30YfKfjZZoLvZvlyM0.ttf",
-      "sha256": "50fe1039eb3ff208d027a4867d3f53bd288bba76273a718578f7b3ec0feec388"
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZg.ttf",
+      "sha256": "8c883f63b2c4157d997319f2c8bc6995ed4357ef371940d31ca159004a4aae63"
     },
     {
       "name": "Mono",
@@ -55,15 +55,15 @@
     "currentCity": "New York, NY"
   },
   "colors": {
-    "ink": "#24282e",
-    "paper": "#fcfbf6",
-    "body": "#292d33",
-    "graphite": "#5d6269",
-    "accent": "#214dcc",
+    "ink": "#292a2e",
+    "paper": "#f6f3ed",
+    "body": "#292a2e",
+    "graphite": "#646269",
+    "accent": "#36559a",
     "hairline": "rgba(35, 39, 46, 0.14)"
   },
-  "generatorDigest": "d6275fc1aab9b26b844d868cd16d02f2a8c0db811ebe56269478dad254fee74e",
-  "imageDigest": "b101afe78bac4e83d38ee9729f389537a0ee67381e109cd69cc23220ccf34190",
+  "generatorDigest": "6cfef1d359dfc9ce05c9bcbd56869a45d5438a1a40c2582655885d2865eb117d",
+  "imageDigest": "c2a623a13cda94e594a0307de93ed76af26ba645b87f65f406552be23746df29",
   "posts": [
     {
       "slug": "why-i-mostly-switched-from-claude-code-to-codex-desktop-app",
@@ -86,7 +86,7 @@
           "value": "12 min"
         }
       ],
-      "imageDigest": "0c2067d6eee1d64f06bcb0e69dbabc3dc72d1e871122aad1a3be7d7ead268f2a"
+      "imageDigest": "85fe621c1acdac8c0e9ce871c91bdc69223b825abca4e3975e1a9fd989dc6761"
     },
     {
       "slug": "claude-code-outage",
@@ -109,7 +109,7 @@
           "value": "2 min"
         }
       ],
-      "imageDigest": "8f5a646f2e90a2e964ff147822e66496fe4205234b9dda347098625223a2d190"
+      "imageDigest": "89c983fe636d4c0147424f506e7c8f5ddf2bf1b522f2f85aa66949a910a92b04"
     },
     {
       "slug": "eurostar-chatbot-analysis",
@@ -132,7 +132,7 @@
           "value": "4 min"
         }
       ],
-      "imageDigest": "4d9e630562050b6b084152634981d62606c68a766b279432e1a67f0293b3d1e4"
+      "imageDigest": "bc879c38769f9836915b15e5e17b049820f9b08d5e01954e841f0a957eef8c8e"
     },
     {
       "slug": "shipping-with-claude-code",
@@ -155,7 +155,7 @@
           "value": "8 min"
         }
       ],
-      "imageDigest": "36a76a596b0ed681507d8c295f939c514340b072316925d4b121afb2d89fe51e"
+      "imageDigest": "6149173111b06f898eb987222738be4c71e00ba8b7d85ffd36292729e0764e7b"
     }
   ]
 }

@@ -17,8 +17,8 @@
 .logo-text {
   font-family: var(--font-display);
   font-size: var(--text-xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-accent);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-fg-bold);
   letter-spacing: var(--tracking-display);
   line-height: 1;
 }

@@ -3,33 +3,33 @@
    Supports both system preference and manual toggle
    ======================================== */
 
-/* Warm charcoal keeps the same cobalt/celadon hierarchy after dark. */
+/* Neutral charcoal surrounds the same deep-blue poster after dark. */
 [data-theme='dark'] {
   /* Core colors */
-  --color-bg: #292d33;
-  --color-bg-alt: #22252a;
-  --color-fg: #e4e5df;
-  --color-fg-bold: #f2f1eb;
-  --color-fg-light: #bfc4ca;
+  --color-bg: #2b2c33;
+  --color-bg-alt: #222329;
+  --color-fg: #ece9e3;
+  --color-fg-bold: #f4f0e9;
+  --color-fg-light: #bebac0;
 
   /* Overlay colors for dark mode */
   --color-overlay-darker: rgba(0, 0, 0, 0.6);
 
   /* Links and filled controls keep separate, contrast-tested color pairs. */
-  --color-accent: #afc2ff;
-  --color-accent-hover: #c6d3ff;
+  --color-accent: #b8c9ee;
+  --color-accent-hover: #d0dcf6;
 
-  --color-celadon: #577b70;
-  --color-celadon-surface: #293630;
+  --color-hero: #304b83;
+  --color-on-hero: #f3eee5;
 
-  --color-accent-fill: #b6c7ff;
-  --color-accent-fill-hover: #c6d3ff;
+  --color-accent-fill: #b8c9ee;
+  --color-accent-fill-hover: #d0dcf6;
   --color-on-accent: #1b2a52;
   --color-accent-light: color-mix(in srgb, var(--color-accent) 18%, transparent);
   --color-accent-underline: color-mix(in srgb, var(--color-accent) 40%, transparent);
   --color-accent-underline-strong: color-mix(in srgb, var(--color-accent) 55%, transparent);
 
-  /* Signal stays separate from the decorative celadon. */
+  /* Amber remains reserved for live or in-progress values. */
   --color-signal: #f0a202;
   --color-signal-mark: #f0a202;
 
@@ -66,10 +66,6 @@
    `.daterange` and `.school` likewise inherit --color-fg-light directly. */
 
 /* Misc dark mode overrides */
-[data-theme='dark'] body::before {
-  opacity: 0.015;
-}
-
 [data-theme='dark'] code {
   background: var(--color-surface-hover);
   border-color: var(--color-border-bg);

@@ -23,8 +23,8 @@
     --color-fg-light: #333;
     --color-accent: #000;
     --color-accent-hover: #000;
-    --color-celadon: transparent;
-    --color-celadon-surface: transparent;
+    --color-hero: #fff;
+    --color-on-hero: #000;
     --color-signal: #000;
     --color-signal-mark: #000;
     --color-border: rgba(0, 0, 0, 0.28);
@@ -54,7 +54,7 @@
      `<body>`, not of `.site-header`, so hiding the header does not reach it.
      Its fixed/translated screen treatment otherwise becomes a large dark
      button in print. */
-  body::before,
+  .hero-line-study,
   .skip-link,
   .site-header,
   .site-footer-new,

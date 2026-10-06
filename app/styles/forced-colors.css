@@ -122,8 +122,8 @@
     -webkit-backdrop-filter: none;
   }
 
-  /* URL-backed background images survive; the grain is a data URL. */
-  body::before {
+  /* The line study is decorative, so it need not compete with system ink. */
+  .hero-line-study {
     display: none;
   }
 }
