@@ -7,12 +7,12 @@ import ThemePortrait from './ThemePortrait';
 export default function Hero() {
   return (
     <section className="hero">
-      <p className="hero-kicker">Software &amp; security</p>
-      <h1 className="hero-title">
-        <span className="hero-name">{profile.name}</span>
-      </h1>
       <div className="hero-grid">
         <div className="hero-primary">
+          <p className="hero-kicker">Software &amp; security</p>
+          <h1 className="hero-title">
+            <span className="hero-name">{profile.name}</span>
+          </h1>
           <p className="hero-tagline">
             I&apos;m a {profile.role} at{' '}
             <a href="https://openai.com" className="hero-highlight">
@@ -49,9 +49,7 @@ export default function Hero() {
         </div>
 
         <figure className="hero-portrait">
-          <div className="hero-portrait-frame">
-            <ThemePortrait width={320} height={320} priority />
-          </div>
+          <ThemePortrait width={320} height={320} priority />
           <figcaption>{profile.currentCity}</figcaption>
         </figure>
       </div>
