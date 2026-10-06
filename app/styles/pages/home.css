@@ -1,5 +1,4 @@
-/* One ink-blue field, a square portrait, and a quiet editorial register.
-   The line study is static SVG; the layout needs no client-side code. */
+/* One ink-blue field, a square portrait, and a quiet editorial register. */
 .hero {
   --color-focus-ring: var(--color-on-hero);
   --color-focus-ring-fill: var(--color-on-hero);
@@ -19,14 +18,15 @@
 }
 
 .hero-title {
-  margin: 0 0 2.25rem;
+  margin: 0 0 1.625rem;
   color: inherit;
 }
 
 .hero-name {
   display: block;
+  max-width: 10ch;
   font-family: var(--font-display);
-  font-size: clamp(2.5rem, 6.5vw, 4.75rem);
+  font-size: clamp(2.5rem, 6.5vw, 4rem);
   font-weight: var(--font-weight-medium);
   letter-spacing: -0.06em;
   line-height: 1.02;
@@ -35,9 +35,9 @@
 
 .hero-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) min(23%, 12rem);
-  gap: 10%;
-  align-items: end;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: 2.5rem;
+  align-items: center;
 }
 
 .hero-primary {
@@ -100,8 +100,9 @@
 }
 
 .hero-portrait {
-  width: 100%;
+  width: min(100%, 13.75rem);
   margin: 0;
+  justify-self: center;
 }
 
 .hero-portrait .theme-portrait,
@@ -119,14 +120,7 @@
   margin-top: 0.75rem;
   font-family: var(--font-mono);
   font-size: var(--text-2xs);
-}
-
-.hero-line-study {
-  display: block;
-  width: 100%;
-  height: auto;
-  margin-top: 1.25rem;
-  opacity: 0.58;
+  text-align: center;
 }
 
 .home-writing {
@@ -220,13 +214,12 @@
   }
 
   .hero-name {
-    max-width: 8ch;
-    font-size: clamp(2.375rem, 9vw, 3.625rem);
+    font-size: clamp(2.375rem, 9vw, 3.25rem);
   }
 
   .hero-grid {
     grid-template-columns: minmax(0, 1fr);
-    gap: 1.75rem;
+    gap: 2rem;
   }
 
   .hero-tagline {
@@ -234,18 +227,7 @@
   }
 
   .hero-portrait {
-    display: grid;
-    grid-template-columns: 5.5rem minmax(0, 1fr);
-    gap: 1.25rem;
-    align-items: end;
-  }
-
-  .hero-portrait figcaption {
-    margin: 0;
-  }
-
-  .hero-line-study {
-    display: none;
+    width: min(100%, 11rem);
   }
 
   .home-writing {
