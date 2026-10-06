@@ -12,9 +12,9 @@ import { readFileSync } from 'node:fs';
 import { readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
-import matter from 'gray-matter';
 import { parser, RuleType } from 'markdown-to-jsx/markdown';
 
+import { parseFrontmatter } from '../src/lib/frontmatter.mjs';
 import { readMarkdownReferences } from '../src/lib/markdown-assets.mjs';
 import { validatePostFrontmatterData } from '../src/lib/post-frontmatter.mjs';
 import { readImageRenderer } from './lib/image-renderer.mjs';
@@ -74,6 +74,7 @@ const GENERATOR_SOURCES = [
   'scripts/generate-og.mjs',
   'scripts/lib/image-renderer.mjs',
   'scripts/og-inputs.mjs',
+  'src/lib/frontmatter.mjs',
   'scripts/og-layout.mjs',
   'scripts/og-profile.mjs',
   'src/lib/markdown-assets.mjs',
@@ -345,7 +346,7 @@ export async function readPostCards(root = process.cwd()) {
   const cards = [];
 
   for (const file of files.sort()) {
-    const { data, content } = matter(
+    const { data, content } = parseFrontmatter(
       await readFile(join(directory, file), 'utf8'),
     );
 
