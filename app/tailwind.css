@@ -23,6 +23,7 @@
 @import './styles/components/skill-bar.css';
 @import './styles/components/tags.css';
 @import './styles/components/icons.css';
+@import './styles/components/section-header.css';
 
 /* Layout */
 @import './styles/layout/header.css';

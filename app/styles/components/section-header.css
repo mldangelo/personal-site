@@ -1,0 +1,59 @@
+/* ========================================
+   SECTION HEADER
+   One way to open a section, on every page
+   ======================================== */
+
+/* A hairline in ink, then the heading in the reading face. Each page used to
+   draw this for itself — a mono label above the rule on one page, below it on
+   the next, bold display type on a third — so one idea arrived five ways. The
+   rule always sits above the heading, at the single hairline weight. */
+.section-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  margin: 0 0 var(--spacing-6);
+  padding-top: var(--spacing-5);
+  border-top: var(--rule) solid var(--color-fg-bold);
+}
+
+.section-heading {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-xl);
+  font-weight: var(--font-weight-normal);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+  text-transform: none;
+  color: var(--color-fg-bold);
+}
+
+/* A count or other annotation opposite the heading. It is data, so it is mono. */
+.section-header-meta {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-fg-light);
+}
+
+@media (max-width: 735px) {
+  .section-heading {
+    font-size: var(--text-lg);
+  }
+}
+
+/* A section heading should not be stranded at the foot of a printed page. */
+@media print {
+  .section-header {
+    margin-bottom: 0.5rem;
+    padding-top: 0.5rem;
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  .section-heading {
+    font-size: 14pt;
+  }
+}
