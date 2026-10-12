@@ -1,51 +1,58 @@
 /* ========================================
    LINK STYLES
-   Animated underlines and hover states
+   Undecorated by default; one style for links in running text
    ======================================== */
 
 @layer base {
-  /* Modern link styling with animated underline */
+  /* A bare link carries no decoration, only a colour change on hover. Most
+     anchors here are navigation, rows, and controls that draw their own state.
+     This rule used to paint an animated accent underline on every `a` as a
+     `background-image`, and two dozen rules across the site carried a
+     declaration whose only job was to switch it off again; the mobile menu
+     shipped looking broken for want of one. */
   a {
     color: var(--color-fg);
     text-decoration: none;
-    background-image: linear-gradient(var(--color-accent), var(--color-accent));
-    background-size: 0% 1.5px;
-    background-repeat: no-repeat;
-    background-position: left bottom;
-    transition:
-      color var(--duration-fast) var(--ease-out),
-      background-size var(--duration-normal) var(--ease-out);
+    transition: color var(--duration-fast) var(--ease-out);
   }
 
   a:hover {
     color: var(--color-accent);
-    background-size: 100% 1.5px;
   }
 
-  /* Persistent underline for inline prose links, replacing the animated one
-     so they do not double up.
+  /* Links in running text: accent ink over a real underline that firms up on
+     hover, which is what article prose already had. This was a second,
+     persistent gradient, which left About links underlined twice and resume
+     links in body ink over a 32% line.
 
-     Scoped to `p` deliberately. This used to match `li a` as well, but the
-     site uses `<li>` for plenty of non-prose UI — navigation, icon rows,
-     course listings — so the rule kept painting accent underlines on things
-     that are not prose, and each of those had to opt out by hand. The mobile
-     menu shipped looking broken for exactly this reason. Prose lists get
-     their underline from their own container rules (`.about-content a`,
-     `.prose a`) instead. */
-  p a {
-    background-image: linear-gradient(
-      transparent calc(100% - 1.5px),
-      var(--color-accent-underline) 1.5px
-    );
-    background-size: 100% 100%;
-    background-position: left bottom;
-    transition:
-      color var(--duration-fast) var(--ease-out),
-      background-image var(--duration-fast) var(--ease-out);
-  }
+     Scoped to `p` deliberately. The site uses `<li>` for plenty of non-prose
+     UI (navigation, icon rows, course listings), so a prose list styles its
+     links from its own container (`.about-content a`, `.prose a`) instead.
 
-  p a:hover {
-    color: var(--color-accent-hover);
-    background-image: linear-gradient(transparent calc(100% - 1.5px), var(--color-accent) 1.5px);
+     Screen only. `print.css` stripped the old gradient from every link, so
+     paper never showed this underline, and the resume is the page people
+     print. */
+  @media screen {
+    p a {
+      color: var(--color-accent);
+      text-decoration: underline;
+      text-decoration-color: var(--color-accent-underline);
+      text-underline-offset: 2px;
+    }
+
+    p a:hover {
+      color: var(--color-accent-hover);
+      text-decoration-color: var(--color-accent);
+    }
+
+    /* The poster's links (home.css) restate the underline with the
+       `text-decoration` shorthand and expect it in their own cream. Safari
+       before 26.2 reads that shorthand as the line alone, so the pale accent
+       above would outlive it: accent on the accent field, an underline nobody
+       can see. Drop this once that rule names its own decoration colour. */
+    p .hero-highlight,
+    p .hero-highlight:hover {
+      text-decoration-color: currentcolor;
+    }
   }
 }

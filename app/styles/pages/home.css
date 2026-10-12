@@ -28,7 +28,7 @@
   font-family: var(--font-display);
   font-size: clamp(2.5rem, 6.5vw, 4rem);
   font-weight: var(--font-weight-medium);
-  letter-spacing: -0.06em;
+  letter-spacing: -0.03em;
   line-height: 1.02;
   overflow-wrap: anywhere;
 }

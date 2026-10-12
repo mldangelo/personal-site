@@ -12,16 +12,12 @@
 @media (forced-colors: active) {
   /* ===================
      LINKS
-     These underlines are `background-image` gradients (base/links.css,
-     home.css), which the palette discards. Navigation-like links set
-     `text-decoration: none` at (0,1,0) and do not pick this up.
+     Links in running text and on the poster are underlined with real
+     `text-decoration` (base/links.css, home.css), which the palette keeps and
+     recolours, so they need nothing here. They were `background-image`
+     gradients once, which it discards. What is left is state drawn some
+     other way.
      =================== */
-  p a,
-  .hero-highlight {
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 2px;
-  }
 
   /* Active-item bars are pseudo-element backgrounds, which flatten to Canvas. */
   .nav-link::after,
