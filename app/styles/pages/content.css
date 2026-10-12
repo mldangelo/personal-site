@@ -361,10 +361,9 @@
 
 .contact-email-text {
   grid-area: 1 / 1;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: baseline;
+  display: block;
+  text-align: center;
+  overflow-wrap: anywhere;
   width: fit-content;
   max-width: 100%;
   padding: 0.875rem 0;

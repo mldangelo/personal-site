@@ -29,6 +29,7 @@ function EmailText({ prefix }: { prefix: string }) {
   return (
     <>
       <span className="contact-email-prefix">{prefix}</span>
+      <wbr />
       <span className="contact-email-domain">@{DOMAIN}</span>
     </>
   );
