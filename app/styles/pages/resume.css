@@ -74,6 +74,11 @@
   margin-bottom: 2rem;
 }
 
+/* The printed resume's title. Shown only by print.css. */
+.resume-print-name {
+  display: none;
+}
+
 /* The title keeps its own bottom margin, so the row leaves the space below the
    heading exactly where it was and only parks the JSON chip on its baseline. */
 .resume-header-row {
