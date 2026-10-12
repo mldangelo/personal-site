@@ -26,8 +26,8 @@
   --color-accent-fill-hover: #d0dcf6;
   --color-on-accent: #1b2a52;
   --color-accent-light: color-mix(in srgb, var(--color-accent) 18%, transparent);
-  --color-accent-underline: color-mix(in srgb, var(--color-accent) 40%, transparent);
-  --color-accent-underline-strong: color-mix(in srgb, var(--color-accent) 55%, transparent);
+  --color-accent-underline: color-mix(in srgb, var(--color-accent) 50%, transparent);
+  --color-accent-underline-strong: color-mix(in srgb, var(--color-accent) 70%, transparent);
 
   /* Amber remains reserved for live or in-progress values. */
   --color-signal: #f0a202;

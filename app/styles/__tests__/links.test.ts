@@ -2,6 +2,8 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
+import { readColorToken, type Theme } from '@/lib/tokens';
+
 /**
  * The link contract in `base/links.css`: a bare link carries nothing to opt out
  * of, and a link in running text takes one treatment wherever it appears.
@@ -252,5 +254,65 @@ describe('links in running text', () => {
           : [],
       ),
     );
+  });
+});
+
+describe('the underline under a link in running text', () => {
+  const TOKEN_FILE: Record<Theme, string> = {
+    light: 'tokens/colors.css',
+    dark: 'dark-mode.css',
+  };
+
+  function channels(hex: string): number[] {
+    return [1, 3, 5].map((at) => Number.parseInt(hex.slice(at, at + 2), 16));
+  }
+
+  function luminance(rgb: number[]): number {
+    const [r, g, b] = rgb.map((value) => {
+      const channel = value / 255;
+      return channel <= 0.03928
+        ? channel / 12.92
+        : ((channel + 0.055) / 1.055) ** 2.4;
+    });
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  }
+
+  function contrast(a: number[], b: number[]): number {
+    const [lighter, darker] = [luminance(a), luminance(b)].sort(
+      (x, y) => y - x,
+    );
+    return (lighter + 0.05) / (darker + 0.05);
+  }
+
+  /** How much accent the token mixes over whatever is behind it. */
+  function accentShare(theme: Theme): number {
+    const declared =
+      /--color-accent-underline:\s*color-mix\(in srgb, var\(--color-accent\) (\d+)%, transparent\)/.exec(
+        readFileSync(join(STYLES, TOKEN_FILE[theme]), 'utf8'),
+      );
+    if (!declared) {
+      throw new Error(`--color-accent-underline is not a mix in ${theme}`);
+    }
+    return Number(declared[1]) / 100;
+  }
+
+  // A link's ink is about 2:1 against the body text around it, which is not
+  // enough to tell them apart by colour. The underline is the cue that does
+  // not depend on colour, so it has to be visible in its own right: it
+  // shipped at 1.65:1 on light paper.
+  it.each([
+    ['light', '--color-bg'],
+    ['light', '--color-bg-alt'],
+    ['dark', '--color-bg'],
+    ['dark', '--color-bg-alt'],
+  ] as const)('clears 3:1 in the %s theme on %s', (theme, surface) => {
+    const accent = channels(readColorToken('--color-accent', theme));
+    const paper = channels(readColorToken(surface, theme));
+    const share = accentShare(theme);
+    const underline = accent.map(
+      (value, at) => value * share + paper[at] * (1 - share),
+    );
+
+    expect(contrast(underline, paper)).toBeGreaterThanOrEqual(3);
   });
 });
