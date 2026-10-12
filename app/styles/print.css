@@ -227,19 +227,31 @@
     page-break-after: avoid;
   }
 
-  /* Filter controls do nothing on paper, and every skill prints regardless
-     of what is selected on screen — the groups stay in the DOM precisely so
-     this override can reach them. */
-  .skill-button-container {
+  /* Both inks print black, so on paper there is no fainter tone for the
+     legend's second sentence to explain. The order it names still holds. */
+  .skill-tier-legend-tone {
     display: none;
   }
 
-  /* Tailwind's hidden rule is important in its base layer. Important layer
-     rules outrank unlayered ones, so this override must share that layer. */
-  @layer base {
-    .skill-group[hidden] {
-      display: block !important;
-    }
+  .skills .skill-tier-legend {
+    margin: 0 0 0.5rem;
+  }
+
+  .skill-groups {
+    gap: 0.3rem;
+  }
+
+  .skill-group-title {
+    font-size: 9pt;
+  }
+
+  .skill-tags {
+    gap: 0.25rem;
+  }
+
+  .skill-tag {
+    padding: 0.05em 0.5em;
+    font-size: 8pt;
   }
 
   .skill-tag,
