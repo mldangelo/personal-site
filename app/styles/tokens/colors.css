@@ -27,6 +27,7 @@
      Keep this surface and its text separate from the control palette. */
   --color-hero: #36559a;
   --color-on-hero: #faf7ef;
+  --color-on-hero-hover: #ebe6da; /* the poster's cream button, hovered */
 
   /* Filled controls need their own pair. A link accent is tuned for contrast
      against the page; reusing it as a button background put white text on it,
