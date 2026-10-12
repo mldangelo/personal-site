@@ -79,37 +79,61 @@
   display: none;
 }
 
-/* The title keeps its own bottom margin, so the row leaves the space below the
-   heading exactly where it was and only parks the JSON chip on its baseline. */
+/* The title and its controls share a baseline while there is room, and the
+   controls drop under the title when there is not: a phone cannot fit a 48px
+   heading beside both. The row carries no space of its own. The title keeps
+   its bottom margin and the controls match it, so the summary sits the same
+   distance below whichever of them ends up last. */
 .resume-header-row {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  gap: 1rem;
+  column-gap: 1.5rem;
 }
 
-/* Mono chip linking to the machine-readable résumé. Deliberately the same
-   affordance as `.writing-rss-link`: a label-sized control that opts out of the
-   accent underline `base/links.css` paints on prose links. `--text-ui`, not
-   `--text-2xs`, because it is interactive rather than annotation. */
-.resume-json-link {
-  font-family: var(--font-mono);
+.resume-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+/* Small standalone controls, not annotation and not prose links: display type
+   in sentence case, a control-weight border, and the 44px target the 35px
+   mono chip fell short of. `background-image: none` opts the link out of the
+   accent underline `base/links.css` paints. */
+.resume-json-link,
+.resume-print-button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0 0.875rem;
+  font-family: var(--font-display);
   font-size: var(--text-ui);
   font-weight: var(--font-weight-medium);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
   color: var(--color-fg-light);
   text-decoration: none;
   background-image: none;
-  padding: 0.35rem 0.6rem;
   border: var(--rule) solid var(--color-control-border);
   border-radius: var(--radius-sm);
+  cursor: pointer;
   transition:
     color var(--duration-instant) var(--ease-out),
     border-color var(--duration-instant) var(--ease-out);
 }
 
-.resume-json-link:hover {
+/* Printing from the page takes a script. Without the attribute the pre-paint
+   bootstrap stamps, none ran, and an enabled button would promise a dialog it
+   cannot open. Hidden on the attribute's absence rather than restored on its
+   presence, as `navigation.css` does for the theme toggle: a restore would
+   have to out-specify the `display` above. */
+:root:not([data-theme-choice]) .resume-print-button {
+  display: none;
+}
+
+.resume-json-link:hover,
+.resume-print-button:hover {
   color: var(--color-accent);
   border-color: var(--color-accent);
 }

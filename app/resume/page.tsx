@@ -7,6 +7,7 @@ import References from '@/components/Resume/References';
 import ResumeNav from '@/components/Resume/ResumeNav';
 import Skills from '@/components/Resume/Skills';
 import PageWrapper from '@/components/Template/PageWrapper';
+import PrintButton from '@/components/Template/PrintButton';
 import contact, { type ContactId } from '@/data/contact';
 import profile from '@/data/profile.json';
 import courses from '@/data/resume/courses';
@@ -82,18 +83,23 @@ export default function ResumePage() {
           </div>
           <div className="resume-header-row">
             <h1 className="resume-title">Resume</h1>
-            {/* The same affordance as the RSS chip on /writing. The href is
-                document-relative on purpose: /resume/ may live below a
-                repository base path, while a root-relative href would escape
-                it. ../resume.json resolves correctly in both deployments. */}
-            <a
-              href={`..${RESUME_JSON_PATH}`}
-              className="resume-json-link"
-              title="JSON Resume"
-              aria-label="JSON Resume"
-            >
-              JSON
-            </a>
+            <div className="resume-actions">
+              <PrintButton className="resume-print-button">
+                Print / PDF
+              </PrintButton>
+              {/* The same affordance as the RSS chip on /writing. The href is
+                  document-relative on purpose: /resume/ may live below a
+                  repository base path, while a root-relative href would escape
+                  it. ../resume.json resolves correctly in both deployments. */}
+              <a
+                href={`..${RESUME_JSON_PATH}`}
+                className="resume-json-link"
+                title="JSON Resume"
+                aria-label="JSON Resume"
+              >
+                JSON
+              </a>
+            </div>
           </div>
           <p className="resume-summary">
             Engineering leader with a career spanning {careerSpan}+ years across

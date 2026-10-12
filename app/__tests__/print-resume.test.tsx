@@ -9,6 +9,7 @@ import profile from '@/data/profile.json';
 import courses from '@/data/resume/courses';
 import degrees from '@/data/resume/degrees';
 import work from '@/data/resume/work';
+import { THEME_CHOICE_ATTRIBUTE } from '@/lib/theme';
 import ResumePage from '../resume/page';
 
 /**
@@ -185,6 +186,7 @@ describe('print: whose resume it is', () => {
       `${selectors.join(', ')} { ${declarations} }`,
   ).join('\n');
 
+  const root = document.documentElement;
   const sheets: HTMLStyleElement[] = [];
 
   function applyStyles(css: string): void {
@@ -196,9 +198,14 @@ describe('print: whose resume it is', () => {
 
   afterEach(() => {
     for (const sheet of sheets.splice(0)) sheet.remove();
+    root.removeAttribute(THEME_CHOICE_ATTRIBUTE);
   });
 
+  /** The header as a visitor with scripts running gets it. */
   function renderHeader() {
+    // The bootstrap's mark: without it the print control is hidden on screen
+    // too, and "not printed" would pass without print.css doing anything.
+    root.setAttribute(THEME_CHOICE_ATTRIBUTE, 'system');
     const { container } = render(<ResumePage />);
 
     const find = (selector: string): HTMLElement => {
@@ -211,6 +218,7 @@ describe('print: whose resume it is', () => {
       header: find('.resume-header'),
       name: find('.resume-print-name'),
       title: find('.resume-header h1'),
+      printButton: find('.resume-header button'),
       jsonLink: find('.resume-json-link'),
       contact: find('.resume-print-contact'),
     };
@@ -253,12 +261,13 @@ describe('print: whose resume it is', () => {
     // screen, and print.css hides both. The page went to paper headed
     // "Resume" and never said whose.
     applyStyles(RESUME_CSS);
-    const { name, title, jsonLink, contact } = renderHeader();
+    const { name, title, printButton, jsonLink, contact } = renderHeader();
 
-    // On screen: the title and its control, and neither print-only block.
+    // On screen: the title and both controls, and neither print-only block.
     expect(name).not.toBeVisible();
     expect(contact).not.toBeVisible();
     expect(title).toBeVisible();
+    expect(printButton).toBeVisible();
     expect(jsonLink).toBeVisible();
 
     applyStyles(PRINT_RULES_UNWRAPPED);
@@ -268,6 +277,7 @@ describe('print: whose resume it is', () => {
     expect(name).toBeVisible();
     expect(contact).toBeVisible();
     expect(title).not.toBeVisible();
+    expect(printButton).not.toBeVisible();
     expect(jsonLink).not.toBeVisible();
   });
 
