@@ -240,6 +240,18 @@ Lead paragraph.
       expect([...rows][0]?.parentElement).toBe(sectionNav());
     });
 
+    it('tells the row how far it has scrolled, for its leading fade', () => {
+      render(<AboutContent markdown={aboutMarkdown} />);
+
+      const row = sectionNav().firstElementChild as HTMLElement;
+
+      // The bar has to be the one the hook is listening on for this to arrive.
+      row.scrollLeft = 115;
+      row.dispatchEvent(new Event('scroll'));
+
+      expect(row.style.getPropertyValue('--scrolled')).toBe('115px');
+    });
+
     it('scrolls smoothly from the nav, and not from a heading link', () => {
       window.history.replaceState({}, '', '/about/');
       // Let go of anything an earlier click in this file left armed.

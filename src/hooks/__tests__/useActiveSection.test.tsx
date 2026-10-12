@@ -31,6 +31,8 @@ interface Page {
   innerHeight: number;
   scrollHeight: number;
   barHeight: number;
+  /** How far a scroll lock has pulled `<body>` up, with `scrollY` back at 0. */
+  lockedAt: number;
 }
 
 let page: Page;
@@ -135,6 +137,7 @@ beforeEach(() => {
     innerHeight: 900,
     scrollHeight: 5900,
     barHeight: 46,
+    lockedAt: 0,
   };
   frames = [];
 
@@ -171,7 +174,7 @@ beforeEach(() => {
       }
 
       if (this.id in page.tops && !this.hasAttribute('data-hidden')) {
-        return rect(page.tops[this.id] - page.scrollY, 300);
+        return rect(page.tops[this.id] - page.scrollY - page.lockedAt, 300);
       }
 
       // Everything else, like an element under `display: none`, has no box.
@@ -474,22 +477,24 @@ describe('useActiveSection', () => {
     expect(document.documentElement).toHaveAttribute(SMOOTH_SCROLL_ATTRIBUTE);
   });
 
-  it('keeps its reading while the document cannot scroll', () => {
-    page.scrollY = maxScroll();
+  it('keeps its reading while the mobile menu locks scrolling', () => {
+    page.scrollY = RESUME.skills;
 
     render(<Subject />);
-    expect(current()).toBe('references');
+    expect(current()).toBe('skills');
 
-    // The mobile menu locks scrolling by fixing <body>: scrollY reads 0 and
-    // the document is one screen tall until the menu closes.
-    const { scrollHeight } = page;
+    // The menu fixes <body> at `top: -scrollY`. Nothing moves on screen, but
+    // `scrollY` reads 0 and the document is one screen tall until it closes.
+    const { scrollHeight, scrollY } = page;
+    page.lockedAt = scrollY;
     page.scrollHeight = page.innerHeight;
     scrollTo(0);
-    expect(current()).toBe('references');
+    expect(current()).toBe('skills');
 
+    page.lockedAt = 0;
     page.scrollHeight = scrollHeight;
-    scrollTo(maxScroll());
-    expect(current()).toBe('references');
+    scrollTo(scrollY);
+    expect(current()).toBe('skills');
   });
 
   it('reads the page once per frame however many scroll events arrive', () => {

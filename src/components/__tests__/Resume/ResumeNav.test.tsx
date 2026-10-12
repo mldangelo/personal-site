@@ -132,6 +132,22 @@ describe('ResumeNav', () => {
     expect([...rows][0]?.parentElement).toBe(bar);
   });
 
+  it('tells the row how far it has scrolled, for its leading fade', () => {
+    render(<ResumeNav />);
+
+    const row = screen.getByRole('link', { name: 'Skills' }).parentElement;
+
+    if (!row) {
+      throw new Error('The links have no row');
+    }
+
+    // The bar has to be the one the hook is listening on for this to arrive.
+    row.scrollLeft = 41;
+    fireEvent.scroll(row);
+
+    expect(row.style.getPropertyValue('--scrolled')).toBe('41px');
+  });
+
   it('follows the reader down the page', async () => {
     const page = layOutResume();
 
