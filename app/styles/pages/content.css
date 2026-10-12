@@ -665,6 +665,20 @@
   white-space: nowrap;
 }
 
+/* On A4 the first page ended on the caption "Measured from this build’s
+   checkout" and its rows began overleaf. Chrome ignores `break-after` on a
+   caption, so the table stays whole, and a note stays with the table it is
+   about rather than opening the next page alone. */
+@media print {
+  .stat-table {
+    break-inside: avoid;
+  }
+
+  .stats-source-note {
+    break-before: avoid;
+  }
+}
+
 /* The caption of a table of last-known numbers is flagged like its note. */
 .stat-table[data-source='fallback'] .stat-table-caption {
   color: var(--color-fg);
