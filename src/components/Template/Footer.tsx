@@ -1,12 +1,61 @@
 import Link from 'next/link';
 
-import ContactIcons from '@/components/Contact/ContactIcons';
+import contact from '@/data/contact';
 import work from '@/data/resume/work';
 import routes from '@/data/routes';
 import { currentPosition } from '@/lib/career';
+import { smartQuotes } from '@/lib/typography';
 import { AUTHOR_NAME } from '@/lib/utils';
 
-import ThemePortrait from './ThemePortrait';
+const SOURCE_URL = 'https://github.com/mldangelo/personal-site';
+
+interface FooterLinkProps {
+  href: string;
+  children: string;
+}
+
+/**
+ * One footer link, dressed by where it goes. A page on this site is a plain
+ * `Link`. A destination off it opens in a new tab and says so twice: `↗` for a
+ * reader, which is decorative, and the words for a screen reader. A `mailto:`
+ * hands off to a mail client instead of opening a tab, so it gets neither.
+ *
+ * The space before those words is a text node of its own, so the link's name
+ * reads "GitHub (opens in a new tab)" wherever it is computed. It trails the
+ * line the label is set on, so it takes up no room.
+ */
+function FooterLink({ href, children }: FooterLinkProps) {
+  if (href.startsWith('/')) {
+    return (
+      <Link href={href} className="footer-link">
+        {children}
+      </Link>
+    );
+  }
+
+  if (href.startsWith('mailto:')) {
+    return (
+      <a href={href} className="footer-link">
+        {children}
+      </a>
+    );
+  }
+
+  return (
+    <a
+      href={href}
+      className="footer-link"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      {children}
+      <span className="footer-link-mark" aria-hidden="true">
+        ↗
+      </span>{' '}
+      <span className="sr-only">(opens in a new tab)</span>
+    </a>
+  );
+}
 
 export default function Footer() {
   const current = currentPosition(work);
@@ -14,27 +63,15 @@ export default function Footer() {
   return (
     <footer className="site-footer-new">
       <div className="footer-content">
+        {/* The name is the identity here. A 48px portrait used to sit beside
+            it, repeating the one in the homepage hero directly above. */}
         <div className="footer-identity">
-          <Link href="/" className="footer-avatar">
-            <ThemePortrait width={80} height={80} />
-          </Link>
-          <div className="footer-info">
-            <span className="footer-name">{AUTHOR_NAME}</span>
-            {current ? (
-              <p className="footer-role">{`${current.position} at ${current.name}`}</p>
-            ) : null}
-            <p className="footer-copyright">
-              &copy; {new Date().getFullYear()} ·{' '}
-              <a
-                href="https://github.com/mldangelo/personal-site"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Source
-                <span className="sr-only"> (opens in new tab)</span>
-              </a>
+          <p className="footer-name">{smartQuotes(AUTHOR_NAME)}</p>
+          {current ? (
+            <p className="footer-role">
+              {smartQuotes(`${current.position} at ${current.name}`)}
             </p>
-          </div>
+          ) : null}
         </div>
 
         <div className="footer-right">
@@ -43,30 +80,50 @@ export default function Footer() {
               These are group labels, not document sections, so they are
               spans rather than headings. */}
           <nav className="footer-links" aria-labelledby="footer-links-heading">
-            <span id="footer-links-heading" className="footer-links-label">
+            <span id="footer-links-heading" className="footer-label">
               Explore
             </span>
-            <div className="footer-links-grid">
+            <ul className="footer-list">
               {routes
                 .filter((route) => !route.index)
                 .map((route) => (
-                  <Link key={route.path} href={route.path}>
-                    {route.label}
-                  </Link>
+                  <li key={route.path}>
+                    <FooterLink href={route.path}>{route.label}</FooterLink>
+                  </li>
                 ))}
-            </div>
+            </ul>
           </nav>
 
-          <div
-            className="footer-social"
-            aria-labelledby="footer-social-heading"
-          >
-            <span id="footer-social-heading" className="footer-social-label">
+          {/* Every destination in `src/data/contact.ts`, by name and in that
+              file's order. The label names the list itself: on the wrapping
+              element it named nothing, because a `div` has no role that takes
+              a name. The role is spelled out for Safari, which stops exposing
+              a `ul` as a list once its markers are styled away, and would
+              drop the name along with it. */}
+          <div className="footer-social">
+            <span id="footer-social-heading" className="footer-label">
               Connect
             </span>
-            <ContactIcons />
+            <ul
+              className="footer-list"
+              role="list"
+              aria-labelledby="footer-social-heading"
+            >
+              {contact.map((item) => (
+                <li key={item.id}>
+                  <FooterLink href={item.link}>{item.label}</FooterLink>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
+
+        {/* Not a paragraph: the base and dark-theme `p a` rules dress links in
+            running prose, and would draw the accent rule under this one. */}
+        <small className="footer-copyright">
+          &copy; {new Date().getFullYear()} ·{' '}
+          <FooterLink href={SOURCE_URL}>Source</FooterLink>
+        </small>
       </div>
     </footer>
   );
