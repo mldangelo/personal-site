@@ -246,30 +246,31 @@
 
 .post-date {
   display: block;
-  font-family: var(--font-mono);
-  font-size: var(--text-2xs);
-  font-variant-numeric: tabular-nums;
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
-  color: var(--color-fg-light);
   margin-bottom: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-fg-light);
 }
 
+/* The title of the essay, in the face the essay is set in. It was display type
+   at the heaviest weight — a third voice for a title the homepage and the
+   index already set two other ways. Balanced by the base heading rule. */
 .post-title {
-  font-family: var(--font-display);
-  font-size: var(--text-2xl);
-  font-weight: var(--font-weight-black);
-  letter-spacing: var(--tracking-display);
-  line-height: 1.1;
   margin: 0 0 0.75rem;
+  font-family: var(--font-body);
+  font-size: var(--text-2xl);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: -0.02em;
+  line-height: 1.12;
   color: var(--color-fg-bold);
 }
 
 .post-description {
-  font-size: var(--text-md);
-  color: var(--color-fg-light);
   margin: 0;
+  font-size: var(--text-md);
   line-height: var(--leading-snug);
+  color: var(--color-fg-light);
 }
 
 /* Prose styling for markdown content */
@@ -280,42 +281,69 @@
   color: var(--color-fg);
 }
 
+/* The reading column is 640px. At 18px that is about 80 characters a line and
+   up to 96; at 20px it is about 72. Below this width the column is the phone's
+   own, and 18px already sets a short line there. The title and standfirst
+   step up with the text they introduce: the title to the size every page
+   title on the site takes, the standfirst so it never ends up smaller than
+   the prose under it. Scoped to `screen`, like the wide figure below, so a
+   printed article is set the same on any paper. */
+@media screen and (min-width: 736px) {
+  .prose {
+    font-size: var(--text-reading);
+  }
+
+  .post-title {
+    font-size: var(--text-3xl);
+  }
+
+  .post-description {
+    font-size: var(--text-lg);
+  }
+}
+
 /* Continuous prose is held to the reading measure one block at a time, which is
    what leaves the rest of the page measure available to a wide figure. */
 .prose > * {
   max-width: var(--measure-read);
 }
 
+/* Section titles inside an essay are titles of things too: the reading face at
+   one weight, stepping down by size. Colour, balance, and the rest come from
+   the base heading rule. */
+.prose h2,
+.prose h3 {
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
 .prose h2 {
-  font-family: var(--font-display);
   font-size: var(--text-xl);
-  font-weight: var(--font-weight-bold);
-  letter-spacing: var(--tracking-tight);
   margin: 3rem 0 0.75rem;
-  color: var(--color-fg-bold);
 }
 
 .prose h3 {
-  font-family: var(--font-display);
   font-size: var(--text-lg);
-  font-weight: var(--font-weight-bold);
-  letter-spacing: var(--tracking-tight);
   margin: 2rem 0 0.75rem;
-  color: var(--color-fg-bold);
 }
 
+/* The one level that stays in display type: at the size of the text around it
+   a serif heading would not read as a heading at all. */
 .prose h4 {
-  font-family: var(--font-display);
   font-size: var(--text-md);
   font-weight: var(--font-weight-semibold);
   margin: 1.5rem 0 0.5rem;
-  color: var(--color-fg-bold);
 }
 
+/* Everything a fragment can land on clears the fixed header: headings, their
+   legacy aliases, and the footnotes a reference jumps to. */
 .prose h2,
 .prose h3,
 .prose h4,
-.prose-anchor-alias {
+.prose-anchor-alias,
+.prose footer > div {
   scroll-margin-top: calc(var(--header-height) + var(--spacing-6));
 }
 
@@ -323,7 +351,8 @@
   .prose h2,
   .prose h3,
   .prose h4,
-  .prose-anchor-alias {
+  .prose-anchor-alias,
+  .prose footer > div {
     scroll-margin-top: calc(var(--header-height-mobile) + var(--spacing-6));
   }
 }
@@ -334,8 +363,10 @@
   height: 0;
 }
 
+/* Blocks are spaced by the size of the text they hold, so the gap between two
+   paragraphs grows with the reading size instead of closing up under it. */
 .prose p {
-  margin: 1rem 0;
+  margin: 1em 0;
 }
 
 .prose a,
@@ -362,7 +393,7 @@
 
 .prose ul,
 .prose ol {
-  margin: 1rem 0;
+  margin: 1em 0;
   padding-left: 1.5rem;
 }
 
@@ -392,18 +423,32 @@
   font-family: var(--font-newsreader-italic), var(--font-body);
 }
 
-.prose code {
-  font-family: var(--font-mono);
-  font-size: var(--text-sm);
-  background: var(--color-surface-subtle);
-  border: var(--rule) solid var(--color-border);
-  padding: 0.15em 0.4em;
-  border-radius: var(--radius-xs);
+/* Inline code takes its size from the text it sits in: the one `em` size on
+   the site, and only inside prose. Fixed at 14px it read as a footnote beside
+   a 28px heading ("On using --dangerously-skip-permissions"), and it would
+   have shrunk again beside 20px body text. The chip itself is the base `code`
+   rule. Long configuration names must wrap in prose without changing code
+   fences. */
+.prose :not(pre) > code {
+  font-size: 0.8em;
+  overflow-wrap: anywhere;
 }
 
-/* Long configuration names must wrap in prose without changing code fences. */
-.prose :not(pre) > code {
-  overflow-wrap: anywhere;
+/* A step smaller in a section title, where the chip's fill and border already
+   add weight the serif around it does not have. The title's tracking was drawn
+   for that serif, so the mono does not inherit it.
+
+   And one box, not inline text: a hyphen is a place a line may break, so on a
+   phone a flag in a title was split after its first dash ("Browser
+   automation: -" over "-chrome"). As a box it moves to the next line whole,
+   and wraps inside itself only when it is longer than the line. Running text
+   keeps inline code, where a box would let the bracket or full stop beside it
+   be parted from it. */
+.prose :is(h2, h3) code {
+  display: inline-block;
+  max-width: 100%;
+  font-size: 0.72em;
+  letter-spacing: normal;
 }
 
 /* The wrapper carries the block's margin so the language plate can be
@@ -424,7 +469,8 @@
 
 /* Annotation on the rule that is already there: the language breaks the top
    hairline the way a callout breaks a border on a drawing. Ink, not amber — a
-   fence's language is a static fact, not a live reading. */
+   fence's language is a static fact, not a live reading. It is an identifier,
+   so it is set as it was typed (`bash`), not as tracked capitals. */
 .prose-fence-lang {
   position: absolute;
   top: 0;
@@ -437,10 +483,7 @@
   background: linear-gradient(var(--color-bg-alt), var(--color-bg-alt)) center / 100%
     calc(var(--rule) + 2px) no-repeat;
   font-family: var(--font-mono);
-  font-size: var(--text-2xs);
-  font-weight: var(--font-weight-medium);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
+  font-size: var(--text-xs);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -459,8 +502,58 @@
 
 .prose hr {
   border: none;
-  border-top: 1px solid var(--color-border);
+  border-top: var(--rule) solid var(--color-border);
   margin: 2rem 0;
+}
+
+/* A Markdown table had no styles at all: cells with no padding ran into each
+   other ("$2.50The baseline"). It is data, so it is set a step under the
+   prose with figures that line up, a labelled header on an ink rule, and
+   hairlines between rows. A column the author aligned keeps its alignment —
+   the renderer writes that inline. Words are not broken to make a table fit,
+   so one with many columns can still be wider than a phone. */
+.prose table {
+  width: 100%;
+  margin: 1.5rem 0;
+  font-size: var(--text-base);
+  line-height: var(--leading-snug);
+  font-variant-numeric: tabular-nums;
+}
+
+.prose th,
+.prose td {
+  padding: 0.5rem 1rem 0.5rem 0;
+  border-bottom: var(--rule) solid var(--color-border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.prose :is(th, td):last-child {
+  padding-right: 0;
+}
+
+.prose th {
+  font-family: var(--font-display);
+  font-size: var(--text-ui);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-fg-light);
+  border-bottom-color: var(--color-fg-bold);
+  vertical-align: bottom;
+}
+
+/* Footnotes arrive as a `<footer>` after the last block. Set off by a hairline
+   and a step quieter, they read as notes on the essay, not as more of it. */
+.prose footer {
+  margin-top: 3rem;
+  padding-top: 1rem;
+  border-top: var(--rule) solid var(--color-border);
+  font-size: var(--text-base);
+  line-height: 1.5;
+  color: var(--color-fg-light);
+}
+
+.prose footer > div {
+  margin: 0.5rem 0;
 }
 
 .prose img {
@@ -498,17 +591,16 @@
   display: block;
 }
 
-/* The caption is annotation about the figure, so it is set in mono at the
-   annotation size rather than as prose. */
+/* A caption is a sentence about the figure, so it is supporting copy in the
+   reading face: a step under the prose in size and ink. It was 11px tracked
+   mono, which is for data — a date, a count — not for something to be read. */
 .prose-figcaption {
   /* The figure may be wider than the reading measure; its caption is still
      text, so it is not. */
-  max-width: var(--measure-read);
+  max-width: 53ch;
   margin-top: 0.6rem;
-  font-family: var(--font-mono);
-  font-size: var(--text-2xs);
-  line-height: var(--leading-snug);
-  letter-spacing: var(--tracking-wide);
+  font-size: var(--text-base);
+  line-height: 1.5;
   color: var(--color-fg-light);
   text-wrap: pretty;
 }

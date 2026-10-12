@@ -36,6 +36,9 @@ import PostPage, { generateMetadata } from './page';
  */
 const DRAFT_SLUG = 'zz-draft-preview-fixture';
 const DRAFT_TITLE = 'A Draft Held Back From Publication';
+/** Written with a keyboard, as posts are; read with a typographic apostrophe. */
+const DRAFT_STANDFIRST = "It isn't published while it is being written.";
+const DRAFT_STANDFIRST_READ = 'It isn’t published while it is being written.';
 const DRAFT_FILE = join(process.cwd(), 'content/writing', `${DRAFT_SLUG}.md`);
 
 beforeAll(() => {
@@ -45,7 +48,7 @@ beforeAll(() => {
       '---',
       `title: '${DRAFT_TITLE}'`,
       "date: '2026-01-08'",
-      "description: 'Unpublished while it is being written.'",
+      `description: "${DRAFT_STANDFIRST}"`,
       'draft: true',
       '---',
       '',
@@ -170,5 +173,53 @@ describe('writing post structured data', () => {
     expect(markup).toContain('width="1200"');
     expect(markup).toContain('height="675"');
     expect(markup).not.toContain(`/og/writing/${slug}.png`);
+  });
+});
+
+/**
+ * The reader gets typographic quotes; everything that is matched on exact text
+ * keeps the string the post was written with. `verify-export` compares the
+ * exported `<title>` against the feed, and the share-card ledger records the
+ * title its image was drawn from.
+ */
+describe('writing post title', () => {
+  const slug = 'eurostar-chatbot-analysis';
+  const authored = 'Notes on the Eurostar chatbot "vulnerability" report';
+
+  it('is set with typographic quotes where it is read', async () => {
+    const markup = renderToStaticMarkup(
+      await PostPage({ params: Promise.resolve({ slug }) }),
+    );
+
+    expect(markup).toContain(
+      '<h1 class="post-title">Notes on the Eurostar chatbot “vulnerability” report</h1>',
+    );
+  });
+
+  it('keeps the authored string in metadata and structured data', async () => {
+    const metadata = await generateMetadata({
+      params: Promise.resolve({ slug }),
+    });
+    const blogPosting = await blogPostingFor(slug);
+
+    expect(metadata.title).toBe(authored);
+    expect(metadata.openGraph?.title).toBe(authored);
+    expect(metadata.twitter?.title).toBe(authored);
+    expect(blogPosting.headline).toBe(authored);
+  });
+
+  it('sets the standfirst with typographic quotes and leaves the description alone', async () => {
+    vi.stubEnv('NODE_ENV', 'development');
+    const markup = renderToStaticMarkup(
+      await PostPage({ params: Promise.resolve({ slug: DRAFT_SLUG }) }),
+    );
+    const metadata = await generateMetadata({
+      params: Promise.resolve({ slug: DRAFT_SLUG }),
+    });
+
+    expect(markup).toContain(
+      `<p class="post-description">${DRAFT_STANDFIRST_READ}</p>`,
+    );
+    expect(metadata.description).toBe(DRAFT_STANDFIRST);
   });
 });

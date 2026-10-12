@@ -17,6 +17,7 @@ import {
   HOME_URL,
   webPageNode,
 } from '@/lib/schema';
+import { smartQuotes } from '@/lib/typography';
 import { AUTHOR_NAME, formatDate, SITE_URL } from '@/lib/utils';
 
 interface PageProps {
@@ -181,8 +182,11 @@ export default async function PostPage({ params }: PageProps) {
           <time className="post-date" dateTime={post.date}>
             {formatDate(post.date)}
           </time>
-          <h1 className="post-title">{post.title}</h1>
-          <p className="post-description">{post.description}</p>
+          {/* Typographic quotes are for the reader. The metadata above, the
+              JSON-LD, the feed, and the share card keep the authored string:
+              those are matched on exact text. */}
+          <h1 className="post-title">{smartQuotes(post.title)}</h1>
+          <p className="post-description">{smartQuotes(post.description)}</p>
         </header>
         <div className="post-content prose">
           <PostContent
