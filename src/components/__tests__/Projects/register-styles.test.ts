@@ -16,6 +16,11 @@ const CARDS_CSS = readFileSync(
   'utf8',
 );
 
+const TAGS_CSS = readFileSync(
+  join(process.cwd(), 'app/styles/components/tags.css'),
+  'utf8',
+);
+
 interface Rule {
   selectors: string[];
   declarations: Map<string, string>;
@@ -167,5 +172,25 @@ describe('projects register styles', () => {
         /project-card|projects-grid|project-note/.test(selector),
       ),
     ).toEqual([]);
+  });
+
+  /**
+   * The tags under a description belong to this page, though their rule lives
+   * with the other tags. At 11px they were the last text here below the size
+   * mono takes everywhere else, and they still answered a hover on the card.
+   */
+  it('sets the tags at the mono size and leaves them still', () => {
+    const stripped = TAGS_CSS.replace(/\/\*[\s\S]*?\*\//g, '');
+    const tagRules = [...stripped.matchAll(/([^{}]+)\{([^{}]*)\}/g)]
+      .map((match) => ({ selector: match[1].trim(), body: match[2] }))
+      .filter((rule) => rule.selector.includes('.tech-tag'));
+
+    expect(tagRules.map((rule) => rule.selector)).toEqual(['.tech-tag']);
+
+    const [{ body }] = tagRules;
+    expect(body).toContain('font-size: var(--text-xs);');
+    expect(body).not.toContain('letter-spacing');
+    expect(body).not.toContain('transition');
+    expect(stripped).not.toContain('project-card');
   });
 });
