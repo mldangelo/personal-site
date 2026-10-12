@@ -76,14 +76,19 @@ interface ParsedAboutSection {
  * Sections whose lists are chronological get the log treatment: entries
  * hang off a spine with a tick each, the same device the resume uses.
  * The rest stay as plain lists, because order carries no meaning there.
+ *
+ * A section is matched by its exact title, as authored. Rename a heading in
+ * `src/data/about.ts` and its key here has to follow, or the section falls
+ * back to a plain list without a word. Its id does not move with the casing:
+ * that is derived case-insensitively, so the deep links hold.
  */
 const sectionVariants: Record<string, string> = {
-  'Some History': 'about-section--log',
-  'Travel / Geography': 'about-section--log',
-  'Fun Facts': 'about-section--compact',
-  'I Like': 'about-section--compact',
-  'I Dream Of': 'about-section--compact',
-  'Websites from People I Admire': 'about-section--links',
+  'Some history': 'about-section--log',
+  'Travel / geography': 'about-section--log',
+  'Fun facts': 'about-section--compact',
+  'I like': 'about-section--compact',
+  'I dream of': 'about-section--compact',
+  'Websites from people I admire': 'about-section--links',
 };
 
 function splitAboutMarkdown(markdown: string) {
@@ -176,14 +181,18 @@ export default function AboutContent({ markdown }: AboutContentProps) {
           key={section.id}
           className={getSectionClassName(section.title)}
         >
-          <h2 id={section.id}>
-            <a href={`#${section.id}`} className="about-section-heading-link">
-              <span>{section.title}</span>
-              <span className="about-section-heading-hash" aria-hidden="true">
-                #
-              </span>
-            </a>
-          </h2>
+          <div className="section-header">
+            {/* The id stays on the heading: it is the public fragment, and
+                the heading is what the stylesheet gives a scroll margin. */}
+            <h2 id={section.id} className="section-heading">
+              <a href={`#${section.id}`} className="about-section-heading-link">
+                {section.title}
+                <span className="about-section-heading-hash" aria-hidden="true">
+                  #
+                </span>
+              </a>
+            </h2>
+          </div>
           {isLogSection(section.title) ? (
             <Markdown options={LOG_MARKDOWN_OPTIONS}>{section.body}</Markdown>
           ) : (

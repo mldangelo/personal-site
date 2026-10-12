@@ -185,7 +185,7 @@ describe('extractLogMarker', () => {
 });
 
 describe('the about page log', () => {
-  const history = sectionEntries('Some History');
+  const history = sectionEntries('Some history');
 
   it('annotates every history entry with only its stated marker', () => {
     expect(history).toHaveLength(15);
@@ -232,7 +232,7 @@ describe('the about page log', () => {
   });
 
   it('leaves undated travel entries empty and does not derive travel ages', () => {
-    const travel = sectionEntries('Travel / Geography');
+    const travel = sectionEntries('Travel / geography');
     const undated = travel.filter((entry) => extractLogMarker(entry) === null);
     const dated = travel
       .map((entry) => extractLogMarker(entry))
