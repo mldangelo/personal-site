@@ -1,9 +1,10 @@
 'use client';
 
-import Markdown from 'markdown-to-jsx';
+import Markdown, { type MarkdownToJSX, RuleType } from 'markdown-to-jsx';
 import { Children, type ReactNode } from 'react';
 import { createUniqueHeadingIds } from '@/lib/anchors';
 import { extractLogMarker } from '@/lib/logEntry';
+import { smartQuotes } from '@/lib/typography';
 
 interface AboutContentProps {
   markdown: string;
@@ -19,6 +20,11 @@ const LOG_VARIANT = 'about-section--log';
  * or both; the gutter does not derive a counterpart from an imprecise date.
  * Entries that open with a link or carry no marker at all keep their text
  * intact and simply leave the gutter empty.
+ *
+ * The text arrives with its quotes already set (`renderRule`, below). No
+ * marker pattern contains a quote, so the reading is the same either way, and
+ * the remainder is cut from the converted string rather than converted again
+ * out of context.
  */
 function LogEntry({ children }: { children?: ReactNode }) {
   const nodes = Children.toArray(children);
@@ -57,14 +63,30 @@ function LogEntry({ children }: { children?: ReactNode }) {
   );
 }
 
-const LOG_MARKDOWN_OPTIONS = {
+/**
+ * The source is typed with the straight quotes a keyboard has; the page sets
+ * typographic ones. Only prose is converted: a code span or a fenced block is
+ * its own node type and never arrives here as text.
+ */
+const renderRule: NonNullable<MarkdownToJSX.Options['renderRule']> = (
+  next,
+  node,
+) => (node.type === RuleType.text ? smartQuotes(node.text) : next());
+
+const MARKDOWN_OPTIONS: MarkdownToJSX.Options = { renderRule };
+
+const LOG_MARKDOWN_OPTIONS: MarkdownToJSX.Options = {
   overrides: { li: { component: LogEntry } },
+  renderRule,
 };
 
 interface AboutSection {
   body: string;
   id: string;
+  /** As a reader sees it: the heading and the section nav both print this. */
   title: string;
+  /** The layout its list takes, when the title names one. */
+  variant: string | undefined;
 }
 
 interface ParsedAboutSection {
@@ -138,19 +160,18 @@ function parseSections(markdown: string): AboutSection[] {
     sections.map((section) => section.title),
   );
 
-  return sections.map((section, index) => ({
-    ...section,
+  // The id and the variant are read from the title as authored. Only what a
+  // reader sees is converted, and once, so the nav and the heading agree.
+  return sections.map(({ body, title }, index) => ({
+    body,
     id: sectionIds[index] ?? 'section',
+    title: smartQuotes(title),
+    variant: sectionVariants[title],
   }));
 }
 
-function getSectionClassName(title: string) {
-  const variant = sectionVariants[title];
+function getSectionClassName(variant: string | undefined) {
   return variant ? `about-section ${variant}` : 'about-section';
-}
-
-function isLogSection(title: string) {
-  return sectionVariants[title] === LOG_VARIANT;
 }
 
 export default function AboutContent({ markdown }: AboutContentProps) {
@@ -160,7 +181,7 @@ export default function AboutContent({ markdown }: AboutContentProps) {
     <article className="about-content">
       {intro ? (
         <div className="about-intro">
-          <Markdown>{intro}</Markdown>
+          <Markdown options={MARKDOWN_OPTIONS}>{intro}</Markdown>
         </div>
       ) : null}
       {sections.length > 0 ? (
@@ -179,7 +200,7 @@ export default function AboutContent({ markdown }: AboutContentProps) {
       {sections.map((section) => (
         <section
           key={section.id}
-          className={getSectionClassName(section.title)}
+          className={getSectionClassName(section.variant)}
         >
           <div className="section-header">
             {/* The id stays on the heading: it is the public fragment, and
@@ -193,11 +214,15 @@ export default function AboutContent({ markdown }: AboutContentProps) {
               </a>
             </h2>
           </div>
-          {isLogSection(section.title) ? (
-            <Markdown options={LOG_MARKDOWN_OPTIONS}>{section.body}</Markdown>
-          ) : (
-            <Markdown>{section.body}</Markdown>
-          )}
+          <Markdown
+            options={
+              section.variant === LOG_VARIANT
+                ? LOG_MARKDOWN_OPTIONS
+                : MARKDOWN_OPTIONS
+            }
+          >
+            {section.body}
+          </Markdown>
         </section>
       ))}
     </article>

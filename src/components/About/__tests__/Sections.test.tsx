@@ -286,4 +286,95 @@ Lead paragraph.
       expect(link?.textContent).toBe(`${titles[index]}#`);
     }
   });
+
+  it('sets typographic apostrophes in the prose, and leaves the source as typed', () => {
+    const { container } = render(<AboutContent markdown={aboutMarkdown} />);
+    const text = container.textContent ?? '';
+
+    expect(text).not.toMatch(/['"]/);
+
+    // A paragraph, a log entry, a possessive after a link, a list, a closer.
+    expect(text).toContain('if you’re interested in collaborating');
+    expect(text).toContain('I still don’t know what pressing the turbo button');
+    expect(text).toContain('(without my parents’ permission)');
+    expect(text).toContain('I can’t locate every country on a map.');
+    expect(text).toContain('you’re probably right');
+
+    // The data keeps the keyboard's quotes; only the page is converted.
+    expect(aboutMarkdown).toContain("if you're interested in collaborating");
+  });
+
+  it('leaves code as it was typed', () => {
+    const { container } = render(
+      <AboutContent
+        markdown={[
+          '# Intro',
+          '',
+          "It's `don't` here.",
+          '',
+          '```',
+          "const quote = 'x';",
+          '```',
+        ].join('\n')}
+      />,
+    );
+
+    expect(container.querySelector('p')).toHaveTextContent("It’s don't here.");
+    expect(container.querySelector('pre')).toHaveTextContent(
+      "const quote = 'x';",
+    );
+  });
+
+  it('reads a marker from an entry whose words carry an apostrophe', () => {
+    const { container } = render(
+      <AboutContent
+        markdown={`# Intro
+
+Lead paragraph.
+
+# Some history
+
+- When I was 12, I didn't sleep.
+- We didn't have a computer in 1993.`}
+      />,
+    );
+
+    // The gutter reads typeset text, and the remainder keeps its apostrophe.
+    expect(
+      Array.from(container.querySelectorAll('.log-entry'), (entry) => [
+        entry.querySelector('.log-entry-marker')?.textContent,
+        entry.querySelector('.log-entry-body')?.textContent,
+      ]),
+    ).toEqual([
+      ['Age 12', 'I didn’t sleep.'],
+      ['1993', 'We didn’t have a computer in 1993.'],
+    ]);
+  });
+
+  it('prints a title the same way in the nav and above its section', () => {
+    render(
+      <AboutContent
+        markdown={`# Intro
+
+Lead paragraph.
+
+# Michael's notes
+
+- A note.`}
+      />,
+    );
+
+    const nav = screen.getByRole('navigation', { name: 'About sections' });
+    const name = 'Michael’s notes';
+
+    // Typeset once for both, while the id is read from the title as typed.
+    expect(screen.getByRole('heading', { name })).toHaveAttribute(
+      'id',
+      'michaels-notes',
+    );
+    expect(within(nav).getByRole('link', { name })).toHaveAttribute(
+      'href',
+      '#michaels-notes',
+    );
+  });
 });
