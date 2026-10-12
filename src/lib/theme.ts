@@ -174,6 +174,24 @@ export function storeThemeChoice(choice: ThemeChoice): void {
 }
 
 /**
+ * The device's colour scheme, asked once, right now — or `null` when there is
+ * no `matchMedia` to ask.
+ *
+ * Render from `usePrefersColorScheme` instead: it subscribes, which is what
+ * keeps `system` live. This is for a press that lands before that hook has
+ * reported. A press can be dispatched between hydration and the mount effects,
+ * to the hydration render's handler, where the hook still says `null` — and
+ * ordering the cycle by a guess there brings the no-op first press back for
+ * whichever device the guess is wrong about.
+ */
+export function readSystemScheme(): ResolvedTheme | null {
+  const media = window.matchMedia?.(DARK_SCHEME_QUERY);
+  if (!media) return null;
+
+  return media.matches ? 'dark' : 'light';
+}
+
+/**
  * The script-owned `theme-color` meta, created on first use.
  *
  * Prepended rather than appended: the browser paints from the first tag in

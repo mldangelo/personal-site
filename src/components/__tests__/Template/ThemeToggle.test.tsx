@@ -569,6 +569,76 @@ describe('ThemeToggle', () => {
     });
   });
 
+  describe('a press that beats the mount effects', () => {
+    /**
+     * Presses the control in the same breath as `hydrateRoot`, which is as
+     * early as a press can land. The handler that answers is the hydration
+     * render's, where the stored choice and the device are both still unread,
+     * and ordering the cycle by the fallback there hands a dark device the
+     * no-op first press.
+     *
+     * A browser reaches the same handler by a different road — hydration
+     * committed, mount effects not yet run. Pressing as early as Chromium
+     * would deliver one against the export landed there every time.
+     */
+    function pressWhileHydrating(device: Device): void {
+      const { host } = serverMarkup();
+      const button = host.querySelector<HTMLButtonElement>('button');
+      if (!button) throw new Error('no theme toggle in the server markup');
+
+      stubColorScheme(device === 'dark');
+      act(() => {
+        hydrated.push(hydrateRoot(host, <ThemeToggle />));
+        // The evidence that this is the early press: the name mounting adds
+        // is not there yet.
+        expect(button).not.toHaveAttribute('aria-label');
+        button.click();
+      });
+    }
+
+    it.each(DEVICES)(
+      'still opens on the other theme on a %s device',
+      (device) => {
+        // What the bootstrap leaves on <html> for a first-time visitor.
+        root().setAttribute(THEME_CHOICE_ATTRIBUTE, 'system');
+        root().setAttribute(THEME_ATTRIBUTE, device);
+
+        pressWhileHydrating(device);
+
+        expect(reading()).toEqual(LAP[device][1]);
+        expect(toggle()).toHaveAccessibleName(LABEL[device][other(device)]);
+      },
+    );
+
+    it.each(DEVICES)('finishes the lap it started on a %s device', (device) => {
+      root().setAttribute(THEME_CHOICE_ATTRIBUTE, 'system');
+      root().setAttribute(THEME_ATTRIBUTE, device);
+
+      pressWhileHydrating(device);
+      fireEvent.click(toggle());
+      expect(reading()).toEqual(LAP[device][2]);
+
+      fireEvent.click(toggle());
+      expect(reading()).toEqual(LAP[device][3]);
+    });
+
+    it('starts from the stored choice, read at the press', () => {
+      // Dark stored, light device: dark is the lap's first stop there, so the
+      // press goes on to light rather than back to `system`.
+      window.localStorage.setItem(THEME_STORAGE_KEY, 'dark');
+      root().setAttribute(THEME_CHOICE_ATTRIBUTE, 'dark');
+      root().setAttribute(THEME_ATTRIBUTE, 'dark');
+
+      pressWhileHydrating('light');
+
+      expect(reading()).toEqual({
+        choice: 'light',
+        theme: 'light',
+        stored: 'light',
+      });
+    });
+  });
+
   describe('following the device', () => {
     it('paints the device theme while the choice is system', () => {
       render(<ThemeToggle />);

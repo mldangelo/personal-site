@@ -7,6 +7,7 @@ import {
   RESOLVED_THEME_COLOR_SELECTOR,
   type ResolvedTheme,
   readStoredThemeChoice,
+  readSystemScheme,
   renderedThemeColor,
   resolveTheme,
   storeThemeChoice,
@@ -358,6 +359,43 @@ describe('theme', () => {
         expect(() => storeThemeChoice('dark')).not.toThrow();
       });
     });
+  });
+
+  describe('readSystemScheme', () => {
+    it('reads a dark device', () => {
+      setPrefersDark(true);
+
+      expect(readSystemScheme()).toBe('dark');
+    });
+
+    it('reads a light device', () => {
+      expect(readSystemScheme()).toBe('light');
+    });
+
+    it('reports nothing when the device cannot be asked', () => {
+      // Rather than a guess the caller cannot tell from an answer.
+      Object.defineProperty(window, 'matchMedia', {
+        writable: true,
+        configurable: true,
+        value: undefined,
+      });
+
+      expect(readSystemScheme()).toBeNull();
+    });
+
+    it.each([true, false])(
+      'agrees with the bootstrap when the device prefers dark: %s',
+      (prefersDark) => {
+        // An early press orders the cycle by this reading while the page is
+        // still painted by the bootstrap's. They have to be the same reading, or
+        // "the opposite theme" is the one already on screen.
+        setPrefersDark(prefersDark);
+        runThemeInitScript();
+
+        expect(choiceAttribute()).toBe('system');
+        expect(readSystemScheme()).toBe(themeAttribute());
+      },
+    );
   });
 
   describe('themeInitScript', () => {

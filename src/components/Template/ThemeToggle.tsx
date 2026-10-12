@@ -7,6 +7,7 @@ import usePrefersColorScheme from '@/hooks/usePrefersColorScheme';
 import {
   nextThemeChoice,
   readStoredThemeChoice,
+  readSystemScheme,
   resolveTheme,
   storeThemeChoice,
   syncThemeColor,
@@ -132,11 +133,18 @@ export default function ThemeToggle() {
   const next = choice === null ? null : nextThemeChoice(choice, systemScheme);
 
   const cycle = useCallback(() => {
-    const to = next ?? nextThemeChoice(readStoredThemeChoice(), systemScheme);
+    // `next` is `null` when the press beat the mount effects: the handler is
+    // still the hydration render's, where neither the stored choice nor the
+    // device has been read. Measured against the export, every press made as
+    // early as Chromium would deliver one landed in that gap. Ask both
+    // directly rather than order the cycle by a guess, which would hand a dark
+    // device the no-op first press.
+    const to =
+      next ?? nextThemeChoice(readStoredThemeChoice(), readSystemScheme());
 
     storeThemeChoice(to);
     setChoice(to);
-  }, [next, systemScheme]);
+  }, [next]);
 
   // Before mount the accessible name comes from the one state label CSS leaves
   // visible, which says only what the preference is. After mount this adds
