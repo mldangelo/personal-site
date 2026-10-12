@@ -28,10 +28,15 @@
   padding: 2rem 1.5rem;
 }
 
-/* The hero grid needs room for a full-measure readout strip
-   alongside its portrait. */
-.page-main--hero {
-  max-width: var(--measure-wide);
+/* The homepage's blue field runs the full width of the viewport, flush under
+   the header, so its main region gives up the page measure and every padding
+   but the bottom one; `.hero-grid` and `.home-writing` hold the page rails
+   instead. Two classes, because the `.page-main` padding in the media query
+   below would otherwise win on source order. */
+.page-main.page-main--hero {
+  max-width: none;
+  padding-top: 0;
+  padding-inline: 0;
 }
 
 @media screen and (min-width: 736px) {

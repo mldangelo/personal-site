@@ -21,7 +21,12 @@ describe('writing information architecture', () => {
 
     expect(cards).toHaveLength(3);
     expect(
-      [...cards].map((card) => card.querySelector('h3')?.textContent),
+      [...cards].map((card) =>
+        card
+          .querySelector('h3')
+          ?.textContent?.replace(/[‘’]/g, "'")
+          .replace(/[“”]/g, '"'),
+      ),
     ).toEqual(expected.map((item) => item.title));
     // `next/link` drops the configured trailing slash in this environment; see
     // the featured-item test below. Normalise rather than pin the shape.

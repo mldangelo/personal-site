@@ -38,10 +38,12 @@ The visual system pairs ink blue with porcelain paper, with neutral charcoal
 at night. Inter handles headings, navigation, and buttons; Newsreader handles
 prose and the homepage writing titles; JetBrains Mono identifies dates, data,
 and annotations. Flat surfaces, hairlines, and spacing keep the composition
-crisp. The homepage uses one blue poster field, with the name and introduction
-in the left column and a square color portrait centered in the right. On
-mobile, the portrait sits centered below the copy. Its location caption is
-centered beneath the image in both layouts.
+crisp. The homepage opens on one blue poster field that runs the full width
+of the viewport, with everything in it held to the page measure: the name and
+introduction on the left rail and a square color portrait on the right. On
+mobile, the portrait follows the copy on the same left edge. Its location
+caption sits left-aligned beneath the image in both layouts. The header, every
+page, and the footer share that one measure.
 
 Blue handles links and controls on paper. The poster has its own surface/text
 pair so its pale copy and inverted button remain readable in both themes.

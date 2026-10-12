@@ -1,19 +1,51 @@
-/* One ink-blue field, a square portrait, and a quiet editorial register. */
+/* One ink-blue field, a square portrait, and a quiet editorial register. The
+   field runs the full width of the viewport, flush under the header; what is
+   inside it keeps to the page rails, so the name starts under the logo and the
+   portrait ends under the header's last control.
+
+   The button inverts the poster pair, and its hover needs a cream of its own:
+   both fill tokens once pointed at `--color-on-hero`, so hovering changed
+   nothing.
+
+   The field's lower edge is the only boundary between it and the section
+   below. The transparent border keeps that edge where the fill is not
+   painted: a forced palette draws it in a system colour, and print.css inks
+   it. */
 .hero {
   --color-focus-ring: var(--color-on-hero);
   --color-focus-ring-fill: var(--color-on-hero);
   --color-accent-fill: var(--color-on-hero);
-  --color-accent-fill-hover: var(--color-on-hero);
+  --color-accent-fill-hover: var(--color-on-hero-hover);
   --color-on-accent: var(--color-hero);
-  padding: 2rem 2.25rem 2.25rem;
+  padding: 3.5rem 0 3.75rem;
+  border-bottom: var(--rule) solid transparent;
   background: var(--color-hero);
   color: var(--color-on-hero);
 }
 
+/* The page rails. `.page-main--hero` gives up its measure and inline padding so
+   the field can bleed, which leaves these two to restate both in step with
+   `.page-main`: the same measure, and the same gutter at each width. */
+.hero-grid,
+.home-writing {
+  max-width: var(--measure-page);
+  margin-inline: auto;
+  padding-inline: 2rem;
+}
+
+@media (max-width: 735px) {
+  .hero-grid,
+  .home-writing {
+    padding-inline: 1.5rem;
+  }
+}
+
 .hero-kicker {
-  margin: 0 0 1.375rem;
+  margin: 0 0 1.5rem;
   font-family: var(--font-display);
-  font-size: var(--text-xs);
+  font-size: var(--text-ui);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.3125rem;
   letter-spacing: var(--tracking-wide);
 }
 
@@ -35,28 +67,36 @@
 
 .hero-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
-  gap: 2.5rem;
-  align-items: center;
+  grid-template-columns: minmax(0, 1fr) min(17.5rem, 35%);
+  gap: 3rem;
+  align-items: start;
 }
 
 .hero-primary {
   min-width: 0;
 }
 
+/* The lede and the summary are one voice at two volumes: the reading face
+   throughout, a full step apart in size. They were a sans at 20px beside a
+   serif at 19px, each with its own right edge. */
 .hero-tagline {
-  max-width: 35ch;
-  margin: 0 0 1.125rem;
-  font-family: var(--font-display);
-  font-size: 1.25rem;
-  line-height: var(--leading-snug);
+  margin: 0 0 1.25rem;
+  font-family: var(--font-body);
+  font-size: var(--text-xl);
+  letter-spacing: -0.01em;
+  line-height: 1.28;
+  text-wrap: balance;
 }
 
+/* Quieter by tone as well as size. A mix rather than `opacity`, so a forced
+   palette can replace it outright instead of dimming the system colour, and
+   so the result is a colour the contrast test can hold to 4.5:1. */
 .hero-summary {
-  max-width: 40ch;
+  max-width: 46ch;
   margin: 0 0 1.75rem;
-  font-size: 1.1875rem;
-  line-height: 1.45;
+  font-size: var(--text-md);
+  line-height: 1.55;
+  color: color-mix(in srgb, var(--color-on-hero) 88%, var(--color-hero));
 }
 
 /* Explicit underline rather than the page's blue gradient: page-link blue
@@ -99,10 +139,16 @@
   text-decoration-thickness: 2px;
 }
 
+/* The portrait fills its column, so its right edge is the right rail. That
+   column is 17.5rem where the measure allows and never more than 35% of it,
+   which keeps the copy the wider of the two on a tablet.
+
+   Its top edge sits on the cap line of the name's first row: down past the
+   kicker (a 1.3125rem line and a 1.5rem margin), then 0.146em of the name,
+   which is how far Inter's capitals start below the top of a 1.02 line box.
+   The clamp restates `.hero-name`'s size so the two stay level as it scales. */
 .hero-portrait {
-  width: min(100%, 13.75rem);
-  margin: 0;
-  justify-self: center;
+  margin: calc(2.8125rem + 0.146 * clamp(2.5rem, 6.5vw, 4rem)) 0 0;
 }
 
 .hero-portrait .theme-portrait,
@@ -112,32 +158,57 @@
   height: auto;
 }
 
-.hero-portrait img {
+/* One white. The photograph's studio backdrop was the brightest thing in the
+   field, a cold second white beside the cream button. Multiplying it by the
+   poster's own text colour brings the backdrop to within a few levels of that
+   cream and leaves the darker tones nearly as they were. forced-colors.css
+   and print.css take the tint away again, where `--color-on-hero` stops being
+   cream. */
+.hero-portrait .theme-portrait {
+  overflow: hidden;
   border-radius: var(--radius-xs);
+}
+
+.hero-portrait .theme-portrait::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-on-hero);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+/* dark-mode.css dims every portrait by a tenth so a white backdrop does not
+   glare at night. This backdrop is already the poster's cream; dimmed again it
+   became a third tone beside the button. */
+.hero-portrait .theme-portrait img {
+  filter: none;
 }
 
 .hero-portrait figcaption {
   margin-top: 0.75rem;
   font-family: var(--font-mono);
-  font-size: var(--text-2xs);
-  text-align: center;
+  font-size: var(--text-xs);
 }
 
+/* The band's lower edge is this section's boundary, so it draws no rule of
+   its own: a 2px one used to sit directly under the field, two edges for one
+   break. The first column is never narrower than its heading, which 23% of a
+   tablet's width was. */
 .home-writing {
   display: grid;
-  grid-template-columns: 23% minmax(0, 1fr);
+  grid-template-columns: minmax(23%, max-content) minmax(0, 1fr);
   gap: 9%;
-  margin-top: 2.25rem;
-  padding-top: 1.5rem;
-  border-top: var(--rule-strong) solid var(--color-fg-bold);
+  margin-top: 3.5rem;
 }
 
+/* Tight, not display, tracking: `--tracking-display` was drawn for the sans. */
 .home-writing h2 {
   margin: 0;
   font-family: var(--font-body);
   font-size: var(--text-xl);
   font-weight: var(--font-weight-normal);
-  letter-spacing: var(--tracking-display);
+  letter-spacing: var(--tracking-tight);
 }
 
 .home-writing-all {
@@ -150,6 +221,12 @@
   font-size: var(--text-ui);
   color: var(--color-fg-light);
   background-image: none;
+}
+
+/* The unlayered colour above outranks the base layer's `a:hover`, which left
+   this link with no hover state at all. */
+.home-writing-all:hover {
+  color: var(--color-accent);
 }
 
 .home-writing-item {
@@ -174,7 +251,7 @@
 .home-writing-meta {
   grid-column: 1;
   font-family: var(--font-mono);
-  font-size: var(--text-2xs);
+  font-size: var(--text-xs);
   color: var(--color-fg-light);
 }
 
@@ -183,22 +260,35 @@
   min-width: 0;
 }
 
+/* The title of a thing, as `/writing` sets the same posts. */
 .home-writing-item h3 {
   margin: 0;
   font-family: var(--font-body);
-  font-size: 1.5rem;
-  font-weight: var(--font-weight-normal);
-  letter-spacing: var(--tracking-tight);
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: -0.01em;
   line-height: 1.2;
   text-wrap: pretty;
 }
 
+/* One line tall, and that line is the title's first. Set against the right
+   rail, so the two arrows' heads line up however wide each one is drawn. */
 .home-writing-arrow {
   grid-column: 2;
   grid-row: 2;
+  justify-self: end;
   color: var(--color-fg-light);
-  font-family: var(--font-display);
   font-size: var(--text-base);
+  line-height: calc(1.2 * var(--text-lg));
+}
+
+/* `→` and `↗` share a column, so they have to be one drawing. Neither is in
+   the self-hosted Inter subset, and left to fall back on their own they came
+   from two fonts (on macOS, Arial and a Korean system face), one arrow half
+   as long again as the other. The system UI face carries both. */
+.home-writing-all span,
+.home-writing-arrow {
+  font-family: system-ui, sans-serif;
 }
 
 .home-writing-item:hover h3,
@@ -208,9 +298,20 @@
   text-underline-offset: 0.2rem;
 }
 
+/* Below 736px the whole page steps down: body type, gutters, the header's
+   navigation. The lede steps with it, not at 641px where the grid becomes two
+   columns. The name is at its smallest there, and a 28px lede beside a 42px
+   name is two voices at one volume again. */
+@media (max-width: 735px) {
+  .hero-tagline {
+    font-size: var(--text-lg);
+    line-height: 1.3;
+  }
+}
+
 @media (max-width: 640px) {
   .hero {
-    padding: 1.5rem 1.25rem;
+    padding: 2.25rem 0 2.5rem;
   }
 
   .hero-name {
@@ -222,22 +323,21 @@
     gap: 2rem;
   }
 
-  .hero-tagline {
-    font-size: 1.1875rem;
-  }
-
+  /* One column, one axis: the portrait follows the buttons on the same left
+     edge as everything above it. */
   .hero-portrait {
-    width: min(100%, 11rem);
+    width: 11rem;
+    margin-top: 0;
   }
 
   .home-writing {
     display: block;
-    margin-top: 2rem;
+    margin-top: 2.5rem;
   }
 
   .home-writing-header {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     justify-content: space-between;
     gap: 0.5rem 1rem;
     flex-wrap: wrap;
