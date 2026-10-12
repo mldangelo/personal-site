@@ -34,12 +34,18 @@
 
   /* Two page measures keep routes aligned without forcing component-sized
      details (portraits, status messages, controls) into page-level tokens.
-     `--measure-wide` is the page measure under a second name. It was 70rem for
-     the header and the homepage, which put the chrome on different rails from
-     the content on every page: the logo sat 112px left of an interior title,
-     and the homepage footer 112px inside the hero above it. It stays because
-     header.css still reads it. */
-  --measure-wide: var(--measure-page); /* Header; alias of the page measure */
+     `--measure-wide` is the page measure under a second name, kept because
+     header.css still reads it. It was 70rem for the header and the homepage,
+     which put the chrome on different rails from the content on every page:
+     the logo sat 112px left of an interior title, and the homepage footer
+     112px inside the hero above it.
+
+     It is capped at its container because the header does arithmetic with it:
+     `(100% - measure) / 2 + 2rem` has to bottom out at the page's own 2rem
+     gutter. A bare 56rem took that below zero under 896px, the header fell
+     back to its 1.5rem floor, and on a tablet it sat 8px outside the content
+     on both sides. */
+  --measure-wide: min(var(--measure-page), 100%); /* Header; the page measure */
   --measure-page: 56rem; /* Default pages, lists, resume, and footer */
   --measure-read: 40rem; /* Continuous prose and compact data views */
 }
