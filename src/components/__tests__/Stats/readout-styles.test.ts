@@ -133,14 +133,19 @@ describe('stats readout styles', () => {
 
   /**
    * A linked value was accent blue with nothing under it, so colour was the
-   * only sign of a link. It is the ink of every other value, over a rule.
+   * only sign of a link. It is the ink of every other value, over a rule —
+   * and the rule is then the only sign, so it has to be one a reader can
+   * find. The control border is the token `contrast.test.ts` holds to 3:1 on
+   * both page surfaces; the structural hairline measured 1.61:1 here.
    */
-  it('draws a linked value in ink over a hairline', () => {
+  it('draws a linked value in ink over a rule that can be seen', () => {
     const link = ruleFor('.stat-table-link');
 
     expect(link.get('color')).toBe('inherit');
     expect(link.get('text-decoration')).toBe('underline');
-    expect(link.get('text-decoration-color')).toBe('var(--color-border-alt)');
+    expect(link.get('text-decoration-color')).toBe(
+      'var(--color-control-border)',
+    );
     expect(link.get('text-decoration-thickness')).toBe('var(--rule)');
   });
 

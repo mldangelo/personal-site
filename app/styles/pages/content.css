@@ -582,11 +582,15 @@
   white-space: nowrap;
 }
 
-/* A linked value is ink over a hairline. It was accent blue with no rule under
+/* A linked value is ink over a rule. It was accent blue with no rule under
    it, so colour was the only sign of a link, and beside an amber age it read
    as a second data colour: one date blue and the next black looked like a
    difference between the dates. The accent now only answers the pointer and
    the keyboard.
+
+   That leaves the rule as the only sign at rest, so it takes the control
+   border, which is held to 3:1 on both page surfaces. Drawn in the structural
+   hairline it measured 1.61:1, and a link nobody could find.
 
    `background-image` clears the animated rule base/links.css draws under
    every bare link. */
@@ -595,7 +599,7 @@
   color: inherit;
   background-image: none;
   text-decoration: underline;
-  text-decoration-color: var(--color-border-alt);
+  text-decoration-color: var(--color-control-border);
   text-decoration-thickness: var(--rule);
   text-underline-offset: 0.18em;
   transition:
