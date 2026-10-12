@@ -115,6 +115,7 @@ describe('armSmoothScroll', () => {
     scrollEnd();
 
     expect(listen.mock.calls.map(([type]) => type).sort()).toEqual([
+      'hashchange',
       'scroll',
       'scrollend',
     ]);
@@ -126,6 +127,159 @@ describe('armSmoothScroll', () => {
     scroll();
     vi.advanceTimersByTime(1000);
     expect(armed()).toBe(false);
+  });
+
+  /**
+   * Back, pressed while the jump is still running. The browser restores the
+   * position it saved, and the animation it was already playing then carries
+   * the page on to the section regardless. Measured: a click from 600px down
+   * the resume followed by Back 150ms later ended at 4,480px, the foot of the
+   * page, under an address with no fragment.
+   */
+  describe('when Back interrupts the jump', () => {
+    const here = window.location.href;
+    const there = `${here}#references`;
+    const origin = (left: number, top: number) => ({
+      left,
+      top,
+      behavior: 'instant',
+    });
+
+    let frames: FrameRequestCallback[];
+
+    function at(left: number, top: number) {
+      Object.defineProperty(window, 'scrollX', {
+        configurable: true,
+        value: left,
+      });
+      Object.defineProperty(window, 'scrollY', {
+        configurable: true,
+        value: top,
+      });
+    }
+
+    /** The address changing by its fragment alone, as a click or Back does. */
+    function hashChange(oldURL: string, newURL: string) {
+      window.dispatchEvent(
+        new HashChangeEvent('hashchange', { oldURL, newURL }),
+      );
+    }
+
+    function nextFrame() {
+      for (const frame of frames.splice(0)) {
+        frame(0);
+      }
+    }
+
+    beforeEach(() => {
+      frames = [];
+      vi.spyOn(window, 'requestAnimationFrame').mockImplementation((callback) =>
+        frames.push(callback),
+      );
+    });
+
+    afterEach(() => {
+      at(0, 0);
+    });
+
+    it('ends the jump where it began, at once', () => {
+      const scrollTo = vi
+        .spyOn(window, 'scrollTo')
+        .mockImplementation(() => {});
+
+      at(0, 600);
+      armSmoothScroll();
+      hashChange(here, there);
+      // The page is well on its way by the time Back arrives.
+      at(0, 2400);
+      scroll();
+      hashChange(there, here);
+
+      expect(scrollTo).toHaveBeenCalledTimes(1);
+      expect(scrollTo).toHaveBeenLastCalledWith(origin(0, 600));
+      expect(armed()).toBe(false);
+    });
+
+    // The animation has a last step already under way when it is stopped,
+    // and that step lands after the first scroll: measured, the page came to
+    // rest 9px to 57px past where it started, more the faster it was moving.
+    it('puts the page there again a frame later, after the last step lands', () => {
+      const scrollTo = vi
+        .spyOn(window, 'scrollTo')
+        .mockImplementation(() => {});
+
+      at(0, 600);
+      armSmoothScroll();
+      at(0, 2400);
+      hashChange(there, here);
+      at(0, 657);
+      nextFrame();
+
+      expect(scrollTo).toHaveBeenCalledTimes(2);
+      expect(scrollTo).toHaveBeenLastCalledWith(origin(0, 600));
+
+      // And then leaves the page to the visitor.
+      nextFrame();
+      expect(scrollTo).toHaveBeenCalledTimes(2);
+    });
+
+    it('is disarmed before it moves the page, so the move cannot animate', () => {
+      const scrollTo = vi.spyOn(window, 'scrollTo').mockImplementation(() => {
+        expect(armed()).toBe(false);
+      });
+
+      armSmoothScroll();
+      hashChange(there, here);
+
+      expect(scrollTo).toHaveBeenCalledTimes(1);
+    });
+
+    // The first version listened for `popstate`, which a fragment navigation
+    // fires for itself: every jump was cancelled as it began, and nothing in
+    // jsdom noticed because jsdom navigates nowhere.
+    it('does not mistake the click arriving at its section for a return', () => {
+      const scrollTo = vi
+        .spyOn(window, 'scrollTo')
+        .mockImplementation(() => {});
+
+      armSmoothScroll();
+      window.dispatchEvent(new PopStateEvent('popstate'));
+      hashChange(here, there);
+      nextFrame();
+
+      expect(scrollTo).not.toHaveBeenCalled();
+      expect(armed()).toBe(true);
+    });
+
+    it('leaves a Back press alone once the jump is over', () => {
+      const scrollTo = vi
+        .spyOn(window, 'scrollTo')
+        .mockImplementation(() => {});
+
+      armSmoothScroll();
+      hashChange(here, there);
+      scrollEnd();
+      hashChange(there, here);
+      nextFrame();
+
+      // Restoring the position is the browser's job, and it does it.
+      expect(scrollTo).not.toHaveBeenCalled();
+    });
+
+    it('returns to where the latest click started, not the first', () => {
+      const scrollTo = vi
+        .spyOn(window, 'scrollTo')
+        .mockImplementation(() => {});
+
+      at(0, 600);
+      armSmoothScroll();
+      at(0, 1800);
+      armSmoothScroll();
+      hashChange(there, here);
+
+      expect(scrollTo).toHaveBeenCalledTimes(1);
+      expect(scrollTo).toHaveBeenLastCalledWith(origin(0, 1800));
+    });
   });
 
   it('listens for scrolling passively', () => {

@@ -36,17 +36,29 @@ let release: (() => void) | undefined;
  * clicks that had nowhere to scroll, fall back to a timer that every `scroll`
  * event restarts — a fixed timeout would have to outlast the longest possible
  * animation, and for that whole time a Back press would animate again.
+ *
+ * A Back press while the jump is still running ends it where it began. The
+ * browser does restore the earlier position, but the animation it was already
+ * playing carries on to the section and leaves the page there, under an
+ * address that no longer names it: a second after a mistaken click, Back put
+ * the visitor at the foot of the page.
  */
 export function armSmoothScroll(): void {
   release?.();
 
   const root = document.documentElement;
+  // Both read before the browser moves. This is the address of the history
+  // entry the click is about to leave, and the position the browser files
+  // against it — so it is where Back returns to.
+  const leaving = window.location.href;
+  const from = { left: window.scrollX, top: window.scrollY };
   let idle: ReturnType<typeof setTimeout> | undefined;
 
   const done = () => {
     clearTimeout(idle);
     window.removeEventListener('scroll', wait);
     window.removeEventListener('scrollend', done);
+    window.removeEventListener('hashchange', returned);
     root.removeAttribute(SMOOTH_SCROLL_ATTRIBUTE);
     release = undefined;
   };
@@ -56,9 +68,29 @@ export function armSmoothScroll(): void {
     idle = setTimeout(done, SCROLL_IDLE_MS);
   };
 
+  // `hashchange`, not `popstate`: a fragment navigation fires `popstate` for
+  // itself, so listening for that ended every jump as it began. The click's
+  // own `hashchange` arrives at the fragment; only a traversal arrives back
+  // at the address the click left.
+  const returned = (event: HashChangeEvent) => {
+    if (event.newURL !== leaving) {
+      return;
+    }
+
+    done();
+    // An explicit scroll is what stops the animation; `instant` so that it
+    // cannot become one itself. Then once more on the next frame: the
+    // animation had a last step already under way, which lands after the
+    // first and left the page up to 57px past where it started.
+    const settle = () => window.scrollTo({ ...from, behavior: 'instant' });
+    settle();
+    window.requestAnimationFrame(settle);
+  };
+
   root.setAttribute(SMOOTH_SCROLL_ATTRIBUTE, '');
   window.addEventListener('scroll', wait, { passive: true });
   window.addEventListener('scrollend', done);
+  window.addEventListener('hashchange', returned);
   release = done;
   wait();
 }
