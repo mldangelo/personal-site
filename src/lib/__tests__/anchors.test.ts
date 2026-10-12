@@ -32,13 +32,30 @@ describe('createHeadingId', () => {
         createHeadingId(title),
       ]),
     ).toEqual([
-      ['Some History', 'some-history'],
-      ['I Like', 'i-like'],
-      ['Travel / Geography', 'travel-geography'],
-      ['Fun Facts', 'fun-facts'],
-      ['I Dream Of', 'i-dream-of'],
-      ['Websites from People I Admire', 'websites-from-people-i-admire'],
+      ['Some history', 'some-history'],
+      ['I like', 'i-like'],
+      ['Travel / geography', 'travel-geography'],
+      ['Fun facts', 'fun-facts'],
+      ['I dream of', 'i-dream-of'],
+      ['Websites from people I admire', 'websites-from-people-i-admire'],
     ]);
+  });
+
+  it('still resolves the links made when those headings were in title case', () => {
+    // The headings were recast in sentence case. Their ids are public deep
+    // links, and an id is read from the words, not from how they are cased.
+    const published = [
+      'Some History',
+      'I Like',
+      'Travel / Geography',
+      'Fun Facts',
+      'I Dream Of',
+      'Websites from People I Admire',
+    ];
+
+    expect(
+      createUniqueHeadingIds(getAboutSectionTitles(aboutMarkdown)),
+    ).toEqual(createUniqueHeadingIds(published));
   });
 });
 
