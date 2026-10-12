@@ -320,11 +320,8 @@
   margin-bottom: 0;
 }
 
-/* Full width rather than shrink-to-fit. As a centred flex item this took the
-   width of its widest child, so a child that changed size moved the whole
-   column — which the address did, while aliases were typed into it. */
 .contact-content {
-  width: 100%;
+  max-width: 100%;
   text-align: center;
 }
 
@@ -333,66 +330,67 @@
   margin-bottom: 2.5rem;
 }
 
-/* The animated address stays the centrepiece. Hidden aliases share
-   one grid cell, reserving room for natural wrapping without moving the page. */
 .contact-email-container {
+  display: block;
   margin-bottom: 0.75rem;
 }
 
+/* The address is the page's one instruction, so it is set as a
+   readout in mono rather than dressed up as a tinted button. */
 .contact-email-link {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  align-items: center;
-  justify-items: center;
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  max-width: 100%;
+  padding: 0.875rem 0;
   font-family: var(--font-mono);
   font-size: clamp(var(--text-xl), 4vw, var(--text-3xl));
   font-weight: var(--font-weight-medium);
   letter-spacing: var(--tracking-tight);
   line-height: var(--leading-tight);
   color: var(--color-fg-bold);
-  background: none;
+  background: transparent;
+  background-image: none;
   border-radius: 0;
+  border-bottom: var(--rule-strong) solid var(--color-accent);
   text-decoration: none;
+  /* The animated alias runs long — "you-can-email-me-at-literally-anything!"
+     pushed 438px of content into a 320px viewport. It has to be allowed to
+     break, mid-token if necessary. */
+  overflow-wrap: anywhere;
+  transition:
+    color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out);
 }
 
 .contact-email-link:hover {
-  background: none;
+  background: transparent;
+  color: var(--color-accent);
+  border-bottom-color: var(--color-accent-hover);
 }
 
-.contact-email-text {
-  grid-area: 1 / 1;
-  display: block;
-  text-align: center;
+/* Flex items default to min-width:auto and refuse to shrink below their
+   content, so the wrapping allowed on the link above never reached the long
+   animated alias. Both halves have to opt in individually. */
+.contact-email-prefix,
+.contact-email-domain {
+  min-width: 0;
   overflow-wrap: anywhere;
-  width: fit-content;
-  max-width: 100%;
-  padding: 0.875rem 0;
-  border-bottom: var(--rule-strong) solid var(--color-accent);
-}
-
-.contact-email-sizer {
-  grid-area: 1 / 1;
-  display: grid;
-  justify-items: center;
-  width: 100%;
-  visibility: hidden;
-  user-select: none;
-  pointer-events: none;
 }
 
 .contact-email-prefix {
-  min-width: 0;
-  overflow-wrap: anywhere;
   color: var(--color-accent);
 }
 
 .contact-email-domain {
-  overflow-wrap: anywhere;
+  color: var(--color-fg-bold);
 }
 
 .contact-hint {
-  font-size: var(--text-base);
-  line-height: 1.5;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide);
   color: var(--color-fg-light);
   margin: 0;
 }

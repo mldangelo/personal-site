@@ -17,13 +17,13 @@ export default function ContactPage() {
     <PageWrapper hideFooter mainClassName="page-main--contact">
       <section className="contact-page">
         <header className="contact-header">
-          <h1 className="page-title">Get in touch</h1>
+          <h1 className="page-title">Get in Touch</h1>
         </header>
 
         <div className="contact-content">
           <div className="contact-email-block">
             <EmailLink />
-            <p className="contact-hint">I usually reply within 24 hours</p>
+            <p className="contact-hint">Usually respond within 24 hours</p>
           </div>
 
           <div className="contact-divider">
