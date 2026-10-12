@@ -477,4 +477,37 @@ describe('about page type', () => {
       /^3 [\d.]+em$/,
     );
   });
+
+  /**
+   * The gutter was 11px tracked capitals, and the lede a `clamp()` whose whole
+   * range was one pixel. Nothing a reader has to read here is transformed,
+   * tracked out, or set at a size off the scale or below 12px.
+   */
+  it('sets no small tracked capitals and no size off the scale', () => {
+    const sizes = page.flatMap((rule) =>
+      rule.declarations
+        .filter(([property]) => property === 'font-size')
+        .map(([, value]): [string, string] => [rule.selectors[0], value]),
+    );
+
+    expect(ruleFor('.log-entry-marker').get('font-size')).toBe(
+      'var(--text-xs)',
+    );
+    for (const [selector, size] of sizes) {
+      expect(size, selector).toMatch(
+        /^var\(--text-(?:xs|ui|sm|base|md|lg|xl|2xl|3xl)\)$/,
+      );
+    }
+
+    for (const rule of page) {
+      const values = rule.declarations.map(([, value]) => value);
+
+      expect(
+        rule.declarations.map(([property]) => property),
+        rule.selectors[0],
+      ).not.toContain('text-transform');
+      expect(values, rule.selectors[0]).not.toContain('var(--tracking-label)');
+      expect(values, rule.selectors[0]).not.toContain('var(--tracking-wide)');
+    }
+  });
 });

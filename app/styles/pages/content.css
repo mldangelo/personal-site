@@ -225,11 +225,14 @@
 }
 
 /* Same gutter-then-spine-then-body arrangement as the resume, so the two
-   records on the site read as one device. */
+   records on the site read as one device. The marker shares the entry's first
+   baseline: it is words and figures now, and at any size that reads as one
+   line where a fixed offset tuned for 11px capitals did not. */
 .about-section--log .log-entry {
   position: relative;
   display: grid;
   grid-template-columns: 4.5rem minmax(0, 1fr);
+  align-items: baseline;
   gap: 0 1.75rem;
   margin-bottom: 1.1rem;
   padding-left: 0;
@@ -283,13 +286,10 @@
   align-items: flex-end;
   gap: 0.1em;
   font-family: var(--font-mono);
-  font-size: var(--text-2xs);
+  font-size: var(--text-xs);
   font-variant-numeric: tabular-nums;
-  letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
   color: var(--color-fg-light);
   text-align: right;
-  padding-top: 0.4em;
   line-height: 1.4;
 }
 
@@ -325,7 +325,6 @@
     align-items: baseline;
     gap: 0 0.5em;
     text-align: left;
-    padding-top: 0;
   }
 
   .log-entry-marker:empty {
