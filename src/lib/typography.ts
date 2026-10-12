@@ -16,18 +16,27 @@ const RIGHT_DOUBLE = '\u201D';
 
 /** Characters a quotation can open after. */
 const OPENS_AFTER = /[\s([{\u2014\u2013\-/]/;
-const WORD = /[\p{L}\p{N}]/u;
 const DIGIT = /\d/;
+
+/**
+ * A letter or digit: ASCII plus accented Latin, written out as ranges.
+ *
+ * Not `\p{L}`. For the browsers this site still targets, the build expands a
+ * Unicode property escape into every code-point range it covers, which put
+ * about 41 kB into each client bundle that imported this file. The same class
+ * is repeated in the two lookaheads below for that reason.
+ */
+const WORD = /[A-Za-z0-9\u00C0-\u024F]/;
 
 /**
  * A string that begins mid-word: the tail of a contraction or possessive whose
  * head sits in a neighbouring element, as in `<a>Promptfoo</a>'s`. Markdown
  * hands text over one node at a time, so this is the only context available.
  */
-const TAIL_AT_START = /^'(?:s|t|re|ve|ll|d|m|em|n)(?![\p{L}\p{N}])/u;
+const TAIL_AT_START = /^'(?:s|t|re|ve|ll|d|m|em|n)(?![A-Za-z0-9\u00C0-\u024F])/;
 
 /** A decade or year elision, as in `'90s` or `'26`. */
-const ELIDED_DIGITS = /^'\d\d(?:s)?(?![\p{L}\p{N}])/u;
+const ELIDED_DIGITS = /^'\d\d(?:s)?(?![A-Za-z0-9\u00C0-\u024F])/;
 
 function singleQuoteFor(text: string, index: number): string {
   const prev = index > 0 ? text[index - 1] : '';
