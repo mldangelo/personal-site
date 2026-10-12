@@ -105,7 +105,12 @@ export default function ThemeToggle() {
   const [lapScheme, setLapScheme] = useState<ResolvedTheme | null>(null);
 
   useEffect(() => {
-    setChoice(readStoredThemeChoice());
+    // A press can get here first (see `cycle`), and its choice is the newer
+    // one. Storage normally hands the same value straight back, but storage
+    // that throws reads as `system`, and adopting that undid the press: the
+    // control's first press did nothing at all for a visitor with site data
+    // blocked.
+    setChoice((pressed) => pressed ?? readStoredThemeChoice());
     // A visitor who arrives on an explicit choice is part-way round already.
     setLapScheme(readSystemScheme());
   }, []);

@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 import { act, fireEvent, render, screen } from '@testing-library/react';
+import { useLayoutEffect } from 'react';
 import { hydrateRoot, type Root } from 'react-dom/client';
 import { renderToStaticMarkup, renderToString } from 'react-dom/server';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -98,6 +99,45 @@ function withoutMatchMedia() {
 
 function other(device: Device): Device {
   return device === 'dark' ? 'light' : 'dark';
+}
+
+/**
+ * The control, pressed from a layout effect: after React has committed it and
+ * before any passive effect — the component's mount effects included — has
+ * run.
+ */
+function PressedOnCommit() {
+  useLayoutEffect(() => {
+    const button = document.querySelector<HTMLButtonElement>(
+      'button.theme-toggle',
+    );
+    if (!button || button.hasAttribute('aria-label')) {
+      throw new Error('expected a theme toggle that has not mounted yet');
+    }
+
+    button.click();
+  }, []);
+
+  return <ThemeToggle />;
+}
+
+/** A storage that rejects every access, as blocked site data does. */
+function withThrowingStorage(run: () => void): void {
+  const original = Object.getOwnPropertyDescriptor(window, 'localStorage');
+  const deny = () => {
+    throw new Error('storage denied');
+  };
+
+  Object.defineProperty(window, 'localStorage', {
+    configurable: true,
+    value: { getItem: deny, setItem: deny, removeItem: deny },
+  });
+
+  try {
+    run();
+  } finally {
+    if (original) Object.defineProperty(window, 'localStorage', original);
+  }
 }
 
 function root() {
@@ -570,16 +610,16 @@ describe('ThemeToggle', () => {
   });
 
   describe('a press that beats the mount effects', () => {
+    // The handler that answers such a press is the first render's, where the
+    // stored choice and the device are both still unread. Ordering the cycle
+    // by the fallback there hands a dark device the no-op first press, so the
+    // handler asks both directly. There are two ways in, and they differ in
+    // which runs first afterwards: the press's own update or the mount
+    // effects'.
+
     /**
-     * Presses the control in the same breath as `hydrateRoot`, which is as
-     * early as a press can land. The handler that answers is the hydration
-     * render's, where the stored choice and the device are both still unread,
-     * and ordering the cycle by the fallback there hands a dark device the
-     * no-op first press.
-     *
-     * A browser reaches the same handler by a different road — hydration
-     * committed, mount effects not yet run. Pressing as early as Chromium
-     * would deliver one against the export landed there every time.
+     * In the same breath as `hydrateRoot`, before React has hydrated the
+     * control at all: it hydrates in order to dispatch the press.
      */
     function pressWhileHydrating(device: Device): void {
       const { host } = serverMarkup();
@@ -596,45 +636,82 @@ describe('ThemeToggle', () => {
       });
     }
 
-    it.each(DEVICES)(
-      'still opens on the other theme on a %s device',
-      (device) => {
-        // What the bootstrap leaves on <html> for a first-time visitor.
+    /**
+     * After React has committed the control and before any passive effect has
+     * run, so the mount effects come *after* the press. This is the gap a
+     * browser's earliest press lands in: pressing as early as Chromium would
+     * deliver one against the export reached the handler there every time.
+     */
+    function pressBeforeMountEffects(device: Device): void {
+      stubColorScheme(device === 'dark');
+      render(<PressedOnCommit />);
+    }
+
+    describe.each([
+      ['before React has hydrated the control', pressWhileHydrating],
+      ['between the commit and the mount effects', pressBeforeMountEffects],
+    ] as const)('%s', (_when, press) => {
+      it.each(DEVICES)(
+        'still opens on the other theme on a %s device',
+        (device) => {
+          // What the bootstrap leaves on <html> for a first-time visitor.
+          root().setAttribute(THEME_CHOICE_ATTRIBUTE, 'system');
+          root().setAttribute(THEME_ATTRIBUTE, device);
+
+          press(device);
+
+          expect(reading()).toEqual(LAP[device][1]);
+          expect(toggle()).toHaveAccessibleName(LABEL[device][other(device)]);
+        },
+      );
+
+      it.each(DEVICES)(
+        'finishes the lap it started on a %s device',
+        (device) => {
+          root().setAttribute(THEME_CHOICE_ATTRIBUTE, 'system');
+          root().setAttribute(THEME_ATTRIBUTE, device);
+
+          press(device);
+          fireEvent.click(toggle());
+          expect(reading()).toEqual(LAP[device][2]);
+
+          fireEvent.click(toggle());
+          expect(reading()).toEqual(LAP[device][3]);
+        },
+      );
+
+      it('starts from the stored choice, read at the press', () => {
+        // Dark stored, light device: dark is the lap's first stop there, so
+        // the press goes on to light rather than back to `system`.
+        window.localStorage.setItem(THEME_STORAGE_KEY, 'dark');
+        root().setAttribute(THEME_CHOICE_ATTRIBUTE, 'dark');
+        root().setAttribute(THEME_ATTRIBUTE, 'dark');
+
+        press('light');
+
+        expect(reading()).toEqual({
+          choice: 'light',
+          theme: 'light',
+          stored: 'light',
+        });
+      });
+
+      it.each(DEVICES)('holds on a %s device when storage throws', (device) => {
+        // Site data blocked: nothing can be written and nothing read back,
+        // so storage reads as `system`. A mount effect that runs after the
+        // press and adopts that reading undoes the press — measured against
+        // the export, the first press of the visit then did nothing at all.
         root().setAttribute(THEME_CHOICE_ATTRIBUTE, 'system');
         root().setAttribute(THEME_ATTRIBUTE, device);
 
-        pressWhileHydrating(device);
+        withThrowingStorage(() => press(device));
 
-        expect(reading()).toEqual(LAP[device][1]);
+        expect(reading()).toEqual({
+          choice: other(device),
+          theme: other(device),
+          stored: null,
+        });
         expect(toggle()).toHaveAccessibleName(LABEL[device][other(device)]);
-      },
-    );
-
-    it.each(DEVICES)('finishes the lap it started on a %s device', (device) => {
-      root().setAttribute(THEME_CHOICE_ATTRIBUTE, 'system');
-      root().setAttribute(THEME_ATTRIBUTE, device);
-
-      pressWhileHydrating(device);
-      fireEvent.click(toggle());
-      expect(reading()).toEqual(LAP[device][2]);
-
-      fireEvent.click(toggle());
-      expect(reading()).toEqual(LAP[device][3]);
-    });
-
-    it('starts from the stored choice, read at the press', () => {
-      // Dark stored, light device: dark is the lap's first stop there, so the
-      // press goes on to light rather than back to `system`.
-      window.localStorage.setItem(THEME_STORAGE_KEY, 'dark');
-      root().setAttribute(THEME_CHOICE_ATTRIBUTE, 'dark');
-      root().setAttribute(THEME_ATTRIBUTE, 'dark');
-
-      pressWhileHydrating('light');
-
-      expect(reading()).toEqual({
-        choice: 'light',
-        theme: 'light',
-        stored: 'light',
       });
     });
   });
