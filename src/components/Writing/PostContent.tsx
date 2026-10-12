@@ -1,6 +1,6 @@
 'use client';
 
-import Markdown from 'markdown-to-jsx';
+import Markdown, { type MarkdownToJSX, RuleType } from 'markdown-to-jsx';
 import Image from 'next/image';
 import type {
   ElementType,
@@ -19,6 +19,7 @@ import {
 } from 'react';
 
 import { planMarkdownHeadingAnchors } from '@/lib/anchors';
+import { smartQuotes } from '@/lib/typography';
 
 interface ImageSize {
   width: number;
@@ -274,6 +275,82 @@ function CodeFence({ children }: { children?: ReactNode }) {
   );
 }
 
+/**
+ * Raw HTML whose text is code, keyboard input, or program output.
+ *
+ * Backtick spans and fences are node types of their own and never reach the
+ * text rule below. An author's `<kbd>'</kbd>` does: markdown-to-jsx parses the
+ * inside of raw HTML as Markdown, so its text arrives as ordinary text nodes.
+ */
+const VERBATIM_TAGS = new Set(['code', 'kbd', 'pre', 'samp', 'var']);
+
+/** True where a node's text is something to be typed, not something to read. */
+function isVerbatim(node: MarkdownToJSX.ASTNode): boolean {
+  if (node.type === RuleType.htmlBlock) {
+    return VERBATIM_TAGS.has(node.tag.toLowerCase());
+  }
+
+  // A bare or angle-bracketed URL, and an address written the same way: the
+  // link text is the destination itself, and a curled apostrophe in it is a
+  // different address for anyone who copies what they see.
+  if (node.type === RuleType.link && node.children.length === 1) {
+    const [label] = node.children;
+
+    return (
+      label.type === RuleType.text &&
+      (label.text === node.target || `mailto:${label.text}` === node.target)
+    );
+  }
+
+  return false;
+}
+
+const OPENING_QUOTE: Record<string, string | undefined> = {
+  '"': '\u201C',
+  "'": '\u2018',
+};
+
+/**
+ * Typographic quotes for the prose of a post, and for nothing else in it.
+ *
+ * Only text nodes are converted. Code spans, fences, and every attribute — a
+ * link's href and title, an image's alt — are other parts of the tree, so they
+ * keep the characters that were typed. A fresh rule per render, because it
+ * counts its way in and out of the verbatim elements above.
+ */
+function typographicQuotes(): NonNullable<MarkdownToJSX.Options['renderRule']> {
+  // `next()` renders a node's children before it returns, so this is back to
+  // zero by the time the element's next sibling is visited.
+  let verbatimDepth = 0;
+
+  return (next, node, _renderChildren, state) => {
+    if (node.type === RuleType.text) {
+      if (verbatimDepth > 0) {
+        return next();
+      }
+
+      // `smartQuotes` sees one node at a time, and reads a quote with nothing
+      // after it as closing one opened in an earlier node. When the quote is
+      // its parent's first child there is no earlier node: `"[Title](url)"`
+      // and `"*emphasis*"` open with it.
+      const opening = state.key === 0 ? OPENING_QUOTE[node.text] : undefined;
+
+      return opening ?? smartQuotes(node.text);
+    }
+
+    if (!isVerbatim(node)) {
+      return next();
+    }
+
+    verbatimDepth += 1;
+    try {
+      return next();
+    } finally {
+      verbatimDepth -= 1;
+    }
+  };
+}
+
 export default function PostContent({
   allowMissingLocalImages = false,
   content,
@@ -340,6 +417,9 @@ export default function PostContent({
         // leaves safe aliases for ids that were published under the library's
         // old default scheme.
         slugify: headingPlan.slugify,
+        // Heading ids are planned from the source above, before this runs, so
+        // curling a heading's apostrophe cannot move its anchor.
+        renderRule: typographicQuotes(),
         overrides: {
           ...headingOverrides(headingPlan.aliases),
           p: {

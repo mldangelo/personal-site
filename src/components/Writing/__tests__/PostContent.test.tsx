@@ -1,6 +1,7 @@
 import { act, fireEvent, render } from '@testing-library/react';
 import { StrictMode } from 'react';
-import { renderToStaticMarkup } from 'react-dom/server';
+import { hydrateRoot, type Root } from 'react-dom/client';
+import { renderToStaticMarkup, renderToString } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 
 import { createHeadingId } from '@/lib/anchors';
@@ -353,6 +354,226 @@ describe('PostContent code fences', () => {
     );
 
     expect(html).not.toContain('prose-fence-lang');
+  });
+});
+
+/**
+ * What a reader sees takes typographic quotes; what a machine or a keyboard
+ * would use keeps the characters that were typed. `renderToStaticMarkup`
+ * escapes a straight quote in text as an entity, so the two cannot be confused
+ * in these assertions: `“` is the conversion, `&quot;` and `&#x27;` are the
+ * originals.
+ */
+describe('PostContent typographic quotes', () => {
+  it('converts prose and leaves a code span in the same paragraph alone', () => {
+    const html = renderToStaticMarkup(
+      <PostContent
+        content={'She said "quoted" and typed `"code"`, and it\'s fine.\n'}
+      />,
+    );
+
+    expect(html).toBe(
+      '<p>She said “quoted” and typed <code>&quot;code&quot;</code>, and it’s fine.</p>',
+    );
+  });
+
+  it('leaves a code fence alone', () => {
+    const html = renderToStaticMarkup(
+      <PostContent
+        content={
+          'Before "a".\n\n```js\nconst s = "it\'s";\n```\n\nAfter "b".\n'
+        }
+      />,
+    );
+
+    expect(html).toContain('const s = &quot;it&#x27;s&quot;;');
+    expect(html).toContain('<p>Before “a”.</p>');
+    expect(html).toContain('<p>After “b”.</p>');
+  });
+
+  it('leaves every attribute as it was typed', () => {
+    const html = renderToStaticMarkup(
+      <PostContent
+        content={
+          'See ["the title"](https://example.com/it\'s "it\'s a tip") and ![it\'s "alt"](https://example.com/a.png "it\'s here") now.\n'
+        }
+      />,
+    );
+
+    expect(html).toContain('href="https://example.com/it&#x27;s"');
+    expect(html).toContain('title="it&#x27;s a tip"');
+    expect(html).toContain('alt="it&#x27;s &quot;alt&quot;"');
+    expect(html).toContain('title="it&#x27;s here"');
+    // The link text is prose, and is the one part of that link a reader reads.
+    expect(html).toContain('>“the title”</a>');
+  });
+
+  it('leaves raw HTML code and keyboard input alone, then resumes', () => {
+    const html = renderToStaticMarkup(
+      <PostContent
+        content={
+          "Press <kbd>'</kbd> or <code><b>\"x\"</b> it's</code> for \"quotes\", and <samp>'out'</samp> isn't prose.\n"
+        }
+      />,
+    );
+
+    expect(html).toContain('<kbd>&#x27;</kbd>');
+    expect(html).toContain('<code><b>&quot;x&quot;</b> it&#x27;s</code>');
+    expect(html).toContain('<samp>&#x27;out&#x27;</samp>');
+    // Each verbatim element is left behind before the text after it is read.
+    expect(html).toContain(' for “quotes”, and ');
+    expect(html).toContain(' isn’t prose.');
+  });
+
+  it('converts prose inside ordinary raw HTML', () => {
+    const html = renderToStaticMarkup(
+      <PostContent
+        content={'An <abbr title="it\'s">it\'s</abbr> and <b>"bold"</b>.\n'}
+      />,
+    );
+
+    expect(html).toContain('<abbr title="it&#x27;s">it’s</abbr>');
+    expect(html).toContain('<b>“bold”</b>');
+  });
+
+  it('leaves a bare URL and a bare address reading as their destinations', () => {
+    const html = renderToStaticMarkup(
+      <PostContent
+        content={
+          "It's at https://en.wikipedia.org/wiki/Zeno's_paradoxes or <o'brien@example.com>.\n"
+        }
+      />,
+    );
+
+    expect(html).toContain(
+      '>https://en.wikipedia.org/wiki/Zeno&#x27;s_paradoxes</a>',
+    );
+    expect(html).toContain('>o&#x27;brien@example.com</a>');
+    expect(html).toContain('<p>It’s at ');
+  });
+
+  it('opens a quotation that begins a block ahead of a link or emphasis', () => {
+    const html = renderToStaticMarkup(
+      <PostContent
+        content={
+          '"[A title](https://example.com)" by someone.\n\n- "*Move fast*" was the mantra\n\n## "`code`" in a heading\n'
+        }
+      />,
+    );
+
+    // Each quotation mark arrives as a text node of its own, with nothing in
+    // it to say which way it faces.
+    expect(html).toContain(
+      '<p>“<a href="https://example.com">A title</a>” by someone.</p>',
+    );
+    expect(html).toContain('<li>“<em>Move fast</em>” was the mantra</li>');
+    expect(html).toContain('>“<code>code</code>” in a heading</h2>');
+  });
+
+  it('closes a quotation that ends a block after a link', () => {
+    const html = renderToStaticMarkup(
+      <PostContent
+        content={'They called it "[a title](https://example.com)"\n'}
+      />,
+    );
+
+    expect(html).toBe(
+      '<p>They called it “<a href="https://example.com">a title</a>”</p>',
+    );
+  });
+
+  it('converts headings, lists, quotations, tables, and footnotes', () => {
+    const html = renderToStaticMarkup(
+      <PostContent
+        content={
+          '## What\'s changed\n\n- a user\'s session\n\n> It\'s "quoted".\n\n| "H" |\n| --- |\n| it\'s |\n\nA claim.[^n]\n\n[^n]: It\'s a "footnote".\n'
+        }
+      />,
+    );
+
+    expect(html).toContain('>What’s changed</h2>');
+    expect(html).toContain('<li>a user’s session</li>');
+    expect(html).toContain('<blockquote><p>It’s “quoted”.</p></blockquote>');
+    expect(html).toContain('<th>“H”</th>');
+    expect(html).toContain('<td>it’s</td>');
+    expect(html).toContain('It’s a “footnote”.');
+  });
+
+  it('does not move a heading whose apostrophe it curls', () => {
+    const html = renderToStaticMarkup(
+      <PostContent content={'## What\'s "changed"\n'} />,
+    );
+
+    // Ids are planned from the source before anything is rendered.
+    expect(headingIds(html)).toEqual([createHeadingId('What\'s "changed"')]);
+    expect(headingIds(html)).toEqual(['whats-changed']);
+    expect(html).toContain('>What’s “changed”</h2>');
+  });
+
+  it('hydrates the server markup without a mismatch', async () => {
+    // The rule counts its way through verbatim elements. Strict Mode compiles
+    // twice, so a count that leaked between passes would curl the `<kbd>` on
+    // one side of hydration and not the other.
+    const article = (
+      <StrictMode>
+        <PostContent
+          content={
+            'It\'s "quoted", <kbd>\'</kbd> then "more", and `"code"`.\n\n"[A title](https://example.com)" closes it.\n'
+          }
+        />
+      </StrictMode>
+    );
+    const container = document.createElement('div');
+    container.innerHTML = renderToString(article);
+    document.body.append(container);
+
+    const mismatches: unknown[] = [];
+    let root: Root | undefined;
+    await act(async () => {
+      root = hydrateRoot(container, article, {
+        onRecoverableError: (error) => mismatches.push(error),
+      });
+    });
+
+    expect(mismatches).toEqual([]);
+    expect(container.querySelector('kbd')).toHaveTextContent("'");
+    expect(container.querySelector('code')).toHaveTextContent('"code"');
+    expect(container).toHaveTextContent("It’s “quoted”, ' then “more”");
+    expect(container).toHaveTextContent('“A title” closes it.');
+
+    act(() => root?.unmount());
+    container.remove();
+  });
+
+  it('leaves no typewriter quote against a letter in any published post', () => {
+    // A quotation mark or apostrophe always touches a letter; a mark that
+    // only touches digits is a measurement (`5'10"`) and is left as typed, so
+    // a post that states one does not turn this red.
+    const typewriterQuote = /\p{L}['"]|['"]\p{L}/u;
+    const posts = getAllPosts();
+
+    // The sources are written with a keyboard, so the loop below cannot pass
+    // by there being nothing to convert.
+    expect(posts.some((post) => typewriterQuote.test(post.content))).toBe(true);
+
+    for (const post of posts) {
+      const html = renderToStaticMarkup(
+        <PostContent
+          content={post.content}
+          imageSizes={readPostImageSizes(post.content)}
+        />,
+      );
+      const document = new DOMParser().parseFromString(html, 'text/html');
+      // Code is typed, and a caption is an image's `title` attribute promoted
+      // to the page: neither is a Markdown text node, so neither is converted.
+      for (const literal of document.querySelectorAll(
+        'pre, code, kbd, samp, figcaption',
+      )) {
+        literal.remove();
+      }
+
+      expect(document.body.textContent, post.slug).not.toMatch(typewriterQuote);
+    }
   });
 });
 
