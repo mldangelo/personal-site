@@ -614,3 +614,116 @@
     width: min(var(--figure-width, 100%), 100%);
   }
 }
+
+/* ========================================
+   ONWARD
+   An essay used to end and the page simply stopped. This is the way out of
+   it: the essays either side, then the list and the feed. It sits under a
+   section rule on the reading measure, so it reads as the next thing after
+   the text rather than as part of the footer.
+   ======================================== */
+
+.post-onward {
+  max-width: var(--measure-read);
+  margin-top: 4rem;
+  padding-top: var(--spacing-6);
+  border-top: var(--rule) solid var(--color-fg-bold);
+}
+
+/* The neighbours share the line equally and wrap one above the other when it
+   is too short for two. Shares, not fixed columns: the newest and the oldest
+   essay have one neighbour, and it takes the whole line rather than half of
+   it beside a hole. */
+.post-onward-neighbours {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-4) var(--spacing-8);
+  margin-bottom: var(--spacing-5);
+}
+
+.post-onward-neighbour {
+  flex: 1 1 16rem;
+  min-width: 0;
+  padding: 0.25rem 0;
+  text-decoration: none;
+  background-image: none;
+}
+
+/* Which way the neighbour lies. Set as the index sets a date: the two are the
+   same axis, and the label stands where the date would. */
+.post-onward-label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  line-height: 1.5;
+  color: var(--color-fg-light);
+}
+
+/* The title of a thing, at the standard size. */
+.post-onward-title {
+  display: block;
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  color: var(--color-fg-bold);
+  text-wrap: balance;
+  transition: color var(--duration-instant) var(--ease-out);
+}
+
+.post-onward-neighbour:hover .post-onward-title,
+.post-onward-neighbour:focus-visible .post-onward-title {
+  color: var(--color-accent);
+}
+
+/* The list and the feed close the block at opposite ends of the measure, as
+   the page title and the RSS control open the index. Plain links here: a
+   bordered control beside two essay titles was the loudest thing in a block
+   that exists to point at the essays. */
+.post-onward-index {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--spacing-4);
+}
+
+.post-onward-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  font-family: var(--font-display);
+  font-size: var(--text-ui);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-fg-light);
+  background-image: none;
+}
+
+/* Three letters in a 44px target. The target is centred on them and pulled out
+   by its own padding, so the letters end on the measure's edge and the focus
+   ring still sits evenly around them. */
+.post-onward-link:last-child {
+  justify-content: center;
+  padding-inline: 0.625rem;
+  margin-inline-end: -0.625rem;
+}
+
+/* The unlayered colour above outranks the base layer's `a:hover`. */
+.post-onward-link:hover {
+  color: var(--color-accent);
+}
+
+/* The arrow is not in the self-hosted Inter subset, and left to fall back by
+   itself it is drawn by whichever face the platform reaches first. The
+   system UI face has it. */
+.post-onward-link span {
+  font-family: system-ui, sans-serif;
+}
+
+/* Navigation has nowhere to go on paper. */
+@media print {
+  .post-onward {
+    display: none;
+  }
+}

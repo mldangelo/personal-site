@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { SchemaGraph } from '@/components/Schema';
 import PageWrapper from '@/components/Template/PageWrapper';
 import PostContent from '@/components/Writing/PostContent';
+import PostOnward from '@/components/Writing/PostOnward';
 import ReadingProgress from '@/components/Writing/ReadingProgress';
 import {
   type ImageSize,
@@ -19,6 +20,7 @@ import {
 } from '@/lib/schema';
 import { smartQuotes } from '@/lib/typography';
 import { AUTHOR_NAME, formatDate, SITE_URL } from '@/lib/utils';
+import { getPostNeighbours } from '@/lib/writing';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -196,6 +198,7 @@ export default async function PostPage({ params }: PageProps) {
           />
         </div>
       </article>
+      <PostOnward {...getPostNeighbours(post.slug)} />
     </PageWrapper>
   );
 }
