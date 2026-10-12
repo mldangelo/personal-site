@@ -3,7 +3,9 @@
    Fixed navigation and mobile menu
    ======================================== */
 
-/* Skip link — offscreen until focused, then pinned over the header. */
+/* Skip link — offscreen until focused, then pinned over the header. It is the
+   first control on every page and is set like the ones after it; it was the
+   last text on the site still in tracked mono capitals. */
 .skip-link {
   position: fixed;
   top: 0.5rem;
@@ -12,10 +14,9 @@
   padding: 0.75rem 1.25rem;
   background: var(--color-accent-fill);
   color: var(--color-on-accent);
-  font-family: var(--font-mono);
+  font-family: var(--font-display);
   font-size: var(--text-ui);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
+  font-weight: var(--font-weight-medium);
   text-decoration: none;
   background-image: none;
   border-radius: var(--radius-sm);

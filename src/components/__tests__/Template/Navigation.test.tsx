@@ -143,6 +143,24 @@ describe('Navigation', () => {
     }
   });
 
+  /**
+   * The skip link is the first control a keyboard reaches on every page. It
+   * was the last text on the site in tracked mono capitals, a page after the
+   * navigation beside it moved to sentence case.
+   */
+  it('sets the skip link like the navigation it sits over', () => {
+    const css = readFileSync(
+      join(process.cwd(), 'app/styles/layout/header.css'),
+      'utf8',
+    ).replace(/\/\*[\s\S]*?\*\//g, '');
+    const skipLink = /\.skip-link\s*\{([^}]*)\}/.exec(css)?.[1] ?? '';
+
+    expect(skipLink).toContain('font-family: var(--font-display);');
+    expect(skipLink).toContain('font-size: var(--text-ui);');
+    expect(skipLink).not.toContain('text-transform');
+    expect(skipLink).not.toContain('letter-spacing');
+  });
+
   it('labels the primary navigation landmark', () => {
     render(<Navigation />);
 
