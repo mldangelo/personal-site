@@ -51,10 +51,14 @@
   white-space: nowrap;
 }
 
-/* Sentence-case display type keeps navigation distinct from data labels. */
+/* Sentence-case display type keeps navigation distinct from data labels.
+   The gap closes up as the header narrows. At tablet widths the centred nav
+   sits near the wordmark, and at the full 1.75rem its items stood almost as
+   far from each other as the first stood from the name, which made the name
+   read as one of them. */
 .nav-links {
   display: none;
-  gap: 1.75rem;
+  gap: clamp(1.25rem, 2.75vw, 1.75rem);
   align-items: center;
 }
 
