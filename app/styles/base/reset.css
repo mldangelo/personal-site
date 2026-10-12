@@ -4,8 +4,15 @@
    ======================================== */
 
 @layer base {
-  html {
-    scroll-behavior: smooth;
+  /* Smooth scrolling is armed for one jump at a time, never set outright:
+     `armSmoothScroll` stamps this attribute when a section-nav link is clicked
+     and takes it off when the scroll ends. On `html` unconditionally, the
+     property also animated the browser's own scroll restoration, so Back into
+     a long article took over a second to arrive where it had been left. */
+  @media (prefers-reduced-motion: no-preference) {
+    html[data-smooth-scroll] {
+      scroll-behavior: smooth;
+    }
   }
 
   /* Respect reduced motion for scrolling and interactive transitions. */
