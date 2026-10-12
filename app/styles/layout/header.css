@@ -184,9 +184,16 @@
   padding: 0;
 }
 
-.hamburger-button:hover {
-  box-shadow: none;
-  opacity: 0.5;
+/* Hover takes the accent the focused glyph below already uses. It used to
+   halve the button's opacity: a hover state that lowered contrast. Skipped
+   under a forced palette, which paints any background colour that is not a
+   system colour as Canvas — at (0,3,1) this would outrank the CanvasText that
+   forced-colors.css gives the bars and erase them for as long as the pointer
+   rests on the button. */
+@media (forced-colors: none) {
+  .hamburger-button:hover .hamburger-icon span {
+    background-color: var(--color-accent);
+  }
 }
 
 .hamburger-button:focus-visible .hamburger-icon span {
