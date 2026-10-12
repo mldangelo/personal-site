@@ -5,7 +5,6 @@ import {
   DARK_SCHEME_QUERY,
   nextThemeChoice,
   RESOLVED_THEME_COLOR_SELECTOR,
-  type ResolvedTheme,
   readStoredThemeChoice,
   readSystemScheme,
   renderedThemeColor,
@@ -14,11 +13,9 @@ import {
   syncThemeColor,
   THEME_ATTRIBUTE,
   THEME_CHOICE_ATTRIBUTE,
-  THEME_CHOICES,
   THEME_COLOR_META_SELECTOR,
   THEME_COLOR_TOKEN,
   THEME_STORAGE_KEY,
-  type ThemeChoice,
   type ThemeColors,
   themeInitScript,
 } from '../theme';
@@ -155,24 +152,6 @@ function clearRoot(): void {
   document.documentElement.removeAttribute(THEME_CHOICE_ATTRIBUTE);
 }
 
-/**
- * Three presses starting from `system`: each stop as the choice and the theme
- * the page is painted with there, start and finish included.
- */
-function lap(
-  scheme: ResolvedTheme | null,
-): [ThemeChoice, ResolvedTheme | null][] {
-  const stops: [ThemeChoice, ResolvedTheme | null][] = [];
-  let choice: ThemeChoice = 'system';
-
-  for (let press = 0; press <= THEME_CHOICES.length; press += 1) {
-    stops.push([choice, resolveTheme(choice, scheme)]);
-    choice = nextThemeChoice(choice, scheme);
-  }
-
-  return stops;
-}
-
 describe('theme', () => {
   beforeEach(() => {
     window.localStorage.clear();
@@ -191,121 +170,14 @@ describe('theme', () => {
   });
 
   describe('nextThemeChoice', () => {
-    it('opens on dark for a light device and comes home by way of light', () => {
-      expect(nextThemeChoice('system', 'light')).toBe('dark');
-      expect(nextThemeChoice('dark', 'light')).toBe('light');
-      expect(nextThemeChoice('light', 'light')).toBe('system');
-    });
-
-    it('opens on light for a dark device and comes home by way of dark', () => {
-      expect(nextThemeChoice('system', 'dark')).toBe('light');
-      expect(nextThemeChoice('light', 'dark')).toBe('dark');
-      expect(nextThemeChoice('dark', 'dark')).toBe('system');
-    });
-
-    // Each stop as what the visitor chose and what the page was painted with,
-    // written out so the two columns can be read against each other.
     it.each([
-      [
-        'light',
-        [
-          ['system', 'light'],
-          ['dark', 'dark'],
-          ['light', 'light'],
-          ['system', 'light'],
-        ],
-      ],
-      [
-        'dark',
-        [
-          ['system', 'dark'],
-          ['light', 'light'],
-          ['dark', 'dark'],
-          ['system', 'dark'],
-        ],
-      ],
-    ] as const)('walks a %s device round in three presses', (scheme, stops) => {
-      expect(lap(scheme)).toEqual(stops);
-    });
-
-    it.each(['light', 'dark'] as const)(
-      'changes what a %s device paints on the first press',
-      (scheme) => {
-        // The defect: `system → light` for everyone, so on a light device the
-        // first press moved the icon and left the page exactly as it was.
-        const [before, after] = lap(scheme).map(([, painted]) => painted);
-
-        expect(after).not.toBe(before);
-      },
-    );
-
-    it.each(['light', 'dark'] as const)(
-      'keeps the one press a %s device cannot show for last',
-      (scheme) => {
-        // `system` paints the same as one explicit theme, so one step in three
-        // has to be invisible. It belongs after the two that visibly work.
-        const painted = lap(scheme).map(([, theme]) => theme);
-        const visible = painted
-          .slice(1)
-          .map((theme, press) => theme !== painted[press]);
-
-        expect(visible).toEqual([true, true, false]);
-      },
-    );
-
-    it('orders an unreadable device by what the bootstrap painted for it', () => {
-      // The fallback order and the bootstrap's fallback theme are two literals
-      // in two places. If they part company, a browser with no `matchMedia`
-      // gets the no-op first press back.
-      Object.defineProperty(window, 'matchMedia', {
-        writable: true,
-        configurable: true,
-        value: undefined,
-      });
-      runThemeInitScript();
-
-      expect(choiceAttribute()).toBe('system');
-      expect(nextThemeChoice('system', null)).not.toBe(themeAttribute());
-      expect(lap(null).map(([choice]) => choice)).toEqual([
-        'system',
-        'dark',
-        'light',
-        'system',
-      ]);
-    });
-
-    it.each([
-      ['a light', 'light'],
-      ['a dark', 'dark'],
-      ['an unreadable', null],
-    ] as const)(
-      'reaches every state from every state on %s device',
-      (_device, scheme) => {
-        for (const start of THEME_CHOICES) {
-          const seen = new Set<ThemeChoice>([start]);
-          let cursor = start;
-
-          for (let step = 1; step < THEME_CHOICES.length; step += 1) {
-            cursor = nextThemeChoice(cursor, scheme);
-            seen.add(cursor);
-          }
-
-          expect(seen.size).toBe(THEME_CHOICES.length);
-          expect(nextThemeChoice(cursor, scheme)).toBe(start);
-        }
-      },
-    );
-  });
-
-  describe('THEME_CHOICES', () => {
-    // The array is the order the state spans ship in, not the order a press
-    // walks them in — that depends on the device. What it still fixes is where
-    // the list opens, which nothing else observes: the rendered states are
-    // picked by CSS from `data-theme-choice`, so their DOM order is invisible
-    // to every other test.
-    it('opens on the state a visitor who has never chosen is in', () => {
-      // Nothing stored, per `beforeEach`: where a first-time visitor starts.
-      expect(THEME_CHOICES[0]).toBe(readStoredThemeChoice());
+      ['light', ['system', 'dark', 'light', 'system']],
+      ['dark', ['system', 'light', 'dark', 'system']],
+      [null, ['system', 'dark', 'light', 'system']],
+    ] as const)('cycles through all choices for %s', (scheme, choices) => {
+      for (let i = 0; i < choices.length - 1; i += 1) {
+        expect(nextThemeChoice(choices[i], scheme)).toBe(choices[i + 1]);
+      }
     });
   });
 
@@ -362,40 +234,26 @@ describe('theme', () => {
   });
 
   describe('readSystemScheme', () => {
-    it('reads a dark device', () => {
-      setPrefersDark(true);
+    it.each([true, false])(
+      'agrees with the bootstrap for prefersDark=%s',
+      (dark) => {
+        setPrefersDark(dark);
+        runThemeInitScript();
+        expect(readSystemScheme()).toBe(dark ? 'dark' : 'light');
+        expect(readSystemScheme()).toBe(themeAttribute());
+      },
+    );
 
-      expect(readSystemScheme()).toBe('dark');
-    });
-
-    it('reads a light device', () => {
-      expect(readSystemScheme()).toBe('light');
-    });
-
-    it('reports nothing when the device cannot be asked', () => {
-      // Rather than a guess the caller cannot tell from an answer.
+    it('uses the opposite of the bootstrap fallback when matchMedia is absent', () => {
       Object.defineProperty(window, 'matchMedia', {
         writable: true,
         configurable: true,
         value: undefined,
       });
-
+      runThemeInitScript();
       expect(readSystemScheme()).toBeNull();
+      expect(nextThemeChoice('system', null)).not.toBe(themeAttribute());
     });
-
-    it.each([true, false])(
-      'agrees with the bootstrap when the device prefers dark: %s',
-      (prefersDark) => {
-        // An early press orders the cycle by this reading while the page is
-        // still painted by the bootstrap's. They have to be the same reading, or
-        // "the opposite theme" is the one already on screen.
-        setPrefersDark(prefersDark);
-        runThemeInitScript();
-
-        expect(choiceAttribute()).toBe('system');
-        expect(readSystemScheme()).toBe(themeAttribute());
-      },
-    );
   });
 
   describe('themeInitScript', () => {

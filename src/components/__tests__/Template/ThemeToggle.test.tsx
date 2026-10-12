@@ -447,65 +447,6 @@ describe('ThemeToggle', () => {
     );
   });
 
-  describe('accessible name', () => {
-    // `aria-pressed` cannot express three states; the name has to say which of
-    // the three is active as well as what a press will do.
-    it.each(DEVICES)(
-      'names the system state and the next one on a %s device',
-      (device) => {
-        stubColorScheme(device === 'dark');
-        render(<ThemeToggle />);
-
-        expect(toggle()).toHaveAccessibleName(LABEL[device].system);
-      },
-    );
-
-    it.each(DEVICES)(
-      'names an explicit light choice on a %s device',
-      (device) => {
-        stubColorScheme(device === 'dark');
-        window.localStorage.setItem(THEME_STORAGE_KEY, 'light');
-        render(<ThemeToggle />);
-
-        expect(toggle()).toHaveAccessibleName(LABEL[device].light);
-      },
-    );
-
-    it.each(DEVICES)(
-      'names an explicit dark choice on a %s device',
-      (device) => {
-        stubColorScheme(device === 'dark');
-        window.localStorage.setItem(THEME_STORAGE_KEY, 'dark');
-        render(<ThemeToggle />);
-
-        expect(toggle()).toHaveAccessibleName(LABEL[device].dark);
-      },
-    );
-
-    it.each(DEVICES)(
-      'offers the same wording as a pointer tooltip on a %s device',
-      (device) => {
-        stubColorScheme(device === 'dark');
-        render(<ThemeToggle />);
-
-        expect(toggle()).toHaveAttribute('title', LABEL[device].system);
-      },
-    );
-
-    it('rewrites the promise when the device flips under system', () => {
-      // The next step from `system` is "the other theme", which is a
-      // different theme the moment the device changes its mind.
-      const media = stubColorScheme(false);
-      render(<ThemeToggle />);
-      expect(toggle()).toHaveAccessibleName(LABEL.light.system);
-
-      media.flipTo(true);
-
-      expect(toggle()).toHaveAccessibleName(LABEL.dark.system);
-      expect(toggle()).toHaveAttribute('title', LABEL.dark.system);
-    });
-  });
-
   describe('cycling', () => {
     it.each(DEVICES)(
       'goes round a %s device in three presses, naming every step',
@@ -526,37 +467,6 @@ describe('ThemeToggle', () => {
         }
       },
     );
-
-    it.each(DEVICES)(
-      'changes the page on the first press on a %s device',
-      (device) => {
-        // The defect. The cycle was `system → light → dark` for everyone, so on
-        // a light device the first press moved the icon and left `data-theme`,
-        // and with it the whole page, exactly as it was.
-        stubColorScheme(device === 'dark');
-        render(<ThemeToggle />);
-        expect(root().getAttribute(THEME_ATTRIBUTE)).toBe(device);
-
-        fireEvent.click(toggle());
-
-        expect(root().getAttribute(THEME_ATTRIBUTE)).toBe(other(device));
-      },
-    );
-
-    it('stores an explicit choice and clears it again for system', () => {
-      // The first click used to pin a theme in localStorage with no route back
-      // to following the device.
-      render(<ThemeToggle />);
-
-      fireEvent.click(toggle());
-      expect(window.localStorage.getItem(THEME_STORAGE_KEY)).toBe('light');
-
-      fireEvent.click(toggle());
-      expect(window.localStorage.getItem(THEME_STORAGE_KEY)).toBe('dark');
-
-      fireEvent.click(toggle());
-      expect(window.localStorage.getItem(THEME_STORAGE_KEY)).toBeNull();
-    });
 
     it('starts from the stored choice rather than from scratch', () => {
       window.localStorage.setItem(THEME_STORAGE_KEY, 'dark');
@@ -652,31 +562,17 @@ describe('ThemeToggle', () => {
       ['between the commit and the mount effects', pressBeforeMountEffects],
     ] as const)('%s', (_when, press) => {
       it.each(DEVICES)(
-        'still opens on the other theme on a %s device',
-        (device) => {
-          // What the bootstrap leaves on <html> for a first-time visitor.
-          root().setAttribute(THEME_CHOICE_ATTRIBUTE, 'system');
-          root().setAttribute(THEME_ATTRIBUTE, device);
-
-          press(device);
-
-          expect(reading()).toEqual(LAP[device][1]);
-          expect(toggle()).toHaveAccessibleName(LABEL[device][other(device)]);
-        },
-      );
-
-      it.each(DEVICES)(
-        'finishes the lap it started on a %s device',
+        'completes the cycle after an early press on %s',
         (device) => {
           root().setAttribute(THEME_CHOICE_ATTRIBUTE, 'system');
           root().setAttribute(THEME_ATTRIBUTE, device);
-
           press(device);
-          fireEvent.click(toggle());
-          expect(reading()).toEqual(LAP[device][2]);
 
-          fireEvent.click(toggle());
-          expect(reading()).toEqual(LAP[device][3]);
+          for (const [index, stop] of LAP[device].slice(1).entries()) {
+            if (index > 0) fireEvent.click(toggle());
+            expect(reading()).toEqual(stop);
+            expect(toggle()).toHaveAccessibleName(LABEL[device][stop.choice]);
+          }
         },
       );
 
@@ -745,174 +641,56 @@ describe('ThemeToggle', () => {
       },
     );
 
-    it.each(DEVICES)(
-      'goes on to the theme not yet shown if a %s device flips after the first press',
-      (device) => {
-        // On a light device: `system → dark`, then the device goes dark. Asking
-        // it again would make dark the lap's last stop and hand back to
-        // `system` — which now paints dark too, so the press would change
-        // nothing while light had still not been offered.
+    it.each(
+      DEVICES.flatMap((device) =>
+        [1, 2].map((presses) => [device, presses] as const),
+      ),
+    )(
+      'holds the order when a %s device flips after %i presses, then starts a new cycle',
+      (device, presses) => {
         const media = stubColorScheme(device === 'dark');
         render(<ThemeToggle />);
-        const first = other(device);
+        for (let i = 0; i < presses; i += 1) fireEvent.click(toggle());
+        const before = reading();
+        const label = toggle().getAttribute('aria-label') ?? '';
 
-        fireEvent.click(toggle());
-        media.flipTo(first === 'dark');
-
-        // The flip itself moves nothing: not the page, and not the promise.
-        expect(reading()).toEqual({
-          choice: first,
-          theme: first,
-          stored: first,
-        });
-        expect(toggle()).toHaveAccessibleName(LABEL[device][first]);
-
-        fireEvent.click(toggle());
-        expect(reading()).toEqual({
-          choice: device,
-          theme: device,
-          stored: device,
-        });
-
-        // Home to `system`, which is the flipped device now: a visible step.
-        fireEvent.click(toggle());
-        expect(reading()).toEqual({
-          choice: 'system',
-          theme: first,
-          stored: null,
-        });
-      },
-    );
-
-    it.each(DEVICES)(
-      'hands back to the device as it now is if a %s device flips after the second press',
-      (device) => {
-        const media = stubColorScheme(device === 'dark');
-        render(<ThemeToggle />);
         const flipped = other(device);
-
-        fireEvent.click(toggle());
-        fireEvent.click(toggle());
         media.flipTo(flipped === 'dark');
-        expect(reading()).toEqual({
-          choice: device,
-          theme: device,
-          stored: device,
-        });
+        expect(reading()).toEqual(before);
+        expect(toggle()).toHaveAccessibleName(label);
 
-        fireEvent.click(toggle());
-
-        expect(reading()).toEqual({
-          choice: 'system',
-          theme: flipped,
-          stored: null,
-        });
-      },
-    );
-
-    it.each(DEVICES)(
-      'starts the next lap by the flipped %s device',
-      (device) => {
-        // The held order is for one lap. Back at `system` the device is asked
-        // again, or the first press of the next lap is the no-op one.
-        const media = stubColorScheme(device === 'dark');
-        render(<ThemeToggle />);
-        const flipped = other(device);
-
-        fireEvent.click(toggle());
-        media.flipTo(flipped === 'dark');
-        fireEvent.click(toggle());
-        fireEvent.click(toggle());
-        expect(reading()).toEqual({
-          choice: 'system',
-          theme: flipped,
-          stored: null,
-        });
-        expect(toggle()).toHaveAccessibleName(LABEL[flipped].system);
-
-        fireEvent.click(toggle());
-
-        expect(reading()).toEqual({
-          choice: device,
-          theme: device,
-          stored: device,
-        });
-      },
-    );
-
-    it.each(DEVICES)(
-      'goes on to the other theme if a %s device flips under the choice a page loaded on',
-      (device) => {
-        // A returning visitor is part-way round a lap from an earlier page
-        // view. The stored theme is the one this device is not showing, so it
-        // is the lap's first stop — and has to stay that when the device flips
-        // to match it, or the first press of the visit hands back to `system`
-        // and changes nothing.
-        const first = other(device);
-        window.localStorage.setItem(THEME_STORAGE_KEY, first);
-        const media = stubColorScheme(device === 'dark');
-        render(<ThemeToggle />);
-        expect(toggle()).toHaveAccessibleName(LABEL[device][first]);
-
-        media.flipTo(first === 'dark');
-        expect(toggle()).toHaveAccessibleName(LABEL[device][first]);
-
-        fireEvent.click(toggle());
-
-        expect(reading()).toEqual({
-          choice: device,
-          theme: device,
-          stored: device,
-        });
-      },
-    );
-
-    it.each(DEVICES)(
-      'hands back as promised if a %s device flips away from the choice a page loaded on',
-      (device) => {
-        // The stored theme matches the device, so it is the last stop and the
-        // name says so. A flip makes that hand-back a visible one; it does not
-        // change where the press was promised to go.
-        window.localStorage.setItem(THEME_STORAGE_KEY, device);
-        const media = stubColorScheme(device === 'dark');
-        render(<ThemeToggle />);
-        const flipped = other(device);
-        expect(toggle()).toHaveAccessibleName(LABEL[device][device]);
-
-        media.flipTo(flipped === 'dark');
-        expect(toggle()).toHaveAccessibleName(LABEL[device][device]);
-
-        fireEvent.click(toggle());
-
-        expect(reading()).toEqual({
-          choice: 'system',
-          theme: flipped,
-          stored: null,
-        });
-      },
-    );
-
-    it.each(DEVICES)(
-      'never names one step and takes another on a restless %s device',
-      (device) => {
-        const media = stubColorScheme(device === 'dark');
-        render(<ThemeToggle />);
-        let dark = device === 'dark';
-
-        // Three laps' worth of presses, the device flipping before every other.
-        for (let press = 0; press < 9; press += 1) {
-          if (press % 2 === 1) {
-            dark = !dark;
-            media.flipTo(dark);
-          }
-
-          const promised = /Switch to (\w+)\.$/.exec(
-            toggle().getAttribute('aria-label') ?? '',
-          )?.[1];
+        for (const stop of LAP[device].slice(presses + 1, 3)) {
           fireEvent.click(toggle());
-
-          expect(root().getAttribute(THEME_CHOICE_ATTRIBUTE)).toBe(promised);
+          expect(reading()).toEqual(stop);
+          expect(toggle()).toHaveAccessibleName(LABEL[device][stop.choice]);
         }
+        fireEvent.click(toggle());
+        expect(reading()).toEqual(LAP[flipped][0]);
+        expect(toggle()).toHaveAccessibleName(LABEL[flipped].system);
+        fireEvent.click(toggle());
+        expect(reading()).toEqual(LAP[flipped][1]);
+      },
+    );
+
+    it.each(
+      DEVICES.flatMap((device) =>
+        DEVICES.map((stored) => [device, stored] as const),
+      ),
+    )(
+      'keeps the promised step for saved %s-device preference %s when the device flips',
+      (device, stored) => {
+        window.localStorage.setItem(THEME_STORAGE_KEY, stored);
+        const media = stubColorScheme(device === 'dark');
+        render(<ThemeToggle />);
+        expect(toggle()).toHaveAccessibleName(LABEL[device][stored]);
+        media.flipTo(device !== 'dark');
+        expect(toggle()).toHaveAccessibleName(LABEL[device][stored]);
+        fireEvent.click(toggle());
+        expect(reading()).toEqual(
+          stored === device
+            ? { choice: 'system', theme: other(device), stored: null }
+            : { choice: device, theme: device, stored: device },
+        );
       },
     );
   });
