@@ -3,10 +3,12 @@
    Blog list and individual post pages
    ======================================== */
 
+/* The last row closes with a hairline and the footer opens with one, so the
+   page keeps some room between the two. */
 .writing-page {
   max-width: var(--measure-page);
   margin: 0;
-  padding: 0;
+  padding: 0 0 2rem;
 }
 
 .writing-header {
@@ -20,16 +22,21 @@
   gap: 1rem;
 }
 
+/* A small standalone control, not annotation and not a prose link: display
+   type in sentence case, a control-weight border, and a 44px target. It was a
+   35px chip of tracked mono capitals. `background-image: none` opts it out of
+   the accent underline `base/links.css` paints. */
 .writing-rss-link {
-  font-family: var(--font-mono);
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0 0.875rem;
+  font-family: var(--font-display);
   font-size: var(--text-ui);
   font-weight: var(--font-weight-medium);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
   color: var(--color-fg-light);
   text-decoration: none;
   background-image: none;
-  padding: 0.35rem 0.6rem;
   border: var(--rule) solid var(--color-control-border);
   border-radius: var(--radius-sm);
   transition:
@@ -42,36 +49,26 @@
   border-color: var(--color-accent);
 }
 
-.writing-list {
-  display: flex;
-  flex-direction: column;
-}
-
+/* Each group opens with the shared header in section-header.css, whose rule
+   sits above the heading. */
 .writing-group + .writing-group {
-  margin-top: 2.75rem;
+  margin-top: 4rem;
 }
 
-/* Posts are dated entries, so the date sits in a gutter beside the
-   title rather than as a caption above it. */
+/* One row of the index, in the grammar the projects register shares. Posts are
+   dated entries, so the date hangs in a gutter beside the title rather than
+   as a caption above it — on the title's first baseline, whatever size the
+   title is. */
 .writing-item {
   display: grid;
   grid-template-columns: 9rem minmax(0, 1fr);
   column-gap: 2rem;
-  position: relative;
+  align-items: baseline;
   padding: 1.5rem 0;
   border-bottom: var(--rule) solid var(--color-border);
   text-decoration: none;
   background-image: none;
   transition: background-color var(--duration-instant) var(--ease-out);
-}
-
-.writing-item--featured {
-  padding-top: 2rem;
-  padding-bottom: 2rem;
-}
-
-.writing-item:first-child {
-  border-top: var(--rule) solid var(--color-fg-bold);
 }
 
 .writing-item:hover,
@@ -90,75 +87,50 @@
 .writing-meta {
   grid-column: 1;
   grid-row: 1 / span 2;
-  display: block;
-  padding-top: 0.4em;
 }
 
+/* Data, so mono — in the case it was written, at a size that can be read.
+   These were 11px tracked capitals. */
 .writing-date,
 .writing-source {
   display: block;
   font-family: var(--font-mono);
-  font-size: var(--text-2xs);
+  font-size: var(--text-xs);
   font-variant-numeric: tabular-nums;
-  letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
+  line-height: 1.5;
   color: var(--color-fg-light);
 }
 
 .writing-date {
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.25rem;
 }
 
+/* The title of a thing, in the reading face. The homepage sets the same posts
+   in this face; this page had them in bold display type, so one essay arrived
+   in two voices depending on where a reader met it. */
 .writing-title {
   grid-column: 2;
   grid-row: 1;
-  font-family: var(--font-display);
-  font-size: var(--text-md);
-  font-weight: var(--font-weight-bold);
-  letter-spacing: var(--tracking-tight);
+  margin: 0 0 0.5rem;
+  font-family: var(--font-body);
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: -0.01em;
+  line-height: 1.2;
   color: var(--color-fg-bold);
-  margin: 0 0 0.4rem 0;
-  line-height: 1.25;
   transition: color var(--duration-instant) var(--ease-out);
 }
 
+/* The newest dated item leads by a size step in the same face, nothing more. */
 .writing-item--featured .writing-title {
   font-size: var(--text-xl);
-  line-height: var(--leading-tight);
 }
 
-.writing-description {
-  grid-column: 2;
-  grid-row: 2;
-  font-size: var(--text-sm);
-  color: var(--color-fg-light);
-  margin: 0;
-  line-height: var(--leading-snug);
-}
-
-@media (max-width: 640px) {
-  .writing-item {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .writing-meta {
-    grid-column: 1;
-    grid-row: 1;
-    padding-top: 0;
-    margin-bottom: 0.35rem;
-    display: flex;
-    align-items: baseline;
-    gap: 0.75rem;
-  }
-
+/* The shared section heading steps down at this width. The titles step with
+   it, so the lead still matches its heading and never outgrows it. */
+@media (max-width: 735px) {
   .writing-title {
-    grid-column: 1;
-    grid-row: 2;
-  }
-
-  .writing-description {
-    grid-column: 1;
-    grid-row: 3;
+    font-size: var(--text-md);
   }
 
   .writing-item--featured .writing-title {
@@ -166,13 +138,45 @@
   }
 }
 
+/* One line of supporting copy. The measure is in `ch`, the width of a zero and
+   about a third wider than an average character of this face, so 53ch is a
+   line of roughly 70 characters. */
+.writing-description {
+  grid-column: 2;
+  grid-row: 2;
+  max-width: 53ch;
+  margin: 0;
+  font-size: var(--text-base);
+  line-height: 1.5;
+  color: var(--color-fg-light);
+}
+
+/* Too narrow for a gutter, so the row stops being a grid: date and source run
+   on one line above the title. */
+@media (max-width: 640px) {
+  .writing-item {
+    display: block;
+  }
+
+  .writing-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .writing-date {
+    margin-bottom: 0;
+  }
+}
+
+/* Leaves the site, in a new tab. Family and colour come from the source it is
+   attached to. */
 .writing-external {
   display: inline-block;
-  margin-left: 0.3rem;
-  font-family: var(--font-mono);
+  margin-left: 0.35rem;
   font-size: var(--text-ui);
-  color: var(--color-fg-light);
-  opacity: 1;
   transition:
     color var(--duration-instant) var(--ease-out),
     transform var(--duration-instant) var(--ease-out);
@@ -182,17 +186,6 @@
 .writing-item:focus-visible .writing-external {
   color: var(--color-accent);
   transform: translate(1px, -1px);
-}
-
-.writing-section-label {
-  margin: 0;
-  font-family: var(--font-mono);
-  font-size: var(--text-ui);
-  font-weight: var(--font-weight-medium);
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-label);
-  color: var(--color-fg-light);
-  padding: 0 0 0.75rem;
 }
 
 /* ========================================
