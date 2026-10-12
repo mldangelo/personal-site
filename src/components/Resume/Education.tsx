@@ -9,8 +9,8 @@ interface EducationProps {
 export default function Education({ data }: EducationProps) {
   return (
     <div className="education">
-      <div className="title">
-        <h2>Education</h2>
+      <div className="section-header">
+        <h2 className="section-heading">Education</h2>
       </div>
       {data.map((degree) => (
         <Degree data={degree} key={degree.school} />
