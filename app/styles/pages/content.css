@@ -854,7 +854,7 @@
 .not-found-code {
   display: block;
   font-family: var(--font-mono);
-  font-size: var(--text-2xs);
+  font-size: var(--text-xs);
   font-weight: var(--font-weight-medium);
   letter-spacing: var(--tracking-label);
   /* A 404 is a static fact, not a live reading, so it stays in the
