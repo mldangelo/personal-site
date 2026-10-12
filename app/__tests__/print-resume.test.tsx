@@ -1,14 +1,15 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { render } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import { afterEach, describe, expect, it } from 'vitest';
 
 import contact from '@/data/contact';
 import profile from '@/data/profile.json';
 import courses from '@/data/resume/courses';
 import degrees from '@/data/resume/degrees';
 import work from '@/data/resume/work';
+import { THEME_CHOICE_ATTRIBUTE } from '@/lib/theme';
 import ResumePage from '../resume/page';
 
 /**
@@ -171,6 +172,127 @@ describe('print: screen chrome', () => {
     );
 
     expect(hidden).toBeDefined();
+  });
+});
+
+describe('print: whose resume it is', () => {
+  /**
+   * The print rules as a sheet jsdom will apply. It evaluates a media list
+   * only when the text is literally `all` or `screen`, so `@media print` is
+   * dropped whole; the parsed rules are re-emitted without the wrapper.
+   */
+  const PRINT_RULES_UNWRAPPED = RULES.map(
+    ({ selectors, declarations }) =>
+      `${selectors.join(', ')} { ${declarations} }`,
+  ).join('\n');
+
+  const root = document.documentElement;
+  const sheets: HTMLStyleElement[] = [];
+
+  function applyStyles(css: string): void {
+    const style = document.createElement('style');
+    style.textContent = css;
+    document.head.appendChild(style);
+    sheets.push(style);
+  }
+
+  afterEach(() => {
+    for (const sheet of sheets.splice(0)) sheet.remove();
+    root.removeAttribute(THEME_CHOICE_ATTRIBUTE);
+  });
+
+  /** The header as a visitor with scripts running gets it. */
+  function renderHeader() {
+    // The bootstrap's mark: without it the print control is hidden on screen
+    // too, and "not printed" would pass without print.css doing anything.
+    root.setAttribute(THEME_CHOICE_ATTRIBUTE, 'system');
+    const { container } = render(<ResumePage />);
+
+    const find = (selector: string): HTMLElement => {
+      const element = container.querySelector<HTMLElement>(selector);
+      if (!element) throw new Error(`no ${selector} in the resume header`);
+      return element;
+    };
+
+    return {
+      header: find('.resume-header'),
+      name: find('.resume-print-name'),
+      title: find('.resume-header h1'),
+      printButton: find('.resume-header button'),
+      jsonLink: find('.resume-json-link'),
+      contact: find('.resume-print-contact'),
+    };
+  }
+
+  it('leads the header with the name, set with a typographic apostrophe', () => {
+    const { header, name } = renderHeader();
+
+    // Real text, not CSS `content`: it has to survive select-and-copy out of a
+    // PDF. Pinned as the reader sees it rather than through `smartQuotes`,
+    // which would only restate the page.
+    expect(name.textContent).toBe('Michael D’Angelo');
+    expect(header.firstElementChild).toBe(name);
+  });
+
+  it('is the one top-level heading on paper, as "Resume" is on screen', () => {
+    // The tagged PDF a browser saves takes its H1 from the accessibility
+    // tree. Hiding the screen title without handing the role on leaves that
+    // document starting at H2. Role queries skip what a stylesheet hides, so
+    // this reads what assistive technology is given in each medium.
+    applyStyles(RESUME_CSS);
+    const { header } = renderHeader();
+    const topLevelHeadings = () =>
+      screen
+        .getAllByRole('heading', { level: 1 })
+        .map((heading) => heading.textContent);
+
+    expect(topLevelHeadings()).toEqual(['Resume']);
+
+    applyStyles(PRINT_RULES_UNWRAPPED);
+
+    expect(topLevelHeadings()).toEqual(['Michael D’Angelo']);
+    // The name takes the role without the tag, so nothing that counts
+    // elements finds two page titles.
+    expect(header.querySelectorAll('h1')).toHaveLength(1);
+  });
+
+  it('prints the name in place of the screen title and its controls', () => {
+    // The site header and footer are the only places the name appears on
+    // screen, and print.css hides both. The page went to paper headed
+    // "Resume" and never said whose.
+    applyStyles(RESUME_CSS);
+    const { name, title, printButton, jsonLink, contact } = renderHeader();
+
+    // On screen: the title and both controls, and neither print-only block.
+    expect(name).not.toBeVisible();
+    expect(contact).not.toBeVisible();
+    expect(title).toBeVisible();
+    expect(printButton).toBeVisible();
+    expect(jsonLink).toBeVisible();
+
+    applyStyles(PRINT_RULES_UNWRAPPED);
+
+    // On paper: the name and the contact line, and nothing that needs a
+    // screen to mean anything.
+    expect(name).toBeVisible();
+    expect(contact).toBeVisible();
+    expect(title).not.toBeVisible();
+    expect(printButton).not.toBeVisible();
+    expect(jsonLink).not.toBeVisible();
+  });
+
+  it('sets the name at title size, not as another line of body copy', () => {
+    const nameRule = RULES.find((rule) =>
+      rule.selectors.includes('.resume-print-name'),
+    );
+    const points = Number(
+      nameRule?.declarations.match(/font-size\s*:\s*([\d.]+)pt/)?.[1],
+    );
+
+    // 22pt is what the "Resume" heading printed at before the name took its
+    // place. A floor, so the name can grow but cannot quietly fall back to
+    // the 10.5pt it would inherit.
+    expect(points).toBeGreaterThanOrEqual(22);
   });
 });
 

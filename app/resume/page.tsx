@@ -7,6 +7,7 @@ import References from '@/components/Resume/References';
 import ResumeNav from '@/components/Resume/ResumeNav';
 import Skills from '@/components/Resume/Skills';
 import PageWrapper from '@/components/Template/PageWrapper';
+import PrintButton from '@/components/Template/PrintButton';
 import contact, { type ContactId } from '@/data/contact';
 import profile from '@/data/profile.json';
 import courses from '@/data/resume/courses';
@@ -16,6 +17,7 @@ import work from '@/data/resume/work';
 import { careerSpanYears } from '@/lib/career';
 import { createPageMetadata } from '@/lib/metadata';
 import { RESUME_JSON_PATH, RESUME_JSON_URL } from '@/lib/resumeJson';
+import { smartQuotes } from '@/lib/typography';
 import { AUTHOR_NAME, SITE_URL } from '@/lib/utils';
 
 const resumeMetadata = createPageMetadata({
@@ -67,24 +69,41 @@ export default function ResumePage() {
     <PageWrapper>
       <section className="resume-page">
         <header className="resume-header">
+          {/* Print-only, and what the printed page is titled with. The site
+              header and footer are the only places the name appears on
+              screen, and neither is printed, so a saved PDF was headed
+              "Resume" and never said whose. Real markup rather than CSS
+              `content`, like the contact line below, so it can be selected
+              and copied. It takes the heading role too: the <h1> below is
+              hidden on paper, and without one here the tagged PDF a browser
+              saves starts at H2. Not a second <h1>, so anything that counts
+              tags still finds one page title. */}
+          <div className="resume-print-name" role="heading" aria-level={1}>
+            {smartQuotes(profile.name)}
+          </div>
           <div className="resume-header-row">
             <h1 className="resume-title">Resume</h1>
-            {/* The same affordance as the RSS chip on /writing. The href is
-                document-relative on purpose: /resume/ may live below a
-                repository base path, while a root-relative href would escape
-                it. ../resume.json resolves correctly in both deployments. */}
-            <a
-              href={`..${RESUME_JSON_PATH}`}
-              className="resume-json-link"
-              title="JSON Resume"
-              aria-label="JSON Resume"
-            >
-              JSON
-            </a>
+            <div className="resume-actions">
+              <PrintButton className="resume-print-button">
+                Print / PDF
+              </PrintButton>
+              {/* The same affordance as the RSS chip on /writing. The href is
+                  document-relative on purpose: /resume/ may live below a
+                  repository base path, while a root-relative href would escape
+                  it. ../resume.json resolves correctly in both deployments. */}
+              <a
+                href={`..${RESUME_JSON_PATH}`}
+                className="resume-json-link"
+                title="JSON Resume"
+                aria-label="JSON Resume"
+              >
+                JSON
+              </a>
+            </div>
           </div>
           <p className="resume-summary">
             Engineering leader with a career spanning {careerSpan}+ years across
-            AI, security, and infrastructure. I&apos;m currently a Member of the
+            AI, security, and infrastructure. I’m currently a Member of the
             Technical Staff at OpenAI, working on Promptfoo and Codex Security.
             I help secure AI systems and use AI to find software
             vulnerabilities. I co-founded Promptfoo before it joined OpenAI in

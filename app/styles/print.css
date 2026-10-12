@@ -117,6 +117,28 @@
     white-space: nowrap;
   }
 
+  /* On paper the resume is titled with the name. The site header and footer
+     are the only places the name appears on screen and both are hidden above,
+     so the page printed, and saved as a PDF, headed "Resume" without ever
+     saying whose. Set as the home page sets the name, in medium display type,
+     at the size, leading, and bottom margin the screen title printed with, so
+     everything beneath it stays where it was. */
+  .resume-print-name {
+    display: block;
+    margin: 0 0 1.25rem;
+    font-family: var(--font-display);
+    font-size: 22pt;
+    font-weight: var(--font-weight-medium);
+    letter-spacing: var(--tracking-display);
+    line-height: var(--leading-tight);
+  }
+
+  /* The row it replaces: the screen title, and controls that do nothing for a
+     reader holding the page. */
+  .resume-header-row {
+    display: none !important;
+  }
+
   .resume-title,
   .stats-title,
   .page-title {
