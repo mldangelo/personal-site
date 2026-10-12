@@ -18,7 +18,13 @@ export default function TableRow({
         {label}
       </th>
       <td className="stat-table-value">
-        {link ? <a href={link}>{displayValue}</a> : displayValue}
+        {link ? (
+          <a className="stat-table-link" href={link}>
+            {displayValue}
+          </a>
+        ) : (
+          displayValue
+        )}
       </td>
     </tr>
   );

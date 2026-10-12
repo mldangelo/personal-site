@@ -577,13 +577,45 @@
   white-space: nowrap;
 }
 
-.stat-table-value a {
-  color: var(--color-accent);
+/* A linked value is ink over a hairline. It was accent blue with no rule under
+   it, so colour was the only sign of a link, and beside an amber age it read
+   as a second data colour: one date blue and the next black looked like a
+   difference between the dates. The accent now only answers the pointer and
+   the keyboard.
+
+   `background-image` clears the animated rule base/links.css draws under
+   every bare link. */
+.stat-table-link {
+  position: relative;
+  color: inherit;
   background-image: none;
+  text-decoration: underline;
+  text-decoration-color: var(--color-border-alt);
+  text-decoration-thickness: var(--rule);
+  text-underline-offset: 0.18em;
+  transition:
+    color var(--duration-fast) var(--ease-out),
+    text-decoration-color var(--duration-fast) var(--ease-out);
 }
 
-.stat-table-value a:hover {
-  color: var(--color-accent-hover);
+.stat-table-link:hover,
+.stat-table-link:focus-visible {
+  color: var(--color-accent);
+  text-decoration-color: var(--color-accent);
+}
+
+/* A count can be one digit, which is an 11px target on a phone. The link
+   answers across 44px each way without its box, and so its focus ring,
+   growing past the figure. It grows leftwards: the figure sits on the right
+   rail, and anything further right is off the page. */
+.stat-table-link::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: max(100%, 2.75rem);
+  height: max(100%, 2.75rem);
+  transform: translateY(-50%);
 }
 
 /* The age starts as a dated server snapshot and upgrades in place. Reserve the

@@ -421,4 +421,22 @@ describe('Site', () => {
       screen.getAllByText(/measured/i).map((element) => element.tagName),
     ).toEqual(['CAPTION', 'CAPTION']);
   });
+
+  it('underlines every linked value', async () => {
+    // Some values were accent blue and some black, and the only difference
+    // was whether they linked anywhere. The class is all jsdom can see;
+    // `readout-styles.test.ts` holds what it is allowed to do.
+    process.env.BUILD_SHA = '0123456789abcdef0123456789abcdef01234567';
+    process.env.BUILD_REPOSITORY = 'mldangelo/personal-site';
+
+    render(await Site());
+
+    const links = screen.getAllByRole('link');
+
+    expect(links).toHaveLength(10);
+    for (const link of links) {
+      expect(link, link.textContent ?? '').toHaveClass('stat-table-link');
+      expect(link.closest('td')).toHaveClass('stat-table-value');
+    }
+  });
 });

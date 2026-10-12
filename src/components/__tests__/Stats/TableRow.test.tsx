@@ -129,4 +129,38 @@ describe('TableRow', () => {
     expect(header).toHaveClass('stat-table-label');
     expect(header.childElementCount).toBe(0);
   });
+
+  it('underlines a linked value rather than colouring it', () => {
+    // jsdom loads no stylesheet, so the class is what can be checked here;
+    // `readout-styles.test.ts` holds what that class is allowed to do.
+    render(
+      <table>
+        <tbody>
+          <TableRow label="Forks" value="979" link="https://example.com" />
+        </tbody>
+      </table>,
+    );
+
+    expect(screen.getByRole('link', { name: '979' })).toHaveClass(
+      'stat-table-link',
+    );
+  });
+
+  it('keeps a linked value and a plain one in the same kind of cell', () => {
+    // A link is a property of the value, not a second kind of reading, so the
+    // cell that sets the type is the same either way.
+    render(
+      <table>
+        <tbody>
+          <TableRow label="Forks" value="979" link="https://example.com" />
+          <TableRow label="Number of spoons" value="0" />
+        </tbody>
+      </table>,
+    );
+
+    const [linked, plain] = screen.getAllByRole('cell');
+
+    expect(linked.className).toBe(plain.className);
+    expect(plain.querySelector('a')).toBeNull();
+  });
 });
