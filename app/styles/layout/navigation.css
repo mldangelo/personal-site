@@ -1,7 +1,18 @@
 /* ========================================
    NAVIGATION
-   Desktop nav links and theme toggle
+   Logo, desktop nav links, and theme toggle
    ======================================== */
+
+/* The header is three tracks: brand, nav, controls. The brand takes whatever
+   the other two leave and is allowed to shrink (`min-width: 0`), so a longer
+   name or a larger default font size shortens the wordmark instead of pushing
+   the nav aside or running underneath it. From 736px the controls take the
+   same share, which is what centres the nav — see the end of this file. */
+.site-brand {
+  display: flex;
+  flex: 1 1 0;
+  min-width: 0;
+}
 
 .site-logo {
   display: flex;
@@ -14,6 +25,8 @@
   background-image: none;
 }
 
+/* The monogram, on the homepage only: the hero directly beneath it sets the
+   name at display size, and repeating it 20px above would be noise. */
 .logo-text {
   font-family: var(--font-display);
   font-size: var(--text-xl);
@@ -21,6 +34,18 @@
   color: var(--color-fg-bold);
   letter-spacing: var(--tracking-display);
   line-height: 1;
+}
+
+/* The name, on every other page. The roomier line height is for the clipping
+   that an ellipsis needs: at `line-height: 1` it shaves the tail off the "g". */
+.site-logo--name .logo-text {
+  overflow: hidden;
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-snug);
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* Sentence-case display type keeps navigation distinct from data labels. */
@@ -31,8 +56,11 @@
 }
 
 @media screen and (min-width: 736px) {
+  /* The margins are the least room the nav keeps on either side, for when the
+     wordmark is shortened to fit. They are equal, so they leave it centred. */
   .nav-links {
     display: flex;
+    margin: 0 1.5rem;
   }
 }
 
@@ -166,13 +194,18 @@
   display: flex;
 }
 
-/* Hide hamburger on desktop */
 @media screen and (min-width: 736px) {
-  /* Match the logo rail even when no JavaScript means no theme control. */
+  /* The same share as the brand track opposite, so the nav between them sits
+     on the header's centre whatever either side holds: a two-letter monogram
+     on the homepage, the name everywhere else, no theme control at all
+     without JavaScript. Forcing both sides to 44px did that only for as long
+     as the logo was 44px wide. */
   .nav-actions {
-    min-width: 44px;
+    flex: 1 1 0;
+    justify-content: flex-end;
   }
 
+  /* Hide hamburger on desktop */
   .hamburger-button {
     display: none;
   }
