@@ -19,6 +19,7 @@
    the nav centred — which left the monogram 2px inside the rail. The minimums
    are the hit target and nothing else. */
 .site-logo {
+  position: relative;
   display: flex;
   align-items: center;
   min-width: 44px;
@@ -112,18 +113,34 @@
   transform: scaleX(1);
 }
 
-.nav-link:focus-visible {
-  color: var(--color-fg-bold);
-  outline: var(--rule-strong) solid var(--color-focus-ring);
-  outline-offset: 4px;
-}
-
 .nav-link.active {
   color: var(--color-accent);
 }
 
 .nav-link.active::after {
   transform: scaleX(1);
+}
+
+/* The header's text links take their focus ring around the label, not around
+   the 44px target. Drawn on the target, the ring was 56px tall in a 64px
+   header and ended 2.5px above the bar on the hairline. This box replaces the
+   outline it removes: with its 3px offset the ring is 2rem tall, centred on
+   the target, with half a rem of air at each end of the label. The offset and
+   radius are the global ring's, so its corners match the monogram's and the
+   theme toggle's, which nearly fill their targets and keep the ring there. */
+.site-logo--name:focus-visible,
+.nav-link:focus-visible {
+  outline: none;
+}
+
+.site-logo--name:focus-visible::before,
+.nav-link:focus-visible::before {
+  content: '';
+  position: absolute;
+  inset: calc(50% - 1rem + 3px) calc(3px - 0.5rem);
+  border-radius: var(--radius-xs);
+  outline: var(--rule-strong) solid var(--color-focus-ring);
+  outline-offset: 3px;
 }
 
 /* The glyphs sit on the right rail, not the buttons around them: each is 20px
