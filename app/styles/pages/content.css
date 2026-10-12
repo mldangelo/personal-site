@@ -588,9 +588,9 @@
    difference between the dates. The accent now only answers the pointer and
    the keyboard.
 
-   That leaves the rule as the only sign at rest, so it takes the control
-   border, which is held to 3:1 on both page surfaces. Drawn in the structural
-   hairline it measured 1.61:1, and a link nobody could find.
+   That leaves the rule as the only sign at rest, so it is drawn in
+   `--color-control-border`, which is held to 3:1 on both page surfaces. In the
+   structural hairline it measured 1.61:1, and was a link nobody could find.
 
    `background-image` clears the animated rule base/links.css draws under
    every bare link. */
