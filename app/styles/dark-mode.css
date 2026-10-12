@@ -50,10 +50,6 @@
 /* Header, navigation, hero, and the experience spine read their
    dark values straight from the tokens above — no overrides needed. */
 
-[data-theme='dark'] .site-footer-new {
-  background: var(--color-bg-alt);
-}
-
 /* Keep the portrait in color while softening its white field at night. */
 [data-theme='dark'] :where(.theme-portrait) img {
   filter: brightness(0.9);
