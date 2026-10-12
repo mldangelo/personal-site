@@ -83,12 +83,16 @@
   transition: color var(--duration-fast) var(--ease-out);
 }
 
-/* The rule under an active item is the same hairline weight used
-   everywhere else, so navigation reads as part of the drawn grid. */
+/* The bar under an active item lies over the header's own hairline, so it
+   reads as part of the drawn grid. It used to sit at the bottom of the 44px
+   target: 12.5px under the label and 10.5px above the hairline, attached to
+   neither. The target is centred in the header's content box, which is the
+   header less its hairline, so the offset is the distance from the target's
+   bottom edge down to the header's. */
 .nav-link::after {
   content: '';
   position: absolute;
-  bottom: 0;
+  bottom: calc((44px - var(--header-height) - var(--rule)) / 2);
   left: 0;
   right: 0;
   height: var(--rule-strong);
