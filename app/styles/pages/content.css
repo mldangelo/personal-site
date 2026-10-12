@@ -410,10 +410,11 @@
   user-select: none;
 }
 
+/* A sentence, so it is set as one: the reading face, not the 11px tracked
+   mono the site keeps for data. */
 .contact-hint {
-  font-family: var(--font-mono);
-  font-size: var(--text-2xs);
-  letter-spacing: var(--tracking-wide);
+  font-size: var(--text-base);
+  line-height: 1.5;
   color: var(--color-fg-light);
   margin: 0;
 }

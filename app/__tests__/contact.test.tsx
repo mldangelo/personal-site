@@ -25,4 +25,15 @@ describe('contact page', () => {
     expect(emailLinks[0]).toHaveAttribute('href', `mailto:${profile.email}`);
     expect(emailLinks[0]).toHaveAccessibleName(profile.email);
   });
+
+  it('is written in sentence case, with the hint as a full sentence', () => {
+    render(<ContactPage />);
+
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'Get in touch' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText('I usually reply within 24 hours'),
+    ).toBeInTheDocument();
+  });
 });
