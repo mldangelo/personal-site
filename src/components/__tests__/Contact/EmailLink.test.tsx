@@ -1,8 +1,12 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { REDUCED_MOTION_QUERY } from '@/hooks/usePrefersReducedMotion';
+import { THEME_CHOICE_ATTRIBUTE } from '@/lib/theme';
 import profile from '../../../data/profile.json';
 import EmailLink from '../../Contact/EmailLink';
 
@@ -47,8 +51,19 @@ function stubReducedMotion(prefersReduced: boolean) {
   };
 }
 
+function stubClipboard(writeText: unknown) {
+  Object.defineProperty(navigator, 'clipboard', {
+    configurable: true,
+    value: writeText === undefined ? undefined : { writeText },
+  });
+}
+
 function addressLink() {
   return screen.getByRole('link');
+}
+
+function copyButton() {
+  return screen.getByRole('button');
 }
 
 function block() {
@@ -123,6 +138,7 @@ describe('EmailLink', () => {
   beforeEach(() => {
     vi.useFakeTimers();
     stubReducedMotion(false);
+    stubClipboard(vi.fn().mockResolvedValue(undefined));
   });
 
   afterEach(() => {
@@ -253,8 +269,8 @@ describe('EmailLink', () => {
       // re-armed the interval.
       fireEvent.mouseEnter(addressLink());
       fireEvent.mouseLeave(addressLink());
-      fireEvent.focus(addressLink());
-      fireEvent.blur(addressLink());
+      fireEvent.focus(copyButton());
+      fireEvent.blur(copyButton());
 
       expect(typedIn(watch(5_000))).toEqual([]);
     });
@@ -274,6 +290,7 @@ describe('EmailLink', () => {
     it.each([
       ['the address', addressLink],
       ['the line itself', aliasLine],
+      ['the copy button', copyButton],
     ])(
       'holds its frame while the pointer is on %s, and resumes after',
       (_label, target) => {
@@ -303,15 +320,18 @@ describe('EmailLink', () => {
       expect(shownAlias()).not.toBe(before);
     });
 
-    it('holds its frame while the address has keyboard focus', () => {
+    it.each([
+      ['the address', addressLink],
+      ['the copy button', copyButton],
+    ])('holds its frame while %s has keyboard focus', (_label, control) => {
       render(<EmailLink />);
       const before = runUntilTyping();
 
-      fireEvent.focus(addressLink());
+      fireEvent.focus(control());
       advance(500);
       expect(shownAlias()).toBe(before);
 
-      fireEvent.blur(addressLink());
+      fireEvent.blur(control());
       advance(500);
       expect(shownAlias()).not.toBe(before);
     });
@@ -324,6 +344,7 @@ describe('EmailLink', () => {
 
       expect(typedIn(watch(WHOLE_CYCLE_MS))).toEqual([]);
       expect(addressLink().textContent).toBe(ADDRESS);
+      expect(copyButton()).toHaveAccessibleName('Copy address');
     });
 
     it('takes the line down when the preference turns on mid-visit', () => {
@@ -353,6 +374,143 @@ describe('EmailLink', () => {
         `hell@${DOMAIN}`,
         `hello@${DOMAIN}`,
       ]);
+    });
+  });
+
+  describe('the copy button', () => {
+    async function press() {
+      await act(async () => {
+        fireEvent.click(copyButton());
+      });
+    }
+
+    it('is a plain button named for what it does', () => {
+      render(<EmailLink />);
+
+      expect(copyButton()).toHaveAttribute('type', 'button');
+      expect(copyButton()).toHaveAccessibleName('Copy address');
+      expect(screen.getByRole('status')).toBeEmptyDOMElement();
+    });
+
+    it('copies the real address, says so, and announces it', async () => {
+      const writeText = vi.fn().mockResolvedValue(undefined);
+      stubClipboard(writeText);
+      render(<EmailLink />);
+
+      await press();
+
+      expect(writeText).toHaveBeenCalledTimes(1);
+      expect(writeText).toHaveBeenCalledWith(ADDRESS);
+      expect(copyButton()).toHaveAccessibleName('Copied');
+      expect(screen.getByRole('status').textContent).toBe('Address copied');
+    });
+
+    it('copies the address, not whichever alias is showing', async () => {
+      const writeText = vi.fn().mockResolvedValue(undefined);
+      stubClipboard(writeText);
+      render(<EmailLink />);
+      const showing = runUntilTyping();
+
+      await press();
+
+      expect(showing).not.toBe(ADDRESS);
+      expect(writeText).toHaveBeenCalledWith(ADDRESS);
+    });
+
+    it('takes the confirmation down after about two seconds', async () => {
+      render(<EmailLink />);
+      await press();
+
+      advance(1_500);
+      expect(copyButton()).toHaveAccessibleName('Copied');
+
+      advance(1_000);
+      expect(copyButton()).toHaveAccessibleName('Copy address');
+      expect(screen.getByRole('status')).toBeEmptyDOMElement();
+    });
+
+    // A flag set once would leave a second press with whatever was left of
+    // the first one's two seconds — here, half a second.
+    it('gives a second press its own two seconds', async () => {
+      render(<EmailLink />);
+      await press();
+      advance(1_500);
+      await press();
+
+      advance(1_500);
+      expect(copyButton()).toHaveAccessibleName('Copied');
+
+      advance(1_000);
+      expect(copyButton()).toHaveAccessibleName('Copy address');
+    });
+
+    it.each([
+      ['the clipboard refuses', vi.fn().mockRejectedValue(new Error('denied'))],
+      ['there is no clipboard', undefined],
+    ])('claims nothing when %s', async (_label, writeText) => {
+      stubClipboard(writeText);
+      render(<EmailLink />);
+
+      await press();
+
+      expect(copyButton()).toHaveAccessibleName('Copy address');
+      expect(screen.getByRole('status')).toBeEmptyDOMElement();
+      expect(addressLink().textContent).toBe(ADDRESS);
+    });
+  });
+
+  describe('without JavaScript', () => {
+    /** The stylesheet that decides what shows, read from source. */
+    const CONTENT_CSS = readFileSync(
+      join(process.cwd(), 'app/styles/pages/content.css'),
+      'utf8',
+    );
+
+    const mounted: Element[] = [];
+
+    /**
+     * Mounts the server markup with the real stylesheet and no React at all.
+     * `choice` is the attribute the pre-paint bootstrap stamps on `<html>`;
+     * its absence is the only sign the page has that scripts did not run.
+     */
+    function renderUnhydrated(choice: string | null) {
+      const style = document.createElement('style');
+      style.textContent = CONTENT_CSS;
+      document.head.appendChild(style);
+
+      const host = document.createElement('div');
+      host.innerHTML = renderToStaticMarkup(<EmailLink />);
+      document.body.appendChild(host);
+      mounted.push(style, host);
+
+      if (choice !== null) {
+        document.documentElement.setAttribute(THEME_CHOICE_ATTRIBUTE, choice);
+      }
+
+      return {
+        link: host.querySelector('a') as HTMLElement,
+        button: host.querySelector('button') as HTMLElement,
+      };
+    }
+
+    afterEach(() => {
+      document.documentElement.removeAttribute(THEME_CHOICE_ATTRIBUTE);
+      for (const node of mounted.splice(0)) node.remove();
+    });
+
+    it('hides the copy button, which could do nothing, and keeps the link', () => {
+      const { link, button } = renderUnhydrated(null);
+
+      expect(button).not.toBeVisible();
+      expect(link).toBeVisible();
+      expect(link).toHaveAttribute('href', `mailto:${ADDRESS}`);
+      expect(link.textContent).toBe(ADDRESS);
+    });
+
+    it('shows the copy button once the bootstrap has run', () => {
+      const { button } = renderUnhydrated('system');
+
+      expect(button).toBeVisible();
     });
   });
 });

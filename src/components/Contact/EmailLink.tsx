@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useReducer, useRef } from 'react';
+import { useEffect, useReducer, useRef, useState } from 'react';
 
 import profile from '@/data/profile.json';
 import usePrefersReducedMotion from '@/hooks/usePrefersReducedMotion';
@@ -8,6 +8,7 @@ import usePrefersReducedMotion from '@/hooks/usePrefersReducedMotion';
 // Animation timing constants
 const ANIMATION_TICK_MS = 50; // Tick length in milliseconds
 const HOLD_TICKS_AFTER_MESSAGE = 50; // Ticks to wait after message completes
+const COPIED_NOTICE_MS = 2000; // How long the copy button reports success
 
 /** The address this page exists to give out: the link's text and its target. */
 const CONTACT_ADDRESS = profile.email;
@@ -139,7 +140,7 @@ interface EmailLinkProps {
 }
 
 /**
- * The address and, kept apart from it, the alias gag.
+ * The address, a way to copy it, and — kept apart from both — the alias gag.
  *
  * The aliases used to be typed into the link itself. That left the one thing
  * `/contact` is for on screen for 2.5 seconds of a 50-second cycle, ended on
@@ -151,6 +152,10 @@ interface EmailLinkProps {
 export default function EmailLink({ loopMessage = false }: EmailLinkProps) {
   const reducedMotion = usePrefersReducedMotion();
   const [state, dispatch] = useReducer(animationReducer, 0, startOf);
+  // A count rather than a flag, so pressing again restarts the notice instead
+  // of inheriting whatever was left of the last one.
+  const [copies, setCopies] = useState(0);
+  const copied = copies > 0;
 
   useInterval(
     () => {
@@ -159,16 +164,32 @@ export default function EmailLink({ loopMessage = false }: EmailLinkProps) {
     state.isActive && !reducedMotion ? ANIMATION_TICK_MS : null,
   );
 
+  useEffect(() => {
+    if (!copies) return;
+
+    const id = setTimeout(() => setCopies(0), COPIED_NOTICE_MS);
+    return () => clearTimeout(id);
+  }, [copies]);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(CONTACT_ADDRESS);
+      setCopies((count) => count + 1);
+    } catch {
+      // Refused, or no clipboard at all. The address is on screen and can be
+      // selected, so the only thing to get right is not claiming a copy.
+    }
+  };
+
   // The line is nothing but motion, so there is no still version of it to fall
   // back on: a visitor who asked for less motion gets no line at all.
   const alias = reducedMotion ? '' : state.message;
 
-  // Pointing at the address or the line, or tabbing to the address, holds the
-  // current frame, so a line that otherwise moves for fifty seconds can be
-  // stopped (WCAG 2.2.2). The handlers sit on the things themselves, not on
-  // the block around them: the block is as wide as the page, and a pointer
-  // parked in its empty gutters would stop the line for no reason a visitor
-  // could see.
+  // Pointing at or tabbing to any of the three holds the current frame, so a
+  // line that otherwise moves for fifty seconds can be stopped (WCAG 2.2.2).
+  // The handlers sit on the things themselves, not on the block around them:
+  // the block is as wide as the page, and a pointer parked in its empty
+  // gutters would stop the line for no reason a visitor could see.
   const pause = () => dispatch({ type: 'PAUSE' });
   const resume = () => dispatch({ type: 'RESUME', maxIdx: messages.length });
   const hold = {
@@ -199,6 +220,17 @@ export default function EmailLink({ loopMessage = false }: EmailLinkProps) {
           {`${alias}@${CONTACT_DOMAIN}`}
         </span>
       ) : null}
+      <button
+        {...hold}
+        type="button"
+        className="contact-copy"
+        onClick={handleCopy}
+      >
+        {copied ? 'Copied' : 'Copy address'}
+      </button>
+      <span className="sr-only" role="status">
+        {copied ? 'Address copied' : ''}
+      </span>
     </div>
   );
 }

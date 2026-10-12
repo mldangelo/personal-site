@@ -333,12 +333,12 @@
   margin-bottom: 2.5rem;
 }
 
-/* The address and the line its aliases are typed on.
+/* The address, the line its aliases are typed on, and the copy control.
 
    The aliases used to be typed into the link itself, which grew from 85px to
    196px whenever a long one wrapped. The block is vertically centred, so the
    heading jumped with it: 0.75 of cumulative layout shift on desktop. The
-   link is static now and the typing has the second row to itself. That row's
+   link is static now and the typing has the middle row to itself. That row's
    height is set here and not by what is in it, and it is held open when the
    line is not rendered at all (reduced motion, no JavaScript, a finished
    cycle), so the line coming and going moves nothing.
@@ -349,7 +349,7 @@
 .contact-email-container {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-  grid-template-rows: auto 1lh;
+  grid-template-rows: auto 1lh auto;
   margin-bottom: 0.75rem;
   font-size: var(--text-xs);
   line-height: 1.5;
@@ -418,25 +418,67 @@
   margin: 0;
 }
 
+/* The address as something to paste: a mailto link is no use to a visitor
+   whose mail lives in a browser tab. `min-width` holds the longer of its two
+   labels, so reporting "Copied" does not resize it. The flex is not there to
+   centre the label, which a button does unaided: it gives the label an
+   anonymous box of its own, and without one the label snapping back from
+   "Copied" two seconds later is recorded as a layout shift. */
+.contact-copy {
+  grid-area: 3 / 1 / auto / -1;
+  justify-self: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 8rem;
+  min-height: 2.75rem;
+  margin-top: 1rem;
+  padding: 0 0.875rem;
+  font-family: var(--font-display);
+  font-size: var(--text-ui);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-fg-light);
+  border: var(--rule) solid var(--color-control-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition:
+    color var(--duration-instant) var(--ease-out),
+    border-color var(--duration-instant) var(--ease-out);
+}
+
+.contact-copy:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+/* Copying needs the client script. Without the attribute the pre-paint
+   bootstrap stamps, JavaScript did not run and the button would promise an
+   action it cannot perform — the theme toggle's gate in navigation.css,
+   written the same way and for the same reason. */
+:root:not([data-theme-choice]) .contact-copy {
+  display: none;
+}
+
 /* Below the desktop breakpoint the longest alias, 61 characters with its
    domain, no longer fits on one line, so the row is held open for the lines
    it wraps to: two, and a third at the narrowest phones, where the line is
    under 31 characters wide (320px gives it 30). */
 @media (max-width: 735px) {
   .contact-email-container {
-    grid-template-rows: auto 2lh;
+    grid-template-rows: auto 2lh auto;
   }
 }
 
 @media (max-width: 340px) {
   .contact-email-container {
-    grid-template-rows: auto 3lh;
+    grid-template-rows: auto 3lh auto;
   }
 }
 
-/* A half-typed joke means nothing on paper. */
+/* Neither means anything on paper. */
 @media print {
-  .contact-email-alias {
+  .contact-email-alias,
+  .contact-copy {
     display: none;
   }
 }
