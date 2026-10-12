@@ -130,11 +130,18 @@
   margin-bottom: 0;
 }
 
+/* The lede: a step up from the body it introduces, on the same measure —
+   about 65 characters a line. It was 17.6px against an 18px body, behind a
+   `clamp()` whose whole range was one pixel, and ran to 88. */
 .about-intro p {
-  max-width: var(--measure-read);
-  font-size: clamp(1.04rem, 0.7vw + 0.95rem, 1.1rem);
-  line-height: 1.7;
-  color: var(--color-fg-bold);
+  font-size: var(--text-lg);
+  line-height: 1.5;
+}
+
+@media (max-width: 735px) {
+  .about-intro p {
+    font-size: var(--text-md);
+  }
 }
 
 .about-content ul {
@@ -151,6 +158,58 @@
 
 .about-content li::marker {
   color: var(--color-fg-muted);
+}
+
+/* Lists of sentences read down one column, at the size of the page around
+   them. They ran across two at a size smaller, which made a reader find their
+   place twice. Set closer than the log: most entries here are a line long. */
+.about-section--compact li {
+  margin-bottom: 0.4rem;
+  line-height: 1.6;
+}
+
+/* The one list of names, so the one list in columns: as many as fit, to
+   three. The longest name is 8.8em wide, so a 9em column never breaks one —
+   which gives a phone two columns from 360px and one below it. */
+.about-section--links ul {
+  columns: 3 9em;
+  column-gap: var(--spacing-6);
+  padding-left: 0;
+  list-style: none;
+}
+
+.about-section--links li {
+  padding-left: 0;
+  break-inside: avoid;
+}
+
+/* On a screen each name is a target of its own, not a link in a sentence, so
+   its row is 44px tall at phone sizes and the link answers across all of it.
+   The pseudo-element is what reaches that far: the link's own box stays the
+   name, which is what its focus ring should fit — as a block it drew a ring
+   the width of the column. The negative margin takes back the row padding,
+   so the names start as far below their heading as any other list. None of
+   this means anything on paper. */
+@media screen {
+  .about-section--links ul {
+    margin-block: -0.5rem var(--spacing-4);
+  }
+
+  .about-section--links li {
+    margin-bottom: 0;
+    padding-block: 0.5rem;
+  }
+
+  .about-section--links li a {
+    position: relative;
+    display: inline-block;
+  }
+
+  .about-section--links li a::before {
+    content: '';
+    position: absolute;
+    inset: -0.5rem 0;
+  }
 }
 
 /* ========================================
@@ -468,30 +527,6 @@
 
   .contact-email-link {
     padding: 0.625rem 0;
-  }
-}
-
-@media (min-width: 736px) {
-  .about-section--compact ul {
-    columns: 2;
-    column-gap: var(--spacing-10);
-  }
-
-  .about-section--compact li {
-    font-size: var(--text-base);
-    line-height: 1.5;
-    margin-bottom: 0.35rem;
-    break-inside: avoid;
-  }
-
-  .about-section--links ul {
-    columns: 3;
-    column-gap: var(--spacing-8);
-  }
-
-  .about-section--links li {
-    margin-bottom: 0.5rem;
-    break-inside: avoid;
   }
 }
 

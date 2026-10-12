@@ -407,3 +407,74 @@ describe('about page links', () => {
     },
   );
 });
+
+describe('about page type', () => {
+  /**
+   * The page's own rules. The section nav's are left out: a row of controls is
+   * set by other rules than a page of reading.
+   */
+  const page = RULES.filter(
+    (rule) =>
+      rule.file === './styles/pages/content.css' &&
+      rule.selectors.some(
+        (selector) =>
+          /\.(?:about|log-entry)\b/.test(selector) &&
+          !selector.includes('section-nav'),
+      ),
+  );
+
+  /** The rule declared for exactly this selector, under this media query. */
+  function ruleFor(selector: string, media: string | null = null) {
+    const rule = page.find(
+      (candidate) =>
+        candidate.media === media && candidate.selectors.includes(selector),
+    );
+
+    if (!rule) throw new Error(`no rule for ${selector}`);
+
+    return new Map(rule.declarations);
+  }
+
+  it('finds the rules it is asserting about', () => {
+    expect(page.length).toBeGreaterThan(25);
+  });
+
+  it('leaves the section heading to the shared section header', () => {
+    const headings = page.filter((rule) =>
+      rule.selectors.includes('.about-section h2'),
+    );
+
+    // One for each height the sticky bar above it takes. All either may say
+    // is where a jump to the heading parks it.
+    expect(headings.map((rule) => rule.media)).toEqual([
+      null,
+      '(max-width: 735px)',
+    ]);
+    for (const rule of headings) {
+      expect(rule.declarations.map(([property]) => property)).toEqual([
+        'scroll-margin-top',
+      ]);
+    }
+  });
+
+  it('sets the intro as a lede, a step above the body at each width', () => {
+    expect(ruleFor('.about-intro p').get('font-size')).toBe('var(--text-lg)');
+    expect(
+      ruleFor('.about-intro p', '(max-width: 735px)').get('font-size'),
+    ).toBe('var(--text-md)');
+  });
+
+  it('reads sentences down one column and names across three', () => {
+    const columned = page
+      .filter((rule) =>
+        rule.declarations.some(([property]) => property.startsWith('column')),
+      )
+      .flatMap((rule) => rule.selectors);
+
+    expect(columned).toEqual(['.about-section--links ul']);
+    // A count and a width: as many columns as hold a name, up to the count.
+    expect(ruleFor('.about-section--links ul').get('columns')).toMatch(
+      /^3 [\d.]+em$/,
+    );
+  });
+});

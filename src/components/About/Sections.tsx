@@ -97,7 +97,9 @@ interface ParsedAboutSection {
 /**
  * Sections whose lists are chronological get the log treatment: entries
  * hang off a spine with a tick each, the same device the resume uses.
- * The rest stay as plain lists, because order carries no meaning there.
+ * The rest stay as lists, because order carries no meaning there: sentences
+ * read down one column, set a little closer than the log, and the one list
+ * of names runs in columns.
  *
  * A section is matched by its exact title, as authored. Rename a heading in
  * `src/data/about.ts` and its key here has to follow, or the section falls
