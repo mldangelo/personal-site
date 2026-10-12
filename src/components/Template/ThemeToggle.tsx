@@ -51,15 +51,29 @@ const ICONS: Record<ThemeChoice, ReactNode> = {
 };
 
 /**
+ * The name each state ships with in the static HTML: which preference is
+ * active, and nothing about what a press does.
+ *
+ * It used to end "Switch to …" as well. The next state now depends on the
+ * device's colour scheme, which static HTML cannot know, so a promise baked in
+ * here would be wrong on one kind of device or the other — "Switch to light"
+ * read out on the light device whose first press goes dark. A name that says
+ * less is still true.
+ */
+function stateLabel(choice: ThemeChoice): string {
+  return `Theme preference: ${choice}.`;
+}
+
+/**
  * Current state first, then what a press does.
  *
  * `aria-pressed` cannot express three states, and a name that only says
  * "switch to dark mode" leaves a screen reader user unable to tell which of
- * the three is active. The next state is derived from `nextThemeChoice` so the
+ * the three is active. `next` is the value the press itself acts on, so the
  * label cannot disagree with the cycle it describes.
  */
-function labelFor(choice: ThemeChoice): string {
-  return `Theme preference: ${choice}. Switch to ${nextThemeChoice(choice)}.`;
+function labelFor(choice: ThemeChoice, next: ThemeChoice): string {
+  return `${stateLabel(choice)} Switch to ${next}.`;
 }
 
 /**
@@ -113,16 +127,22 @@ export default function ThemeToggle() {
     syncThemeColor(document);
   }, [choice, systemScheme]);
 
+  // Where a press goes from here, once mounted. The label and the press both
+  // take this one value, so the name cannot promise a step the press skips.
+  const next = choice === null ? null : nextThemeChoice(choice, systemScheme);
+
   const cycle = useCallback(() => {
-    const next = nextThemeChoice(choice ?? readStoredThemeChoice());
-    storeThemeChoice(next);
-    setChoice(next);
-  }, [choice]);
+    const to = next ?? nextThemeChoice(readStoredThemeChoice(), systemScheme);
+
+    storeThemeChoice(to);
+    setChoice(to);
+  }, [next, systemScheme]);
 
   // Before mount the accessible name comes from the one state label CSS leaves
-  // visible; after mount this states it outright, for both the name and the
-  // pointer tooltip.
-  const label = choice === null ? undefined : labelFor(choice);
+  // visible, which says only what the preference is. After mount this adds
+  // what a press does, for both the name and the pointer tooltip.
+  const label =
+    choice === null || next === null ? undefined : labelFor(choice, next);
 
   return (
     <button
@@ -139,7 +159,7 @@ export default function ThemeToggle() {
           data-theme-state={state}
         >
           {ICONS[state]}
-          <span className="sr-only">{labelFor(state)}</span>
+          <span className="sr-only">{stateLabel(state)}</span>
         </span>
       ))}
     </button>

@@ -2,7 +2,8 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 import { act, fireEvent, render, screen } from '@testing-library/react';
-import { renderToStaticMarkup } from 'react-dom/server';
+import { hydrateRoot, type Root } from 'react-dom/client';
+import { renderToStaticMarkup, renderToString } from 'react-dom/server';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
@@ -18,9 +19,38 @@ import {
 import { readColorToken } from '@/lib/tokens';
 import ThemeToggle from '../../Template/ThemeToggle';
 
-const SYSTEM_LABEL = 'Theme preference: system. Switch to light.';
-const LIGHT_LABEL = 'Theme preference: light. Switch to dark.';
-const DARK_LABEL = 'Theme preference: dark. Switch to system.';
+/**
+ * The name each state ships with in the static HTML. It says which preference
+ * is active and stops there: where a press goes depends on the device, which
+ * the HTML cannot know.
+ */
+const STATE_LABEL = {
+  system: 'Theme preference: system.',
+  light: 'Theme preference: light.',
+  dark: 'Theme preference: dark.',
+} as const;
+
+/**
+ * The name once mounted, when the device has been read and the next step can
+ * be promised. The cycle opens on the theme the device is *not* showing, so
+ * the two kinds of device read the three states out differently.
+ */
+const LABEL = {
+  light: {
+    system: 'Theme preference: system. Switch to dark.',
+    dark: 'Theme preference: dark. Switch to light.',
+    light: 'Theme preference: light. Switch to system.',
+  },
+  dark: {
+    system: 'Theme preference: system. Switch to light.',
+    light: 'Theme preference: light. Switch to dark.',
+    dark: 'Theme preference: dark. Switch to system.',
+  },
+} as const;
+
+type Device = keyof typeof LABEL;
+
+const DEVICES = ['light', 'dark'] as const;
 
 /** A `matchMedia` stand-in whose preference can be flipped mid-test. */
 function stubColorScheme(prefersDark: boolean) {
@@ -57,6 +87,19 @@ function stubColorScheme(prefersDark: boolean) {
   };
 }
 
+/** A browser with no `matchMedia`, and the server, which has no device. */
+function withoutMatchMedia() {
+  Object.defineProperty(window, 'matchMedia', {
+    writable: true,
+    configurable: true,
+    value: undefined,
+  });
+}
+
+function other(device: Device): Device {
+  return device === 'dark' ? 'light' : 'dark';
+}
+
 function root() {
   return document.documentElement;
 }
@@ -69,6 +112,35 @@ function clearRoot() {
 function toggle() {
   return screen.getByRole('button');
 }
+
+/** Where a press left things: what was asked for, painted, and remembered. */
+function reading() {
+  return {
+    choice: root().getAttribute(THEME_CHOICE_ATTRIBUTE),
+    theme: root().getAttribute(THEME_ATTRIBUTE),
+    stored: window.localStorage.getItem(THEME_STORAGE_KEY),
+  };
+}
+
+/**
+ * One lap from `system` on each kind of device, start and finish included.
+ * Written out rather than derived, so the order here is the order a visitor
+ * meets and not a second copy of the function that produces it.
+ */
+const LAP = {
+  light: [
+    { choice: 'system', theme: 'light', stored: null },
+    { choice: 'dark', theme: 'dark', stored: 'dark' },
+    { choice: 'light', theme: 'light', stored: 'light' },
+    { choice: 'system', theme: 'light', stored: null },
+  ],
+  dark: [
+    { choice: 'system', theme: 'dark', stored: null },
+    { choice: 'light', theme: 'light', stored: 'light' },
+    { choice: 'dark', theme: 'dark', stored: 'dark' },
+    { choice: 'system', theme: 'dark', stored: null },
+  ],
+} as const;
 
 /** The stylesheet that decides which state is visible, read from source. */
 const NAVIGATION_CSS = readFileSync(
@@ -105,6 +177,23 @@ function renderUnhydrated(choice: string | null): Element {
   if (!button) throw new Error('no theme toggle in the server markup');
 
   return button;
+}
+
+const hydrated: Root[] = [];
+
+/**
+ * The markup the server sends, mounted as it arrives: no device to ask while
+ * rendering it, and no React attached yet.
+ */
+function serverMarkup(): { host: HTMLElement; sent: string } {
+  withoutMatchMedia();
+
+  const host = document.createElement('div');
+  host.innerHTML = renderToString(<ThemeToggle />);
+  document.body.appendChild(host);
+  unhydrated.push(host);
+
+  return { host, sent: host.innerHTML };
 }
 
 /**
@@ -181,6 +270,10 @@ describe('ThemeToggle', () => {
   });
 
   afterEach(() => {
+    // Roots hydrated by hand are not Testing Library's to unmount.
+    act(() => {
+      for (const mounted of hydrated.splice(0)) mounted.unmount();
+    });
     clearRoot();
     for (const node of unhydrated.splice(0)) node.remove();
     // The bootstrap and the component both create their tag rather than taking
@@ -213,9 +306,22 @@ describe('ThemeToggle', () => {
     it('ships a name for each state, so the button is never unnamed', () => {
       const html = renderToStaticMarkup(<ThemeToggle />);
 
-      expect(html).toContain(SYSTEM_LABEL);
-      expect(html).toContain(LIGHT_LABEL);
-      expect(html).toContain(DARK_LABEL);
+      expect(html).toContain(STATE_LABEL.system);
+      expect(html).toContain(STATE_LABEL.light);
+      expect(html).toContain(STATE_LABEL.dark);
+    });
+
+    it('promises no next step, which depends on a device it cannot see', () => {
+      // Each state used to ship "Switch to …" too. The cycle now opens on the
+      // theme opposite the device's, so that sentence would be read out wrong
+      // on one kind of device or the other until the page hydrated.
+      const html = renderToStaticMarkup(<ThemeToggle />);
+
+      expect(html).not.toMatch(/switch to/i);
+      // And no one name over the top of the three, which is what `aria-label`
+      // would be: it wins over the content CSS has picked.
+      expect(html).not.toContain('aria-label=');
+      expect(html).not.toContain('title=');
     });
   });
 
@@ -223,17 +329,16 @@ describe('ThemeToggle', () => {
     // The server markup plus the real stylesheet plus the attribute the head
     // bootstrap stamps — no React. This is the whole claim of the component:
     // one icon and one truthful name before the client bundle hydrates.
-    it.each([
-      ['system', SYSTEM_LABEL],
-      ['light', LIGHT_LABEL],
-      ['dark', DARK_LABEL],
-    ])('shows one state and names it for choice %s', (choice, label) => {
-      const button = renderUnhydrated(choice);
+    it.each(['system', 'light', 'dark'] as const)(
+      'shows one state and names it for choice %s',
+      (choice) => {
+        const button = renderUnhydrated(choice);
 
-      expect(button).toBeVisible();
-      expect(visibleStates()).toEqual([choice]);
-      expect(button).toHaveAccessibleName(label);
-    });
+        expect(button).toBeVisible();
+        expect(visibleStates()).toEqual([choice]);
+        expect(button).toHaveAccessibleName(STATE_LABEL[choice]);
+      },
+    );
 
     it('hides the inert control when the bootstrap did not run', () => {
       const button = renderUnhydrated(null);
@@ -243,55 +348,160 @@ describe('ThemeToggle', () => {
     });
   });
 
+  describe('hydration', () => {
+    const cases = DEVICES.flatMap((device) =>
+      (['system', 'light', 'dark'] as const).map(
+        (choice) => [device, choice] as const,
+      ),
+    );
+
+    // `suppressHydrationWarning` is not in play, so a hydration render that
+    // differed from the server's is reported — to `console.error`, and to
+    // `onRecoverableError` when React had to re-render to recover. What
+    // mounting may do is add one name and one tooltip to the button, and
+    // nothing else: the three state spans stay exactly as they were sent.
+    it.each(cases)(
+      'on a %s device with %s chosen, only adds a name to what the server sent',
+      (device, choice) => {
+        const { host, sent } = serverMarkup();
+        const said = host.querySelector(
+          `[data-theme-state="${choice}"] .sr-only`,
+        )?.textContent;
+        const errors = vi.spyOn(console, 'error').mockImplementation(() => {});
+        const recovered = vi.fn();
+
+        stubColorScheme(device === 'dark');
+        if (choice !== 'system') {
+          window.localStorage.setItem(THEME_STORAGE_KEY, choice);
+        }
+
+        try {
+          act(() => {
+            hydrated.push(
+              hydrateRoot(host, <ThemeToggle />, {
+                onRecoverableError: recovered,
+              }),
+            );
+          });
+
+          expect(recovered).not.toHaveBeenCalled();
+          expect(errors).not.toHaveBeenCalled();
+        } finally {
+          errors.mockRestore();
+        }
+
+        const label = LABEL[device][choice];
+        expect(toggle()).toHaveAttribute('aria-label', label);
+        expect(toggle()).toHaveAttribute('title', label);
+
+        // The name it adds opens with the one already read out, so a screen
+        // reader user who heard the first is never told it was wrong.
+        expect(said).toBe(STATE_LABEL[choice]);
+        expect(label.slice(0, said?.length)).toBe(said);
+
+        const unnamed = host.cloneNode(true) as HTMLElement;
+        unnamed.querySelector('button')?.removeAttribute('aria-label');
+        unnamed.querySelector('button')?.removeAttribute('title');
+        expect(unnamed.innerHTML).toBe(sent);
+      },
+    );
+  });
+
   describe('accessible name', () => {
     // `aria-pressed` cannot express three states; the name has to say which of
     // the three is active as well as what a press will do.
-    it('names the system state and the next one', () => {
+    it.each(DEVICES)(
+      'names the system state and the next one on a %s device',
+      (device) => {
+        stubColorScheme(device === 'dark');
+        render(<ThemeToggle />);
+
+        expect(toggle()).toHaveAccessibleName(LABEL[device].system);
+      },
+    );
+
+    it.each(DEVICES)(
+      'names an explicit light choice on a %s device',
+      (device) => {
+        stubColorScheme(device === 'dark');
+        window.localStorage.setItem(THEME_STORAGE_KEY, 'light');
+        render(<ThemeToggle />);
+
+        expect(toggle()).toHaveAccessibleName(LABEL[device].light);
+      },
+    );
+
+    it.each(DEVICES)(
+      'names an explicit dark choice on a %s device',
+      (device) => {
+        stubColorScheme(device === 'dark');
+        window.localStorage.setItem(THEME_STORAGE_KEY, 'dark');
+        render(<ThemeToggle />);
+
+        expect(toggle()).toHaveAccessibleName(LABEL[device].dark);
+      },
+    );
+
+    it.each(DEVICES)(
+      'offers the same wording as a pointer tooltip on a %s device',
+      (device) => {
+        stubColorScheme(device === 'dark');
+        render(<ThemeToggle />);
+
+        expect(toggle()).toHaveAttribute('title', LABEL[device].system);
+      },
+    );
+
+    it('rewrites the promise when the device flips under system', () => {
+      // The next step from `system` is "the other theme", which is a
+      // different theme the moment the device changes its mind.
+      const media = stubColorScheme(false);
       render(<ThemeToggle />);
+      expect(toggle()).toHaveAccessibleName(LABEL.light.system);
 
-      expect(toggle()).toHaveAccessibleName(SYSTEM_LABEL);
-    });
+      media.flipTo(true);
 
-    it('names an explicit light choice', () => {
-      window.localStorage.setItem(THEME_STORAGE_KEY, 'light');
-      render(<ThemeToggle />);
-
-      expect(toggle()).toHaveAccessibleName(LIGHT_LABEL);
-    });
-
-    it('names an explicit dark choice', () => {
-      window.localStorage.setItem(THEME_STORAGE_KEY, 'dark');
-      render(<ThemeToggle />);
-
-      expect(toggle()).toHaveAccessibleName(DARK_LABEL);
-    });
-
-    it('offers the same wording as a pointer tooltip', () => {
-      render(<ThemeToggle />);
-
-      expect(toggle()).toHaveAttribute('title', SYSTEM_LABEL);
+      expect(toggle()).toHaveAccessibleName(LABEL.dark.system);
+      expect(toggle()).toHaveAttribute('title', LABEL.dark.system);
     });
   });
 
   describe('cycling', () => {
-    it('goes system to light to dark and back to system', () => {
-      render(<ThemeToggle />);
-      expect(root().getAttribute(THEME_CHOICE_ATTRIBUTE)).toBe('system');
+    it.each(DEVICES)(
+      'goes round a %s device in three presses, naming every step',
+      (device) => {
+        stubColorScheme(device === 'dark');
+        render(<ThemeToggle />);
+        const [start, ...presses] = LAP[device];
 
-      fireEvent.click(toggle());
-      expect(toggle()).toHaveAccessibleName(LIGHT_LABEL);
-      expect(root().getAttribute(THEME_CHOICE_ATTRIBUTE)).toBe('light');
-      expect(root().getAttribute(THEME_ATTRIBUTE)).toBe('light');
+        expect(reading()).toEqual(start);
+        expect(toggle()).toHaveAccessibleName(LABEL[device][start.choice]);
 
-      fireEvent.click(toggle());
-      expect(toggle()).toHaveAccessibleName(DARK_LABEL);
-      expect(root().getAttribute(THEME_CHOICE_ATTRIBUTE)).toBe('dark');
-      expect(root().getAttribute(THEME_ATTRIBUTE)).toBe('dark');
+        for (const stop of presses) {
+          fireEvent.click(toggle());
 
-      fireEvent.click(toggle());
-      expect(toggle()).toHaveAccessibleName(SYSTEM_LABEL);
-      expect(root().getAttribute(THEME_CHOICE_ATTRIBUTE)).toBe('system');
-    });
+          expect(reading()).toEqual(stop);
+          expect(toggle()).toHaveAccessibleName(LABEL[device][stop.choice]);
+          expect(toggle()).toHaveAttribute('title', LABEL[device][stop.choice]);
+        }
+      },
+    );
+
+    it.each(DEVICES)(
+      'changes the page on the first press on a %s device',
+      (device) => {
+        // The defect. The cycle was `system → light → dark` for everyone, so on
+        // a light device the first press moved the icon and left `data-theme`,
+        // and with it the whole page, exactly as it was.
+        stubColorScheme(device === 'dark');
+        render(<ThemeToggle />);
+        expect(root().getAttribute(THEME_ATTRIBUTE)).toBe(device);
+
+        fireEvent.click(toggle());
+
+        expect(root().getAttribute(THEME_ATTRIBUTE)).toBe(other(device));
+      },
+    );
 
     it('stores an explicit choice and clears it again for system', () => {
       // The first click used to pin a theme in localStorage with no route back
@@ -314,8 +524,48 @@ describe('ThemeToggle', () => {
 
       fireEvent.click(toggle());
 
-      expect(toggle()).toHaveAccessibleName(SYSTEM_LABEL);
+      expect(toggle()).toHaveAccessibleName(LABEL.dark.system);
       expect(window.localStorage.getItem(THEME_STORAGE_KEY)).toBeNull();
+    });
+
+    it('orders a returning visitor by the device they came back on', () => {
+      // Dark is stored on both devices; what follows it is not the same. On a
+      // dark device it is the last stop and hands back to `system`, as above.
+      // On a light one it is the first, and light is still to come.
+      window.localStorage.setItem(THEME_STORAGE_KEY, 'dark');
+      stubColorScheme(false);
+      render(<ThemeToggle />);
+      expect(toggle()).toHaveAccessibleName(LABEL.light.dark);
+
+      fireEvent.click(toggle());
+
+      expect(reading()).toEqual({
+        choice: 'light',
+        theme: 'light',
+        stored: 'light',
+      });
+    });
+
+    it('still goes round when the device cannot be asked', () => {
+      // No `matchMedia`. The bootstrap paints light then, so the control
+      // orders itself as a light device would and the first press shows.
+      withoutMatchMedia();
+      renderHead();
+      render(<ThemeToggle />);
+
+      expect(reading()).toEqual({
+        choice: 'system',
+        theme: 'light',
+        stored: null,
+      });
+      expect(toggle()).toHaveAccessibleName(LABEL.light.system);
+
+      for (const stop of LAP.light.slice(1)) {
+        fireEvent.click(toggle());
+
+        expect(reading()).toEqual(stop);
+        expect(toggle()).toHaveAccessibleName(LABEL.light[stop.choice]);
+      }
     });
   });
 
@@ -341,8 +591,15 @@ describe('ThemeToggle', () => {
       const media = stubColorScheme(false);
       render(<ThemeToggle />);
 
+      // Round to explicit light, which a light device paints exactly as it
+      // paints `system` — only the device flipping can tell the two apart.
       fireEvent.click(toggle());
-      expect(root().getAttribute(THEME_ATTRIBUTE)).toBe('light');
+      fireEvent.click(toggle());
+      expect(reading()).toEqual({
+        choice: 'light',
+        theme: 'light',
+        stored: 'light',
+      });
 
       media.flipTo(true);
 
@@ -353,12 +610,13 @@ describe('ThemeToggle', () => {
       const media = stubColorScheme(false);
       render(<ThemeToggle />);
 
-      // Pin light, then dark, then hand control back.
-      fireEvent.click(toggle());
+      // Pin dark, then light, then hand control back.
       fireEvent.click(toggle());
       expect(root().getAttribute(THEME_ATTRIBUTE)).toBe('dark');
 
       fireEvent.click(toggle());
+      fireEvent.click(toggle());
+      expect(root().getAttribute(THEME_CHOICE_ATTRIBUTE)).toBe('system');
       expect(root().getAttribute(THEME_ATTRIBUTE)).toBe('light');
 
       media.flipTo(true);
@@ -419,11 +677,12 @@ describe('ThemeToggle', () => {
       renderHead();
       render(<ThemeToggle />);
 
-      // system -> light -> dark, pinned against a light device.
-      fireEvent.click(toggle());
+      // system -> dark, pinned against a light device.
       fireEvent.click(toggle());
       expect(paintedChromeColor(false)).toBe(CHROME_COLORS.dark);
 
+      // dark -> light -> system.
+      fireEvent.click(toggle());
       fireEvent.click(toggle());
       expect(root().getAttribute(THEME_CHOICE_ATTRIBUTE)).toBe('system');
       expect(paintedChromeColor(false)).toBe(CHROME_COLORS.light);
@@ -478,9 +737,8 @@ describe('ThemeToggle', () => {
       const pair = hoistThemeColorPair();
       render(<ThemeToggle />);
 
-      // system -> light -> dark: dark pinned on a light-preferring device,
-      // which is the direction that broke.
-      fireEvent.click(toggle());
+      // system -> dark: dark pinned on a light-preferring device, which is the
+      // direction that broke.
       fireEvent.click(toggle());
       expect(root().getAttribute(THEME_ATTRIBUTE)).toBe('dark');
       expect(paintedChromeColor(false)).toBe(CHROME_COLORS.dark);

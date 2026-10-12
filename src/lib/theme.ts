@@ -70,26 +70,64 @@ export const RESOLVED_THEME_COLOR_SELECTOR = `${THEME_COLOR_META_SELECTOR}[${RES
 export type ThemeColors = Readonly<Record<ResolvedTheme, string>>;
 
 /**
- * The order the single control cycles through. `system` is a real, reachable
- * state, not just the pre-first-click default: before this existed the first
- * click pinned a theme in `localStorage` forever with no route back to
- * following the device.
+ * Every choice, `system` first. This is the order the control's state spans
+ * ship in, which static HTML makes the same for every visitor — it is not the
+ * order a press walks them in. {@link nextThemeChoice} decides that from the
+ * device.
  */
-const NEXT_CHOICE: Record<ThemeChoice, ThemeChoice> = {
-  system: 'light',
-  light: 'dark',
-  dark: 'system',
-};
-
-/** Every choice, in cycle order starting from `system`. */
 export const THEME_CHOICES: readonly ThemeChoice[] = [
   'system',
   'light',
   'dark',
 ];
 
-export function nextThemeChoice(choice: ThemeChoice): ThemeChoice {
-  return NEXT_CHOICE[choice];
+/**
+ * The scheme to order the cycle by when the device cannot be asked. Light,
+ * because light is what {@link themeInitScript} paints in that case, so the
+ * first press still lands on a theme the visitor is not already looking at.
+ */
+const UNREADABLE_SCHEME: ResolvedTheme = 'light';
+
+/**
+ * Where one press of the single control takes the choice.
+ *
+ * The order depends on the device, because the first press has to change what
+ * the visitor is looking at:
+ *
+ * - light device: `system → dark → light → system`
+ * - dark device: `system → light → dark → system`
+ *
+ * It was `system → light → dark` for everyone. A new visitor is on `system`,
+ * which a light device paints light, so their first press moved to `light`:
+ * the icon changed and the page did not. Measured on the export, `data-theme`
+ * and the body background were identical after press one and only press two
+ * went dark — a control whose first press appears to do nothing reads as
+ * broken. So the cycle opens on the theme *opposite* the device's, crosses to
+ * the other explicit theme, and then hands back to `system`.
+ *
+ * With three states, `system` always paints the same as one of the explicit
+ * themes, so exactly one step in three is necessarily invisible whichever way
+ * round the cycle runs. This order puts it last — the explicit theme that
+ * matches the device, returning to `system` — after the visitor has twice
+ * seen the control work, and the icon changing is the feedback for it.
+ *
+ * `system` is a real, reachable state, not just the pre-first-click default:
+ * before it existed the first click pinned a theme in `localStorage` forever
+ * with no route back to following the device.
+ *
+ * `systemScheme` is `null` when the device cannot be asked; the cycle then
+ * runs as {@link UNREADABLE_SCHEME} orders it rather than refusing to move.
+ */
+export function nextThemeChoice(
+  choice: ThemeChoice,
+  systemScheme: ResolvedTheme | null,
+): ThemeChoice {
+  const device = systemScheme ?? UNREADABLE_SCHEME;
+  const opposite: ResolvedTheme = device === 'dark' ? 'light' : 'dark';
+
+  if (choice === 'system') return opposite;
+
+  return choice === opposite ? device : 'system';
 }
 
 /**
