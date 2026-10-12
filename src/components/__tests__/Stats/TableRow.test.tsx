@@ -163,4 +163,58 @@ describe('TableRow', () => {
     expect(linked.className).toBe(plain.className);
     expect(plain.querySelector('a')).toBeNull();
   });
+
+  it('lets only a value too long for a phone break', () => {
+    // A value is one token, and its column is as wide as the widest of them.
+    // A 26-character city ran 60px off a 320px screen in the browser; the
+    // values this site publishes stay whole.
+    render(
+      <table>
+        <tbody>
+          <TableRow label="Current city" value="New York, NY" />
+          <TableRow label="Direct dependencies" value="29 packages" />
+          <TableRow label="Current city" value="Rancho Santa Margarita, CA" />
+        </tbody>
+      </table>,
+    );
+
+    const [city, packages, longCity] = screen.getAllByRole('cell');
+
+    expect(city).not.toHaveClass('stat-table-value--long');
+    expect(packages).not.toHaveClass('stat-table-value--long');
+    expect(longCity).toHaveClass('stat-table-value', 'stat-table-value--long');
+  });
+
+  it('draws the line at what fits beside a label on a 320px screen', () => {
+    render(
+      <table>
+        <tbody>
+          <TableRow label="Fits" value={'8'.repeat(18)} />
+          <TableRow label="Does not" value={'8'.repeat(19)} />
+        </tbody>
+      </table>,
+    );
+
+    const [fits, doesNot] = screen.getAllByRole('cell');
+
+    expect(fits).not.toHaveClass('stat-table-value--long');
+    expect(doesNot).toHaveClass('stat-table-value--long');
+  });
+
+  it('never breaks a value that is an element', () => {
+    // The live age reserves its own width; breaking it would move the table
+    // every time the readout ticked over.
+    render(
+      <table>
+        <tbody>
+          <TableRow
+            label="Current age"
+            value={<span>36.68132394318 and counting</span>}
+          />
+        </tbody>
+      </table>,
+    );
+
+    expect(screen.getByRole('cell')).not.toHaveClass('stat-table-value--long');
+  });
 });

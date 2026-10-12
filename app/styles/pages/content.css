@@ -546,16 +546,22 @@
    rules and mismatched alignment. */
 .stat-table th,
 .stat-table td {
-  padding: 1rem 0;
+  padding-block: 1rem;
   border-bottom: var(--rule) solid var(--color-border);
   vertical-align: baseline;
 }
 
 /* A label is a phrase, so it is set as one: the reading face, in ink and in
    sentence case. As 13px tracked capitals in a column fixed at 40%, "Stars
-   this repository has on GitHub" took three lines of a phone. */
+   this repository has on GitHub" took three lines of a phone.
+
+   Neither column declares a width. A value never breaks, so its column is
+   exactly as wide as the widest value in that table and the label has all of
+   the rest. The gap is the least that keeps the two apart: at 360px the
+   longest label fits on two lines with 2.5px to spare, and took a third when
+   the gap was 1rem. */
 .stat-table-label {
-  width: 40%;
+  padding-right: 0.5rem;
   text-align: left;
   text-wrap: balance;
   font-family: var(--font-body);
@@ -566,7 +572,6 @@
 }
 
 .stat-table-value {
-  width: 60%;
   text-align: right;
   font-family: var(--font-mono);
   font-size: var(--text-2xl);
@@ -733,6 +738,13 @@
 
   .stat-table-value {
     font-size: var(--text-md);
+  }
+
+  /* `TableRow` marks a value too long to be sure of fitting beside its label
+     on a phone. Only that one may break, mid-token if it has to: letting every
+     value wrap here made its column give way to a long label first, which
+     broke "29 packages" in two while there was still room for it. */
+  .stat-table-value--long {
     white-space: normal;
     overflow-wrap: anywhere;
   }
