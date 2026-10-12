@@ -14,13 +14,15 @@
   min-width: 0;
 }
 
+/* The home link starts on the left rail: its text box is its own left edge.
+   It used to be centred in a 44px box — half of the balancing act that kept
+   the nav centred — which left the monogram 2px inside the rail. The minimums
+   are the hit target and nothing else. */
 .site-logo {
   display: flex;
   align-items: center;
-  justify-content: center;
   min-width: 44px;
   min-height: 44px;
-  gap: 0.5rem;
   text-decoration: none;
   background-image: none;
 }
@@ -120,7 +122,13 @@
   transform: scaleX(1);
 }
 
+/* The glyphs sit on the right rail, not the buttons around them: each is 20px
+   wide in a 44px target, so the cluster is drawn 12px outward and the targets
+   keep their size. An offset rather than a negative margin, which would
+   shorten this track and pull the nav off centre by half as much. */
 .nav-actions {
+  position: relative;
+  left: 12px;
   display: flex;
   align-items: center;
   gap: 0.75rem;

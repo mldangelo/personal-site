@@ -59,10 +59,12 @@
 }
 
 @media (max-width: 735px) {
+  /* The same inline padding as `.page-main`, so the logo and the page beneath
+     it share a left edge. At 1rem they sat 8px apart. */
   .site-header {
     height: var(--header-height-mobile);
     line-height: var(--header-height-mobile);
-    padding: 0 1rem;
+    padding: 0 1.5rem;
   }
 }
 
