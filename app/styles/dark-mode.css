@@ -75,22 +75,7 @@
   border-left-color: var(--color-border-alt);
 }
 
-/* Link underlines — scoped to `p` to match base/links.css */
-[data-theme='dark'] p a {
-  background-image: linear-gradient(
-    transparent calc(100% - 1.5px),
-    var(--color-accent-underline) 1.5px
-  );
-}
-
-[data-theme='dark'] p a:hover {
-  background-image: linear-gradient(transparent calc(100% - 1.5px), var(--color-accent) 1.5px);
-}
-
-/* Prose links use text-decoration only, no background-image */
-[data-theme='dark'] .prose a,
-[data-theme='dark'] .prose p a,
-[data-theme='dark'] .prose a:hover,
-[data-theme='dark'] .prose p a:hover {
-  background-image: none;
-}
+/* Links read their dark values from the tokens above as well. The gradient
+   underline once restated here weighed (0,1,2), so in this theme alone it
+   outranked class-level link rules, and article prose carried four selectors
+   just to cancel it. */
