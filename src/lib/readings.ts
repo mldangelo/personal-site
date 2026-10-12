@@ -59,7 +59,7 @@ export interface StatDeclaration {
   /**
    * Appended after the formatted count, and only where it tells the reader
    * something the label does not. `53 countries` beside `Countries visited`
-   * is noise; `29 packages` beside `Dependencies declared directly` is useful.
+   * is noise; `29 packages` beside `Direct dependencies` is useful.
    */
   unit?: string;
   format?: (value: unknown) => string | ReactElement;

@@ -76,17 +76,17 @@ describe('Site', () => {
     render(await Site());
 
     expect(rowsUnder(FETCHED)).toEqual([
-      'Stars this repository has on GitHub',
-      'Number of people watching this repository',
-      'Number of forks',
-      'Open GitHub issues and pull requests',
+      'GitHub stars',
+      'Watchers',
+      'Forks',
+      'Open issues and pull requests',
       'Latest repository push (UTC)',
     ]);
     // No build identity here, so no "Built from commit" row.
     expect(rowsUnder(MEASURED)).toEqual([
       'Built on (UTC)',
-      'Lines of TypeScript powering this website',
-      'Dependencies declared directly',
+      'Lines of TypeScript',
+      'Direct dependencies',
       'Installed non-development package locations',
       'Lockfile package locations',
       'Biome lint rules enabled in CI',
@@ -145,9 +145,7 @@ describe('Site', () => {
     render(await Site());
 
     expect(screen.queryByText(/fetched at build time/i)).toBeNull();
-    expect(rowsUnder(LAST_KNOWN)).toContain(
-      'Stars this repository has on GitHub',
-    );
+    expect(rowsUnder(LAST_KNOWN)).toContain('GitHub stars');
     expect(screen.getByRole('table', { name: MEASURED })).toHaveAttribute(
       'data-source',
       'measured',
@@ -197,10 +195,7 @@ describe('Site', () => {
       `https://github.com/octocat/personal-site/commit/${sha}`,
     );
     expect(
-      screen
-        .getByText('Dependencies declared directly')
-        .closest('tr')
-        ?.querySelector('a'),
+      screen.getByText('Direct dependencies').closest('tr')?.querySelector('a'),
     ).toHaveAttribute(
       'href',
       `https://github.com/octocat/personal-site/blob/${sha}/package.json`,
@@ -278,11 +273,9 @@ describe('Site', () => {
       expect(
         screen.getByText('Latest repository push (UTC)').closest('tr'),
       ).toHaveTextContent('2026-07-31');
-      expect(
-        screen
-          .getByText('Number of people watching this repository')
-          .closest('tr'),
-      ).toHaveTextContent('23');
+      expect(screen.getByText('Watchers').closest('tr')).toHaveTextContent(
+        '23',
+      );
       expect(screen.getByText('Built on (UTC)')).toBeInTheDocument();
     },
   );
@@ -305,7 +298,7 @@ describe('Site', () => {
     );
     expect(
       screen
-        .getByText('Stars this repository has on GitHub')
+        .getByText('GitHub stars')
         .closest('tr')
         ?.querySelector('.stat-table-value'),
     ).toHaveTextContent(/^0$/);
@@ -368,7 +361,7 @@ describe('Site', () => {
     render(await Site());
 
     for (const label of [
-      'Dependencies declared directly',
+      'Direct dependencies',
       'Installed non-development package locations',
       'Lockfile package locations',
       'Biome lint rules enabled in CI',
@@ -384,9 +377,7 @@ describe('Site', () => {
       screen.getByText(label).closest('tr')?.querySelector('.stat-table-value')
         ?.textContent ?? '';
 
-    expect(valueFor('Dependencies declared directly')).toMatch(
-      /^[\d,]+ packages$/,
-    );
+    expect(valueFor('Direct dependencies')).toMatch(/^[\d,]+ packages$/);
     expect(valueFor('Installed non-development package locations')).toMatch(
       /^[\d,]+$/,
     );
@@ -418,7 +409,7 @@ describe('Site', () => {
 
   it('says no source on any row', async () => {
     // What the caption replaced: a tag under each label, so that every row
-    // header read "Number of forks Source: GitHub". A header is its label.
+    // header read "GitHub stars Source: GitHub". A header is its label.
     render(await Site());
 
     for (const header of screen.getAllByRole('rowheader')) {

@@ -511,10 +511,10 @@
    STATS PAGE
    ======================================== */
 
-/* Readings, not a spreadsheet: the label annotates in mono and the value is
-   set large enough to be read off at a glance. Each table holds the readings
-   from one source and is named by its caption. The ink rule above it belongs
-   to the section header now, so the table draws none of its own. */
+/* Readings, not a spreadsheet: a label to read beside a value set large enough
+   to be read off at a glance. Each table holds the readings from one source
+   and is named by its caption. The ink rule above it belongs to the section
+   header now, so the table draws none of its own. */
 .stat-table {
   border-collapse: separate;
   border-spacing: 0;
@@ -551,17 +551,18 @@
   vertical-align: baseline;
 }
 
-/* A row label is the information, not annotation about it, so it sits at
-   the interactive/readable size rather than the 11px annotation size. */
+/* A label is a phrase, so it is set as one: the reading face, in ink and in
+   sentence case. As 13px tracked capitals in a column fixed at 40%, "Stars
+   this repository has on GitHub" took three lines of a phone. */
 .stat-table-label {
   width: 40%;
   text-align: left;
-  font-family: var(--font-mono);
-  font-size: var(--text-ui);
-  font-weight: var(--font-weight-medium);
-  letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
-  color: var(--color-fg-light);
+  text-wrap: balance;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--leading-snug);
+  color: var(--color-fg);
 }
 
 .stat-table-value {
@@ -604,10 +605,8 @@
   display: block;
   margin-top: 0.35rem;
   font-family: var(--font-mono);
-  font-size: var(--text-2xs);
+  font-size: var(--text-xs);
   font-weight: var(--font-weight-normal);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
   white-space: nowrap;
   color: var(--color-fg-light);
 }
