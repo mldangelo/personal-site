@@ -512,13 +512,13 @@
    ======================================== */
 
 /* Readings, not a spreadsheet: the label annotates in mono and the
-   value is set large enough to be read off at a glance. */
+   value is set large enough to be read off at a glance. The ink rule above
+   it belongs to the section header now, so the table draws none of its own. */
 .stat-table {
   border-collapse: separate;
   border-spacing: 0;
   width: 100%;
   background: transparent;
-  border-top: var(--rule) solid var(--color-fg-bold);
 }
 
 .stat-table tr {
@@ -706,16 +706,6 @@
   display: flex;
   flex-direction: column;
   gap: 3.5rem;
-}
-
-.stats-section-title {
-  font-family: var(--font-mono);
-  font-size: var(--text-2xs);
-  font-weight: var(--font-weight-medium);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
-  color: var(--color-fg-light);
-  margin-bottom: 0.75rem;
 }
 
 @media (max-width: 640px) {
