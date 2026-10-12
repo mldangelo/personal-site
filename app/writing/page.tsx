@@ -11,6 +11,7 @@ import {
   SITE_URL,
   WRITING_DESCRIPTION,
 } from '@/lib/schema';
+import { smartQuotes } from '@/lib/typography';
 import { formatDate } from '@/lib/utils';
 import { getWritingItems, type WritingItem as Item } from '@/lib/writing';
 
@@ -37,18 +38,18 @@ export const metadata: Metadata = {
 interface WritingItemProps {
   featured?: boolean;
   item: Item;
-  showDate?: boolean;
 }
 
-function WritingItem({
-  featured = false,
-  item,
-  showDate = true,
-}: WritingItemProps) {
+/**
+ * One row of the index: provenance in the gutter, then the title and a line
+ * of supporting copy. An entry with no date simply has none to show, so its
+ * source is the whole of its gutter.
+ */
+function WritingItem({ featured = false, item }: WritingItemProps) {
   const content = (
     <>
       <div className="writing-meta">
-        {showDate && item.date && (
+        {item.date && (
           <time className="writing-date" dateTime={item.date}>
             {formatDate(item.date)}
           </time>
@@ -62,8 +63,8 @@ function WritingItem({
           </span>
         )}
       </div>
-      <h3 className="writing-title">{item.title}</h3>
-      <p className="writing-description">{item.description}</p>
+      <h3 className="writing-title">{smartQuotes(item.title)}</h3>
+      <p className="writing-description">{smartQuotes(item.description)}</p>
       {item.isExternal && (
         // The arrow is decorative, so the warning has to be spoken.
         <span className="sr-only"> (opens in a new tab)</span>
@@ -98,8 +99,9 @@ function WritingItem({
 export default function WritingPage() {
   const allItems = getWritingItems();
   const internal = allItems.filter((item) => !item.isExternal);
-  const external = allItems.filter((item) => item.isExternal && item.date);
-  const guides = allItems.filter((item) => item.isExternal && !item.date);
+  // Undated entries already sort last, so a guide with no date closes this
+  // list. It used to get a section to itself: a heading over a single link.
+  const external = allItems.filter((item) => item.isExternal);
 
   const latestDatedItem = allItems.find((item) => item.date);
   const latestPostDate = latestDatedItem?.date;
@@ -137,9 +139,11 @@ export default function WritingPage() {
         </header>
 
         <section className="writing-group" aria-labelledby="writing-here">
-          <h2 id="writing-here" className="writing-section-label">
-            Essays on this site
-          </h2>
+          <div className="section-header">
+            <h2 id="writing-here" className="section-heading">
+              Essays on this site
+            </h2>
+          </div>
           <div className="writing-list">
             {internal.map((item) => (
               <WritingItem
@@ -152,9 +156,11 @@ export default function WritingPage() {
         </section>
 
         <section className="writing-group" aria-labelledby="writing-elsewhere">
-          <h2 id="writing-elsewhere" className="writing-section-label">
-            Selected writing elsewhere
-          </h2>
+          <div className="section-header">
+            <h2 id="writing-elsewhere" className="section-heading">
+              Selected writing elsewhere
+            </h2>
+          </div>
           <div className="writing-list">
             {external.map((item) => (
               <WritingItem
@@ -165,19 +171,6 @@ export default function WritingPage() {
             ))}
           </div>
         </section>
-
-        {guides.length > 0 && (
-          <section className="writing-group" aria-labelledby="writing-guides">
-            <h2 id="writing-guides" className="writing-section-label">
-              Guides
-            </h2>
-            <div className="writing-list">
-              {guides.map((item) => (
-                <WritingItem key={item.url} item={item} showDate={false} />
-              ))}
-            </div>
-          </section>
-        )}
       </article>
     </PageWrapper>
   );
