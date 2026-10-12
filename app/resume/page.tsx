@@ -103,7 +103,7 @@ export default function ResumePage() {
           </div>
           <p className="resume-summary">
             Engineering leader with a career spanning {careerSpan}+ years across
-            AI, security, and infrastructure. I&apos;m currently a Member of the
+            AI, security, and infrastructure. I’m currently a Member of the
             Technical Staff at OpenAI, working on Promptfoo and Codex Security.
             I help secure AI systems and use AI to find software
             vulnerabilities. I co-founded Promptfoo before it joined OpenAI in
