@@ -7,7 +7,10 @@ import localFont from 'next/font/local';
  * does not silently preload every script Fontsource ships.
  */
 export const inter = localFont({
-  src: '../node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2',
+  // The `opsz` file carries the optical-size axis beside weight; `wght` alone
+  // is the text cut at every size, which is what set the 64px name in letters
+  // drawn for 14px. Browsers pick the cut from the font size unprompted.
+  src: '../node_modules/@fontsource-variable/inter/files/inter-latin-opsz-normal.woff2',
   variable: '--font-inter',
   weight: '100 900',
   style: 'normal',
