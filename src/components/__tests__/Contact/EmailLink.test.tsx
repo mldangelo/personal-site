@@ -1,250 +1,358 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { REDUCED_MOTION_QUERY } from '@/hooks/usePrefersReducedMotion';
 import profile from '../../../data/profile.json';
 import EmailLink from '../../Contact/EmailLink';
 
-const [localPart, domain] = profile.email.split('@');
+const ADDRESS = profile.email;
+const [, DOMAIN] = ADDRESS.split('@');
+
+/** One animation tick. */
+const TICK_MS = 50;
+/** Comfortably longer than one pass through every alias (about 49 seconds). */
+const WHOLE_CYCLE_MS = 60_000;
+
+/** A `matchMedia` stand-in whose reduced-motion answer can be flipped. */
+function stubReducedMotion(prefersReduced: boolean) {
+  const listeners = new Set<() => void>();
+  let matches = prefersReduced;
+
+  Object.defineProperty(window, 'matchMedia', {
+    writable: true,
+    configurable: true,
+    value: (query: string) => ({
+      get matches() {
+        return query === REDUCED_MOTION_QUERY && matches;
+      },
+      media: query,
+      addEventListener: (_type: string, listener: () => void) => {
+        listeners.add(listener);
+      },
+      removeEventListener: (_type: string, listener: () => void) => {
+        listeners.delete(listener);
+      },
+    }),
+  });
+
+  return {
+    /** What switching the operating-system setting mid-visit looks like. */
+    flipTo(next: boolean) {
+      matches = next;
+      act(() => {
+        for (const listener of listeners) listener();
+      });
+    },
+  };
+}
+
+function addressLink() {
+  return screen.getByRole('link');
+}
+
+function block() {
+  return document.querySelector('.contact-email-container') as HTMLElement;
+}
+
+/** The decorative line, or `null` while nothing is typed on it. */
+function aliasLine() {
+  return document.querySelector('.contact-email-alias');
+}
+
+/**
+ * What the line reads, exactly. `toHaveTextContent` matches substrings, which
+ * is the wrong tool on a page whose bug was extra text beside the address.
+ */
+function shownAlias(): string | null {
+  return aliasLine()?.textContent ?? null;
+}
+
+function advance(ms: number) {
+  act(() => {
+    vi.advanceTimersByTime(ms);
+  });
+}
+
+interface Frame {
+  alias: string | null;
+  linkText: string | null;
+  linkHref: string | null;
+}
+
+/** Steps the clock one tick at a time, recording what is on screen at each. */
+function watch(durationMs: number): Frame[] {
+  const frames: Frame[] = [];
+
+  for (let elapsed = 0; elapsed < durationMs; elapsed += TICK_MS) {
+    advance(TICK_MS);
+    frames.push({
+      alias: shownAlias(),
+      linkText: addressLink().textContent,
+      linkHref: addressLink().getAttribute('href'),
+    });
+  }
+
+  return frames;
+}
+
+/** Every distinct alias a run typed, in the order it first appeared. */
+function typedIn(frames: Frame[]): string[] {
+  return [
+    ...new Set(
+      frames.map((frame) => frame.alias).filter((alias) => alias !== null),
+    ),
+  ];
+}
+
+/** Runs until an alias is part-way typed, and returns what is showing. */
+function runUntilTyping(): string {
+  for (let elapsed = 0; elapsed < WHOLE_CYCLE_MS; elapsed += TICK_MS) {
+    advance(TICK_MS);
+    if (aliasLine()) {
+      // One more tick, so a frozen line is distinguishable from its first frame.
+      advance(TICK_MS);
+      return shownAlias() ?? '';
+    }
+  }
+
+  throw new Error('no alias was ever typed');
+}
 
 describe('EmailLink', () => {
   beforeEach(() => {
     vi.useFakeTimers();
-    // Mock matchMedia for reduced motion preference
-    Object.defineProperty(window, 'matchMedia', {
-      writable: true,
-      value: vi.fn().mockImplementation((query) => ({
-        matches: false,
-        media: query,
-        onchange: null,
-        addListener: vi.fn(),
-        removeListener: vi.fn(),
-        addEventListener: vi.fn(),
-        removeEventListener: vi.fn(),
-        dispatchEvent: vi.fn(),
-      })),
-    });
+    stubReducedMotion(false);
   });
 
   afterEach(() => {
     vi.useRealTimers();
   });
 
-  it('renders the email domain', () => {
-    render(<EmailLink />);
+  describe('the address', () => {
+    it('is the link, in full, pointing at itself', () => {
+      render(<EmailLink />);
 
-    expect(screen.getByText(`@${domain}`)).toBeInTheDocument();
-  });
-
-  it('renders as a link element', () => {
-    render(<EmailLink />);
-
-    const link = screen.getByRole('link');
-    expect(link).toBeInTheDocument();
-  });
-
-  it('animates through messages over time', async () => {
-    render(<EmailLink />);
-
-    // Flush effects first
-    await act(async () => {
-      await Promise.resolve();
+      expect(addressLink().textContent).toBe(ADDRESS);
+      expect(addressLink()).toHaveAccessibleName(ADDRESS);
+      expect(addressLink()).toHaveAttribute('href', `mailto:${ADDRESS}`);
     });
 
-    // Initial state shows the real local-part (accessibility: never show empty)
-    const prefix = document.querySelector('.contact-email-prefix');
-    expect(prefix?.textContent).toBe(localPart);
+    /**
+     * The aliases used to be typed into the link. The real address was on
+     * screen for 2.5 seconds, a selection copied whichever alias was showing,
+     * and the cycle ended on `thanks@…` for good.
+     */
+    it.each([
+      ['once', false],
+      ['looping', true],
+    ])('never changes while the aliases cycle %s', (_label, loopMessage) => {
+      render(<EmailLink loopMessage={loopMessage} />);
 
-    // Advance through multiple messages to verify animation works
-    // Each message takes ~50 chars + 50 hold ticks at 50ms each
-    act(() => {
-      vi.advanceTimersByTime(10000); // Advance 10 seconds
+      const frames = watch(WHOLE_CYCLE_MS);
+
+      // At every tick, not only once the cycle has settled.
+      expect(new Set(frames.map((frame) => frame.linkText))).toEqual(
+        new Set([ADDRESS]),
+      );
+      expect(new Set(frames.map((frame) => frame.linkHref))).toEqual(
+        new Set([`mailto:${ADDRESS}`]),
+      );
+      expect(addressLink()).toHaveAccessibleName(ADDRESS);
+      expect(addressLink()).not.toHaveAttribute('aria-disabled');
+      // The cycle really ran underneath it, all the way to its last alias.
+      expect(typedIn(frames)).toContain(`thanks@${DOMAIN}`);
     });
 
-    // Animation should have progressed beyond 'hi'
-    // The component continues to animate through messages
-    expect(prefix).toBeInTheDocument();
+    it('is in the server markup with nothing typed under it', () => {
+      const html = renderToStaticMarkup(<EmailLink />);
+
+      expect(html).toContain(`>${ADDRESS}</a>`);
+      expect(html).not.toContain('contact-email-alias');
+    });
   });
 
-  /**
-   * Advancing used to reset to zero characters, leaving `message` empty for a
-   * tick. The render fell back to the static local part, so the prefix snapped
-   * back to the real address for one frame at every one of the fifteen message
-   * boundaries — a visible flicker on the deployed page.
-   */
-  it('never blanks or snaps back to the address mid-animation', () => {
-    render(<EmailLink loopMessage />);
-    const prefix = () =>
-      document.querySelector('.contact-email-prefix')?.textContent ?? '';
+  describe('the alias line', () => {
+    it('opens empty, then types the first alias after a pause', () => {
+      render(<EmailLink />);
 
-    let previous = prefix();
+      expect(aliasLine()).toBeNull();
 
-    // Two full cycles, so the loop wrap is covered as well as every boundary.
-    for (let elapsed = 0; elapsed < 120_000; elapsed += 50) {
-      act(() => {
-        vi.advanceTimersByTime(50);
-      });
+      advance(2_000);
+      expect(aliasLine()).toBeNull();
 
-      const shown = prefix();
-
-      // The blank frame itself.
-      expect(shown).not.toBe('');
-
-      // The flash is a *jump* to the complete address from some other alias
-      // already several characters long. Looping re-types the address
-      // legitimately, but that grows "h" -> "hi", so the previous frame is a
-      // single character and this guard leaves it alone.
-      if (previous.length > 1 && previous !== localPart) {
-        expect(shown).not.toBe(localPart);
-      }
-
-      previous = shown;
-    }
-  });
-
-  it('stays settled once the animation completes', () => {
-    const { container } = render(<EmailLink />);
-
-    act(() => {
-      vi.advanceTimersByTime(120_000);
+      advance(1_000);
+      expect(shownAlias()).toBe(`hello@${DOMAIN}`);
     });
 
-    const settled = document.querySelector(
-      '.contact-email-prefix',
-    )?.textContent;
+    it('types a character at a time, with the domain riding along', () => {
+      render(<EmailLink />);
 
-    // A finished animation recorded completion only in `isActive`, so RESUME's
-    // `idx < maxIdx` check passed and every mouse-out re-armed the interval.
-    const wrapper = container.querySelector(
-      '.contact-email-container',
-    ) as HTMLElement;
-    fireEvent.mouseEnter(wrapper);
-    fireEvent.mouseLeave(wrapper);
-
-    act(() => {
-      vi.advanceTimersByTime(5_000);
+      expect(typedIn(watch(5_000))).toEqual([
+        `h@${DOMAIN}`,
+        `he@${DOMAIN}`,
+        `hel@${DOMAIN}`,
+        `hell@${DOMAIN}`,
+        `hello@${DOMAIN}`,
+      ]);
     });
 
-    expect(document.querySelector('.contact-email-prefix')?.textContent).toBe(
-      settled,
+    it('is decoration: hidden from assistive technology and outside the link', () => {
+      render(<EmailLink />);
+      runUntilTyping();
+
+      expect(aliasLine()).toHaveAttribute('aria-hidden', 'true');
+      expect(addressLink()).not.toContainElement(aliasLine() as HTMLElement);
+    });
+
+    /**
+     * Rendering `{alias}@{domain}` looks the same and is three text nodes. The
+     * domain then has a position of its own for every keystroke to push, and
+     * Chrome reports each push as a layout shift: 45 entries typing one alias,
+     * measured against none for a single node.
+     */
+    it('is a single text node, so typing moves nothing that was already there', () => {
+      render(<EmailLink />);
+      runUntilTyping();
+
+      expect(aliasLine()?.childNodes).toHaveLength(1);
+      expect(aliasLine()?.firstChild?.nodeType).toBe(Node.TEXT_NODE);
+    });
+
+    /**
+     * Advancing used to reset to zero characters, leaving the message empty
+     * for a tick. An empty message draws no line, so the line would blink out
+     * at every one of the boundaries between aliases.
+     */
+    it('stays up from the first alias to the last, then clears', () => {
+      render(<EmailLink />);
+
+      const frames = watch(WHOLE_CYCLE_MS);
+      const presence = frames
+        .map((frame) => (frame.alias === null ? '-' : 'x'))
+        .join('');
+
+      // Empty, then continuously present, then empty: no gap in the middle.
+      expect(presence).toMatch(/^-+x+-+$/);
+
+      const typed = typedIn(frames);
+
+      // Never a bare `@domain`, which is what an empty message would type.
+      expect(typed.filter((alias) => alias.startsWith('@'))).toEqual([]);
+      expect(typed.at(-1)).toBe(`thanks@${DOMAIN}`);
+    });
+
+    it('stays cleared once the cycle has finished', () => {
+      render(<EmailLink />);
+      advance(WHOLE_CYCLE_MS);
+
+      expect(aliasLine()).toBeNull();
+
+      // A finished animation recorded completion only in `isActive`, so
+      // RESUME's `idx < maxIdx` check passed and every mouse-out or blur
+      // re-armed the interval.
+      fireEvent.mouseEnter(addressLink());
+      fireEvent.mouseLeave(addressLink());
+      fireEvent.focus(addressLink());
+      fireEvent.blur(addressLink());
+
+      expect(typedIn(watch(5_000))).toEqual([]);
+    });
+
+    it('starts over after a rest when it loops', () => {
+      render(<EmailLink loopMessage />);
+
+      const frames = watch(WHOLE_CYCLE_MS).map((frame) => frame.alias);
+      const firstAlias = `hello@${DOMAIN}`;
+      const timesTyped = frames.filter(
+        (alias, index) => alias === firstAlias && frames[index - 1] !== alias,
+      ).length;
+
+      expect(timesTyped).toBe(2);
+    });
+
+    it.each([
+      ['the address', addressLink],
+      ['the line itself', aliasLine],
+    ])(
+      'holds its frame while the pointer is on %s, and resumes after',
+      (_label, target) => {
+        render(<EmailLink />);
+        const before = runUntilTyping();
+
+        fireEvent.mouseEnter(target() as HTMLElement);
+        advance(500);
+        expect(shownAlias()).toBe(before);
+
+        fireEvent.mouseLeave(target() as HTMLElement);
+        advance(500);
+        expect(shownAlias()).not.toBe(before);
+      },
     );
+
+    // The block is a grid as wide as the page. With the handlers on the block,
+    // a pointer resting anywhere in that band froze the line for no visible
+    // reason.
+    it('keeps typing while the pointer is only in the space beside the address', () => {
+      render(<EmailLink />);
+      const before = runUntilTyping();
+
+      fireEvent.mouseEnter(block());
+      advance(500);
+
+      expect(shownAlias()).not.toBe(before);
+    });
+
+    it('holds its frame while the address has keyboard focus', () => {
+      render(<EmailLink />);
+      const before = runUntilTyping();
+
+      fireEvent.focus(addressLink());
+      advance(500);
+      expect(shownAlias()).toBe(before);
+
+      fireEvent.blur(addressLink());
+      advance(500);
+      expect(shownAlias()).not.toBe(before);
+    });
   });
 
-  it('pauses animation on mouse enter', async () => {
-    render(<EmailLink />);
+  describe('reduced motion', () => {
+    it('never renders the alias line, and leaves the rest alone', () => {
+      stubReducedMotion(true);
+      render(<EmailLink />);
 
-    const container = document.querySelector(
-      '.contact-email-container',
-    ) as HTMLElement;
-
-    // Let animation run a bit
-    act(() => {
-      vi.advanceTimersByTime(100);
+      expect(typedIn(watch(WHOLE_CYCLE_MS))).toEqual([]);
+      expect(addressLink().textContent).toBe(ADDRESS);
     });
 
-    const prefixBefore = document.querySelector(
-      '.contact-email-prefix',
-    )?.textContent;
+    it('takes the line down when the preference turns on mid-visit', () => {
+      const motion = stubReducedMotion(false);
+      render(<EmailLink />);
+      runUntilTyping();
 
-    // Pause on hover
-    fireEvent.mouseEnter(container);
+      motion.flipTo(true);
 
-    // Advance time
-    act(() => {
-      vi.advanceTimersByTime(500);
+      expect(aliasLine()).toBeNull();
+      expect(typedIn(watch(5_000))).toEqual([]);
     });
 
-    const prefixAfter = document.querySelector(
-      '.contact-email-prefix',
-    )?.textContent;
+    // Hiding the line is not the same as stopping it. A cycle left ticking
+    // unseen would surface part-way through if the preference were lifted.
+    it('does not run the cycle unseen: lifting the preference starts it from the top', () => {
+      const motion = stubReducedMotion(true);
+      render(<EmailLink />);
+      advance(10_000);
 
-    // Should be the same since animation is paused
-    expect(prefixAfter).toBe(prefixBefore);
-  });
+      motion.flipTo(false);
 
-  it('resumes animation on mouse leave', async () => {
-    render(<EmailLink />);
-
-    const container = document.querySelector(
-      '.contact-email-container',
-    ) as HTMLElement;
-
-    // Pause
-    fireEvent.mouseEnter(container);
-
-    act(() => {
-      vi.advanceTimersByTime(100);
+      expect(typedIn(watch(5_000))).toEqual([
+        `h@${DOMAIN}`,
+        `he@${DOMAIN}`,
+        `hel@${DOMAIN}`,
+        `hell@${DOMAIN}`,
+        `hello@${DOMAIN}`,
+      ]);
     });
-
-    // Resume
-    fireEvent.mouseLeave(container);
-
-    // Animation should be running again (no error)
-    act(() => {
-      vi.advanceTimersByTime(100);
-    });
-
-    expect(container).toBeInTheDocument();
-  });
-
-  it('generates valid mailto href for valid email prefixes', () => {
-    render(<EmailLink />);
-
-    // Advance time to get a valid email prefix
-    act(() => {
-      vi.advanceTimersByTime(150); // Type out 'hi'
-    });
-
-    const link = screen.getByRole('link');
-    expect(link.getAttribute('href')).toBe(`mailto:${profile.email}`);
-  });
-
-  /**
-   * Three of the joke aliases are not valid email local-parts, including
-   * "but not this :(  ". Those used to replace the anchor with an
-   * aria-disabled, unfocusable span, leaving the contact page with no way to
-   * reach anyone for roughly a fifth of the animation cycle.
-   */
-  it('keeps a working email link through the entire animation cycle', () => {
-    render(<EmailLink loopMessage />);
-
-    for (let elapsed = 0; elapsed < 60_000; elapsed += 250) {
-      act(() => {
-        vi.advanceTimersByTime(250);
-      });
-
-      const link = screen.getByRole('link');
-      expect(link).toHaveAttribute('href', `mailto:${profile.email}`);
-      expect(link).not.toHaveAttribute('aria-disabled');
-    }
-  });
-
-  it('names the link by its real destination, not the animated alias', () => {
-    render(<EmailLink />);
-
-    act(() => {
-      vi.advanceTimersByTime(50 * 200);
-    });
-
-    // The alias changes ~20x/second; an accessible name that mutated with it
-    // would be unusable, so the visible text is decorative.
-    expect(
-      screen.getByRole('link', { name: `Email ${profile.email}` }),
-    ).toBeInTheDocument();
-    expect(document.querySelector('.contact-email-prefix')).toHaveAttribute(
-      'aria-hidden',
-      'true',
-    );
-  });
-
-  it('loops messages when loopMessage is true', async () => {
-    render(<EmailLink loopMessage={true} />);
-
-    // Advance through all messages
-    act(() => {
-      vi.advanceTimersByTime(50 * 1000);
-    });
-
-    // Component should still be active and rendering
-    const container = document.querySelector('.contact-email-container');
-    expect(container).toBeInTheDocument();
   });
 });

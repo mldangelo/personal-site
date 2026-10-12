@@ -320,8 +320,11 @@
   margin-bottom: 0;
 }
 
+/* Full width rather than shrink-to-fit. As a centred flex item this took the
+   width of its widest child, so a child that changed size moved the whole
+   column — which the address did, while aliases were typed into it. */
 .contact-content {
-  max-width: 100%;
+  width: 100%;
   text-align: center;
 }
 
@@ -330,19 +333,34 @@
   margin-bottom: 2.5rem;
 }
 
+/* The address and the line its aliases are typed on.
+
+   The aliases used to be typed into the link itself, which grew from 85px to
+   196px whenever a long one wrapped. The block is vertically centred, so the
+   heading jumped with it: 0.75 of cumulative layout shift on desktop. The
+   link is static now and the typing has the second row to itself. That row's
+   height is set here and not by what is in it, and it is held open when the
+   line is not rendered at all (reduced motion, no JavaScript, a finished
+   cycle), so the line coming and going moves nothing.
+
+   The address sits between two equal gutters, which centres it and gives the
+   alias line a left edge to share. The size and leading set here are the
+   alias line's, so `lh` measures the row in that line's own lines. */
 .contact-email-container {
-  display: block;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  grid-template-rows: auto 1lh;
   margin-bottom: 0.75rem;
+  font-size: var(--text-xs);
+  line-height: 1.5;
 }
 
 /* The address is the page's one instruction, so it is set as a
-   readout in mono rather than dressed up as a tinted button. */
+   readout in mono rather than dressed up as a tinted button. All of it is
+   ink: the accent prefix marked the half that animated, and nothing does. */
 .contact-email-link {
-  display: inline-flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: center;
-  max-width: 100%;
+  grid-area: 1 / 2;
+  margin-bottom: 0.5rem;
   padding: 0.875rem 0;
   font-family: var(--font-mono);
   font-size: clamp(var(--text-xl), 4vw, var(--text-3xl));
@@ -355,9 +373,8 @@
   border-radius: 0;
   border-bottom: var(--rule-strong) solid var(--color-accent);
   text-decoration: none;
-  /* The animated alias runs long — "you-can-email-me-at-literally-anything!"
-     pushed 438px of content into a 320px viewport. It has to be allowed to
-     break, mid-token if necessary. */
+  /* An address is one unbreakable token. With enlarged text on a narrow
+     screen it has to break, mid-token, rather than push the page sideways. */
   overflow-wrap: anywhere;
   transition:
     color var(--duration-fast) var(--ease-out),
@@ -370,21 +387,27 @@
   border-bottom-color: var(--color-accent-hover);
 }
 
-/* Flex items default to min-width:auto and refuse to shrink below their
-   content, so the wrapping allowed on the link above never reached the long
-   animated alias. Both halves have to opt in individually. */
-.contact-email-prefix,
-.contact-email-domain {
-  min-width: 0;
+/* Decoration: typed from the address's left edge towards the right rail, and
+   clipped to its row rather than allowed to grow it. Left-aligned because
+   centred type re-centres on every keystroke — the whole line slides half a
+   character per tick, which is itself a layout shift. Not selectable: several
+   aliases are not valid addresses, and a selection swept across the block
+   should pick up only the real one.
+
+   `contain` keeps the text from ever sizing a column. Confined to the
+   address's own `auto` track, an alias wider than the address widened that
+   track and stretched the link's rule to the page edge for as long as it was
+   up. Spanning into the gutter happens to avoid that; this does not depend on
+   where the line is placed. */
+.contact-email-alias {
+  grid-area: 2 / 2 / auto / -1;
+  contain: inline-size;
+  overflow: hidden;
   overflow-wrap: anywhere;
-}
-
-.contact-email-prefix {
-  color: var(--color-accent);
-}
-
-.contact-email-domain {
-  color: var(--color-fg-bold);
+  font-family: var(--font-mono);
+  text-align: left;
+  color: var(--color-fg-light);
+  user-select: none;
 }
 
 .contact-hint {
@@ -393,6 +416,29 @@
   letter-spacing: var(--tracking-wide);
   color: var(--color-fg-light);
   margin: 0;
+}
+
+/* Below the desktop breakpoint the longest alias, 61 characters with its
+   domain, no longer fits on one line, so the row is held open for the lines
+   it wraps to: two, and a third at the narrowest phones, where the line is
+   under 31 characters wide (320px gives it 30). */
+@media (max-width: 735px) {
+  .contact-email-container {
+    grid-template-rows: auto 2lh;
+  }
+}
+
+@media (max-width: 340px) {
+  .contact-email-container {
+    grid-template-rows: auto 3lh;
+  }
+}
+
+/* A half-typed joke means nothing on paper. */
+@media print {
+  .contact-email-alias {
+    display: none;
+  }
 }
 
 /* Divider */

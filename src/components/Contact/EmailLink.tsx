@@ -9,12 +9,19 @@ import usePrefersReducedMotion from '@/hooks/usePrefersReducedMotion';
 const ANIMATION_TICK_MS = 50; // Tick length in milliseconds
 const HOLD_TICKS_AFTER_MESSAGE = 50; // Ticks to wait after message completes
 
-/** The address the link always resolves to, whatever the animation shows. */
+/** The address this page exists to give out: the link's text and its target. */
 const CONTACT_ADDRESS = profile.email;
-const [CONTACT_LOCAL_PART, CONTACT_DOMAIN] = CONTACT_ADDRESS.split('@');
+const [, CONTACT_DOMAIN] = CONTACT_ADDRESS.split('@');
 
+/**
+ * Joke aliases, typed one at a time on a decorative line under the address.
+ *
+ * The first is blank on purpose. The line opens empty and holds for as long as
+ * any other message, so the address has been read before anything beneath it
+ * moves — and a looping cycle rests the same way between laps.
+ */
 const messages = [
-  CONTACT_LOCAL_PART,
+  '',
   'hello',
   'hola',
   'you-can-email-me-at-literally-anything! Really',
@@ -62,9 +69,9 @@ type AnimationAction =
  * The opening frame of a message.
  *
  * Advancing used to reset to zero characters, so `message` was `''` for one
- * tick at every boundary — and the render fell back to the static address,
- * flashing it fifteen times a cycle. A message now begins already showing its
- * first character, so the prefix is never empty mid-animation.
+ * tick at every boundary. An empty message draws no alias line, so the line
+ * would blink out between every pair of aliases. A message begins already
+ * showing its first character; only the blank opening message is ever empty.
  */
 function startOf(idx: number): AnimationState {
   return {
@@ -106,7 +113,11 @@ function animationReducer(
         // Completion is recorded in `idx`, not only in `isActive`. Leaving it
         // on the last message meant RESUME's `idx < maxIdx` test passed, so a
         // finished animation re-armed its interval on every mouse-out.
-        return { ...state, idx: messages.length, isActive: false };
+        //
+        // The message is cleared with it. A last alias left standing would be
+        // a second address under the real one, with no typing left to say it
+        // was a joke.
+        return { idx: messages.length, message: '', char: 0, isActive: false };
       }
 
       return startOf(nextIdx);
@@ -127,24 +138,19 @@ interface EmailLinkProps {
   loopMessage?: boolean;
 }
 
+/**
+ * The address and, kept apart from it, the alias gag.
+ *
+ * The aliases used to be typed into the link itself. That left the one thing
+ * `/contact` is for on screen for 2.5 seconds of a 50-second cycle, ended on
+ * `thanks@…` for good, and let a wrapping alias resize the link and throw the
+ * centred page around with it. The link is now static text and the gag has a
+ * line of its own, whose space `content.css` reserves whether or not anything
+ * is typed there.
+ */
 export default function EmailLink({ loopMessage = false }: EmailLinkProps) {
   const reducedMotion = usePrefersReducedMotion();
-
-  // Opens on the real local part, already complete, so the first thing anyone
-  // sees is the actual address — and it holds there before the cycle starts.
-  const [state, dispatch] = useReducer(animationReducer, {
-    idx: 0,
-    message: CONTACT_LOCAL_PART,
-    char: messages[0].length,
-    isActive: true,
-  });
-
-  // If user prefers reduced motion, show static email immediately
-  useEffect(() => {
-    if (reducedMotion) {
-      dispatch({ type: 'PAUSE' });
-    }
-  }, [reducedMotion]);
+  const [state, dispatch] = useReducer(animationReducer, 0, startOf);
 
   useInterval(
     () => {
@@ -153,44 +159,46 @@ export default function EmailLink({ loopMessage = false }: EmailLinkProps) {
     state.isActive && !reducedMotion ? ANIMATION_TICK_MS : null,
   );
 
-  // The reducer never yields an empty prefix, so the only reason to override
-  // it is reduced motion, where the real address should simply stand.
-  const displayMessage = reducedMotion ? CONTACT_LOCAL_PART : state.message;
+  // The line is nothing but motion, so there is no still version of it to fall
+  // back on: a visitor who asked for less motion gets no line at all.
+  const alias = reducedMotion ? '' : state.message;
 
-  const handlePause = () => dispatch({ type: 'PAUSE' });
-  const handleResume = () => {
-    if (!reducedMotion) {
-      dispatch({ type: 'RESUME', maxIdx: messages.length });
-    }
+  // Pointing at the address or the line, or tabbing to the address, holds the
+  // current frame, so a line that otherwise moves for fifty seconds can be
+  // stopped (WCAG 2.2.2). The handlers sit on the things themselves, not on
+  // the block around them: the block is as wide as the page, and a pointer
+  // parked in its empty gutters would stop the line for no reason a visitor
+  // could see.
+  const pause = () => dispatch({ type: 'PAUSE' });
+  const resume = () => dispatch({ type: 'RESUME', maxIdx: messages.length });
+  const hold = {
+    onMouseEnter: pause,
+    onMouseLeave: resume,
+    onFocus: pause,
+    onBlur: resume,
   };
 
   return (
-    <div
-      className="contact-email-container"
-      onMouseEnter={handlePause}
-      onMouseLeave={handleResume}
-    >
-      {/* Always a real link to a real address.
-          The animation cycles through joke aliases, three of which are not
-          valid local-parts ("but not this :(  " among them). Those used to
-          swap the anchor for an aria-disabled, unfocusable <span>, so for
-          roughly a fifth of the cycle the contact page offered no way to
-          reach anyone. The gag is now purely visual: the shown alias is
-          decorative and the destination never changes. */}
+    <div className="contact-email-container">
+      {/* The link's text is the address, exactly: it is what gets read, what a
+          selection copies, and the link's accessible name. Nothing in here
+          animates. */}
       <a
+        {...hold}
         href={`mailto:${CONTACT_ADDRESS}`}
         className="contact-email-link"
-        onFocus={handlePause}
-        onBlur={handleResume}
       >
-        <span className="sr-only">Email {CONTACT_ADDRESS}</span>
-        <span className="contact-email-prefix" aria-hidden="true">
-          {displayMessage}
-        </span>
-        <span className="contact-email-domain" aria-hidden="true">
-          @{CONTACT_DOMAIN}
-        </span>
+        {CONTACT_ADDRESS}
       </a>
+      {/* Decorative, and several aliases are not valid addresses, so it is
+          hidden from assistive technology and cannot be selected. One text
+          node on purpose: a domain in a node of its own would be pushed along
+          by every keystroke, and each push is a layout shift. */}
+      {alias ? (
+        <span {...hold} className="contact-email-alias" aria-hidden="true">
+          {`${alias}@${CONTACT_DOMAIN}`}
+        </span>
+      ) : null}
     </div>
   );
 }
