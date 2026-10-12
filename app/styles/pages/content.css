@@ -274,20 +274,28 @@
   }
 }
 
+/* One link style, the article's, in paragraphs and lists alike. Links here
+   were ink with a hairline underline at 1.6:1, and in a paragraph the global
+   `p a` gradient drew a second line under the first. */
 .about-content a {
-  color: inherit;
+  color: var(--color-accent);
   text-decoration: underline;
-  text-decoration-color: var(--color-border-alt);
+  text-decoration-color: var(--color-accent-underline);
   text-underline-offset: 2px;
-  text-decoration-thickness: 1px;
-  transition:
-    text-decoration-color var(--duration-fast) var(--ease-out),
-    color var(--duration-fast) var(--ease-out);
+  background-image: none;
+}
+
+/* dark-mode.css restates that gradient at (0,1,2), and its hover at (0,2,2),
+   after this file: both outrank the rule above, so at night a paragraph link
+   kept its second line. */
+[data-theme='dark'] .about-content p a,
+[data-theme='dark'] .about-content p a:hover {
+  background-image: none;
 }
 
 .about-content a:hover {
-  text-decoration-color: var(--color-accent-underline-strong);
-  color: var(--color-fg-bold);
+  color: var(--color-accent-hover);
+  text-decoration-color: var(--color-accent);
 }
 
 .contact-page {
