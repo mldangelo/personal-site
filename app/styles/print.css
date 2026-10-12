@@ -144,10 +144,22 @@
     page-break-inside: avoid;
   }
 
+  /* Paper is narrower than the screen's column and its dates are set smaller,
+     so the two sections that hang on the gutter take a tighter one: as wide
+     as a range of two dated months at 8pt, and no wider. */
+  .jobs-container,
+  .skill-group {
+    --resume-gutter: 7.5rem;
+    --resume-gap: 1rem;
+  }
+
+  /* A long role may run on to the next page between two of its bullets. Held
+     whole by the rule above, one that did not fit was moved to the next page
+     entire, and the first page went out a fifth empty. */
   .jobs-container {
-    padding-bottom: 1.25rem;
-    grid-template-columns: 9rem minmax(0, 1fr);
-    gap: 0 1.5rem;
+    padding: 0 0 0.9rem;
+    break-inside: auto;
+    page-break-inside: auto;
   }
 
   /* The spine and its ticks are screen scaffolding; on paper the dated
@@ -192,21 +204,82 @@
   }
 
   .jobs-container--lead header h3 {
-    font-size: 14pt;
+    font-size: 13pt;
   }
 
   .jobs-container header h3 {
+    gap: 0.1rem;
+    margin-bottom: 0.3rem;
+  }
+
+  /* The tiers keep their step on paper, a point at a time and all of them
+     under the 14pt section heading. Each is named, because a rule for every
+     entry placed after the lead's would take the lead's size back. */
+  .jobs-container--primary header h3,
+  .degree-container .degree {
     font-size: 12pt;
-    margin-bottom: 0.35rem;
+  }
+
+  .jobs-container--early header h3 {
+    font-size: 11pt;
+  }
+
+  /* Role and dates are set in points, like the rest of the page, and small:
+     at their screen sizes they printed larger than the copy they label. */
+  .job-position,
+  .degree-container .school {
+    font-size: 9pt;
+  }
+
+  .daterange,
+  .degree-container .school time,
+  .courses .course-number {
+    font-size: 8pt;
+  }
+
+  .degree-container + .degree-container {
+    margin-top: 0.6rem;
+  }
+
+  .jobs-container .points {
+    margin-top: 0.3rem;
   }
 
   .jobs-container .points li {
+    --leading: 1.35;
     font-size: 9.5pt;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.15rem;
+  }
+
+  /* Where a role does break, it is between two bullets and nowhere else: not
+     inside its heading, its summary, or a bullet, not directly under the
+     heading or the summary, and not one bullet from either end of the list.
+     The heading is a column of two lines, which a page will otherwise part:
+     a company name ended one page and its role began the next. */
+  .jobs-container header,
+  .summary,
+  .jobs-container .points li {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .jobs-container header,
+  .summary,
+  .jobs-container .points li:first-child {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  .jobs-container .points li:last-child {
+    break-before: avoid;
+    page-break-before: avoid;
   }
 
   .summary,
-  .jobs-container--lead .summary {
+  .jobs-container--lead .summary,
+  .jobs-container--early .summary {
+    margin-bottom: 0.25rem;
+    line-height: 1.35;
     font-size: 10pt;
   }
 
@@ -296,11 +369,24 @@
      print.css is imported last, so source order settles it. */
   .resume-page .courses .course-list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 1.5rem;
   }
 
-  /* A screen touch-target floor has no meaning on paper. */
+  /* A screen touch-target floor has no meaning on paper, nor has the room a
+     pointer's wash needs. That room hangs outside the column, and anything
+     wider than the sheet makes the browser scale every page down to fit it:
+     with the overhang left on, the whole résumé printed one percent small.
+     The columns close up as well, so that most titles keep to one line. */
   .course-container a {
     min-height: 0;
+    grid-template-columns: 3.5rem minmax(0, 1fr);
+    column-gap: 0.75rem;
+    margin: 0;
+    padding: 0.05rem 0;
+  }
+
+  .courses .course-name {
+    font-size: 9.5pt;
   }
 
   a {
