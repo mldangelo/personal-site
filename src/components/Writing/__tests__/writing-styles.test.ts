@@ -284,6 +284,28 @@ describe('writing styles', () => {
     expect(ruleFor('.prose pre code').get('font-size')).toBe('var(--text-sm)');
   });
 
+  /**
+   * `PostContent` marks the code that must not be broken; this is the rule
+   * that makes the mark mean something. Without it a line still ends on the
+   * two dashes of `--chrome`.
+   */
+  it('keeps marked code on one line, except in a table', () => {
+    expect(ruleFor('.prose .prose-code-nowrap').get('white-space')).toBe(
+      'nowrap',
+    );
+    // A table's columns are already as narrow as the page can make them.
+    expect(
+      ruleFor('.prose :is(td, th) .prose-code-nowrap').get('white-space'),
+    ).toBe('normal');
+    // Unmarked code has to stay free to wrap: it is the code too long to fit.
+    expect(ruleFor('.prose :not(pre) > code').get('white-space')).toBe(
+      undefined,
+    );
+    expect(ruleFor('.prose :not(pre) > code').get('overflow-wrap')).toBe(
+      'anywhere',
+    );
+  });
+
   it('gives each standalone control a 44px target', () => {
     expect(ruleFor('.writing-rss-link').get('min-height')).toBe('2.75rem');
     expect(ruleFor('.post-onward-link').get('min-height')).toBe('2.75rem');

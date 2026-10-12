@@ -434,6 +434,19 @@
   overflow-wrap: anywhere;
 }
 
+/* Short code, and the dashes of a flag in longer code, stay on one line. A
+   hyphen is a place a line may break, so `--chrome` near the end of a line was
+   set as `--` above `chrome`. `PostContent` decides what is short enough to
+   fit any line; this only keeps it whole. Not in a table, whose columns are
+   already as narrow as the page can make them. */
+.prose .prose-code-nowrap {
+  white-space: nowrap;
+}
+
+.prose :is(td, th) .prose-code-nowrap {
+  white-space: normal;
+}
+
 /* A step smaller in a section title, where the chip's fill and border already
    add weight the serif around it does not have. The title's tracking was drawn
    for that serif, so the mono does not inherit it.

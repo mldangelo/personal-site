@@ -351,6 +351,92 @@ function typographicQuotes(): NonNullable<MarkdownToJSX.Options['renderRule']> {
   };
 }
 
+/**
+ * The longest code span that fits on one line wherever prose puts it. A nested
+ * list item on a 320px phone holds 21 characters of it, measured, and no line
+ * of an article is narrower. Anything longer has to stay free to wrap, or it
+ * would push the page sideways.
+ */
+const UNBROKEN_CODE_LENGTH = 20;
+
+/** The dashes that open a flag, with the word they introduce. */
+const FLAG_HEAD = /^-{1,2}[^-]+/;
+
+/** The part of a word that must not be parted from its leading dashes. */
+function flagHead(word: string): string | undefined {
+  const head = FLAG_HEAD.exec(word)?.[0];
+
+  return head && head.length <= UNBROKEN_CODE_LENGTH ? head : undefined;
+}
+
+/**
+ * A code span set so that a flag is never parted from its dashes.
+ *
+ * A hyphen is a place a line may break, so `--chrome` near the end of a line
+ * was set as `--` on one line and `chrome` on the next. Short code is kept
+ * whole. Longer code still has to wrap on a phone, so there only the dashes
+ * of each flag are tied to the word after them. The text itself is never
+ * changed: a reader who copies the code gets the characters that were typed.
+ *
+ * Returns nothing where the library's own `<code>` is already right.
+ */
+function codeSpan(text: string, key?: string | number): ReactNode {
+  if (text.length <= UNBROKEN_CODE_LENGTH) {
+    return (
+      <code className="prose-code-nowrap" key={key}>
+        {text}
+      </code>
+    );
+  }
+
+  // Words and the whitespace between them, in order.
+  const pieces = text.split(/(\s+)/);
+  if (!pieces.some(flagHead)) {
+    return undefined;
+  }
+
+  const children: ReactNode[] = [];
+  let plain = '';
+  for (const [index, piece] of pieces.entries()) {
+    const head = flagHead(piece);
+    if (!head) {
+      plain += piece;
+      continue;
+    }
+
+    if (plain) {
+      children.push(plain);
+    }
+    children.push(
+      <span className="prose-code-nowrap" key={index}>
+        {head}
+      </span>,
+    );
+    plain = piece.slice(head.length);
+  }
+  if (plain) {
+    children.push(plain);
+  }
+
+  return <code key={key}>{children}</code>;
+}
+
+/**
+ * What a post's Markdown needs beyond the library's defaults: typographic
+ * quotes in the prose, and code spans that keep a flag in one piece.
+ */
+function proseRules(): NonNullable<MarkdownToJSX.Options['renderRule']> {
+  const quotes = typographicQuotes();
+
+  return (next, node, renderChildren, state) => {
+    if (node.type === RuleType.codeInline) {
+      return codeSpan(node.text, state.key) ?? next();
+    }
+
+    return quotes(next, node, renderChildren, state);
+  };
+}
+
 export default function PostContent({
   allowMissingLocalImages = false,
   content,
@@ -419,7 +505,7 @@ export default function PostContent({
         slugify: headingPlan.slugify,
         // Heading ids are planned from the source above, before this runs, so
         // curling a heading's apostrophe cannot move its anchor.
-        renderRule: typographicQuotes(),
+        renderRule: proseRules(),
         overrides: {
           ...headingOverrides(headingPlan.aliases),
           p: {

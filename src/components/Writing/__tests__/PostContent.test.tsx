@@ -358,6 +358,91 @@ describe('PostContent code fences', () => {
 });
 
 /**
+ * A hyphen is a place a line may break, and a browser took it: `--chrome` was
+ * set as `--` on one line and `chrome` on the next at most desktop widths.
+ * jsdom lays nothing out, so these hold the markup the stylesheet keys on;
+ * where the lines actually fall is checked in a browser against the export.
+ */
+describe('PostContent code spans', () => {
+  const render = (content: string) =>
+    renderToStaticMarkup(<PostContent content={content} />);
+
+  /** What a reader would copy: the markup with its tags taken away. */
+  const textOf = (html: string) =>
+    html
+      .replace(/<[^>]+>/g, '')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&amp;/g, '&');
+
+  it.each(['--chrome', 'claude --chrome', '## 2.0.76', 'agents.max_depth = 3'])(
+    'keeps %j on one line',
+    (code) => {
+      expect(render(`Run \`${code}\` now.\n`)).toBe(
+        `<p>Run <code class="prose-code-nowrap">${code}</code> now.</p>`,
+      );
+    },
+  );
+
+  it('stops where a nested list item on the narrowest phone stops', () => {
+    // 21 characters fit there, measured. One more than the limit must be
+    // free to wrap, or it would push the page sideways instead.
+    const fits = 'a'.repeat(20);
+    const tooLong = 'a'.repeat(21);
+
+    expect(render(`\`${fits}\`\n`)).toBe(
+      `<p><code class="prose-code-nowrap">${fits}</code></p>`,
+    );
+    expect(render(`\`${tooLong}\`\n`)).toBe(`<p><code>${tooLong}</code></p>`);
+  });
+
+  it('ties the dashes of a long flag to the word after them', () => {
+    expect(render('Avoid `--dangerously-skip-permissions` here.\n')).toBe(
+      '<p>Avoid <code><span class="prose-code-nowrap">--dangerously</span>-skip-permissions</code> here.</p>',
+    );
+  });
+
+  it('ties every flag in a long command, wherever it falls', () => {
+    expect(render('`git worktree add --detach -b topic ../wt`\n')).toBe(
+      '<p><code>git worktree add <span class="prose-code-nowrap">--detach</span> <span class="prose-code-nowrap">-b</span> topic ../wt</code></p>',
+    );
+  });
+
+  it('leaves long code with no flag in it as it was', () => {
+    expect(render('`agents.max_concurrent_threads_per_session`\n')).toBe(
+      '<p><code>agents.max_concurrent_threads_per_session</code></p>',
+    );
+    // A bare `--` separator and a hyphenated name are not flags.
+    expect(render('`git checkout -- src/pre-commit-hook.sh`\n')).toBe(
+      '<p><code>git checkout -- src/pre-commit-hook.sh</code></p>',
+    );
+  });
+
+  it('does not tie a flag too long to fit a line of its own', () => {
+    const flag = `--${'x'.repeat(30)}`;
+
+    expect(render(`\`${flag}\`\n`)).toBe(`<p><code>${flag}</code></p>`);
+  });
+
+  it.each([
+    '--chrome',
+    '--dangerously-skip-permissions',
+    'git worktree add --detach -b topic ../wt',
+    'docs/plans/<task>.md',
+    'a && b --flag-with-a-long-name=1',
+  ])('never changes the characters of %j', (code) => {
+    expect(textOf(render(`\`${code}\`\n`))).toBe(code);
+  });
+
+  it('leaves a fence alone', () => {
+    const html = render('```bash\nclaude --chrome\n```\n');
+
+    expect(html).toContain('claude --chrome');
+    expect(html).not.toContain('prose-code-nowrap');
+  });
+});
+
+/**
  * What a reader sees takes typographic quotes; what a machine or a keyboard
  * would use keeps the characters that were typed. `renderToStaticMarkup`
  * escapes a straight quote in text as an entity, so the two cannot be confused
@@ -373,7 +458,7 @@ describe('PostContent typographic quotes', () => {
     );
 
     expect(html).toBe(
-      '<p>She said “quoted” and typed <code>&quot;code&quot;</code>, and it’s fine.</p>',
+      '<p>She said “quoted” and typed <code class="prose-code-nowrap">&quot;code&quot;</code>, and it’s fine.</p>',
     );
   });
 
@@ -467,7 +552,9 @@ describe('PostContent typographic quotes', () => {
       '<p>“<a href="https://example.com">A title</a>” by someone.</p>',
     );
     expect(html).toContain('<li>“<em>Move fast</em>” was the mantra</li>');
-    expect(html).toContain('>“<code>code</code>” in a heading</h2>');
+    expect(html).toContain(
+      '>“<code class="prose-code-nowrap">code</code>” in a heading</h2>',
+    );
   });
 
   it('closes a quotation that ends a block after a link', () => {
