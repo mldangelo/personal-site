@@ -155,7 +155,7 @@
   gap: 0.75rem;
 }
 
-/* Theme Toggle — one control cycling light / dark / system.
+/* Theme Toggle — one control with three states.
    The 44x44 box is the hit target and is reserved by the button itself, not by
    a placeholder waiting on hydration. */
 .theme-toggle {
