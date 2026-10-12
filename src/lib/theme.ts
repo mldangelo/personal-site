@@ -115,8 +115,11 @@ const UNREADABLE_SCHEME: ResolvedTheme = 'light';
  * before it existed the first click pinned a theme in `localStorage` forever
  * with no route back to following the device.
  *
- * `systemScheme` is `null` when the device cannot be asked; the cycle then
- * runs as {@link UNREADABLE_SCHEME} orders it rather than refusing to move.
+ * `systemScheme` is whichever reading of the device the caller orders by —
+ * `ThemeToggle` holds on to the one a lap set out under, so a flip part-way
+ * round cannot reorder it — and `null` when the device cannot be asked. The
+ * cycle then runs as {@link UNREADABLE_SCHEME} orders it rather than refusing
+ * to move.
  */
 export function nextThemeChoice(
   choice: ThemeChoice,
@@ -178,11 +181,12 @@ export function storeThemeChoice(choice: ThemeChoice): void {
  * no `matchMedia` to ask.
  *
  * Render from `usePrefersColorScheme` instead: it subscribes, which is what
- * keeps `system` live. This is for a press that lands before that hook has
- * reported. A press can be dispatched between hydration and the mount effects,
- * to the hydration render's handler, where the hook still says `null` — and
- * ordering the cycle by a guess there brings the no-op first press back for
- * whichever device the guess is wrong about.
+ * keeps `system` live. This is for the two moments `ThemeToggle` needs the
+ * device before that hook has reported: on mounting, and in a press that
+ * lands earlier still. A press can be dispatched between hydration and the
+ * mount effects, to the hydration render's handler, where the hook still says
+ * `null` — and ordering the cycle by a guess there brings the no-op first
+ * press back for whichever device the guess is wrong about.
  */
 export function readSystemScheme(): ResolvedTheme | null {
   const media = window.matchMedia?.(DARK_SCHEME_QUERY);

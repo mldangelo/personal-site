@@ -6,6 +6,7 @@ import { MoonIcon, SunIcon } from '@/components/Icons';
 import usePrefersColorScheme from '@/hooks/usePrefersColorScheme';
 import {
   nextThemeChoice,
+  type ResolvedTheme,
   readStoredThemeChoice,
   readSystemScheme,
   resolveTheme,
@@ -93,9 +94,20 @@ export default function ThemeToggle() {
   // `null` until mounted, which keeps the hydration render byte-identical to
   // the server render. It is not used to decide what to draw.
   const [choice, setChoice] = useState<ThemeChoice | null>(null);
+  // The device scheme the lap in progress is walked under: read on mounting,
+  // and again by every press that leaves `system`. It is held rather than
+  // asked for at each press because `nextThemeChoice` takes its order from
+  // the device, so a flip would reorder the lap under a visitor who is
+  // part-way round it: dark, pressed for on a light device, becomes the last
+  // stop the moment the device goes dark, and the next press hands back to
+  // `system`, paints dark again, and changes nothing while light has still
+  // not been offered.
+  const [lapScheme, setLapScheme] = useState<ResolvedTheme | null>(null);
 
   useEffect(() => {
     setChoice(readStoredThemeChoice());
+    // A visitor who arrives on an explicit choice is part-way round already.
+    setLapScheme(readSystemScheme());
   }, []);
 
   useEffect(() => {
@@ -128,9 +140,13 @@ export default function ThemeToggle() {
     syncThemeColor(document);
   }, [choice, systemScheme]);
 
+  // What orders the next press. Only `system` asks the device afresh: that is
+  // where a lap starts, and where its first press has to be the visible one.
+  const orderScheme = choice === 'system' ? systemScheme : lapScheme;
+
   // Where a press goes from here, once mounted. The label and the press both
   // take this one value, so the name cannot promise a step the press skips.
-  const next = choice === null ? null : nextThemeChoice(choice, systemScheme);
+  const next = choice === null ? null : nextThemeChoice(choice, orderScheme);
 
   const cycle = useCallback(() => {
     // `next` is `null` when the press beat the mount effects: the handler is
@@ -139,12 +155,13 @@ export default function ThemeToggle() {
     // early as Chromium would deliver one landed in that gap. Ask both
     // directly rather than order the cycle by a guess, which would hand a dark
     // device the no-op first press.
-    const to =
-      next ?? nextThemeChoice(readStoredThemeChoice(), readSystemScheme());
+    const scheme = next === null ? readSystemScheme() : orderScheme;
+    const to = next ?? nextThemeChoice(readStoredThemeChoice(), scheme);
 
     storeThemeChoice(to);
     setChoice(to);
-  }, [next]);
+    setLapScheme(scheme);
+  }, [next, orderScheme]);
 
   // Before mount the accessible name comes from the one state label CSS leaves
   // visible, which says only what the preference is. After mount this adds
