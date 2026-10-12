@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 import { smartQuotes } from '../typography';
@@ -64,5 +66,20 @@ describe('smartQuotes', () => {
   it('is idempotent', () => {
     const once = smartQuotes('It\'s the "second" pass');
     expect(smartQuotes(once)).toBe(once);
+  });
+});
+
+describe('typography source', () => {
+  it('spells its character classes out instead of using Unicode property escapes', () => {
+    // The build expands a property escape into every range it covers for the
+    // browsers this site targets: 41 kB in each client bundle that imports
+    // the helper, for a function that fits in one.
+    const source = readFileSync(
+      path.join(process.cwd(), 'src/lib/typography.ts'),
+      'utf8',
+    );
+    const code = source.replace(/\/\*[\s\S]*?\*\//g, '');
+
+    expect(code).not.toMatch(/\\p\{/i);
   });
 });
