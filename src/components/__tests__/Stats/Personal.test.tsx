@@ -84,32 +84,40 @@ describe('Personal', () => {
     );
   });
 
-  it('marks every reading as coming from the profile', () => {
+  it('says once that these readings come from the profile', () => {
+    // Three rows used to carry three tags reading "Profile". The caption says
+    // it for all of them, and the rows say only what they measure.
     render(<Personal />);
 
-    const sources = Array.from(
-      document.querySelectorAll('.stat-provenance'),
-      (mark) => mark.getAttribute('data-source'),
-    );
-
-    expect(sources).toEqual(['profile', 'profile', 'profile']);
+    expect(
+      screen.getByRole('table', { name: 'From my profile' }),
+    ).toHaveAttribute('data-source', 'profile');
+    expect(screen.getAllByText(/profile/i)).toHaveLength(1);
+    expect(
+      screen.getAllByRole('rowheader').map((header) => header.textContent),
+    ).toEqual(['Current age', 'Countries visited', 'Current city']);
   });
 
-  it('carries the source note this table used to lack', () => {
+  it('keeps a note under the table for what a caption cannot say', () => {
     render(<Personal />);
 
-    const note = screen.getByText(/profile readings come from/i);
+    const note = screen.getByText(/ticks in your browser/i);
 
     expect(note).toHaveClass('stats-source-note');
     expect(note).toHaveAttribute('data-source', 'profile');
   });
 
-  it('explains what the age is when JavaScript never runs', () => {
+  it('explains what the age is when it is not ticking', () => {
+    // The two states in which a reader sees a dated snapshot instead of a
+    // live value. Each has to be named, or the note describes a page they are
+    // not looking at.
     render(<Personal />);
 
-    expect(screen.getByText(/profile readings come from/i).textContent).toMatch(
-      /without javascript/i,
-    );
+    const note = screen.getByText(/ticks in your browser/i).textContent;
+
+    expect(note).toMatch(/without javascript/i);
+    expect(note).toMatch(/reduced motion/i);
+    expect(note).toMatch(/dated snapshot/i);
   });
 
   it('does not append a unit that repeats its label', () => {

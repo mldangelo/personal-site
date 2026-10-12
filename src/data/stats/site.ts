@@ -91,7 +91,8 @@ const data: StatDeclaration[] = [
     link: () => buildSourceFileUrl('biome.json'),
   },
   {
-    // The only row that measures nothing, so it has no provenance mark.
+    // The only row that measures nothing, so it declares no source and the
+    // page sets it apart from the tables that do.
     label: 'Number of spoons',
     value: 0,
   },

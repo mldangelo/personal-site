@@ -5,8 +5,8 @@ import { COUNTRIES_VISITED, CURRENT_CITY } from '@/lib/telemetry';
  * All three are `source: 'profile'`: they are facts typed into
  * `src/data/profile.json`, not counted from anything. The age readout is
  * computed rather than typed, but the datum it is computed from — the birth
- * instant — is still a profile entry, and that is what the mark is telling the
- * reader.
+ * instant — is still a profile entry, and that is what the table's caption is
+ * telling the reader.
  *
  * `age` declares a key and no value. This file used to carry a `'use client'`
  * directive so it could hold the live readout as a React element, which dragged

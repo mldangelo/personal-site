@@ -511,18 +511,34 @@
    STATS PAGE
    ======================================== */
 
-/* Readings, not a spreadsheet: the label annotates in mono and the
-   value is set large enough to be read off at a glance. The ink rule above
-   it belongs to the section header now, so the table draws none of its own. */
+/* Readings, not a spreadsheet: the label annotates in mono and the value is
+   set large enough to be read off at a glance. Each table holds the readings
+   from one source and is named by its caption. The ink rule above it belongs
+   to the section header now, so the table draws none of its own. */
 .stat-table {
   border-collapse: separate;
   border-spacing: 0;
   width: 100%;
-  background: transparent;
 }
 
-.stat-table tr {
-  background: transparent;
+/* A second source in the same section stands off from the one above it. */
+.stat-table ~ .stat-table {
+  margin-top: var(--spacing-10);
+}
+
+/* Where the readings came from, said once for every row beneath it. A figure
+   counted from this working tree is not the same kind of claim as one fetched
+   from an API or one typed into a profile. Each row used to say which it was
+   in a tag of its own: three rows about me, three tags reading "Profile". A
+   source is data about the readings, so it is set in mono. */
+.stat-table-caption {
+  padding-bottom: var(--spacing-3);
+  border-bottom: var(--rule) solid var(--color-border);
+  text-align: left;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  line-height: var(--leading-snug);
+  color: var(--color-fg-light);
 }
 
 /* Both cells, not just `td`. Labels became `th[scope="row"]` for screen
@@ -531,7 +547,6 @@
 .stat-table th,
 .stat-table td {
   padding: 1rem 0;
-  background: transparent;
   border-bottom: var(--rule) solid var(--color-border);
   vertical-align: baseline;
 }
@@ -547,53 +562,6 @@
   letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: var(--color-fg-light);
-}
-
-.stat-table-label-text {
-  display: block;
-}
-
-/* Provenance. A figure counted from this working tree is not the same kind of
-   claim as one fetched from an API or one typed into a profile, so each row
-   says which it is — the 11px category-label role, not a value.
-
-   It hangs under the label instead of taking a third column. The 40/60 split
-   already wraps the value with `overflow-wrap: anywhere` below 480px, and a
-   third element per row would crowd it off a phone; stacked, the mark needs no
-   breakpoint of its own. It also has to sit below rather than above, because
-   both cells align on their first baseline — an 11px mark above the label
-   would drag the 36px value up to meet it. */
-.stat-provenance {
-  display: block;
-  margin-top: 0.35rem;
-  font-family: var(--font-mono);
-  font-size: var(--text-2xs);
-  font-weight: var(--font-weight-normal);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
-  color: var(--color-fg-light);
-}
-
-/* A hairline tick, in the ink the mark is already set in. Amber is reserved
-   for live values and the accent for structure and links, so nothing here
-   spends a colour: the three marks separate by word, weight, and rule. */
-.stat-provenance::before {
-  content: '';
-  display: inline-block;
-  width: 0.75rem;
-  margin-right: 0.5rem;
-  vertical-align: 0.28em;
-  border-top: var(--rule) solid currentcolor;
-}
-
-/* Counted from the tree this page describes — the only first-hand readings
-   here, so they carry the heavier rule. */
-.stat-provenance[data-source='measured'] {
-  font-weight: var(--font-weight-medium);
-}
-
-.stat-provenance[data-source='measured']::before {
-  border-top-width: var(--rule-strong);
 }
 
 .stat-table-value {
@@ -644,13 +612,26 @@
   color: var(--color-fg-light);
 }
 
+/* A caveat about the table above it, written as a sentence and set as one. It
+   was 11px mono, and with a tag under every row so was 43% of this page. */
 .stats-source-note {
-  margin: 0.75rem 0 0;
-  font-family: var(--font-mono);
-  font-size: var(--text-2xs);
-  line-height: var(--leading-snug);
-  letter-spacing: var(--tracking-wide);
+  max-width: 53ch;
+  margin: var(--spacing-3) 0 0;
+  font-size: var(--text-sm);
+  line-height: 1.5;
   color: var(--color-fg-light);
+}
+
+/* A repository's name, or a date, stays in one piece. Rather than leave a
+   short last line, the note broke "personal-site" at its hyphen on every
+   phone from 320px to 370px wide. */
+.stats-source-note span {
+  white-space: nowrap;
+}
+
+/* The caption of a table of last-known numbers is flagged like its note. */
+.stat-table[data-source='fallback'] .stat-table-caption {
+  color: var(--color-fg);
 }
 
 /* A build that shipped last-known numbers must not look like one that fetched
@@ -723,13 +704,6 @@
     font-size: var(--text-md);
     white-space: normal;
     overflow-wrap: anywhere;
-  }
-
-  /* The label column is ~150px on a phone. Tighten the tick so the mark still
-     fits on one line beside it rather than wrapping under its own rule. */
-  .stat-provenance::before {
-    width: 0.5rem;
-    margin-right: 0.35rem;
   }
 }
 

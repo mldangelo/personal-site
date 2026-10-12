@@ -2,9 +2,13 @@ import { createElement, isValidElement } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
 import {
+  captionFor,
   formatReading,
+  groupBySource,
+  type Reading,
+  type ReadingSource,
   resolveReadings,
-  SOURCE_LABELS,
+  SOURCE_CAPTIONS,
   type StatDeclaration,
 } from '../readings';
 
@@ -28,13 +32,94 @@ describe('formatReading', () => {
   });
 });
 
-describe('SOURCE_LABELS', () => {
+describe('SOURCE_CAPTIONS', () => {
   it('names all three kinds of claim the page makes', () => {
-    expect(SOURCE_LABELS).toEqual({
-      measured: 'Measured',
-      github: 'GitHub',
-      profile: 'Profile',
+    // The words a reader is given for each source, so they are pinned as
+    // written. Each says how the readings were come by, not just from where:
+    // a GitHub count is as old as the build, and says so.
+    expect(SOURCE_CAPTIONS).toEqual({
+      measured: 'Measured from this build’s checkout',
+      github: 'From GitHub, fetched at build time',
+      profile: 'From my profile',
     });
+  });
+});
+
+describe('captionFor', () => {
+  it('captions a source with its own words', () => {
+    expect(captionFor('profile')).toBe('From my profile');
+  });
+
+  it('claims no source for readings that declare none', () => {
+    // The spoon count measures nothing. A caption borrowed from a real source
+    // would say that it had been counted.
+    expect(captionFor(undefined)).toBe('Not measured');
+  });
+});
+
+describe('groupBySource', () => {
+  const reading = (label: string, source?: ReadingSource): Reading => ({
+    label,
+    value: '1',
+    source,
+  });
+
+  const shape = (readings: Reading[]) =>
+    groupBySource(readings).map((group) => [
+      group.source,
+      group.readings.map((row) => row.label),
+    ]);
+
+  it('gathers readings under the source they declare', () => {
+    expect(
+      shape([
+        reading('Stars', 'github'),
+        reading('Forks', 'github'),
+        reading('Lines', 'measured'),
+      ]),
+    ).toEqual([
+      ['github', ['Stars', 'Forks']],
+      ['measured', ['Lines']],
+    ]);
+  });
+
+  it('gives a reading declared out of sequence to the table it belongs in', () => {
+    // Grouping by run would open a second GitHub table under the same
+    // caption, which is the repetition the captions replaced.
+    expect(
+      shape([
+        reading('Stars', 'github'),
+        reading('Lines', 'measured'),
+        reading('Forks', 'github'),
+      ]),
+    ).toEqual([
+      ['github', ['Stars', 'Forks']],
+      ['measured', ['Lines']],
+    ]);
+  });
+
+  it('sets apart the readings that declare no source', () => {
+    expect(
+      shape([reading('Lines', 'measured'), reading('Number of spoons')]),
+    ).toEqual([
+      ['measured', ['Lines']],
+      [undefined, ['Number of spoons']],
+    ]);
+  });
+
+  it('carries each reading through whole', () => {
+    const linked: Reading = {
+      label: 'Stars',
+      value: '1,663',
+      link: 'https://example.com',
+      source: 'github',
+    };
+
+    expect(groupBySource([linked])[0].readings[0]).toBe(linked);
+  });
+
+  it('makes no table out of no readings', () => {
+    expect(groupBySource([])).toEqual([]);
   });
 });
 

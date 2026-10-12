@@ -111,60 +111,22 @@ describe('TableRow', () => {
     expect(screen.getByText('null')).toBeInTheDocument();
   });
 
-  it('renders a provenance mark for the row source', () => {
+  it('heads the row with its label and nothing else', () => {
+    // The header once carried a source tag under the label, so a screen
+    // reader announced "Countries visited Source: Profile" before each value.
+    // The source belongs to the table's caption now.
     render(
       <table>
         <tbody>
-          <TableRow label="Lines" value="5,411" source="measured" />
+          <TableRow label="Countries visited" value="53" />
         </tbody>
       </table>,
     );
 
-    const mark = document.querySelector('.stat-provenance');
-    expect(mark).toHaveAttribute('data-source', 'measured');
-    expect(mark).toHaveTextContent('Measured');
-  });
+    const header = screen.getByRole('rowheader');
 
-  it('names the mark for screen readers without labelling the value', () => {
-    render(
-      <table>
-        <tbody>
-          <TableRow label="Stars" value="1,663" source="github" />
-        </tbody>
-      </table>,
-    );
-
-    expect(document.querySelector('.stat-provenance')).toHaveTextContent(
-      'Source: GitHub',
-    );
-  });
-
-  it('keeps the label text queryable beside the mark', () => {
-    // The mark lives in the row header, so without its own element the label
-    // text would merge into the header's text content and every `getByText`
-    // for a label on this page would stop matching.
-    render(
-      <table>
-        <tbody>
-          <TableRow label="Countries visited" value="53" source="profile" />
-        </tbody>
-      </table>,
-    );
-
-    expect(screen.getByText('Countries visited')).toHaveClass(
-      'stat-table-label-text',
-    );
-  });
-
-  it('omits the mark entirely when a row has no source', () => {
-    render(
-      <table>
-        <tbody>
-          <TableRow label="Number of spoons" value="0" />
-        </tbody>
-      </table>,
-    );
-
-    expect(document.querySelector('.stat-provenance')).toBeNull();
+    expect(header).toHaveTextContent(/^Countries visited$/);
+    expect(header).toHaveClass('stat-table-label');
+    expect(header.childElementCount).toBe(0);
   });
 });
