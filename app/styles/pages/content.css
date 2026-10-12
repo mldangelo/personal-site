@@ -690,7 +690,7 @@
 .stats-title {
   font-family: var(--font-display);
   font-size: var(--text-3xl);
-  font-weight: var(--font-weight-black);
+  font-weight: var(--font-weight-medium);
   letter-spacing: var(--tracking-display);
   margin-bottom: 0.5rem;
   color: var(--color-fg-bold);
@@ -780,7 +780,7 @@
 .not-found-title {
   font-family: var(--font-display);
   font-size: var(--text-2xl);
-  font-weight: var(--font-weight-black);
+  font-weight: var(--font-weight-medium);
   color: var(--color-fg-bold);
   margin-bottom: 0.75rem;
   letter-spacing: var(--tracking-display);
