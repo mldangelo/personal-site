@@ -1,128 +1,67 @@
-'use client';
-
-import { useCallback, useMemo, useState } from 'react';
-
 import type { Category, Skill } from '@/data/resume/skills';
 
-import CategoryButton from './Skills/CategoryButton';
-import SkillTag from './Skills/SkillTag';
+import SkillTag, { knowledgeTier } from './Skills/SkillTag';
 
 interface SkillsProps {
   skills: Skill[];
   categories: Category[];
 }
 
-export const ALL_CATEGORY = 'All';
-
 /**
- * One selected category at a time, held as a string.
+ * Every skill under the category it belongs to, deepest first — the order
+ * `/resume.json` publishes the same list in.
  *
- * This replaced a `Record<string, boolean>` reducer that recomputed its own
- * `All` flag from the map it was building, so clicking "All" always left it
- * `aria-pressed="false"` — and on first paint every filter reported unpressed
- * while all skills were showing.
+ * This used to open with a row of filter buttons, one per category, above
+ * tags already grouped under those same category names. The control was the
+ * heaviest thing in the section and repeated its headings, so it is gone, and
+ * with it the state: nothing here can be hidden, so nothing can be missing
+ * from the page when it is printed.
  */
 export default function Skills({ skills, categories }: SkillsProps) {
-  const [activeCategory, setActiveCategory] = useState<string>(ALL_CATEGORY);
-
-  // Selecting the category that is already active returns to All, which keeps
-  // the toggle affordance the buttons' pressed state implies.
-  const handleChildClick = useCallback((label: string) => {
-    setActiveCategory((current) => (current === label ? ALL_CATEGORY : label));
-  }, []);
-
-  const buttonElements = useMemo(
-    () =>
-      [ALL_CATEGORY, ...categories.map(({ name }) => name)].map((name) => (
-        <CategoryButton
-          label={name}
-          key={name}
-          isActive={activeCategory === name}
-          handleClick={handleChildClick}
-        />
-      )),
-    [categories, activeCategory, handleChildClick],
-  );
-
-  /**
-   * Every category is always rendered; the inactive ones are hidden with CSS.
-   *
-   * Filtering by removing groups from the DOM meant a printed page reflected
-   * whatever filter happened to be set, silently omitting skills. Keeping the
-   * markup lets `print.css` show everything regardless.
-   */
-  const groupedSkills = useMemo(() => {
-    const sortedSkills = [...skills].sort((a, b) => {
-      if (a.competency !== b.competency) return b.competency - a.competency;
-      return a.title.localeCompare(b.title);
-    });
-
-    return categories
-      .map((category) => ({
-        category,
-        skills: sortedSkills.filter((skill) =>
-          skill.category.includes(category.name),
+  const groups = categories
+    .map((category) => ({
+      name: category.name,
+      skills: skills
+        .filter((skill) => skill.category.includes(category.name))
+        .sort(
+          (a, b) =>
+            b.competency - a.competency || a.title.localeCompare(b.title, 'en'),
         ),
-      }))
-      .filter((group) => group.skills.length > 0);
-  }, [skills, categories]);
+    }))
+    .filter((group) => group.skills.length > 0);
 
-  // A skill can appear in several category groups; announce it only once.
-  const allSkills = groupedSkills.flatMap((group) => group.skills);
-  const visibleSkills =
-    activeCategory === ALL_CATEGORY
-      ? allSkills
-      : (groupedSkills.find(({ category }) => category.name === activeCategory)
-          ?.skills ?? []);
-  const totalSkillCount = new Set(allSkills.map((skill) => skill.title)).size;
-  const visibleSkillCount = new Set(visibleSkills.map((skill) => skill.title))
-    .size;
-
-  const noun = totalSkillCount === 1 ? 'skill' : 'skills';
-  const filterStatus =
-    activeCategory === ALL_CATEGORY
-      ? `Showing all ${totalSkillCount} ${noun}.`
-      : `Showing ${visibleSkillCount} of ${totalSkillCount} ${noun} in ${activeCategory}.`;
+  // The fainter tone is only worth explaining where something is set in it.
+  const hasFamiliar = skills.some(
+    (skill) => knowledgeTier(skill.competency) === 'familiar',
+  );
 
   return (
     <div className="skills">
-      <div className="title">
-        <h2>Skills</h2>
+      <div className="section-header">
+        <h2 className="section-heading">Skills</h2>
       </div>
-      <div className="skill-button-container">{buttonElements}</div>
-      {/* Stays hidden: print.css un-hides every group, so a visible count
-          would contradict the page it is printed on. */}
-      <p className="sr-only" role="status">
-        {filterStatus}
-      </p>
-      <p className="skill-tier-legend">
-        <span className="skill-tier-legend-label">Knowledge</span>
-        <span className="skill-tag--deep">Deep</span>
-        <span aria-hidden="true">·</span>
-        <span className="skill-tag--working">Working</span>
-        <span aria-hidden="true">·</span>
-        <span className="skill-tag--familiar">Familiar</span>
+      <p className="resume-note skill-tier-legend">
+        Strongest first.
+        {hasFamiliar ? (
+          // Says what a tone means, which is no use to anyone who cannot see
+          // it; each tag already carries its tier as text for a screen reader.
+          <span className="skill-tier-legend-tone" aria-hidden="true">
+            {' '}
+            Fainter tags mark familiarity, not working knowledge.
+          </span>
+        ) : null}
       </p>
       <div className="skill-groups">
-        {groupedSkills.map(({ category, skills: categorySkills }) => {
-          const isVisible =
-            activeCategory === ALL_CATEGORY || activeCategory === category.name;
-
-          return (
-            <div
-              key={category.name}
-              className="skill-group"
-              hidden={!isVisible}
-            >
-              <h3 className="skill-group-title">{category.name}</h3>
-              <div className="skill-tags">
-                {categorySkills.map((skill) => (
-                  <SkillTag key={skill.title} data={skill} />
-                ))}
-              </div>
-            </div>
-          );
-        })}
+        {groups.map((group) => (
+          <div key={group.name} className="skill-group">
+            <h3 className="skill-group-title">{group.name}</h3>
+            <ul className="skill-tags">
+              {group.skills.map((skill) => (
+                <SkillTag key={skill.title} data={skill} />
+              ))}
+            </ul>
+          </div>
+        ))}
       </div>
     </div>
   );

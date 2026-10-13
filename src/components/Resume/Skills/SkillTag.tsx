@@ -23,14 +23,19 @@ export function knowledgeTier(competency: number): SkillTier {
   return 'familiar';
 }
 
+/**
+ * One entry in a group's list. All three tiers are stated as text for a
+ * screen reader; a sighted reader gets the order the group is listed in, and
+ * one fainter tone for the last tier.
+ */
 export default function SkillTag({ data }: SkillTagProps) {
   const { competency, title } = data;
   const tier = knowledgeTier(competency);
 
   return (
-    <span className={`skill-tag skill-tag--${tier}`}>
-      <span className="skill-tag-name">{title}</span>
-      <span className="sr-only">, {TIER_DESCRIPTION[tier]}</span>
-    </span>
+    <li className={`skill-tag skill-tag--${tier}`}>
+      {title}
+      <span className="sr-only">{`, ${TIER_DESCRIPTION[tier]}`}</span>
+    </li>
   );
 }

@@ -3,85 +3,73 @@
    Tech tags, skill tags, and chips
    ======================================== */
 
-/* Container for all skill groups */
+/* One row per group: its name in the résumé's gutter, its tags beside it on
+   the name's baseline. The two measures are the ones `.resume-content` gives
+   the experience spine, so the tags stand under the roles above them. Stacked
+   label-over-tags, six groups took most of a screen to list thirty words. */
 .skill-groups {
-  display: flex;
-  flex-direction: column;
-  gap: 2.5rem;
+  display: grid;
+  gap: 0.875rem;
 }
 
-/* Individual category group */
 .skill-group {
-  text-align: left;
-  padding-bottom: 0;
-  border-bottom: none;
+  display: grid;
+  grid-template-columns: var(--resume-gutter) minmax(0, 1fr);
+  column-gap: var(--resume-gap);
+  align-items: baseline;
 }
 
-/* Category names are annotation, matching every other label
-   on the site rather than shouting in the accent colour. */
+/* A label to be read, in the case it was written in. */
 .skill-group-title {
-  font-family: var(--font-mono);
-  font-size: var(--text-2xs);
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-ui);
   font-weight: var(--font-weight-medium);
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-label);
+  letter-spacing: var(--tracking-normal);
+  line-height: var(--leading-snug);
   color: var(--color-fg-light);
-  margin-bottom: 0.875rem;
-  padding-bottom: 0;
-  border-bottom: none;
-  display: block;
 }
 
 .skill-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 0.375rem;
-  justify-content: flex-start;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-/* Skills read as plotted values: quiet, squared, weighted by knowledge tier. */
+/* Squared, quiet, mono, and never broken across two lines. A tag is not a
+   control, so nothing here answers the pointer. */
 .skill-tag {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.4em 0.75em;
-  background: transparent;
+  padding: 0.3em 0.7em;
   border: var(--rule) solid var(--color-border);
   border-radius: var(--radius-sm);
   font-family: var(--font-mono);
   font-size: var(--text-xs);
-  font-weight: var(--font-weight-normal);
-  color: var(--color-fg);
-  transition:
-    border-color var(--duration-fast) var(--ease-out),
-    background-color var(--duration-fast) var(--ease-out);
-}
-
-.skill-tag:hover {
-  border-color: var(--color-fg-light);
-  background: var(--color-surface-subtle);
-}
-
-.skill-tag-name {
+  line-height: 1.5;
   white-space: nowrap;
-}
-
-/* Names the three tag weights once, so no tag has to carry a visible badge.
-   The samples inherit the mid tone; the tier modifiers move them from it. */
-.skill-tier-legend {
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin: 0.75rem 0 1.5rem;
-  font-family: var(--font-mono);
-  font-size: var(--text-2xs);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
   color: var(--color-fg);
 }
 
-.skill-tier-legend-label {
-  color: var(--color-fg-light);
+/* The section's one line of explanation belongs to its heading, so it takes
+   back half of the gap the shared header leaves for a list. Two classes,
+   because `.resume-note` sets its own margin later in the cascade. */
+.skills .skill-tier-legend {
+  margin: -0.75rem 0 1.5rem;
+}
+
+/* The gutter goes where the experience spine gives its own up, and like it
+   for screens only. */
+@media screen and (max-width: 760px) {
+  .skill-groups {
+    gap: 1.25rem;
+  }
+
+  .skill-group {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 0.5rem;
+  }
 }
 
 /* Tech tags — squared, quiet, mono. */
@@ -106,13 +94,17 @@
   border-color: var(--color-border-alt);
 }
 
-/* Tier variations — weight and tone, not scale. The working tier is the
-   inherited middle, so only the outer two need a rule. */
-.skill-tag--deep {
-  font-weight: var(--font-weight-medium);
-  color: var(--color-fg-bold);
-}
-
+/* Depth is the order each group is listed in, and the last tier is set a
+   tone fainter. Deep and working used to differ by one step of weight at
+   12px, which nobody could see, under a legend that explained three. */
 .skill-tag--familiar {
   color: var(--color-fg-light);
+}
+
+/* A forced palette draws every tag in one colour, which leaves the legend's
+   second sentence describing a tone that is not there. */
+@media (forced-colors: active) {
+  .skill-tier-legend-tone {
+    display: none;
+  }
 }
