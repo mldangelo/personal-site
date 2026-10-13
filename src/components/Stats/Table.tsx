@@ -1,9 +1,14 @@
 import TableRow from './TableRow';
 import type { TableProps } from './types';
 
-export default function Table({ data }: TableProps) {
+/**
+ * One table per source. The caption says where its readings came from, once
+ * for every row beneath it, and it is the table's accessible name as well.
+ */
+export default function Table({ caption, data, source }: TableProps) {
   return (
-    <table className="stat-table">
+    <table className="stat-table" data-source={source}>
+      <caption className="stat-table-caption">{caption}</caption>
       <thead className="sr-only">
         <tr>
           <th scope="col">Statistic</th>
@@ -16,7 +21,6 @@ export default function Table({ data }: TableProps) {
             key={reading.label}
             label={reading.label}
             link={reading.link}
-            source={reading.source}
             value={reading.value}
           />
         ))}

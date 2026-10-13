@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockGitHubData = {
@@ -29,6 +29,22 @@ function clearBuildEnvironment() {
   }
 }
 
+const FETCHED = 'From GitHub, fetched at build time';
+const LAST_KNOWN = 'From GitHub, last known July 31, 2026';
+const MEASURED = 'Measured from this build’s checkout';
+
+/** The row labels under one caption, as a reader meets them. */
+function rowsUnder(caption: string): (string | null)[] {
+  return within(screen.getByRole('table', { name: caption }))
+    .getAllByRole('rowheader')
+    .map((header) => header.textContent);
+}
+
+/** The note a build leaves when it could not fetch GitHub's numbers. */
+function fallbackNote(): HTMLElement {
+  return screen.getByText(/could not be fetched when this site was built/i);
+}
+
 describe('Site', () => {
   beforeEach(() => {
     clearBuildEnvironment();
@@ -53,14 +69,37 @@ describe('Site', () => {
     }
   });
 
-  it('renders the site readings as a table', async () => {
+  it('sets each source in a table of its own, under a caption naming it', async () => {
+    // One table used to hold all of these, with the source repeated as a tag
+    // under every row. Which caption stands over which rows is the whole of
+    // what a reader is now told about provenance, so it is pinned row by row.
     render(await Site());
 
-    expect(screen.getByRole('table')).toBeInTheDocument();
+    expect(rowsUnder(FETCHED)).toEqual([
+      'GitHub stars',
+      'Watchers',
+      'Forks',
+      'Open issues and pull requests',
+      'Latest repository push (UTC)',
+    ]);
+    // No build identity here, so no "Built from commit" row.
+    expect(rowsUnder(MEASURED)).toEqual([
+      'Built on (UTC)',
+      'Lines of TypeScript',
+      'Direct dependencies',
+      'Installed non-development package locations',
+      'Lockfile package locations',
+      'Biome lint rules enabled in CI',
+    ]);
+    expect(screen.getAllByRole('table')).toHaveLength(3);
+  });
+
+  it('exposes each table’s source to the stylesheet', async () => {
+    render(await Site());
+
     expect(
-      screen.getByText('Stars this repository has on GitHub'),
-    ).toBeInTheDocument();
-    expect(screen.getByText('Number of spoons')).toBeInTheDocument();
+      screen.getAllByRole('table').map((table) => table.dataset.source),
+    ).toEqual(['github', 'measured', undefined]);
   });
 
   it('fetches the upstream repository at build time', async () => {
@@ -92,10 +131,24 @@ describe('Site', () => {
   it('exports labeled fallback readings when anonymous requests are rate limited', async () => {
     fetchMock.mockResolvedValueOnce(new Response(null, { status: 403 }));
     render(await Site());
-    expect(screen.getByRole('table')).toBeInTheDocument();
-    expect(screen.getByText(/fallback refreshed/i)).toHaveAttribute(
+    expect(screen.getByRole('table', { name: LAST_KNOWN })).toHaveAttribute(
       'data-source',
       'fallback',
+    );
+    expect(fallbackNote()).toHaveAttribute('data-source', 'fallback');
+  });
+
+  it('never captions last-known numbers as fetched', async () => {
+    // The caption sits directly over the numbers, so it is the first thing
+    // that would lie. The other tables came from this build either way.
+    fetchMock.mockRejectedValueOnce(new Error('Network error'));
+    render(await Site());
+
+    expect(screen.queryByText(/fetched at build time/i)).toBeNull();
+    expect(rowsUnder(LAST_KNOWN)).toContain('GitHub stars');
+    expect(screen.getByRole('table', { name: MEASURED })).toHaveAttribute(
+      'data-source',
+      'measured',
     );
   });
 
@@ -142,10 +195,7 @@ describe('Site', () => {
       `https://github.com/octocat/personal-site/commit/${sha}`,
     );
     expect(
-      screen
-        .getByText('Dependencies declared directly')
-        .closest('tr')
-        ?.querySelector('a'),
+      screen.getByText('Direct dependencies').closest('tr')?.querySelector('a'),
     ).toHaveAttribute(
       'href',
       `https://github.com/octocat/personal-site/blob/${sha}/package.json`,
@@ -166,8 +216,10 @@ describe('Site', () => {
 
     render(await Site());
 
-    const note = screen.getByText(/fallback refreshed july 31, 2026/i);
+    const note = fallbackNote();
     expect(note).toHaveAttribute('data-source', 'fallback');
+    expect(note).toHaveTextContent(/approximate/i);
+    expect(note).toHaveTextContent(/on July 31, 2026\.$/);
     expect(screen.getByText('21')).toBeInTheDocument();
   });
 
@@ -213,17 +265,17 @@ describe('Site', () => {
     async (_label, payload) => {
       fetchMock.mockResolvedValueOnce({ ok: true, json: async () => payload });
       render(await Site());
-      expect(
-        screen.getByText(/fallback refreshed july 31, 2026/i),
-      ).toHaveAttribute('data-source', 'fallback');
+      expect(fallbackNote()).toHaveAttribute('data-source', 'fallback');
+      expect(screen.getByRole('table', { name: LAST_KNOWN })).toHaveAttribute(
+        'data-source',
+        'fallback',
+      );
       expect(
         screen.getByText('Latest repository push (UTC)').closest('tr'),
       ).toHaveTextContent('2026-07-31');
-      expect(
-        screen
-          .getByText('Number of people watching this repository')
-          .closest('tr'),
-      ).toHaveTextContent('23');
+      expect(screen.getByText('Watchers').closest('tr')).toHaveTextContent(
+        '23',
+      );
       expect(screen.getByText('Built on (UTC)')).toBeInTheDocument();
     },
   );
@@ -240,13 +292,13 @@ describe('Site', () => {
       }),
     });
     render(await Site());
-    expect(screen.getByText(/github readings describe/i)).toHaveAttribute(
+    expect(screen.getByRole('table', { name: FETCHED })).toHaveAttribute(
       'data-source',
       'github',
     );
     expect(
       screen
-        .getByText('Stars this repository has on GitHub')
+        .getByText('GitHub stars')
         .closest('tr')
         ?.querySelector('.stat-table-value'),
     ).toHaveTextContent(/^0$/);
@@ -263,25 +315,53 @@ describe('Site', () => {
       },
     });
     render(await Site());
-    expect(screen.getByText(/fallback refreshed/i)).toHaveAttribute(
-      'data-source',
-      'fallback',
-    );
+    expect(fallbackNote()).toHaveAttribute('data-source', 'fallback');
   });
 
   it('explains which repository the GitHub readings describe', async () => {
+    // A fork's build still reads the upstream repository, so the note under
+    // the table is what keeps a fork from presenting these counts as its own.
     render(await Site());
 
+    const note = screen.getByRole('table', {
+      name: FETCHED,
+    }).nextElementSibling;
+
+    expect(note).toHaveClass('stats-source-note');
+    expect(note).toHaveAttribute('data-source', 'github');
+    expect(note).toHaveTextContent(
+      /^These describe the mldangelo\/personal-site repository\.$/,
+    );
+  });
+
+  it('names that repository in the fallback note too', async () => {
+    fetchMock.mockRejectedValueOnce(new Error('Network error'));
+    render(await Site());
+
+    expect(fallbackNote()).toHaveTextContent('mldangelo/personal-site');
     expect(
-      screen.getByText(/github readings describe mldangelo\/personal-site/i),
-    ).toHaveAttribute('data-source', 'github');
+      screen.getByRole('table', { name: LAST_KNOWN }).nextElementSibling,
+    ).toBe(fallbackNote());
+  });
+
+  it('keeps the repository name and the date whole within a note', async () => {
+    // The note broke "personal-site" at its hyphen on every phone from 320px
+    // to 370px wide. An element of its own is what the stylesheet holds
+    // together; `readout-styles.test.ts` checks that it does.
+    fetchMock.mockRejectedValueOnce(new Error('Network error'));
+    render(await Site());
+
+    const whole = within(fallbackNote());
+
+    expect(whole.getByText('mldangelo/personal-site').tagName).toBe('SPAN');
+    expect(whole.getByText('July 31, 2026').tagName).toBe('SPAN');
   });
 
   it('keeps the corrected dependency and lint labels from its live base', async () => {
     render(await Site());
 
     for (const label of [
-      'Dependencies declared directly',
+      'Direct dependencies',
       'Installed non-development package locations',
       'Lockfile package locations',
       'Biome lint rules enabled in CI',
@@ -297,9 +377,7 @@ describe('Site', () => {
       screen.getByText(label).closest('tr')?.querySelector('.stat-table-value')
         ?.textContent ?? '';
 
-    expect(valueFor('Dependencies declared directly')).toMatch(
-      /^[\d,]+ packages$/,
-    );
+    expect(valueFor('Direct dependencies')).toMatch(/^[\d,]+ packages$/);
     expect(valueFor('Installed non-development package locations')).toMatch(
       /^[\d,]+$/,
     );
@@ -318,18 +396,47 @@ describe('Site', () => {
     ).toBeNull();
   });
 
-  it('marks every factual row with provenance and leaves the joke unmarked', async () => {
+  it('files every factual row under a source and sets the joke apart', async () => {
+    // The spoon count measures nothing. Under either caption above it, the
+    // page would be claiming to have fetched or counted it.
     render(await Site());
 
-    const rows = document.querySelectorAll('tbody tr');
-    const sources = document.querySelectorAll('.stat-provenance');
-
-    expect(sources).toHaveLength(rows.length - 1);
+    expect(rowsUnder('Not measured')).toEqual(['Number of spoons']);
     expect(
-      screen
-        .getByText('Number of spoons')
-        .closest('tr')
-        ?.querySelector('.stat-provenance'),
-    ).toBeNull();
+      screen.getByRole('table', { name: 'Not measured' }),
+    ).not.toHaveAttribute('data-source');
+  });
+
+  it('says no source on any row', async () => {
+    // What the caption replaced: a tag under each label, so that every row
+    // header read "GitHub stars Source: GitHub". A header is its label.
+    render(await Site());
+
+    for (const header of screen.getAllByRole('rowheader')) {
+      expect(header.childElementCount, header.textContent ?? '').toBe(0);
+    }
+    expect(screen.queryByText(/source:/i)).toBeNull();
+    // The word stands over the measured rows, in two captions, and on none.
+    expect(
+      screen.getAllByText(/measured/i).map((element) => element.tagName),
+    ).toEqual(['CAPTION', 'CAPTION']);
+  });
+
+  it('underlines every linked value', async () => {
+    // Some values were accent blue and some black, and the only difference
+    // was whether they linked anywhere. The class is all jsdom can see;
+    // `readout-styles.test.ts` holds what it is allowed to do.
+    process.env.BUILD_SHA = '0123456789abcdef0123456789abcdef01234567';
+    process.env.BUILD_REPOSITORY = 'mldangelo/personal-site';
+
+    render(await Site());
+
+    const links = screen.getAllByRole('link');
+
+    expect(links).toHaveLength(10);
+    for (const link of links) {
+      expect(link, link.textContent ?? '').toHaveClass('stat-table-link');
+      expect(link.closest('td')).toHaveClass('stat-table-value');
+    }
   });
 });

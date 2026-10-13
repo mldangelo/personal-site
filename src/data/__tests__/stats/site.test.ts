@@ -32,6 +32,28 @@ afterEach(() => {
 });
 
 describe('site stats data', () => {
+  it('labels each reading the way a person would say it', () => {
+    // These were sentences ("Stars this repository has on GitHub", "Number of
+    // people watching this repository") and wrapped to three lines on a
+    // phone. The section heading and the table caption supply the rest, so a
+    // label is pinned as written: it is the first thing a reader reads.
+    expect(data.map((stat) => stat.label)).toEqual([
+      'GitHub stars',
+      'Watchers',
+      'Forks',
+      'Open issues and pull requests',
+      'Latest repository push (UTC)',
+      'Built from commit',
+      'Built on (UTC)',
+      'Lines of TypeScript',
+      'Direct dependencies',
+      'Installed non-development package locations',
+      'Lockfile package locations',
+      'Biome lint rules enabled in CI',
+      'Number of spoons',
+    ]);
+  });
+
   it('declares every GitHub API reading with provenance', () => {
     for (const key of [
       'stargazers_count',

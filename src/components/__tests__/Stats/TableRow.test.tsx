@@ -111,60 +111,110 @@ describe('TableRow', () => {
     expect(screen.getByText('null')).toBeInTheDocument();
   });
 
-  it('renders a provenance mark for the row source', () => {
+  it('heads the row with its label and nothing else', () => {
+    // The header once carried a source tag under the label, so a screen
+    // reader announced "Countries visited Source: Profile" before each value.
+    // The source belongs to the table's caption now.
     render(
       <table>
         <tbody>
-          <TableRow label="Lines" value="5,411" source="measured" />
+          <TableRow label="Countries visited" value="53" />
         </tbody>
       </table>,
     );
 
-    const mark = document.querySelector('.stat-provenance');
-    expect(mark).toHaveAttribute('data-source', 'measured');
-    expect(mark).toHaveTextContent('Measured');
+    const header = screen.getByRole('rowheader');
+
+    expect(header).toHaveTextContent(/^Countries visited$/);
+    expect(header).toHaveClass('stat-table-label');
+    expect(header.childElementCount).toBe(0);
   });
 
-  it('names the mark for screen readers without labelling the value', () => {
+  it('underlines a linked value rather than colouring it', () => {
+    // jsdom loads no stylesheet, so the class is what can be checked here;
+    // `readout-styles.test.ts` holds what that class is allowed to do.
     render(
       <table>
         <tbody>
-          <TableRow label="Stars" value="1,663" source="github" />
+          <TableRow label="Forks" value="979" link="https://example.com" />
         </tbody>
       </table>,
     );
 
-    expect(document.querySelector('.stat-provenance')).toHaveTextContent(
-      'Source: GitHub',
+    expect(screen.getByRole('link', { name: '979' })).toHaveClass(
+      'stat-table-link',
     );
   });
 
-  it('keeps the label text queryable beside the mark', () => {
-    // The mark lives in the row header, so without its own element the label
-    // text would merge into the header's text content and every `getByText`
-    // for a label on this page would stop matching.
+  it('keeps a linked value and a plain one in the same kind of cell', () => {
+    // A link is a property of the value, not a second kind of reading, so the
+    // cell that sets the type is the same either way.
     render(
       <table>
         <tbody>
-          <TableRow label="Countries visited" value="53" source="profile" />
-        </tbody>
-      </table>,
-    );
-
-    expect(screen.getByText('Countries visited')).toHaveClass(
-      'stat-table-label-text',
-    );
-  });
-
-  it('omits the mark entirely when a row has no source', () => {
-    render(
-      <table>
-        <tbody>
+          <TableRow label="Forks" value="979" link="https://example.com" />
           <TableRow label="Number of spoons" value="0" />
         </tbody>
       </table>,
     );
 
-    expect(document.querySelector('.stat-provenance')).toBeNull();
+    const [linked, plain] = screen.getAllByRole('cell');
+
+    expect(linked.className).toBe(plain.className);
+    expect(plain.querySelector('a')).toBeNull();
+  });
+
+  it('lets only a value too long for a phone break', () => {
+    // A value is one token, and its column is as wide as the widest of them.
+    // A 26-character city ran 60px off a 320px screen in the browser; the
+    // values this site publishes stay whole.
+    render(
+      <table>
+        <tbody>
+          <TableRow label="Current city" value="New York, NY" />
+          <TableRow label="Direct dependencies" value="29 packages" />
+          <TableRow label="Current city" value="Rancho Santa Margarita, CA" />
+        </tbody>
+      </table>,
+    );
+
+    const [city, packages, longCity] = screen.getAllByRole('cell');
+
+    expect(city).not.toHaveClass('stat-table-value--long');
+    expect(packages).not.toHaveClass('stat-table-value--long');
+    expect(longCity).toHaveClass('stat-table-value', 'stat-table-value--long');
+  });
+
+  it('draws the line at what fits beside a label on a 320px screen', () => {
+    render(
+      <table>
+        <tbody>
+          <TableRow label="Fits" value={'8'.repeat(18)} />
+          <TableRow label="Does not" value={'8'.repeat(19)} />
+        </tbody>
+      </table>,
+    );
+
+    const [fits, doesNot] = screen.getAllByRole('cell');
+
+    expect(fits).not.toHaveClass('stat-table-value--long');
+    expect(doesNot).toHaveClass('stat-table-value--long');
+  });
+
+  it('never breaks a value that is an element', () => {
+    // The live age reserves its own width; breaking it would move the table
+    // every time the readout ticked over.
+    render(
+      <table>
+        <tbody>
+          <TableRow
+            label="Current age"
+            value={<span>36.68132394318 and counting</span>}
+          />
+        </tbody>
+      </table>,
+    );
+
+    expect(screen.getByRole('cell')).not.toHaveClass('stat-table-value--long');
   });
 });

@@ -13,29 +13,38 @@ const REPOSITORY = 'https://github.com/mldangelo/personal-site';
  * Keys are filled by `src/components/Stats/Site.tsx`. GitHub rows describe the
  * public upstream repository; measured rows describe this exact build and link
  * to its repository and immutable revision when CI provides that identity.
+ *
+ * A label says only what its surroundings have not. The page sets each
+ * `source` in a table of its own under a caption naming it, inside a section
+ * headed "This site", so a row no longer spells out "this repository" or "on
+ * GitHub" for itself: written as sentences, the labels ran to three lines on
+ * a phone. Shortening stops where it would change the claim. The two counts
+ * of package locations keep every qualifying word: one package can be
+ * installed at several locations, and only one of the counts leaves
+ * development tooling out.
  */
 const data: StatDeclaration[] = [
   {
-    label: 'Stars this repository has on GitHub',
+    label: 'GitHub stars',
     key: 'stargazers_count',
     source: 'github',
     link: `${REPOSITORY}/stargazers`,
   },
   {
-    label: 'Number of people watching this repository',
+    label: 'Watchers',
     key: 'subscribers_count',
     source: 'github',
     link: `${REPOSITORY}/watchers`,
   },
   {
-    label: 'Number of forks',
+    label: 'Forks',
     key: 'forks',
     source: 'github',
     link: `${REPOSITORY}/network`,
   },
   {
     // GitHub's open_issues_count includes open pull requests.
-    label: 'Open GitHub issues and pull requests',
+    label: 'Open issues and pull requests',
     key: 'open_issues_count',
     source: 'github',
     link: 'https://github.com/search?q=repo%3Amldangelo%2Fpersonal-site+is%3Aopen&type=issues',
@@ -61,13 +70,13 @@ const data: StatDeclaration[] = [
     source: 'measured',
   },
   {
-    label: 'Lines of TypeScript powering this website',
+    label: 'Lines of TypeScript',
     key: 'source_lines',
     source: 'measured',
     link: buildSourceTreeUrl,
   },
   {
-    label: 'Dependencies declared directly',
+    label: 'Direct dependencies',
     key: 'direct_dependencies',
     source: 'measured',
     unit: 'packages',
@@ -91,7 +100,8 @@ const data: StatDeclaration[] = [
     link: () => buildSourceFileUrl('biome.json'),
   },
   {
-    // The only row that measures nothing, so it has no provenance mark.
+    // The only row that measures nothing, so it declares no source and the
+    // page sets it apart from the tables that do.
     label: 'Number of spoons',
     value: 0,
   },

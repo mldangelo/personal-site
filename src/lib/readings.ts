@@ -7,16 +7,33 @@ import { isValidElement, type ReactElement } from 'react';
  * them identically: a count taken from the working tree at build time, a
  * number fetched from the GitHub API, and a fact typed into
  * `src/data/profile.json`. They are not equally trustworthy and they do not
- * go stale the same way, so every row says which it is.
+ * go stale the same way, so every reading declares which it is, and the page
+ * sets the readings of one kind in one table under a caption that says so.
  */
 export type ReadingSource = 'measured' | 'github' | 'profile';
 
-/** The gutter mark shown for each source. */
-export const SOURCE_LABELS: Record<ReadingSource, string> = {
-  measured: 'Measured',
-  github: 'GitHub',
-  profile: 'Profile',
+/**
+ * The caption over each table of readings.
+ *
+ * A tag used to repeat this under every row: three rows about me, three tags
+ * reading "Profile". The source is said once now, above the rows it covers.
+ */
+export const SOURCE_CAPTIONS: Record<ReadingSource, string> = {
+  measured: 'Measured from this build’s checkout',
+  github: 'From GitHub, fetched at build time',
+  profile: 'From my profile',
 };
+
+/**
+ * The caption over readings that declare no source. A row that measures
+ * nothing cannot sit under any caption above without claiming that it did.
+ */
+export const UNSOURCED_CAPTION = 'Not measured';
+
+/** What to call a group of readings, given where they came from. */
+export function captionFor(source: ReadingSource | undefined): string {
+  return source ? SOURCE_CAPTIONS[source] : UNSOURCED_CAPTION;
+}
 
 /**
  * A row as declared in `src/data/stats/*`.
@@ -42,7 +59,7 @@ export interface StatDeclaration {
   /**
    * Appended after the formatted count, and only where it tells the reader
    * something the label does not. `53 countries` beside `Countries visited`
-   * is noise; `29 packages` beside `Dependencies declared directly` is useful.
+   * is noise; `29 packages` beside `Direct dependencies` is useful.
    */
   unit?: string;
   format?: (value: unknown) => string | ReactElement;
@@ -103,7 +120,7 @@ function resolveValue(
  *
  * This lived inline in `src/components/Stats/Site.tsx`, which meant the
  * personal table went through a different path and had no provenance at all.
- * Both tables resolve here now, so a source only has to be described once.
+ * Both sections resolve here now, so a source only has to be described once.
  *
  * A measurement of `null` drops its row rather than printing a placeholder:
  * a fork with no lockfile should show one fewer reading, not a wrong one.
@@ -136,4 +153,38 @@ export function resolveReadings(
   }
 
   return readings;
+}
+
+/** Readings that share a source, in the order they were declared. */
+export interface ReadingGroup {
+  /** Absent for readings that declare no source. */
+  source?: ReadingSource;
+  readings: Reading[];
+}
+
+/**
+ * Gather resolved readings by source, so each source is captioned once.
+ *
+ * Groups come out in the order their source first appears and rows keep their
+ * declared order. Grouping by source rather than by run means a declaration
+ * added out of sequence joins its own table instead of opening a second one
+ * under the same caption.
+ */
+export function groupBySource(readings: readonly Reading[]): ReadingGroup[] {
+  const groups = new Map<ReadingSource | undefined, Reading[]>();
+
+  for (const reading of readings) {
+    const group = groups.get(reading.source);
+
+    if (group) {
+      group.push(reading);
+    } else {
+      groups.set(reading.source, [reading]);
+    }
+  }
+
+  return Array.from(groups, ([source, group]) => ({
+    source,
+    readings: group,
+  }));
 }
