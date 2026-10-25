@@ -104,8 +104,8 @@ export default function ResumePage() {
           <p className="resume-summary">
             Engineering leader with a career spanning {careerSpan}+ years across
             AI, security, and infrastructure. I’m currently a Member of the
-            Technical Staff at OpenAI, working on Promptfoo and Codex Security.
-            I help secure AI systems and use AI to find software
+            Technical Staff at OpenAI, working on Promptfoo and other cyber
+            products. I help secure AI systems and use AI to find software
             vulnerabilities. I co-founded Promptfoo before it joined OpenAI in
             2026. Stanford MS, YC alum, previously VP Engineering.
           </p>
