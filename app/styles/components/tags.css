@@ -84,26 +84,19 @@
   color: var(--color-fg-light);
 }
 
-/* Tech tags — squared, quiet, mono. */
+/* Tech tags — squared, quiet, mono, at the size mono takes everywhere else:
+   at 11px they were the smallest text on the projects page. A tag is not a
+   control and the card that used to light them is gone, so nothing here
+   answers the pointer. */
 .tech-tag {
   font-family: var(--font-mono);
-  font-size: var(--text-2xs);
-  letter-spacing: var(--tracking-wide);
+  font-size: var(--text-xs);
   font-weight: var(--font-weight-normal);
   color: var(--color-fg-light);
   background: transparent;
   border: var(--rule) solid var(--color-border);
   padding: 0.25rem 0.5rem;
   border-radius: var(--radius-sm);
-  transition:
-    color var(--duration-fast) var(--ease-out),
-    border-color var(--duration-fast) var(--ease-out);
-}
-
-.project-card--linked:hover .tech-tag,
-.project-card--linked:focus-within .tech-tag {
-  color: var(--color-fg);
-  border-color: var(--color-border-alt);
 }
 
 /* Tier variations — weight and tone, not scale. The working tier is the

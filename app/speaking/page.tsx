@@ -57,8 +57,8 @@ export default function SpeakingPage() {
         </header>
 
         <section className="projects-group" aria-labelledby="speaking-public">
-          <div className="projects-group-header">
-            <h2 id="speaking-public" className="projects-section-title">
+          <div className="section-header">
+            <h2 id="speaking-public" className="section-heading">
               Public sessions
             </h2>
           </div>
@@ -72,14 +72,14 @@ export default function SpeakingPage() {
         </section>
 
         <section className="projects-group" aria-labelledby="speaking-private">
-          <div className="projects-group-header">
-            <h2 id="speaking-private" className="projects-section-title">
+          <div className="section-header">
+            <h2 id="speaking-private" className="section-heading">
               Closed-door sessions
             </h2>
           </div>
           <p className="page-prose">
             I also run closed-door sessions with security and engineering teams
-            on behalf of OpenAI, which aren't listed here. If you're organizing
+            on behalf of OpenAI, which aren’t listed here. If you’re organizing
             an event or working on the same problems,{' '}
             <Link href="/contact/">get in touch</Link>.
           </p>
