@@ -34,7 +34,7 @@ describe('personal stats data', () => {
 
     expect(countriesStat).toBeDefined();
     expect(countriesStat!.label).toBe('Countries visited');
-    expect(countriesStat!.value).toBe(53);
+    expect(countriesStat!.value).toBe(55);
     expect(countriesStat!.link).toContain('google.com/maps');
   });
 
@@ -43,7 +43,7 @@ describe('personal stats data', () => {
 
     expect(locationStat).toBeDefined();
     expect(locationStat!.label).toBe('Current city');
-    expect(locationStat!.value).toBe('New York, NY');
+    expect(locationStat!.value).toBe('San Francisco');
   });
 
   it('stays a plain data module with no React in it', () => {
