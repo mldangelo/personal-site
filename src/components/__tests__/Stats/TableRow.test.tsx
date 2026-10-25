@@ -185,12 +185,12 @@ describe('TableRow', () => {
     expect(longCity).toHaveClass('stat-table-value', 'stat-table-value--long');
   });
 
-  it('draws the line at what fits beside a label on a 320px screen', () => {
+  it('draws the line at what fits beside the longest label on a 320px screen', () => {
     render(
       <table>
         <tbody>
-          <TableRow label="Fits" value={'8'.repeat(18)} />
-          <TableRow label="Does not" value={'8'.repeat(19)} />
+          <TableRow label="Fits" value={'8'.repeat(15)} />
+          <TableRow label="Does not" value={'8'.repeat(16)} />
         </tbody>
       </table>,
     );

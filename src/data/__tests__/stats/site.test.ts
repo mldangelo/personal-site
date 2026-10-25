@@ -45,7 +45,7 @@ describe('site stats data', () => {
       'Latest repository push (UTC)',
       'Built from commit',
       'Built on (UTC)',
-      'Lines of TypeScript',
+      'Lines of TypeScript powering this site',
       'Direct dependencies',
       'Installed non-development package locations',
       'Lockfile package locations',

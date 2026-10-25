@@ -7,14 +7,15 @@ import type { TableRowProps } from './types';
  * its label on the narrowest phone.
  *
  * A value is one token and never breaks, which is what lets its column hug the
- * widest value and leave the label everything else. At 18px mono a character
- * is 10.8px, and on a 320px screen the profile table has 197px left for a
- * value once its labels have wrapped as far as they will. A longer one runs
- * past the right rail, and a 26-character city took the page 60px sideways.
- * Nothing this site publishes comes close, but the city is free text, and a
- * fork's may not fit.
+ * widest value and leave the label everything else. The tightest row is
+ * "Installed non-development package locations": its longest word cannot
+ * break, and on a 320px screen that leaves room for 15 characters of value.
+ * At 16 the table runs past the right rail, and a 26-character city once took
+ * the page 60px sideways. Nothing this site publishes comes close, but a fork's
+ * counts and city may not fit. The limit applies to every row, so the
+ * tightest one sets it.
  */
-const LONGEST_UNBROKEN_VALUE = 18;
+const LONGEST_UNBROKEN_VALUE = 15;
 
 export default function TableRow({
   label,

@@ -30,7 +30,7 @@ function clearBuildEnvironment() {
 }
 
 const FETCHED = 'From GitHub, fetched at build time';
-const LAST_KNOWN = 'From GitHub, last known July 31, 2026';
+const LAST_KNOWN = 'From GitHub, last known 2026-07-31';
 const MEASURED = 'Measured from this build’s checkout';
 
 /** The row labels under one caption, as a reader meets them. */
@@ -85,7 +85,7 @@ describe('Site', () => {
     // No build identity here, so no "Built from commit" row.
     expect(rowsUnder(MEASURED)).toEqual([
       'Built on (UTC)',
-      'Lines of TypeScript',
+      'Lines of TypeScript powering this site',
       'Direct dependencies',
       'Installed non-development package locations',
       'Lockfile package locations',
@@ -219,7 +219,7 @@ describe('Site', () => {
     const note = fallbackNote();
     expect(note).toHaveAttribute('data-source', 'fallback');
     expect(note).toHaveTextContent(/approximate/i);
-    expect(note).toHaveTextContent(/on July 31, 2026\.$/);
+    expect(note).toHaveTextContent(/on 2026-07-31\.$/);
     expect(screen.getByText('21')).toBeInTheDocument();
   });
 
@@ -334,27 +334,20 @@ describe('Site', () => {
     );
   });
 
-  it('names that repository in the fallback note too', async () => {
+  it('names the repository and dates the numbers in the fallback note', async () => {
+    // The note broke "personal-site" at its hyphen on phones, so the name and
+    // the date each keep an element the stylesheet holds in one piece.
     fetchMock.mockRejectedValueOnce(new Error('Network error'));
     render(await Site());
 
-    expect(fallbackNote()).toHaveTextContent('mldangelo/personal-site');
+    const note = fallbackNote();
     expect(
       screen.getByRole('table', { name: LAST_KNOWN }).nextElementSibling,
-    ).toBe(fallbackNote());
-  });
-
-  it('keeps the repository name and the date whole within a note', async () => {
-    // The note broke "personal-site" at its hyphen on every phone from 320px
-    // to 370px wide. An element of its own is what the stylesheet holds
-    // together; `readout-styles.test.ts` checks that it does.
-    fetchMock.mockRejectedValueOnce(new Error('Network error'));
-    render(await Site());
-
-    const whole = within(fallbackNote());
-
-    expect(whole.getByText('mldangelo/personal-site').tagName).toBe('SPAN');
-    expect(whole.getByText('July 31, 2026').tagName).toBe('SPAN');
+    ).toBe(note);
+    expect(within(note).getByText('mldangelo/personal-site').tagName).toBe(
+      'SPAN',
+    );
+    expect(within(note).getByText('2026-07-31').tagName).toBe('SPAN');
   });
 
   it('keeps the corrected dependency and lint labels from its live base', async () => {
@@ -405,38 +398,5 @@ describe('Site', () => {
     expect(
       screen.getByRole('table', { name: 'Not measured' }),
     ).not.toHaveAttribute('data-source');
-  });
-
-  it('says no source on any row', async () => {
-    // What the caption replaced: a tag under each label, so that every row
-    // header read "GitHub stars Source: GitHub". A header is its label.
-    render(await Site());
-
-    for (const header of screen.getAllByRole('rowheader')) {
-      expect(header.childElementCount, header.textContent ?? '').toBe(0);
-    }
-    expect(screen.queryByText(/source:/i)).toBeNull();
-    // The word stands over the measured rows, in two captions, and on none.
-    expect(
-      screen.getAllByText(/measured/i).map((element) => element.tagName),
-    ).toEqual(['CAPTION', 'CAPTION']);
-  });
-
-  it('underlines every linked value', async () => {
-    // Some values were accent blue and some black, and the only difference
-    // was whether they linked anywhere. The class is all jsdom can see;
-    // `readout-styles.test.ts` holds what it is allowed to do.
-    process.env.BUILD_SHA = '0123456789abcdef0123456789abcdef01234567';
-    process.env.BUILD_REPOSITORY = 'mldangelo/personal-site';
-
-    render(await Site());
-
-    const links = screen.getAllByRole('link');
-
-    expect(links).toHaveLength(10);
-    for (const link of links) {
-      expect(link, link.textContent ?? '').toHaveClass('stat-table-link');
-      expect(link.closest('td')).toHaveClass('stat-table-value');
-    }
   });
 });

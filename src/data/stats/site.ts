@@ -3,11 +3,17 @@ import {
   buildSourceFileUrl,
   buildSourceTreeUrl,
   builtCommitUrl,
+  DEFAULT_SOURCE_REPOSITORY,
   SHORT_SHA_LENGTH,
   utcDate,
 } from '@/lib/telemetry';
 
-const REPOSITORY = 'https://github.com/mldangelo/personal-site';
+const REPOSITORY = `https://github.com/${DEFAULT_SOURCE_REPOSITORY}`;
+
+const OPEN_ITEMS_SEARCH = `https://github.com/search?${new URLSearchParams({
+  q: `repo:${DEFAULT_SOURCE_REPOSITORY} is:open`,
+  type: 'issues',
+})}`;
 
 /**
  * Keys are filled by `src/components/Stats/Site.tsx`. GitHub rows describe the
@@ -47,7 +53,7 @@ const data: StatDeclaration[] = [
     label: 'Open issues and pull requests',
     key: 'open_issues_count',
     source: 'github',
-    link: 'https://github.com/search?q=repo%3Amldangelo%2Fpersonal-site+is%3Aopen&type=issues',
+    link: OPEN_ITEMS_SEARCH,
   },
   {
     // `pushed_at` is repository activity, not deployment provenance.
@@ -70,7 +76,7 @@ const data: StatDeclaration[] = [
     source: 'measured',
   },
   {
-    label: 'Lines of TypeScript',
+    label: 'Lines of TypeScript powering this site',
     key: 'source_lines',
     source: 'measured',
     link: buildSourceTreeUrl,

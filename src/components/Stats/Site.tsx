@@ -14,7 +14,11 @@ import {
   type Measurement,
   resolveReadings,
 } from '../../lib/readings';
-import { builtCommit, utcDate } from '../../lib/telemetry';
+import {
+  builtCommit,
+  DEFAULT_SOURCE_REPOSITORY,
+  utcDate,
+} from '../../lib/telemetry';
 import Table from './Table';
 
 interface GitHubData {
@@ -32,26 +36,26 @@ interface GitHubStatsResult {
 
 /**
  * The repository every GitHub reading describes. A fork's build reads this one
- * too, so the note under the table names it. Fetching and naming it from one
- * constant is what keeps that note true.
+ * too, so the note under the table names it, and the row links in
+ * `src/data/stats/site.ts` are built from the same constant.
  */
-const UPSTREAM = 'mldangelo/personal-site';
+const UPSTREAM = DEFAULT_SOURCE_REPOSITORY;
 
 /**
- * Last-known upstream values for builds where the GitHub API is unavailable.
- * The table's caption dates this snapshot and its note calls the numbers
- * approximate, so refresh `FALLBACK_REFRESHED` whenever these change.
+ * Last-known upstream values for builds where the GitHub API is unavailable,
+ * and the day they were recorded. The caption and note date the numbers by
+ * `asOf`, so it lives beside them and changes with them.
  */
-const FALLBACK_DATA: GitHubData = {
-  stargazers_count: 1663,
-  subscribers_count: 23,
-  forks: 979,
-  open_issues_count: 21,
-  pushed_at: '2026-07-31T15:44:18Z',
+const FALLBACK: { asOf: string; data: GitHubData } = {
+  asOf: '2026-07-31',
+  data: {
+    stargazers_count: 1663,
+    subscribers_count: 23,
+    forks: 979,
+    open_issues_count: 21,
+    pushed_at: '2026-07-31T15:44:18Z',
+  },
 };
-
-/** When `FALLBACK_DATA` was last refreshed, as the page states it. */
-const FALLBACK_REFRESHED = 'July 31, 2026';
 
 /** Narrow untrusted JSON before any formatter can observe it. */
 function isGitHubData(value: unknown): value is GitHubData {
@@ -110,13 +114,13 @@ async function fetchGitHubStats(): Promise<GitHubStatsResult> {
 
     if (!response.ok) {
       console.warn(`GitHub API returned ${response.status}, using fallback`);
-      return { data: FALLBACK_DATA, source: 'fallback' };
+      return { data: FALLBACK.data, source: 'fallback' };
     }
 
     const data: unknown = await response.json();
     if (!isGitHubData(data)) {
       console.warn('GitHub API returned malformed statistics, using fallback');
-      return { data: FALLBACK_DATA, source: 'fallback' };
+      return { data: FALLBACK.data, source: 'fallback' };
     }
     return {
       data: {
@@ -130,7 +134,7 @@ async function fetchGitHubStats(): Promise<GitHubStatsResult> {
     };
   } catch (error) {
     console.warn('Failed to fetch GitHub stats, using fallback:', error);
-    return { data: FALLBACK_DATA, source: 'fallback' };
+    return { data: FALLBACK.data, source: 'fallback' };
   }
 }
 
@@ -153,9 +157,9 @@ function measureThisBuild(): Record<string, Measurement> {
  * Site statistics are fully server-rendered and add no client JavaScript.
  *
  * One table per source, each under a caption that names it. Only the GitHub
- * table has two states. A build that could not fetch its numbers says so three
- * times over: in the caption, in the note, and as `data-source="fallback"` on
- * both, because last-known numbers must never pass for fetched ones.
+ * table has two states. A build that could not fetch its numbers says so in
+ * the caption, in the note, and as `data-source="fallback"` on both, because
+ * last-known numbers must never pass for fetched ones.
  */
 export default async function SiteStats() {
   const githubStats = fetchGitHubStats();
@@ -165,41 +169,31 @@ export default async function SiteStats() {
     ...measurements,
     ...githubData,
   });
+  const fellBack = fetched === 'fallback';
 
-  return groupBySource(data).map(({ source, readings }) =>
-    source === 'github' ? (
-      <Fragment key={source}>
-        <Table
-          caption={
-            fetched === 'github'
-              ? captionFor(source)
-              : `From GitHub, last known ${FALLBACK_REFRESHED}`
-          }
-          data={readings}
-          source={fetched}
-        />
-        {/* The spans keep a name and a date in one piece: see content.css. */}
+  return groupBySource(data).map(({ source, readings }) => (
+    <Fragment key={source ?? 'unsourced'}>
+      <Table
+        caption={captionFor(source, fellBack ? FALLBACK.asOf : undefined)}
+        data={readings}
+        source={source === 'github' ? fetched : source}
+      />
+      {source === 'github' ? (
+        // The spans keep a name and a date in one piece: see content.css.
         <p className="stats-source-note" data-source={fetched}>
-          {fetched === 'github' ? (
-            <>
-              These describe the <span>{UPSTREAM}</span> repository.
-            </>
-          ) : (
+          {fellBack ? (
             <>
               GitHub’s numbers could not be fetched when this site was built.
               These are approximate: the last counts recorded for{' '}
-              <span>{UPSTREAM}</span>, on <span>{FALLBACK_REFRESHED}</span>.
+              <span>{UPSTREAM}</span>, on <span>{FALLBACK.asOf}</span>.
+            </>
+          ) : (
+            <>
+              These describe the <span>{UPSTREAM}</span> repository.
             </>
           )}
         </p>
-      </Fragment>
-    ) : (
-      <Table
-        key={source ?? 'unsourced'}
-        caption={captionFor(source)}
-        data={readings}
-        source={source}
-      />
-    ),
-  );
+      ) : null}
+    </Fragment>
+  ));
 }

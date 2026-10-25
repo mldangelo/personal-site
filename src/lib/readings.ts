@@ -30,8 +30,20 @@ export const SOURCE_CAPTIONS: Record<ReadingSource, string> = {
  */
 export const UNSOURCED_CAPTION = 'Not measured';
 
-/** What to call a group of readings, given where they came from. */
-export function captionFor(source: ReadingSource | undefined): string {
+/**
+ * What to call a group of readings, given where they came from.
+ *
+ * `lastKnown` is the date of the GitHub numbers a build fell back to when it
+ * could not fetch fresh ones. The caption sits directly over those numbers,
+ * so it is the first thing that would lie if it still said "fetched".
+ */
+export function captionFor(
+  source: ReadingSource | undefined,
+  lastKnown?: string,
+): string {
+  if (source === 'github' && lastKnown) {
+    return `From GitHub, last known ${lastKnown}`;
+  }
   return source ? SOURCE_CAPTIONS[source] : UNSOURCED_CAPTION;
 }
 

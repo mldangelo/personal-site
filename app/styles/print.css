@@ -221,8 +221,7 @@
   }
 
   .resume-page .title h2,
-  .about-section h2,
-  .stats-section-title {
+  .about-section h2 {
     break-after: avoid;
     page-break-after: avoid;
   }

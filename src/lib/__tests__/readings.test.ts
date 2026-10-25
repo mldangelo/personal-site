@@ -55,6 +55,14 @@ describe('captionFor', () => {
     // would say that it had been counted.
     expect(captionFor(undefined)).toBe('Not measured');
   });
+
+  it('dates GitHub numbers a build could not fetch', () => {
+    expect(captionFor('github', '2026-07-31')).toBe(
+      'From GitHub, last known 2026-07-31',
+    );
+    // Only GitHub numbers are fetched, so only they can be last-known.
+    expect(captionFor('measured', '2026-07-31')).toBe(SOURCE_CAPTIONS.measured);
+  });
 });
 
 describe('groupBySource', () => {
