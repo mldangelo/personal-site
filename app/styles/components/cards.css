@@ -18,6 +18,8 @@
    student-era archive as cards. Only the archive has screenshots, so
    the register row has to carry itself on the date gutter, display
    type, and a hairline — no picture frame to hide behind.
+   /speaking renders its appearances with these same classes, so a
+   change to the register here changes that page too.
    ======================================== */
 
 .projects-page {
