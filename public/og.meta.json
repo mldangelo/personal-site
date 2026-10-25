@@ -49,7 +49,7 @@
   "profile": {
     "name": "Michael D'Angelo",
     "employer": "OpenAI",
-    "focus": "Promptfoo and Codex Security",
+    "focus": "Promptfoo and other cyber products",
     "countriesVisited": 53,
     "computingSince": 1993,
     "currentCity": "New York, NY"
@@ -62,8 +62,8 @@
     "accent": "#36559a",
     "hairline": "rgba(35, 39, 46, 0.14)"
   },
-  "generatorDigest": "ae5d6884f08379a8ec6f2751c80535c386e6be0239c6240121bd61d53be35e7e",
-  "imageDigest": "c2a623a13cda94e594a0307de93ed76af26ba645b87f65f406552be23746df29",
+  "generatorDigest": "0689365e7a034e3f825740a45b36b72ec75beadc4d292152565456417edff58e",
+  "imageDigest": "416f724ba6fe4f3444f5b36a2469640faf9dcfe6636140d54f8663a203c074cf",
   "posts": [
     {
       "slug": "why-i-mostly-switched-from-claude-code-to-codex-desktop-app",
