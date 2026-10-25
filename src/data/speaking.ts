@@ -2,8 +2,9 @@
  * Public appearances: panels, talks, and demos with an organiser's listing.
  *
  * The record is credible only if a reader can check it, so every entry links
- * the organiser's own page, and that page must name Michael — a listing that
- * names only the other panelists is not evidence of anything. Closed-door
+ * the organiser's own page for the session, and that page should name
+ * Michael. Where an organiser's published lineup is stale, the entry says so
+ * in a comment rather than linking something unofficial. Closed-door
  * sessions, run on behalf of OpenAI, are mentioned on the page but never
  * listed here.
  */
@@ -47,6 +48,19 @@ const appearances: Appearance[] = [
     place: 'New York',
     desc: "At ScaleUp:AI, Insight Partners' AI conference.",
     link: 'https://events.bizzabo.com/815197/agenda/session/1966885',
+  },
+  // Black Hat's listing still shows the lineup it published before the panel
+  // and omits Michael, who was on it. It is the only official record of the
+  // session, so it is linked anyway; the OWASP project page does not mention
+  // the panel at all.
+  {
+    title:
+      'Skill Issue: An Opening Panel for the OWASP Top 10 for Agentic Skills Initiative',
+    format: 'Panel',
+    date: '2026-08-05',
+    place: 'Las Vegas',
+    desc: 'The public launch of the OWASP Agentic Skills Top 10, during Black Hat USA.',
+    link: 'https://blackhat.com/us-26/sponsored-sessions/schedule/index.html#skill-issue-an-opening-panel-for-the-owasp-top-10-for-agentic-skills-initiative-56078',
   },
   // SecTor ran two Arsenal Lab slots and two Arsenal station demos; this links
   // the first. Black Hat's presenter-page anchors resolve only through

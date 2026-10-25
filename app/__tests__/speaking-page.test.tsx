@@ -44,15 +44,17 @@ describe('speaking page', () => {
   it('opens each listing in a new tab and says so without hiding the row', () => {
     render(<SpeakingPage />);
     const register = screen.getByRole('region', { name: 'Public sessions' });
+    // By position, not by name: one row's description names another's event.
+    const links = within(register).getAllByRole('link');
 
-    for (const appearance of appearances) {
-      const link = within(register).getByRole('link', {
-        name: new RegExp(
-          appearance.title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),
-        ),
-      });
+    expect(links).toHaveLength(appearances.length);
+    links.forEach((link, index) => {
+      const appearance = appearances[index];
 
       expect(link).toHaveAttribute('href', appearance.link);
+      expect(link).toHaveAccessibleName(
+        expect.stringContaining(appearance.title),
+      );
       expect(link).toHaveAttribute('target', '_blank');
       expect(link).toHaveAttribute('rel', 'noopener noreferrer');
       expect(link).not.toHaveAttribute('aria-label');
@@ -62,7 +64,7 @@ describe('speaking page', () => {
       expect(link).toHaveAccessibleName(
         expect.stringContaining('(opens in a new tab)'),
       );
-    }
+    });
   });
 
   it('mentions closed-door sessions without listing them, and links contact', () => {
