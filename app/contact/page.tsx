@@ -25,7 +25,7 @@ export default function ContactPage() {
             <EmailLink />
             <p className="contact-hint">Usually respond within 24 hours</p>
             <p className="contact-hint">
-              For talks or team sessions, email is best
+              For speaking invitations, email is best
             </p>
           </div>
 
