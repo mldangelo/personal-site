@@ -35,7 +35,7 @@ export const SHARE_IMAGE_DIMENSIONS = {
 
 // Canonical one-line bio, shared across page metadata, OpenGraph, and JSON-LD.
 export const SITE_DESCRIPTION =
-  'Member of the Technical Staff at OpenAI, working on Promptfoo and Codex Security. Co-founded Promptfoo before it joined OpenAI in 2026.';
+  'Member of the Technical Staff at OpenAI, working on Promptfoo and other cyber products. Co-founded Promptfoo before it joined OpenAI in 2026.';
 
 // Image dimension constants
 export const PROJECT_IMAGE = {

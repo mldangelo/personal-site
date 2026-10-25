@@ -57,3 +57,12 @@
   color: var(--color-fg-light);
   margin-bottom: 2rem;
 }
+
+/* Sentences rather than a one-line tagline: at subtitle size they ran to
+   three lines on desktop and six on a phone. Declared after .page-subtitle
+   so its size wins when the two are combined. */
+.page-prose {
+  max-width: var(--measure-read);
+  font-size: var(--text-md);
+  line-height: var(--leading-normal);
+}

@@ -6,17 +6,16 @@ import {
   nextThemeChoice,
   RESOLVED_THEME_COLOR_SELECTOR,
   readStoredThemeChoice,
+  readSystemScheme,
   renderedThemeColor,
   resolveTheme,
   storeThemeChoice,
   syncThemeColor,
   THEME_ATTRIBUTE,
   THEME_CHOICE_ATTRIBUTE,
-  THEME_CHOICES,
   THEME_COLOR_META_SELECTOR,
   THEME_COLOR_TOKEN,
   THEME_STORAGE_KEY,
-  type ThemeChoice,
   type ThemeColors,
   themeInitScript,
 } from '../theme';
@@ -171,49 +170,14 @@ describe('theme', () => {
   });
 
   describe('nextThemeChoice', () => {
-    it('cycles system to light to dark and back', () => {
-      expect(nextThemeChoice('system')).toBe('light');
-      expect(nextThemeChoice('light')).toBe('dark');
-      expect(nextThemeChoice('dark')).toBe('system');
-    });
-
-    it('walks in the order THEME_CHOICES documents', () => {
-      const walked: ThemeChoice[] = [];
-      let cursor: ThemeChoice = 'system';
-
-      for (let step = 0; step < THEME_CHOICES.length; step += 1) {
-        walked.push(cursor);
-        cursor = nextThemeChoice(cursor);
+    it.each([
+      ['light', ['system', 'dark', 'light', 'system']],
+      ['dark', ['system', 'light', 'dark', 'system']],
+      [null, ['system', 'dark', 'light', 'system']],
+    ] as const)('cycles through all choices for %s', (scheme, choices) => {
+      for (let i = 0; i < choices.length - 1; i += 1) {
+        expect(nextThemeChoice(choices[i], scheme)).toBe(choices[i + 1]);
       }
-
-      expect(walked).toEqual(THEME_CHOICES);
-      expect(cursor).toBe('system');
-    });
-
-    it('reaches every state from every state, so none is a dead end', () => {
-      for (const start of THEME_CHOICES) {
-        const seen = new Set<ThemeChoice>([start]);
-        let cursor = start;
-
-        for (let step = 1; step < THEME_CHOICES.length; step += 1) {
-          cursor = nextThemeChoice(cursor);
-          seen.add(cursor);
-        }
-
-        expect(seen.size).toBe(THEME_CHOICES.length);
-        expect(nextThemeChoice(cursor)).toBe(start);
-      }
-    });
-  });
-
-  describe('THEME_CHOICES', () => {
-    // Two literals hold one order: this array and the `nextThemeChoice` map.
-    // The walk above pins the sequence; this pins where it opens, which is the
-    // half nothing else observes — the rendered states are picked by CSS from
-    // `data-theme-choice`, so their DOM order is invisible to every other test.
-    it('opens on the state a visitor who has never chosen is in', () => {
-      // Nothing stored, per `beforeEach`: where a first-time visitor starts.
-      expect(THEME_CHOICES[0]).toBe(readStoredThemeChoice());
     });
   });
 
@@ -266,6 +230,29 @@ describe('theme', () => {
         expect(readStoredThemeChoice()).toBe('system');
         expect(() => storeThemeChoice('dark')).not.toThrow();
       });
+    });
+  });
+
+  describe('readSystemScheme', () => {
+    it.each([true, false])(
+      'agrees with the bootstrap for prefersDark=%s',
+      (dark) => {
+        setPrefersDark(dark);
+        runThemeInitScript();
+        expect(readSystemScheme()).toBe(dark ? 'dark' : 'light');
+        expect(readSystemScheme()).toBe(themeAttribute());
+      },
+    );
+
+    it('uses the opposite of the bootstrap fallback when matchMedia is absent', () => {
+      Object.defineProperty(window, 'matchMedia', {
+        writable: true,
+        configurable: true,
+        value: undefined,
+      });
+      runThemeInitScript();
+      expect(readSystemScheme()).toBeNull();
+      expect(nextThemeChoice('system', null)).not.toBe(themeAttribute());
     });
   });
 

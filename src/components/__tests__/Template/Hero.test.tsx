@@ -32,17 +32,8 @@ describe('Hero', () => {
     expect(promptfooLink).toHaveAttribute('href', 'https://promptfoo.dev');
     expect(promptfooLink).toHaveClass('hero-highlight');
 
-    const codexSecurityLink = screen.getByRole('link', {
-      name: 'Codex Security',
-    });
-    expect(codexSecurityLink).toHaveAttribute(
-      'href',
-      'https://openai.com/index/codex-security-now-in-research-preview/',
-    );
-    expect(codexSecurityLink).toHaveClass('hero-highlight');
-
     expect(container.querySelector('.hero-tagline')).toHaveTextContent(
-      'I’m a Member of the Technical Staff at OpenAI, working on Promptfoo and Codex Security.',
+      'I’m a Member of the Technical Staff at OpenAI, working on Promptfoo and other cyber products.',
     );
     expect(container.querySelector('.hero-summary')).toHaveTextContent(
       'I help secure AI systems and use AI to find software vulnerabilities. I co-founded Promptfoo before it joined OpenAI in 2026.',

@@ -17,8 +17,8 @@
     "renderer": [
       {
         "name": "next",
-        "version": "16.3.8",
-        "integrity": "sha512-U7QEZaTini6wKrb8A8hqLLqYQyCetegKjCpJOyxk642vWoMoU1x5PyZCJFvgYgiptA8xc5j/9xYlZFO7w9Sjmw=="
+        "version": "16.4.3",
+        "integrity": "sha512-OqxKTGi9u80FydydsMNYNjnuje9Au+kvHlt2GZ//ftdpDHm1dxKqAaENoOOTX5wKzn+9vaKUNIfZeyZUuLhCnA=="
       },
       {
         "name": "react",
@@ -32,7 +32,7 @@
       }
     ]
   },
-  "generatorDigest": "b5ba298936bd719b74059ac2a1991f1b22814634e4299597bb2dae2774b6fa28",
+  "generatorDigest": "85e4ca5e585dc077209a554e6f7e44c819878bda120895786a53e8e4d4492488",
   "files": {
     "app/favicon.ico": "1a36375860b595f54b960ae03580627b62b72e20f44f0fb82066686e10ec41e1",
     "app/icon.png": "43291a11cdaa0d3333e6ec55216c112f7a0e5cb3c34c1b05869e00fc98057b5e",
