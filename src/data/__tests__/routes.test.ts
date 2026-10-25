@@ -88,6 +88,7 @@ describe('routes', () => {
       '/resume',
       '/projects',
       '/writing',
+      '/speaking',
       '/contact',
     ]);
   });

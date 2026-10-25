@@ -9,8 +9,8 @@ import {
 } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import matter from 'gray-matter';
 import { afterEach, beforeAll, describe, expect, it } from 'vitest';
+import { stringifyFrontmatter } from '@/lib/frontmatter.mjs';
 import {
   getAllPosts,
   getPostSlugs,
@@ -66,7 +66,7 @@ function postFixture(frontmatter: Record<string, unknown>): string {
   mkdirSync(directory, { recursive: true });
   writeFileSync(
     join(directory, 'example.md'),
-    matter.stringify('Fixture body.\n', frontmatter),
+    stringifyFrontmatter('Fixture body.\n', frontmatter),
   );
   temporaryRoots.push(root);
   return root;
