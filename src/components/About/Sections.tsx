@@ -78,6 +78,7 @@ interface ParsedAboutSection {
  * The rest stay as plain lists, because order carries no meaning there.
  */
 const sectionVariants: Record<string, string> = {
+  Speaking: 'about-section--log',
   'Some History': 'about-section--log',
   'Travel / Geography': 'about-section--log',
   'Fun Facts': 'about-section--compact',
