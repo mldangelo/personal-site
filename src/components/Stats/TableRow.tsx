@@ -8,14 +8,13 @@ import type { TableRowProps } from './types';
  *
  * A value is one token and never breaks, which is what lets its column hug the
  * widest value and leave the label everything else. The tightest row is
- * "Installed non-development package locations": its longest word cannot
- * break, and on a 320px screen that leaves room for 15 characters of value.
- * At 16 the table runs past the right rail, and a 26-character city once took
- * the page 60px sideways. Nothing this site publishes comes close, but a fork's
- * counts and city may not fit. The limit applies to every row, so the
- * tightest one sets it.
+ * "Lines of TypeScript powering this site": its longest word cannot break,
+ * and on a 320px screen that leaves room for 17 characters of value. A longer
+ * one runs past the right rail, and a 26-character city once took the page
+ * 60px sideways. Nothing this site publishes comes close, but a fork's city
+ * may not fit. The limit applies to every row, so the tightest one sets it.
  */
-const LONGEST_UNBROKEN_VALUE = 15;
+const LONGEST_UNBROKEN_VALUE = 17;
 
 export default function TableRow({
   label,

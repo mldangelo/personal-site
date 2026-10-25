@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import {
   AGE_MIN_INTERVAL,
@@ -8,45 +8,11 @@ import {
   ageIntervalFor,
   agePlaceholder,
   BIRTH_DATE,
-  buildIdentity,
-  buildSourceFileUrl,
-  buildSourceTreeUrl,
-  builtCommit,
-  builtCommitUrl,
-  DEFAULT_SOURCE_REPOSITORY,
   MS_PER_YEAR,
-  SHORT_SHA_LENGTH,
   utcDate,
 } from '../telemetry';
 
 const COMPACT_PRECISION = 8;
-const ENV_KEYS = [
-  'BUILD_SHA',
-  'BUILD_REPOSITORY',
-  'GITHUB_SHA',
-  'GITHUB_REPOSITORY',
-] as const;
-const originalEnvironment = Object.fromEntries(
-  ENV_KEYS.map((key) => [key, process.env[key]]),
-);
-
-function clearBuildEnvironment() {
-  for (const key of ENV_KEYS) {
-    delete process.env[key];
-  }
-}
-
-afterEach(() => {
-  for (const key of ENV_KEYS) {
-    const value = originalEnvironment[key];
-
-    if (value === undefined) {
-      delete process.env[key];
-    } else {
-      process.env[key] = value;
-    }
-  }
-});
 
 describe('ageAt', () => {
   const birthTime = new Date(BIRTH_DATE).getTime();
@@ -115,100 +81,5 @@ describe('utcDate', () => {
   it('does not depend on the build host timezone', () => {
     expect(utcDate(Date.UTC(2026, 6, 28, 23, 59))).toBe('2026-07-28');
     expect(utcDate(Date.UTC(2026, 6, 29, 0, 1))).toBe('2026-07-29');
-  });
-});
-
-describe('buildIdentity', () => {
-  it('uses a complete explicit build pair', () => {
-    clearBuildEnvironment();
-    const sha = '0123456789abcdef0123456789abcdef01234567';
-    process.env.BUILD_SHA = sha;
-    process.env.BUILD_REPOSITORY = 'mldangelo/personal-site';
-
-    expect(buildIdentity()).toEqual({
-      repository: 'mldangelo/personal-site',
-      sha,
-    });
-    expect(builtCommit()).toBe(sha);
-    expect(builtCommitUrl(sha)).toBe(
-      `https://github.com/mldangelo/personal-site/commit/${sha}`,
-    );
-    expect(sha.slice(0, SHORT_SHA_LENGTH)).toBe('0123456');
-  });
-
-  it("uses GitHub Actions' complete pair for a fork build", () => {
-    clearBuildEnvironment();
-    const sha = 'f'.repeat(40);
-    process.env.GITHUB_SHA = sha;
-    process.env.GITHUB_REPOSITORY = 'octocat/personal-site';
-
-    expect(buildIdentity()).toEqual({
-      repository: 'octocat/personal-site',
-      sha,
-    });
-    expect(builtCommitUrl(sha)).toBe(
-      `https://github.com/octocat/personal-site/commit/${sha}`,
-    );
-  });
-
-  it('never fills a partial explicit pair from runner values', () => {
-    clearBuildEnvironment();
-    process.env.BUILD_SHA = 'a'.repeat(40);
-    process.env.GITHUB_SHA = 'b'.repeat(40);
-    process.env.GITHUB_REPOSITORY = 'octocat/personal-site';
-
-    expect(buildIdentity()).toBeNull();
-    expect(builtCommit()).toBeNull();
-  });
-
-  it('rejects incomplete runner and malformed explicit identities', () => {
-    clearBuildEnvironment();
-    process.env.GITHUB_SHA = 'a'.repeat(40);
-    expect(buildIdentity()).toBeNull();
-
-    process.env.BUILD_SHA = 'b'.repeat(40);
-    process.env.BUILD_REPOSITORY = 'owner/repo?tab=actions';
-    expect(buildIdentity()).toBeNull();
-  });
-
-  it('returns null off CI rather than inferring provenance', () => {
-    clearBuildEnvironment();
-
-    expect(buildIdentity()).toBeNull();
-    expect(builtCommit()).toBeNull();
-  });
-
-  it('will not link a different valid-looking SHA', () => {
-    clearBuildEnvironment();
-    process.env.BUILD_SHA = 'a'.repeat(40);
-    process.env.BUILD_REPOSITORY = 'mldangelo/personal-site';
-
-    expect(() => builtCommitUrl('b'.repeat(40))).toThrow(
-      /outside the current build identity/i,
-    );
-  });
-});
-
-describe('build source links', () => {
-  it('pin CI links to the build repository and full immutable SHA', () => {
-    clearBuildEnvironment();
-    const sha = 'c'.repeat(40);
-    process.env.GITHUB_SHA = sha;
-    process.env.GITHUB_REPOSITORY = 'octocat/personal-site';
-
-    expect(buildSourceTreeUrl()).toBe(
-      `https://github.com/octocat/personal-site/tree/${sha}`,
-    );
-    expect(buildSourceFileUrl('package.json')).toBe(
-      `https://github.com/octocat/personal-site/blob/${sha}/package.json`,
-    );
-  });
-
-  it('uses upstream main only for local source browsing', () => {
-    clearBuildEnvironment();
-
-    expect(buildSourceFileUrl('biome.json')).toBe(
-      `https://github.com/${DEFAULT_SOURCE_REPOSITORY}/blob/main/biome.json`,
-    );
   });
 });

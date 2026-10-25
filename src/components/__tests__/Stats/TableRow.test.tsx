@@ -189,8 +189,8 @@ describe('TableRow', () => {
     render(
       <table>
         <tbody>
-          <TableRow label="Fits" value={'8'.repeat(15)} />
-          <TableRow label="Does not" value={'8'.repeat(16)} />
+          <TableRow label="Fits" value={'8'.repeat(17)} />
+          <TableRow label="Does not" value={'8'.repeat(18)} />
         </tbody>
       </table>,
     );
