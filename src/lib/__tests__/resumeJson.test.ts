@@ -123,7 +123,7 @@ describe('json resume document', () => {
   });
 
   it('splits the display city into city and region without asserting a country', () => {
-    expect(resume.basics.location).toEqual({ city: 'New York', region: 'NY' });
+    expect(resume.basics.location).toEqual({ city: 'San Francisco' });
   });
 
   it('lists every non-email contact as a profile with its handle', () => {

@@ -167,7 +167,7 @@ export function toPlainText(value: string): string {
 }
 
 /**
- * `profile.currentCity` is a single display string ("New York, NY"). It is
+ * `profile.currentCity` is a single display string ("San Francisco"), optionally with a region after a comma. It is
  * split rather than duplicated, and `countryCode` is left off because the data
  * does not state a country — a hardcoded `US` here would silently outlive a
  * move abroad.
