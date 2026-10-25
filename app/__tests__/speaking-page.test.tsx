@@ -7,7 +7,7 @@ import SpeakingPage from '../speaking/page';
 describe('speaking page', () => {
   const appearances = getAppearances();
 
-  it('lists every appearance, newest first, under a counted heading', () => {
+  it('lists every appearance, newest first, without a tally', () => {
     const { container } = render(<SpeakingPage />);
     const register = screen.getByRole('region', { name: 'Public sessions' });
     const titles = within(register)
@@ -15,9 +15,8 @@ describe('speaking page', () => {
       .map((heading) => heading.textContent?.replace('↗', ''));
 
     expect(titles).toEqual(appearances.map((appearance) => appearance.title));
-    expect(
-      container.querySelector('.projects-section-count'),
-    ).toHaveTextContent(`${appearances.length} appearances`);
+    // Deliberately uncounted: the tally added nothing.
+    expect(container.querySelector('.projects-section-count')).toBeNull();
   });
 
   it('states each format as the organiser billed it, beside the date', () => {

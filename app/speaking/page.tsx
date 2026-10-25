@@ -20,10 +20,6 @@ const PAGE_TITLE = 'Speaking';
 
 const SPEAKING_DESCRIPTION = `Panels and demos on AI security by ${AUTHOR_NAME}: prompt injection, agent security, and red teaming LLM applications.`;
 
-function appearanceCountLabel(count: number): string {
-  return `${count} ${count === 1 ? 'appearance' : 'appearances'}`;
-}
-
 export const metadata: Metadata = createPageMetadata({
   title: PAGE_TITLE,
   description: SPEAKING_DESCRIPTION,
@@ -65,10 +61,6 @@ export default function SpeakingPage() {
             <h2 id="speaking-public" className="projects-section-title">
               Public sessions
             </h2>
-            {/* Counted, never typed. */}
-            <span className="projects-section-count">
-              {appearanceCountLabel(appearances.length)}
-            </span>
           </div>
           <ol className="projects-register">
             {appearances.map((appearance) => (
