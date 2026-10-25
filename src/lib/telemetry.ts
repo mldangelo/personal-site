@@ -62,92 +62,9 @@ export function utcDate(at: number): string {
   return new Date(at).toISOString().slice(0, 10);
 }
 
-/** Characters shown for a build SHA; links retain the complete hash. */
-export const SHORT_SHA_LENGTH = 7;
-
 /**
- * Source location used by local builds that have no CI identity.
- *
- * This fallback is only for source links. It is never used to invent the
- * "Built from commit" reading.
+ * The repository this site is built from. The GitHub readings on `/stats`
+ * describe it and its rows link into it, so a fork changes
+ * this one constant.
  */
-export const DEFAULT_SOURCE_REPOSITORY = 'mldangelo/personal-site';
-
-const COMMIT_SHA = /^[0-9a-f]{40}$/i;
-const REPOSITORY_NAME = /^[a-z0-9](?:[a-z0-9-]{0,38})\/[a-z0-9._-]{1,100}$/i;
-
-export interface BuildIdentity {
-  repository: string;
-  sha: string;
-}
-
-function parseBuildIdentity(
-  shaValue: string | undefined,
-  repositoryValue: string | undefined,
-): BuildIdentity | null {
-  const sha = (shaValue ?? '').trim();
-  const repository = (repositoryValue ?? '').trim();
-
-  if (!COMMIT_SHA.test(sha) || !REPOSITORY_NAME.test(repository)) {
-    return null;
-  }
-
-  return { repository, sha };
-}
-
-/**
- * The repository and commit checked out for this build.
- *
- * Explicit `BUILD_*` values form one pair. If either is present, both must be
- * valid; a partial explicit identity never borrows a value from the runner.
- * Otherwise GitHub Actions' own pair is used. Local builds return `null`.
- */
-export function buildIdentity(): BuildIdentity | null {
-  const hasExplicitIdentity =
-    process.env.BUILD_SHA !== undefined ||
-    process.env.BUILD_REPOSITORY !== undefined;
-
-  return hasExplicitIdentity
-    ? parseBuildIdentity(process.env.BUILD_SHA, process.env.BUILD_REPOSITORY)
-    : parseBuildIdentity(process.env.GITHUB_SHA, process.env.GITHUB_REPOSITORY);
-}
-
-/** The exact commit checked out for this build, if the build identifies one. */
-export function builtCommit(): string | null {
-  return buildIdentity()?.sha ?? null;
-}
-
-/** Link the current build reading to its full commit in the same repository. */
-export function builtCommitUrl(value: unknown): string {
-  const identity = buildIdentity();
-  const sha = String(value).trim();
-
-  if (!identity || sha !== identity.sha) {
-    throw new Error('Cannot link a commit outside the current build identity');
-  }
-
-  return `https://github.com/${identity.repository}/commit/${identity.sha}`;
-}
-
-/**
- * Link to a file at the exact build commit.
- *
- * Local builds have no immutable revision to name, so their links use the
- * upstream main branch without claiming that it produced a deployed artifact.
- */
-export function buildSourceFileUrl(path: string): string {
-  const identity = buildIdentity();
-  const repository = identity?.repository ?? DEFAULT_SOURCE_REPOSITORY;
-  const revision = identity?.sha ?? 'main';
-
-  return `https://github.com/${repository}/blob/${revision}/${path}`;
-}
-
-/** Link to the complete source tree that the build measured. */
-export function buildSourceTreeUrl(): string {
-  const identity = buildIdentity();
-  const repository = identity?.repository ?? DEFAULT_SOURCE_REPOSITORY;
-  const revision = identity?.sha ?? 'main';
-
-  return `https://github.com/${repository}/tree/${revision}`;
-}
+export const SOURCE_REPOSITORY = 'mldangelo/personal-site';

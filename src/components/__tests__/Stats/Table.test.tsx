@@ -21,30 +21,9 @@ describe('Table', () => {
 
     render(<Table data={data} />);
 
-    expect(screen.getByText('Row 1')).toBeInTheDocument();
-    expect(screen.getByText('Row 2')).toBeInTheDocument();
-    expect(screen.getByText('Row 3')).toBeInTheDocument();
-  });
-
-  it('passes provenance to rows', () => {
-    // Formatting used to be passed down as a `format` function; it now happens
-    // in `resolveReadings` before a row reaches the table, because functions
-    // cannot cross the RSC boundary the site table renders on.
-    const data = [
-      {
-        label: 'Counted',
-        value: '1,000 packages',
-        source: 'measured' as const,
-      },
-      { label: 'Fetched', value: '23', source: 'github' as const },
-    ];
-
-    render(<Table data={data} />);
-
-    const marks = document.querySelectorAll('.stat-provenance');
     expect(
-      Array.from(marks, (mark) => mark.getAttribute('data-source')),
-    ).toEqual(['measured', 'github']);
+      screen.getAllByRole('rowheader').map((header) => header.textContent),
+    ).toEqual(['Row 1', 'Row 2', 'Row 3']);
   });
 
   it('passes link to rows', () => {

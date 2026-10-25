@@ -83,42 +83,4 @@ describe('Personal', () => {
       new RegExp(`^\\d+\\.\\d{${AGE_PRECISION_FULL}}$`),
     );
   });
-
-  it('marks every reading as coming from the profile', () => {
-    render(<Personal />);
-
-    const sources = Array.from(
-      document.querySelectorAll('.stat-provenance'),
-      (mark) => mark.getAttribute('data-source'),
-    );
-
-    expect(sources).toEqual(['profile', 'profile', 'profile']);
-  });
-
-  it('carries the source note this table used to lack', () => {
-    render(<Personal />);
-
-    const note = screen.getByText(/profile readings come from/i);
-
-    expect(note).toHaveClass('stats-source-note');
-    expect(note).toHaveAttribute('data-source', 'profile');
-  });
-
-  it('explains what the age is when JavaScript never runs', () => {
-    render(<Personal />);
-
-    expect(screen.getByText(/profile readings come from/i).textContent).toMatch(
-      /without javascript/i,
-    );
-  });
-
-  it('does not append a unit that repeats its label', () => {
-    // `53 countries` beside `Countries visited` says nothing the label has
-    // not already said.
-    render(<Personal />);
-
-    const row = screen.getByText('Countries visited').closest('tr');
-
-    expect(row?.textContent).not.toMatch(/countries$/i);
-  });
 });
