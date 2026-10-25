@@ -1,19 +1,35 @@
 /* ========================================
    NAVIGATION
-   Desktop nav links and theme toggle
+   Logo, desktop nav links, and theme toggle
    ======================================== */
 
+/* The header is three tracks: brand, nav, controls. The brand takes whatever
+   the other two leave and is allowed to shrink (`min-width: 0`), so a longer
+   name or a larger default font size shortens the wordmark instead of pushing
+   the nav aside or running underneath it. From 736px the controls take the
+   same share, which is what centres the nav — see the end of this file. */
+.site-brand {
+  display: flex;
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+/* The home link starts on the left rail: its text box is its own left edge.
+   It used to be centred in a 44px box — half of the balancing act that kept
+   the nav centred — which left the monogram 2px inside the rail. The minimums
+   are the hit target and nothing else. */
 .site-logo {
+  position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
   min-width: 44px;
   min-height: 44px;
-  gap: 0.5rem;
   text-decoration: none;
   background-image: none;
 }
 
+/* The monogram, on the homepage only: the hero directly beneath it sets the
+   name at display size, and repeating it 20px above would be noise. */
 .logo-text {
   font-family: var(--font-display);
   font-size: var(--text-xl);
@@ -23,16 +39,35 @@
   line-height: 1;
 }
 
-/* Sentence-case display type keeps navigation distinct from data labels. */
+/* The name, on every other page. The roomier line height is for the clipping
+   that an ellipsis needs: at `line-height: 1` it shaves the tail off the "g". */
+.site-logo--name .logo-text {
+  overflow: hidden;
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-snug);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Sentence-case display type keeps navigation distinct from data labels.
+   The gap closes up as the header narrows. At tablet widths the centred nav
+   sits near the wordmark, and at the full 1.75rem its items stood almost as
+   far from each other as the first stood from the name, which made the name
+   read as one of them. */
 .nav-links {
   display: none;
-  gap: 1.75rem;
+  gap: clamp(1.25rem, 2.75vw, 1.75rem);
   align-items: center;
 }
 
 @media screen and (min-width: 736px) {
+  /* The margins are the least room the nav keeps on either side, for when the
+     wordmark is shortened to fit. They are equal, so they leave it centred. */
   .nav-links {
     display: flex;
+    margin: 0 1.5rem;
   }
 }
 
@@ -53,12 +88,16 @@
   transition: color var(--duration-fast) var(--ease-out);
 }
 
-/* The rule under an active item is the same hairline weight used
-   everywhere else, so navigation reads as part of the drawn grid. */
+/* The bar under an active item lies over the header's own hairline, so it
+   reads as part of the drawn grid. It used to sit at the bottom of the 44px
+   target: 12.5px under the label and 10.5px above the hairline, attached to
+   neither. The target is centred in the header's content box, which is the
+   header less its hairline, so the offset is the distance from the target's
+   bottom edge down to the header's. */
 .nav-link::after {
   content: '';
   position: absolute;
-  bottom: 0;
+  bottom: calc((44px - var(--header-height) - var(--rule)) / 2);
   left: 0;
   right: 0;
   height: var(--rule-strong);
@@ -78,12 +117,6 @@
   transform: scaleX(1);
 }
 
-.nav-link:focus-visible {
-  color: var(--color-fg-bold);
-  outline: var(--rule-strong) solid var(--color-focus-ring);
-  outline-offset: 4px;
-}
-
 .nav-link.active {
   color: var(--color-accent);
 }
@@ -92,13 +125,41 @@
   transform: scaleX(1);
 }
 
+/* The header's text links take their focus ring around the label, not around
+   the 44px target. Drawn on the target, the ring was 56px tall in a 64px
+   header and ended 2.5px above the bar on the hairline. This box replaces the
+   outline it removes: with its 3px offset the ring is 2rem tall, centred on
+   the target, with half a rem of air at each end of the label. The offset and
+   radius are the global ring's, so its corners match the monogram's and the
+   theme toggle's, which nearly fill their targets and keep the ring there. */
+.site-logo--name:focus-visible,
+.nav-link:focus-visible {
+  outline: none;
+}
+
+.site-logo--name:focus-visible::before,
+.nav-link:focus-visible::before {
+  content: '';
+  position: absolute;
+  inset: calc(50% - 1rem + 3px) calc(3px - 0.5rem);
+  border-radius: var(--radius-xs);
+  outline: var(--rule-strong) solid var(--color-focus-ring);
+  outline-offset: 3px;
+}
+
+/* The glyphs sit on the right rail, not the buttons around them: each is 20px
+   wide in a 44px target, so the cluster is drawn 12px outward and the targets
+   keep their size. An offset rather than a negative margin, which would
+   shorten this track and pull the nav off centre by half as much. */
 .nav-actions {
+  position: relative;
+  left: 12px;
   display: flex;
   align-items: center;
   gap: 0.75rem;
 }
 
-/* Theme Toggle — one control cycling light / dark / system.
+/* Theme Toggle — one control with three states.
    The 44x44 box is the hit target and is reserved by the button itself, not by
    a placeholder waiting on hydration. */
 .theme-toggle {
@@ -113,9 +174,7 @@
   border-radius: var(--radius-sm);
   color: var(--color-fg);
   cursor: pointer;
-  transition:
-    color var(--duration-fast) var(--ease-out),
-    background-color var(--duration-fast) var(--ease-out);
+  transition: color var(--duration-fast) var(--ease-out);
 }
 
 /* The parser-blocking bootstrap stamps the choice before the body paints.
@@ -138,14 +197,15 @@
   display: none;
 }
 
-.theme-toggle:hover {
-  color: var(--color-fg-bold);
-  background: var(--color-bg-alt);
+/* Hover takes the accent, as focus does and as the menu trigger beside it
+   does. It used to set the ink the glyph already had over a fill in the
+   header's own colour, so in the light theme the pointer changed nothing. */
+.theme-toggle:hover,
+.theme-toggle:focus-visible {
+  color: var(--color-accent);
 }
 
 .theme-toggle:focus-visible {
-  color: var(--color-accent);
-  background: var(--color-bg-alt);
   outline: var(--rule-strong) solid var(--color-focus-ring);
   outline-offset: 2px;
 }
@@ -166,13 +226,18 @@
   display: flex;
 }
 
-/* Hide hamburger on desktop */
 @media screen and (min-width: 736px) {
-  /* Match the logo rail even when no JavaScript means no theme control. */
+  /* The same share as the brand track opposite, so the nav between them sits
+     on the header's centre whatever either side holds: a two-letter monogram
+     on the homepage, the name everywhere else, no theme control at all
+     without JavaScript. Forcing both sides to 44px did that only for as long
+     as the logo was 44px wide. */
   .nav-actions {
-    min-width: 44px;
+    flex: 1 1 0;
+    justify-content: flex-end;
   }
 
+  /* Hide hamburger on desktop */
   .hamburger-button {
     display: none;
   }

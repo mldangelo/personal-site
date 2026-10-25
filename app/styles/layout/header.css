@@ -3,7 +3,9 @@
    Fixed navigation and mobile menu
    ======================================== */
 
-/* Skip link — offscreen until focused, then pinned over the header. */
+/* Skip link — offscreen until focused, then pinned over the header. It is the
+   first control on every page and is set like the ones after it; it was the
+   last text on the site still in tracked mono capitals. */
 .skip-link {
   position: fixed;
   top: 0.5rem;
@@ -12,10 +14,9 @@
   padding: 0.75rem 1.25rem;
   background: var(--color-accent-fill);
   color: var(--color-on-accent);
-  font-family: var(--font-mono);
+  font-family: var(--font-display);
   font-size: var(--text-ui);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
+  font-weight: var(--font-weight-medium);
   text-decoration: none;
   background-image: none;
   border-radius: var(--radius-sm);
@@ -60,10 +61,12 @@
 }
 
 @media (max-width: 735px) {
+  /* The same inline padding as `.page-main`, so the logo and the page beneath
+     it share a left edge. At 1rem they sat 8px apart. */
   .site-header {
     height: var(--header-height-mobile);
     line-height: var(--header-height-mobile);
-    padding: 0 1rem;
+    padding: 0 1.5rem;
   }
 }
 
@@ -183,9 +186,16 @@
   padding: 0;
 }
 
-.hamburger-button:hover {
-  box-shadow: none;
-  opacity: 0.5;
+/* Hover takes the accent the focused glyph below already uses. It used to
+   halve the button's opacity: a hover state that lowered contrast. Skipped
+   under a forced palette, which paints any background colour that is not a
+   system colour as Canvas — at (0,3,1) this would outrank the CanvasText that
+   forced-colors.css gives the bars and erase them for as long as the pointer
+   rests on the button. */
+@media (forced-colors: none) {
+  .hamburger-button:hover .hamburger-icon span {
+    background-color: var(--color-accent);
+  }
 }
 
 .hamburger-button:focus-visible .hamburger-icon span {
