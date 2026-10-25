@@ -60,8 +60,14 @@ docs/                 → Documentation
 - Make small, frequent conventional commits as you go (e.g., `feat:`, `fix:`, `refactor:`)
 - Push to your remote branch after every commit to keep it in sync
 - Land changes on `main` by merging GitHub PRs with conventional-commit titles (deploys trigger automatically from these merges)
-- If multiple PRs need to land together, open an integration branch PR; do not locally merge into `main`
+- If multiple PRs need to land together, open an integration branch PR; do not locally merge into `main`. Dependency upgrades follow the workflow below
 - Treat `main` as protected: force-pushes and history rewrites require explicit user approval
+
+### Dependency upgrade PRs
+
+- Merge dependency upgrade PRs one at a time into `main`. Verify the result on `main` before merging the next PR
+- Review and repair each existing PR in place, preserving its branch and discussion. Refresh the PR head, base, CI results, and review threads before merging; do not bypass required checks or reviews
+- Leave a dependency PR open if it cannot be safely merged, and report the blocker. Do not close, supersede, replace, or combine dependency PRs, or retarget them to an integration branch, unless the user explicitly requests that approach
 
 ## Tech Stack
 
