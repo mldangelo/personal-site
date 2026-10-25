@@ -11,12 +11,14 @@ import {
   vi,
 } from 'vitest';
 
+import { getPostSlugs } from '@/lib/posts';
 import {
   AUTHOR_NAME,
   SHARE_IMAGE_DIMENSIONS,
   SHARE_IMAGE_PATH,
   SITE_URL,
 } from '@/lib/utils';
+import { getPostNeighbours } from '@/lib/writing';
 
 import PostPage, { generateMetadata } from './page';
 
@@ -36,6 +38,9 @@ import PostPage, { generateMetadata } from './page';
  */
 const DRAFT_SLUG = 'zz-draft-preview-fixture';
 const DRAFT_TITLE = 'A Draft Held Back From Publication';
+/** Written with a keyboard, as posts are; read with a typographic apostrophe. */
+const DRAFT_STANDFIRST = "It isn't published while it is being written.";
+const DRAFT_STANDFIRST_READ = 'It isn’t published while it is being written.';
 const DRAFT_FILE = join(process.cwd(), 'content/writing', `${DRAFT_SLUG}.md`);
 
 beforeAll(() => {
@@ -45,7 +50,7 @@ beforeAll(() => {
       '---',
       `title: '${DRAFT_TITLE}'`,
       "date: '2026-01-08'",
-      "description: 'Unpublished while it is being written.'",
+      `description: "${DRAFT_STANDFIRST}"`,
       'draft: true',
       '---',
       '',
@@ -82,6 +87,29 @@ async function blogPostingFor(slug: string) {
     (node: { '@type': string }) => node['@type'] === 'BlogPosting',
   );
 }
+
+/**
+ * Every destination in the block that closes a rendered post, in order.
+ *
+ * `next/link` drops the configured trailing slash here, because the setting is
+ * build-time config this environment never applies; it is normalised away so
+ * these compare destinations, not which element rendered them.
+ */
+async function onwardHrefs(slug: string): Promise<string[]> {
+  const markup = renderToStaticMarkup(
+    await PostPage({ params: Promise.resolve({ slug }) }),
+  );
+  const nav = markup.match(/<nav class="post-onward"[\s\S]*?<\/nav>/)?.[0];
+  if (!nav) {
+    throw new Error(`no onward block rendered for ${slug}`);
+  }
+
+  return Array.from(nav.matchAll(/href="([^"]+)"/g), (match) =>
+    match[1].replace(/\/$/, ''),
+  );
+}
+
+const postPath = (slug: string) => `/writing/${slug}`;
 
 describe('writing post metadata', () => {
   it('uses a trailing-slash canonical URL for posts', async () => {
@@ -170,5 +198,107 @@ describe('writing post structured data', () => {
     expect(markup).toContain('width="1200"');
     expect(markup).toContain('height="675"');
     expect(markup).not.toContain(`/og/writing/${slug}.png`);
+  });
+});
+
+/**
+ * The reader gets typographic quotes; everything that is matched on exact text
+ * keeps the string the post was written with. `verify-export` compares the
+ * exported `<title>` against the feed, and the share-card ledger records the
+ * title its image was drawn from.
+ */
+describe('writing post title', () => {
+  const slug = 'eurostar-chatbot-analysis';
+  const authored = 'Notes on the Eurostar chatbot "vulnerability" report';
+
+  it('is set with typographic quotes where it is read', async () => {
+    const markup = renderToStaticMarkup(
+      await PostPage({ params: Promise.resolve({ slug }) }),
+    );
+
+    expect(markup).toContain(
+      '<h1 class="post-title">Notes on the Eurostar chatbot “vulnerability” report</h1>',
+    );
+  });
+
+  it('keeps the authored string in metadata and structured data', async () => {
+    const metadata = await generateMetadata({
+      params: Promise.resolve({ slug }),
+    });
+    const blogPosting = await blogPostingFor(slug);
+
+    expect(metadata.title).toBe(authored);
+    expect(metadata.openGraph?.title).toBe(authored);
+    expect(metadata.twitter?.title).toBe(authored);
+    expect(blogPosting.headline).toBe(authored);
+  });
+
+  it('sets the standfirst with typographic quotes and leaves the description alone', async () => {
+    vi.stubEnv('NODE_ENV', 'development');
+    const markup = renderToStaticMarkup(
+      await PostPage({ params: Promise.resolve({ slug: DRAFT_SLUG }) }),
+    );
+    const metadata = await generateMetadata({
+      params: Promise.resolve({ slug: DRAFT_SLUG }),
+    });
+
+    expect(markup).toContain(
+      `<p class="post-description">${DRAFT_STANDFIRST_READ}</p>`,
+    );
+    expect(metadata.description).toBe(DRAFT_STANDFIRST);
+  });
+});
+
+describe('writing post onward links', () => {
+  it('closes every published essay with a way back to the list and the feed', async () => {
+    for (const slug of getPostSlugs()) {
+      const hrefs = await onwardHrefs(slug);
+
+      // Always the last two, after whichever neighbours the essay has.
+      expect(hrefs.slice(-2), slug).toEqual(['/writing', '../../feed.xml']);
+    }
+  });
+
+  it('links only other published essays as neighbours', async () => {
+    const published = getPostSlugs();
+
+    // More than one essay, or there are no neighbours to be wrong about.
+    expect(published.length).toBeGreaterThan(1);
+
+    for (const slug of published) {
+      const neighbours = (await onwardHrefs(slug)).slice(0, -2);
+      const others = published.filter((other) => other !== slug).map(postPath);
+
+      expect(neighbours.length, slug).toBeGreaterThan(0);
+      expect(neighbours.length, slug).toBeLessThanOrEqual(2);
+      for (const href of neighbours) {
+        expect(others, `${slug} → ${href}`).toContain(href);
+      }
+    }
+  });
+
+  /**
+   * The draft fixture is dated between published essays, which is exactly
+   * where a leak would show: under `next dev`, where drafts are visible, the
+   * essay beside it does link it. Everywhere else the next published essay
+   * takes that place.
+   */
+  it('never offers a draft as a neighbour, even one dated between two essays', async () => {
+    vi.stubEnv('NODE_ENV', 'development');
+    const beside = getPostNeighbours(DRAFT_SLUG);
+    const newer = beside.newer?.url.replace(/\/$/, '');
+    const older = beside.older?.url.replace(/\/$/, '');
+    if (!newer || !older) {
+      throw new Error('expected the draft fixture to sit between two essays');
+    }
+    const newerSlug = newer.replace('/writing/', '');
+    const previewed = await onwardHrefs(newerSlug);
+
+    vi.unstubAllEnvs();
+    const exported = await onwardHrefs(newerSlug);
+
+    expect(previewed).toContain(postPath(DRAFT_SLUG));
+    expect(exported).not.toContain(postPath(DRAFT_SLUG));
+    expect(exported).toContain(older);
   });
 });

@@ -28,7 +28,7 @@ describe('writing information architecture', () => {
     expect(stripTrailingSlash(viewAll.getAttribute('href'))).toBe('/writing');
   });
 
-  it('groups owned essays, external articles, and guides under real headings', () => {
+  it('groups owned essays and external articles under real headings', () => {
     const { container } = render(<WritingPage />);
 
     expect(
@@ -41,8 +41,8 @@ describe('writing information architecture', () => {
       }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole('heading', { level: 2, name: 'Guides' }),
-    ).toBeInTheDocument();
+      screen.queryByRole('heading', { level: 2, name: 'Guides' }),
+    ).not.toBeInTheDocument();
 
     expect(container.querySelectorAll('.writing-item h3')).toHaveLength(
       getWritingItems().length,

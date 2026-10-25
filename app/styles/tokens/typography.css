@@ -37,6 +37,7 @@
   --text-sm: 0.875rem; /* 14px */
   --text-base: 1rem; /* 16px */
   --text-md: 1.125rem; /* 18px */
+  --text-reading: 1.25rem; /* 20px — long-form prose on wide screens */
   --text-lg: 1.375rem; /* 22px */
   --text-xl: 1.75rem; /* 28px */
   --text-2xl: 2.25rem; /* 36px */
