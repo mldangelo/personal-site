@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import matter from 'gray-matter';
+import { parseFrontmatter } from './frontmatter.mjs';
 
 import { validatePostFrontmatterData } from './post-frontmatter.mjs';
 
@@ -71,7 +71,7 @@ function readPost(slug: string): Post | null {
   }
 
   const fileContents = fs.readFileSync(fullPath, 'utf8');
-  const { data, content } = matter(fileContents);
+  const { data, content } = parseFrontmatter(fileContents);
   const frontmatter = validatePostFrontmatter(
     data,
     path.relative(process.cwd(), fullPath),
