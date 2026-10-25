@@ -27,50 +27,79 @@
   line-height: 1.7;
 }
 
-/* Section index — mono labels on a rule, matching the resume. */
+/* Section index — the resume's, on this page. pages/resume.css explains why
+   the bar and the row inside it are separate elements, and how the row fades. */
 .about-section-nav {
   position: sticky;
   top: var(--header-height);
   z-index: var(--z-sticky);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 1.5rem;
   margin: var(--spacing-10) 0 var(--spacing-6);
-  padding: 0.75rem 0;
-  border-top: var(--rule) solid var(--color-border);
-  border-bottom: var(--rule) solid var(--color-border);
-  border-radius: 0;
   background: var(--color-bg-alt);
-  box-shadow: none;
+  border-block: var(--rule) solid var(--color-border);
 }
 
+/* Six labels at 0.5rem of padding fill this measure to within 9px, and the
+   fallback face runs wider than that until Inter arrives. A row that wrapped
+   would jump from 46px to 90px and back as the font swapped; this one only
+   ever overflows into its own end padding. */
+.about-section-nav-row {
+  display: flex;
+  margin: 0 -0.5rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  scroll-padding: 0 2rem;
+  scroll-behavior: smooth;
+}
+
+/* Two classes throughout, to stay ahead of `.about-content a` and its hover
+   further down, which would otherwise underline and recolour these. */
 .about-content .about-section-nav-link {
-  flex: none;
+  position: relative;
   display: inline-flex;
   align-items: center;
-  padding: 0;
-  border-radius: 0;
-  color: var(--color-fg-light);
-  background: transparent;
-  font-family: var(--font-mono);
+  min-height: 2.75rem;
+  padding: 0 0.5rem;
+  font-family: var(--font-display);
   font-size: var(--text-ui);
   font-weight: var(--font-weight-medium);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
+  color: var(--color-fg-light);
+  background-image: none;
   text-decoration: none;
   white-space: nowrap;
-  transition: color var(--duration-fast) var(--ease-out);
+  outline-offset: -4px;
 }
 
-.about-content .about-section-nav-link:hover {
-  background: transparent;
+.about-content .about-section-nav-link:hover,
+.about-content .about-section-nav-link:focus-visible {
   color: var(--color-fg-bold);
-  text-decoration: none;
 }
 
-.about-section-nav-link:focus-visible {
-  outline: var(--rule-strong) solid var(--color-focus-ring);
-  outline-offset: 2px;
+.about-content .about-section-nav-link.active {
+  color: var(--color-accent);
+}
+
+.about-section-nav-link.active::after {
+  content: '';
+  position: absolute;
+  inset: auto 0.5rem 0;
+  border-bottom: var(--rule-strong) solid var(--color-accent);
+}
+
+@media (max-width: 735px) {
+  .about-section-nav-row {
+    mask-image: linear-gradient(
+      90deg,
+      #0000,
+      #000 min(var(--scrolled, 0px), 2rem) calc(100% - 2rem),
+      #0000
+    );
+  }
+
+  .about-section-nav-row::after {
+    content: '';
+    flex: none;
+    width: 2rem;
+  }
 }
 
 .about-section {
@@ -450,12 +479,8 @@
 @media (max-width: 735px) {
   .about-section-nav {
     top: var(--header-height-mobile);
-    flex-wrap: nowrap;
-    overflow-x: auto;
     margin: var(--spacing-6) 0 var(--spacing-5);
-    padding: var(--spacing-3) 0;
-    border-radius: 0;
-    scrollbar-width: thin;
+    box-shadow: -0.5rem 0 var(--color-bg-alt);
   }
 
   .about-section h2 {
