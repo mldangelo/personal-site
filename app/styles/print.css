@@ -159,6 +159,12 @@
     display: none;
   }
 
+  /* The About lede keeps its step above the body, at a paper size: its screen
+     size is larger than the section headings print at. */
+  .about-intro p {
+    font-size: 12pt;
+  }
+
   .about-section--log ul {
     padding-left: 1.1rem;
     list-style: disc;
@@ -179,7 +185,6 @@
     align-items: baseline;
     gap: 0 0.4em;
     text-align: left;
-    padding-top: 0;
     margin-right: 0.5em;
   }
 

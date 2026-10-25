@@ -77,51 +77,47 @@
   margin-top: var(--spacing-12);
 }
 
+/* The heading's type and the rule above it come from the shared section
+   header. The heading is still the fragment target, and that rule now sits
+   one `--spacing-5` above it, on the element around it — so the margin
+   carries that distance too, and a jump parks the rule clear of the sticky
+   section index, as it did when the heading drew the rule itself. */
 .about-section h2 {
-  scroll-margin-top: calc(var(--header-height) + 5.5rem);
-  margin: 0 0 var(--spacing-5);
-  padding-top: var(--spacing-5);
-  border-top: var(--rule) solid var(--color-fg-bold);
-  font-family: var(--font-display);
-  font-size: var(--text-xl);
-  font-weight: var(--font-weight-bold);
-  line-height: 1.15;
-  letter-spacing: var(--tracking-display);
-  color: var(--color-fg-bold);
+  scroll-margin-top: calc(var(--header-height) + 5.5rem + var(--spacing-5));
 }
 
+/* The heading's own link is not prose. Two classes keep it ahead of
+   `.about-content a`, further down, and three ahead of that rule's hover. */
 .about-content .about-section-heading-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
   color: inherit;
   text-decoration: none;
 }
 
-.about-content .about-section-heading-link:hover,
-.about-content .about-section-heading-link:focus-visible {
-  color: var(--color-fg-bold);
-  text-decoration: none;
+.about-content .about-section-heading-link:hover {
+  color: inherit;
 }
 
-.about-section-heading-link:focus-visible {
-  outline: var(--rule-strong) solid var(--color-focus-ring);
-  outline-offset: 4px;
-  border-radius: var(--radius-xs);
-}
-
+/* A mark, not text, so it takes the muted ink. No space separates it from the
+   title in the markup, which is what keeps it from wrapping onto a line of
+   its own under a long heading on a phone. */
 .about-section-heading-hash {
+  margin-left: 0.35rem;
   opacity: 0;
   color: var(--color-fg-muted);
-  transform: translateY(-1px);
   transition:
     opacity var(--duration-fast) var(--ease-out),
     color var(--duration-fast) var(--ease-out);
 }
 
 .about-section:hover .about-section-heading-hash,
-.about-content .about-section-heading-link:focus-visible .about-section-heading-hash {
+.about-section-heading-link:focus-visible .about-section-heading-hash {
   opacity: 1;
+}
+
+/* Hovering anywhere in a section shows the mark; this is what says the
+   heading itself is the link. */
+.about-section-heading-link:hover .about-section-heading-hash {
+  color: var(--color-accent);
 }
 
 .about-content p {
@@ -134,11 +130,18 @@
   margin-bottom: 0;
 }
 
+/* The lede: a step up from the body it introduces, on the same measure —
+   about 65 characters a line. It was 17.6px against an 18px body, behind a
+   `clamp()` whose whole range was one pixel, and ran to 88. */
 .about-intro p {
-  max-width: var(--measure-read);
-  font-size: clamp(1.04rem, 0.7vw + 0.95rem, 1.1rem);
-  line-height: 1.7;
-  color: var(--color-fg-bold);
+  font-size: var(--text-lg);
+  line-height: 1.5;
+}
+
+@media (max-width: 735px) {
+  .about-intro p {
+    font-size: var(--text-md);
+  }
 }
 
 .about-content ul {
@@ -157,6 +160,58 @@
   color: var(--color-fg-muted);
 }
 
+/* Lists of sentences read down one column, at the size of the page around
+   them. They ran across two at a size smaller, which made a reader find their
+   place twice. Set closer than the log: most entries here are a line long. */
+.about-section--compact li {
+  margin-bottom: 0.4rem;
+  line-height: 1.6;
+}
+
+/* The one list of names, so the one list in columns: as many as fit, to
+   three. The longest name is 8.8em wide, so a 9em column never breaks one —
+   which gives a phone two columns from 360px and one below it. */
+.about-section--links ul {
+  columns: 3 9em;
+  column-gap: var(--spacing-6);
+  padding-left: 0;
+  list-style: none;
+}
+
+.about-section--links li {
+  padding-left: 0;
+  break-inside: avoid;
+}
+
+/* On a screen each name is a target of its own, not a link in a sentence, so
+   its row is 44px tall at phone sizes and the link answers across all of it.
+   The pseudo-element is what reaches that far: the link's own box stays the
+   name, which is what its focus ring should fit — as a block it drew a ring
+   the width of the column. The negative margin takes back the row padding,
+   so the names start as far below their heading as any other list. None of
+   this means anything on paper. */
+@media screen {
+  .about-section--links ul {
+    margin-block: -0.5rem var(--spacing-4);
+  }
+
+  .about-section--links li {
+    margin-bottom: 0;
+    padding-block: 0.5rem;
+  }
+
+  .about-section--links li a {
+    position: relative;
+    display: inline-block;
+  }
+
+  .about-section--links li a::before {
+    content: '';
+    position: absolute;
+    inset: -0.5rem 0;
+  }
+}
+
 /* ========================================
    ABOUT — LOG SECTIONS
    The history and travel lists are a chronological record, so they
@@ -170,11 +225,14 @@
 }
 
 /* Same gutter-then-spine-then-body arrangement as the resume, so the two
-   records on the site read as one device. */
+   records on the site read as one device. The marker shares the entry's first
+   baseline: it is words and figures now, and at any size that reads as one
+   line where a fixed offset tuned for 11px capitals did not. */
 .about-section--log .log-entry {
   position: relative;
   display: grid;
   grid-template-columns: 4.5rem minmax(0, 1fr);
+  align-items: baseline;
   gap: 0 1.75rem;
   margin-bottom: 1.1rem;
   padding-left: 0;
@@ -228,13 +286,10 @@
   align-items: flex-end;
   gap: 0.1em;
   font-family: var(--font-mono);
-  font-size: var(--text-2xs);
+  font-size: var(--text-xs);
   font-variant-numeric: tabular-nums;
-  letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
   color: var(--color-fg-light);
   text-align: right;
-  padding-top: 0.4em;
   line-height: 1.4;
 }
 
@@ -270,7 +325,6 @@
     align-items: baseline;
     gap: 0 0.5em;
     text-align: left;
-    padding-top: 0;
   }
 
   .log-entry-marker:empty {
@@ -278,20 +332,28 @@
   }
 }
 
+/* One link style, the article's, in paragraphs and lists alike. Links here
+   were ink with a hairline underline at 1.6:1, and in a paragraph the global
+   `p a` gradient drew a second line under the first. */
 .about-content a {
-  color: inherit;
+  color: var(--color-accent);
   text-decoration: underline;
-  text-decoration-color: var(--color-border-alt);
+  text-decoration-color: var(--color-accent-underline);
   text-underline-offset: 2px;
-  text-decoration-thickness: 1px;
-  transition:
-    text-decoration-color var(--duration-fast) var(--ease-out),
-    color var(--duration-fast) var(--ease-out);
+  background-image: none;
+}
+
+/* dark-mode.css restates that gradient at (0,1,2), and its hover at (0,2,2),
+   after this file: both outrank the rule above, so at night a paragraph link
+   kept its second line. */
+[data-theme='dark'] .about-content p a,
+[data-theme='dark'] .about-content p a:hover {
+  background-image: none;
 }
 
 .about-content a:hover {
-  text-decoration-color: var(--color-accent-underline-strong);
-  color: var(--color-fg-bold);
+  color: var(--color-accent-hover);
+  text-decoration-color: var(--color-accent);
 }
 
 .contact-page {
@@ -459,37 +521,11 @@
   }
 
   .about-section h2 {
-    scroll-margin-top: calc(var(--header-height-mobile) + 4.5rem);
-    padding-top: var(--spacing-4);
-    font-size: 1.25rem;
+    scroll-margin-top: calc(var(--header-height-mobile) + 4.5rem + var(--spacing-5));
   }
 
   .contact-email-link {
     padding: 0.625rem 0;
-  }
-}
-
-@media (min-width: 736px) {
-  .about-section--compact ul {
-    columns: 2;
-    column-gap: var(--spacing-10);
-  }
-
-  .about-section--compact li {
-    font-size: var(--text-base);
-    line-height: 1.5;
-    margin-bottom: 0.35rem;
-    break-inside: avoid;
-  }
-
-  .about-section--links ul {
-    columns: 3;
-    column-gap: var(--spacing-8);
-  }
-
-  .about-section--links li {
-    margin-bottom: 0.5rem;
-    break-inside: avoid;
   }
 }
 
@@ -500,10 +536,6 @@
 
   .about-section {
     margin-top: var(--spacing-16);
-  }
-
-  .about-section h2 {
-    margin-bottom: var(--spacing-5);
   }
 }
 

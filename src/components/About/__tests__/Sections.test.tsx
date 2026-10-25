@@ -20,7 +20,7 @@ describe('AboutContent', () => {
 
 Hello from the intro.
 
-# Some History
+# Some history
 
 - Built a thing.`}
       />,
@@ -31,7 +31,7 @@ Hello from the intro.
       screen.queryByRole('heading', { name: 'Intro' }),
     ).not.toBeInTheDocument();
     expect(
-      screen.getByRole('heading', { name: 'Some History' }),
+      screen.getByRole('heading', { name: 'Some history' }),
     ).toBeInTheDocument();
   });
 
@@ -42,11 +42,11 @@ Hello from the intro.
 
 Lead paragraph.
 
-# I Like
+# I like
 
 - Running
 
-# Websites from People I Admire
+# Websites from people I admire
 
 - [Example](https://example.com)`}
       />,
@@ -66,21 +66,21 @@ Lead paragraph.
 
 Lead paragraph.
 
-# Some History
+# Some history
 
 - Built a thing.
 
-# Travel / Geography
+# Travel / geography
 
 - Went somewhere.`}
       />,
     );
 
     expect(
-      screen.getByRole('heading', { name: 'Some History' }),
+      screen.getByRole('heading', { name: 'Some history' }),
     ).toHaveAttribute('id', 'some-history');
     expect(
-      screen.getByRole('heading', { name: 'Travel / Geography' }),
+      screen.getByRole('heading', { name: 'Travel / geography' }),
     ).toHaveAttribute('id', 'travel-geography');
   });
 
@@ -193,7 +193,7 @@ Lead paragraph.
 
     const nav = screen.getByRole('navigation', { name: 'About sections' });
     const navLink = within(nav).getByRole('link', {
-      name: 'Travel / Geography',
+      name: 'Travel / geography',
     });
 
     navLink.click();
@@ -202,12 +202,12 @@ Lead paragraph.
       expect(window.location.hash).toBe('#travel-geography');
     });
     expect(document.querySelector(window.location.hash)).toHaveTextContent(
-      'Travel / Geography',
+      'Travel / geography',
     );
 
-    const heading = screen.getByRole('heading', { name: 'Fun Facts' });
+    const heading = screen.getByRole('heading', { name: 'Fun facts' });
     const permalink = within(heading).getByRole('link', {
-      name: 'Fun Facts',
+      name: 'Fun facts',
     });
 
     permalink.click();
@@ -216,7 +216,165 @@ Lead paragraph.
       expect(window.location.hash).toBe('#fun-facts');
     });
     expect(document.querySelector(window.location.hash)).toHaveTextContent(
-      'Fun Facts',
+      'Fun facts',
+    );
+  });
+
+  it('matches every real section to its layout, by its title as authored', () => {
+    const { container } = render(<AboutContent markdown={aboutMarkdown} />);
+
+    // A heading renamed in the data without its `sectionVariants` key shows
+    // up here as a bare `about-section`. The ids are the public deep links.
+    expect(
+      Array.from(container.querySelectorAll('.about-section'), (section) => [
+        section.querySelector('h2')?.id,
+        section.className,
+      ]),
+    ).toEqual([
+      ['some-history', 'about-section about-section--log'],
+      ['i-like', 'about-section about-section--compact'],
+      ['travel-geography', 'about-section about-section--log'],
+      ['fun-facts', 'about-section about-section--compact'],
+      ['i-dream-of', 'about-section about-section--compact'],
+      ['websites-from-people-i-admire', 'about-section about-section--links'],
+    ]);
+  });
+
+  it('leaves a section whose title names no layout as a plain list', () => {
+    const { container } = render(
+      <AboutContent
+        markdown={`# Intro
+
+Lead paragraph.
+
+# I Like
+
+- Running`}
+      />,
+    );
+
+    // Matching is exact, so the title-case form of a known heading is unknown.
+    expect(container.querySelector('.about-section')?.className).toBe(
+      'about-section',
+    );
+  });
+
+  it('opens every section with the shared section header', () => {
+    const titles = getActualSectionTitles(aboutMarkdown);
+    const { container } = render(<AboutContent markdown={aboutMarkdown} />);
+    const sections = Array.from(container.querySelectorAll('.about-section'));
+
+    expect(sections).toHaveLength(titles.length);
+
+    for (const [index, section] of sections.entries()) {
+      const header = section.firstElementChild;
+      const heading = header?.firstElementChild;
+      const link = heading?.firstElementChild;
+
+      expect(header).toHaveClass('section-header');
+      expect(heading).toBe(
+        screen.getByRole('heading', { level: 2, name: titles[index] }),
+      );
+      expect(heading).toHaveClass('section-heading');
+      // The fragment lands on the heading itself, not on the header around it:
+      // the heading is the element the stylesheet gives a scroll margin.
+      expect(document.getElementById(heading?.id ?? '')).toBe(heading);
+
+      // The mark follows the title with no space between them, which is what
+      // keeps it from wrapping onto a line of its own.
+      expect(link?.firstChild?.textContent).toBe(titles[index]);
+      expect(link?.textContent).toBe(`${titles[index]}#`);
+    }
+  });
+
+  it('sets typographic apostrophes in the prose, and leaves the source as typed', () => {
+    const { container } = render(<AboutContent markdown={aboutMarkdown} />);
+    const text = container.textContent ?? '';
+
+    expect(text).not.toMatch(/['"]/);
+
+    // A paragraph, a log entry, a possessive after a link, a list, a closer.
+    expect(text).toContain('if you’re interested in collaborating');
+    expect(text).toContain('I still don’t know what pressing the turbo button');
+    expect(text).toContain('(without my parents’ permission)');
+    expect(text).toContain('I can’t locate every country on a map.');
+    expect(text).toContain('you’re probably right');
+
+    // The data keeps the keyboard's quotes; only the page is converted.
+    expect(aboutMarkdown).toContain("if you're interested in collaborating");
+  });
+
+  it('leaves code as it was typed', () => {
+    const { container } = render(
+      <AboutContent
+        markdown={[
+          '# Intro',
+          '',
+          "It's `don't` here.",
+          '',
+          '```',
+          "const quote = 'x';",
+          '```',
+        ].join('\n')}
+      />,
+    );
+
+    expect(container.querySelector('p')).toHaveTextContent("It’s don't here.");
+    expect(container.querySelector('pre')).toHaveTextContent(
+      "const quote = 'x';",
+    );
+  });
+
+  it('reads a marker from an entry whose words carry an apostrophe', () => {
+    const { container } = render(
+      <AboutContent
+        markdown={`# Intro
+
+Lead paragraph.
+
+# Some history
+
+- When I was 12, I didn't sleep.
+- We didn't have a computer in 1993.`}
+      />,
+    );
+
+    // The gutter reads typeset text, and the remainder keeps its apostrophe.
+    expect(
+      Array.from(container.querySelectorAll('.log-entry'), (entry) => [
+        entry.querySelector('.log-entry-marker')?.textContent,
+        entry.querySelector('.log-entry-body')?.textContent,
+      ]),
+    ).toEqual([
+      ['Age 12', 'I didn’t sleep.'],
+      ['1993', 'We didn’t have a computer in 1993.'],
+    ]);
+  });
+
+  it('prints a title the same way in the nav and above its section', () => {
+    render(
+      <AboutContent
+        markdown={`# Intro
+
+Lead paragraph.
+
+# Michael's notes
+
+- A note.`}
+      />,
+    );
+
+    const nav = screen.getByRole('navigation', { name: 'About sections' });
+    const name = 'Michael’s notes';
+
+    // Typeset once for both, while the id is read from the title as typed.
+    expect(screen.getByRole('heading', { name })).toHaveAttribute(
+      'id',
+      'michaels-notes',
+    );
+    expect(within(nav).getByRole('link', { name })).toHaveAttribute(
+      'href',
+      '#michaels-notes',
     );
   });
 });
