@@ -49,7 +49,7 @@ export default function SpeakingPage() {
       <div className="projects-page">
         <header className="projects-header">
           <h1 className="page-title">{PAGE_TITLE}</h1>
-          <p className="page-subtitle">
+          <p className="page-subtitle page-prose">
             I talk about security for AI systems: prompt injection, agent
             security, and red teaming LLM applications. Most of it comes from
             building Promptfoo and now working on cyber products at OpenAI.
@@ -77,7 +77,7 @@ export default function SpeakingPage() {
               Closed-door sessions
             </h2>
           </div>
-          <p>
+          <p className="page-prose">
             I also run closed-door sessions with security and engineering teams
             on behalf of OpenAI, which aren't listed here. If you're organizing
             an event or working on the same problems,{' '}
