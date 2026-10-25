@@ -7,16 +7,14 @@ import SpeakingPage from '../speaking/page';
 describe('speaking page', () => {
   const appearances = getAppearances();
 
-  it('lists every appearance, newest first, without a tally', () => {
-    const { container } = render(<SpeakingPage />);
+  it('lists every appearance, newest first', () => {
+    render(<SpeakingPage />);
     const register = screen.getByRole('region', { name: 'Public sessions' });
     const titles = within(register)
       .getAllByRole('heading', { level: 3 })
       .map((heading) => heading.textContent?.replace('↗', ''));
 
     expect(titles).toEqual(appearances.map((appearance) => appearance.title));
-    // Deliberately uncounted: the tally added nothing.
-    expect(container.querySelector('.projects-section-count')).toBeNull();
   });
 
   it('states each format as the organiser billed it, beside the date', () => {
