@@ -43,7 +43,9 @@
 /* Page header styles */
 .page-title {
   font-size: var(--text-3xl);
-  font-weight: var(--font-weight-black);
+  /* The weight the homepage sets the name in, so every page opens in one
+     voice. `.resume-title`, `.stats-title`, and `.not-found-title` match. */
+  font-weight: var(--font-weight-medium);
   margin-bottom: 0.5rem;
 }
 

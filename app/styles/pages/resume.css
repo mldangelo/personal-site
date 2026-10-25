@@ -112,7 +112,7 @@
 .resume-title {
   font-family: var(--font-display);
   font-size: var(--text-3xl);
-  font-weight: var(--font-weight-black);
+  font-weight: var(--font-weight-medium);
   letter-spacing: var(--tracking-display);
   margin-bottom: 1.25rem;
   color: var(--color-fg-bold);
