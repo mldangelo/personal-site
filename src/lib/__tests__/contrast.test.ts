@@ -236,10 +236,56 @@ describe('reading surfaces', () => {
   it('keeps poster text, links, its inverted button, and focus rings readable in both themes', () => {
     // The hero uses this pair in both directions: pale text on blue, then
     // blue text on the pale CTA. Its offset focus rings use the pale token.
+    //
+    // `.hero` points the page's button tokens at that pair, so the CTA is
+    // checked through what home.css assigns rather than through the page-level
+    // values. Both of its fills once named `--color-on-hero`: legible, and no
+    // hover state at all.
+    const homeCss = readFileSync(join(STYLES, 'pages/home.css'), 'utf8');
+    const assignedInHero = readTokens('pages/home.css');
+    const onPoster = (theme: (name: string) => string, name: string) => {
+      const value = assignedInHero.get(name) ?? '';
+
+      return value.startsWith('var(')
+        ? theme(value.slice(4, -1).trim())
+        : value;
+    };
+
+    // The summary is a quieter mix of the same pair. `color-mix(in srgb, …)`
+    // interpolates the encoded channels, which is what this does.
+    const [, summaryShare] =
+      /\.hero-summary\s*\{[^}]*color-mix\(\s*in srgb,\s*var\(--color-on-hero\)\s*(\d+)%,\s*var\(--color-hero\)\s*\)/.exec(
+        homeCss,
+      ) ?? [];
+    const mixed = (a: string, b: string, share: number) =>
+      `#${parseHexColor(a)
+        .map((channel, index) =>
+          Math.round(channel * share + parseHexColor(b)[index] * (1 - share))
+            .toString(16)
+            .padStart(2, '0'),
+        )
+        .join('')}`;
+
+    expect(
+      summaryShare,
+      'the hero summary is no longer a color-mix of the poster pair',
+    ).toBeDefined();
+
     for (const theme of themes) {
+      const field = theme('--color-hero');
+      const text = theme('--color-on-hero');
+      const label = onPoster(theme, '--color-on-accent');
+      const fill = onPoster(theme, '--color-accent-fill');
+      const hoverFill = onPoster(theme, '--color-accent-fill-hover');
+
+      expect(contrastRatio(text, field)).toBeGreaterThanOrEqual(AA_TEXT);
       expect(
-        contrastRatio(theme('--color-on-hero'), theme('--color-hero')),
+        contrastRatio(mixed(text, field, Number(summaryShare) / 100), field),
+        'summary on the poster',
       ).toBeGreaterThanOrEqual(AA_TEXT);
+      expect(contrastRatio(label, fill)).toBeGreaterThanOrEqual(AA_TEXT);
+      expect(contrastRatio(label, hoverFill)).toBeGreaterThanOrEqual(AA_TEXT);
+      expect(hoverFill, 'the CTA does not change on hover').not.toBe(fill);
     }
   });
 });

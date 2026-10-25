@@ -114,6 +114,12 @@
     mix-blend-mode: normal;
     filter: none;
   }
+  /* The hero also lays a multiplied field of `--color-on-hero` over its
+     portrait. Forced to Canvas, that field multiplies the photograph to
+     black on a dark palette, so the tint goes and the picture stays. */
+  .hero-portrait .theme-portrait::after {
+    display: none;
+  }
 
   /* The header is fixed over whatever scrolls, so it has to stay opaque. A
      forced palette swaps a background's colour for Canvas but keeps its alpha,

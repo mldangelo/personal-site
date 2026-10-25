@@ -11,11 +11,14 @@ describe('Hero', () => {
     expect(heroSection).toBeInTheDocument();
   });
 
-  it('displays the name as heading', () => {
+  it('sets the name with a typographic apostrophe', () => {
     render(<Hero />);
 
+    // The data keeps the keyboard's straight apostrophe, which is what
+    // `resume.json` and the metadata match on. At display size the page sets
+    // the real one.
     const heading = screen.getByRole('heading', { level: 1 });
-    expect(heading).toHaveTextContent("Michael D'Angelo");
+    expect(heading.textContent).toBe('Michael D’Angelo');
   });
 
   it('describes the current work and Promptfoo joining OpenAI', () => {
@@ -30,7 +33,7 @@ describe('Hero', () => {
     expect(promptfooLink).toHaveClass('hero-highlight');
 
     expect(container.querySelector('.hero-tagline')).toHaveTextContent(
-      "I'm a Member of the Technical Staff at OpenAI, working on Promptfoo and other cyber products.",
+      'I’m a Member of the Technical Staff at OpenAI, working on Promptfoo and other cyber products.',
     );
     expect(container.querySelector('.hero-summary')).toHaveTextContent(
       'I help secure AI systems and use AI to find software vulnerabilities. I co-founded Promptfoo before it joined OpenAI in 2026.',
@@ -60,5 +63,19 @@ describe('Hero', () => {
     expect(resumeButton).toHaveAttribute('href', '/resume');
     expect(resumeButton).toHaveClass('hero-resume-link');
     expect(resumeButton).not.toHaveClass('button');
+  });
+
+  it('puts no arrow on links that stay on the site', () => {
+    render(<Hero />);
+
+    // ↗ means "leaves the site in a new tab" and nothing else. "About me"
+    // carried one while opening /about in the same tab. The glyph never
+    // reached the accessible name, so only the text content can catch it.
+    for (const label of ['About me', 'View resume']) {
+      const link = screen.getByRole('link', { name: label });
+
+      expect(link.textContent).toBe(label);
+      expect(link).not.toHaveAttribute('target');
+    }
   });
 });

@@ -300,4 +300,26 @@
     max-width: 100% !important;
     filter: grayscale(1) !important;
   }
+
+  /* The homepage poster prints white, with `--color-on-hero` as black ink, so
+     what its fill did on screen has to be said another way. Its lower edge
+     was the boundary of the section below: ink the border home.css keeps
+     transparent. Its rails restate `.page-main`, which has no padding here. */
+  .hero {
+    border-bottom-color: var(--color-fg-bold);
+  }
+
+  .hero-grid,
+  .home-writing {
+    padding-inline: 0;
+  }
+
+  /* Two things painted with that token would print as solid black: the tint
+     multiplied over the portrait, and the fill of a button whose label the
+     `a` rule above has already made black. Both of the hero's links are
+     navigation, which paper has no use for. */
+  .hero-cta,
+  .hero-portrait .theme-portrait::after {
+    display: none;
+  }
 }
