@@ -21,6 +21,8 @@
    the two parts differ only by a size step in the title and by a
    thumbnail where a screenshot exists. Each part opens with the
    shared header in section-header.css.
+   /speaking renders its appearances with these same classes, so a
+   change to the register here changes that page too.
    ======================================== */
 
 .projects-page {

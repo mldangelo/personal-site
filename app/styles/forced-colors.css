@@ -115,10 +115,10 @@
     filter: none;
   }
 
-  /* The palette forces the header wash opaque, so its blur buys nothing. */
+  /* The header is fixed over whatever scrolls, so it has to stay opaque. A
+     forced palette swaps a background's colour for Canvas but keeps its alpha,
+     so the system colour is named here rather than left to the base rule. */
   .site-header {
     background-color: Canvas;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
   }
 }

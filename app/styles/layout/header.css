@@ -37,12 +37,13 @@
   outline: none;
 }
 
-/* A quiet paper header with a structural hairline. */
+/* An opaque paper header with a structural hairline. The colour is the page's
+   own, which `theme-color` also gives the browser chrome above it. It was an
+   88% wash leaning on a `backdrop-filter` the build shipped as `-webkit-`
+   only, so outside Safari the hero name and article text read through it. */
 .site-header {
   align-items: center;
-  background-color: color-mix(in srgb, var(--color-bg-alt) 88%, transparent);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background-color: var(--color-bg-alt);
   border-bottom: var(--rule) solid var(--color-border);
   display: flex;
   height: var(--header-height);

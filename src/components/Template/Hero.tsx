@@ -22,14 +22,7 @@ export default function Hero() {
             <a href="https://promptfoo.dev" className="hero-highlight">
               Promptfoo
             </a>{' '}
-            and{' '}
-            <a
-              href="https://openai.com/index/codex-security-now-in-research-preview/"
-              className="hero-highlight"
-            >
-              Codex Security
-            </a>
-            .
+            and other cyber products.
           </p>
 
           <p className="hero-summary">

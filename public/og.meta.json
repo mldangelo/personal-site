@@ -32,8 +32,8 @@
   "renderer": [
     {
       "name": "next",
-      "version": "16.3.8",
-      "integrity": "sha512-U7QEZaTini6wKrb8A8hqLLqYQyCetegKjCpJOyxk642vWoMoU1x5PyZCJFvgYgiptA8xc5j/9xYlZFO7w9Sjmw=="
+      "version": "16.4.3",
+      "integrity": "sha512-OqxKTGi9u80FydydsMNYNjnuje9Au+kvHlt2GZ//ftdpDHm1dxKqAaENoOOTX5wKzn+9vaKUNIfZeyZUuLhCnA=="
     },
     {
       "name": "react",
@@ -49,7 +49,7 @@
   "profile": {
     "name": "Michael D'Angelo",
     "employer": "OpenAI",
-    "focus": "Promptfoo and Codex Security",
+    "focus": "Promptfoo and other cyber products",
     "countriesVisited": 53,
     "computingSince": 1993,
     "currentCity": "New York, NY"
@@ -62,8 +62,8 @@
     "accent": "#36559a",
     "hairline": "rgba(35, 39, 46, 0.14)"
   },
-  "generatorDigest": "6cfef1d359dfc9ce05c9bcbd56869a45d5438a1a40c2582655885d2865eb117d",
-  "imageDigest": "c2a623a13cda94e594a0307de93ed76af26ba645b87f65f406552be23746df29",
+  "generatorDigest": "0689365e7a034e3f825740a45b36b72ec75beadc4d292152565456417edff58e",
+  "imageDigest": "416f724ba6fe4f3444f5b36a2469640faf9dcfe6636140d54f8663a203c074cf",
   "posts": [
     {
       "slug": "why-i-mostly-switched-from-claude-code-to-codex-desktop-app",
