@@ -4,8 +4,8 @@
    ======================================== */
 
 @layer components {
-  /* Icon list — wraps, because seven 44px targets plus gaps is 400px and
-     will not fit a 320px viewport on one line. */
+  /* Icon list, for the destinations on `/contact`. It wraps rather than push
+     a row of 44px targets through the side of a narrow viewport. */
   .icons {
     cursor: default;
     display: flex;
