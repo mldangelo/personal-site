@@ -4,9 +4,7 @@
  * The history and travel lists are written as a record — "At 7, I discovered
  * …", "In 2016, I visited …", "We subscribed to AOL in 1995" — so the marker is
  * already in the prose. Lifting it into the gutter is what turns a bulleted
- * list into a log; inventing one would not be. The speaking record opens each
- * entry with a dateline instead — "Oct 2026 · Panel: …" — and the gutter keeps
- * the month because the entry states it.
+ * list into a log; inventing one would not be.
  *
  * Markers repeat only what the entry actually says. A year does not establish
  * an exact age without the event date, and an age can span two calendar years,
@@ -16,29 +14,10 @@
 /** A plausible four-digit year; the surrounding patterns supply date context. */
 const YEAR_PATTERN = /(?:1[89]|20)\d{2}/;
 
-const MONTHS = [
-  'Jan',
-  'Feb',
-  'Mar',
-  'Apr',
-  'May',
-  'Jun',
-  'Jul',
-  'Aug',
-  'Sep',
-  'Oct',
-  'Nov',
-  'Dec',
-];
-
-/** A month name, abbreviated or in full. */
-const MONTH_PATTERN =
-  /Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|June?|July?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?/;
-
 export interface LogMarker {
   /** Explicit age or age range, e.g. "Age 7". */
   age?: string;
-  /** Explicit year or year range, led by its month when a dateline states one. */
+  /** Explicit year or year range. */
   year?: string;
   /**
    * The entry text to render. The marker is removed only when it was a leading
@@ -53,8 +32,6 @@ type Span = [number] | [number, number];
 
 interface Reading {
   age?: Span;
-  /** Index into `MONTHS`; only a dateline supplies one. */
-  month?: number;
   year?: Span;
 }
 
@@ -93,15 +70,6 @@ const LEADING_PATTERNS: Array<{
     pattern: new RegExp(`^In\\s+(${YEAR_PATTERN.source}),\\s+`, 'i'),
     read: (m) => ({ year: [num(m[1])] }),
   },
-  // "Oct 2026 · Panel: …" — the separator is required, so a sentence that
-  // merely opens with a month ("May 2020 was quiet") is not taken for one.
-  {
-    pattern: new RegExp(
-      `^(${MONTH_PATTERN.source})\\.?\\s+(${YEAR_PATTERN.source})\\s*[·—–-]\\s+`,
-      'i',
-    ),
-    read: (m) => ({ month: monthIndex(m[1]), year: [num(m[2])] }),
-  },
 ];
 
 /**
@@ -129,11 +97,6 @@ function num(value: string) {
   return Number.parseInt(value, 10);
 }
 
-function monthIndex(value: string) {
-  const prefix = value.slice(0, 3).toLowerCase();
-  return MONTHS.findIndex((month) => month.toLowerCase() === prefix);
-}
-
 /**
  * The opening sentence, which is where a marker belongs. Scanning the whole
  * entry would let a year mentioned three sentences later date the entry.
@@ -148,17 +111,15 @@ function formatSpan(span: Span) {
 }
 
 function toMarker(reading: Reading, rest: string): LogMarker | null {
-  const { age, month, year } = reading;
+  const { age, year } = reading;
 
   if (!age && !year) {
     return null;
   }
 
-  const monthPrefix = month === undefined ? '' : `${MONTHS[month]} `;
-
   return {
     ...(age ? { age: `Age ${formatSpan(age)}` } : {}),
-    ...(year ? { year: `${monthPrefix}${formatSpan(year)}` } : {}),
+    ...(year ? { year: formatSpan(year) } : {}),
     rest,
   };
 }

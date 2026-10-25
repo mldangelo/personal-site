@@ -118,10 +118,8 @@ Lead paragraph.
   });
 
   it('renders only the history markers stated by the prose', () => {
-    render(<AboutContent markdown={aboutMarkdown} />);
-    const history = screen
-      .getByRole('heading', { name: 'Some History' })
-      .closest('section');
+    const { container } = render(<AboutContent markdown={aboutMarkdown} />);
+    const history = container.querySelector('.about-section--log');
     const entries = Array.from(
       history?.querySelectorAll('.log-entry') ?? [],
     ) as HTMLElement[];
@@ -173,32 +171,6 @@ Lead paragraph.
     );
   });
 
-  it('lifts each speaking dateline into the gutter, ahead of the history', () => {
-    render(<AboutContent markdown={aboutMarkdown} />);
-    const nav = screen.getByRole('navigation', { name: 'About sections' });
-    const speaking = screen
-      .getByRole('heading', { name: 'Speaking' })
-      .closest('section');
-    const entries = Array.from(
-      speaking?.querySelectorAll('.log-entry') ?? [],
-    ) as HTMLElement[];
-
-    expect(within(nav).getAllByRole('link')[0]).toHaveTextContent('Speaking');
-    expect(speaking).toHaveClass('about-section--log');
-    expect(entries.length).toBeGreaterThan(0);
-
-    for (const entry of entries) {
-      const marker = entry.querySelector('.log-entry-marker');
-
-      expect(marker?.textContent).toMatch(/^[A-Z][a-z]{2} \d{4}$/);
-      // Lifted, not repeated, so the gutter is the only place the date is said.
-      expect(marker).not.toHaveAttribute('aria-hidden');
-      expect(entry.querySelector('.log-entry-body')?.textContent).not.toMatch(
-        /^[A-Z][a-z]{2} \d{4}/,
-      );
-    }
-  });
-
   it('leaves an undated entry an empty gutter rather than a broken marker', () => {
     const { container } = render(<AboutContent markdown={aboutMarkdown} />);
     const markers = Array.from(
@@ -206,7 +178,7 @@ Lead paragraph.
     );
     const empty = markers.filter((marker) => marker.textContent === '');
 
-    expect(markers).toHaveLength(30);
+    expect(markers).toHaveLength(26);
     expect(empty).toHaveLength(3);
 
     for (const marker of empty) {

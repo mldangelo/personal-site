@@ -176,33 +176,6 @@ describe('extractLogMarker', () => {
     expect(extractLogMarker('In 2016, ')).toBeNull();
   });
 
-  it('lifts a month-and-year dateline and keeps the month', () => {
-    expect(
-      extractLogMarker('Oct 2026 · Panel: The AI Security Panel: Unfiltered.'),
-    ).toEqual({
-      year: 'Oct 2026',
-      rest: 'Panel: The AI Security Panel: Unfiltered.',
-    });
-
-    // Full and dotted month names read the same as the abbreviation.
-    expect(extractLogMarker('September 2025 — Arsenal Lab.')?.year).toBe(
-      'Sep 2025',
-    );
-    expect(extractLogMarker('Sept. 2025 - Arsenal Lab.')?.year).toBe(
-      'Sep 2025',
-    );
-    expect(extractLogMarker('june 2024 · a demo.')).toEqual({
-      year: 'Jun 2024',
-      rest: 'A demo.',
-    });
-  });
-
-  it('needs the dateline separator before lifting a month', () => {
-    // Without one, a sentence that opens with a month is ordinary prose.
-    expect(extractLogMarker('May 2020 was quiet.')).toBeNull();
-    expect(extractLogMarker('Oct 2026 · ')).toBeNull();
-  });
-
   it('is case-insensitive on the leading word', () => {
     expect(extractLogMarker('at 13, I went to space camp.')?.age).toBe(
       'Age 13',
@@ -256,43 +229,6 @@ describe('the about page log', () => {
     expect(marker?.year).toBe('1996');
     expect(marker?.age).toBeUndefined();
     expect(marker?.rest).toContain('In the summer of 1996');
-  });
-
-  it('dates every speaking entry by month, newest first', () => {
-    const speaking = sectionEntries('Speaking');
-    const months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-    ];
-    const markers = speaking.map((entry) => extractLogMarker(entry));
-
-    expect(speaking.length).toBeGreaterThan(0);
-
-    const ordinals = markers.map((marker) => {
-      const [month, year] = (marker?.year ?? '').split(' ');
-      expect(months).toContain(month);
-      expect(marker?.age).toBeUndefined();
-      return Number(year) * 12 + months.indexOf(month);
-    });
-
-    // Newest first, like the resume, unlike the history below it.
-    expect(ordinals).toEqual([...ordinals].sort((a, b) => b - a));
-  });
-
-  it('links every speaking entry to a public record of it', () => {
-    for (const entry of sectionEntries('Speaking')) {
-      expect(entry).toMatch(/\]\(https:\/\/[^)]+\)/);
-    }
   });
 
   it('leaves undated travel entries empty and does not derive travel ages', () => {

@@ -6,17 +6,6 @@ I co-founded [Promptfoo](https://promptfoo.dev) before it joined OpenAI in 2026.
 
 In my spare time, I enjoy investing in people and ideas through a [small venture fund](https://skepticalinvestments.biz), focusing on projects with high social impact. If you think I can be helpful to you or your cause, or if you're interested in collaborating, feel free to get in touch.
 
-# Speaking
-
-I talk about security for AI systems: prompt injection, agent security, and red teaming LLM applications. Most of it comes from building Promptfoo and now working on cyber products at OpenAI.
-
-- Oct 2026 · Panel: [The AI Security Panel: Unfiltered](https://luma.com/snyk-y9pl), hosted by Snyk the day before the AI Security Summit in San Francisco.
-- Oct 2026 · Panel: [The Compounding Intelligence Race](https://events.bizzabo.com/815197/agenda/session/1966885) at ScaleUp:AI in New York.
-- Oct 2025 · Arsenal Lab and demos at [SecTor](https://blackhat.com/archive/sector/2025/arsenal/schedule/index.html#promptfoo-47729) in Toronto, with the Promptfoo team.
-- Aug 2025 · Arsenal Lab at [Black Hat USA](https://blackhat.com/archive/usa/2025/arsenal/schedule/index.html#promptfoo-44648) in Las Vegas, with the Promptfoo team.
-
-I also run closed-door sessions with security and engineering teams, which aren't listed here. If you're organizing an event or want a session for your team, [get in touch](/contact/).
-
 # Some History
 
 - My parents put a computer in my bedroom in 1993 when I was 3. It was an old Tandy that ran MS-DOS. My favorite games were Street Rod 2, Wolfenstein 3D, and Tom and Jerry. It had a mechanical keyboard and a turbo button. To this day, I still don't know what pressing the turbo button really did.
