@@ -2,11 +2,22 @@ import dayjs from 'dayjs';
 
 import type { Position } from '@/data/resume/work';
 import { type DateInput, formatDuration, monthsBetween } from '@/lib/career';
+import { smartQuotes } from '@/lib/typography';
 
 import JobSummary from './JobSummary';
 
-/** How much weight a role carries on the timeline spine. */
+/**
+ * Where a role sits on the timeline spine. A tier is a step in type size and
+ * spacing; the typeface, its weight, and the ink are the same at all three.
+ */
 export type JobTier = 'lead' | 'primary' | 'early';
+
+/**
+ * Short months, as the projects register sets them. Spelled out, the ranges
+ * were as uneven as the calendar: "January 2014 – January 2022" broke over two
+ * lines of the gutter while "March 2026 – Present" sat on one.
+ */
+const MONTH_YEAR = 'MMM YYYY';
 
 interface JobProps {
   data: Position;
@@ -30,18 +41,20 @@ export default function Job({ data, tier = 'primary', now }: JobProps) {
         isCurrent ? ' jobs-container--current' : ''
       }`}
     >
-      <span className="job-marker" aria-hidden="true" />
-
       <p className="daterange">
-        <time dateTime={startDate}>{dayjs(startDate).format('MMMM YYYY')}</time>
+        {/* The tick on the spine. It lives in the date line so that it is
+            placed against the line it marks, in both layouts and at every
+            tier, instead of at an offset measured from the entry. */}
+        <span className="job-marker" aria-hidden="true" />
+        <time dateTime={startDate}>{dayjs(startDate).format(MONTH_YEAR)}</time>
         {/* The dash is decorative, so a screen reader would otherwise run the
-            dates together as "March 2026 Present". */}
+            dates together as "Mar 2026 Present". */}
         <span className="daterange-sep" aria-hidden="true">
           –
         </span>
         <span className="sr-only"> to </span>
         {endDate ? (
-          <time dateTime={endDate}>{dayjs(endDate).format('MMMM YYYY')}</time>
+          <time dateTime={endDate}>{dayjs(endDate).format(MONTH_YEAR)}</time>
         ) : (
           <span className="daterange-present">Present</span>
         )}
@@ -55,16 +68,19 @@ export default function Job({ data, tier = 'primary', now }: JobProps) {
         <header>
           <h3>
             <a href={url} className="job-company">
-              {name}
+              {smartQuotes(name)}
             </a>
-            <span className="job-position">{position}</span>
+            {/* Only layout separates the two, so the heading was named as one
+                phrase: "UB Nanosatellite Program Program Manager". */}
+            <span className="sr-only">, </span>
+            <span className="job-position">{smartQuotes(position)}</span>
           </h3>
         </header>
         {summary ? <JobSummary summary={summary} /> : null}
         {highlights ? (
           <ul className="points">
             {highlights.map((highlight) => (
-              <li key={highlight}>{highlight}</li>
+              <li key={highlight}>{smartQuotes(highlight)}</li>
             ))}
           </ul>
         ) : null}

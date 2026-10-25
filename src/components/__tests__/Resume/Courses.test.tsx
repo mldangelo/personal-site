@@ -26,12 +26,15 @@ const mockCourses = [
 ];
 
 describe('Courses', () => {
-  it('renders the courses section with title', () => {
+  it('opens with the shared section heading, in sentence case', () => {
     render(<Courses data={mockCourses} />);
 
-    expect(
-      screen.getByRole('heading', { name: /selected courses/i }),
-    ).toBeInTheDocument();
+    const heading = screen.getByRole('heading', {
+      level: 2,
+      name: 'Selected courses',
+    });
+    expect(heading).toHaveClass('section-heading');
+    expect(heading.parentElement).toHaveClass('section-header');
   });
 
   it('renders all courses', () => {
@@ -67,9 +70,9 @@ describe('Courses', () => {
 
     const items = screen.getAllByRole('listitem');
     expect(items.map((item) => item.textContent)).toEqual([
-      'CS 229:Machine Learning',
-      'CS 230:Deep Learning',
-      'CS 161:Algorithms',
+      'CS 229: Machine Learning',
+      'CS 230: Deep Learning',
+      'CS 161: Algorithms',
     ]);
   });
 
@@ -122,5 +125,32 @@ describe('Course', () => {
     render(<Course data={mockCourse} />);
 
     expect(screen.queryByRole('heading')).not.toBeInTheDocument();
+  });
+
+  /**
+   * Every code used to print a colon after it, in a layout whose columns
+   * already set it apart from the title. The colon is gone from sight and
+   * kept where it still does work: in the one string a screen reader is
+   * given for the link.
+   */
+  it('prints the code bare and still names the link with a separator', () => {
+    render(<Course data={mockCourse} />);
+
+    expect(document.querySelector('.course-number')?.textContent).toBe(
+      'CS 229',
+    );
+    // Engines differ on the space around a visually hidden run, so the name
+    // is matched for the separator rather than for its whitespace.
+    expect(
+      screen.getByRole('link', { name: /^CS 229\s*:\s*Machine Learning$/ }),
+    ).toBeInTheDocument();
+  });
+
+  it('sets typographic quotes in the title', () => {
+    render(<Course data={{ ...mockCourse, title: "Maxwell's Equations" }} />);
+
+    expect(document.querySelector('.course-name')?.textContent).toBe(
+      'Maxwell’s Equations',
+    );
   });
 });
