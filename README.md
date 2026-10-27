@@ -14,7 +14,7 @@ project archive, and writing site built with
 The architecture is reusable and MIT licensed. The content and visual design
 are personal, so a fork needs a full rebrand.
 
-**[Visit the live site →](https://mldangelo.com)**
+**[Visit the live site →](http://saranshvaidya.me)**
 
 ## What is here
 
