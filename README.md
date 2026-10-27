@@ -1,4 +1,4 @@
-# Michael D'Angelo: Personal Site
+# Saransh T'Vaidya: Personal Site
 
 [![Build Status](https://img.shields.io/github/actions/workflow/status/mldangelo/personal-site/node.js.yml?branch=main)](https://github.com/mldangelo/personal-site/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
