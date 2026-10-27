@@ -8,105 +8,103 @@ export interface WritingItem {
 const data: WritingItem[] = [
   {
     title:
-      "McKinsey's Lilli Looks More Like an API Security Failure Than a Model Jailbreak",
-    url: 'https://www.promptfoo.dev/blog/mckinsey-lilli-appsec-vs-ai-jailbreak/',
-    date: '2026-03-10',
+      "Dam Break Inundation Modelling Platform for Real-Time Decision Support in Flood Emergencies",
+    url: 'https://github.com/saranshvaidya0/AI_Bandits_SIH26',
+    date: '2026-09-10',
     description:
-      'Why the reported Lilli incident looks like an application-security chain reaching an AI system, not a model jailbreak.',
+      'This web-based prototype provides an end-to-end flood simulation and decision-support platform for dam breach scenarios. The platform combines 3D Smoothed Particle Hydrodynamics (SPH - DualSPHysics concept) and 2D Depth-Averaged Shallow Water Equations (Delft3D FM concept) to model dam break wave propagation, inundation extent, water depth, flow velocity, and spatiotemporal progression.',
   },
   {
-    title: 'Promptfoo is joining OpenAI',
-    url: 'https://www.linkedin.com/posts/michaelldangelo_today-were-announcing-that-promptfoo-will-share-7436818429187088386-_hpH',
-    date: '2026-03-09',
+    title: 'Open Source Chat Bot',
+    url: 'https://github.com/saranshvaidya0/Open_Source_CHAT_BOT',
+    date: '2026-07-27',
     description:
-      'Announcing that Promptfoo has agreed to be acquired by OpenAI.',
+      'A simple and beginner-friendly AI chatbot built with Python, Streamlit, and Groq API. This project demonstrates how to create and deploy an AI-powered chatbot using a clean and easy-to-understand implementation.',
   },
   {
-    title: 'How AI Regulation Changed in 2025',
-    url: 'https://www.promptfoo.dev/blog/ai-regulation-2025/',
-    date: '2025-12-15',
+    title: 'WhatsApp Chat Talk Bot',
+    url: 'https://github.com/saranshvaidya0/EX_Girlfriend.git',
+    date: '2026-04-25',
     description:
-      'Why "AI compliance questions" appeared in security questionnaires and RFPs, and how policy becomes contract requirements.',
+      'A WhatsApp chatbot that can engage in conversations with users, providing information, answering questions, and assisting with various tasks. Built using Python and the Twilio API for WhatsApp integration.',
   },
   {
-    title:
-      "Why Attack Success Rate (ASR) Isn't Comparable Across Jailbreak Papers",
-    url: 'https://www.promptfoo.dev/blog/asr-not-portable-metric/',
-    date: '2025-12-12',
+    title: "Leet Code DAS Challenge: A Comprehensive Guide to Solving the DAS Problem",
+    url: 'https://github.com/saranshvaidya0/Leet_Code_DAS.git',
+    date: '2026-08-25',
     description:
-      "ASR isn't portable across papers because measurement choices dominate the headline number. Includes math and a checklist for reading papers.",
+      'This guide provides a detailed walkthrough of the Leet Code DAS Challenge, including problem analysis, solution strategies, and code implementation. It aims to help developers understand the DAS problem and improve their coding skills.',
   },
   {
-    title: 'GPT-5.2 Initial Trust and Safety Assessment',
-    url: 'https://www.promptfoo.dev/blog/gpt-5.2-trust-safety-assessment/',
-    date: '2025-12-11',
+    title: 'AI Intelligence Agent Using n8n + Google Gemini',
+    url: 'https://lnkd.in/p/gPMZnaKc',
+    date: '2026-09-11',
     description:
-      'Day-zero red team of GPT-5.2 focusing on jailbreak resilience and harmful content.',
+      'This project showcases an AI intelligence agent that leverages n8n, an open-source workflow automation tool, in conjunction with Google Gemini. The agent is designed to perform various tasks autonomously, demonstrating the capabilities of AI in automating complex workflows and decision-making processes.',
   },
   {
-    title: 'Real-Time Fact Checking for LLM Outputs',
-    url: 'https://www.promptfoo.dev/blog/llm-search-rubric-assertions/',
-    date: '2025-11-28',
+    title: 'Generative AI Learning Journey, AI Bootcamp, 100 Days of Code',
+    url: 'https://lnkd.in/p/gZejqdC6',
+    date: '2026-09-17',
     description:
-      'Introduces search-rubric, an assertion where a search-enabled judge verifies time-sensitive claims during evals and CI.',
-  },
-  {
-    title:
-      'When AI becomes the attacker: The rise of AI-orchestrated cyberattacks',
-    url: 'https://www.promptfoo.dev/blog/anthropic-threat-intelligence-vibe-hacking/',
-    date: '2025-11-10',
-    description:
-      'Connects malware querying LLMs at runtime with "vibe hacking" case studies. Defense needs continuous testing.',
+      'This project documents a 100-day learning journey into generative AI, covering various concepts, techniques, and applications. It serves as a comprehensive resource for individuals looking to enhance their understanding of generative AI and its practical implementations.',
   },
   {
     title:
-      'Reinforcement Learning with Verifiable Rewards Makes Models Faster, Not Smarter',
-    url: 'https://www.promptfoo.dev/blog/rlvr-explained/',
-    date: '2025-10-24',
+      'The Biggest Lessons I Learned During This Journey: Execution Beats Perfection',
+    url: 'https://lnkd.in/p/g9NNFA_w',
+    date: '2026-07-10',
     description:
-      'RLVR gains are often "search compression" rather than new reasoning ability.',
+      'Reflecting on the key lessons learned during a journey of personal and professional growth, emphasizing the importance of execution over perfection in achieving success.',
   },
   {
-    title: "Prompt Injection vs Jailbreaking: What's the Difference?",
-    url: 'https://www.promptfoo.dev/blog/jailbreaking-vs-prompt-injection/',
-    date: '2025-08-18',
+    title:
+      'AI Workflows & Automation using Make (formerly Integromat) and Google Gemini',
+    url: 'https://lnkd.in/p/gCt_ii7t',
+    date: '2026-07-24',
     description:
-      'Jailbreaking targets model safety training; prompt injection targets application trust boundaries.',
+      'This project explores the use of Make (formerly Integromat) and Google Gemini to create AI workflows and automation solutions. It demonstrates how to integrate various services and APIs to streamline processes and enhance productivity through AI-driven automation.',
   },
   {
-    title: 'AI Safety vs AI Security in LLM Applications: What Teams Must Know',
-    url: 'https://www.promptfoo.dev/blog/ai-safety-vs-security/',
-    date: '2025-08-17',
-    description:
-      'Safety protects people from harmful outputs; security protects systems from adversarial manipulation.',
+    title: "SV Work",
+    url: "https://github.com/saranshvaidya0/svwork",
+    date: "",
+    description: "A software development project showcasing coding, implementation, and development skills."
   },
-  {
-    title: 'Promptfoo Raises $18.4M Series A',
-    url: 'https://www.promptfoo.dev/blog/series-a-announcement/',
-    date: '2025-07-29',
-    description:
-      'Announcing our Series A led by Insight Partners with participation from a16z.',
-  },
-  {
-    title: 'Evaluating political bias in LLMs',
-    url: 'https://www.promptfoo.dev/blog/grok-4-political-bias/',
-    date: '2025-07-24',
-    description:
-      'Open methodology and dataset (2,500 political statements) to measure political leaning in models.',
-  },
-  {
-    title: 'Celebrating 100,000 Users',
-    url: 'https://www.promptfoo.dev/blog/100k-users/',
-    date: '2025-06-10',
-    description:
-      "Promptfoo's journey from prompt evaluation to AI red teaming, marking 100,000 users.",
-  },
-  {
-    title: "Testing Humanity's Last Exam with Promptfoo",
-    url: 'https://www.promptfoo.dev/docs/guides/hle-benchmark/',
-    date: '',
-    description: 'Guide on using Promptfoo to test the HLE benchmark.',
-  },
+  // {
+  //   title: 'AI Safety vs AI Security in LLM Applications: What Teams Must Know',
+  //   url: 'https://www.promptfoo.dev/blog/ai-safety-vs-security/',
+  //   date: '2025-08-17',
+  //   description:
+  //     'Safety protects people from harmful outputs; security protects systems from adversarial manipulation.',
+  // },
+  // {
+  //   title: 'Promptfoo Raises $18.4M Series A',
+  //   url: 'https://www.promptfoo.dev/blog/series-a-announcement/',
+  //   date: '2025-07-29',
+  //   description:
+  //     'Announcing our Series A led by Insight Partners with participation from a16z.',
+  // },
+  // {
+  //   title: 'Evaluating political bias in LLMs',
+  //   url: 'https://www.promptfoo.dev/blog/grok-4-political-bias/',
+  //   date: '2025-07-24',
+  //   description:
+  //     'Open methodology and dataset (2,500 political statements) to measure political leaning in models.',
+  // },
+  // {
+  //   title: 'Celebrating 100,000 Users',
+  //   url: 'https://www.promptfoo.dev/blog/100k-users/',
+  //   date: '2025-06-10',
+  //   description:
+  //     "Promptfoo's journey from prompt evaluation to AI red teaming, marking 100,000 users.",
+  // },
+  // {
+  //   title: "Testing Humanity's Last Exam with Promptfoo",
+  //   url: 'https://www.promptfoo.dev/docs/guides/hle-benchmark/',
+  //   date: '',
+  //   description: 'Guide on using Promptfoo to test the HLE benchmark.',
+  // },
 ];
 
 export default data;

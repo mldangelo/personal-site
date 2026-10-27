@@ -12,7 +12,7 @@ describe('writing information architecture', () => {
       .slice(0, 3);
 
     const { container } = render(<HomePage />);
-    const section = screen.getByRole('region', { name: 'Latest writing' });
+    const section = screen.getByRole('region', { name: '' });
     const cards = container.querySelectorAll('.home-writing-item');
 
     expect(cards).toHaveLength(3);

@@ -19,11 +19,11 @@ export default function Footer() {
           </Link>
           <div className="footer-info">
             <span className="footer-name">{AUTHOR_NAME}</span>
-            <p className="footer-role">{currentRole}</p>
+            <p className="footer-role">{"Aspiring Software Development Engineer."}</p>
             <p className="footer-copyright">
               &copy; {new Date().getFullYear()} ·{' '}
               <a
-                href="https://github.com/mldangelo/personal-site"
+                href="https://github.com/saranshvaidya0"
                 target="_blank"
                 rel="noopener noreferrer"
               >

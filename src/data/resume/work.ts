@@ -21,11 +21,11 @@ const work: Position[] = [
     at OpenAI, with a focus on securing AI systems and applying AI to software security.`,
   },
   {
-    name: 'Promptfoo',
-    position: 'Co-founder & CTO',
-    url: 'https://promptfoo.dev',
-    startDate: '2024-07-01',
-    endDate: '2026-03-09',
+    name: 'Business Intelligence',
+    position: ' Data Analytics',
+    url: 'https://openai.com',
+    startDate: '2026-07-01',
+    endDate: '2026-10-09',
     summary: `Promptfoo started as a developer-first eval tool and grew into a platform
     for AI security, red-teaming, and compliance. It reached more than 350,000 developers, 130,000
     monthly active users, and teams at more than 25% of the Fortune 500 before joining OpenAI in 2026.`,

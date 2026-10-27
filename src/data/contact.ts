@@ -17,32 +17,32 @@ export interface ContactItem {
 
 const data: ContactItem[] = [
   {
-    link: 'https://www.linkedin.com/in/michaelldangelo',
+    link: 'https://www.linkedin.com/in/saransh-vaidya-448789290/',
     label: 'LinkedIn',
     icon: faLinkedinIn,
   },
   {
-    link: 'https://github.com/mldangelo',
+    link: 'https://github.com/saranshvaidya0',
     label: 'GitHub',
     icon: faGithub,
   },
   {
-    link: 'https://x.com/dangelosaurus',
+    link: 'https://x.com/premvaidya750',
     label: 'X',
     icon: faTwitter,
   },
   {
-    link: 'https://angel.co/michael-d-angelo',
+    link: 'https://wellfound.com/u/saransh-vaidya',
     label: 'Angel List',
     icon: faAngellist,
   },
   {
-    link: 'https://www.instagram.com/dangelosaurus/',
+    link: 'https://www.instagram.com/saranshvaidya_prem/',
     label: 'Instagram',
     icon: faInstagram,
   },
   {
-    link: 'https://facebook.com/d',
+    link: 'https://www.facebook.com/prem.vaidya.311',
     label: 'Facebook',
     icon: faFacebookF,
   },

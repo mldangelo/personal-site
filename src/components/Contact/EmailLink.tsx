@@ -24,7 +24,7 @@ const messages = [
   'but not this :(  ',
   'you.can.also.email.me.with.specific.topics.like',
   'just-saying-hi',
-  'please-work-for-us',
+  'please-work-for-India',
   'help',
   'admin',
   'or-I-really-like-your-website',

@@ -1,95 +1,567 @@
 ---
-title: Notes on the Eurostar chatbot "vulnerability" report
-date: '2026-01-05'
-description: Looking at what makes something a vulnerability versus a hardening opportunity in LLM applications.
+title: AI News Intelligence Agent -- n8n + Google Gemini
+date: '2026-01-03'
+description: 'An automated AI-powered news intelligence workflow built with **n8n** and **Google Gemini**.'
+image: /images/writing/api-costs-july-2025.png
+imageAlt: 'Anthropic API costs for July 2025 showing $9,986.20 in token usage'
 ---
 
-_I work on [Promptfoo](https://github.com/promptfoo/promptfoo), an open-source LLM red teaming tool._
+## Context
+An automated AI-powered news intelligence workflow built with **n8n**
+and **Google Gemini**.
 
-On December 22, 2025, Pen Test Partners published ["Eurostar AI vulnerability: when a chatbot goes off the rails"](https://www.pentestpartners.com/security-blog/eurostar-ai-vulnerability-when-a-chatbot-goes-off-the-rails/) claiming four "distinct security issues" in Eurostar's public chatbot.
+The workflow automatically collects AI and technology news from RSS
+feeds, retrieves upcoming AI/technology events, combines the
+information, uses Gemini to generate a structured intelligence report,
+and delivers the final report through Gmail.
 
-Based on what's demonstrated in that post, most of this isn't a vulnerability. It's a mix of expected LLM behavior, hardening opportunities, and one low-severity web bug.
+## ✨ Features
 
-Here's why that distinction matters.
+-   ⏰ Automated scheduled execution using n8n
+-   📰 AI and technology news collection through RSS feeds
+-   📡 Multiple news sources
+-   📅 Upcoming AI & technology event discovery using SerpAPI / Google
+    Events
+-   🔀 Multi-source data merging
+-   📦 Data aggregation before AI processing
+-   🧠 Google Gemini-powered summarization and intelligence generation
+-   📧 Automated Gmail delivery
+-   🔐 Credentials kept outside the exported workflow
+-   ⚙️ Easy customization of feeds, schedule, event query, Gemini model,
+    and report format
 
-## What makes something a vulnerability
+## 🧠 What the Agent Does
 
-A vulnerability generally means:
+Instead of manually checking multiple AI news websites and event
+listings every day, the workflow creates an automated pipeline:
 
-1. **A security boundary was crossed** - auth, authorization, isolation, trust boundaries, code execution in another user's context
-2. **There is demonstrated impact** - data exfiltration, account compromise, unauthorized actions, cross-user effects
+``` text
+News Sources + Events
+        │
+        ▼
+   n8n collects data
+        │
+        ▼
+    Data Merging
+        │
+        ▼
+   Data Aggregation
+        │
+        ▼
+   Google Gemini
+        │
+        ▼
+Intelligence Report
+        │
+        ▼
+      Gmail
+```
 
-OWASP's LLM Top 10 includes prompt injection and insecure output handling as real categories, but explicitly notes that severity depends on context and agency: what the model is allowed to touch and do.
+The result is a single, structured daily briefing containing important
+AI developments, technology updates, and upcoming events.
 
-The Pen Test Partners post doesn't demonstrate either crossing a boundary or concrete harm.
+## 🏗️ Workflow Architecture
 
-## What the report actually shows
+``` text
+                         ┌──────────────────┐
+                         │ Schedule Trigger │
+                         └────────┬─────────┘
+                                  │
+                 ┌────────────────┼────────────────┐
+                 │                │                │
+                 ▼                ▼                ▼
+        ┌────────────────┐ ┌───────────────┐ ┌──────────────┐
+        │   NormalTech   │ │  AIBusiness   │ │ Fetch Events │
+        │    RSS Feed    │ │    RSS Feed   │ │   SerpAPI    │
+        └───────┬────────┘ └───────┬───────┘ └──────┬───────┘
+                │                  │                │
+                └──────────────────┼────────────────┘
+                                   ▼
+                         ┌─────────────────┐
+                         │   Data Merger   │
+                         └────────┬────────┘
+                                  ▼
+                         ┌─────────────────┐
+                         │ Data Aggregator │
+                         └────────┬────────┘
+                                  ▼
+                     ┌────────────────────────┐
+                     │ AI Summarization Model │
+                     │     Google Gemini      │
+                     └────────────┬───────────┘
+                                  ▼
+                         ┌─────────────────┐
+                         │   Email Sender  │
+                         │      Gmail      │
+                         └─────────────────┘
+```
 
-The post calls these "vulnerabilities" but doesn't demonstrate unauthorized access to other users' data, unauthorized actions, cross-user XSS, or any actual exploit chain with impact. Instead, several findings are paired with what _could_ happen if the chatbot had more capabilities.
+## 🛠️ Tech Stack
 
-**1. Guardrail bypass via client-side history manipulation**
+  -----------------------------------------------------------------------
+  Technology                          Purpose
+  ----------------------------------- -----------------------------------
+  **n8n**                             Workflow orchestration and
+                                      automation
 
-The server validates only the latest message but trusts the client-submitted `chat_history`. Make the latest message harmless, edit earlier messages to carry prompts that would fail the guardrail.
+  **Google Gemini**                   AI analysis, summarization, and
+                                      report generation
 
-This is a client-trust issue. The question is: what does bypassing the guardrail enable? For a public help chatbot with no tools or privileged access, bypassing it just means you can steer the model with different text. That's the default property of an LLM. The guardrail bypass matters if it's enforcing authorization, but no unauthorized action is shown.
+  **RSS Feeds**                       AI and technology news ingestion
 
-**2. System prompt extraction via prompt injection**
+  **SerpAPI / Google Events**         Upcoming AI & technology event
+                                      discovery
 
-Standard prompt injection extracted the system prompt. The post frames this as "information disclosure" but also notes that prompt injection here did not expose other users' data.
+  **Gmail**                           Automated report delivery
+  -----------------------------------------------------------------------
 
-The industry trend is moving away from treating prompts as secrets. Anthropic publishes system prompts for Claude's consumer apps. xAI publishes Grok prompts on GitHub. The meaningful question is: what can someone do with that knowledge? In this case, nothing beyond what's already possible.
+## 📰 News Sources
 
-**3. HTML rendering without sanitization**
+The current workflow reads news from:
 
-The system prompt instructs the model to return HTML for links, and those snippets render directly in the UI. This allows arbitrary HTML/JS output.
+``` text
+https://www.normaltech.ai/feed
+https://aibusiness.com/rss.xml
+```
 
-This is the clearest web security issue - it maps to OWASP's "Insecure Output Handling" category. But the post acknowledges this is "only" self-XSS as demonstrated. Self-XSS is widely treated as low severity unless you can demonstrate exploitation of other users. HackerOne explicitly lists "self-exploitation, such as self-XSS" as ineligible unless it affects other accounts.
+These sources are merged with the event data before being sent to
+Gemini.
 
-Could this escalate to real XSS? Yes, if chat transcripts are shown to support agents, if conversations are shared, or if payloads persist and replay in someone else's session. Those are common blind XSS patterns. But the post doesn't demonstrate that chain.
+## 📅 Event Intelligence
 
-**4. Unverified conversation/message IDs**
+The workflow uses the SerpAPI Google Events engine to search for
+upcoming AI and technology events.
 
-The backend accepted non-UUID values like "1" or "hello" for conversation and message IDs. Testing cross-user access would have been out of scope.
+Current search configuration:
 
-This could be an IDOR or lead to stored XSS across users, but neither is shown. The post offers a hypothetical about injecting a payload and reusing a conversation ID so a victim loads it, which requires specific (unconfirmed) system behavior about how chats are stored and replayed.
+``` text
+engine = google_events
+q      = AI Tech Events in india
+hl     = en
+gl     = us
+```
 
-## What would have made this a real vulnerability
+The query can be customized for a specific country, city, technology, or
+topic.
 
-If the report had shown any of:
+## 🧠 Gemini Intelligence Layer
 
-- **Cross-user data access** - reading another user's chats, bookings, personal details
-- **Unauthorized actions** - changing bookings, issuing refunds, triggering support workflows, querying internal systems
-- **Non-self XSS** - stored/shared XSS executing in another user's session or in an agent/admin console
-- **A demonstrated exploit chain** - prompt injection → tool misuse / auth bypass → impact
+The workflow uses:
 
-OWASP's point about "agency" is exactly this: prompt injection becomes severe when the model is wired to tools, data stores, or workflows without robust authorization and output handling. None of that is shown here.
+``` text
+models/gemini-2.0-flash
+```
 
-## What this actually is
+Gemini acts as the intelligence and summarization layer.
 
-The hardening recommendations in the post are sound: don't render model output as raw HTML, validate inputs, enforce decisions server-side, bind IDs to sessions. Those are good engineering practices.
+It receives the aggregated news and event information and generates a
+structured daily report.
 
-But calling these "AI vulnerabilities" overstates what's demonstrated:
+### Report Sections
 
-- A client-trust weakness (only security-relevant if the model has privileged actions or sensitive data)
-- Prompt injection extracting a system prompt (not inherently sensitive; industry is publishing these)
-- Self-XSS (should be fixed, but acknowledged as low severity)
-- Unverified IDs without demonstrated cross-user impact (could be hardened)
+The generated report contains:
 
-The author even acknowledges this: "these issues weren't desperately serious" and frames concern around future features. That's a reasonable conclusion for an internal security review. It's not the same as a public vulnerability disclosure.
+### AI NEWS HIGHLIGHTS
 
----
+The **5 most important AI developments**.
 
-The real finding: there's an insecure-output-handling bug (HTML rendering) that should be fixed. The rest is about not trusting the client, not treating prompts as secrets, and not confusing guardrails with security.
+### TECHNOLOGY UPDATES
 
----
+Important recent technology developments.
 
-## Links
+### UPCOMING AI EVENTS
 
-- [Eurostar AI vulnerability report](https://www.pentestpartners.com/security-blog/eurostar-ai-vulnerability-when-a-chatbot-goes-off-the-rails/) - Pen Test Partners
-- [Hacker News discussion](https://news.ycombinator.com/item?id=46492063) - Comments on the Eurostar report
-- [OWASP Top 10 for LLM Applications](https://owasp.org/www-project-top-10-for-large-language-model-applications/) - OWASP Foundation
-- [LLM01:2025 Prompt Injection](https://genai.owasp.org/llmrisk/llm01-prompt-injection/) - OWASP Gen AI Security
-- [System Prompts](https://platform.claude.com/docs/en/release-notes/system-prompts) - Claude documentation
-- [Grok prompts repository](https://github.com/xai-org/grok-prompts) - xAI on GitHub
-- [Core Ineligible Findings](https://docs.hackerone.com/en/articles/8494488-core-ineligible-findings) - HackerOne documentation
-- [The Ultimate Guide to XSS](https://www.bugcrowd.com/blog/the-ultimate-guide-to-finding-and-escalating-xss-bugs/) - Bugcrowd
+Upcoming events including:
+
+-   Event name
+-   Date
+-   Location
+-   Description
+
+If no events are available, the workflow instructs Gemini to report:
+
+> No AI events scheduled this week
+
+### News Item Format
+
+Each news item is requested with:
+
+-   Headline in **ALL CAPS**
+-   2--3 sentence summary
+-   Original article link
+
+The report ends with:
+
+> Your AI Intelligence Team
+
+## 📁 Repository Structure
+
+``` text
+AI-News-Intelligence-Agent-n8n-Google-Gemini/
+│
+├── README.md
+├── .gitignore
+│
+├── AI News Summarizer 2/
+├── Ai News two RSS Read To Email Output/
+├── Auto AI Internship Applier/
+├── Automated AI-Powered Weather-Based Daily Planner/
+├── Automated Historical Content Publisher/
+├── Automated LinkedIn job tracker/
+├── Automated Social Media Content Generation/
+├── Automated Social Media Content Generation with Image/
+│
+└── ...
+```
+
+> The repository currently contains multiple n8n automation workflows.
+> The main AI News Intelligence workflow is documented here based on the
+> repository's AI News Intelligence Agent implementation.
+
+## 🚀 Setup
+
+### 1. Install / open n8n
+
+Run n8n using your preferred setup.
+
+For example, with npm:
+
+``` bash
+npm install n8n -g
+```
+
+Then:
+
+``` bash
+n8n start
+```
+
+You can also use n8n Cloud or another supported deployment method.
+
+### 2. Import the workflow
+
+Open your n8n instance and import the AI News Intelligence workflow
+JSON.
+
+After importing, inspect the workflow nodes and connect the required
+credentials.
+
+### 3. Configure Google Gemini
+
+Create a Google Gemini credential in n8n and connect it to the **Google
+Gemini Chat Model** node.
+
+The current workflow uses:
+
+``` text
+models/gemini-2.0-flash
+```
+
+### 4. Configure Gmail
+
+Connect your Gmail credential to the email-sending node.
+
+Set the destination email address before activating the workflow.
+
+The exported workflow should not contain private Gmail credentials.
+
+### 5. Configure SerpAPI
+
+The event-fetching HTTP Request uses:
+
+``` text
+https://serpapi.com/search
+```
+
+with:
+
+``` text
+engine = google_events
+q      = AI Tech Events in india
+hl     = en
+gl     = us
+api_key = YOUR_API_KEY
+```
+
+Replace:
+
+``` text
+YOUR_API_KEY
+```
+
+with your SerpAPI key inside n8n.
+
+**Never commit your real API key to GitHub.**
+
+### 6. Check the RSS feeds
+
+Verify that the following feeds are reachable from your n8n environment:
+
+``` text
+https://www.normaltech.ai/feed
+https://aibusiness.com/rss.xml
+```
+
+### 7. Test the workflow
+
+Before activating the schedule, run the workflow manually.
+
+Verify:
+
+1.  Schedule Trigger starts the workflow branches.
+2.  RSS Feed nodes return news.
+3.  Fetch Events returns event data or an empty result.
+4.  Data Merger combines the inputs.
+5.  Data Aggregator passes the collected information forward.
+6.  Gemini generates the intelligence report.
+7.  Gmail sends the final report.
+
+## 🔐 Security
+
+This repository should contain workflow definitions and configuration
+placeholders, **not private credentials**.
+
+Never commit:
+
+-   ❌ API keys
+-   ❌ OAuth tokens
+-   ❌ Gmail credentials
+-   ❌ Private authentication credentials
+-   ❌ Personal information that should remain private
+
+Keep credentials inside n8n's credential manager.
+
+For SerpAPI, use:
+
+``` text
+YOUR_API_KEY
+```
+
+as the public placeholder rather than exposing the real key.
+
+## ⚙️ Customization
+
+The agent can be customized without changing the overall architecture.
+
+### News Sources
+
+Add or replace RSS feeds according to the topics you want to monitor.
+
+### Event Search
+
+Change:
+
+``` text
+AI Tech Events in india
+```
+
+to queries such as:
+
+``` text
+AI conferences in India
+Machine Learning events in Pune
+Generative AI conferences
+Technology events in Bangalore
+```
+
+### Gemini Model
+
+The Gemini model can be changed according to your requirements and the
+models available in your n8n/Gemini configuration.
+
+### Number of News Items
+
+Change the Gemini prompt to control how many headlines appear in the
+final report.
+
+### Report Structure
+
+You can modify the prompt to add sections such as:
+
+-   AI startups
+-   Funding
+-   Research papers
+-   Product launches
+-   Open-source releases
+-   Cybersecurity
+-   Robotics
+-   Job opportunities
+-   Indian AI ecosystem
+
+### Email
+
+Customize:
+
+-   Email recipient
+-   Email subject
+-   Report formatting
+-   Delivery schedule
+
+### Schedule
+
+Change the n8n Schedule Trigger to run:
+
+-   Daily
+-   Weekly
+-   Multiple times per day
+-   At a specific time
+
+## 📊 Example Intelligence Pipeline
+
+``` text
+                    INPUT
+                      │
+        ┌─────────────┴─────────────┐
+        │                           │
+     RSS News                  AI Events
+        │                           │
+        └─────────────┬─────────────┘
+                      ▼
+                n8n Workflow
+                      │
+                      ▼
+                 Data Merge
+                      │
+                      ▼
+               Data Aggregation
+                      │
+                      ▼
+                Gemini AI
+                      │
+          ┌───────────┴───────────┐
+          │                       │
+       Analyze                 Summarize
+          │                       │
+          └───────────┬───────────┘
+                      ▼
+             Structured Report
+                      │
+                      ▼
+                    Gmail
+```
+
+## 💡 Why This Project Is Useful
+
+The project demonstrates how multiple automation and AI concepts can be
+combined into one practical system.
+
+### AI Agent Development
+
+Uses Gemini to transform raw information into structured intelligence.
+
+### Workflow Automation
+
+n8n connects multiple services without requiring a large custom backend.
+
+### Data Aggregation
+
+Multiple independent information sources are merged into a single
+processing pipeline.
+
+### Prompt Engineering
+
+The Gemini prompt controls the structure, length, sections, and style of
+the generated report.
+
+### API Integration
+
+The project demonstrates integration between:
+
+-   RSS feeds
+-   SerpAPI
+-   Google Gemini
+-   Gmail
+-   n8n
+
+### Automated Information Delivery
+
+The final result is automatically delivered instead of requiring the
+user to manually check multiple websites.
+
+## 🔮 Future Improvements
+
+Possible enhancements include:
+
+-   [ ] Add more AI/technology RSS sources
+-   [ ] Add OpenAI, Anthropic, or other LLM providers
+-   [ ] Add Telegram delivery
+-   [ ] Add WhatsApp delivery
+-   [ ] Add Slack notifications
+-   [ ] Add Google Docs export
+-   [ ] Add Notion integration
+-   [ ] Add personalized news categories
+-   [ ] Add regional news filtering
+-   [ ] Add historical news storage
+-   [ ] Track recurring topics and trends
+-   [ ] Add duplicate-news detection before Gemini
+-   [ ] Add source credibility scoring
+-   [ ] Add automatic retry/error handling
+-   [ ] Add monitoring and workflow health notifications
+-   [ ] Add a dashboard for historical intelligence reports
+
+## 📸 Workflow Preview
+
+Add the workflow screenshot to the repository and reference it here:
+
+``` text
+assets/workflow.png
+```
+
+Then use:
+
+``` markdown
+![AI News Intelligence Agent Workflow](assets/workflow.png)
+```
+
+## 📌 Use Case
+
+A practical daily workflow looks like this:
+
+``` text
+Morning
+   │
+   ▼
+n8n Schedule Trigger
+   │
+   ├──► Collect AI News
+   │
+   ├──► Collect Technology News
+   │
+   └──► Find Upcoming AI Events
+             │
+             ▼
+        Merge Information
+             │
+             ▼
+        Google Gemini
+             │
+             ▼
+      Daily Intelligence
+             │
+             ▼
+            Gmail
+```
+
+Instead of spending time checking multiple websites, the user receives a
+consolidated intelligence report automatically.
+
+## ⚠️ Disclaimer
+
+This project is intended for educational, portfolio, and
+automation-development purposes.
+
+The generated news summaries depend on the external RSS feeds, event
+search results, and AI model output. Users should open the original
+sources and verify important information before relying on it for
+professional or consequential decisions.
+
+## 👨‍💻 Author
+
+**Saransh Vaidya**
+
+GitHub:\
+https://github.com/saranshvaidya0
+
+## 📂 Repository
+
+https://github.com/saranshvaidya0/AI-News-Intelligence-Agent-n8n-Google-Gemini
