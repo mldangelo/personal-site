@@ -15,7 +15,7 @@ export default function ContactIcons({
         .filter((item) => includeEmail || !item.link.startsWith('mailto:'))
         .map((s) => {
           // A mailto: hands off to a mail client, so it neither opens a tab nor
-          // needs the warning — announcing one was simply wrong.
+          // needs the warning.
           const isMailto = s.link.startsWith('mailto:');
 
           return (

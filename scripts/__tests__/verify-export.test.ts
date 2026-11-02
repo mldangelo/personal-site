@@ -13,199 +13,145 @@ import { afterEach, describe, expect, it } from 'vitest';
 const verifier = resolve(process.cwd(), 'scripts/verify-export.mjs');
 const fixtureRoots: string[] = [];
 
-interface ResumeFixture {
-  basics: { name: unknown };
-  work: unknown[];
-}
+const HOME = 'out/index.html';
+const ABOUT = 'out/about/index.html';
+const RESUME_PAGE = 'out/resume/index.html';
+const RESUME = 'out/resume.json';
+const MANIFEST = 'out/manifest.json';
+const SITEMAP = 'out/sitemap.xml';
+const FEED = 'out/feed.xml';
+const DRAFT = 'content/writing/secret-draft.md';
+const BASE_PATH = '/personal-site';
+const CANONICAL = 'rel="canonical" href="https://example.com/about';
 
-function write(root: string, path: string, contents = '') {
-  const destination = join(root, path);
-  mkdirSync(dirname(destination), { recursive: true });
-  writeFileSync(destination, contents);
-}
+type Change = (root: string) => void;
+type FixtureOptions = { basePath?: string; draftSlug?: string };
+/** The test title is the expected message unless a row names itself. */
+type Rejection = [expected: string | string[], change: Change, name?: string];
 
-function htmlPage({
-  canonical,
-  content,
-  head = '',
-  siteRoot,
-}: {
-  canonical: string;
-  content: string;
-  head?: string;
-  siteRoot: string;
-}) {
+const addFile =
+  (path: string, contents = ''): Change =>
+  (root) => {
+    const destination = join(root, path);
+    mkdirSync(dirname(destination), { recursive: true });
+    writeFileSync(destination, contents);
+  };
+const replaceIn =
+  (path: string, from: string | RegExp, to: string): Change =>
+  (root) => {
+    const file = join(root, path);
+    writeFileSync(
+      file,
+      readFileSync(file, 'utf8').replace(from, () => to),
+    );
+  };
+const both =
+  (...changes: Change[]): Change =>
+  (root) => {
+    for (const change of changes) change(root);
+  };
+const inHomeBody = (markup: string) =>
+  replaceIn(HOME, '</body>', `${markup}</body>`);
+const inDraftBody = (body: string) => replaceIn(DRAFT, /$/, `\n${body}\n`);
+const inSummary = (text: string) => replaceIn(RESUME, 'Did the work.', text);
+/** An exported file that only the draft's body asks for. */
+const draftAsset = (body: string, path = 'images/private.png') =>
+  both(addFile(`out/${path}`), inDraftBody(body));
+
+const TEXT_META =
+  'og:title og:description og:site_name og:locale og:type og:image:alt twitter:card twitter:site twitter:creator twitter:title twitter:description'.split(
+    ' ',
+  );
+
+function htmlPage(site: string, path: string, body: string, head = '') {
   return `<!doctype html>
 <html>
   <head>
     <title>Fixture</title>
-    <link rel="canonical" href="${canonical}">
-    <meta property="og:title" content="Fixture">
-    <meta property="og:description" content="Fixture description">
-    <meta property="og:url" content="${canonical}">
-    <meta property="og:site_name" content="Fixture site">
-    <meta property="og:locale" content="en_US">
-    <meta property="og:type" content="website">
-    <meta property="og:image" content="${siteRoot}og.png">
-    <meta property="og:image:alt" content="Fixture share card">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@fixture">
-    <meta name="twitter:creator" content="@fixture">
-    <meta name="twitter:title" content="Fixture">
-    <meta name="twitter:description" content="Fixture description">
-    <meta name="twitter:image" content="${siteRoot}og.png">
-    <link rel="manifest" href="${siteRoot}manifest.json">
-    <link rel="icon" href="${siteRoot}favicon.ico">
-    <link rel="icon" href="${siteRoot}icon.png">
-    <link rel="apple-touch-icon" href="${siteRoot}apple-icon.png">
+    <link rel="canonical" href="${site}${path}">
+    <meta property="og:url" content="${site}${path}">
+    <meta property="og:image" content="${site}og.png">
+    <meta name="twitter:image" content="${site}og.png">
+    ${TEXT_META.map((name) => `<meta ${name.startsWith('og:') ? 'property' : 'name'}="${name}" content="Fixture">`).join('\n')}
+    <link rel="manifest" href="${site}manifest.json">
+    <link rel="icon" href="${site}favicon.ico">
+    <link rel="icon" href="${site}icon.png">
+    <link rel="apple-touch-icon" href="${site}apple-icon.png">
     ${head}
   </head>
-  <body>${content}</body>
+  <body>${body}</body>
 </html>`;
 }
 
-function createFixture({ basePath = '', draftSlug = 'secret-draft' } = {}) {
+function createFixture({
+  basePath = '',
+  draftSlug = 'secret-draft',
+}: FixtureOptions = {}) {
   const root = mkdtempSync(join(tmpdir(), 'verify-export-'));
   fixtureRoots.push(root);
-  const siteRoot = `https://example.com${basePath}/`;
+  const site = `https://example.com${basePath}/`;
 
-  write(root, 'package.json', JSON.stringify({ homepage: siteRoot }));
-  write(
-    root,
-    `content/writing/${draftSlug}.md`,
-    [
-      '---',
-      'title: Secret draft',
-      "date: '2026-01-01'",
-      'description: Private fixture',
-      'draft: true # keep private',
-      '---',
+  const files = {
+    'package.json': JSON.stringify({ homepage: site }),
+    [`content/writing/${draftSlug}.md`]:
+      "---\ntitle: Secret draft\ndate: '2026-01-01'\ndescription: Private fixture\ndraft: true # keep private\n---\n",
+    [HOME]: htmlPage(
+      site,
       '',
-    ].join('\n'),
-  );
-  write(
-    root,
-    'out/index.html',
-    htmlPage({
-      canonical: siteRoot,
-      siteRoot,
-      content: `
-        <a href="#main-content">Skip</a>
-        <a href="about/#section">About section</a>
-        <img src="images/photo.png" alt="">
-        <main id="main-content">Home</main>
-      `,
+      `<a href="#main-content">Skip</a>
+      <a href="about/#section">About section</a>
+      <img src="images/photo.png" alt="">
+      <main id="main-content">Home</main>`,
+    ),
+    [ABOUT]: htmlPage(
+      site,
+      'about/',
+      `<a href="#section">This section</a>
+      <a href="../#main-content">Home content</a>
+      <main id="section">About</main>`,
+    ),
+    [RESUME_PAGE]: htmlPage(
+      site,
+      'resume/',
+      '<a href="../resume.json">JSON</a><main id="resume">Resume</main>',
+      `<link rel="alternate" type="application/json" href="${site}resume.json">`,
+    ),
+    [RESUME]: JSON.stringify({
+      $schema:
+        'https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json',
+      basics: { name: 'Fixture Person', url: site },
+      work: [{ url: 'https://work.example/', summary: 'Did the work.' }],
+      meta: { canonical: `${site}resume.json` },
     }),
-  );
-  write(
-    root,
-    'out/about/index.html',
-    htmlPage({
-      canonical: `${siteRoot}about/`,
-      siteRoot,
-      content: `
-        <a href="#section">This section</a>
-        <a href="../#main-content">Home content</a>
-        <main id="section">About</main>
-      `,
-    }),
-  );
-  write(
-    root,
-    'out/resume/index.html',
-    htmlPage({
-      canonical: `${siteRoot}resume/`,
-      siteRoot,
-      head: `<link rel="alternate" type="application/json" href="${siteRoot}resume.json">`,
-      content: `
-        <a href="../resume.json">JSON</a>
-        <main id="resume">Resume</main>
-      `,
-    }),
-  );
-  write(
-    root,
-    'out/resume.json',
-    `${JSON.stringify(
-      {
-        $schema:
-          'https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json',
-        basics: { name: 'Fixture Person', url: siteRoot },
-        work: [
-          {
-            name: 'Fixture Co',
-            position: 'Engineer',
-            url: 'https://work.example/',
-            startDate: '2020-01-01',
-            summary: 'Did the work.',
-          },
-        ],
-        meta: { canonical: `${siteRoot}resume.json` },
-      },
-      null,
-      2,
-    )}\n`,
-  );
-  write(root, 'out/og.png');
-  write(root, 'out/favicon.ico');
-  write(root, 'out/icon.png');
-  write(root, 'out/apple-icon.png');
-  write(root, 'out/images/icons/app.png');
-  write(
-    root,
-    'out/manifest.json',
-    JSON.stringify({
-      name: 'Fixture',
+    [MANIFEST]: JSON.stringify({
       start_url: '.',
       scope: '.',
       icons: [{ src: 'images/icons/app.png' }],
     }),
-  );
-  write(root, 'out/images/photo.png');
-  write(
-    root,
-    'out/sitemap.xml',
-    `<?xml version="1.0"?>
-<urlset>
-  <url><loc>${siteRoot}</loc></url>
-  <url><loc>${siteRoot}about/</loc></url>
-  <url><loc>${siteRoot}resume/</loc></url>
+    [SITEMAP]: `<urlset>
+  <url><loc>${site}</loc></url>
+  <url><loc>${site}about/</loc></url>
+  <url><loc>${site}resume/</loc></url>
 </urlset>`,
-  );
-  write(
-    root,
-    'out/feed.xml',
-    `<?xml version="1.0"?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom">
+    [FEED]: `<rss xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <link>${siteRoot}</link>
-    <atom:link href="${siteRoot}feed.xml" rel="self"/>
-    <item>
-      <link>${siteRoot}about/</link>
-      <guid isPermaLink="true">${siteRoot}about/</guid>
-    </item>
+    <link>${site}</link>
+    <atom:link href="${site}feed.xml" rel="self"/>
+    <item><link>${site}about/</link><guid isPermaLink="true">${site}about/</guid></item>
   </channel>
 </rss>`,
-  );
+    'out/og.png': '',
+    'out/favicon.ico': '',
+    'out/icon.png': '',
+    'out/apple-icon.png': '',
+    'out/images/icons/app.png': '',
+    'out/images/photo.png': '',
+  };
+  for (const [path, contents] of Object.entries(files)) {
+    addFile(path, contents)(root);
+  }
 
   return root;
-}
-
-function mutate(
-  root: string,
-  path: string,
-  transform: (value: string) => string,
-) {
-  const file = join(root, path);
-  writeFileSync(file, transform(readFileSync(file, 'utf8')));
-}
-
-function appendDraftBody(root: string, body: string) {
-  mutate(
-    root,
-    'content/writing/secret-draft.md',
-    (markdown) => `${markdown}\n${body}\n`,
-  );
 }
 
 function runVerifier(root: string) {
@@ -219,718 +165,386 @@ function runVerifier(root: string) {
   };
 }
 
+function rejects(cases: Rejection[], options?: FixtureOptions) {
+  const rows = cases.map(([expected, change, name]) => ({
+    name: name ?? [expected].flat()[0],
+    expected,
+    change,
+  }));
+
+  it.each(rows)('rejects $name', ({ expected, change }) => {
+    const root = createFixture(options);
+    change(root);
+
+    const { status, output } = runVerifier(root);
+    expect(status).toBe(1);
+    for (const message of [expected].flat()) {
+      expect(output).toContain(message);
+    }
+  });
+}
+
+function accepts(cases: [string, Change][], options?: FixtureOptions) {
+  it.each(cases)('accepts %s', (_name, change) => {
+    const root = createFixture(options);
+    change(root);
+
+    const { status, output } = runVerifier(root);
+    expect(output).toContain('3 pages OK');
+    expect(status).toBe(0);
+  });
+}
+
 afterEach(() => {
   for (const root of fixtureRoots.splice(0)) {
     rmSync(root, { recursive: true, force: true });
   }
 });
 
-describe('verify-export', () => {
-  it('accepts valid root-relative, document-relative, and fragment links', () => {
-    const result = runVerifier(createFixture());
-
-    expect(result.status).toBe(0);
-    expect(result.output).toContain('3 pages OK');
-  });
-
-  it('accepts a repository-site base path', () => {
-    const result = runVerifier(createFixture({ basePath: '/personal-site' }));
-
-    expect(result.status).toBe(0);
-    expect(result.output).toContain('3 pages OK');
-  });
-
-  it('rejects links that escape a configured repository-site base path', () => {
-    const root = createFixture({ basePath: '/personal-site' });
-    mutate(root, 'out/index.html', (html) =>
-      html.replace('href="about/#section"', 'href="/about/#section"'),
-    );
-
-    const result = runVerifier(root);
-    expect(result.status).toBe(1);
-    expect(result.output).toContain(
-      'internal link points outside configured base path /personal-site/',
-    );
-  });
-
-  it('rejects a missing exported icon target', () => {
-    const root = createFixture();
-    mutate(root, 'out/index.html', (html) =>
-      html.replace('href="https://example.com/icon.png"', 'href="/gone.png"'),
-    );
-
-    const result = runVerifier(root);
-    expect(result.status).toBe(1);
-    expect(result.output).toContain(
-      'icon link points at missing export: /gone.png',
-    );
-  });
-
-  it('rejects a manifest icon outside the configured base path', () => {
-    const root = createFixture({ basePath: '/personal-site' });
-    mutate(root, 'out/manifest.json', (json) =>
-      json.replace('images/icons/app.png', '/images/icons/app.png'),
-    );
-
-    const result = runVerifier(root);
-    expect(result.status).toBe(1);
-    expect(result.output).toContain(
-      'icons[0].src points outside configured base path /personal-site/',
-    );
-  });
-
-  it('rejects a manifest start URL outside the configured base path', () => {
-    const root = createFixture({ basePath: '/personal-site' });
-    mutate(root, 'out/manifest.json', (json) =>
-      json.replace('"start_url":"."', '"start_url":"/"'),
-    );
-
-    const result = runVerifier(root);
-    expect(result.status).toBe(1);
-    expect(result.output).toContain(
-      'start_url points outside configured base path /personal-site/',
-    );
-  });
-
-  it('rejects a missing same-page fragment', () => {
-    const root = createFixture();
-    mutate(root, 'out/index.html', (html) =>
-      html.replace('href="#main-content"', 'href="#missing"'),
-    );
-
-    const result = runVerifier(root);
-    expect(result.status).toBe(1);
-    expect(result.output).toContain(
-      'internal link points at missing fragment: /#missing',
-    );
-  });
-
-  it('rejects a missing cross-page fragment', () => {
-    const root = createFixture();
-    mutate(root, 'out/index.html', (html) =>
-      html.replace('about/#section', 'about/#missing'),
-    );
-
-    const result = runVerifier(root);
-    expect(result.status).toBe(1);
-    expect(result.output).toContain(
-      'internal link points at missing fragment: /about/#missing',
-    );
-  });
-
-  it.each([
-    ['video', '<video src="media/missing.mp4"></video>'],
-    ['audio', '<audio src="media/missing.mp3"></audio>'],
-    ['source', '<video><source src="media/missing.webm"></video>'],
-    ['poster', '<video poster="media/missing.png"></video>'],
-    ['track', '<video><track src="media/missing.vtt"></video>'],
-    ['object', '<object data="media/missing.pdf"></object>'],
-    ['embed', '<embed src="media/missing.pdf">'],
-    ['iframe', '<iframe src="media/missing.html"></iframe>'],
+describe('links, metadata, and icons', () => {
+  rejects([
     [
-      'srcset',
-      '<picture><source srcset="images/photo.png 1x, media/missing.png 2x"></picture>',
+      'icon link points at missing export: /gone.png',
+      replaceIn(
+        HOME,
+        'href="https://example.com/icon.png"',
+        'href="/gone.png"',
+      ),
     ],
-  ])(
-    'rejects missing %s targets under a deployment base path',
-    (_name, markup) => {
-      const root = createFixture({ basePath: '/personal-site' });
-      mutate(root, 'out/index.html', (html) =>
-        html.replace('</body>', `${markup}</body>`),
-      );
-      const result = runVerifier(root);
-      expect(result.status).toBe(1);
-      expect(result.output).toContain(
-        'points at missing export: media/missing.',
-      );
-    },
+    [
+      'internal link points at missing fragment: /#missing',
+      replaceIn(HOME, 'href="#main-content"', 'href="#missing"'),
+    ],
+    [
+      'internal link points at missing fragment: /about/#missing',
+      replaceIn(HOME, 'about/#section', 'about/#missing'),
+    ],
+    [
+      'internal link points at missing export: missing/',
+      replaceIn(HOME, 'about/#section', 'missing/'),
+    ],
+    [
+      'image points at missing export: images/missing.png',
+      replaceIn(HOME, 'images/photo.png', 'images/missing.png'),
+    ],
+    [
+      'indexable page has 2 canonical links; expected 1',
+      replaceIn(ABOUT, '</head>', `<link ${CANONICAL}/"></head>`),
+    ],
+    [
+      'canonical uses https://wrong.example; expected https://example.com',
+      replaceIn(
+        ABOUT,
+        CANONICAL,
+        CANONICAL.replace('example.com', 'wrong.example'),
+      ),
+    ],
+    [
+      'canonical trailing-slash form',
+      replaceIn(ABOUT, `${CANONICAL}/"`, `${CANONICAL}"`),
+    ],
+    [
+      'does not match canonical',
+      replaceIn(
+        ABOUT,
+        'content="https://example.com/about/"',
+        'content="https://example.com/"',
+      ),
+    ],
+    ...['og:title', 'og:site_name', 'twitter:card', 'twitter:creator'].map(
+      (name): Rejection => [
+        `indexable page has 0 ${name} tags; expected 1`,
+        replaceIn(ABOUT, new RegExp(`<meta \\w+="${name}"[^>]*>`), ''),
+      ],
+    ),
+    [
+      'sitemap.xml\n    omits indexable route: /about/',
+      replaceIn(
+        SITEMAP,
+        '<url><loc>https://example.com/about/</loc></url>',
+        '',
+      ),
+      'a sitemap that omits an indexable route',
+    ],
+  ]);
+
+  accepts([['root-relative, document-relative, and fragment links', () => {}]]);
+});
+
+// Every helper that takes a public path has to work when that path carries the
+// repository-site prefix, including the `/resume/` lookup the accepted case runs.
+describe('at a repository-site base path', () => {
+  rejects(
+    [
+      [
+        `internal link points outside configured base path ${BASE_PATH}/`,
+        replaceIn(HOME, 'href="about/#section"', 'href="/about/#section"'),
+      ],
+      [
+        `icons[0].src points outside configured base path ${BASE_PATH}/`,
+        replaceIn(MANIFEST, 'images/icons/app.png', '/images/icons/app.png'),
+      ],
+      [
+        `start_url points outside configured base path ${BASE_PATH}/`,
+        replaceIn(MANIFEST, '"start_url":"."', '"start_url":"/"'),
+      ],
+      [
+        `draft references a publicly exported image: ${BASE_PATH}/images/private.png`,
+        draftAsset('![private](../../images/private.png)'),
+      ],
+      ...[
+        '<video src="media/missing.mp4"></video>',
+        '<audio src="media/missing.mp3"></audio>',
+        '<video><source src="media/missing.webm"></video>',
+        '<video poster="media/missing.png"></video>',
+        '<video><track src="media/missing.vtt"></video>',
+        '<object data="media/missing.pdf"></object>',
+        '<embed src="media/missing.pdf">',
+        '<iframe src="media/missing.html"></iframe>',
+        '<picture><source srcset="images/photo.png 1x, media/missing.png 2x"></picture>',
+      ].map(
+        (markup): Rejection => [
+          'points at missing export: media/missing.',
+          inHomeBody(markup),
+          `the missing target in ${markup}`,
+        ],
+      ),
+    ],
+    { basePath: BASE_PATH },
   );
 
-  it('accepts existing relative media and external media under a base path', () => {
-    const root = createFixture({ basePath: '/personal-site' });
-    write(root, 'out/media/demo.mp4');
-    mutate(root, 'out/index.html', (html) =>
-      html.replace(
-        '</body>',
-        '<video src="media/demo.mp4" poster="images/photo.png"><source src="https://media.example/demo.webm"></video></body>',
-      ),
-    );
-    expect(runVerifier(root).status).toBe(0);
-  });
+  accepts(
+    [
+      ['the unchanged export', () => {}],
+      [
+        'existing relative media and external media',
+        both(
+          addFile('out/media/demo.mp4'),
+          inHomeBody(
+            '<video src="media/demo.mp4" poster="images/photo.png"><source src="https://media.example/demo.webm"></video>',
+          ),
+        ),
+      ],
+    ],
+    { basePath: BASE_PATH },
+  );
+});
 
-  describe.each(['', '/personal-site'])(
-    'form targets at base path "%s"',
-    (basePath) => {
-      it.each([
-        ['form action', '<form action="missing/"></form>'],
-        [
-          'button override',
-          '<form action="about/"><button formaction="missing/">Submit</button></form>',
-        ],
-        [
-          'input override',
-          '<form action="about/"><input type="submit" formaction="missing/"></form>',
-        ],
-      ])('rejects a missing %s', (_name, markup) => {
-        const root = createFixture({ basePath });
-        mutate(root, 'out/index.html', (html) =>
-          html.replace('</body>', `${markup}</body>`),
-        );
-        const result = runVerifier(root);
-        expect(result.status).toBe(1);
-        expect(result.output).toContain(
-          'form target points at missing export: missing/',
-        );
-      });
+// A submit control can override a valid form destination, so both attributes are
+// checked at root and repository-site deployments.
+describe.each(['', BASE_PATH])('form targets at base path "%s"', (basePath) => {
+  rejects(
+    [
+      '<form action="missing/"></form>',
+      '<form action="about/"><button formaction="missing/">Submit</button></form>',
+      '<form action="about/"><input type="submit" formaction="missing/"></form>',
+    ].map((markup) => [
+      'form target points at missing export: missing/',
+      inHomeBody(markup),
+      markup,
+    ]),
+    { basePath },
+  );
 
-      it('accepts existing, empty, and external submission targets', () => {
-        const root = createFixture({ basePath });
-        mutate(root, 'out/index.html', (html) =>
-          html.replace(
-            '</body>',
-            `
+  accepts(
+    [
+      [
+        'existing, empty, and external submission targets',
+        inHomeBody(`
           <form action="about/?q=hello">
             <button formaction="${basePath}/about/#section">Submit</button>
             <input type="submit" formaction="https://forms.example/submit">
           </form>
           <form action=""><button formaction="">Submit here</button></form>
-          <form action="https://forms.example/submit"></form>
-        </body>`,
-          ),
-        );
-        expect(runVerifier(root).status).toBe(0);
-      });
-    },
+          <form action="https://forms.example/submit"></form>`),
+      ],
+    ],
+    { basePath },
   );
+});
 
-  it('rejects missing relative routes and local image files', () => {
-    const root = createFixture();
-    mutate(root, 'out/index.html', (html) =>
-      html
-        .replace('about/#section', 'missing/')
-        .replace('images/photo.png', 'images/missing.png'),
-    );
+describe('machine-readable resume', () => {
+  rejects([
+    [
+      'resume.json\n    missing from export',
+      (root) => rmSync(join(root, RESUME)),
+      'an export with no resume.json',
+    ],
+    [
+      'resume.json\n    root must be a JSON object',
+      addFile(RESUME, 'null\n'),
+      'a JSON primitive as the document',
+    ],
+    [
+      'basics.name must be a non-empty string',
+      replaceIn(RESUME, '"Fixture Person"', '[]'),
+    ],
+    [
+      'work[0] must be a JSON object',
+      replaceIn(RESUME, /"work":\[.*?\]/, '"work":[1]'),
+    ],
+    [
+      '/resume/ does not link to the machine-readable resume',
+      replaceIn(RESUME_PAGE, 'href="../resume.json"', 'href="/about/"'),
+    ],
+    [
+      '/resume/ does not advertise the machine-readable resume',
+      replaceIn(RESUME_PAGE, /<link rel="alternate"[^>]*>/, ''),
+    ],
+    ...[
+      "Did <a href='#'>the work</a>.",
+      'Did [the work](https://work.example/).',
+      // An element the plain-text conversion does not strip.
+      'Shipped a <canvas> renderer.',
+    ].map(
+      (text): Rejection => [
+        'work[0].summary carries markup rather than plain text',
+        inSummary(text),
+        `markup in prose: ${text}`,
+      ],
+    ),
+    ['work[0].summary has uncollapsed whitespace', inSummary('Did  the work.')],
+    [
+      'key is not part of the JSON Resume schema: jobs',
+      replaceIn(RESUME, '"work"', '"jobs"'),
+    ],
+    [
+      'meta.canonical is https://example.com/resume.json/',
+      replaceIn(RESUME, '/resume.json"', '/resume.json/"'),
+    ],
+  ]);
 
-    const result = runVerifier(root);
-    expect(result.status).toBe(1);
-    expect(result.output).toContain(
-      'internal link points at missing export: missing/',
-    );
-    expect(result.output).toContain(
-      'image points at missing export: images/missing.png',
-    );
-  });
+  // The literal `src/lib/__tests__/resumeJson.test.ts` asserts survives
+  // `toPlainText`. The conversion and this gate make the same promise, so the
+  // two tests share one string.
+  accepts([
+    [
+      'angle-bracket comparisons and generic types in prose',
+      inSummary('latency < 50ms and throughput > 1k with Map<string, number>'),
+    ],
+  ]);
+});
 
-  it.each([
-    {
-      name: 'duplicate canonical links',
-      change: (html: string) =>
-        html.replace(
-          '</head>',
-          '<link rel="canonical" href="https://example.com/about/"></head>',
-        ),
-      expected: 'indexable page has 2 canonical links; expected 1',
-    },
-    {
-      name: 'a foreign canonical origin',
-      change: (html: string) =>
-        html.replace(
-          'rel="canonical" href="https://example.com/about/"',
-          'rel="canonical" href="https://wrong.example/about/"',
-        ),
-      expected:
-        'canonical uses https://wrong.example; expected https://example.com',
-    },
-    {
-      name: 'a non-canonical route form',
-      change: (html: string) =>
-        html.replace(
-          'rel="canonical" href="https://example.com/about/"',
-          'rel="canonical" href="https://example.com/about"',
-        ),
-      expected: 'canonical trailing-slash form',
-    },
-    {
-      name: 'og:url that differs from the canonical',
-      change: (html: string) =>
-        html.replace(
-          'property="og:url" content="https://example.com/about/"',
-          'property="og:url" content="https://example.com/"',
-        ),
-      expected: 'does not match canonical',
-    },
-  ])('rejects $name', ({ change, expected }) => {
-    const root = createFixture();
-    mutate(root, 'out/about/index.html', change);
-
-    const result = runVerifier(root);
-    expect(result.status).toBe(1);
-    expect(result.output).toContain(expected);
-  });
-
-  it.each([
-    ['Open Graph title', 'property="og:title"', 'og:title'],
-    ['Open Graph site name', 'property="og:site_name"', 'og:site_name'],
-    ['Twitter card', 'name="twitter:card"', 'twitter:card'],
-    ['Twitter creator', 'name="twitter:creator"', 'twitter:creator'],
-  ])('rejects a missing %s', (_, attribute, tagName) => {
-    const root = createFixture();
-    mutate(root, 'out/about/index.html', (html) =>
-      html.replace(new RegExp(`\\s*<meta ${attribute}[^>]*>`), ''),
-    );
-
-    const result = runVerifier(root);
-    expect(result.status).toBe(1);
-    expect(result.output).toContain(
-      `indexable page has 0 ${tagName} tags; expected 1`,
-    );
-  });
-
-  it('rejects draft and missing routes in the sitemap', () => {
-    const root = createFixture();
-    mutate(root, 'out/sitemap.xml', (xml) =>
-      xml.replace(
+// `src/lib/__tests__/markdown-assets.test.ts` owns the grammar of Markdown and
+// raw HTML references. These rows cover what the gate adds: resolving a target
+// from the post route, ownership against `out/`, and failing on a parser refusal.
+describe('drafts', () => {
+  rejects([
+    [
+      'sitemap.xml\n    exposes draft route: /writing/secret-draft/',
+      replaceIn(
+        SITEMAP,
         '</urlset>',
         '<url><loc>https://example.com/writing/secret-draft/</loc></url></urlset>',
       ),
-    );
-
-    const result = runVerifier(root);
-    expect(result.status).toBe(1);
-    expect(result.output).toContain(
-      'sitemap.xml\n    exposes draft route: /writing/secret-draft/',
-    );
-  });
-
-  it('rejects draft routes in the RSS feed', () => {
-    const root = createFixture();
-    mutate(root, 'out/feed.xml', (xml) =>
-      xml.replace(
+      'a draft route in the sitemap',
+    ],
+    [
+      'feed.xml\n    exposes draft route: /writing/secret-draft/',
+      replaceIn(
+        FEED,
         '</channel>',
         '<item><link>https://example.com/writing/secret-draft/</link></item></channel>',
       ),
-    );
-
-    const result = runVerifier(root);
-    expect(result.status).toBe(1);
-    expect(result.output).toContain(
-      'feed.xml\n    exposes draft route: /writing/secret-draft/',
-    );
-  });
-
-  it('rejects an export with no machine-readable resume', () => {
-    const root = createFixture();
-    rmSync(join(root, 'out/resume.json'));
-
-    const result = runVerifier(root);
-    expect(result.status).toBe(1);
-    expect(result.output).toContain('resume.json\n    missing from export');
-  });
-
-  it('rejects a JSON primitive instead of accepting it as a resume document', () => {
-    const root = createFixture();
-    write(root, 'out/resume.json', 'null\n');
-
-    const result = runVerifier(root);
-    expect(result.status).toBe(1);
-    expect(result.output).toContain(
-      'resume.json\n    root must be a JSON object',
-    );
-  });
-
-  it.each([
-    {
-      name: 'a non-string basics.name',
-      change: (resume: ResumeFixture) => {
-        resume.basics.name = [];
-      },
-      expected: 'basics.name must be a non-empty string',
-    },
-    {
-      name: 'a non-object work item',
-      change: (resume: ResumeFixture) => {
-        resume.work = [1];
-      },
-      expected: 'work[0] must be a JSON object',
-    },
-  ])('rejects $name', ({ change, expected }) => {
-    const root = createFixture();
-    mutate(root, 'out/resume.json', (json) => {
-      const resume = JSON.parse(json) as ResumeFixture;
-      change(resume);
-      return JSON.stringify(resume);
-    });
-
-    const result = runVerifier(root);
-    expect(result.status).toBe(1);
-    expect(result.output).toContain(expected);
-  });
-
-  it('rejects a resume page that stops linking the artifact', () => {
-    const root = createFixture();
-    mutate(root, 'out/resume/index.html', (html) =>
-      html.replace('href="../resume.json"', 'href="/about/"'),
-    );
-
-    const result = runVerifier(root);
-    expect(result.status).toBe(1);
-    expect(result.output).toContain(
-      '/resume/ does not link to the machine-readable resume',
-    );
-  });
-
-  it('rejects a resume page that stops advertising the JSON alternate', () => {
-    const root = createFixture();
-    mutate(root, 'out/resume/index.html', (html) =>
-      html.replace(
-        '<link rel="alternate" type="application/json" href="https://example.com/resume.json">',
-        '',
-      ),
-    );
-
-    const result = runVerifier(root);
-    expect(result.status).toBe(1);
-    expect(result.output).toContain(
-      '/resume/ does not advertise the machine-readable resume',
-    );
-  });
-
-  it.each([
-    {
-      name: 'HTML left in resume prose',
-      change: (json: string) =>
-        json.replace('Did the work.', "Did <a href='#'>the work</a>."),
-      expected: 'work[0].summary carries markup rather than plain text',
-    },
-    {
-      name: 'a markdown link left in resume prose',
-      change: (json: string) =>
-        json.replace('Did the work.', 'Did [the work](https://work.example/).'),
-      expected: 'work[0].summary carries markup rather than plain text',
-    },
-    {
-      name: 'uncollapsed whitespace in resume prose',
-      change: (json: string) => json.replace('Did the work.', 'Did  the work.'),
-      expected: 'work[0].summary has uncollapsed whitespace',
-    },
-    {
-      name: 'an HTML element the plain-text conversion does not strip',
-      change: (json: string) =>
-        json.replace('Did the work.', 'Shipped a <canvas> renderer.'),
-      expected: 'work[0].summary carries markup rather than plain text',
-    },
-    {
-      name: 'a key the JSON Resume schema does not define',
-      change: (json: string) => json.replace('"work"', '"jobs"'),
-      expected: 'key is not part of the JSON Resume schema: jobs',
-    },
-    {
-      name: 'a resume canonical that is not the file-like route',
-      change: (json: string) =>
-        json.replace('/resume.json"\n  }', '/resume.json/"\n  }'),
-      expected: 'meta.canonical is https://example.com/resume.json/',
-    },
-  ])('rejects $name', ({ change, expected }) => {
-    const root = createFixture();
-    mutate(root, 'out/resume.json', change);
-
-    const result = runVerifier(root);
-    expect(result.status).toBe(1);
-    expect(result.output).toContain(expected);
-  });
-
-  // The exact string `src/lib/__tests__/resumeJson.test.ts` asserts survives
-  // `toPlainText` untouched. Kept identical on purpose: the conversion and this
-  // gate have to make the same promise, or technical prose passes `npm test`
-  // and then fails the export in CI naming markup that was never there.
-  it('accepts angle-bracket comparisons and generic types in resume prose', () => {
-    const root = createFixture();
-    mutate(root, 'out/resume.json', (json) =>
-      json.replace(
-        'Did the work.',
-        'latency < 50ms and throughput > 1k with Map<string, number>',
-      ),
-    );
-
-    const result = runVerifier(root);
-    expect(result.status).toBe(0);
-    expect(result.output).toContain('3 pages OK');
-  });
-
-  /**
-   * `public/` now holds a generated share card per published post, so the export
-   * can carry an asset derived from `content/writing/`. A card for a draft is
-   * not a route and appears in no metadata, so every other gate here would let
-   * it through — while the file itself is publicly fetchable with the
-   * unpublished title rendered into its pixels.
-   */
-  it('rejects a generated share card for a draft post', () => {
-    const root = createFixture();
-    write(root, 'out/og/writing/secret-draft.png');
-
-    const result = runVerifier(root);
-    expect(result.status).toBe(1);
-    expect(result.output).toContain(
-      'exports a file named after a draft post: /og/writing/secret-draft.png',
-    );
-  });
-
-  it('rejects any other export on a draft route', () => {
-    const root = createFixture();
-    write(root, 'out/writing/secret-draft/notes.pdf');
-
-    const result = runVerifier(root);
-    expect(result.status).toBe(1);
-    expect(result.output).toContain(
-      'exports a file named after a draft post: /writing/secret-draft/notes.pdf',
-    );
-  });
-
-  it('rejects noindex HTML named after a draft on the writing route', () => {
-    const root = createFixture();
-    write(
-      root,
-      'out/writing/secret-draft.html',
-      '<!doctype html><html><head><meta name="robots" content="noindex"></head><body>Draft-derived page</body></html>',
-    );
-
-    const result = runVerifier(root);
-    expect(result.status).toBe(1);
-    expect(result.output).toContain(
+      'a draft route in the RSS feed',
+    ],
+    // A card is not a route and appears in no metadata, so only the file-name
+    // check catches an unpublished title rendered into a public PNG.
+    ...['og/writing/secret-draft.png', 'writing/secret-draft/notes.pdf'].map(
+      (path): Rejection => [
+        `exports a file named after a draft post: /${path}`,
+        addFile(`out/${path}`),
+      ],
+    ),
+    [
       'exports a file named after a draft post: /writing/secret-draft.html',
-    );
-  });
-
-  /**
-   * Post slugs are ordinary words. Matching a draft slug against every path
-   * segment in the export failed the site's own pages: a draft called `about`
-   * made `/about/index.html` an error, and one called `sitemap` or `og` did the
-   * same to `/sitemap.xml` and `/og.png`.
-   */
-  it.each(['about', 'og', 'sitemap', 'feed', 'photo', 'index'])(
-    'accepts the site\'s own routes and assets against a draft called "%s"',
-    (draftSlug) => {
-      const result = runVerifier(createFixture({ draftSlug }));
-
-      expect(result.output).toContain('3 pages OK');
-      expect(result.status).toBe(0);
-    },
-  );
-
-  it.each([
-    ['a nested-alt inline image', '![nested [alt]](/images/private.png)'],
-    [
-      'a full reference image',
+      addFile(
+        'out/writing/secret-draft.html',
+        '<!doctype html><html><head><meta name="robots" content="noindex"></head><body>Draft-derived page</body></html>',
+      ),
+    ],
+    ...[
       '![private][asset]\n\n[asset]: /images/private.png',
-    ],
-    [
-      'a collapsed reference image',
-      '![private][]\n\n[private]: /images/private.png',
-    ],
-    [
-      'a shortcut reference image',
-      '![private]\n\n[private]: /images/private.png',
-    ],
-    ['a parent-relative image', '![private](../../images/private.png)'],
-    [
-      'a same-origin absolute image',
+      '![private](../../images/private.png)',
       '![private](https://example.com/images/private.png)',
-    ],
-    [
-      'a same-origin protocol-relative image',
       '![private](//example.com/images/private.png)',
-    ],
-    [
-      'a raw HTML image with a quoted angle bracket',
       '<img alt="private > screenshot" src="/images/private.png">',
-    ],
-  ])('rejects a draft-only exported asset declared through %s', (_, body) => {
-    const root = createFixture();
-    write(root, 'out/images/private.png');
-    appendDraftBody(root, body);
-
-    const result = runVerifier(root);
-    expect(result.status).toBe(1);
-    expect(result.output).toContain(
-      'content/writing/secret-draft.md\n    draft references a publicly exported image: /images/private.png',
-    );
-  });
-
-  it('resolves relative draft assets within a repository-site base path', () => {
-    const root = createFixture({ basePath: '/personal-site' });
-    write(root, 'out/images/private.png');
-    appendDraftBody(root, '![private](../../images/private.png)');
-
-    const result = runVerifier(root);
-    expect(result.status).toBe(1);
-    expect(result.output).toContain(
-      'draft references a publicly exported image: /personal-site/images/private.png',
-    );
-  });
-
-  it('rejects every local candidate in a draft HTML srcset', () => {
-    const root = createFixture();
-    write(root, 'out/images/private-small.webp');
-    write(root, 'out/images/private-large.webp');
-    appendDraftBody(
-      root,
-      '<picture><source srcset="/images/private-small.webp 1x, /images/private-large.webp 2x"></picture>',
-    );
-
-    const result = runVerifier(root);
-    expect(result.status).toBe(1);
-    expect(result.output).toContain(
-      'draft references a publicly exported image: /images/private-small.webp',
-    );
-    expect(result.output).toContain(
-      'draft references a publicly exported image: /images/private-large.webp',
-    );
-  });
-
-  it.each([
+    ].map(
+      (body): Rejection => [
+        'content/writing/secret-draft.md\n    draft references a publicly exported image: /images/private.png',
+        draftAsset(body),
+        `a draft-only asset declared through ${body}`,
+      ],
+    ),
     [
-      'an image input src',
-      '<input type="image" src="/images/private.svg">',
-      'out/images/private.svg',
-      'image',
-    ],
-  ])(
-    'rejects a draft-only exported resource declared through %s',
-    (_, body, exportedPath, kind) => {
-      const root = createFixture();
-      write(root, exportedPath);
-      appendDraftBody(root, body);
-
-      const result = runVerifier(root);
-      expect(result.status).toBe(1);
-      expect(result.output).toContain(
-        `draft references a publicly exported ${kind}`,
-      );
-    },
-  );
-
-  it.each([
-    '<div style="background-image:url(/images/private.png)">Private</div>',
-    String.raw`<div style="background-image:u\72l(/images/private.png)">Private</div>`,
-    '<script src="/scripts/private.js"></script>',
-    '<iframe src="data:text/html,<img src=https://example.com/images/private.png>"></iframe>',
-    '<object data="data:text/html,<img src=https://example.com/images/private.png>"></object>',
-    '<link rel="stylesheet" href="data:text/css,body{background:url(https://example.com/images/private.png)}">',
-    '<svg><rect fill="url(/images/private.svg#paint)"></rect></svg>',
-    '<svg><image id="i"><set attributeName="href" to="/images/private.png"></set></image></svg>',
-  ])('fails closed for an uninspectable draft HTML fetch: %s', (body) => {
-    const root = createFixture();
-    appendDraftBody(root, body);
-
-    const result = runVerifier(root);
-    expect(result.status).toBe(1);
-    expect(result.output).toMatch(/not allowed|cannot be verified/i);
-  });
-
-  it('rejects an exported attachment linked only from a draft', () => {
-    const root = createFixture();
-    write(root, 'out/downloads/private-notes.pdf');
-    appendDraftBody(
-      root,
-      '[private notes][notes]\n\n[notes]: /downloads/private-notes.pdf',
-    );
-
-    const result = runVerifier(root);
-    expect(result.status).toBe(1);
-    expect(result.output).toContain(
       'draft references a publicly exported link: /downloads/private-notes.pdf',
-    );
-  });
-
-  it('rejects a draft-only frontmatter image', () => {
-    const root = createFixture();
-    write(root, 'out/images/private-frontmatter.png');
-    mutate(root, 'content/writing/secret-draft.md', (markdown) =>
-      markdown.replace(
-        'draft: true # keep private',
-        [
+      draftAsset(
+        '[private notes][notes]\n\n[notes]: /downloads/private-notes.pdf',
+        'downloads/private-notes.pdf',
+      ),
+    ],
+    [
+      'draft references a publicly exported image: /images/private-frontmatter.png',
+      both(
+        addFile('out/images/private-frontmatter.png'),
+        replaceIn(
+          DRAFT,
           'draft: true # keep private',
-          'image: /images/private-frontmatter.png',
-          'imageAlt: Private screenshot',
+          'draft: true # keep private\nimage: /images/private-frontmatter.png\nimageAlt: Private screenshot',
+        ),
+      ),
+    ],
+    // A reference the parsers cannot inspect fails the export.
+    [
+      'cannot be verified',
+      inDraftBody(
+        '<div style="background-image:url(/images/private.png)">Private</div>',
+      ),
+      'an uninspectable draft HTML fetch',
+    ],
+    [
+      'srcset',
+      inDraftBody(
+        '<source srcset="data:image/png;base64,AAAA, /images/hidden.png 2x">',
+      ),
+      'ambiguous draft srcset syntax',
+    ],
+    // Malformed frontmatter must fail here and at the route reader alike, or a
+    // draft flag the reader rejects could pass this privacy boundary.
+    [
+      '"draft" must be a boolean',
+      replaceIn(DRAFT, 'draft: true', "draft: 'true'"),
+    ],
+  ]);
+
+  accepts([
+    [
+      'a draft using an asset an exported page already uses',
+      inDraftBody('![shared](/images/photo.png)'),
+    ],
+    [
+      'draft links to public pages and references to absent private files',
+      inDraftBody(
+        [
+          '[About](/about/)',
+          '![kept outside public](/images/not-published.png)',
+          '![external](https://cdn.example.net/private-preview.png)',
+          '![embedded](data:image/png;base64,AAAA)',
         ].join('\n'),
       ),
-    );
+    ],
+    [
+      'a generated share card for a published post',
+      addFile('out/og/writing/about.png'),
+    ],
+  ]);
 
-    const result = runVerifier(root);
-    expect(result.status).toBe(1);
-    expect(result.output).toContain(
-      'draft references a publicly exported image: /images/private-frontmatter.png',
-    );
-  });
-
-  it('allows a draft to use an asset that an exported page already uses', () => {
-    const root = createFixture();
-    appendDraftBody(root, '![shared](/images/photo.png)');
-
-    const result = runVerifier(root);
-    expect(result.status).toBe(0);
-    expect(result.output).toContain('3 pages OK');
-  });
-
-  it('allows draft links to public pages and references to absent private files', () => {
-    const root = createFixture();
-    appendDraftBody(
-      root,
-      [
-        '[About](/about/)',
-        '![kept outside public](/images/not-published.png)',
-        '![external](https://cdn.example.net/private-preview.png)',
-        '![embedded](data:image/png;base64,AAAA)',
-      ].join('\n'),
-    );
-
-    const result = runVerifier(root);
-    expect(result.status).toBe(0);
-    expect(result.output).toContain('3 pages OK');
-  });
-
-  it('fails closed when draft srcset syntax is ambiguous', () => {
-    const root = createFixture();
-    appendDraftBody(
-      root,
-      '<source srcset="data:image/png;base64,AAAA, /images/hidden.png 2x">',
-    );
-
-    const result = runVerifier(root);
-    expect(result.status).toBe(1);
-    expect(result.output).toContain('srcset');
-  });
-
-  it('validates draft frontmatter before trusting its privacy boundary', () => {
-    const root = createFixture();
-    mutate(root, 'content/writing/secret-draft.md', (markdown) =>
-      markdown.replace('draft: true', "draft: 'true'"),
-    );
-
-    const result = runVerifier(root);
-    expect(result.status).toBe(1);
-    expect(result.output).toContain('"draft" must be a boolean');
-  });
-
-  it('accepts generated share cards for published posts', () => {
-    const root = createFixture();
-    write(root, 'out/og/writing/about.png');
-
-    const result = runVerifier(root);
-    expect(result.status).toBe(0);
-    expect(result.output).toContain('3 pages OK');
-  });
-
-  it('requires the sitemap to cover every indexable route', () => {
-    const root = createFixture();
-    mutate(root, 'out/sitemap.xml', (xml) =>
-      xml.replace('  <url><loc>https://example.com/about/</loc></url>\n', ''),
-    );
-
-    const result = runVerifier(root);
-    expect(result.status).toBe(1);
-    expect(result.output).toContain(
-      'sitemap.xml\n    omits indexable route: /about/',
-    );
-  });
+  // Post slugs are ordinary words, so a draft sharing a name with one of the
+  // site's own routes or assets must not fail a clean export.
+  describe.each(['about', 'og', 'sitemap', 'feed', 'photo', 'index'])(
+    'called "%s"',
+    (draftSlug) => {
+      accepts([['the site’s own routes and assets', () => {}]], { draftSlug });
+    },
+  );
 });

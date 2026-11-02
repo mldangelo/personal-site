@@ -43,8 +43,7 @@ export default function Hamburger() {
 
             return (
               <li key={l.label}>
-                {/* Navigation labels, not document sections — these were <h3>,
-                  which put six phantom headings into the outline. */}
+                {/* Navigation labels, not document sections, so not headings. */}
                 <Link
                   href={l.path}
                   onClick={closeMenu}

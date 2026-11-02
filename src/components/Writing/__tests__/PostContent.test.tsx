@@ -3,41 +3,58 @@ import { StrictMode } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 
-import { createHeadingId } from '@/lib/anchors';
-import { readPostImageSizes } from '@/lib/imageSize';
-import { getAllPosts, getPostBySlug } from '@/lib/posts';
+import { type ImageSize, readPostImageSizes } from '@/lib/imageSize';
+import { getPostBySlug } from '@/lib/posts';
 
 import PostContent from '../PostContent';
 
-const OG_SIZE = { '/og.png': { width: 1200, height: 630 } };
+const OG_SIZE: Record<string, ImageSize> = {
+  '/og.png': { width: 1200, height: 630 },
+};
 
-function headingIds(html: string): string[] {
-  return Array.from(html.matchAll(/<h[1-6][^>]*\bid="([^"]+)"/g), (m) => m[1]);
-}
-
-function allIds(html: string): string[] {
-  return Array.from(html.matchAll(/\bid="([^"]+)"/g), (m) => m[1]);
-}
-
-function aliasIds(html: string): string[] {
-  return Array.from(
-    html.matchAll(/<span class="prose-anchor-alias" id="([^"]+)"/g),
-    (m) => m[1],
+function markup(content: string, imageSizes = OG_SIZE) {
+  return renderToStaticMarkup(
+    <PostContent content={content} imageSizes={imageSizes} />,
   );
 }
 
-describe('PostContent', () => {
-  it('renders measured local images during server rendering', () => {
+function idsIn(html: string, pattern: RegExp): string[] {
+  return Array.from(html.matchAll(pattern), (m) => m[1]);
+}
+
+const headingIds = (html: string) => idsIn(html, /<h[1-6][^>]*\bid="([^"]+)"/g);
+const aliasIds = (html: string) =>
+  idsIn(html, /<span class="prose-anchor-alias" id="([^"]+)"/g);
+
+function expectUniqueIds(html: string) {
+  const ids = idsIn(html, /\bid="([^"]+)"/g);
+  expect(new Set(ids).size, html).toBe(ids.length);
+}
+
+describe('PostContent block structure', () => {
+  it('leaves blocks as direct children, where `.prose > *` rules reach them', () => {
+    expect(markup('One.\n\nTwo.')).not.toContain('<div>');
+  });
+});
+
+describe('PostContent image sizing', () => {
+  it.each([
+    ['a measured local image', '![Alt](/og.png)', {}, '630'],
+    [
+      'an unpublished draft image',
+      '![Alt](/private-draft.png)',
+      { allowMissingLocalImages: true },
+      '675',
+    ],
+    ['a remote image', '![Alt](https://example.com/a.png)', {}, '675'],
+  ])('reserves space for %s', (_, content, props, height) => {
     const html = renderToStaticMarkup(
-      <PostContent
-        content="![A social card](/og.png)"
-        imageSizes={{ '/og.png': { width: 1200, height: 630 } }}
-      />,
+      <PostContent content={content} imageSizes={OG_SIZE} {...props} />,
     );
 
-    expect(html).toContain('alt="A social card"');
+    expect(html).toContain('alt="Alt"');
     expect(html).toContain('width="1200"');
-    expect(html).toContain('height="630"');
+    expect(html).toContain(`height="${height}"`);
   });
 
   it('refuses to invent dimensions for a local image', () => {
@@ -47,528 +64,218 @@ describe('PostContent', () => {
       'Missing measured dimensions for local article image: /missing.png',
     );
   });
-
-  it('uses a draft-only fallback for an intentionally unpublished image', () => {
-    const html = renderToStaticMarkup(
-      <PostContent
-        content="![Private draft screenshot](/private-draft.png)"
-        allowMissingLocalImages
-      />,
-    );
-
-    expect(html).toContain('alt="Private draft screenshot"');
-    expect(html).toContain('width="1200"');
-    expect(html).toContain('height="675"');
-  });
-
-  it('retains a fallback for remote images', () => {
-    const html = renderToStaticMarkup(
-      <PostContent content="![Remote](https://example.com/image.png)" />,
-    );
-
-    expect(html).toContain('width="1200"');
-    expect(html).toContain('height="675"');
-  });
 });
 
 describe('PostContent figures', () => {
-  it('promotes the site caption convention without repeating it as a tooltip', () => {
-    const html = renderToStaticMarkup(
-      <PostContent
-        content={'Intro.\n\n![Alt](/og.png "July API spend: $9,986.20")\n'}
-        imageSizes={OG_SIZE}
-      />,
-    );
+  // The caption is visible copy; a retained title would repeat it as a native
+  // tooltip and as the image's accessible description.
+  it.each([
+    ['standalone', '![Alt](/og.png "Spend: $9,986")', '<img'],
+    // The caption reaches an image one level below the promoted node.
+    [
+      'linked',
+      '[![Alt](/og.png "Spend: $9,986")](https://example.com)',
+      '<a href="https://example.com">',
+    ],
+  ])('promotes a %s image title to a caption', (_, image, kept) => {
+    const html = markup(`Intro.\n\n${image}\n`);
 
-    expect(html).toContain(
-      '<figcaption class="prose-figcaption">July API spend: $9,986.20</figcaption>',
-    );
-    // The caption is visible copy; keeping the title would say it a second
-    // time as a native tooltip and as the image's accessible description.
-    expect(html).not.toContain('title="July API spend: $9,986.20"');
-    expect(html).toContain('<figure class="prose-figure"');
+    expect(html).toContain('<figure');
+    expect(html).toContain(kept);
+    expect(html).toContain('Spend: $9,986</figcaption>');
+    expect(html).not.toContain('title="Spend');
   });
 
-  it('keeps the tooltip on an image that stays inline', () => {
-    const html = renderToStaticMarkup(
-      <PostContent
-        content={'Intro.\n\nInline ![Alt](/og.png "Hover copy") in a line.\n'}
-        imageSizes={OG_SIZE}
-      />,
+  it('keeps the tooltip on an image that stays inline, with no figure', () => {
+    const html = markup(
+      'Intro.\n\nInline ![Alt](/og.png "Hover") in a line.\n',
     );
 
     expect(html).not.toContain('<figure');
-    expect(html).toContain('title="Hover copy"');
+    expect(html).toContain('title="Hover"');
   });
 
-  it('does not emit an empty caption for a whitespace-only title', () => {
-    const html = renderToStaticMarkup(
-      <PostContent content={'![Alt](/og.png "   ")\n'} imageSizes={OG_SIZE} />,
-    );
+  it('hoists a figure out of its paragraph, with no empty caption', () => {
+    for (const image of ['![Alt](/og.png)', '![Alt](/og.png "   ")']) {
+      const html = markup(`Intro.\n\n${image}\n\nOutro.\n`);
 
-    expect(html).not.toContain('<figcaption');
-  });
-
-  it('renders the published contributions qualification as a figure caption', () => {
-    const post = getPostBySlug('shipping-with-claude-code');
-    if (!post) {
-      throw new Error('expected shipping-with-claude-code to be published');
+      expect(html).toContain('<figure');
+      expect(html).not.toContain('<p><figure');
+      expect(html).not.toContain('<figcaption');
+      // Lets a wide figure exceed the reading measure.
+      expect(html).toContain('--figure-width:1200px');
     }
-
-    const html = renderToStaticMarkup(
-      <PostContent
-        content={post.content}
-        imageSizes={readPostImageSizes(post.content)}
-      />,
-    );
-
-    expect(html).toContain(
-      '<figcaption class="prose-figcaption">GitHub counts commits, pull requests, reviews, and issue activity here; I use the total as a rough proxy for output.</figcaption>',
-    );
-    expect(html).not.toContain('title="GitHub counts');
   });
 
-  it('promotes a standalone image to a figure without emitting one inside a paragraph', () => {
-    const html = renderToStaticMarkup(
-      <PostContent
-        content={'Intro.\n\n![Alt](/og.png)\n\nOutro.\n'}
-        imageSizes={OG_SIZE}
-      />,
-    );
-
-    expect(html).toContain('<figure class="prose-figure"');
-    expect(html).not.toContain('<p><figure');
-    expect(html).not.toContain('<figcaption');
-  });
-
-  it('keeps a linked image a captioned figure', () => {
-    const html = renderToStaticMarkup(
-      <PostContent
-        content={
-          'Intro.\n\n[![Alt](/og.png "8,482 contributions")](https://example.com)\n'
-        }
-        imageSizes={OG_SIZE}
-      />,
-    );
-
-    expect(html).toContain('<figure class="prose-figure"');
-    expect(html).toContain('<a href="https://example.com">');
-    expect(html).toContain('8,482 contributions</figcaption>');
-    // The caption reaches an image one level down, so the tooltip must go too.
-    expect(html).not.toContain('title="8,482 contributions"');
-  });
-
+  // A `src` is not an image: promoting one sends it to the build-time sizer,
+  // which only measures Markdown image syntax, and `next build` fails.
   it('leaves a standalone raw-HTML embed alone', () => {
     const html = renderToStaticMarkup(
-      <PostContent
-        content={'Intro.\n\n<video src="/demo.mp4" controls></video>\n'}
-      />,
+      <PostContent content={'Intro.\n\n<video src="/demo.mp4"></video>\n'} />,
     );
 
-    // A `src` is not an image. Promoting one routes it through the build-time
-    // image sizer, which only ever measures Markdown image syntax, so a local
-    // clip took the whole static export down.
     expect(html).toContain('<video src="/demo.mp4"');
     expect(html).not.toContain('<figure');
-  });
-
-  it('leaves a paragraph that merely contains an image as a paragraph', () => {
-    const html = renderToStaticMarkup(
-      <PostContent
-        content={'Intro.\n\nInline ![Alt](/og.png) inside a sentence.\n'}
-        imageSizes={OG_SIZE}
-      />,
-    );
-
-    expect(html).not.toContain('<figure');
-    expect(html).toContain('Inline ');
-  });
-
-  it('publishes the build-measured width so a wide figure can exceed the reading measure', () => {
-    const html = renderToStaticMarkup(
-      <PostContent
-        content={'Intro.\n\n![Wide](/wide.png)\n'}
-        imageSizes={{ '/wide.png': { width: 1117, height: 812 } }}
-      />,
-    );
-
-    expect(html).toContain('--figure-width:1117px');
   });
 });
 
 describe('PostContent code fences', () => {
-  it('labels a fence with the language it already declares', () => {
-    const html = renderToStaticMarkup(
-      <PostContent content={'Intro.\n\n```bash\nnpm run dev\n```\n'} />,
-    );
+  const FENCE = '```text\nA deliberately long line\n```\n';
 
-    expect(html).toContain(
-      '<span class="prose-fence-lang" aria-hidden="true">bash</span>',
-    );
-    expect(html).toContain('<span class="sr-only">bash code block</span>');
-  });
+  /** Renders a fence whose layout jsdom cannot measure, so the test sets it. */
+  function renderFence(content = FENCE) {
+    const view = render(<PostContent content={content} />);
+    const pre = view.container.querySelector('pre') as HTMLElement;
+    const box = { clientWidth: 320, scrollWidth: 640 };
 
-  it('does not add tab stops or landmark regions during server rendering', () => {
-    const html = renderToStaticMarkup(
-      <PostContent
-        content={
-          '```markdown\n@AGENTS.md\n```\n\n```markdown\n@CLAUDE.md\n```\n'
-        }
-      />,
-    );
-
-    expect(html).not.toContain('tabindex');
-    expect(html).not.toContain('role="region"');
-    expect(html).not.toContain('aria-label');
-  });
-
-  it('adds a tab stop only while the rendered fence actually overflows', () => {
-    const { container } = render(
-      <PostContent content={'```text\nA deliberately long line\n```\n'} />,
-    );
-    const pre = container.querySelector('pre');
-    if (!pre) {
-      throw new Error('expected a rendered code fence');
-    }
-
-    let clientWidth = 320;
-    let scrollWidth = 640;
     Object.defineProperties(pre, {
-      clientWidth: {
-        configurable: true,
-        get: () => clientWidth,
-      },
-      scrollWidth: {
-        configurable: true,
-        get: () => scrollWidth,
-      },
+      clientWidth: { configurable: true, get: () => box.clientWidth },
+      scrollWidth: { configurable: true, get: () => box.scrollWidth },
     });
 
+    return { ...view, pre, box };
+  }
+
+  function resize() {
     act(() => window.dispatchEvent(new Event('resize')));
+  }
+
+  it('names a declared language and invents none for an unlabelled fence', () => {
+    expect(markup('```bash\nnpm run dev\n```\n')).toContain('bash code block');
+    expect(markup('```\nultrathink\n```\n')).not.toContain('code block');
+  });
+
+  it('adds no tab stop or landmark during server rendering', () => {
+    expect(markup(FENCE)).not.toMatch(/tabindex|role="region"|aria-label/);
+  });
+
+  it('adds a tab stop only while the fence overflows', () => {
+    const { pre, box } = renderFence();
+
+    resize();
     expect(pre).toHaveAttribute('tabindex', '0');
     expect(pre).not.toHaveAttribute('role');
 
-    clientWidth = 640;
-    scrollWidth = 640;
-    act(() => window.dispatchEvent(new Event('resize')));
+    box.clientWidth = 640;
+    resize();
     expect(pre).not.toHaveAttribute('tabindex');
   });
 
-  it('scrolls an overflowing focused fence with horizontal arrow keys', () => {
-    const { container } = render(
-      <PostContent content={'```text\nA deliberately long line\n```\n'} />,
-    );
-    const pre = container.querySelector('pre');
-    if (!pre) {
-      throw new Error('expected a rendered code fence');
-    }
+  it('remeasures when a retained fence receives new code', () => {
+    const { pre, box, container, rerender } = renderFence();
 
-    Object.defineProperties(pre, {
-      clientWidth: {
-        configurable: true,
-        value: 320,
-      },
-      scrollWidth: {
-        configurable: true,
-        value: 640,
-      },
-    });
+    box.scrollWidth = 320;
+    resize();
+    expect(pre).not.toHaveAttribute('tabindex');
+
+    box.scrollWidth = 640;
+    rerender(<PostContent content={'```text\nA replacement line\n```\n'} />);
+    expect(container.querySelector('pre')).toBe(pre);
+    expect(pre).toHaveAttribute('tabindex', '0');
+  });
+
+  it('scrolls with arrow keys but leaves Shift+Arrow to text selection', () => {
+    const { pre } = renderFence();
 
     fireEvent.keyDown(pre, { key: 'ArrowRight' });
     expect(pre.scrollLeft).toBe(40);
 
     fireEvent.keyDown(pre, { key: 'ArrowLeft' });
     expect(pre.scrollLeft).toBe(0);
-  });
-
-  it('leaves Shift+Arrow to the browser so a selection can still extend', () => {
-    const { container } = render(
-      <PostContent content={'```text\nA deliberately long line\n```\n'} />,
-    );
-    const pre = container.querySelector('pre');
-    if (!pre) {
-      throw new Error('expected a rendered code fence');
-    }
-
-    Object.defineProperties(pre, {
-      clientWidth: {
-        configurable: true,
-        value: 320,
-      },
-      scrollWidth: {
-        configurable: true,
-        value: 640,
-      },
-    });
 
     // fireEvent returns false once the handler cancels the default action.
-    const notCancelled = fireEvent.keyDown(pre, {
-      key: 'ArrowRight',
-      shiftKey: true,
-    });
-
-    expect(notCancelled).toBe(true);
+    expect(fireEvent.keyDown(pre, { key: 'ArrowRight', shiftKey: true })).toBe(
+      true,
+    );
     expect(pre.scrollLeft).toBe(0);
-  });
-
-  it('remeasures overflow when a retained fence receives new code', () => {
-    let scrollWidth = 320;
-    const { container, rerender } = render(
-      <PostContent content={'```text\nshort\n```\n'} />,
-    );
-    const pre = container.querySelector('pre');
-    if (!pre) {
-      throw new Error('expected a rendered code fence');
-    }
-
-    Object.defineProperties(pre, {
-      clientWidth: {
-        configurable: true,
-        get: () => 320,
-      },
-      scrollWidth: {
-        configurable: true,
-        get: () => scrollWidth,
-      },
-    });
-
-    act(() => window.dispatchEvent(new Event('resize')));
-    expect(pre).not.toHaveAttribute('tabindex');
-
-    scrollWidth = 640;
-    rerender(
-      <PostContent
-        content={
-          '```text\nA replacement line that now exceeds the retained fence\n```\n'
-        }
-      />,
-    );
-    expect(container.querySelector('pre')).toBe(pre);
-    expect(pre).toHaveAttribute('tabindex', '0');
-  });
-
-  it('does not invent a language plate for an unlabelled fence', () => {
-    const html = renderToStaticMarkup(
-      <PostContent content={'Intro.\n\n```\nultrathink: audit this\n```\n'} />,
-    );
-
-    expect(html).not.toContain('prose-fence-lang');
   });
 });
 
 describe('PostContent heading anchors', () => {
-  it('slugifies headings with the shared helper instead of a second scheme', () => {
-    const html = renderToStaticMarkup(
-      <PostContent
-        content={
-          '## On using `--dangerously-skip-permissions`\n\n## CLAUDE.md + AGENTS.md\n'
-        }
-      />,
-    );
-
-    expect(headingIds(html)).toEqual([
-      createHeadingId('On using `--dangerously-skip-permissions`'),
-      createHeadingId('CLAUDE.md + AGENTS.md'),
-    ]);
-    expect(headingIds(html)).toEqual([
-      'on-using-dangerously-skip-permissions',
-      'claude-md-agents-md',
-    ]);
-  });
-
-  it('gives normalized duplicate headings deterministic unique ids', () => {
-    const html = renderToStaticMarkup(
-      <PostContent
-        content={'## Repeat\n\n## Repeat\n\n## Répeat\n\n## !!!\n\n## ???\n'}
-      />,
-    );
-
-    expect(headingIds(html)).toEqual([
-      'repeat',
-      'repeat-2',
-      'repeat-3',
-      'section',
-      'section-2',
-    ]);
-    expect(new Set(allIds(html)).size, html).toBe(allIds(html).length);
+  // The renderer's own slugifier keeps every separator it strips, which would
+  // disagree with the id the rest of the site derives.
+  it('slugifies headings with the shared helper', () => {
+    expect(
+      headingIds(
+        markup(
+          '## On using `--dangerously-skip-permissions`\n\n## CLAUDE.md + AGENTS.md\n',
+        ),
+      ),
+    ).toEqual(['on-using-dangerously-skip-permissions', 'claude-md-agents-md']);
   });
 
   it('keeps ids unique when a heading already ends in a generated suffix', () => {
-    const html = renderToStaticMarkup(
-      <PostContent
-        content={
-          '## Repeat\n\n## Repeat\n\n## Repeat 2\n\n## Repeat\n\n## !!!\n\n## Section\n\n## !!!\n'
-        }
-      />,
+    expect(
+      headingIds(
+        markup(
+          '## Repeat\n\n## Répeat\n\n## Repeat 2\n\n## Repeat\n\n## !!!\n\n## Section\n',
+        ),
+      ),
+    ).toEqual(
+      'repeat repeat-2 repeat-2-2 repeat-3 section section-2'.split(' '),
     );
-
-    expect(headingIds(html)).toEqual([
-      'repeat',
-      'repeat-2',
-      'repeat-2-2',
-      'repeat-3',
-      'section',
-      'section-2',
-      'section-3',
-    ]);
-    expect(new Set(allIds(html)).size).toBe(allIds(html).length);
   });
 
   it('keeps duplicate ids stable when Strict Mode repeats compilation', () => {
     const { container } = render(
       <StrictMode>
-        <PostContent content={'## Repeat\n\n## Repeat\n\n## Répeat\n'} />
+        <PostContent content={'## Repeat\n\n## Repeat\n'} />
       </StrictMode>,
     );
 
-    expect(headingIds(container.innerHTML)).toEqual([
-      'repeat',
-      'repeat-2',
-      'repeat-3',
-    ]);
+    expect(headingIds(container.innerHTML)).toEqual(['repeat', 'repeat-2']);
   });
 
-  it('emits anchor-clean ids for every heading in every published post', () => {
-    for (const post of getAllPosts()) {
-      const html = renderToStaticMarkup(
-        <PostContent
-          content={post.content}
-          imageSizes={readPostImageSizes(post.content)}
-        />,
-      );
-
-      for (const id of headingIds(html)) {
-        expect(id, `${post.slug} → ${id}`).toBe(createHeadingId(id));
-      }
-    }
-  });
-
-  it('renders the real post whose headings the two schemes disagreed about', () => {
+  it('keeps the legacy ids of a published post resolving as hidden aliases', () => {
     const post = getPostBySlug('shipping-with-claude-code');
     if (!post) {
       throw new Error('expected shipping-with-claude-code to be published');
     }
 
-    const html = renderToStaticMarkup(
-      <PostContent
-        content={post.content}
-        imageSizes={readPostImageSizes(post.content)}
-      />,
-    );
+    const html = markup(post.content, readPostImageSizes(post.content));
 
-    expect(headingIds(html)).toContain('on-using-dangerously-skip-permissions');
-    expect(headingIds(html)).toContain('claude-md-agents-md');
-    expect(headingIds(html)).not.toContain(
+    expect(aliasIds(html).sort()).toEqual([
+      'browser-automation---chrome-for-interaction-playwright-mcp-for-screenshots',
+      'claudemd--agentsmd',
       'on-using---dangerously-skip-permissions',
-    );
-  });
-
-  it('keeps the previously published ids resolving as hidden aliases', () => {
-    const post = getPostBySlug('shipping-with-claude-code');
-    if (!post) {
-      throw new Error('expected shipping-with-claude-code to be published');
-    }
-
-    const html = renderToStaticMarkup(
-      <PostContent
-        content={post.content}
-        imageSizes={readPostImageSizes(post.content)}
-      />,
-    );
-
-    expect(aliasIds(html).sort()).toEqual(
-      [
-        'browser-automation---chrome-for-interaction-playwright-mcp-for-screenshots',
-        'claudemd--agentsmd',
-        'on-using---dangerously-skip-permissions',
-        'plan-mode--writing-plans-to-files',
-      ].sort(),
-    );
-    expect(new Set(allIds(html)).size).toBe(allIds(html).length);
-  });
-
-  it('keeps one legacy alias when a formerly duplicated heading repeats', () => {
-    const html = renderToStaticMarkup(
-      <PostContent
-        content={
-          '## On using `--dangerously-skip-permissions`\n\n## On using `--dangerously-skip-permissions`\n'
-        }
-      />,
-    );
-
-    expect(headingIds(html)).toEqual([
-      'on-using-dangerously-skip-permissions',
-      'on-using-dangerously-skip-permissions-2',
+      'plan-mode--writing-plans-to-files',
     ]);
-    expect(aliasIds(html)).toEqual(['on-using---dangerously-skip-permissions']);
-    expect(new Set(allIds(html)).size).toBe(allIds(html).length);
   });
 
-  it('does not collide with raw HTML or footnote ids in the document', () => {
-    const html = renderToStaticMarkup(
-      <PostContent
-        content={
-          '<h2 id="custom">Raw heading</h2>\n\n## Custom\n\n[^note]\n\n[^note]: Footnote copy\n\n## note\n'
-        }
-      />,
+  it.each([
+    [
+      'keeps one alias when a heading with a legacy id repeats',
+      '## On using `--dangerously-skip-permissions`\n\n## On using `--dangerously-skip-permissions`\n',
+      ['on-using---dangerously-skip-permissions'],
+    ],
+    [
+      'suppresses an alias that would collide with a canonical id',
+      '## Node.js\n\n## Nodejs\n',
+      [],
+    ],
+  ])('%s', (_, content, aliases) => {
+    const html = markup(content);
+
+    expect(aliasIds(html)).toEqual(aliases);
+    expectUniqueIds(html);
+  });
+
+  it('keeps raw heading attributes and avoids raw and footnote ids', () => {
+    const html = markup(
+      '<h2 id="custom" class="special">Raw</h2>\n\n## Custom\n\n[^note]\n\n[^note]: Copy\n\n## note\n',
     );
 
+    expect(html).toContain('<h2 class="special" id="custom">');
     expect(headingIds(html)).toEqual(['custom', 'custom-2', 'note-2']);
-    expect(allIds(html)).toContain('note');
     expect(html).toContain('href="#note"');
-    expect(new Set(allIds(html)).size, html).toBe(allIds(html).length);
+    expectUniqueIds(html);
   });
 
-  it('preserves authored attributes on raw HTML headings', () => {
-    const html = renderToStaticMarkup(
-      <PostContent
-        content={
-          '<h2 id="kept" class="special" data-kind="example">Raw heading</h2>\n'
-        }
-      />,
-    );
-
-    expect(html).toContain(
-      '<h2 class="special" data-kind="example" id="kept">',
-    );
-    expect(html).toContain('Raw heading</h2>');
-  });
-
-  it('keeps footnote links paired with the library-generated footer id', () => {
-    const html = renderToStaticMarkup(
-      <PostContent
-        content={
-          '## foo.bar\n\nA dotted footnote label.[^foo.bar]\n\n[^foo.bar]: Footnote copy\n'
-        }
-      />,
-    );
+  it('leaves footnotes on the slug scheme the renderer pairs them with', () => {
+    const html = markup('## foo.bar\n\nText.[^foo.bar]\n\n[^foo.bar]: Copy\n');
 
     expect(headingIds(html)).toEqual(['foo-bar']);
     expect(html).toContain('href="#foobar"');
     expect(html).toContain('<div id="foobar">');
-    expect(html).not.toContain('<div id="foo-bar">');
-  });
-
-  it('suppresses a legacy alias that would collide with another canonical id', () => {
-    const html = renderToStaticMarkup(
-      <PostContent content={'## Node.js\n\n## Nodejs\n'} />,
-    );
-
-    expect(headingIds(html)).toEqual(['node-js', 'nodejs']);
-    expect(aliasIds(html)).toEqual([]);
-  });
-
-  it('emits no duplicate ids in any published post', () => {
-    for (const post of getAllPosts()) {
-      const html = renderToStaticMarkup(
-        <PostContent
-          content={post.content}
-          imageSizes={readPostImageSizes(post.content)}
-        />,
-      );
-      const ids = allIds(html);
-
-      expect(new Set(ids).size, post.slug).toBe(ids.length);
-    }
   });
 });

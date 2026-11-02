@@ -51,9 +51,7 @@ export const THEME_COLOR_META_SELECTOR = 'meta[name="theme-color"]';
  * every client-side navigation, from the build-time payload. Worse, it matches
  * them back up by `content` and `name` but never by `media`, so a repointed tag
  * is claimed by whichever hoisted meta now shares its colour and a third tag is
- * built for the one left unmatched. Measured on the export: two tags declared,
- * three in the live document, and the first `<Link>` press put the light chrome
- * colour back over a dark page for the rest of the session.
+ * built for the one left unmatched.
  *
  * So the rendered theme gets a tag of its own, created by
  * {@link themeInitScript} before first paint and never rendered by React. It
@@ -97,13 +95,9 @@ const UNREADABLE_SCHEME: ResolvedTheme = 'light';
  * - light device: `system → dark → light → system`
  * - dark device: `system → light → dark → system`
  *
- * It was `system → light → dark` for everyone. A new visitor is on `system`,
- * which a light device paints light, so their first press moved to `light`:
- * the icon changed and the page did not. Measured on the export, `data-theme`
- * and the body background were identical after press one and only press two
- * went dark — a control whose first press appears to do nothing reads as
- * broken. So the cycle opens on the theme *opposite* the device's, crosses to
- * the other explicit theme, and then hands back to `system`.
+ * A new visitor is on `system`, and a control whose first press appears to do
+ * nothing reads as broken. So the cycle opens on the theme *opposite* the
+ * device's, crosses to the other explicit theme, and then hands back to `system`.
  *
  * With three states, `system` always paints the same as one of the explicit
  * themes, so exactly one step in three is necessarily invisible whichever way

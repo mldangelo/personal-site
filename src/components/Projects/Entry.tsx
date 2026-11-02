@@ -4,7 +4,6 @@ import type { Project } from '@/data/projects';
 import { smartQuotes } from '@/lib/typography';
 
 import DateRange from './DateRange';
-import { externalLinkProps } from './shared';
 
 interface EntryProps {
   data: Project;
@@ -107,7 +106,13 @@ export default function Entry({ data }: EntryProps) {
   }
 
   return (
-    <a className={className} {...externalLinkProps(link, displayTitle)}>
+    <a
+      className={className}
+      href={link}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`${displayTitle} (opens in a new tab)`}
+    >
       {body}
     </a>
   );

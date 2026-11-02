@@ -27,79 +27,9 @@
   line-height: 1.7;
 }
 
-/* Section index — the resume's, on this page. pages/resume.css explains why
-   the bar and the row inside it are separate elements, and how the row fades. */
+/* Section index: the rules are shared with the résumé's in pages/resume.css. */
 .about-section-nav {
-  position: sticky;
-  top: var(--header-height);
-  z-index: var(--z-sticky);
   margin: var(--spacing-10) 0 var(--spacing-6);
-  background: var(--color-bg-alt);
-  border-block: var(--rule) solid var(--color-border);
-}
-
-/* Six labels at 0.5rem of padding fill this measure to within 9px, and the
-   fallback face runs wider than that until Inter arrives. A row that wrapped
-   would jump from 46px to 90px and back as the font swapped; this one only
-   ever overflows into its own end padding. */
-.about-section-nav-row {
-  display: flex;
-  margin: 0 -0.5rem;
-  overflow-x: auto;
-  scrollbar-width: none;
-  scroll-padding: 0 2rem;
-  scroll-behavior: smooth;
-}
-
-/* Two classes throughout, to stay ahead of `.about-content a` and its hover
-   further down, which would otherwise underline and recolour these. */
-.about-content .about-section-nav-link {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  min-height: 2.75rem;
-  padding: 0 0.5rem;
-  font-family: var(--font-display);
-  font-size: var(--text-ui);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-fg-light);
-  background-image: none;
-  text-decoration: none;
-  white-space: nowrap;
-  outline-offset: -4px;
-}
-
-.about-content .about-section-nav-link:hover,
-.about-content .about-section-nav-link:focus-visible {
-  color: var(--color-fg-bold);
-}
-
-.about-content .about-section-nav-link.active {
-  color: var(--color-accent);
-}
-
-.about-section-nav-link.active::after {
-  content: '';
-  position: absolute;
-  inset: auto 0.5rem 0;
-  border-bottom: var(--rule-strong) solid var(--color-accent);
-}
-
-@media (max-width: 735px) {
-  .about-section-nav-row {
-    mask-image: linear-gradient(
-      90deg,
-      #0000,
-      #000 min(var(--scrolled, 0px), 2rem) calc(100% - 2rem),
-      #0000
-    );
-  }
-
-  .about-section-nav-row::after {
-    content: '';
-    flex: none;
-    width: 2rem;
-  }
 }
 
 .about-section {
@@ -478,9 +408,7 @@
 
 @media (max-width: 735px) {
   .about-section-nav {
-    top: var(--header-height-mobile);
     margin: var(--spacing-6) 0 var(--spacing-5);
-    box-shadow: -0.5rem 0 var(--color-bg-alt);
   }
 
   .about-section h2 {
@@ -586,11 +514,9 @@
   white-space: nowrap;
 }
 
-/* A linked value is ink over a rule. It was accent blue with no rule under
-   it, so colour was the only sign of a link, and beside an amber age it read
-   as a second data colour: one date blue and the next black looked like a
-   difference between the dates. The accent now only answers the pointer and
-   the keyboard.
+/* A linked value is ink over a rule, because beside an amber age an accent
+   colour would read as a second data colour. The accent only answers the
+   pointer and the keyboard.
 
    That leaves the rule as the only sign at rest, so it is drawn in
    `--color-control-border`, which is held to 3:1 on both page surfaces. In the
