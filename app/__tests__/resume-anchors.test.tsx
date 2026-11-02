@@ -14,9 +14,8 @@ import work from '@/data/resume/work';
 const SECTIONS = ['experience', 'education', 'skills', 'courses', 'references'];
 
 /**
- * The section components used to render their own `<div class="link-to" id>`
- * alongside the `<section id>` wrappers on the page, so every anchor on the
- * resume existed twice. Duplicate ids are invalid and make `#skills` ambiguous.
+ * Every anchor on the resume must exist once. Duplicate ids are invalid and make
+ * `#skills` ambiguous.
  */
 function renderResumeSections() {
   return renderToStaticMarkup(

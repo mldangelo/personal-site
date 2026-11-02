@@ -38,12 +38,11 @@
   outline: none;
 }
 
-/* A quiet paper header with a structural hairline. */
+/* An opaque paper header with a structural hairline. The colour is the page's
+   own, which `theme-color` also gives the browser chrome above it. */
 .site-header {
   align-items: center;
-  background-color: color-mix(in srgb, var(--color-bg-alt) 88%, transparent);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background-color: var(--color-bg-alt);
   border-bottom: var(--rule) solid var(--color-border);
   display: flex;
   height: var(--header-height);
@@ -114,16 +113,8 @@
   transition: transform var(--duration-normal) var(--ease-menu);
   width: 300px;
   z-index: var(--z-menu);
-}
-
-.slide-menu--right {
   right: 0;
   transform: translateX(100%);
-}
-
-.slide-menu--left {
-  left: 0;
-  transform: translateX(-100%);
 }
 
 .slide-menu--open {
@@ -322,7 +313,7 @@
   background-color: transparent;
 }
 
-/* The mobile menu previously gave no indication of where you were. */
+/* Where you are, in the mobile menu. */
 .hamburger-ul li a.active span {
   color: var(--color-accent);
 }

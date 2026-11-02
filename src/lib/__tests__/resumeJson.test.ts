@@ -123,7 +123,7 @@ describe('json resume document', () => {
   });
 
   it('splits the display city into city and region without asserting a country', () => {
-    expect(resume.basics.location).toEqual({ city: 'New York', region: 'NY' });
+    expect(resume.basics.location).toEqual({ city: 'San Francisco' });
   });
 
   it('lists every non-email contact as a profile with its handle', () => {
@@ -164,7 +164,7 @@ describe('json resume document', () => {
 
   it('reduces summaries carrying inline anchors to plain text', () => {
     expect(resume.work[0].summary).toBe(
-      'Building Promptfoo and Codex Security at OpenAI, with a focus on securing AI systems and applying AI to software security.',
+      'Building Promptfoo and other cyber products at OpenAI, with a focus on securing AI systems and applying AI to software security.',
     );
 
     const arthena = resume.work.find((position) => position.name === 'Arthena');

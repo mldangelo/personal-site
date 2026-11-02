@@ -21,8 +21,7 @@ const work: Position[] = [
     position: 'Member of the Technical Staff',
     url: 'https://openai.com',
     startDate: '2026-03-09',
-    summary: `Building Promptfoo and <a href='https://openai.com/index/codex-security-now-in-research-preview/'>Codex Security</a>
-    at OpenAI, with a focus on securing AI systems and applying AI to software security.`,
+    summary: `Building Promptfoo and other cyber products at OpenAI, with a focus on securing AI systems and applying AI to software security.`,
   },
   {
     name: 'Promptfoo',

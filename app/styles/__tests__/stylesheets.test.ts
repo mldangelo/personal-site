@@ -2,6 +2,9 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
+import { THEME_COLOR_TOKEN } from '@/lib/theme';
+import { readColorToken } from '@/lib/tokens';
+
 /**
  * `app/tailwind.css` is the only stylesheet `app/layout.tsx` imports, and no
  * stylesheet imports another. A file under `app/styles` the entry point does
@@ -41,4 +44,31 @@ describe('stylesheet graph', () => {
 
     expect(repoPaths(empty)).toEqual([]);
   });
+});
+
+// Let the production optimiser add the prefixes its browser targets need.
+it('does not hand-write -webkit-backdrop-filter', () => {
+  const prefixed = onDisk.filter((file) =>
+    /-webkit-backdrop-filter\s*:/.test(withoutComments(file)),
+  );
+
+  expect(repoPaths(prefixed)).toEqual([]);
+});
+
+it('keeps the header opaque and aligned with the browser chrome', () => {
+  const css = withoutComments(join(STYLES_DIR, 'layout/header.css'));
+  const headerRules = [...css.matchAll(/\.site-header\s*\{([^{}]*)\}/g)]
+    .map((match) => match[1])
+    .join('\n');
+  const backgrounds = [
+    ...headerRules.matchAll(/(?:^|;)\s*background(?:-color)?\s*:\s*([^;{}]+)/g),
+  ].map((match) => match[1].trim());
+
+  expect(backgrounds).toEqual([`var(${THEME_COLOR_TOKEN})`]);
+  expect(headerRules).not.toMatch(/backdrop-filter\s*:/);
+  for (const theme of ['light', 'dark'] as const) {
+    expect(readColorToken(THEME_COLOR_TOKEN, theme)).toMatch(
+      /^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/,
+    );
+  }
 });

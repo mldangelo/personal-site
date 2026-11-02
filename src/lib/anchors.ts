@@ -123,11 +123,10 @@ function collectReservedMarkdownIds(
  * Plans the unique heading ids for a Markdown document and any legacy ids that
  * still need to resolve.
  *
- * Posts originally shipped with markdown-to-jsx's slugifier. The site later
- * standardized on createHeadingId, which is more readable but changed several
- * already-public anchors. Parsing once up front lets the renderer both
- * de-duplicate its canonical ids and retain safe aliases for the exact legacy
- * values the library used to publish.
+ * Canonical ids come from createHeadingId; published anchors from
+ * markdown-to-jsx's slugifier stay resolvable as aliases. Parsing once up front
+ * lets the renderer both de-duplicate its canonical ids and retain those
+ * aliases safely.
  */
 export function planMarkdownHeadingAnchors(
   markdown: string,

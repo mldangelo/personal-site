@@ -34,7 +34,7 @@ export default function Hamburger({ name }: HamburgerProps) {
   const closeMenu = useCallback(() => setOpen(false), []);
 
   const slideMenu = (
-    <SlideMenu id={MENU_ID} isOpen={open} onClose={closeMenu} position="right">
+    <SlideMenu id={MENU_ID} isOpen={open} onClose={closeMenu}>
       {/* The trap keeps focus inside the dialog, so it needs a way out that
           is not the Escape key alone. */}
       <button

@@ -110,8 +110,7 @@ describe('extractLogMarker', () => {
       rest: 'We subscribed to AOL in 1995. I still remember it.',
     });
 
-    // Previously null: a mid-sentence year was ignored entirely, which left the
-    // best entries on the page with an empty gutter.
+    // A mid-sentence year counts, or the best entries get an empty gutter.
     expect(extractLogMarker('I visited Canada in 2016, then Japan.')).toEqual({
       year: '2016',
       rest: 'I visited Canada in 2016, then Japan.',
