@@ -1,8 +1,8 @@
 import matter from 'gray-matter';
 import { dump, load } from 'js-yaml';
 
-// gray-matter's default engine still calls the removed safeLoad/safeDump API.
-// js-yaml 4's load/dump are safe by default and avoid the old sprintf-js chain.
+// gray-matter's default engine binds the removed safeLoad/safeDump API from its
+// own js-yaml copy, pinned to 4.x by package.json overrides; it never parses here.
 const options = { engines: { yaml: { parse: load, stringify: dump } } };
 
 /** @param {string} source */
