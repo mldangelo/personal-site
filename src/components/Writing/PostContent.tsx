@@ -28,9 +28,8 @@ interface ImageSize {
 interface PostContentProps {
   content: string;
   /**
-   * Intrinsic dimensions per image src, measured at build time by the page.
-   * Every image previously declared 1200x630 regardless of its real shape, so
-   * each one reserved the wrong ratio and shifted the page as it loaded.
+   * Intrinsic dimensions per image src, measured at build time by the page, so
+   * each image reserves its real ratio and the page does not shift as it loads.
    */
   imageSizes?: Record<string, ImageSize>;
   /**
@@ -334,11 +333,10 @@ export default function PostContent({
         // No wrapper element: the default `<div>` around a multi-block document
         // becomes the only child of `.prose`, so any per-block rule written as
         // `.prose > *` silently lands on the wrapper and constrains everything
-        // inside it — which is exactly what stopped a wide figure widening.
+        // inside it.
         wrapper: null,
-        // One unique slug scheme for the whole site. The precomputed plan also
-        // leaves safe aliases for ids that were published under the library's
-        // old default scheme.
+        // One unique slug scheme for the whole site, plus safe aliases for the
+        // published ids that differ from it.
         slugify: headingPlan.slugify,
         overrides: {
           ...headingOverrides(headingPlan.aliases),

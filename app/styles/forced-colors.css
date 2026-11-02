@@ -54,26 +54,6 @@
     background-color: CanvasText;
   }
 
-  .skillbutton {
-    transition: none;
-  }
-
-  /* Keep selection visible even when the UA remaps a button's fill. */
-  .skillbutton-active {
-    text-decoration: underline;
-    text-decoration-thickness: 2px;
-    text-underline-offset: 0.25em;
-  }
-
-  /* Preserve the system selection pair together; remapping only the fill
-     can leave HighlightText unreadable on the UA's text backplate. */
-  .skillbutton-active:not(.skillbutton--all) {
-    forced-color-adjust: none;
-    background-color: Highlight;
-    color: HighlightText;
-    border-color: Highlight;
-  }
-
   /* ===================
      STATE THAT NEEDS MORE THAN COLOUR
      Amber does not survive, so filled-versus-hollow carries the current role;
@@ -111,10 +91,10 @@
     filter: none;
   }
 
-  /* The palette forces the header wash opaque, so its blur buys nothing. */
+  /* The header is fixed over whatever scrolls, so it has to stay opaque. A
+     forced palette swaps a background's colour for Canvas but keeps its alpha,
+     so the system colour is named here rather than left to the base rule. */
   .site-header {
     background-color: Canvas;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
   }
 }

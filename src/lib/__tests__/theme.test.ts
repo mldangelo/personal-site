@@ -6,17 +6,16 @@ import {
   nextThemeChoice,
   RESOLVED_THEME_COLOR_SELECTOR,
   readStoredThemeChoice,
+  readSystemScheme,
   renderedThemeColor,
   resolveTheme,
   storeThemeChoice,
   syncThemeColor,
   THEME_ATTRIBUTE,
   THEME_CHOICE_ATTRIBUTE,
-  THEME_CHOICES,
   THEME_COLOR_META_SELECTOR,
   THEME_COLOR_TOKEN,
   THEME_STORAGE_KEY,
-  type ThemeChoice,
   type ThemeColors,
   themeInitScript,
 } from '../theme';
@@ -42,9 +41,9 @@ const injected: Element[] = [];
  * A media-scoped pair, hoisted into `<head>` the way React hoists the ones a
  * fork might declare through `viewport.themeColor`.
  *
- * The export no longer ships these — its fallback lives in `<noscript>` — but
- * the script-owned tag has to win against them anyway, because that is what
- * makes it durable rather than merely first to run.
+ * The export does not ship these — its fallback lives in `<noscript>` — but the
+ * script-owned tag has to win against them anyway, because that is what makes
+ * it durable rather than merely first to run.
  */
 function addThemeColorMetas(): Element[] {
   const added = ['light', 'dark'].map((scheme) => {
@@ -171,49 +170,14 @@ describe('theme', () => {
   });
 
   describe('nextThemeChoice', () => {
-    it('cycles system to light to dark and back', () => {
-      expect(nextThemeChoice('system')).toBe('light');
-      expect(nextThemeChoice('light')).toBe('dark');
-      expect(nextThemeChoice('dark')).toBe('system');
-    });
-
-    it('walks in the order THEME_CHOICES documents', () => {
-      const walked: ThemeChoice[] = [];
-      let cursor: ThemeChoice = 'system';
-
-      for (let step = 0; step < THEME_CHOICES.length; step += 1) {
-        walked.push(cursor);
-        cursor = nextThemeChoice(cursor);
+    it.each([
+      ['light', ['system', 'dark', 'light', 'system']],
+      ['dark', ['system', 'light', 'dark', 'system']],
+      [null, ['system', 'dark', 'light', 'system']],
+    ] as const)('cycles through all choices for %s', (scheme, choices) => {
+      for (let i = 0; i < choices.length - 1; i += 1) {
+        expect(nextThemeChoice(choices[i], scheme)).toBe(choices[i + 1]);
       }
-
-      expect(walked).toEqual(THEME_CHOICES);
-      expect(cursor).toBe('system');
-    });
-
-    it('reaches every state from every state, so none is a dead end', () => {
-      for (const start of THEME_CHOICES) {
-        const seen = new Set<ThemeChoice>([start]);
-        let cursor = start;
-
-        for (let step = 1; step < THEME_CHOICES.length; step += 1) {
-          cursor = nextThemeChoice(cursor);
-          seen.add(cursor);
-        }
-
-        expect(seen.size).toBe(THEME_CHOICES.length);
-        expect(nextThemeChoice(cursor)).toBe(start);
-      }
-    });
-  });
-
-  describe('THEME_CHOICES', () => {
-    // Two literals hold one order: this array and the `nextThemeChoice` map.
-    // The walk above pins the sequence; this pins where it opens, which is the
-    // half nothing else observes — the rendered states are picked by CSS from
-    // `data-theme-choice`, so their DOM order is invisible to every other test.
-    it('opens on the state a visitor who has never chosen is in', () => {
-      // Nothing stored, per `beforeEach`: where a first-time visitor starts.
-      expect(THEME_CHOICES[0]).toBe(readStoredThemeChoice());
     });
   });
 
@@ -266,6 +230,29 @@ describe('theme', () => {
         expect(readStoredThemeChoice()).toBe('system');
         expect(() => storeThemeChoice('dark')).not.toThrow();
       });
+    });
+  });
+
+  describe('readSystemScheme', () => {
+    it.each([true, false])(
+      'agrees with the bootstrap for prefersDark=%s',
+      (dark) => {
+        setPrefersDark(dark);
+        runThemeInitScript();
+        expect(readSystemScheme()).toBe(dark ? 'dark' : 'light');
+        expect(readSystemScheme()).toBe(themeAttribute());
+      },
+    );
+
+    it('uses the opposite of the bootstrap fallback when matchMedia is absent', () => {
+      Object.defineProperty(window, 'matchMedia', {
+        writable: true,
+        configurable: true,
+        value: undefined,
+      });
+      runThemeInitScript();
+      expect(readSystemScheme()).toBeNull();
+      expect(nextThemeChoice('system', null)).not.toBe(themeAttribute());
     });
   });
 
@@ -417,9 +404,8 @@ describe('theme', () => {
     });
 
     it('leaves the page it was given untouched', () => {
-      // Mutating the tags the document shipped is the mechanism this replaced:
       // React re-creates its own hoisted metas on navigation, so a mutation
-      // there lasts until the visitor follows one link.
+      // there would last only until the visitor follows one link.
       const pair = addThemeColorMetas();
 
       applyThemeColor(document, CHROME_COLORS.dark);

@@ -9,9 +9,7 @@ export const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
  *
  * Returns `false` on the server and for the first client paint so markup
  * matches, then settles to the real preference. It also subscribes to changes,
- * so toggling the OS setting takes effect without a reload — the three
- * hand-rolled `matchMedia` reads this replaced each did something slightly
- * different, and only one of them listened.
+ * so toggling the OS setting takes effect without a reload.
  *
  * `matchMedia` is optional-chained because jsdom does not implement it; a
  * missing preference is treated as "no preference".

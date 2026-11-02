@@ -55,8 +55,7 @@ export function parseImageSize(buffer: Buffer): ImageSize | null {
 /**
  * Intrinsic dimensions of a root-local image in `public/`.
  *
- * Unlike the old nullable API, failures are explicit. A Markdown typo should
- * stop the static build instead of producing a broken image with invented
+ * Failures are explicit. A Markdown typo should stop the static build instead of producing a broken image with invented
  * dimensions. Paths are normalized within `public/`, which prevents traversal
  * through `..` and encoded separators.
  *
@@ -347,7 +346,7 @@ export function readPostImageSizes(
   return sizes;
 }
 
-export function isRootLocalImage(src: string): boolean {
+function isRootLocalImage(src: string): boolean {
   return src.startsWith('/') && !src.startsWith('//');
 }
 

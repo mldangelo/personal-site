@@ -11,7 +11,6 @@ interface SlideMenuProps {
   isOpen: boolean;
   onClose: () => void;
   children: ReactNode;
-  position?: 'left' | 'right';
 }
 
 /**
@@ -24,7 +23,6 @@ export default function SlideMenu({
   isOpen,
   onClose,
   children,
-  position = 'right',
 }: SlideMenuProps) {
   const menuRef = useRef<HTMLDivElement>(null);
   const previousActiveElement = useRef<HTMLElement | null>(null);
@@ -120,7 +118,7 @@ export default function SlideMenu({
         role="dialog"
         aria-modal="true"
         aria-label="Navigation menu"
-        className={`slide-menu slide-menu--${position}${isOpen ? ' slide-menu--open' : ''}`}
+        className={`slide-menu${isOpen ? ' slide-menu--open' : ''}`}
         aria-hidden={!isOpen}
         inert={!isOpen}
         onKeyDown={handleKeyDown}

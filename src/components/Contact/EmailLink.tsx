@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useReducer, useRef } from 'react';
+import { useEffect, useReducer } from 'react';
 
 import profile from '@/data/profile.json';
 import usePrefersReducedMotion from '@/hooks/usePrefersReducedMotion';
@@ -31,21 +31,6 @@ const messages = [
   'thanks',
 ];
 
-function useInterval(callback: () => void, delay: number | null) {
-  const savedCallback = useRef<() => void>(callback);
-
-  useEffect(() => {
-    savedCallback.current = callback;
-  }, [callback]);
-
-  useEffect(() => {
-    if (!delay) return;
-
-    const id = setInterval(() => savedCallback.current?.(), delay);
-    return () => clearInterval(id);
-  }, [delay]);
-}
-
 interface AnimationState {
   idx: number;
   message: string;
@@ -53,18 +38,11 @@ interface AnimationState {
   isActive: boolean;
 }
 
-type AnimationAction =
-  | { type: 'TICK'; loopMessage: boolean; hold: number }
-  | { type: 'PAUSE' }
-  | { type: 'RESUME'; maxIdx: number };
+type AnimationAction = { type: 'TICK' | 'PAUSE' | 'RESUME' };
 
 /**
- * The opening frame of a message.
- *
- * Advancing used to reset to zero characters, so `message` was `''` for one
- * tick at every boundary — and the render fell back to the static address,
- * flashing it fifteen times a cycle. A message now begins already showing its
- * first character, so the prefix is never empty mid-animation.
+ * The opening frame of a message. It already shows the first character, so the
+ * prefix is never empty mid-animation.
  */
 function startOf(idx: number): AnimationState {
   return {
@@ -85,7 +63,8 @@ function animationReducer(
         return state;
       }
 
-      const finished = state.char - action.hold >= messages[state.idx].length;
+      const finished =
+        state.char - HOLD_TICKS_AFTER_MESSAGE >= messages[state.idx].length;
 
       if (!finished) {
         return {
@@ -99,13 +78,8 @@ function animationReducer(
       const nextIdx = state.idx + 1;
 
       if (nextIdx === messages.length) {
-        if (action.loopMessage) {
-          return startOf(0);
-        }
-
-        // Completion is recorded in `idx`, not only in `isActive`. Leaving it
-        // on the last message meant RESUME's `idx < maxIdx` test passed, so a
-        // finished animation re-armed its interval on every mouse-out.
+        // Completion is recorded in `idx`, not only in `isActive`, so RESUME
+        // cannot re-arm a finished animation.
         return { ...state, idx: messages.length, isActive: false };
       }
 
@@ -114,20 +88,11 @@ function animationReducer(
     case 'PAUSE':
       return { ...state, isActive: false };
     case 'RESUME':
-      return {
-        ...state,
-        isActive: state.idx < action.maxIdx,
-      };
-    default:
-      return state;
+      return { ...state, isActive: state.idx < messages.length };
   }
 }
 
-interface EmailLinkProps {
-  loopMessage?: boolean;
-}
-
-export default function EmailLink({ loopMessage = false }: EmailLinkProps) {
+export default function EmailLink() {
   const reducedMotion = usePrefersReducedMotion();
 
   // Opens on the real local part, already complete, so the first thing anyone
@@ -146,12 +111,14 @@ export default function EmailLink({ loopMessage = false }: EmailLinkProps) {
     }
   }, [reducedMotion]);
 
-  useInterval(
-    () => {
-      dispatch({ type: 'TICK', loopMessage, hold: HOLD_TICKS_AFTER_MESSAGE });
-    },
-    state.isActive && !reducedMotion ? ANIMATION_TICK_MS : null,
-  );
+  const animating = state.isActive && !reducedMotion;
+
+  useEffect(() => {
+    if (!animating) return;
+
+    const id = setInterval(() => dispatch({ type: 'TICK' }), ANIMATION_TICK_MS);
+    return () => clearInterval(id);
+  }, [animating]);
 
   // The reducer never yields an empty prefix, so the only reason to override
   // it is reduced motion, where the real address should simply stand.
@@ -160,7 +127,7 @@ export default function EmailLink({ loopMessage = false }: EmailLinkProps) {
   const handlePause = () => dispatch({ type: 'PAUSE' });
   const handleResume = () => {
     if (!reducedMotion) {
-      dispatch({ type: 'RESUME', maxIdx: messages.length });
+      dispatch({ type: 'RESUME' });
     }
   };
 
@@ -170,13 +137,9 @@ export default function EmailLink({ loopMessage = false }: EmailLinkProps) {
       onMouseEnter={handlePause}
       onMouseLeave={handleResume}
     >
-      {/* Always a real link to a real address.
-          The animation cycles through joke aliases, three of which are not
-          valid local-parts ("but not this :(  " among them). Those used to
-          swap the anchor for an aria-disabled, unfocusable <span>, so for
-          roughly a fifth of the cycle the contact page offered no way to
-          reach anyone. The gag is now purely visual: the shown alias is
-          decorative and the destination never changes. */}
+      {/* Always a real link to a real address. The animation cycles through
+          joke aliases, some of which are not valid local-parts, so the shown
+          alias is decorative and the destination never changes. */}
       <a
         href={`mailto:${CONTACT_ADDRESS}`}
         className="contact-email-link"

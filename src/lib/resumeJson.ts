@@ -41,7 +41,7 @@ export const RESUME_JSON_URL = `${SITE_URL}${RESUME_JSON_PATH}`;
  * The published schema this document declares itself against. `$schema` is a
  * root property of JSON Resume v1.0.0, not an extension to it.
  */
-export const RESUME_SCHEMA_URL =
+const RESUME_SCHEMA_URL =
   'https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json';
 
 interface ResumeProfile {
@@ -167,7 +167,7 @@ export function toPlainText(value: string): string {
 }
 
 /**
- * `profile.currentCity` is a single display string ("New York, NY"). It is
+ * `profile.currentCity` is a single display string ("San Francisco"), optionally with a region after a comma. It is
  * split rather than duplicated, and `countryCode` is left off because the data
  * does not state a country — a hardcoded `US` here would silently outlive a
  * move abroad.

@@ -2,7 +2,7 @@ import { act, render, screen } from '@testing-library/react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { AGE_PRECISION_FULL, agePlaceholder } from '@/lib/telemetry';
+import { AGE_PRECISION_FULL, ageAt } from '@/lib/telemetry';
 
 import LiveAge from '../../Stats/LiveAge';
 
@@ -96,7 +96,7 @@ describe('LiveAge', () => {
     render(subject());
 
     const value = document.querySelector('.stat-readout-value');
-    const width = agePlaceholder(AGE_PRECISION_FULL).length;
+    const width = ageAt(Date.now(), AGE_PRECISION_FULL).length;
 
     expect(value?.getAttribute('style')).toContain(
       `--readout-width: ${width}ch`,

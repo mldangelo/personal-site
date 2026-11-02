@@ -3,7 +3,6 @@
 import type { CSSProperties } from 'react';
 
 import useLiveAge from '@/hooks/useLiveAge';
-import { agePlaceholder } from '@/lib/telemetry';
 
 interface LiveAgeProps {
   /** The coarse age snapshot rendered by the server. */
@@ -27,7 +26,8 @@ type ReadoutStyle = CSSProperties & {
  */
 export default function LiveAge({ initial, note, precision }: LiveAgeProps) {
   const { ref, live } = useLiveAge<HTMLSpanElement>(precision, initial);
-  const width = Math.max(initial.length, agePlaceholder(precision).length);
+  // Two-digit years, the point, and the decimals the timer will show.
+  const width = Math.max(initial.length, 3 + precision);
   const style: ReadoutStyle = { '--readout-width': `${width}ch` };
 
   return (
