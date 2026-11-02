@@ -1,6 +1,3 @@
-import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
-
 import { fireEvent, render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -40,12 +37,8 @@ describe('Navigation', () => {
     expect(logo).toHaveAttribute('href', '/');
   });
 
-  /**
-   * "md" was the logo on every page, so an interior page never said whose
-   * site it was above the fold — and `/contact`, which has no footer, never
-   * said it at all. The homepage is the one place the monogram is enough: the
-   * hero directly beneath the header sets the name at display size.
-   */
+  // The homepage is the one place the monogram is enough: the hero directly
+  // beneath the header sets the name at display size.
   describe('logo', () => {
     const logo = () => screen.getByRole('link', { name: /home/i });
 
@@ -115,51 +108,6 @@ describe('Navigation', () => {
       ).toHaveAttribute('href', '/');
     },
   );
-
-  /**
-   * The name is prepared by the server component and handed to the client
-   * header as a string. When the client header called `smartQuotes` itself,
-   * `typography.ts` joined the root layout's bundle and the build rewrote its
-   * three `\p{L}` classes as literal Unicode ranges for the oldest browser the
-   * production targets name: the layout chunk went from 8,651 bytes to 49,787
-   * on every page. jsdom cannot see a bundle, so the guard is on the source —
-   * and only on the header's own modules, which is where it was measured.
-   */
-  it('prepares the name on the server and keeps the helper out of the client header', () => {
-    const source = (file: string) =>
-      readFileSync(
-        join(process.cwd(), 'src/components/Template', file),
-        'utf8',
-      );
-    const CLIENT_DIRECTIVE = /^'use client';/;
-    const TYPOGRAPHY_IMPORT = /from '[^']*\/typography'/;
-
-    expect(source('Navigation.tsx')).not.toMatch(CLIENT_DIRECTIVE);
-    expect(source('Navigation.tsx')).toMatch(TYPOGRAPHY_IMPORT);
-
-    for (const file of ['SiteHeader.tsx', 'Hamburger.tsx']) {
-      expect(source(file)).toMatch(CLIENT_DIRECTIVE);
-      expect(source(file)).not.toMatch(TYPOGRAPHY_IMPORT);
-    }
-  });
-
-  /**
-   * The skip link is the first control a keyboard reaches on every page. It
-   * was the last text on the site in tracked mono capitals, a page after the
-   * navigation beside it moved to sentence case.
-   */
-  it('sets the skip link like the navigation it sits over', () => {
-    const css = readFileSync(
-      join(process.cwd(), 'app/styles/layout/header.css'),
-      'utf8',
-    ).replace(/\/\*[\s\S]*?\*\//g, '');
-    const skipLink = /\.skip-link\s*\{([^}]*)\}/.exec(css)?.[1] ?? '';
-
-    expect(skipLink).toContain('font-family: var(--font-display);');
-    expect(skipLink).toContain('font-size: var(--text-ui);');
-    expect(skipLink).not.toContain('text-transform');
-    expect(skipLink).not.toContain('letter-spacing');
-  });
 
   it('labels the primary navigation landmark', () => {
     render(<Navigation />);

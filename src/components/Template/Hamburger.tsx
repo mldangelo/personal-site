@@ -7,21 +7,12 @@ import { createPortal } from 'react-dom';
 
 import routes from '../../data/routes';
 import { isActiveRoute } from '../../lib/routes';
+import { smartQuotes } from '../../lib/typography';
 import SlideMenu from './SlideMenu';
 
 const MENU_ID = 'mobile-nav-menu';
 
-interface HamburgerProps {
-  /**
-   * The author's name as a reader should see it. The index entry below is
-   * that name — `routes` labels it `AUTHOR_NAME`, apostrophe as typed — so it
-   * takes the form the header already holds for its wordmark, prepared on the
-   * server to keep the helper that makes it out of the browser.
-   */
-  name: string;
-}
-
-export default function Hamburger({ name }: HamburgerProps) {
+export default function Hamburger() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -62,7 +53,7 @@ export default function Hamburger({ name }: HamburgerProps) {
                   aria-current={active ? 'page' : undefined}
                 >
                   <span className={l.index ? 'index-li' : undefined}>
-                    {l.index ? name : l.label}
+                    {smartQuotes(l.label)}
                   </span>
                 </Link>
               </li>

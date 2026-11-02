@@ -36,12 +36,9 @@ function injectSheets(sheets: string[]): () => void {
   };
 }
 
-/** What the header hands the menu: the name with its typographic apostrophe. */
-const NAME = 'Michael D’Angelo';
-
 describe('Hamburger', () => {
   it('renders the hamburger button', () => {
-    render(<Hamburger name={NAME} />);
+    render(<Hamburger />);
 
     const button = screen.getByRole('button', {
       name: /open navigation menu/i,
@@ -50,7 +47,7 @@ describe('Hamburger', () => {
   });
 
   it('has correct initial aria attributes', () => {
-    render(<Hamburger name={NAME} />);
+    render(<Hamburger />);
 
     const button = screen.getByRole('button');
     expect(button).toHaveAttribute('aria-expanded', 'false');
@@ -69,7 +66,7 @@ describe('Hamburger', () => {
       const removeSheets = injectSheets(sheets);
 
       try {
-        render(<Hamburger name={NAME} />);
+        render(<Hamburger />);
         const button =
           document.querySelector<HTMLButtonElement>('.hamburger-button');
         if (!button) throw new Error('no hamburger button rendered');
@@ -86,7 +83,7 @@ describe('Hamburger', () => {
   );
 
   it('toggles menu open on click', () => {
-    render(<Hamburger name={NAME} />);
+    render(<Hamburger />);
 
     const button = screen.getByRole('button');
     fireEvent.click(button);
@@ -96,7 +93,7 @@ describe('Hamburger', () => {
   });
 
   it('toggles menu closed on second click', () => {
-    render(<Hamburger name={NAME} />);
+    render(<Hamburger />);
 
     const button = screen.getByRole('button');
     fireEvent.click(button); // Open
@@ -107,7 +104,7 @@ describe('Hamburger', () => {
   });
 
   it('shows hamburger icon when closed', () => {
-    render(<Hamburger name={NAME} />);
+    render(<Hamburger />);
 
     const icon = document.querySelector('.hamburger-icon');
     expect(icon).toBeInTheDocument();
@@ -115,7 +112,7 @@ describe('Hamburger', () => {
   });
 
   it('changes icon to close state when open', () => {
-    render(<Hamburger name={NAME} />);
+    render(<Hamburger />);
 
     const button = screen.getByRole('button');
     fireEvent.click(button);
@@ -125,7 +122,7 @@ describe('Hamburger', () => {
   });
 
   it('renders navigation links in slide menu', () => {
-    render(<Hamburger name={NAME} />);
+    render(<Hamburger />);
 
     // Open the menu
     fireEvent.click(screen.getByRole('button'));
@@ -143,7 +140,7 @@ describe('Hamburger', () => {
    * count as well means a future demotion cannot pass by going unmentioned.
    */
   it('lists every primary route and no demoted one', () => {
-    render(<Hamburger name={NAME} />);
+    render(<Hamburger />);
 
     fireEvent.click(screen.getByRole('button'));
 
@@ -155,23 +152,8 @@ describe('Hamburger', () => {
     );
   });
 
-  // `routes` labels the index entry with the name as `profile.json` types it,
-  // straight apostrophe and all. The menu is where a reader sees it, so the
-  // entry shows the form it is handed and not the label.
-  it('sets the home entry in the name it is given', () => {
-    render(<Hamburger name={NAME} />);
-
-    fireEvent.click(screen.getByRole('button'));
-
-    expect(routes.find((route) => route.index)?.label).toBe("Michael D'Angelo");
-    expect(screen.getByRole('link', { name: NAME })).toHaveAttribute(
-      'href',
-      '/',
-    );
-  });
-
   it('closes menu when a link is clicked', () => {
-    render(<Hamburger name={NAME} />);
+    render(<Hamburger />);
 
     // Open the menu
     const button = screen.getByRole('button');

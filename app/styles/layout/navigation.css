@@ -15,9 +15,7 @@
 }
 
 /* The home link starts on the left rail: its text box is its own left edge.
-   It used to be centred in a 44px box — half of the balancing act that kept
-   the nav centred — which left the monogram 2px inside the rail. The minimums
-   are the hit target and nothing else. */
+   The minimums are the hit target and nothing else. */
 .site-logo {
   position: relative;
   display: flex;
@@ -52,9 +50,8 @@
 }
 
 /* Sentence-case display type keeps navigation distinct from data labels.
-   The gap closes up as the header narrows. At tablet widths the centred nav
-   sits near the wordmark, and at the full 1.75rem its items stood almost as
-   far from each other as the first stood from the name, which made the name
+   The gap closes up as the header narrows, so at tablet widths the items stay
+   closer to each other than the first is to the wordmark, which would otherwise
    read as one of them. */
 .nav-links {
   display: none;
@@ -89,11 +86,9 @@
 }
 
 /* The bar under an active item lies over the header's own hairline, so it
-   reads as part of the drawn grid. It used to sit at the bottom of the 44px
-   target: 12.5px under the label and 10.5px above the hairline, attached to
-   neither. The target is centred in the header's content box, which is the
-   header less its hairline, so the offset is the distance from the target's
-   bottom edge down to the header's. */
+   reads as part of the drawn grid. The target is centred in the header's
+   content box, which is the header less its hairline, so the offset is the
+   distance from the target's bottom edge down to the header's. */
 .nav-link::after {
   content: '';
   position: absolute;
@@ -126,9 +121,8 @@
 }
 
 /* The header's text links take their focus ring around the label, not around
-   the 44px target. Drawn on the target, the ring was 56px tall in a 64px
-   header and ended 2.5px above the bar on the hairline. This box replaces the
-   outline it removes: with its 3px offset the ring is 2rem tall, centred on
+   the 44px target, which nearly fills the header. This box replaces the outline
+   it removes: with its 3px offset the ring is 2rem tall, centred on
    the target, with half a rem of air at each end of the label. The offset and
    radius are the global ring's, so its corners match the monogram's and the
    theme toggle's, which nearly fill their targets and keep the ring there. */
@@ -198,8 +192,7 @@
 }
 
 /* Hover takes the accent, as focus does and as the menu trigger beside it
-   does. It used to set the ink the glyph already had over a fill in the
-   header's own colour, so in the light theme the pointer changed nothing. */
+   does. */
 .theme-toggle:hover,
 .theme-toggle:focus-visible {
   color: var(--color-accent);
@@ -230,8 +223,7 @@
   /* The same share as the brand track opposite, so the nav between them sits
      on the header's centre whatever either side holds: a two-letter monogram
      on the homepage, the name everywhere else, no theme control at all
-     without JavaScript. Forcing both sides to 44px did that only for as long
-     as the logo was 44px wide. */
+     without JavaScript. */
   .nav-actions {
     flex: 1 1 0;
     justify-content: flex-end;
