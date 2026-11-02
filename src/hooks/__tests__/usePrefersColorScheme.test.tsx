@@ -89,8 +89,7 @@ describe('usePrefersColorScheme', () => {
   });
 
   it('follows the device when it changes, without a remount', () => {
-    // The read this replaced sampled once at mount, so a visitor who arrived
-    // in the morning stayed light when their device flipped at sunset.
+    // A visitor who arrives in the morning follows their device at sunset.
     const media = stubColorScheme(false);
     render(<Scheme />);
 

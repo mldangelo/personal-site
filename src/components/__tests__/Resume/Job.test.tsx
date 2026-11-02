@@ -31,11 +31,73 @@ describe('Job', () => {
     );
   });
 
-  it('formats date range correctly', () => {
+  /**
+   * Short months. Spelled out, "January 2014 – January 2022" broke over two
+   * lines of the date gutter while "March 2026 – Present" sat on one.
+   */
+  it('sets the range in short months and keeps the full dates for machines', () => {
     render(<Job data={mockJob} now={NOW} />);
 
-    expect(screen.getByText(/january 2020/i)).toBeInTheDocument();
-    expect(screen.getByText(/june 2023/i)).toBeInTheDocument();
+    const dates = [...document.querySelectorAll('.daterange time')];
+
+    expect(dates.map((date) => date.textContent)).toEqual([
+      'Jan 2020',
+      'Jun 2023',
+    ]);
+    expect(dates.map((date) => date.getAttribute('datetime'))).toEqual([
+      '2020-01-15',
+      '2023-06-30',
+    ]);
+  });
+
+  it('abbreviates the longest month names too', () => {
+    render(
+      <Job
+        data={{ ...mockJob, startDate: '2015-09-01', endDate: '2016-02-01' }}
+        now={NOW}
+      />,
+    );
+
+    expect(
+      [...document.querySelectorAll('.daterange time')].map(
+        (date) => date.textContent,
+      ),
+    ).toEqual(['Sep 2015', 'Feb 2016']);
+  });
+
+  it('reads the range aloud as "to", with the dash kept from a screen reader', () => {
+    render(<Job data={mockJob} now={NOW} />);
+
+    const range = document.querySelector('.daterange') as HTMLElement;
+
+    expect(range.querySelector('.daterange-sep')).toHaveAttribute(
+      'aria-hidden',
+      'true',
+    );
+    expect(range.querySelector('.daterange-sep + .sr-only')?.textContent).toBe(
+      ' to ',
+    );
+  });
+
+  // The stylesheet places the tick against the date line, so that is where
+  // it has to be: moved out, it would be positioned against the whole entry.
+  it('keeps the spine tick inside the date line it marks', () => {
+    render(<Job data={mockJob} now={NOW} />);
+
+    expect(document.querySelector('.daterange > .job-marker')).toHaveAttribute(
+      'aria-hidden',
+      'true',
+    );
+  });
+
+  // Only layout separated the two, so the heading was named as one phrase:
+  // "UB Nanosatellite Program Program Manager".
+  it('names the heading with the company and the role apart', () => {
+    render(<Job data={mockJob} now={NOW} />);
+
+    expect(screen.getByRole('heading', { level: 3 }).textContent).toBe(
+      'Acme Corp, Senior Engineer',
+    );
   });
 
   it('shows Present for current job (no end date)', () => {
@@ -142,5 +204,113 @@ describe('Job', () => {
     expect(duration?.querySelector('.sr-only')).toHaveTextContent(
       'Duration: less than 1 month',
     );
+  });
+
+  /**
+   * A summary written on one line parses as inline content, which came back
+   * with no paragraph around it: the text reached the page bare, outside
+   * every `.summary` rule.
+   */
+  it('wraps a one-line summary in its paragraph like any other', () => {
+    render(
+      <Job
+        data={{ ...mockJob, summary: 'Led a 60-person student team.' }}
+        now={NOW}
+      />,
+    );
+
+    expect(document.querySelector('p.summary')?.textContent).toBe(
+      'Led a 60-person student team.',
+    );
+  });
+
+  describe('typographic quotes', () => {
+    it('sets them in highlights', () => {
+      render(
+        <Job
+          data={{
+            ...mockJob,
+            highlights: [
+              "Worked on Facebook's first GPU compute team.",
+              'Shipped the "detectors" people asked for.',
+            ],
+          }}
+          now={NOW}
+        />,
+      );
+
+      expect(
+        [...document.querySelectorAll('.points li')].map(
+          (item) => item.textContent,
+        ),
+      ).toEqual([
+        'Worked on Facebook’s first GPU compute team.',
+        'Shipped the “detectors” people asked for.',
+      ]);
+    });
+
+    it('sets them in the company and the role', () => {
+      render(
+        <Job
+          data={{
+            ...mockJob,
+            name: "McKinsey's Lab",
+            position: "Founder's Associate",
+          }}
+          now={NOW}
+        />,
+      );
+
+      expect(document.querySelector('.job-company')?.textContent).toBe(
+        'McKinsey’s Lab',
+      );
+      expect(document.querySelector('.job-position')?.textContent).toBe(
+        'Founder’s Associate',
+      );
+    });
+
+    /**
+     * The summaries are Markdown with inline anchors whose `href` is quoted
+     * with apostrophes. Converting the source string turns those into part of
+     * the address — `’https://…’` — and every citation becomes a dead
+     * relative link, so the conversion is per text node, after parsing.
+     */
+    it('sets them in a summary without reaching into its links', () => {
+      render(
+        <Job
+          data={{
+            ...mockJob,
+            summary: `Backed by <a href='https://example.com/fund'>Acme's fund</a>,
+              and it's what "everyone" used.`,
+          }}
+          now={NOW}
+        />,
+      );
+
+      const summary = document.querySelector('p.summary') as HTMLElement;
+      const link = summary.querySelector('a') as HTMLAnchorElement;
+
+      expect(link.getAttribute('href')).toBe('https://example.com/fund');
+      expect(link.textContent).toBe('Acme’s fund');
+      expect(summary.textContent?.replace(/\s+/g, ' ')).toBe(
+        'Backed by Acme’s fund, and it’s what “everyone” used.',
+      );
+    });
+
+    it('leaves code in a summary as it was written', () => {
+      render(
+        <Job
+          data={{
+            ...mockJob,
+            summary: "It's installed with `npm i 'left-pad'` and nothing else.",
+          }}
+          now={NOW}
+        />,
+      );
+
+      expect(document.querySelector('p.summary')?.textContent).toBe(
+        "It’s installed with npm i 'left-pad' and nothing else.",
+      );
+    });
   });
 });

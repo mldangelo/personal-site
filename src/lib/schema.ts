@@ -29,8 +29,8 @@ export const PERSON_ID = `${SITE_URL}/#person`;
 export const WEBSITE_ID = `${SITE_URL}/#website`;
 export const BLOG_ID = `${SITE_URL}/writing/#blog`;
 
-export const SITE_LANGUAGE = 'en-US';
-export const SITE_IMAGE = `${SITE_URL}${SITE_IMAGE_PATH}`;
+const SITE_LANGUAGE = 'en-US';
+const SITE_IMAGE = `${SITE_URL}${SITE_IMAGE_PATH}`;
 export const HOME_URL = `${SITE_URL}/`;
 
 // Shared so the /writing metadata and the Blog node stay in sync.
@@ -45,13 +45,13 @@ interface Crumb {
 }
 
 /** Reference to the canonical Person node. */
-export const personRef = () => ({ '@id': PERSON_ID });
+const personRef = () => ({ '@id': PERSON_ID });
 
 /** Reference to the canonical WebSite node. */
-export const websiteRef = () => ({ '@id': WEBSITE_ID });
+const websiteRef = () => ({ '@id': WEBSITE_ID });
 
 /** Reference to the canonical Blog node. */
-export const blogRef = () => ({ '@id': BLOG_ID });
+const blogRef = () => ({ '@id': BLOG_ID });
 
 /**
  * The canonical Person entity. Emitted site-wide so every page anchors to the

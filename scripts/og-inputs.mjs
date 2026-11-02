@@ -18,7 +18,6 @@ import { parseFrontmatter } from '../src/lib/frontmatter.mjs';
 import { readMarkdownReferences } from '../src/lib/markdown-assets.mjs';
 import { validatePostFrontmatterData } from '../src/lib/post-frontmatter.mjs';
 import { readImageRenderer } from './lib/image-renderer.mjs';
-import { ogProfileSnapshot } from './og-profile.mjs';
 
 /** Every card is a `summary_large_image`, so every card is this size. */
 export const CARD_SIZE = { width: 1200, height: 630 };
@@ -76,10 +75,24 @@ const GENERATOR_SOURCES = [
   'scripts/og-inputs.mjs',
   'src/lib/frontmatter.mjs',
   'scripts/og-layout.mjs',
-  'scripts/og-profile.mjs',
   'src/lib/markdown-assets.mjs',
   'src/lib/post-frontmatter.mjs',
 ];
+
+/**
+ * The profile fields the share card actually renders. Adding a field here is
+ * what makes a change to that field invalidate the card.
+ */
+function ogProfileSnapshot(profile) {
+  return {
+    name: profile.name,
+    employer: profile.employer,
+    focus: profile.focus,
+    countriesVisited: profile.countriesVisited,
+    computingSince: profile.computingSince,
+    currentCity: profile.currentCity,
+  };
+}
 
 const CONTENT_DIRECTORY = join('content', 'writing');
 const COLOR_TOKENS_FILE = join('app', 'styles', 'tokens', 'colors.css');

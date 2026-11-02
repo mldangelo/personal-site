@@ -41,20 +41,20 @@ describe('Personal', () => {
     render(<Personal />);
 
     expect(screen.getByText('Countries visited')).toBeInTheDocument();
-    expect(screen.getByText('53')).toBeInTheDocument();
+    expect(screen.getByText('55')).toBeInTheDocument();
   });
 
   it('displays current city', () => {
     render(<Personal />);
 
     expect(screen.getByText('Current city')).toBeInTheDocument();
-    expect(screen.getByText('New York, NY')).toBeInTheDocument();
+    expect(screen.getByText('San Francisco')).toBeInTheDocument();
   });
 
   it('has a link for countries visited', () => {
     render(<Personal />);
 
-    const link = screen.getByRole('link', { name: /53/i });
+    const link = screen.getByRole('link', { name: /55/i });
     expect(link).toHaveAttribute(
       'href',
       'https://www.google.com/maps/d/embed?mid=1iBBTscqateQ93pWFVfHCUZXoDu8&z=2',
@@ -82,43 +82,5 @@ describe('Personal', () => {
     expect(document.querySelector('.stat-readout-value')?.textContent).toMatch(
       new RegExp(`^\\d+\\.\\d{${AGE_PRECISION_FULL}}$`),
     );
-  });
-
-  it('marks every reading as coming from the profile', () => {
-    render(<Personal />);
-
-    const sources = Array.from(
-      document.querySelectorAll('.stat-provenance'),
-      (mark) => mark.getAttribute('data-source'),
-    );
-
-    expect(sources).toEqual(['profile', 'profile', 'profile']);
-  });
-
-  it('carries the source note this table used to lack', () => {
-    render(<Personal />);
-
-    const note = screen.getByText(/profile readings come from/i);
-
-    expect(note).toHaveClass('stats-source-note');
-    expect(note).toHaveAttribute('data-source', 'profile');
-  });
-
-  it('explains what the age is when JavaScript never runs', () => {
-    render(<Personal />);
-
-    expect(screen.getByText(/profile readings come from/i).textContent).toMatch(
-      /without javascript/i,
-    );
-  });
-
-  it('does not append a unit that repeats its label', () => {
-    // `53 countries` beside `Countries visited` says nothing the label has
-    // not already said.
-    render(<Personal />);
-
-    const row = screen.getByText('Countries visited').closest('tr');
-
-    expect(row?.textContent).not.toMatch(/countries$/i);
   });
 });

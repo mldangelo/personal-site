@@ -38,9 +38,7 @@
 }
 
 /* An opaque paper header with a structural hairline. The colour is the page's
-   own, which `theme-color` also gives the browser chrome above it. It was an
-   88% wash leaning on a `backdrop-filter` the build shipped as `-webkit-`
-   only, so outside Safari the hero name and article text read through it. */
+   own, which `theme-color` also gives the browser chrome above it. */
 .site-header {
   align-items: center;
   background-color: var(--color-bg-alt);
@@ -112,16 +110,8 @@
   transition: transform var(--duration-normal) var(--ease-menu);
   width: 300px;
   z-index: var(--z-menu);
-}
-
-.slide-menu--right {
   right: 0;
   transform: translateX(100%);
-}
-
-.slide-menu--left {
-  left: 0;
-  transform: translateX(-100%);
 }
 
 .slide-menu--open {
@@ -313,7 +303,7 @@
   background-color: transparent;
 }
 
-/* The mobile menu previously gave no indication of where you were. */
+/* Where you are, in the mobile menu. */
 .hamburger-ul li a.active span {
   color: var(--color-accent);
 }
