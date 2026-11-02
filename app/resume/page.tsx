@@ -69,12 +69,10 @@ export default function ResumePage() {
     <PageWrapper>
       <section className="resume-page">
         <header className="resume-header">
-          {/* Print-only, and what the printed page is titled with. The site
-              header and footer are the only places the name appears on
-              screen, and neither is printed, so a saved PDF was headed
-              "Resume" and never said whose. Real markup rather than CSS
-              `content`, like the contact line below, so it can be selected
-              and copied. It takes the heading role too: the <h1> below is
+          {/* The printed page's title: the site header and footer carry the
+              name on screen, and neither is printed. Real markup rather than
+              CSS `content`, like the contact line below, so it can be selected
+              and copied. It takes the heading role because the <h1> below is
               hidden on paper, and without one here the tagged PDF a browser
               saves starts at H2. Not a second <h1>, so anything that counts
               tags still finds one page title. */}

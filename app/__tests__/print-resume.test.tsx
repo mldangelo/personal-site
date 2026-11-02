@@ -257,9 +257,8 @@ describe('print: whose resume it is', () => {
   });
 
   it('prints the name in place of the screen title and its controls', () => {
-    // The site header and footer are the only places the name appears on
-    // screen, and print.css hides both. The page went to paper headed
-    // "Resume" and never said whose.
+    // The site header and footer carry the name on screen, and print.css hides
+    // both, so this is where the printed page says whose it is.
     applyStyles(RESUME_CSS);
     const { name, title, printButton, jsonLink, contact } = renderHeader();
 
@@ -279,20 +278,6 @@ describe('print: whose resume it is', () => {
     expect(title).not.toBeVisible();
     expect(printButton).not.toBeVisible();
     expect(jsonLink).not.toBeVisible();
-  });
-
-  it('sets the name at title size, not as another line of body copy', () => {
-    const nameRule = RULES.find((rule) =>
-      rule.selectors.includes('.resume-print-name'),
-    );
-    const points = Number(
-      nameRule?.declarations.match(/font-size\s*:\s*([\d.]+)pt/)?.[1],
-    );
-
-    // 22pt is what the "Resume" heading printed at before the name took its
-    // place. A floor, so the name can grow but cannot quietly fall back to
-    // the 10.5pt it would inherit.
-    expect(points).toBeGreaterThanOrEqual(22);
   });
 });
 

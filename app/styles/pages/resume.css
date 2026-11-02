@@ -106,8 +106,8 @@
 }
 
 /* Small standalone controls, not annotation and not prose links: display type
-   in sentence case, a control-weight border, and the 44px target the 35px
-   mono chip fell short of. `background-image: none` opts the link out of the
+   in sentence case, a control-weight border, and a 44px target.
+   `background-image: none` opts the link out of the
    accent underline `base/links.css` paints. */
 .resume-json-link,
 .resume-print-button {

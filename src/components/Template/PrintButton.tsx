@@ -8,10 +8,6 @@ interface PrintButtonProps {
   className?: string;
 }
 
-function printPage(): void {
-  window.print();
-}
-
 /**
  * Opens the browser's print dialog, which is also where "Save as PDF" lives.
  *
@@ -27,7 +23,7 @@ function printPage(): void {
  */
 export default function PrintButton({ children, className }: PrintButtonProps) {
   return (
-    <button type="button" className={className} onClick={printPage}>
+    <button type="button" className={className} onClick={() => window.print()}>
       {children}
     </button>
   );
