@@ -178,6 +178,24 @@ function baseWebPage(
   };
 }
 
+/** The page node and breadcrumb every top-level section publishes. */
+export function sectionPageNodes(
+  buildPage: (options: PageNodeOptions) => SchemaNode,
+  path: string,
+  name: string,
+  description: string,
+): [SchemaNode, SchemaNode] {
+  const url = `${SITE_URL}${path}`;
+
+  return [
+    buildPage({ url, name, description, hasBreadcrumb: true }),
+    breadcrumbNode(url, [
+      { name: 'Home', url: HOME_URL },
+      { name, url },
+    ]),
+  ];
+}
+
 /** A WebPage subtype describing a page about a person (e.g. home, about). */
 export function profilePageNode(options: PageNodeOptions): SchemaNode {
   return {

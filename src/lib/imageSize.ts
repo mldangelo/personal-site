@@ -1,5 +1,5 @@
 import { readFileSync } from 'node:fs';
-import { isAbsolute, relative, resolve, sep } from 'node:path';
+import { resolve } from 'node:path';
 
 import { readMarkdownImageSources } from './markdown-assets.mjs';
 
@@ -134,27 +134,8 @@ function resolvePublicImage(publicPath: string): string {
       `Local image resolves outside public/: ${publicPath}`,
     );
   }
-  const unresolvedPath = resolve(publicDirectory, `.${pathname}`);
 
-  if (!isWithin(publicDirectory, unresolvedPath)) {
-    throw new ImageSizeError(
-      'OUTSIDE_PUBLIC',
-      publicPath,
-      `Local image resolves outside public/: ${publicPath}`,
-    );
-  }
-
-  return unresolvedPath;
-}
-
-function isWithin(directory: string, candidate: string): boolean {
-  const pathFromDirectory = relative(directory, candidate);
-  return (
-    pathFromDirectory === '' ||
-    (!pathFromDirectory.startsWith(`..${sep}`) &&
-      pathFromDirectory !== '..' &&
-      !isAbsolute(pathFromDirectory))
-  );
+  return resolve(publicDirectory, `.${pathname}`);
 }
 
 function getNodeErrorCode(error: unknown): string | undefined {
