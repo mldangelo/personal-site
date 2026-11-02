@@ -126,72 +126,102 @@
   margin: 0;
 }
 
-/* Section index — a row of mono labels on a rule, not a pill bar. */
+/* Section index — sentence-case labels on a rule, not a pill bar. The About
+   page's index in pages/content.css is the same design.
+
+   The bar is the sticky, opaque part and the row inside it is the part that
+   scrolls and fades: a mask on the bar itself would let the page show through
+   its faded edges. */
 .resume-nav {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  /* Row gap matters: the links wrap below ~375px, and the active indicator
-     used to be positioned relative to the bar rather than the link, so it
-     drew straight through the second row. */
-  gap: 0.5rem 1.75rem;
-  margin-top: var(--spacing-8);
-  margin-bottom: var(--spacing-4);
   position: sticky;
   top: var(--header-height);
   z-index: var(--z-sticky);
+  margin: var(--spacing-8) 0 var(--spacing-4);
   background: var(--color-bg-alt);
-  padding: 0.75rem 0;
-  border-top: var(--rule) solid var(--color-border);
-  border-bottom: var(--rule) solid var(--color-border);
+  border-block: var(--rule) solid var(--color-border);
 }
 
-@media (max-width: 735px) {
-  .resume-nav {
-    top: var(--header-height-mobile);
-    gap: 0 1rem;
-  }
+/* One row at every width, never wrapped: a second row of 44px targets makes
+   the bar 90px, and a heading on the About page parks only 88px under the
+   header. The links are spaced by their own padding so their targets meet,
+   and the row hangs that padding outside both rails to keep the first label
+   on the page edge. `scroll-padding` is how far a focused or current link is
+   kept from an edge, which is the width of the fades. */
+.resume-nav-row {
+  display: flex;
+  margin: 0 -0.5rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  scroll-padding: 0 2rem;
+  scroll-behavior: smooth;
 }
 
+/* The focus ring is drawn inside the target. The default one sits outside it,
+   where the scrolling row clips it and the header covers what is left. The
+   colour change eases through the transition every link already has. */
 .resume-nav-link {
   position: relative;
-  padding: 0.25rem 0;
-  font-family: var(--font-mono);
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0 0.5rem;
+  font-family: var(--font-display);
   font-size: var(--text-ui);
   font-weight: var(--font-weight-medium);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
   color: var(--color-fg-light);
-  background: transparent;
   background-image: none;
-  border: none;
-  text-decoration: none;
-  transition: color var(--duration-fast) var(--ease-out);
+  white-space: nowrap;
+  outline-offset: -4px;
 }
 
-.resume-nav-link:hover {
+.resume-nav-link:hover,
+.resume-nav-link:focus-visible {
   color: var(--color-fg-bold);
-  background: transparent;
 }
 
 .resume-nav-link.active {
   color: var(--color-accent);
 }
 
-/* Anchored to the link itself, so a wrapped row underlines its own item. */
+/* Anchored to the link and inset to its label. A border, not a background:
+   a forced palette keeps border colours and flattens fills. */
 .resume-nav-link.active::after {
   content: '';
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: var(--rule-strong);
-  background: var(--color-accent);
+  inset: auto 0.5rem 0;
+  border-bottom: var(--rule-strong) solid var(--color-accent);
 }
 
-.resume-nav-link:focus-visible {
-  outline: var(--rule-strong) solid var(--color-focus-ring);
-  outline-offset: 3px;
+@media (max-width: 735px) {
+  /* The timeline hangs its markers a few pixels off the left rail here, and
+     each one slid past the end of the bar as a stray half-circle beside the
+     first label. The shadow is the bar's own colour, carried out over the
+     row's overhang. */
+  .resume-nav {
+    top: var(--header-height-mobile);
+    box-shadow: -0.5rem 0 var(--color-bg-alt);
+  }
+
+  /* The labels outrun a phone, so each edge of the row fades (`#0000` is
+     transparent) while there is more beyond it. The left one grows with
+     `--scrolled`, which `useActiveSection` keeps at the row's scroll offset:
+     nothing is hidden there until the row has moved. The right one is fixed,
+     and the spacer is as wide as it is, so the last label clears it once the
+     row is scrolled to its end. */
+  .resume-nav-row {
+    mask-image: linear-gradient(
+      90deg,
+      #0000,
+      #000 min(var(--scrolled, 0px), 2rem) calc(100% - 2rem),
+      #0000
+    );
+  }
+
+  .resume-nav-row::after {
+    content: '';
+    flex: none;
+    width: 2rem;
+  }
 }
 
 .resume-content {

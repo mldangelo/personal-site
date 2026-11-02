@@ -2,6 +2,7 @@
 
 import Markdown from 'markdown-to-jsx';
 import { Children, type ReactNode } from 'react';
+import useActiveSection from '@/hooks/useActiveSection';
 import { createUniqueHeadingIds } from '@/lib/anchors';
 import { extractLogMarker } from '@/lib/logEntry';
 
@@ -150,6 +151,9 @@ function isLogSection(title: string) {
 
 export default function AboutContent({ markdown }: AboutContentProps) {
   const { intro, sections } = splitAboutMarkdown(markdown);
+  const { activeId, navRef, onLinkClick } = useActiveSection(
+    sections.map((section) => section.id),
+  );
 
   return (
     <article className="about-content">
@@ -159,16 +163,33 @@ export default function AboutContent({ markdown }: AboutContentProps) {
         </div>
       ) : null}
       {sections.length > 0 ? (
-        <nav className="about-section-nav" aria-label="About sections">
-          {sections.map((section) => (
-            <a
-              key={section.id}
-              href={`#${section.id}`}
-              className="about-section-nav-link"
-            >
-              {section.title}
-            </a>
-          ))}
+        <nav
+          ref={navRef}
+          className="about-section-nav"
+          aria-label="About sections"
+        >
+          {/* The bar stays opaque while this row scrolls and fades inside it. */}
+          <div className="about-section-nav-row">
+            {sections.map((section) => {
+              const current = activeId === section.id;
+
+              return (
+                <a
+                  key={section.id}
+                  href={`#${section.id}`}
+                  className={
+                    current
+                      ? 'about-section-nav-link active'
+                      : 'about-section-nav-link'
+                  }
+                  aria-current={current ? 'location' : undefined}
+                  onClick={onLinkClick}
+                >
+                  {section.title}
+                </a>
+              );
+            })}
+          </div>
         </nav>
       ) : null}
       {sections.map((section) => (
