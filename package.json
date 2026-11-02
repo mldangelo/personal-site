@@ -13,7 +13,6 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build --webpack",
-    "start": "next start",
     "lint": "biome check .",
     "type-check": "tsc --noEmit",
     "format": "biome format --write . && prettier --write \"**/*.{md,css,scss}\"",
@@ -21,8 +20,6 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "test:ui": "vitest --ui",
-    "predeploy": "npm run build",
     "analyze": "ANALYZE=true npm run build",
     "og": "node scripts/generate-og.mjs",
     "og:check": "npm run og:check:ledger && npm run og:check:render",
