@@ -88,11 +88,12 @@
 /* The bar under an active item lies over the header's own hairline, so it
    reads as part of the drawn grid. The target is centred in the header's
    content box, which is the header less its hairline, so the offset is the
-   distance from the target's bottom edge down to the header's. */
+   distance from the target's bottom edge down to the header's. The percentage
+   is half the target's real height, which grows with the font size. */
 .nav-link::after {
   content: '';
   position: absolute;
-  bottom: calc((44px - var(--header-height) - var(--rule)) / 2);
+  bottom: calc(50% - (var(--header-height) + var(--rule)) / 2);
   left: 0;
   right: 0;
   height: var(--rule-strong);
