@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-function Icon({ children }: { children: ReactNode }) {
+export function Icon({ children }: { children: ReactNode }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

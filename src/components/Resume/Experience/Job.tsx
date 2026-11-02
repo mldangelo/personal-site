@@ -1,5 +1,4 @@
-import dayjs from 'dayjs';
-
+import { DateSpan } from '@/components/Projects/DateRange';
 import type { Position } from '@/data/resume/work';
 import { type DateInput, formatDuration, monthsBetween } from '@/lib/career';
 import { smartQuotes } from '@/lib/typography';
@@ -11,12 +10,6 @@ import JobSummary from './JobSummary';
  * spacing; the typeface, its weight, and the ink are the same at all three.
  */
 export type JobTier = 'lead' | 'primary' | 'early';
-
-/**
- * Short months, as the projects register sets them, so a range stays on one line
- * of the gutter.
- */
-const MONTH_YEAR = 'MMM YYYY';
 
 interface JobProps {
   data: Position;
@@ -45,18 +38,7 @@ export default function Job({ data, tier = 'primary', now }: JobProps) {
             placed against the line it marks, in both layouts and at every
             tier, instead of at an offset measured from the entry. */}
         <span className="job-marker" aria-hidden="true" />
-        <time dateTime={startDate}>{dayjs(startDate).format(MONTH_YEAR)}</time>
-        {/* The dash is decorative, so a screen reader would otherwise run the
-            dates together as "Mar 2026 Present". */}
-        <span className="daterange-sep" aria-hidden="true">
-          –
-        </span>
-        <span className="sr-only"> to </span>
-        {endDate ? (
-          <time dateTime={endDate}>{dayjs(endDate).format(MONTH_YEAR)}</time>
-        ) : (
-          <span className="daterange-present">Present</span>
-        )}
+        <DateSpan date={startDate} endDate={endDate} ongoing />
         <span className="daterange-duration">
           <span aria-hidden="true">{duration}</span>
           <span className="sr-only">Duration: {durationLong}</span>
