@@ -66,12 +66,10 @@ function reveal(link: Element | null | undefined): void {
  * that is lower — a fragment jump parks the section there, and a link that
  * scrolls to a section has to end up lighting it.
  *
- * The résumé nav this replaced watched a band 20–25% down the viewport with an
- * IntersectionObserver. Its last section sits so near the end of the page that
- * nothing could scroll it up to that band, so "References" never lit. And its
- * fallback only saw the entries delivered in the current callback, so an
- * instant jump back to the top left the section that had just left the band
- * lit. Reading every position afresh on each scroll frame has neither problem.
+ * Every position is read afresh on each scroll frame rather than through an
+ * IntersectionObserver band: a last section near the end of the page may never
+ * scroll up to a band, and observer callbacks only report the entries that
+ * just changed, which an instant jump can leave stale.
  *
  * Pass the section ids in document order. Ids with no rendered element are
  * skipped, and the array may be a new one on every render.

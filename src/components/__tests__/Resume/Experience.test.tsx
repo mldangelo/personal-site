@@ -73,10 +73,7 @@ describe('Experience', () => {
   });
 
   /**
-   * The spine used to render in raw array order, and the real data had drifted
-   * out of sequence, so a section that reads as a timeline ran backwards in the
-   * middle. `tierFor` was already written not to depend on array position;
-   * sorting is the other half of that.
+   * A section that reads as a timeline must not depend on source order.
    */
   it('renders the most recently held role first regardless of source order', () => {
     const shuffled = [

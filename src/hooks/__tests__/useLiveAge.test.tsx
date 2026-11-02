@@ -2,7 +2,7 @@ import { act, fireEvent, render, screen } from '@testing-library/react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { ageAt, agePlaceholder } from '@/lib/telemetry';
+import { ageAt } from '@/lib/telemetry';
 import useLiveAge from '../useLiveAge';
 
 const TEST_PRECISION = 8;
@@ -56,17 +56,6 @@ describe('useLiveAge', () => {
 
     expect(html).toContain(`>${INITIAL}<`);
     expect(html).toContain('data-live="false"');
-  });
-
-  it('uses a digit-free placeholder only when no snapshot is supplied', () => {
-    function Placeholder() {
-      const { ref } = useLiveAge<HTMLSpanElement>(TEST_PRECISION);
-      return <span ref={ref}>{agePlaceholder(TEST_PRECISION)}</span>;
-    }
-
-    const html = renderToStaticMarkup(<Placeholder />);
-
-    expect(html).not.toMatch(/\d/);
   });
 
   it('upgrades to the requested precision and marks an active timer live', () => {

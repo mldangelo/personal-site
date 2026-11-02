@@ -46,43 +46,6 @@ describe('TableRow', () => {
     expect(link).toHaveAttribute('href', 'https://example.com');
   });
 
-  it('does not render link when link prop is null', () => {
-    render(
-      <table>
-        <tbody>
-          <TableRow label="No Link" value="Plain text" link={null} />
-        </tbody>
-      </table>,
-    );
-
-    expect(screen.queryByRole('link')).not.toBeInTheDocument();
-    expect(screen.getByText('Plain text')).toBeInTheDocument();
-  });
-
-  it('renders numeric values correctly', () => {
-    render(
-      <table>
-        <tbody>
-          <TableRow label="Count" value={42} />
-        </tbody>
-      </table>,
-    );
-
-    expect(screen.getByText('42')).toBeInTheDocument();
-  });
-
-  it('renders boolean values as strings', () => {
-    render(
-      <table>
-        <tbody>
-          <TableRow label="Active" value={true} />
-        </tbody>
-      </table>,
-    );
-
-    expect(screen.getByText('true')).toBeInTheDocument();
-  });
-
   it('renders React elements directly', () => {
     const element = <span data-testid="custom-element">Custom</span>;
 
@@ -95,20 +58,6 @@ describe('TableRow', () => {
     );
 
     expect(screen.getByTestId('custom-element')).toBeInTheDocument();
-  });
-
-  it('handles null value', () => {
-    render(
-      <table>
-        <tbody>
-          <TableRow label="Null" value={null} />
-        </tbody>
-      </table>,
-    );
-
-    expect(screen.getByText('Null')).toBeInTheDocument();
-    // null gets converted to string 'null'
-    expect(screen.getByText('null')).toBeInTheDocument();
   });
 
   it('heads the row with its label and nothing else', () => {

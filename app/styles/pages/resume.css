@@ -3,10 +3,7 @@
    ======================================== */
 
 /* Every section opens with the shared header in components/section-header.css,
-   and the gap on `.resume-content` is the only space between sections. This
-   file used to draw the headings itself, as an 11px tracked label under the
-   rule, and skills, courses, and references each added a margin of their own,
-   so five sections stood four different distances apart. */
+   and the gap on `.resume-content` is the only space between sections. */
 
 .resume-page .courses .course-list {
   display: grid;

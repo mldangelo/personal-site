@@ -97,9 +97,8 @@
     font-family: var(--font-mono);
     font-size: 8.5pt;
     font-style: normal;
-    /* Five entries at 0.04em no longer fit one line on Letter or A4. Tighter
-       tracking plus a real line-height means the block reads as one run
-       whether it takes one line or two. */
+    /* Tight tracking plus a real line-height means the block reads as one run
+       whether it takes one line or two on Letter or A4. */
     letter-spacing: 0.02em;
     line-height: 1.5;
     color: #333;

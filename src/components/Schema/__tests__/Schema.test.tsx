@@ -2,8 +2,7 @@ import { render } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 import { PERSON_ID, WEBSITE_ID } from '@/lib/schema';
-import SchemaGraph from '../SchemaGraph';
-import SiteSchema from '../SiteSchema';
+import { SchemaGraph, SiteSchema } from '../index';
 
 function parseScript(container: HTMLElement) {
   const script = container.querySelector('script[type="application/ld+json"]');
@@ -20,6 +19,20 @@ describe('SchemaGraph', () => {
     expect(data['@context']).toBe('https://schema.org');
     expect(data['@graph']).toHaveLength(1);
     expect(data['@graph'][0]['@id']).toBe('x');
+  });
+
+  it('escapes < so a value cannot close the script tag', () => {
+    const headline = 'Test </script><script>alert("xss")</script>';
+    const { container } = render(
+      <SchemaGraph nodes={[{ '@type': 'Article', headline }]} />,
+    );
+    const script = container.querySelector(
+      'script[type="application/ld+json"]',
+    );
+
+    expect(script?.innerHTML).not.toContain('</script>');
+    expect(script?.innerHTML).toContain('\\u003c');
+    expect(parseScript(container)['@graph'][0].headline).toBe(headline);
   });
 });
 

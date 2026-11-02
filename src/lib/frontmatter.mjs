@@ -1,20 +1,34 @@
-import matter from 'gray-matter';
-import { dump, load } from 'js-yaml';
-
-// gray-matter's default engine binds the removed safeLoad/safeDump API from its
-// own js-yaml copy, pinned to 4.x by package.json overrides; it never parses here.
-const options = { engines: { yaml: { parse: load, stringify: dump } } };
-
-/** @param {string} source */
-export function parseFrontmatter(source) {
-  const { data, content } = matter(source, options);
-  return { data, content };
-}
+import { load } from 'js-yaml';
 
 /**
- * @param {string} content
- * @param {Record<string, unknown>} data
+ * Split a leading `---` YAML block from a document's body.
+ *
+ * An unclosed block throws rather than becoming body text, so a malformed post
+ * cannot lose its `draft: true` and publish.
+ *
+ * @param {string} source
  */
-export function stringifyFrontmatter(content, data) {
-  return matter.stringify(content, data, options);
+export function parseFrontmatter(source) {
+  const text = source.replace(/^﻿/, '');
+  const open = /^---[ \t]*\r?\n/.exec(text);
+
+  if (!open) {
+    return { data: {}, content: text };
+  }
+
+  const rest = text.slice(open[0].length);
+  const close = /^---[ \t]*(?:\r?\n|$)/m.exec(rest);
+
+  if (!close) {
+    throw new SyntaxError('Frontmatter has no closing --- delimiter');
+  }
+
+  const block = rest.slice(0, close.index);
+  // js-yaml throws on a document with nothing in it but blanks and comments.
+  const isEmpty = block.replace(/^\s*#.*$/gm, '').trim() === '';
+
+  return {
+    data: isEmpty ? {} : (load(block) ?? {}),
+    content: rest.slice(close.index + close[0].length),
+  };
 }

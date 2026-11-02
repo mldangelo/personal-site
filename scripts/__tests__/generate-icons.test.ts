@@ -10,10 +10,8 @@ import { readImageRenderer } from '../lib/image-renderer.mjs';
  * Keeps the committed icon set bound to the inputs that produced it, the way
  * `check-og.mjs` keeps the share card bound to its own.
  *
- * The set this replaced was generated once by an online tool and then went
- * stale in place: it still carried `#2e59ba` long after the palette moved to
- * `#1b2fbf`, and nothing anywhere noticed. These assertions are what makes
- * that a failing test rather than a thing someone eventually spots.
+ * These assertions make stale art a failing test rather than a thing someone
+ * eventually spots.
  */
 
 const root = process.cwd();

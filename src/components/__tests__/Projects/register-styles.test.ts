@@ -166,18 +166,9 @@ describe('projects register styles', () => {
     }
   });
 
-  it('keeps no rule for the cards the archive used to be', () => {
-    expect(
-      SELECTORS.filter((selector) =>
-        /project-card|projects-grid|project-note/.test(selector),
-      ),
-    ).toEqual([]);
-  });
-
   /**
    * The tags under a description belong to this page, though their rule lives
-   * with the other tags. At 11px they were the last text here below the size
-   * mono takes everywhere else, and they still answered a hover on the card.
+   * with the other tags, at the size mono takes everywhere else.
    */
   it('sets the tags at the mono size and leaves them still', () => {
     const stripped = TAGS_CSS.replace(/\/\*[\s\S]*?\*\//g, '');

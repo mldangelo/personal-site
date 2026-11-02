@@ -69,10 +69,6 @@ describe('Skills', () => {
     ]);
   });
 
-  /**
-   * The section used to open with a button per category, above tags already
-   * grouped under those same names, and to hide whatever was not selected.
-   */
   it('has no filter: nothing to press, nothing hidden, nothing announced', () => {
     const { container } = render(
       <Skills skills={mockSkills} categories={mockCategories} />,
@@ -120,9 +116,8 @@ describe('Skills', () => {
   });
 
   /**
-   * The three tiers used to be told apart by one step of weight at 12px,
-   * which nobody could see. Each is now stated as text for a screen reader,
-   * and a sighted reader is told the two things the page actually shows.
+   * Each tier is stated as text for a screen reader, and a sighted reader is
+   * told the two things the page actually shows.
    */
   describe('knowledge tiers', () => {
     it('states the tier of every tag as text', () => {
