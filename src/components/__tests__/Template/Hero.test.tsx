@@ -11,14 +11,11 @@ describe('Hero', () => {
     expect(heroSection).toBeInTheDocument();
   });
 
-  it('sets the name with a typographic apostrophe', () => {
+  it('displays the name as heading', () => {
     render(<Hero />);
 
-    // The data keeps the keyboard's straight apostrophe, which is what
-    // `resume.json` and the metadata match on. At display size the page sets
-    // the real one.
     const heading = screen.getByRole('heading', { level: 1 });
-    expect(heading.textContent).toBe('Michael D’Angelo');
+    expect(heading).toHaveTextContent('Michael D’Angelo');
   });
 
   it('describes the current work and Promptfoo joining OpenAI', () => {
