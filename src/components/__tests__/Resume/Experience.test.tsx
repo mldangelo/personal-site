@@ -24,12 +24,15 @@ const mockJobs = [
 ];
 
 describe('Experience', () => {
-  it('renders the experience section with title', () => {
+  it('opens with the shared section heading, in sentence case', () => {
     render(<Experience data={mockJobs} />);
 
-    expect(
-      screen.getByRole('heading', { name: /experience/i }),
-    ).toBeInTheDocument();
+    const heading = screen.getByRole('heading', {
+      level: 2,
+      name: 'Experience',
+    });
+    expect(heading).toHaveClass('section-heading');
+    expect(heading.parentElement).toHaveClass('section-header');
   });
 
   it('renders all jobs', () => {
@@ -70,10 +73,7 @@ describe('Experience', () => {
   });
 
   /**
-   * The spine used to render in raw array order, and the real data had drifted
-   * out of sequence, so a section that reads as a timeline ran backwards in the
-   * middle. `tierFor` was already written not to depend on array position;
-   * sorting is the other half of that.
+   * A section that reads as a timeline must not depend on source order.
    */
   it('renders the most recently held role first regardless of source order', () => {
     const shuffled = [

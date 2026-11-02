@@ -56,11 +56,9 @@ const ICONS: Record<ThemeChoice, ReactNode> = {
  * The name each state ships with in the static HTML: which preference is
  * active, and nothing about what a press does.
  *
- * It used to end "Switch to …" as well. The next state now depends on the
- * device's colour scheme, which static HTML cannot know, so a promise baked in
- * here would be wrong on one kind of device or the other — "Switch to light"
- * read out on the light device whose first press goes dark. A name that says
- * less is still true.
+ * The next state depends on the device's colour scheme, which static HTML
+ * cannot know, so a promise baked in here would be wrong on one kind of device
+ * or the other. A name that says less is still true.
  */
 function stateLabel(choice: ThemeChoice): string {
   return `Theme preference: ${choice}.`;
@@ -137,11 +135,8 @@ export default function ThemeToggle() {
     // once at mount. Reads the token back out of the cascade, so it cannot
     // name a colour the page is not painted with.
     //
-    // The pathname is deliberately *not* a dependency. It used to need to be,
-    // because this repointed the tags Next rendered and React rebuilt those on
-    // every client-side navigation, reverting the mutation. It now writes to a
-    // tag the bootstrap created, which React never owns and no navigation can
-    // touch — so the mutation survives without this effect having to chase it.
+    // The pathname is deliberately *not* a dependency: this writes to a tag the
+    // bootstrap created, which React never owns and no navigation can touch.
     syncThemeColor(document);
   }, [choice, systemScheme]);
 

@@ -32,7 +32,7 @@ function isEarlyCareer(job: Position): boolean {
 }
 
 /**
- * How much weight a role should carry on the spine. The lead is the newest
+ * Which step of the spine's type scale a role takes. The lead is the newest
  * substantive, non-side-role start date rather than array position, so
  * reordering the source data cannot change the visual hierarchy.
  */
@@ -62,8 +62,8 @@ export default function Experience({
 
   return (
     <div className="experience">
-      <div className="title">
-        <h2>Experience</h2>
+      <div className="section-header">
+        <h2 className="section-heading">Experience</h2>
       </div>
       <div className="experience-spine">
         {positions.map((job) => (

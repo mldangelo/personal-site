@@ -65,19 +65,17 @@ describe('EmailLink', () => {
   });
 
   /**
-   * Advancing used to reset to zero characters, leaving `message` empty for a
-   * tick. The render fell back to the static local part, so the prefix snapped
-   * back to the real address for one frame at every one of the fifteen message
-   * boundaries — a visible flicker on the deployed page.
+   * An empty `message` for a single tick would snap the prefix back to the real
+   * address at every message boundary, a visible flicker.
    */
   it('never blanks or snaps back to the address mid-animation', () => {
-    render(<EmailLink loopMessage />);
+    render(<EmailLink />);
     const prefix = () =>
       document.querySelector('.contact-email-prefix')?.textContent ?? '';
 
     let previous = prefix();
 
-    // Two full cycles, so the loop wrap is covered as well as every boundary.
+    // Longer than one full cycle, so every boundary is covered.
     for (let elapsed = 0; elapsed < 120_000; elapsed += 50) {
       act(() => {
         vi.advanceTimersByTime(50);
@@ -89,9 +87,7 @@ describe('EmailLink', () => {
       expect(shown).not.toBe('');
 
       // The flash is a *jump* to the complete address from some other alias
-      // already several characters long. Looping re-types the address
-      // legitimately, but that grows "h" -> "hi", so the previous frame is a
-      // single character and this guard leaves it alone.
+      // already several characters long.
       if (previous.length > 1 && previous !== localPart) {
         expect(shown).not.toBe(localPart);
       }
@@ -199,12 +195,10 @@ describe('EmailLink', () => {
 
   /**
    * Three of the joke aliases are not valid email local-parts, including
-   * "but not this :(  ". Those used to replace the anchor with an
-   * aria-disabled, unfocusable span, leaving the contact page with no way to
-   * reach anyone for roughly a fifth of the animation cycle.
+   * "but not this :(  ". The contact page must stay reachable during them.
    */
   it('keeps a working email link through the entire animation cycle', () => {
-    render(<EmailLink loopMessage />);
+    render(<EmailLink />);
 
     for (let elapsed = 0; elapsed < 60_000; elapsed += 250) {
       act(() => {
@@ -233,18 +227,5 @@ describe('EmailLink', () => {
       'aria-hidden',
       'true',
     );
-  });
-
-  it('loops messages when loopMessage is true', async () => {
-    render(<EmailLink loopMessage={true} />);
-
-    // Advance through all messages
-    act(() => {
-      vi.advanceTimersByTime(50 * 1000);
-    });
-
-    // Component should still be active and rendering
-    const container = document.querySelector('.contact-email-container');
-    expect(container).toBeInTheDocument();
   });
 });

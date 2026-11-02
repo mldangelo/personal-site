@@ -22,17 +22,16 @@
  * The npm `--silent` flag is required when JSON goes to stdout; otherwise npm
  * writes its script banner ahead of the JSON.
  */
-import {
-  existsSync,
-  readdirSync,
-  readFileSync,
-  statSync,
-  writeFileSync,
-} from 'node:fs';
-import { extname, isAbsolute, join, relative, resolve, sep } from 'node:path';
+import { existsSync, readFileSync, statSync, writeFileSync } from 'node:fs';
+import { extname, isAbsolute, relative, resolve, sep } from 'node:path';
 
 import { attribute, elements, tags } from './lib/html.mjs';
-import { exportLayout, readSiteConfig, toUrlPath } from './lib/site.mjs';
+import {
+  exportLayout,
+  readSiteConfig,
+  toUrlPath,
+  walkFiles,
+} from './lib/site.mjs';
 
 const ROOT = process.cwd();
 const OUT = resolve(ROOT, 'out');
@@ -158,21 +157,6 @@ const GROUPS = [
 // ---------------------------------------------------------------------------
 // Measurement
 // ---------------------------------------------------------------------------
-
-function walkFiles(dir) {
-  const found = [];
-  if (!existsSync(dir)) return found;
-
-  for (const entry of readdirSync(dir, { withFileTypes: true })) {
-    const path = join(dir, entry.name);
-    if (entry.isDirectory()) {
-      found.push(...walkFiles(path));
-    } else if (entry.isFile()) {
-      found.push(path);
-    }
-  }
-  return found;
-}
 
 const paths = walkFiles(OUT);
 if (paths.length === 0) {

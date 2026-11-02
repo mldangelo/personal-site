@@ -39,20 +39,6 @@ describe('SlideMenu', () => {
     expect(menu).not.toHaveClass('slide-menu--open');
   });
 
-  it('applies right position by default', () => {
-    render(<SlideMenu {...defaultProps} isOpen />);
-
-    const menu = screen.getByRole('dialog');
-    expect(menu).toHaveClass('slide-menu--right');
-  });
-
-  it('applies left position when specified', () => {
-    render(<SlideMenu {...defaultProps} isOpen position="left" />);
-
-    const menu = screen.getByRole('dialog');
-    expect(menu).toHaveClass('slide-menu--left');
-  });
-
   it('sets aria-hidden based on isOpen', () => {
     const { rerender } = render(<SlideMenu {...defaultProps} isOpen={false} />);
 

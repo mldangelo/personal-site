@@ -58,26 +58,6 @@
     background-color: CanvasText;
   }
 
-  .skillbutton {
-    transition: none;
-  }
-
-  /* Keep selection visible even when the UA remaps a button's fill. */
-  .skillbutton-active {
-    text-decoration: underline;
-    text-decoration-thickness: 2px;
-    text-underline-offset: 0.25em;
-  }
-
-  /* Preserve the system selection pair together; remapping only the fill
-     can leave HighlightText unreadable on the UA's text backplate. */
-  .skillbutton-active:not(.skillbutton--all) {
-    forced-color-adjust: none;
-    background-color: Highlight;
-    color: HighlightText;
-    border-color: Highlight;
-  }
-
   /* ===================
      STATE THAT NEEDS MORE THAN COLOUR
      Amber does not survive, so filled-versus-hollow carries the current role;

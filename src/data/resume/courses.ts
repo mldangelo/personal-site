@@ -53,10 +53,8 @@ const courses: Course[] = [
     university: 'Stanford University',
   },
   {
-    // Both fields come from the Bulletin record. The old class site
-    // (web.stanford.edu/class/cme306/) is a Spring 2009 archive still titled
-    // "Mathematical Methods for Fluids, Solids and Interfaces", and
-    // cme306.stanford.edu redirects back to it over cleartext.
+    // Both fields come from the Bulletin record, not the class site, which is
+    // an archived offering under a retired title.
     title: 'Computational Methods of Applied Mathematics',
     number: 'CME 306',
     link: 'https://bulletin.stanford.edu/courses/1174062',

@@ -12,11 +12,8 @@ import { DARK_SCHEME_QUERY, type ResolvedTheme } from '@/lib/theme';
  * dark-mode visitor — and `<html data-theme>` already carries the answer from
  * the pre-paint bootstrap, so callers should leave it alone until this settles.
  *
- * It subscribes to `change`, which is the whole point: the read this replaced
- * sampled the preference once at mount, so a visitor who arrived in the
- * morning stayed on the light theme when their device flipped at sunset. This
- * is the same shape as `usePrefersReducedMotion` for the same reason — the
- * hand-rolled `matchMedia` reads drifted, and only some of them listened.
+ * It subscribes to `change`, so a device that flips at sunset takes the page
+ * with it. Use this rather than a hand-rolled `matchMedia` read.
  *
  * `matchMedia` is optional-chained because jsdom does not implement it; with no
  * way to ask, the preference stays unknown.
