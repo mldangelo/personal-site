@@ -5,11 +5,7 @@
 
 @layer base {
   /* A bare link carries no decoration, only a colour change on hover. Most
-     anchors here are navigation, rows, and controls that draw their own state.
-     This rule used to paint an animated accent underline on every `a` as a
-     `background-image`, and two dozen rules across the site carried a
-     declaration whose only job was to switch it off again; the mobile menu
-     shipped looking broken for want of one. */
+     anchors here are navigation, rows, and controls that draw their own state. */
   a {
     color: var(--color-fg);
     text-decoration: none;
@@ -21,17 +17,14 @@
   }
 
   /* Links in running text: accent ink over a real underline that firms up on
-     hover, which is what article prose already had. This was a second,
-     persistent gradient, which left About links underlined twice and resume
-     links in body ink over a 32% line.
+     hover, matching article prose.
 
      Scoped to `p` deliberately. The site uses `<li>` for plenty of non-prose
      UI (navigation, icon rows, course listings), so a prose list styles its
      links from its own container (`.about-content a`, `.prose a`) instead.
 
-     Screen only. `print.css` stripped the old gradient from every link, so
-     paper never showed this underline, and the resume is the page people
-     print. */
+     Screen only: links carry no underline on paper, and the resume is the page
+     people print. */
   @media screen {
     p a {
       color: var(--color-accent);
@@ -43,16 +36,6 @@
     p a:hover {
       color: var(--color-accent-hover);
       text-decoration-color: var(--color-accent);
-    }
-
-    /* The poster's links (home.css) restate the underline with the
-       `text-decoration` shorthand and expect it in their own cream. Safari
-       before 26.2 reads that shorthand as the line alone, so the pale accent
-       above would outlive it: accent on the accent field, an underline nobody
-       can see. Drop this once that rule names its own decoration colour. */
-    p .hero-highlight,
-    p .hero-highlight:hover {
-      text-decoration-color: currentcolor;
     }
   }
 }

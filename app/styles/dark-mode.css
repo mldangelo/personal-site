@@ -74,8 +74,3 @@
 [data-theme='dark'] blockquote {
   border-left-color: var(--color-border-alt);
 }
-
-/* Links read their dark values from the tokens above as well. The gradient
-   underline once restated here weighed (0,1,2), so in this theme alone it
-   outranked class-level link rules, and article prose carried four selectors
-   just to cancel it. */

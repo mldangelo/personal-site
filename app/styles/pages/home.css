@@ -59,13 +59,16 @@
   line-height: 1.45;
 }
 
-/* Explicit underline rather than the page's blue gradient: page-link blue
-   disappears into the poster, especially under the dark-theme overrides. */
+/* Its own underline in its own colour: page-link blue disappears into the
+   poster. The token is named, not `currentcolor`, because the optimiser folds
+   that into the shorthand and Safari before 26.2 reads the shorthand as the
+   line alone. */
 .hero .hero-highlight,
 .hero .hero-highlight:hover {
   color: inherit;
   background-image: none;
   text-decoration: underline;
+  text-decoration-color: var(--color-on-hero);
   text-decoration-thickness: 1px;
   text-underline-offset: 0.2em;
 }

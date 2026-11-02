@@ -243,3 +243,31 @@ describe('reading surfaces', () => {
     }
   });
 });
+
+describe('--color-accent-underline', () => {
+  // A link's ink is about 2:1 against the body text around it, so the underline
+  // is what marks a link for a reader who cannot tell the colours apart.
+  it('clears 3:1 on every surface in both themes', () => {
+    for (const theme of themes) {
+      const share = Number(
+        /(\d+)%/.exec(theme('--color-accent-underline'))?.[1] ?? 0,
+      );
+      const accent = parseHexColor(theme('--color-accent'));
+
+      for (const surface of SURFACES) {
+        const paper = parseHexColor(theme(surface));
+        const underline = accent
+          .map((channel, index) =>
+            Math.round((channel * share + paper[index] * (100 - share)) / 100)
+              .toString(16)
+              .padStart(2, '0'),
+          )
+          .join('');
+
+        expect(
+          contrastRatio(`#${underline}`, theme(surface)),
+        ).toBeGreaterThanOrEqual(3);
+      }
+    }
+  });
+});

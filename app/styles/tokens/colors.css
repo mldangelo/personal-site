@@ -38,7 +38,7 @@
   /* The rule under a link in running text. A link's ink is only about 2:1
      against the body text beside it, so the underline is what marks it for a
      reader who cannot tell the two colours apart, and it has to clear 3:1 on
-     paper by itself. At 32% it measured 1.65:1. */
+     paper by itself. */
   --color-accent-underline: color-mix(in srgb, var(--color-accent) 68%, transparent);
   --color-accent-underline-strong: color-mix(in srgb, var(--color-accent) 85%, transparent);
 
