@@ -13,7 +13,6 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build --webpack",
-    "start": "next start",
     "lint": "biome check .",
     "type-check": "tsc --noEmit",
     "format": "biome format --write . && prettier --write \"**/*.{md,css,scss}\"",
@@ -21,8 +20,6 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "test:ui": "vitest --ui",
-    "predeploy": "npm run build",
     "analyze": "ANALYZE=true npm run build",
     "og": "node scripts/generate-og.mjs",
     "og:check": "npm run og:check:ledger && npm run og:check:render",
@@ -43,7 +40,6 @@
     "@next/third-parties": "^16.4.3",
     "@tailwindcss/postcss": "^4.3.3",
     "dayjs": "^1.11.23",
-    "gray-matter": "^4.0.3",
     "js-yaml": "^5.5.0",
     "markdown-to-jsx": "^9.10.3",
     "next": "^16.4.3",
@@ -67,9 +63,6 @@
     "vitest": "^5.0.3"
   },
   "overrides": {
-    "gray-matter": {
-      "js-yaml": "^4.3.2"
-    },
     "nanoid": "^3.3.18",
     "source-map-js": "^1.2.2"
   },

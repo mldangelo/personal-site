@@ -133,7 +133,7 @@ describe('theme-color', () => {
     /**
      * A literal `<script>` with the body inline, which is the only kind that
      * runs before the page is painted. `<Script strategy="beforeInteractive">`
-     * looks like it should be — it is what this used to be — but in the App
+     * looks like it should be, but in the App
      * Router it serialises the body into `self.__next_s` for Next's
      * `appBootstrap` to run once the client chunks have loaded, which is long
      * after first paint. Nothing else in the head is deferred like that, so
@@ -156,8 +156,8 @@ describe('theme-color', () => {
     });
 
     it('queries no tag it did not create', () => {
-      // Repointing the page's own tags is the mechanism this replaced; a
-      // bootstrap that goes looking for them again has gone back to it.
+      // React rebuilds the page's own tags on navigation, so the bootstrap must
+      // not depend on them.
       expect(HEAD).not.toContain(THEME_COLOR_META_SELECTOR);
     });
   });

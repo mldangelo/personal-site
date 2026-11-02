@@ -3,10 +3,8 @@
    One way to open a section, on every page
    ======================================== */
 
-/* A hairline in ink, then the heading in the reading face. Each page used to
-   draw this for itself — a mono label above the rule on one page, below it on
-   the next, bold display type on a third — so one idea arrived five ways. The
-   rule always sits above the heading, at the single hairline weight. */
+/* A hairline in ink, then the heading in the reading face. The rule always sits
+   above the heading, at the single hairline weight. */
 .section-header {
   display: flex;
   align-items: baseline;

@@ -15,12 +15,10 @@
 /* ========================================
    PROJECTS PAGE
    One register in two parts: selected work, then the student-era
-   archive. Both are drawn by the same row. The archive used to be
-   picture cards with ink descriptions under a list of small grey
-   rows, so the page's weight ran opposite to its importance; now
-   the two parts differ only by a size step in the title and by a
-   thumbnail where a screenshot exists. Each part opens with the
-   shared header in section-header.css.
+   archive. Both are drawn by the same row, and the two parts differ
+   only by a size step in the title and by a thumbnail where a
+   screenshot exists. Each part opens with the shared header in
+   section-header.css.
    /speaking renders its appearances with these same classes, so a
    change to the register here changes that page too.
    ======================================== */
@@ -385,8 +383,7 @@ a.project-entry:focus-visible .project-entry-external {
 
 /* The identifying link of an entry is its title, so it stays in ink until it
    is asked for, and under the pointer or the keyboard it is unmistakably a
-   link. It used to change colour under the pointer and do nothing more.
-   `background-image` is restated on the second rule because the dark theme's
+   link. `background-image` is restated on the second rule because the dark theme's
    `p a:hover` would otherwise out-specify the first and draw its own line. */
 .job-company,
 .degree-container .school a {

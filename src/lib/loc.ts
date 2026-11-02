@@ -53,10 +53,8 @@ function countLinesIn(dir: string): number {
  * Lines of TypeScript powering the site, counted from the working tree at
  * build time.
  *
- * This used to be a number typed into `src/data/stats/site.ts`, which drifted
- * by nearly 2,000 lines. A stats page is the worst place on a site to carry a
- * figure nobody re-checks, so it is now derived. Tests are excluded — the
- * claim is about what ships.
+ * Derived because a stats page is the worst place on a site to carry a figure
+ * nobody re-checks. Tests are excluded — the claim is about what ships.
  *
  * Server-only: this reads the filesystem and must not be imported into a
  * client component.

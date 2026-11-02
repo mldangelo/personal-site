@@ -41,7 +41,7 @@ export const RESUME_JSON_URL = `${SITE_URL}${RESUME_JSON_PATH}`;
  * The published schema this document declares itself against. `$schema` is a
  * root property of JSON Resume v1.0.0, not an extension to it.
  */
-export const RESUME_SCHEMA_URL =
+const RESUME_SCHEMA_URL =
   'https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json';
 
 interface ResumeProfile {

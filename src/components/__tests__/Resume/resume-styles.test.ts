@@ -211,8 +211,7 @@ describe('résumé styles', () => {
     });
 
     /**
-     * A tier is a step in size and spacing. The lead used to take the black
-     * weight as well, and the early tier a lighter ink.
+     * A tier is a step in size and spacing, and nothing else.
      */
     it('lets a tier change sizes and spacing, never face, weight, or ink', () => {
       expect(tiered.length).toBeGreaterThanOrEqual(5);
@@ -310,8 +309,7 @@ describe('résumé styles', () => {
     });
 
     /**
-     * Deep and working used to differ by a step of weight at 12px. Depth is
-     * the order of the list now, and one tier takes one fainter tone.
+     * Depth is the order of the list, and one tier takes one fainter tone.
      */
     it('gives the familiar tier the fainter ink and no other tier a look', () => {
       const tiers = SCREEN_RULES.filter((rule) =>

@@ -6,8 +6,8 @@
  * on disk has to agree on how that prefix is stripped. Two implementations of
  * this drift, and the fork is where the drift shows up.
  */
-import { existsSync, readFileSync, statSync } from 'node:fs';
-import { resolve, sep } from 'node:path';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
+import { join, resolve, sep } from 'node:path';
 
 /**
  * `label` prefixes the failure message so the caller is identifiable in CI
@@ -42,6 +42,22 @@ export function readSiteConfig(root, label) {
 
 /** URLs always use forward slashes; `relative` uses the platform separator. */
 export const toUrlPath = (path) => path.split(sep).join('/');
+
+/** Every file under `dir`, or nothing if it does not exist. */
+export function walkFiles(dir) {
+  const found = [];
+  if (!existsSync(dir)) return found;
+
+  for (const entry of readdirSync(dir)) {
+    const path = join(dir, entry);
+    if (statSync(path).isDirectory()) {
+      found.push(...walkFiles(path));
+    } else {
+      found.push(path);
+    }
+  }
+  return found;
+}
 
 /**
  * Route helpers bound to one export directory and one base path.

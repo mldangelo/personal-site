@@ -11,11 +11,8 @@ interface SkillsProps {
  * Every skill under the category it belongs to, deepest first — the order
  * `/resume.json` publishes the same list in.
  *
- * This used to open with a row of filter buttons, one per category, above
- * tags already grouped under those same category names. The control was the
- * heaviest thing in the section and repeated its headings, so it is gone, and
- * with it the state: nothing here can be hidden, so nothing can be missing
- * from the page when it is printed.
+ * There is no filter state: nothing here can be hidden, so nothing can be
+ * missing from the page when it is printed.
  */
 export default function Skills({ skills, categories }: SkillsProps) {
   const groups = categories

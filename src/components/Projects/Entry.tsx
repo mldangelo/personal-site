@@ -31,12 +31,9 @@ function tierFor({ status, ongoing }: Project): 'archive' | 'live' | undefined {
 /**
  * One row of the projects register, in either of its two parts.
  *
- * The archive used to be drawn by a second component — picture cards with ink
- * descriptions — while the work above it was small grey rows, so the page's
- * weight ran opposite to its importance. One component now serves both, and
- * the only differences are ones the data states: a size step in the title, and
- * a thumbnail where a screenshot exists. Nothing is invented for a row without
- * one. The row shares the writing index's grammar — a dated gutter, a title,
+ * The only differences between the parts are ones the data states: a size step
+ * in the title, and a thumbnail where a screenshot exists. Nothing is invented
+ * for a row without one. The row shares the writing index's grammar — a dated gutter, a title,
  * supporting copy, a hairline — so the two lists on the site read as one
  * system.
  *

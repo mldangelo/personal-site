@@ -41,9 +41,9 @@ const injected: Element[] = [];
  * A media-scoped pair, hoisted into `<head>` the way React hoists the ones a
  * fork might declare through `viewport.themeColor`.
  *
- * The export no longer ships these — its fallback lives in `<noscript>` — but
- * the script-owned tag has to win against them anyway, because that is what
- * makes it durable rather than merely first to run.
+ * The export does not ship these — its fallback lives in `<noscript>` — but the
+ * script-owned tag has to win against them anyway, because that is what makes
+ * it durable rather than merely first to run.
  */
 function addThemeColorMetas(): Element[] {
   const added = ['light', 'dark'].map((scheme) => {
@@ -404,9 +404,8 @@ describe('theme', () => {
     });
 
     it('leaves the page it was given untouched', () => {
-      // Mutating the tags the document shipped is the mechanism this replaced:
       // React re-creates its own hoisted metas on navigation, so a mutation
-      // there lasts until the visitor follows one link.
+      // there would last only until the visitor follows one link.
       const pair = addThemeColorMetas();
 
       applyThemeColor(document, CHROME_COLORS.dark);

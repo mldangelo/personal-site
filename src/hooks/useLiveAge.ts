@@ -2,7 +2,7 @@
 
 import { type RefObject, useEffect, useRef, useState } from 'react';
 
-import { ageAt, ageIntervalFor, agePlaceholder } from '@/lib/telemetry';
+import { ageAt, ageIntervalFor } from '@/lib/telemetry';
 
 import usePrefersReducedMotion from './usePrefersReducedMotion';
 
@@ -24,7 +24,7 @@ export interface LiveAgeState<T extends HTMLElement> {
  */
 export default function useLiveAge<T extends HTMLElement = HTMLSpanElement>(
   precision: number,
-  initial: string = agePlaceholder(precision),
+  initial: string,
 ): LiveAgeState<T> {
   const ref = useRef<T>(null);
   const [live, setLive] = useState(false);
