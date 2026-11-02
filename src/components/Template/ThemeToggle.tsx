@@ -6,7 +6,9 @@ import { MoonIcon, SunIcon } from '@/components/Icons';
 import usePrefersColorScheme from '@/hooks/usePrefersColorScheme';
 import {
   nextThemeChoice,
+  type ResolvedTheme,
   readStoredThemeChoice,
+  readSystemScheme,
   resolveTheme,
   storeThemeChoice,
   syncThemeColor,
@@ -51,15 +53,29 @@ const ICONS: Record<ThemeChoice, ReactNode> = {
 };
 
 /**
+ * The name each state ships with in the static HTML: which preference is
+ * active, and nothing about what a press does.
+ *
+ * It used to end "Switch to …" as well. The next state now depends on the
+ * device's colour scheme, which static HTML cannot know, so a promise baked in
+ * here would be wrong on one kind of device or the other — "Switch to light"
+ * read out on the light device whose first press goes dark. A name that says
+ * less is still true.
+ */
+function stateLabel(choice: ThemeChoice): string {
+  return `Theme preference: ${choice}.`;
+}
+
+/**
  * Current state first, then what a press does.
  *
  * `aria-pressed` cannot express three states, and a name that only says
  * "switch to dark mode" leaves a screen reader user unable to tell which of
- * the three is active. The next state is derived from `nextThemeChoice` so the
+ * the three is active. `next` is the value the press itself acts on, so the
  * label cannot disagree with the cycle it describes.
  */
-function labelFor(choice: ThemeChoice): string {
-  return `Theme preference: ${choice}. Switch to ${nextThemeChoice(choice)}.`;
+function labelFor(choice: ThemeChoice, next: ThemeChoice): string {
+  return `${stateLabel(choice)} Switch to ${next}.`;
 }
 
 /**
@@ -78,9 +94,25 @@ export default function ThemeToggle() {
   // `null` until mounted, which keeps the hydration render byte-identical to
   // the server render. It is not used to decide what to draw.
   const [choice, setChoice] = useState<ThemeChoice | null>(null);
+  // The device scheme the lap in progress is walked under: read on mounting,
+  // and again by every press that leaves `system`. It is held rather than
+  // asked for at each press because `nextThemeChoice` takes its order from
+  // the device, so a flip would reorder the lap under a visitor who is
+  // part-way round it: dark, pressed for on a light device, becomes the last
+  // stop the moment the device goes dark, and the next press hands back to
+  // `system`, paints dark again, and changes nothing while light has still
+  // not been offered.
+  const [lapScheme, setLapScheme] = useState<ResolvedTheme | null>(null);
 
   useEffect(() => {
-    setChoice(readStoredThemeChoice());
+    // A press can get here first (see `cycle`), and its choice is the newer
+    // one. Storage normally hands the same value straight back, but storage
+    // that throws reads as `system`, and adopting that undid the press: the
+    // control's first press did nothing at all for a visitor with site data
+    // blocked.
+    setChoice((pressed) => pressed ?? readStoredThemeChoice());
+    // A visitor who arrives on an explicit choice is part-way round already.
+    setLapScheme(readSystemScheme());
   }, []);
 
   useEffect(() => {
@@ -113,16 +145,34 @@ export default function ThemeToggle() {
     syncThemeColor(document);
   }, [choice, systemScheme]);
 
+  // What orders the next press. Only `system` asks the device afresh: that is
+  // where a lap starts, and where its first press has to be the visible one.
+  const orderScheme = choice === 'system' ? systemScheme : lapScheme;
+
+  // Where a press goes from here, once mounted. The label and the press both
+  // take this one value, so the name cannot promise a step the press skips.
+  const next = choice === null ? null : nextThemeChoice(choice, orderScheme);
+
   const cycle = useCallback(() => {
-    const next = nextThemeChoice(choice ?? readStoredThemeChoice());
-    storeThemeChoice(next);
-    setChoice(next);
-  }, [choice]);
+    // `next` is `null` when the press beat the mount effects: the handler is
+    // still the hydration render's, where neither the stored choice nor the
+    // device has been read. Measured against the export, every press made as
+    // early as Chromium would deliver one landed in that gap. Ask both
+    // directly rather than order the cycle by a guess, which would hand a dark
+    // device the no-op first press.
+    const scheme = next === null ? readSystemScheme() : orderScheme;
+    const to = next ?? nextThemeChoice(readStoredThemeChoice(), scheme);
+
+    storeThemeChoice(to);
+    setChoice(to);
+    setLapScheme(scheme);
+  }, [next, orderScheme]);
 
   // Before mount the accessible name comes from the one state label CSS leaves
-  // visible; after mount this states it outright, for both the name and the
-  // pointer tooltip.
-  const label = choice === null ? undefined : labelFor(choice);
+  // visible, which says only what the preference is. After mount this adds
+  // what a press does, for both the name and the pointer tooltip.
+  const label =
+    choice === null || next === null ? undefined : labelFor(choice, next);
 
   return (
     <button
@@ -139,7 +189,7 @@ export default function ThemeToggle() {
           data-theme-state={state}
         >
           {ICONS[state]}
-          <span className="sr-only">{labelFor(state)}</span>
+          <span className="sr-only">{stateLabel(state)}</span>
         </span>
       ))}
     </button>

@@ -32,13 +32,13 @@
   "renderer": [
     {
       "name": "next",
-      "version": "16.3.8",
-      "integrity": "sha512-U7QEZaTini6wKrb8A8hqLLqYQyCetegKjCpJOyxk642vWoMoU1x5PyZCJFvgYgiptA8xc5j/9xYlZFO7w9Sjmw=="
+      "version": "16.4.3",
+      "integrity": "sha512-OqxKTGi9u80FydydsMNYNjnuje9Au+kvHlt2GZ//ftdpDHm1dxKqAaENoOOTX5wKzn+9vaKUNIfZeyZUuLhCnA=="
     },
     {
       "name": "react",
-      "version": "19.3.0",
-      "integrity": "sha512-E8LUcbtBWt20bbl2YoHfx4ZDBdxVTfOKtCZn9cDSJ4l6/nuoApcpIBcj47t2wZoVX8g2ZHuMHbiShgCR1T5Sog=="
+      "version": "19.3.1",
+      "integrity": "sha512-QNhWdt7nrgVWWQG58QuGsAR3jv3Hbe4mb4vz7w2csnHavciZJgda1CPNaldF6eVxv90ud3jUXpKlHL69gO38yw=="
     },
     {
       "name": "sharp",
@@ -49,10 +49,10 @@
   "profile": {
     "name": "Michael D'Angelo",
     "employer": "OpenAI",
-    "focus": "Promptfoo and Codex Security",
-    "countriesVisited": 53,
+    "focus": "Promptfoo and other cyber products",
+    "countriesVisited": 55,
     "computingSince": 1993,
-    "currentCity": "New York, NY"
+    "currentCity": "San Francisco"
   },
   "colors": {
     "ink": "#292a2e",
@@ -62,8 +62,8 @@
     "accent": "#36559a",
     "hairline": "rgba(35, 39, 46, 0.14)"
   },
-  "generatorDigest": "6cfef1d359dfc9ce05c9bcbd56869a45d5438a1a40c2582655885d2865eb117d",
-  "imageDigest": "c2a623a13cda94e594a0307de93ed76af26ba645b87f65f406552be23746df29",
+  "generatorDigest": "b91a82859a4d1d7768a6b53bbe46ddf499dd0333c74b96aaacbd4abf99fb2e19",
+  "imageDigest": "c65a73c3f62da10d330e50caae8bc74a1db46489dc83044dc78b96497cfda86a",
   "posts": [
     {
       "slug": "why-i-mostly-switched-from-claude-code-to-codex-desktop-app",

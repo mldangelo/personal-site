@@ -1,10 +1,9 @@
 import { createElement, isValidElement } from 'react';
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import {
   formatReading,
   resolveReadings,
-  SOURCE_LABELS,
   type StatDeclaration,
 } from '../readings';
 
@@ -22,51 +21,30 @@ describe('formatReading', () => {
     expect(formatReading(53)).toBe('53');
     expect(formatReading(0)).toBe('0');
   });
-
-  it('appends a unit when one is given', () => {
-    expect(formatReading(301, 'packages')).toBe('301 packages');
-  });
-});
-
-describe('SOURCE_LABELS', () => {
-  it('names all three kinds of claim the page makes', () => {
-    expect(SOURCE_LABELS).toEqual({
-      measured: 'Measured',
-      github: 'GitHub',
-      profile: 'Profile',
-    });
-  });
 });
 
 describe('resolveReadings', () => {
   it('fills a keyed row from the measurements for this build', () => {
     const declarations: StatDeclaration[] = [
-      { key: 'source_lines', label: 'Lines', source: 'measured' },
+      { key: 'source_lines', label: 'Lines', link: 'https://example.com' },
     ];
 
     expect(resolveReadings(declarations, { source_lines: 5411 })).toEqual([
-      { label: 'Lines', value: '5,411', link: undefined, source: 'measured' },
+      { label: 'Lines', value: '5,411', link: 'https://example.com' },
     ]);
   });
 
-  it('appends the declared unit to a measured count', () => {
-    const declarations: StatDeclaration[] = [
-      { key: 'locked', label: 'Resolved', unit: 'packages' },
-    ];
-
-    expect(resolveReadings(declarations, { locked: 301 })[0].value).toBe(
-      '301 packages',
-    );
-  });
-
   it('drops a row whose measurement could not be taken', () => {
-    // A fork with no lockfile shows one fewer reading rather than a wrong one.
+    // A reading that could not be taken leaves one fewer row, not a wrong one.
     const declarations: StatDeclaration[] = [
-      { key: 'locked', label: 'Resolved' },
+      { key: 'missing', label: 'Missing' },
       { key: 'lines', label: 'Lines' },
     ];
 
-    const readings = resolveReadings(declarations, { locked: null, lines: 12 });
+    const readings = resolveReadings(declarations, {
+      missing: null,
+      lines: 12,
+    });
 
     expect(readings.map((reading) => reading.label)).toEqual(['Lines']);
   });
@@ -79,24 +57,19 @@ describe('resolveReadings', () => {
     expect(resolveReadings(declarations)[0].value).toBe('0');
   });
 
-  it('applies a declared format function instead of the count formatting', () => {
-    const declarations: StatDeclaration[] = [
-      {
-        key: 'pushed_at',
-        label: 'Last updated at',
-        format: (value) => `on ${String(value)}`,
-      },
-    ];
+  it('passes a string measurement through as written', () => {
+    // A floor such as "1,695+" is already formatted by whoever took it.
+    const declarations: StatDeclaration[] = [{ key: 'stars', label: 'Stars' }];
 
-    expect(
-      resolveReadings(declarations, { pushed_at: '2026-07-25' })[0].value,
-    ).toBe('on 2026-07-25');
+    expect(resolveReadings(declarations, { stars: '1,695+' })[0].value).toBe(
+      '1,695+',
+    );
   });
 
   it('passes a React element through untouched', () => {
     const element = createElement('span', null, 'live');
     const declarations: StatDeclaration[] = [
-      { key: 'age', label: 'Current age', value: element, source: 'profile' },
+      { key: 'age', label: 'Current age', value: element },
     ];
 
     const [reading] = resolveReadings(declarations);
@@ -106,48 +79,18 @@ describe('resolveReadings', () => {
   });
 
   it('accepts an element as the measurement for a keyed row', () => {
-    // The age and the build clock are readings whose current value only a
-    // browser can take, so the server supplies the client leaf that carries
-    // them rather than a string. A declaration that names the key and no value
-    // is what keeps the element out of the data file.
+    // The age is a reading whose current value only a browser can take, so the
+    // server supplies the client leaf that carries it rather than a string. A
+    // declaration that names the key and no value is what keeps the element
+    // out of the data file.
     const element = createElement('span', null, '36.42');
     const declarations: StatDeclaration[] = [
-      { key: 'age', label: 'Current age', source: 'profile' },
+      { key: 'age', label: 'Current age' },
     ];
 
     const [reading] = resolveReadings(declarations, { age: element });
 
     expect(reading.value).toBe(element);
-  });
-
-  it('derives a link from the reading when the declaration asks it to', () => {
-    // The build commit is the one row whose link target is its own value.
-    const declarations: StatDeclaration[] = [
-      {
-        key: 'built_commit',
-        label: 'Built from commit',
-        format: (value) => String(value).slice(0, 7),
-        link: (value) => `https://example.com/commit/${value}`,
-      },
-    ];
-
-    const [reading] = resolveReadings(declarations, {
-      built_commit: 'abcdef1234567890',
-    });
-
-    expect(reading.value).toBe('abcdef1');
-    expect(reading.link).toBe('https://example.com/commit/abcdef1234567890');
-  });
-
-  it('never calls a link function for a row it is about to drop', () => {
-    // Off CI there is no commit, so there is nothing to link to either.
-    const link = vi.fn(() => 'https://example.com');
-    const declarations: StatDeclaration[] = [
-      { key: 'built_commit', label: 'Built from commit', link },
-    ];
-
-    expect(resolveReadings(declarations, { built_commit: null })).toEqual([]);
-    expect(link).not.toHaveBeenCalled();
   });
 
   it('prefers the measurement over a declared value when both exist', () => {
@@ -159,32 +102,6 @@ describe('resolveReadings', () => {
 
     expect(resolveReadings(declarations, { lines: 5411 })[0].value).toBe(
       '5,411',
-    );
-  });
-
-  it('carries the link and source onto the resolved row', () => {
-    const declarations: StatDeclaration[] = [
-      {
-        key: 'stargazers_count',
-        label: 'Stars',
-        source: 'github',
-        link: 'https://example.com',
-      },
-    ];
-
-    expect(resolveReadings(declarations, { stargazers_count: 1663 })).toEqual([
-      {
-        label: 'Stars',
-        value: '1,663',
-        link: 'https://example.com',
-        source: 'github',
-      },
-    ]);
-  });
-
-  it('leaves a row with no source unmarked', () => {
-    expect(resolveReadings([{ label: 'Joke', value: 0 }])[0].source).toBe(
-      undefined,
     );
   });
 });

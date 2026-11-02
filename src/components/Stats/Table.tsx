@@ -16,7 +16,6 @@ export default function Table({ data }: TableProps) {
             key={reading.label}
             label={reading.label}
             link={reading.link}
-            source={reading.source}
             value={reading.value}
           />
         ))}

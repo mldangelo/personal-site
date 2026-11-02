@@ -11,7 +11,7 @@
  */
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { basename, extname, join, relative, resolve } from 'node:path';
-import matter from 'gray-matter';
+import { parseFrontmatter } from '../src/lib/frontmatter.mjs';
 import {
   parseSrcset,
   readMarkdownReferences,
@@ -72,7 +72,7 @@ if (pages.length === 0) {
 
 const posts = walk(CONTENT, (name) => name.endsWith('.md')).map((path) => {
   const source = toUrlPath(relative(ROOT, path));
-  const { data, content } = matter(readFileSync(path, 'utf8'));
+  const { data, content } = parseFrontmatter(readFileSync(path, 'utf8'));
   const frontmatter = validatePostFrontmatterData(data, source);
 
   return {

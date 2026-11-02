@@ -22,12 +22,20 @@ export default function StatsPage() {
           <p className="stats-subtitle">Some fun numbers</p>
         </header>
         <div className="stats-content">
-          <section>
-            <h2 className="stats-section-title">About me</h2>
+          <section aria-labelledby="stats-about-me">
+            <div className="section-header">
+              <h2 id="stats-about-me" className="section-heading">
+                About me
+              </h2>
+            </div>
             <Personal />
           </section>
-          <section>
-            <h2 className="stats-section-title">This site</h2>
+          <section aria-labelledby="stats-this-site">
+            <div className="section-header">
+              <h2 id="stats-this-site" className="section-heading">
+                This site
+              </h2>
+            </div>
             <Site />
           </section>
         </div>

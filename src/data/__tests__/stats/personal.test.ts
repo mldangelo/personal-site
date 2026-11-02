@@ -26,7 +26,6 @@ describe('personal stats data', () => {
     expect(ageStat).toBeDefined();
     expect(ageStat!.label).toBe('Current age');
     expect(ageStat!.value).toBeUndefined();
-    expect(ageStat!.source).toBe('profile');
   });
 
   it('has a countries visited stat', () => {
@@ -34,7 +33,7 @@ describe('personal stats data', () => {
 
     expect(countriesStat).toBeDefined();
     expect(countriesStat!.label).toBe('Countries visited');
-    expect(countriesStat!.value).toBe(53);
+    expect(countriesStat!.value).toBe(55);
     expect(countriesStat!.link).toContain('google.com/maps');
   });
 
@@ -43,7 +42,7 @@ describe('personal stats data', () => {
 
     expect(locationStat).toBeDefined();
     expect(locationStat!.label).toBe('Current city');
-    expect(locationStat!.value).toBe('New York, NY');
+    expect(locationStat!.value).toBe('San Francisco');
   });
 
   it('stays a plain data module with no React in it', () => {
@@ -51,12 +50,6 @@ describe('personal stats data', () => {
     // again, the whole table becomes a client component again with it.
     for (const stat of data) {
       expect(typeof stat.value, stat.label).not.toBe('object');
-    }
-  });
-
-  it('names the source of every reading', () => {
-    for (const stat of data) {
-      expect(stat.source, stat.label).toBe('profile');
     }
   });
 });

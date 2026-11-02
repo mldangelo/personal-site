@@ -27,14 +27,5 @@ export default function PersonalStats() {
     ),
   });
 
-  return (
-    <>
-      <Table data={readings} />
-      <p className="stats-source-note" data-source="profile">
-        Profile readings come from the site&apos;s maintained profile data. The
-        age updates in your browser; without JavaScript or with reduced motion,
-        it remains the dated snapshot taken when this page was rendered.
-      </p>
-    </>
-  );
+  return <Table data={readings} />;
 }
