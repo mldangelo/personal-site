@@ -22,15 +22,9 @@ export interface PostFrontmatter {
   imageAlt?: string;
 }
 
-export interface Post {
+export interface Post extends PostFrontmatter {
   slug: string;
-  title: string;
-  date: string;
-  description: string;
   content: string;
-  draft?: boolean;
-  image?: string;
-  imageAlt?: string;
 }
 
 const postsDirectory = path.join(process.cwd(), 'content/writing');
@@ -64,11 +58,6 @@ function readPost(slug: string): Post | null {
   }
 
   const fullPath = path.join(postsDirectory, `${slug}.md`);
-
-  if (!fs.existsSync(fullPath)) {
-    return null;
-  }
-
   const fileContents = fs.readFileSync(fullPath, 'utf8');
   const { data, content } = parseFrontmatter(fileContents);
   const frontmatter = validatePostFrontmatter(
@@ -76,16 +65,7 @@ function readPost(slug: string): Post | null {
     path.relative(process.cwd(), fullPath),
   );
 
-  return {
-    slug,
-    title: frontmatter.title,
-    date: frontmatter.date,
-    description: frontmatter.description,
-    content,
-    draft: frontmatter.draft,
-    image: frontmatter.image,
-    imageAlt: frontmatter.imageAlt,
-  };
+  return { ...frontmatter, slug, content };
 }
 
 function isSafeSlug(slug: string): boolean {
@@ -126,10 +106,6 @@ export function getPostSlugs(): string[] {
  * reaches the filesystem.
  */
 export function getPostBySlug(slug: string): Post | null {
-  if (!isSafeSlug(slug)) {
-    return null;
-  }
-
   return getAllPosts().find((post) => post.slug === slug) ?? null;
 }
 
@@ -161,7 +137,6 @@ export function getAllPosts(): Post[] {
 
   cachedPosts ??= readPublishedPosts();
 
-  // Copy: callers have historically sorted the array they were handed, and a
-  // shared reference would make that reorder everyone else's view.
+  // Copy: a caller sorting a shared reference would reorder everyone's view.
   return [...cachedPosts];
 }

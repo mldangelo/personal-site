@@ -40,6 +40,16 @@ const CONTENT = resolve(ROOT, 'content/writing');
 const failures = [];
 const fail = (page, message) => failures.push({ page, message });
 
+/** Reports a same-origin URL outside the configured base path; true if it is. */
+function isOutsideBasePath(url, page, label, raw) {
+  if (routeForPublicPath(url.pathname) !== undefined) return false;
+  fail(
+    page,
+    `${label} points outside configured base path ${SITE_BASE_PATH}/: ${raw}`,
+  );
+  return true;
+}
+
 const {
   origin: SITE_ORIGIN,
   basePath: SITE_BASE_PATH,
@@ -264,13 +274,7 @@ for (const draft of drafts) {
 
     if (!['http:', 'https:'].includes(url.protocol)) continue;
     if (url.origin !== SITE_ORIGIN) continue;
-    if (routeForPublicPath(url.pathname) === undefined) {
-      fail(
-        draft.source,
-        `draft ${kind} points outside configured base path ${SITE_BASE_PATH}/: ${target}`,
-      );
-      continue;
-    }
+    if (isOutsideBasePath(url, draft.source, `draft ${kind}`, target)) continue;
     if (kind === 'link' && pageAt(url.pathname)) continue;
     if (
       exportedFileExists(url.pathname) &&
@@ -311,13 +315,7 @@ function validateInternalTarget(raw, source, label) {
   const url = parseHttpUrl(raw, source.route, source.relativePath, label);
   if (!url || url.origin !== SITE_ORIGIN) return;
 
-  if (routeForPublicPath(url.pathname) === undefined) {
-    fail(
-      source.relativePath,
-      `${label} points outside configured base path ${SITE_BASE_PATH}/: ${raw}`,
-    );
-    return;
-  }
+  if (isOutsideBasePath(url, source.relativePath, label, raw)) return;
 
   if (isDraftPath(url.pathname)) {
     fail(
@@ -365,13 +363,7 @@ function validateExportedHeadAsset(raw, source, label) {
     );
     return url;
   }
-  if (routeForPublicPath(url.pathname) === undefined) {
-    fail(
-      source.relativePath,
-      `${label} points outside configured base path ${SITE_BASE_PATH}/: ${raw}`,
-    );
-    return url;
-  }
+  if (isOutsideBasePath(url, source.relativePath, label, raw)) return url;
   if (!exportedFileExists(url.pathname)) {
     fail(source.relativePath, `${label} points at missing export: ${raw}`);
   }
@@ -393,12 +385,7 @@ function validateAbsoluteMetadataUrl(raw, source, label) {
       `${label} uses ${url.origin}; expected ${SITE_ORIGIN}`,
     );
   }
-  if (routeForPublicPath(url.pathname) === undefined) {
-    fail(
-      source.relativePath,
-      `${label} points outside configured base path ${SITE_BASE_PATH}/: ${raw}`,
-    );
-  }
+  isOutsideBasePath(url, source.relativePath, label, raw);
   if (!hasCanonicalPathFormat(raw, url)) {
     fail(
       source.relativePath,
@@ -470,18 +457,22 @@ for (const record of records) {
     fail(relativePath, `duplicate ids: ${duplicateIds.join(', ')}`);
   }
 
+  const checkUrlCount = (values, noun) => {
+    if (isIndexable && values.length !== 1) {
+      fail(
+        relativePath,
+        `indexable page has ${values.length} ${noun}; expected 1`,
+      );
+    } else if (!isIndexable && values.length > 1) {
+      fail(
+        relativePath,
+        `non-indexable page has ${values.length} ${noun}; expected at most 1`,
+      );
+    }
+  };
+
   const canonicals = canonicalValues(html);
-  if (isIndexable && canonicals.length !== 1) {
-    fail(
-      relativePath,
-      `indexable page has ${canonicals.length} canonical links; expected 1`,
-    );
-  } else if (!isIndexable && canonicals.length > 1) {
-    fail(
-      relativePath,
-      `non-indexable page has ${canonicals.length} canonical links; expected at most 1`,
-    );
-  }
+  checkUrlCount(canonicals, 'canonical links');
 
   const canonicalUrl = canonicals[0]
     ? validateAbsoluteMetadataUrl(canonicals[0], record, 'canonical')
@@ -508,17 +499,7 @@ for (const record of records) {
   }
 
   const ogUrls = metaValues(html, 'property', 'og:url');
-  if (isIndexable && ogUrls.length !== 1) {
-    fail(
-      relativePath,
-      `indexable page has ${ogUrls.length} og:url tags; expected 1`,
-    );
-  } else if (!isIndexable && ogUrls.length > 1) {
-    fail(
-      relativePath,
-      `non-indexable page has ${ogUrls.length} og:url tags; expected at most 1`,
-    );
-  }
+  checkUrlCount(ogUrls, 'og:url tags');
 
   const ogUrl = ogUrls[0]
     ? validateAbsoluteMetadataUrl(ogUrls[0], record, 'og:url')
@@ -659,11 +640,8 @@ if (!home) {
 
       if (url.origin !== SITE_ORIGIN) {
         fail('manifest.json', `${name} uses a foreign origin: ${url.origin}`);
-      } else if (routeForPublicPath(url.pathname) === undefined) {
-        fail(
-          'manifest.json',
-          `${name} points outside configured base path ${SITE_BASE_PATH}/: ${raw}`,
-        );
+      } else {
+        isOutsideBasePath(url, 'manifest.json', name, raw);
       }
       return url;
     };
@@ -736,13 +714,7 @@ function validateXmlUrl(raw, documentName, options = {}) {
   }
 
   if (url.origin === SITE_ORIGIN) {
-    if (routeForPublicPath(url.pathname) === undefined) {
-      fail(
-        documentName,
-        `URL points outside configured base path ${SITE_BASE_PATH}/: ${raw.trim()}`,
-      );
-      return url;
-    }
+    if (isOutsideBasePath(url, documentName, 'URL', raw.trim())) return url;
     if (isDraftPath(url.pathname)) {
       fail(documentName, `exposes draft route: ${url.pathname}`);
     }

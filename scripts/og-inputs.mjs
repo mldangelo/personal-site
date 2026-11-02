@@ -113,10 +113,7 @@ export function publicFile(root, publicPath) {
  * Card colour role → design token.
  *
  * satori has no cascade, so the generator has to be handed literal colours.
- * These were hand-copied hex literals and drifted: the readout hairline was
- * `rgba(35, 39, 46, 0.18)`, a value no token has — between `--color-border`
- * (0.14) and `--color-border-alt` (0.24). Reading the stylesheet keeps the
- * cards on the site's palette, and folding the resolved values into the card
+ * Reading the stylesheet keeps the cards on the site's palette, and folding the resolved values into the card
  * digest makes a token change invalidate the committed PNGs.
  */
 const CARD_COLORS = {
@@ -325,7 +322,7 @@ export function formatCardDate(date) {
  * its own source: a number typed into a card is a number that goes stale
  * without anything failing.
  */
-export function measurePost(markdown) {
+function measurePost(markdown) {
   const words = countProseWords(markdown);
 
   return [

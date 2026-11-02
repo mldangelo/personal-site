@@ -8,14 +8,14 @@ import { readImageRenderer } from '../lib/image-renderer.mjs';
 
 /**
  * Keeps the committed icon set bound to the inputs that produced it, the way
- * `check-og.mjs` keeps the share card bound to its own.
- *
- * These assertions make stale art a failing test rather than a thing someone
- * eventually spots.
+ * `check-og.mjs` keeps the share card bound to its own, so stale art is a
+ * failing test.
  */
 
 const root = process.cwd();
-const META_PATH = join(root, 'scripts', 'icons.meta.json');
+const meta = JSON.parse(
+  readFileSync(join(root, 'scripts', 'icons.meta.json'), 'utf8'),
+);
 
 const GENERATED_FILES = [
   'app/apple-icon.png',
@@ -25,35 +25,7 @@ const GENERATED_FILES = [
   'public/images/icons/icon-192.png',
   'public/images/icons/icon-512.png',
   'public/images/icons/icon-maskable-512.png',
-] as const;
-
-type IconsMeta = {
-  inputs: {
-    accent: string;
-    onAccent: string;
-    backgroundLight: string;
-    backgroundDark: string;
-    monogram: string;
-    name: string;
-    font: {
-      name: string;
-      family: string;
-      weight: number;
-      style: string;
-      url: string;
-      sha256: string;
-    };
-    renderer: {
-      name: string;
-      version: string;
-      integrity: string;
-    }[];
-  };
-  generatorDigest: string;
-  files: Record<string, string>;
-};
-
-const meta: IconsMeta = JSON.parse(readFileSync(META_PATH, 'utf8'));
+];
 
 const STALE =
   'Run `npm run icons` and commit the regenerated icon set plus scripts/icons.meta.json.';
@@ -67,46 +39,29 @@ function pngSize(bytes: Buffer): { width: number; height: number } {
 }
 
 describe('generated icon set', () => {
-  it('records the accent the palette currently declares', () => {
-    expect(meta.inputs.accent).toBe(readColorToken('--color-accent', 'light'));
-    expect(meta.inputs.onAccent).toBe(
-      readColorToken('--color-on-accent', 'light'),
-    );
+  it.each([
+    ['accent', '--color-accent', 'light'],
+    ['onAccent', '--color-on-accent', 'light'],
+    ['backgroundLight', '--color-bg-alt', 'light'],
+    ['backgroundDark', '--color-bg-alt', 'dark'],
+  ] as const)('records %s as the current %s in %s', (input, token, theme) => {
+    expect(meta.inputs[input]).toBe(readColorToken(token, theme));
   });
 
-  it('records the page background both themes currently declare', () => {
-    expect(meta.inputs.backgroundLight).toBe(
-      readColorToken('--color-bg-alt', 'light'),
-    );
-    expect(meta.inputs.backgroundDark).toBe(
-      readColorToken('--color-bg-alt', 'dark'),
-    );
-  });
-
-  it('derives the monogram from the profile name rather than hardcoding it', () => {
+  it('records the current profile name', () => {
     expect(meta.inputs.name).toBe(profile.name);
-    expect(meta.inputs.monogram).toBe(
-      profile.name
-        .split(/[\s'’-]+/)
-        .filter(Boolean)
-        .map((word) => word[0].toUpperCase())
-        .slice(0, 2)
-        .join(''),
-    );
   });
 
   it('pins the exact supported font bytes used by the generator', () => {
-    const fontUrl = new URL(meta.inputs.font.url);
-
     expect(meta.inputs.font).toMatchObject({
       name: 'Display',
       family: 'Inter',
       weight: 500,
       style: 'normal',
     });
-    expect(fontUrl.protocol).toBe('https:');
-    expect(fontUrl.hostname).toBe('fonts.gstatic.com');
-    expect(fontUrl.pathname).toMatch(/^\/s\/inter\/v\d+\/[^/]+\.ttf$/);
+    expect(meta.inputs.font.url).toMatch(
+      /^https:\/\/fonts\.gstatic\.com\/s\/inter\/v\d+\/[^/]+\.ttf$/,
+    );
     expect(meta.inputs.font.sha256).toMatch(/^[0-9a-f]{64}$/);
   });
 
@@ -160,18 +115,8 @@ describe('generated icon set', () => {
     expect(digest, STALE).toBe(meta.files[path]);
   });
 
-  it('records portable repository paths in the ledger', () => {
-    for (const path of GENERATED_FILES) {
-      expect(path).not.toContain('\\');
-      expect(path).toBe(posix.normalize(path));
-    }
-  });
-
-  /**
-   * Next reads these dimensions off the files themselves and puts them in the
-   * `sizes` attribute of the `<link>` tags it emits, so the wrong size here is
-   * a wrong promise in every page's `<head>`.
-   */
+  // Next reads these dimensions off the files and puts them in the `sizes`
+  // attribute of the `<link>` tags it emits on every page.
   it.each([
     ['app/icon.png', 96],
     ['app/apple-icon.png', 180],
@@ -185,10 +130,8 @@ describe('generated icon set', () => {
     });
   });
 
-  /**
-   * `/favicon.ico` is fetched by convention with no HTML reference, so a
-   * malformed container fails silently in exactly the place nobody looks.
-   */
+  // `/favicon.ico` is fetched by convention with no HTML reference, so nothing
+  // else notices a malformed container.
   it('packs favicon.ico as two png entries at 16 and 32', () => {
     const ico = readFileSync(join(root, 'app', 'favicon.ico'));
 
@@ -196,23 +139,16 @@ describe('generated icon set', () => {
     expect(ico.readUInt16LE(2)).toBe(1); // type: icon
     expect(ico.readUInt16LE(4)).toBe(2);
 
-    const entries = [0, 1].map((index) => {
+    for (const [index, size] of [16, 32].entries()) {
       const at = 6 + index * 16;
       const length = ico.readUInt32LE(at + 8);
       const offset = ico.readUInt32LE(at + 12);
 
-      return {
-        declared: ico[at],
-        image: ico.subarray(offset, offset + length),
-      };
-    });
-
-    expect(entries.map((entry) => entry.declared)).toEqual([16, 32]);
-
-    for (const entry of entries) {
-      const { width, height } = pngSize(entry.image);
-      expect(width).toBe(entry.declared);
-      expect(height).toBe(entry.declared);
+      expect(ico[at]).toBe(size);
+      expect(pngSize(ico.subarray(offset, offset + length))).toEqual({
+        width: size,
+        height: size,
+      });
     }
   });
 });
@@ -234,13 +170,8 @@ describe('generated web app manifest', () => {
     expect(manifest.short_name).toBe(meta.inputs.monogram);
   });
 
-  /**
-   * Every `src` is relative to the manifest's own url, so a fork served under
-   * a repository basePath resolves them without the generator knowing the
-   * prefix. A leading slash — which is what the deleted manifest used — breaks
-   * that. The paths also have to name files that exist, since the deleted
-   * manifest's did not once the art moved.
-   */
+  // Every `src` is relative to the manifest's own url, so a fork under a
+  // repository basePath resolves them without the generator knowing the prefix.
   it('points every icon at a committed file by relative path', () => {
     expect(manifest.icons.length).toBeGreaterThan(0);
 

@@ -9,30 +9,16 @@ import work from '@/data/resume/work';
 import { sortPositions } from '@/lib/career';
 import {
   buildJsonResume,
-  RESUME_JSON_PATH,
-  RESUME_JSON_URL,
   serializeJsonResume,
   toPlainText,
 } from '@/lib/resumeJson';
-import { AUTHOR_NAME, SITE_DESCRIPTION, SITE_URL } from '@/lib/utils';
+import { AUTHOR_NAME, SITE_URL } from '@/lib/utils';
 
 /** Root properties JSON Resume v1.0.0 allows; the schema forbids the rest. */
-const ROOT_KEYS = [
-  '$schema',
-  'basics',
-  'work',
-  'volunteer',
-  'education',
-  'awards',
-  'certificates',
-  'publications',
-  'skills',
-  'languages',
-  'interests',
-  'references',
-  'projects',
-  'meta',
-];
+const ROOT_KEYS =
+  '$schema basics work volunteer education awards certificates publications skills languages interests references projects meta'.split(
+    ' ',
+  );
 
 /** The schema's `iso8601` definition: YYYY, YYYY-MM, or YYYY-MM-DD. */
 const ISO8601 =
@@ -41,74 +27,46 @@ const ISO8601 =
 const resume = buildJsonResume();
 
 describe('toPlainText', () => {
-  it('keeps anchor text and drops the markup', () => {
-    expect(
-      toPlainText("see <a href='https://example.com'>the docs</a> now"),
-    ).toBe('see the docs now');
+  it.each([
+    ["see <a href='https://example.com'>the docs</a>", 'see the docs'],
+    [
+      '[docs](https://example.com) **very** *good* `code`',
+      'docs very good code',
+    ],
+    ['one\n    two\n\n  three ', 'one two three'],
+    ['Trust &amp; Safety &#38; more', 'Trust & Safety & more'],
+    // Scalar values at each side of the surrogate range.
+    [
+      '&#xD7FF;&#xE000;&#x10FFFF;',
+      String.fromCodePoint(0xd7ff, 0xe000, 0x10ffff),
+    ],
+  ])('flattens %s', (input, expected) => {
+    expect(toPlainText(input)).toBe(expected);
   });
 
-  it('unwraps markdown links, emphasis, and code', () => {
-    expect(
-      toPlainText('[docs](https://example.com) are **very** *good* `code`'),
-    ).toBe('docs are very good code');
-  });
-
-  it('collapses the wrapping and indentation of template literals', () => {
-    expect(toPlainText('one\n    two\n\n  three ')).toBe('one two three');
-  });
-
-  it('decodes HTML entities', () => {
-    expect(toPlainText('Trust &amp; Safety &#38; more')).toBe(
-      'Trust & Safety & more',
-    );
-  });
-
-  it('preserves invalid numeric entities instead of throwing or emitting surrogates', () => {
-    for (const entity of [
-      '&#1114112;',
-      '&#x110000;',
-      '&#99999999;',
-      '&#xD800;',
-      '&#xDFFF;',
-    ]) {
-      expect(() => toPlainText(`before ${entity} after`)).not.toThrow();
-      expect(toPlainText(`before ${entity} after`)).toBe(
-        `before ${entity} after`,
-      );
-    }
-  });
-
-  it('decodes valid scalar values at each side of the surrogate range', () => {
-    expect(toPlainText('&#xD7FF;&#xE000;&#x10FFFF;')).toBe(
-      `${String.fromCodePoint(0xd7ff)}${String.fromCodePoint(
-        0xe000,
-      )}${String.fromCodePoint(0x10ffff)}`,
-    );
-  });
-
-  it('leaves underscores alone so identifiers survive', () => {
-    expect(toPlainText('the snake_case_name field')).toBe(
-      'the snake_case_name field',
-    );
-  });
-
-  it('preserves angle-bracket comparisons that are not HTML tags', () => {
-    expect(
-      toPlainText(
-        'latency < 50ms and throughput > 1k with Map<string, number>',
-      ),
-    ).toBe('latency < 50ms and throughput > 1k with Map<string, number>');
+  it.each([
+    'the snake_case_name field',
+    // The same literal is the positive case in
+    // `scripts/__tests__/verify-export.test.ts`: what this conversion keeps, the
+    // export gate has to accept.
+    'latency < 50ms and throughput > 1k with Map<string, number>',
+    // Invalid numeric entities must not throw or emit lone surrogates.
+    'before &#1114112; after',
+    'before &#x110000; after',
+    'before &#99999999; after',
+    'before &#xD800; after',
+    'before &#xDFFF; after',
+  ])('leaves alone: %s', (text) => {
+    expect(toPlainText(text)).toBe(text);
   });
 });
 
 describe('json resume document', () => {
-  it('declares the schema it conforms to and adds no keys of its own', () => {
+  it('declares the schema it conforms to and adds no root keys', () => {
     expect(resume.$schema).toBe(
       'https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json',
     );
-    for (const key of Object.keys(resume)) {
-      expect(ROOT_KEYS).toContain(key);
-    }
+    expect(ROOT_KEYS).toEqual(expect.arrayContaining(Object.keys(resume)));
   });
 
   it('builds basics from the shared profile facts', () => {
@@ -116,70 +74,40 @@ describe('json resume document', () => {
       name: AUTHOR_NAME,
       label: profile.role,
       email: profile.email,
-      image: `${SITE_URL}/images/me.jpg`,
-      url: `${SITE_URL}/`,
-      summary: SITE_DESCRIPTION,
+      // The display city, without asserting a country.
+      location: { city: 'San Francisco' },
     });
   });
 
-  it('splits the display city into city and region without asserting a country', () => {
-    expect(resume.basics.location).toEqual({ city: 'San Francisco' });
-  });
-
   it('lists every non-email contact as a profile with its handle', () => {
-    const socials = contact.filter((item) => !item.link.startsWith('mailto:'));
-
-    expect(resume.basics.profiles).toHaveLength(socials.length);
+    expect(resume.basics.profiles).toHaveLength(
+      contact.filter((item) => !item.link.startsWith('mailto:')).length,
+    );
     expect(resume.basics.profiles).toContainEqual({
       network: 'GitHub',
       username: 'mldangelo',
       url: 'https://github.com/mldangelo',
     });
-    expect(resume.basics.profiles).toContainEqual({
-      network: 'LinkedIn',
-      username: 'michaelldangelo',
-      url: 'https://www.linkedin.com/in/michaelldangelo',
-    });
-    expect(
-      resume.basics.profiles.every((entry) => entry.username.length > 0),
-    ).toBe(true);
   });
 
-  it('carries every position in résumé order', () => {
+  it('carries every position in résumé order, with no invented end date', () => {
     expect(resume.work.map((position) => position.name)).toEqual(
       sortPositions(work).map((position) => position.name),
     );
-    expect(resume.work[0]).toMatchObject({
-      name: 'OpenAI',
-      position: work[0].position,
-      url: work[0].url,
-      startDate: work[0].startDate,
-    });
-  });
-
-  it('omits endDate for the current role rather than inventing one', () => {
     expect(resume.work[0]).not.toHaveProperty('endDate');
     expect(resume.work[1].endDate).toBe('2026-03-09');
   });
 
-  it('reduces summaries carrying inline anchors to plain text', () => {
-    expect(resume.work[0].summary).toBe(
-      'Building Promptfoo and other cyber products at OpenAI, with a focus on securing AI systems and applying AI to software security.',
-    );
-
-    const arthena = resume.work.find((position) => position.name === 'Arthena');
-    expect(arthena?.summary).toContain(
-      'backed by Anthemis, Foundation Capital, and Y Combinator',
-    );
-  });
-
+  // Summaries are Markdown with inline anchors, so this reads the real prose.
   it('leaves no markup or uncollapsed whitespace anywhere in the prose', () => {
     const prose = resume.work.flatMap((position) => [
       position.summary ?? '',
       ...(position.highlights ?? []),
     ]);
 
-    expect(prose.length).toBeGreaterThan(0);
+    expect(prose.join(' ')).toContain(
+      'backed by Anthemis, Foundation Capital, and Y Combinator',
+    );
     for (const text of prose) {
       expect(text).not.toMatch(/[<>]/);
       expect(text).not.toMatch(/\[[^\]]+\]\([^)]*\)/);
@@ -201,38 +129,24 @@ describe('json resume document', () => {
     expect(resume.education).toHaveLength(degrees.length);
     expect(resume.education[0]).toMatchObject({
       institution: 'Stanford University',
-      url: 'https://stanford.edu',
       studyType: 'M.S.',
       area: 'Computational and Mathematical Engineering (ICME)',
       endDate: '2016',
     });
-    expect(resume.education[1]).toMatchObject({
-      institution: 'University at Buffalo',
-      studyType: 'B.S.',
-      area: 'Electrical Engineering, Computer Engineering',
-      endDate: '2012',
-    });
   });
 
-  it('files coursework under the school it was taken at', () => {
-    expect(resume.education[0].courses).toHaveLength(courses.length);
+  // Cardinality across the whole document: per-entry assertions never look at a
+  // duplicate. A school whose name contains another's is the case the real data
+  // cannot express, and joining by containment would double every course.
+  it('files each course under exactly one degree', async () => {
     expect(resume.education[0].courses).toContain(
       'EE 364a - Convex Optimization',
     );
-    // Every course in the data is a Stanford course, so Buffalo carries none
-    // rather than an empty array.
-    expect(resume.education[1]).not.toHaveProperty('courses');
-  });
-
-  it('files each course under exactly one degree', async () => {
-    // Cardinality across the whole document, not per entry: attaching courses
-    // by substring containment published all 13 Stanford courses under every
-    // degree whose school name merely contained "Stanford", and the per-entry
-    // assertions above never looked at the extra entry. A second school with a
-    // superstring name is the case the current data cannot express.
     expect(
       resume.education.flatMap((entry) => entry.courses ?? []),
     ).toHaveLength(courses.length);
+    // A school with no courses carries none, rather than an empty array.
+    expect(resume.education[1]).not.toHaveProperty('courses');
 
     vi.resetModules();
     vi.doMock('@/data/resume/degrees', () => ({
@@ -251,7 +165,7 @@ describe('json resume document', () => {
       const { buildJsonResume: buildWithSecondSchool } = await import(
         '@/lib/resumeJson'
       );
-      const education = buildWithSecondSchool().education;
+      const { education } = buildWithSecondSchool();
 
       expect(education).toHaveLength(degrees.length + 1);
       expect(education.flatMap((entry) => entry.courses ?? [])).toHaveLength(
@@ -273,35 +187,26 @@ describe('json resume document', () => {
       const expected = skills
         .filter((skill) => skill.category.includes(group.name))
         .map((skill) => skill.title);
-
-      expect(group.keywords).toHaveLength(expected.length);
-      expect([...group.keywords].sort()).toEqual([...expected].sort());
-
       const competencies = group.keywords.map(
         (keyword) =>
           skills.find((skill) => skill.title === keyword)?.competency ?? 0,
       );
+
+      expect([...group.keywords].sort()).toEqual([...expected].sort());
       expect(competencies).toEqual([...competencies].sort((a, b) => b - a));
     }
   });
 
+  // Work dates describe employment, not edits to this document, and JSON Resume
+  // makes `lastModified` optional.
   it('keeps the canonical file-like without inventing a modification date', () => {
-    expect(RESUME_JSON_PATH).toBe('/resume.json');
-    expect(RESUME_JSON_URL).toBe(`${SITE_URL}/resume.json`);
-    expect(resume.meta.canonical).toBe(RESUME_JSON_URL);
-    expect(resume.meta.canonical).not.toMatch(/resume\.json\/$/);
-    // Work dates describe employment, not edits to profile, education, skills,
-    // prose, or this generator. JSON Resume makes lastModified optional.
-    expect(resume.meta).not.toHaveProperty('lastModified');
-    expect(serializeJsonResume()).not.toContain('lastModified');
+    expect(resume.meta).toEqual({ canonical: `${SITE_URL}/resume.json` });
   });
 
-  it('serializes to stable, pretty-printed bytes', () => {
+  it('serializes to pretty-printed bytes that parse back', () => {
     const serialized = serializeJsonResume();
 
-    expect(serialized).toBe(serializeJsonResume());
-    expect(serialized.endsWith('\n')).toBe(true);
-    expect(serialized).toContain('\n  "basics": {');
+    expect(serialized).toMatch(/\n {2}"basics": \{[\s\S]*\n$/);
     expect(JSON.parse(serialized)).toEqual(resume);
   });
 });

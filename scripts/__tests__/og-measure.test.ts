@@ -1,6 +1,6 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { deflateSync } from 'node:zlib';
+import sharp from 'sharp';
 import { beforeAll, describe, expect, it } from 'vitest';
 
 import { CARD_SIZE, readCardColors } from '../og-inputs.mjs';
@@ -20,6 +20,8 @@ const CARDS = [
     .filter((name) => name.endsWith('.png'))
     .map((name) => join(CARD_DIR, name)),
 ];
+const READOUT_TOP = readoutTop(CARD_SIZE);
+const LAST_ROW = CARD_SIZE.height - 1;
 
 let paper = '';
 
@@ -29,140 +31,93 @@ beforeAll(async () => {
   paper = colors.paper;
 });
 
-function crc32(bytes: Buffer): number {
-  let crc = 0xffffffff;
-  for (const byte of bytes) {
-    crc ^= byte;
-    for (let bit = 0; bit < 8; bit += 1) {
-      crc = crc & 1 ? (crc >>> 1) ^ 0xedb88320 : crc >>> 1;
-    }
-  }
-  return (crc ^ 0xffffffff) >>> 0;
-}
-
-function chunk(type: string, data: Buffer): Buffer {
-  const header = Buffer.alloc(8);
-  header.writeUInt32BE(data.length, 0);
-  header.write(type, 4, 'ascii');
-  const crc = Buffer.alloc(4);
-  crc.writeUInt32BE(crc32(Buffer.concat([header.subarray(4), data])), 0);
-  return Buffer.concat([header, data, crc]);
-}
-
 /** A card-shaped PNG with the given rows painted in ink and the rest paper. */
-function cardFixture(inkRows: [number, number][]): Buffer {
+function cardFixture(inkRows: [number, number][]): Promise<Buffer> {
   const { width, height } = CARD_SIZE;
-  const [red, green, blue] = parseColor(paper);
-  const raw = Buffer.alloc(height * (width * 4 + 1));
+  const color = Buffer.from(parseColor(paper));
+  const ink = Buffer.alloc(3);
+  const raw = Buffer.alloc(width * height * 3);
 
   for (let y = 0; y < height; y += 1) {
     const inked = inkRows.some(([start, end]) => y >= start && y <= end);
     for (let x = 0; x < width; x += 1) {
-      const offset = y * (width * 4 + 1) + 1 + x * 4;
-      raw[offset] = inked ? 0 : red;
-      raw[offset + 1] = inked ? 0 : green;
-      raw[offset + 2] = inked ? 0 : blue;
-      raw[offset + 3] = 255;
+      (inked ? ink : color).copy(raw, (y * width + x) * 3);
     }
   }
 
-  const header = Buffer.alloc(13);
-  header.writeUInt32BE(width, 0);
-  header.writeUInt32BE(height, 4);
-  header[8] = 8;
-  header[9] = 6;
-
-  return Buffer.concat([
-    Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
-    chunk('IHDR', header),
-    chunk('IDAT', deflateSync(raw)),
-    chunk('IEND', Buffer.alloc(0)),
-  ]);
+  return sharp(raw, { raw: { width, height, channels: 3 } })
+    .png()
+    .toBuffer();
 }
 
-const fits = (image: Buffer) =>
-  assertCardGeometry(image, {
+const fits = async (inkRows: [number, number][]) =>
+  assertCardGeometry(await cardFixture(inkRows), {
     size: CARD_SIZE,
     paper,
     topRule: TOP_RULE,
-    readoutTop: readoutTop(CARD_SIZE),
+    readoutTop: READOUT_TOP,
   });
 
 /**
- * These constants are not free parameters: they describe where satori actually
- * puts ink, and the whole fit calculation is measured against them. `122` was
- * wrong by 22px for long enough to spend half the slack the layout thought it
- * had, and nothing failed, because nothing looked at a card.
+ * These constants describe where satori actually puts ink, and the whole fit
+ * calculation is measured against them.
  */
 describe('committed card geometry', () => {
   it.each(CARDS)('matches the budgeted rows in %s', async (path) => {
     const bands = await inkBands(readFileSync(path), paper);
     const readout = bands[bands.length - 1];
+    const copy = bands[bands.length - 2];
 
     expect(bands[0]).toEqual([0, TOP_RULE - 1]);
-    expect(readout).toEqual([readoutTop(CARD_SIZE), CARD_SIZE.height - 1]);
+    expect(readout).toEqual([READOUT_TOP, LAST_ROW]);
     // The readout row, its own rule included, is exactly what was budgeted.
     expect(READOUT_HEIGHT + READOUT_RULE).toBe(CARD_SIZE.height - readout[0]);
-  });
-
-  it('leaves the copy clear of the readout on every committed card', async () => {
-    for (const path of CARDS) {
-      const bands = await inkBands(readFileSync(path), paper);
-      const copy = bands[bands.length - 2];
-
-      expect(copy[1]).toBeLessThan(readoutTop(CARD_SIZE));
-    }
+    expect(copy[1]).toBeLessThan(READOUT_TOP);
   });
 });
 
 describe('rendered card geometry', () => {
   it('accepts a card whose copy stops above the readout', async () => {
     await expect(
-      fits(
-        cardFixture([
-          [0, TOP_RULE - 1],
-          [90, 400],
-          [readoutTop(CARD_SIZE), CARD_SIZE.height - 1],
-        ]),
-      ),
+      fits([
+        [0, TOP_RULE - 1],
+        [90, 400],
+        [READOUT_TOP, LAST_ROW],
+      ]),
     ).resolves.toBeDefined();
   });
 
-  it('rejects copy that has run into the readout', async () => {
-    // The failure satori does not report: the title's last line and the
-    // readout rule become one unbroken band of ink.
-    await expect(
-      fits(
-        cardFixture([
-          [0, TOP_RULE - 1],
-          [90, CARD_SIZE.height - 1],
-        ]),
-      ),
-    ).rejects.toThrow(/Copy has run into the readout/);
-  });
-
-  it('rejects a readout pushed down the card', async () => {
-    await expect(
-      fits(
-        cardFixture([
-          [0, TOP_RULE - 1],
-          [90, 480],
-          [559, CARD_SIZE.height - 1],
-        ]),
-      ),
-    ).rejects.toThrow(/readout should be the last band of ink/);
-  });
-
-  it('rejects a card that does not open with its rule', async () => {
-    await expect(
-      fits(
-        cardFixture([
-          [2, TOP_RULE - 1],
-          [90, 400],
-          [readoutTop(CARD_SIZE), CARD_SIZE.height - 1],
-        ]),
-      ),
-    ).rejects.toThrow(/does not open with its/);
+  it.each<[string, [number, number][], RegExp]>([
+    // The failure satori does not report: the title's last line and the readout
+    // rule become one unbroken band of ink.
+    [
+      'copy that has run into the readout',
+      [
+        [0, TOP_RULE - 1],
+        [90, LAST_ROW],
+      ],
+      /Copy has run into the readout/,
+    ],
+    [
+      'a readout pushed down the card',
+      [
+        [0, TOP_RULE - 1],
+        [90, 480],
+        [559, LAST_ROW],
+      ],
+      /readout should be the last band of ink/,
+    ],
+    [
+      'a card that does not open with its rule',
+      [
+        [2, TOP_RULE - 1],
+        [90, 400],
+        [READOUT_TOP, LAST_ROW],
+      ],
+      /does not open with its/,
+    ],
+  ])('rejects %s', async (_name, inkRows, expected) => {
+    await expect(fits(inkRows)).rejects.toThrow(expected);
   });
 
   it('refuses to measure non-PNG input', async () => {

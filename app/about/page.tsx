@@ -6,15 +6,8 @@ import PageWrapper from '@/components/Template/PageWrapper';
 import { aboutMarkdown } from '@/data/about';
 import profile from '@/data/profile.json';
 import { createPageMetadata } from '@/lib/metadata';
-import {
-  breadcrumbNode,
-  HOME_URL,
-  profilePageNode,
-  SITE_URL,
-} from '@/lib/schema';
+import { profilePageNode, sectionPageNodes } from '@/lib/schema';
 import { AUTHOR_NAME } from '@/lib/utils';
-
-const ABOUT_URL = `${SITE_URL}/about/`;
 
 const ABOUT_DESCRIPTION = `Learn about ${AUTHOR_NAME} - ${profile.role} at ${profile.employer} and builder across AI, security, and infrastructure.`;
 
@@ -28,18 +21,12 @@ export default function AboutPage() {
   return (
     <PageWrapper>
       <SchemaGraph
-        nodes={[
-          profilePageNode({
-            url: ABOUT_URL,
-            name: 'About',
-            description: ABOUT_DESCRIPTION,
-            hasBreadcrumb: true,
-          }),
-          breadcrumbNode(ABOUT_URL, [
-            { name: 'Home', url: HOME_URL },
-            { name: 'About', url: ABOUT_URL },
-          ]),
-        ]}
+        nodes={sectionPageNodes(
+          profilePageNode,
+          '/about/',
+          'About',
+          ABOUT_DESCRIPTION,
+        )}
       />
       <section className="about-page">
         <header className="about-header">

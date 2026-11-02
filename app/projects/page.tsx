@@ -5,15 +5,8 @@ import { SchemaGraph } from '@/components/Schema';
 import PageWrapper from '@/components/Template/PageWrapper';
 import { archive, shipped } from '@/data/projects';
 import { createPageMetadata } from '@/lib/metadata';
-import {
-  breadcrumbNode,
-  collectionPageNode,
-  HOME_URL,
-  SITE_URL,
-} from '@/lib/schema';
+import { collectionPageNode, sectionPageNodes } from '@/lib/schema';
 import { AUTHOR_NAME } from '@/lib/utils';
-
-const PROJECTS_URL = `${SITE_URL}/projects/`;
 
 const PAGE_TITLE = 'Projects';
 
@@ -41,18 +34,12 @@ export default function ProjectsPage() {
   return (
     <PageWrapper>
       <SchemaGraph
-        nodes={[
-          collectionPageNode({
-            url: PROJECTS_URL,
-            name: PAGE_TITLE,
-            description: PROJECTS_DESCRIPTION,
-            hasBreadcrumb: true,
-          }),
-          breadcrumbNode(PROJECTS_URL, [
-            { name: 'Home', url: HOME_URL },
-            { name: PAGE_TITLE, url: PROJECTS_URL },
-          ]),
-        ]}
+        nodes={sectionPageNodes(
+          collectionPageNode,
+          '/projects/',
+          PAGE_TITLE,
+          PROJECTS_DESCRIPTION,
+        )}
       />
       <div className="projects-page">
         <header className="projects-header">
