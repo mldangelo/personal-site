@@ -159,18 +159,11 @@
   margin-bottom: 0;
 }
 
-/* The lede: a step up from the body it introduces, on the same measure —
-   about 65 characters a line. It was 17.6px against an 18px body, behind a
-   `clamp()` whose whole range was one pixel, and ran to 88. */
+/* The intro is told apart by its ink. Its size is the reading size at every
+   width, so it does not outweigh the page title above it. */
 .about-intro p {
-  font-size: var(--text-lg);
-  line-height: 1.5;
-}
-
-@media (max-width: 735px) {
-  .about-intro p {
-    font-size: var(--text-md);
-  }
+  font-size: var(--text-md);
+  color: var(--color-fg-bold);
 }
 
 .about-content ul {
@@ -189,12 +182,18 @@
   color: var(--color-fg-muted);
 }
 
-/* Lists of sentences read down one column, at the size of the page around
-   them. They ran across two at a size smaller, which made a reader find their
-   place twice. Set closer than the log: most entries here are a line long. */
+/* Lists of sentences read down one column, a size below the prose: they are
+   asides, and most entries are a line long, so they are also set closer than
+   the log. On paper they keep the printed body size. */
 .about-section--compact li {
   margin-bottom: 0.4rem;
   line-height: 1.6;
+}
+
+@media screen {
+  .about-section--compact li {
+    font-size: var(--text-base);
+  }
 }
 
 /* The one list of names, so the one list in columns: as many as fit, to

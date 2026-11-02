@@ -170,8 +170,8 @@
     display: none;
   }
 
-  /* The About lede keeps its step above the body, at a paper size: its screen
-     size is larger than the section headings print at. */
+  /* The About intro sits a step above the printed body and below the section
+     headings, which its screen size would crowd. */
   .about-intro p {
     font-size: 12pt;
   }

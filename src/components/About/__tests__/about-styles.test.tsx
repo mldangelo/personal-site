@@ -457,11 +457,21 @@ describe('about page type', () => {
     }
   });
 
-  it('sets the intro as a lede, a step above the body at each width', () => {
-    expect(ruleFor('.about-intro p').get('font-size')).toBe('var(--text-lg)');
+  it('tells the intro apart by its ink, at the reading size at every width', () => {
+    const intro = ruleFor('.about-intro p');
+
+    expect(intro.get('font-size')).toBe('var(--text-md)');
+    expect(intro.get('color')).toBe('var(--color-fg-bold)');
     expect(
-      ruleFor('.about-intro p', '(max-width: 735px)').get('font-size'),
-    ).toBe('var(--text-md)');
+      page.filter((rule) => rule.selectors.includes('.about-intro p')),
+    ).toHaveLength(1);
+  });
+
+  it('sets sentence lists a size below the prose, on screen only', () => {
+    expect(
+      ruleFor('.about-section--compact li', 'screen').get('font-size'),
+    ).toBe('var(--text-base)');
+    expect(ruleFor('.about-section--compact li').has('font-size')).toBe(false);
   });
 
   it('reads sentences down one column and names across three', () => {
@@ -479,9 +489,8 @@ describe('about page type', () => {
   });
 
   /**
-   * The gutter was 11px tracked capitals, and the lede a `clamp()` whose whole
-   * range was one pixel. Nothing a reader has to read here is transformed,
-   * tracked out, or set at a size off the scale or below 12px.
+   * Nothing a reader has to read here is transformed, tracked out, or set at a
+   * size off the scale or below 12px.
    */
   it('sets no small tracked capitals and no size off the scale', () => {
     const sizes = page.flatMap((rule) =>
