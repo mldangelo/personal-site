@@ -1,6 +1,7 @@
 import DateRange from '@/components/Projects/DateRange';
 import { NEW_TAB_SUFFIX } from '@/components/Projects/shared';
 import type { Appearance } from '@/data/speaking';
+import { smartQuotes } from '@/lib/typography';
 
 interface EntryProps {
   data: Appearance;
@@ -22,7 +23,7 @@ export default function Entry({ data }: EntryProps) {
 
   return (
     <a
-      className="project-entry project-entry--linked"
+      className="project-entry"
       href={link}
       target="_blank"
       rel="noopener noreferrer"
@@ -35,12 +36,12 @@ export default function Entry({ data }: EntryProps) {
 
       <div className="project-entry-body">
         <h3 className="project-entry-title">
-          {title}
+          {smartQuotes(title)}
           <span className="project-entry-external" aria-hidden="true">
             ↗
           </span>
         </h3>
-        <p className="project-entry-desc">{desc}</p>
+        <p className="project-entry-desc">{smartQuotes(desc)}</p>
         <span className="sr-only"> {NEW_TAB_SUFFIX}</span>
       </div>
     </a>
