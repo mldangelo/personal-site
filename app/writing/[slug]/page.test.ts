@@ -10,13 +10,12 @@ import {
   it,
   vi,
 } from 'vitest';
-
+import { getPostBySlug, getPostSlugs } from '@/lib/posts';
 import {
   SHARE_IMAGE_DIMENSIONS,
   SHARE_IMAGE_PATH,
   SITE_URL,
 } from '@/lib/utils';
-
 import PostPage, { generateMetadata } from './page';
 
 /**
@@ -71,6 +70,13 @@ async function blogPostingFor(slug: string) {
 }
 
 describe('draft preview', () => {
+  it('is absent from every published read', () => {
+    vi.stubEnv('NODE_ENV', 'production');
+
+    expect(getPostSlugs()).not.toContain(DRAFT_SLUG);
+    expect(getPostBySlug(DRAFT_SLUG)).toBeNull();
+  });
+
   it('declares no canonical and no public card', async () => {
     vi.stubEnv('NODE_ENV', 'development');
     const metadata = await generateMetadata({

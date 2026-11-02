@@ -68,6 +68,7 @@ describe('extractLogMarker', () => {
     'I was 3 hours from the border.',
     'I was 50 miles out and still climbing.',
     'I was 20 percent of the way through the list.',
+    'I was 14 - 17 and playing a lot of video games.',
     // A model number is not a year.
     'It was an old Tandy 2000 with a turbo button.',
     'I shoot with a Nikon D750 and a D800 these days.',

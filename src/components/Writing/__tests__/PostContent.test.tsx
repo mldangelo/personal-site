@@ -31,6 +31,12 @@ function expectUniqueIds(html: string) {
   expect(new Set(ids).size, html).toBe(ids.length);
 }
 
+describe('PostContent block structure', () => {
+  it('leaves blocks as direct children, where `.prose > *` rules reach them', () => {
+    expect(markup('One.\n\nTwo.')).not.toContain('<div>');
+  });
+});
+
 describe('PostContent image sizing', () => {
   it.each([
     ['a measured local image', '![Alt](/og.png)', {}, '630'],
