@@ -155,10 +155,8 @@ export default function RootLayout({
           Skip to content
         </a>
         <ScrollToTop />
-        <div className="site-wrapper">
-          <Navigation />
-          {children}
-        </div>
+        <Navigation />
+        {children}
         <GoogleAnalytics />
       </body>
     </html>

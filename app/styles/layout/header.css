@@ -65,17 +65,6 @@
   }
 }
 
-/* Wrapper - minimal padding, body handles header offset */
-.site-wrapper {
-  display: block;
-  margin: 0 auto;
-  max-width: 100%;
-  opacity: 1;
-  padding: 0;
-  transition: opacity var(--duration-menu) ease;
-  width: 100%;
-}
-
 /* ========================================
    SLIDE MENU (native implementation)
    ======================================== */
