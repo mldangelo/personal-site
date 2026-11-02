@@ -10,7 +10,6 @@ import {
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, beforeAll, describe, expect, it } from 'vitest';
-import { stringifyFrontmatter } from '@/lib/frontmatter.mjs';
 import {
   getAllPosts,
   getPostSlugs,
@@ -66,7 +65,8 @@ function postFixture(frontmatter: Record<string, unknown>): string {
   mkdirSync(directory, { recursive: true });
   writeFileSync(
     join(directory, 'example.md'),
-    stringifyFrontmatter('Fixture body.\n', frontmatter),
+    // JSON is valid YAML, and it needs no serializer.
+    `---\n${JSON.stringify(frontmatter)}\n---\nFixture body.\n`,
   );
   temporaryRoots.push(root);
   return root;

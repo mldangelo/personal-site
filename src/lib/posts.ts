@@ -96,7 +96,7 @@ function isSafeSlug(slug: string): boolean {
 /**
  * Runtime validation at the filesystem boundary.
  *
- * A TypeScript assertion on gray-matter data does not protect a static build:
+ * A TypeScript assertion on parsed YAML does not protect a static build:
  * malformed YAML otherwise becomes `undefined` metadata, an invalid sort key,
  * or a truthy string masquerading as `draft`. Keep this dependency-free and
  * fail with the source filename so editorial mistakes are easy to locate.
