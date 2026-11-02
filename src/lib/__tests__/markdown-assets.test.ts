@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 
 import { parseSrcset, readMarkdownReferences } from '../markdown-assets.mjs';
 
+const image = (target: string) => ({ kind: 'image', target });
+
 describe('readMarkdownReferences', () => {
   it('follows every Markdown image and attachment form the renderer accepts', () => {
     const markdown = [
@@ -21,13 +23,13 @@ describe('readMarkdownReferences', () => {
     ].join('\n');
 
     expect(readMarkdownReferences(markdown)).toEqual([
-      { kind: 'image', target: '/images/nested.png' },
-      { kind: 'image', target: '/images/escaped.png' },
-      { kind: 'image', target: '/images/a(1).png' },
-      { kind: 'image', target: '/images/a)b.png' },
-      { kind: 'image', target: '/images/full.png' },
-      { kind: 'image', target: '/images/collapsed.png' },
-      { kind: 'image', target: '/images/shortcut.png' },
+      image('/images/nested.png'),
+      image('/images/escaped.png'),
+      image('/images/a(1).png'),
+      image('/images/a)b.png'),
+      image('/images/full.png'),
+      image('/images/collapsed.png'),
+      image('/images/shortcut.png'),
       { kind: 'link', target: '/downloads/notes.pdf' },
     ]);
   });
@@ -44,26 +46,22 @@ describe('readMarkdownReferences', () => {
     ].join('\n');
 
     expect(readMarkdownReferences(markdown)).toEqual([
-      { kind: 'image', target: '/images/small.webp' },
-      { kind: 'image', target: '/images/large.webp' },
-      { kind: 'image', target: '/images/fallback.webp' },
-      { kind: 'image', target: '/images/submit.png' },
-      { kind: 'image', target: '/images/poster.png' },
+      image('/images/small.webp'),
+      image('/images/large.webp'),
+      image('/images/fallback.webp'),
+      image('/images/submit.png'),
+      image('/images/poster.png'),
       { kind: 'asset', target: '/media/demo.mp4' },
       { kind: 'link', target: '/downloads/notes.pdf' },
     ]);
   });
 
   it('ignores resource-looking text inside code', () => {
-    const markdown = [
-      '`![inline](/images/inline.png)`',
-      '',
-      '```md',
-      '![fenced](/images/fenced.png)',
-      '```',
-    ].join('\n');
-
-    expect(readMarkdownReferences(markdown)).toEqual([]);
+    expect(
+      readMarkdownReferences(
+        '`![inline](/a.png)`\n\n```md\n![fenced](/b.png)\n```',
+      ),
+    ).toEqual([]);
   });
 
   it.each([
@@ -90,7 +88,7 @@ describe('readMarkdownReferences', () => {
   it('allows embedded raster images but rejects active data documents', () => {
     expect(
       readMarkdownReferences('![pixel](data:image/png;base64,AAAA)'),
-    ).toEqual([{ kind: 'image', target: 'data:image/png;base64,AAAA' }]);
+    ).toEqual([image('data:image/png;base64,AAAA')]);
     expect(() =>
       readMarkdownReferences(
         '![svg](data:image/svg+xml;base64,PHN2Zz48aW1hZ2UgaHJlZj0iL3ByaXZhdGUucG5nIi8+PC9zdmc+)',
@@ -105,16 +103,15 @@ describe('readMarkdownReferences', () => {
 });
 
 describe('parseSrcset', () => {
-  it('parses density, width, and descriptor-free candidates', () => {
-    expect(
-      parseSrcset('/one.png 1x, /two.png 2x, /wide.png 960w, /plain.png'),
-    ).toEqual(['/one.png', '/two.png', '/wide.png', '/plain.png']);
-  });
-
-  it('keeps a described data URL separate from a later local candidate', () => {
-    expect(parseSrcset('data:image/png;base64,AAAA 1x, /local.png 2x')).toEqual(
+  it.each([
+    ['/a.png 1x, /b.png 960w, /c.png', ['/a.png', '/b.png', '/c.png']],
+    // A described data URL stays separate from a later local candidate.
+    [
+      'data:image/png;base64,AAAA 1x, /local.png 2x',
       ['data:image/png;base64,AAAA', '/local.png'],
-    );
+    ],
+  ])('parses %s', (srcset, expected) => {
+    expect(parseSrcset(srcset)).toEqual(expected);
   });
 
   it.each([

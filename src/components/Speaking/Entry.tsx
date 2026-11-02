@@ -1,5 +1,4 @@
 import DateRange from '@/components/Projects/DateRange';
-import { NEW_TAB_SUFFIX } from '@/components/Projects/shared';
 import type { Appearance } from '@/data/speaking';
 import { smartQuotes } from '@/lib/typography';
 
@@ -42,7 +41,7 @@ export default function Entry({ data }: EntryProps) {
           </span>
         </h3>
         <p className="project-entry-desc">{smartQuotes(desc)}</p>
-        <span className="sr-only"> {NEW_TAB_SUFFIX}</span>
+        <span className="sr-only"> (opens in a new tab)</span>
       </div>
     </a>
   );

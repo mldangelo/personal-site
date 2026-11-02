@@ -1,6 +1,6 @@
 import { cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
-import { afterAll, afterEach, beforeAll, vi } from 'vitest';
+import { afterEach, vi } from 'vitest';
 
 // Clean up DOM after each test
 afterEach(() => {
@@ -28,20 +28,8 @@ vi.mock('next/image', () => ({
 
 // Mock Next.js router
 vi.mock('next/navigation', () => ({
-  useRouter() {
-    return {
-      push: vi.fn(),
-      pathname: '/',
-      query: {},
-      asPath: '/',
-      prefetch: vi.fn(),
-    };
-  },
   usePathname() {
     return '/';
-  },
-  useSearchParams() {
-    return new URLSearchParams();
   },
 }));
 
@@ -89,22 +77,4 @@ Object.defineProperty(window, 'localStorage', {
 Object.defineProperty(globalThis, 'localStorage', {
   configurable: true,
   value: localStorageMock,
-});
-
-// Suppress console errors in tests unless needed
-const originalError = console.error;
-beforeAll(() => {
-  console.error = (...args: unknown[]) => {
-    if (
-      typeof args[0] === 'string' &&
-      args[0].includes('Warning: ReactDOM.render')
-    ) {
-      return;
-    }
-    originalError.call(console, ...args);
-  };
-});
-
-afterAll(() => {
-  console.error = originalError;
 });
