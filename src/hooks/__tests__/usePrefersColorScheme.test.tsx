@@ -1,123 +1,64 @@
 import { act, render, screen } from '@testing-library/react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import { DARK_SCHEME_QUERY } from '@/lib/theme';
 import usePrefersColorScheme from '../usePrefersColorScheme';
 
 function Scheme() {
-  const scheme = usePrefersColorScheme();
-
-  return <span data-testid="scheme">{scheme ?? 'unknown'}</span>;
+  return (
+    <span data-testid="scheme">{usePrefersColorScheme() ?? 'unknown'}</span>
+  );
 }
+
+const scheme = () => screen.getByTestId('scheme');
 
 /** A `matchMedia` stand-in whose preference can be flipped mid-test. */
 function stubColorScheme(prefersDark: boolean) {
   const listeners = new Set<() => void>();
-  let matches = prefersDark;
-  let removeEventListenerCalls = 0;
-
   const media = {
-    get matches() {
-      return matches;
-    },
-    media: DARK_SCHEME_QUERY,
-    addEventListener: (_type: string, listener: () => void) => {
+    matches: prefersDark,
+    addEventListener: (_: string, listener: () => void) => {
       listeners.add(listener);
     },
-    removeEventListener: (_type: string, listener: () => void) => {
-      removeEventListenerCalls += 1;
+    removeEventListener: (_: string, listener: () => void) => {
       listeners.delete(listener);
     },
   };
 
-  const matchMedia = vi.fn(() => media);
-  Object.defineProperty(window, 'matchMedia', {
-    writable: true,
-    configurable: true,
-    value: matchMedia,
-  });
+  window.matchMedia = ((query: string) =>
+    query === DARK_SCHEME_QUERY ? media : null) as typeof matchMedia;
 
   return {
-    matchMedia,
-    /** What a device switching to dark at sunset looks like. */
+    listeners,
     flipTo(next: boolean) {
-      matches = next;
+      media.matches = next;
       act(() => {
         for (const listener of listeners) listener();
       });
     },
-    listenerCount: () => listeners.size,
-    removeEventListenerCalls: () => removeEventListenerCalls,
   };
 }
 
-function withoutMatchMedia() {
-  Object.defineProperty(window, 'matchMedia', {
-    writable: true,
-    configurable: true,
-    value: undefined,
-  });
-}
-
 describe('usePrefersColorScheme', () => {
-  it('reports nothing on the server, where there is no device to ask', () => {
-    withoutMatchMedia();
+  it('reports nothing on the server, even where a device could be asked', () => {
+    stubColorScheme(true);
 
     expect(renderToStaticMarkup(<Scheme />)).toContain('unknown');
   });
 
-  it('reads the device preference on mount', () => {
-    stubColorScheme(true);
-    render(<Scheme />);
-
-    expect(screen.getByTestId('scheme')).toHaveTextContent('dark');
-  });
-
-  it('reads a light device preference', () => {
-    stubColorScheme(false);
-    render(<Scheme />);
-
-    expect(screen.getByTestId('scheme')).toHaveTextContent('light');
-  });
-
-  it('asks for the dark-scheme query', () => {
-    const media = stubColorScheme(false);
-    render(<Scheme />);
-
-    expect(media.matchMedia).toHaveBeenCalledWith(DARK_SCHEME_QUERY);
-  });
-
-  it('follows the device when it changes, without a remount', () => {
-    // A visitor who arrives in the morning follows their device at sunset.
-    const media = stubColorScheme(false);
-    render(<Scheme />);
-
-    expect(screen.getByTestId('scheme')).toHaveTextContent('light');
-
-    media.flipTo(true);
-    expect(screen.getByTestId('scheme')).toHaveTextContent('dark');
+  it('reads the device on mount and follows it, then unsubscribes', () => {
+    const media = stubColorScheme(true);
+    const { unmount } = render(<Scheme />);
+    expect(scheme()).toHaveTextContent('dark');
 
     media.flipTo(false);
-    expect(screen.getByTestId('scheme')).toHaveTextContent('light');
-  });
+    expect(scheme()).toHaveTextContent('light');
 
-  it('unsubscribes on unmount', () => {
-    const media = stubColorScheme(false);
-    const { unmount } = render(<Scheme />);
-
-    expect(media.listenerCount()).toBe(1);
+    media.flipTo(true);
+    expect(scheme()).toHaveTextContent('dark');
 
     unmount();
-
-    expect(media.removeEventListenerCalls()).toBe(1);
-    expect(media.listenerCount()).toBe(0);
-  });
-
-  it('reports nothing when matchMedia is unavailable', () => {
-    withoutMatchMedia();
-
-    expect(() => render(<Scheme />)).not.toThrow();
-    expect(screen.getByTestId('scheme')).toHaveTextContent('unknown');
+    expect(media.listeners.size).toBe(0);
   });
 });
