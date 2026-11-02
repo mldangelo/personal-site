@@ -42,6 +42,22 @@ function renderList() {
   };
 }
 
+describe('homepage hero', () => {
+  // ↗ means "leaves the site and opens a new tab", and nothing else. The glyph
+  // never reaches the accessible name, so only the text content can catch it.
+  it.each(['About me', 'View resume'])(
+    'puts no arrow on %s, which stays on the site',
+    (label) => {
+      render(<HomePage />);
+
+      const link = screen.getByRole('link', { name: label });
+
+      expect(link.textContent).toBe(label);
+      expect(link).not.toHaveAttribute('target');
+    },
+  );
+});
+
 describe('homepage writing list', () => {
   /**
    * ↗ means "leaves the site and opens a new tab", and nothing else. Every row
