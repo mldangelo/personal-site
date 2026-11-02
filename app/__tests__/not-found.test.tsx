@@ -28,7 +28,7 @@ describe('not found page', () => {
   it('sets its one sentence with typographic apostrophes', () => {
     render(<NotFound />);
 
-    // Straight ones were the last on the site a reader could see.
+    // Reader-visible apostrophes are typographic across the site.
     expect(
       screen.getByText(
         'The page you\u2019re looking for doesn\u2019t exist or has been moved.',
@@ -43,7 +43,7 @@ describe('not found page', () => {
     );
     const rule = /\.not-found-code\s*\{([^}]*)\}/.exec(css)?.[1] ?? '';
 
-    // 11px was the annotation size; nothing a reader reads is set at it.
+    // Nothing a reader reads is set at the 11px annotation size.
     expect(rule).toContain('font-size: var(--text-xs);');
   });
 

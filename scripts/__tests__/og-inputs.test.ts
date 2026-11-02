@@ -347,9 +347,8 @@ describe('post measurements', () => {
   });
 
   /**
-   * Every one of these is a link on the rendered page, and every one of them
-   * counted as zero while the figure was matched out of the Markdown source
-   * with an expression instead of read off the parsed document.
+   * Every one of these is a link on the rendered page, which only reading the
+   * parsed document can count.
    */
   it.each([
     ['a reference-style link', '[a][ref]\n\n[ref]: https://one.example'],

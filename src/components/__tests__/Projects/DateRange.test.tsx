@@ -5,8 +5,7 @@ import DateRange from '../../Projects/DateRange';
 
 describe('DateRange', () => {
   /**
-   * The archive was truncating every date to its year, so four projects a
-   * fortnight apart in 2015 all read "2015" and the register looked frozen.
+   * Year precision would make entries a fortnight apart read identically.
    */
   it('distinguishes two dates in the same year', () => {
     const { container: may } = render(<DateRange date="2015-05-15" />);

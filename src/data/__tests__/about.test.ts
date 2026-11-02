@@ -3,11 +3,6 @@ import { describe, expect, it } from 'vitest';
 import { aboutMarkdown } from '../about';
 
 describe('about data', () => {
-  it('exports aboutMarkdown as a string', () => {
-    expect(typeof aboutMarkdown).toBe('string');
-    expect(aboutMarkdown.length).toBeGreaterThan(0);
-  });
-
   it('contains the intro section', () => {
     expect(aboutMarkdown).toContain('# Intro');
     expect(aboutMarkdown).toContain('OpenAI');

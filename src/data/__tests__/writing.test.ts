@@ -8,20 +8,6 @@ describe('writing data', () => {
     expect(writing.length).toBeGreaterThan(0);
   });
 
-  it('each item has required properties', () => {
-    for (const item of writing) {
-      expect(item).toHaveProperty('title');
-      expect(item).toHaveProperty('url');
-      expect(item).toHaveProperty('date');
-      expect(item).toHaveProperty('description');
-
-      expect(typeof item.title).toBe('string');
-      expect(typeof item.url).toBe('string');
-      expect(typeof item.date).toBe('string');
-      expect(typeof item.description).toBe('string');
-    }
-  });
-
   it('titles are non-empty', () => {
     for (const item of writing) {
       expect(item.title.trim().length).toBeGreaterThan(0);

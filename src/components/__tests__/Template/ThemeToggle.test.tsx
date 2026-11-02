@@ -851,9 +851,7 @@ describe('ThemeToggle', () => {
      * systemScheme]`, and neither changes on a client-side navigation — but
      * React re-creates every hoisted `<meta>` from the build-time payload on
      * each one. Anything written into those tags is reverted by the first
-     * `<Link>` press, and it was: measured in Chrome against the export, a
-     * light device with dark pinned had the light chrome colour painted back
-     * over a dark page and kept it for the rest of the session.
+     * `<Link>` press.
      */
     it('survives a navigation that rebuilds the tags React owns', () => {
       stubColorScheme(false);

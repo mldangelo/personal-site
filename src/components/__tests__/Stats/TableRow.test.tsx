@@ -61,9 +61,7 @@ describe('TableRow', () => {
   });
 
   it('heads the row with its label and nothing else', () => {
-    // The header once carried a source tag under the label, so a screen
-    // reader announced "Countries visited Source: Profile" before each value.
-    // The source belongs to the table's caption now.
+    // A screen reader announces the row header before each value.
     render(
       <table>
         <tbody>

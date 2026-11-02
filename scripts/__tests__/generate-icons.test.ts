@@ -237,9 +237,8 @@ describe('generated web app manifest', () => {
   /**
    * Every `src` is relative to the manifest's own url, so a fork served under
    * a repository basePath resolves them without the generator knowing the
-   * prefix. A leading slash — which is what the deleted manifest used — breaks
-   * that. The paths also have to name files that exist, since the deleted
-   * manifest's did not once the art moved.
+   * prefix. A leading slash breaks that. The paths also have to name files that
+   * exist.
    */
   it('points every icon at a committed file by relative path', () => {
     expect(manifest.icons.length).toBeGreaterThan(0);

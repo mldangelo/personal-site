@@ -31,8 +31,7 @@ describe('countSourceLines', () => {
   });
 
   it('does not count the empty segment after a trailing newline', () => {
-    // Nearly every source file ends in a newline, so this was inflating the
-    // published figure by one per file.
+    // Nearly every source file ends in a newline, which is not a line of code.
     writeRaw('src/a.ts', 'one\ntwo\nthree\n');
 
     expect(countSourceLines(root)).toBe(3);

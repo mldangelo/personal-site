@@ -90,9 +90,7 @@ const fits = (image: Buffer) =>
 
 /**
  * These constants are not free parameters: they describe where satori actually
- * puts ink, and the whole fit calculation is measured against them. `122` was
- * wrong by 22px for long enough to spend half the slack the layout thought it
- * had, and nothing failed, because nothing looked at a card.
+ * puts ink, and the whole fit calculation is measured against them.
  */
 describe('committed card geometry', () => {
   it.each(CARDS)('matches the budgeted rows in %s', async (path) => {

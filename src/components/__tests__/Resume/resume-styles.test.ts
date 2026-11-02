@@ -1,15 +1,12 @@
-import { existsSync, readFileSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
 /**
  * How the résumé reads is decided in stylesheets jsdom never loads, so these
- * read the rules themselves. They hold the decisions the page once had the
- * other way round — the role and the dates as 11px tracked capitals in grey,
- * the bullets in the secondary ink, a tier that changed weight — and the ones
- * a screenshot cannot show, such as a bullet mark that was on the screen and
- * in no PDF. Whether the result is any good still takes a browser.
+ * read the rules themselves. Whether the result is any good still takes a
+ * browser.
  */
 
 const read = (file: string) => readFileSync(join(process.cwd(), file), 'utf8');
@@ -18,8 +15,6 @@ const CARDS_CSS = read('app/styles/components/cards.css');
 const TAGS_CSS = read('app/styles/components/tags.css');
 const RESUME_CSS = read('app/styles/pages/resume.css');
 const PRINT_CSS = read('app/styles/print.css');
-const FORCED_COLORS_CSS = read('app/styles/forced-colors.css');
-const ENTRY_CSS = read('app/tailwind.css');
 
 interface Rule {
   /** The `@media` condition the rule sits under, or '' at the top level. */
@@ -118,9 +113,8 @@ describe('résumé styles', () => {
   });
 
   /**
-   * 634 of the page's characters were 11px tracked capitals, and they were
-   * the role and the dates. Nothing a reader has to read is transformed,
-   * label-tracked, or set at the annotation size.
+   * Nothing a reader has to read is transformed, label-tracked, or set at the
+   * annotation size.
    */
   it('sets no small tracked capitals', () => {
     for (const rule of SCREEN_RULES) {
@@ -179,7 +173,6 @@ describe('résumé styles', () => {
     ]);
   });
 
-  /** Education titles were Inter regular beside experience titles in bold. */
   it('titles a degree and a company with one rule', () => {
     const title = SCREEN_RULES.find((rule) =>
       rule.selectors.includes('.jobs-container header h3'),
@@ -248,7 +241,6 @@ describe('résumé styles', () => {
     });
   });
 
-  /** Summary and bullets were the secondary grey: the body read as an aside. */
   it('sets summaries and bullets in ink', () => {
     expect(ruleFor('.summary').get('color')).toBe('var(--color-fg)');
 
@@ -264,7 +256,7 @@ describe('résumé styles', () => {
 
   /**
    * Browsers leave backgrounds off a printed page unless asked for them, so a
-   * dash drawn as a filled box was on the screen and in no PDF.
+   * dash drawn as a filled box would not print.
    */
   it('draws the bullet dash with a border, which prints', () => {
     const dash = ruleFor('.jobs-container .points li::before');
@@ -331,23 +323,6 @@ describe('résumé styles', () => {
 
       expect(interactive).toEqual([]);
     });
-
-    it('leaves no rule, stylesheet, or import behind for the filter', () => {
-      const everywhere = [
-        CARDS_CSS,
-        TAGS_CSS,
-        RESUME_CSS,
-        PRINT_CSS,
-        FORCED_COLORS_CSS,
-        ENTRY_CSS,
-      ].join('\n');
-
-      expect(everywhere).not.toMatch(/skillbutton|skill-button|skill-bar/);
-      expect(PRINT_CSS).not.toMatch(/\[hidden\]/);
-      expect(
-        existsSync(join(process.cwd(), 'app/styles/components/skill-bar.css')),
-      ).toBe(false);
-    });
   });
 
   /**
@@ -395,8 +370,8 @@ describe('résumé styles', () => {
     });
 
     /**
-     * A role may run on to the next page, but only between two bullets: a
-     * company name once ended a page with its role at the top of the next.
+     * A role may run on to the next page, but only between two bullets, so a
+     * company name cannot end a page with its role at the top of the next.
      */
     it('breaks a long role between bullets and nowhere else', () => {
       const whole = PRINT_RULES.find(

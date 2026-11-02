@@ -63,13 +63,7 @@ function projectStyles(): string {
 }
 
 /**
- * The export shipped with no `theme-color` at all, so mobile browsers painted
- * their chrome from their own default rather than from the page. Then it
- * shipped a media-scoped pair, which described a dark theme no visitor without
- * JavaScript is ever served, and which React rebuilt out from under the
- * bootstrap on every client-side navigation.
- *
- * What ships now is one unscoped light value in `<noscript>` — the whole truth
+ * The export ships one unscoped light value in `<noscript>` — the whole truth
  * for a reader with no JavaScript — and one script-owned tag that carries the
  * rendered theme for everyone else.
  */

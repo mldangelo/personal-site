@@ -290,8 +290,7 @@ describe('theme', () => {
     });
 
     it('still resolves a theme when storage throws', () => {
-      // A single try/catch around the whole body shipped a page with no
-      // data-theme at all, which is an unstyled flash rather than a fallback.
+      // No data-theme at all is an unstyled flash rather than a fallback.
       setPrefersDark(true);
       withThrowingStorage(runThemeInitScript);
 

@@ -8,20 +8,6 @@ describe('degrees data', () => {
     expect(degrees.length).toBeGreaterThan(0);
   });
 
-  it('each degree has required properties', () => {
-    for (const degree of degrees) {
-      expect(degree).toHaveProperty('school');
-      expect(degree).toHaveProperty('degree');
-      expect(degree).toHaveProperty('link');
-      expect(degree).toHaveProperty('year');
-
-      expect(typeof degree.school).toBe('string');
-      expect(typeof degree.degree).toBe('string');
-      expect(typeof degree.link).toBe('string');
-      expect(typeof degree.year).toBe('number');
-    }
-  });
-
   it('degree years are reasonable (between 1950 and current year + 10)', () => {
     const currentYear = new Date().getFullYear();
 

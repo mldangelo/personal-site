@@ -658,7 +658,7 @@ describe('verify-export', () => {
   });
 
   /**
-   * `public/` now holds a generated share card per published post, so the export
+   * `public/` holds a generated share card per published post, so the export
    * can carry an asset derived from `content/writing/`. A card for a draft is
    * not a route and appears in no metadata, so every other gate here would let
    * it through — while the file itself is publicly fetchable with the

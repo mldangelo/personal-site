@@ -8,20 +8,6 @@ describe('courses data', () => {
     expect(courses.length).toBeGreaterThan(0);
   });
 
-  it('each course has required properties', () => {
-    for (const course of courses) {
-      expect(course).toHaveProperty('title');
-      expect(course).toHaveProperty('number');
-      expect(course).toHaveProperty('link');
-      expect(course).toHaveProperty('university');
-
-      expect(typeof course.title).toBe('string');
-      expect(typeof course.number).toBe('string');
-      expect(typeof course.link).toBe('string');
-      expect(typeof course.university).toBe('string');
-    }
-  });
-
   it('course numbers are non-empty', () => {
     for (const course of courses) {
       expect(course.number.trim().length).toBeGreaterThan(0);

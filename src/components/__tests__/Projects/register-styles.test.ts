@@ -5,10 +5,8 @@ import { describe, expect, it } from 'vitest';
 
 /**
  * How the projects register looks is decided in a stylesheet jsdom never
- * loads, so these read the rules themselves. They hold the decisions the page
- * once had the other way round — picture cards for student projects over small
- * grey rows for the real work — and nothing else; whether the result is any
- * good still takes a browser and a pair of eyes.
+ * loads, so these read the rules themselves. Whether the result is any good
+ * still takes a browser and a pair of eyes.
  */
 
 const CARDS_CSS = readFileSync(
@@ -115,7 +113,6 @@ describe('projects register styles', () => {
     }
   });
 
-  /** They were 14px in the secondary grey, at over a hundred characters. */
   it('sets descriptions as primary copy on a bounded measure', () => {
     const description = ruleFor('.project-entry-desc');
 
@@ -125,8 +122,8 @@ describe('projects register styles', () => {
   });
 
   /**
-   * A quarter of this page was 11px tracked capitals. Nothing a reader has to
-   * read is transformed, label-tracked, or set at the annotation size.
+   * Nothing a reader has to read is transformed, label-tracked, or set at the
+   * annotation size.
    */
   it('sets no small tracked capitals', () => {
     for (const rule of RULES) {

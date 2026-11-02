@@ -90,8 +90,7 @@ describe('Job', () => {
     );
   });
 
-  // Only layout separated the two, so the heading was named as one phrase:
-  // "UB Nanosatellite Program Program Manager".
+  // Only layout separates the two, so the name needs its own separator.
   it('names the heading with the company and the role apart', () => {
     render(<Job data={mockJob} now={NOW} />);
 

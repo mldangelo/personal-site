@@ -6,9 +6,7 @@ import { describe, expect, it } from 'vitest';
  * The résumé and About pages each carry a section index, and it is one design
  * written out twice: once per page stylesheet, under each page's class names.
  * Nothing but this file notices when a change lands on one copy and not the
- * other, which is how the two came apart before: on a phone the résumé's
- * wrapped to a second row while About's scrolled sideways, and only one of
- * them showed which section the reader was in.
+ * other.
  */
 
 const COMMENT = /\/\*[\s\S]*?\*\//g;

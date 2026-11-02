@@ -30,9 +30,7 @@ describe('stats page', () => {
   });
 
   it('draws both headings with the shared section header', () => {
-    // The page had a heading style of its own: 11px tracked capitals with the
-    // rule beneath, one of four ways the site opened a section. The class is
-    // all jsdom can see of the shared one.
+    // The class is all jsdom can see of the shared header.
     render(<StatsPage />);
 
     // Within the page's own content: the footer is free to have headings.

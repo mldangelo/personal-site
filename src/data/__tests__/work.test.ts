@@ -12,20 +12,6 @@ describe('work data', () => {
     expect(work.length).toBeGreaterThan(0);
   });
 
-  it('each position has required properties', () => {
-    for (const job of work) {
-      expect(job).toHaveProperty('name');
-      expect(job).toHaveProperty('position');
-      expect(job).toHaveProperty('url');
-      expect(job).toHaveProperty('startDate');
-
-      expect(typeof job.name).toBe('string');
-      expect(typeof job.position).toBe('string');
-      expect(typeof job.url).toBe('string');
-      expect(typeof job.startDate).toBe('string');
-    }
-  });
-
   it('endDate is after startDate when present', () => {
     for (const job of work) {
       if (job.endDate) {

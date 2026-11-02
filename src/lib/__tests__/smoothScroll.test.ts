@@ -201,8 +201,7 @@ describe('armSmoothScroll', () => {
     });
 
     // The animation has a last step already under way when it is stopped,
-    // and that step lands after the first scroll: measured, the page came to
-    // rest 9px to 57px past where it started, more the faster it was moving.
+    // and that step lands after the first scroll.
     it('puts the page there again a frame later, after the last step lands', () => {
       const scrollTo = vi
         .spyOn(window, 'scrollTo')
@@ -234,9 +233,8 @@ describe('armSmoothScroll', () => {
       expect(scrollTo).toHaveBeenCalledTimes(1);
     });
 
-    // The first version listened for `popstate`, which a fragment navigation
-    // fires for itself: every jump was cancelled as it began, and nothing in
-    // jsdom noticed because jsdom navigates nowhere.
+    // A fragment navigation fires `popstate` for itself, so that event cannot
+    // signal a return. jsdom navigates nowhere, so only this test can tell.
     it('does not mistake the click arriving at its section for a return', () => {
       const scrollTo = vi
         .spyOn(window, 'scrollTo')

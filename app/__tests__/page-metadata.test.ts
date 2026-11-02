@@ -59,8 +59,7 @@ describe('page metadata', () => {
 
   /**
    * A route-level `openGraph` object replaces the inherited one entirely, so
-   * every page that declares one must repeat the share image. Blog posts
-   * shipped without an og:image for exactly this reason.
+   * every page that declares one must repeat the share image.
    */
   it.each([
     ['about', aboutMetadata],
@@ -157,8 +156,7 @@ describe('page metadata', () => {
 
   /**
    * The share blocks are spread, not rebuilt: a route-level `openGraph` or
-   * `twitter` object replaces the inherited one, and posts have already shipped
-   * twice missing something omitted here.
+   * `twitter` object replaces the inherited one.
    */
   it('keeps the shared open graph and twitter fields on blog posts', async () => {
     const [slug] = getPostSlugs();

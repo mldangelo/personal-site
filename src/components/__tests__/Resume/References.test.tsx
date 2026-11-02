@@ -41,11 +41,7 @@ describe('References', () => {
     expect(paragraph.tagName).toBe('P');
   });
 
-  /**
-   * It was the one centred line on a left-aligned page, styled by a run of
-   * utility classes of its own. It takes the section-note class now, and the
-   * link takes its look from being a link in running text.
-   */
+  /** The link takes its look from being a link in running text. */
   it('is styled by the section-note class, not by utilities of its own', () => {
     render(<References />);
 
