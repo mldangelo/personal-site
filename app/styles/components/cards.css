@@ -106,7 +106,8 @@ a.project-entry:focus-visible .project-entry-title {
    two ends of a range is a bare glyph and would otherwise sit flush against
    both dates. Data, so mono — in the case it was written, at a size that
    keeps a whole range on one line of the gutter. */
-.project-dates {
+.project-dates,
+.daterange {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
@@ -302,22 +303,11 @@ a.project-entry:focus-visible .project-entry-external {
 }
 
 /* Dates sit in the gutter, in mono, so the column scans as a timeline rather
-   than as a caption under each heading. They are data, so they keep the case
-   they were written in and take no tracking: as 11px tracked capitals this
-   was the least legible line on the page, and one of the three facts a reader
-   comes for. */
+   than as a caption under each heading. The rest of the rule is shared with
+   `.project-dates`. */
 .daterange {
   position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0 0.4em;
   margin: 0;
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  font-variant-numeric: tabular-nums;
-  line-height: 1.5;
-  color: var(--color-fg-light);
 }
 
 .daterange-sep {
@@ -416,8 +406,7 @@ a.project-entry:focus-visible .project-entry-external {
   width: fit-content;
 }
 
-/* The page's primary copy, so it is in ink. Summary and bullets were the
-   secondary grey, and the body of the résumé read as an aside. */
+/* The page's primary copy, so it is in ink. */
 .summary {
   margin-bottom: 0.5em;
   font-size: var(--text-md);

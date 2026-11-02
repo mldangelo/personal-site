@@ -17,10 +17,8 @@ export default function JobSummary({ summary }: JobSummaryProps) {
   return (
     <Markdown
       options={{
-        // A summary written on one line parses as inline content, and inline
-        // content comes back with no paragraph around it: one role's summary
-        // was reaching the page as a bare text node, outside every `.summary`
-        // rule, at the body size beside 14px bullets.
+        // A summary written on one line parses as inline content, which comes
+        // back with no paragraph around it and so outside every `.summary` rule.
         forceBlock: true,
         overrides: {
           p: {

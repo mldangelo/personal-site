@@ -156,8 +156,8 @@ function figureImage(
 }
 
 /**
- * The fence's language, which markdown-to-jsx already puts in the DOM as
- * `language-bash` on the inner `<code>` and which nothing was reading.
+ * The fence's language, which markdown-to-jsx puts in the DOM as `language-bash`
+ * on the inner `<code>`.
  */
 function fenceLanguage(children: ReactNode): string | undefined {
   const [code] = Children.toArray(children);

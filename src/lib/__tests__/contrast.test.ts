@@ -3,61 +3,33 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 /**
- * WCAG 2.2 contrast for opaque sRGB hex, so token pairs are checked rather
- * than eyeballed. It lives here because nothing ships it: in `src/lib` it
- * counted toward the source-line figure on /stats.
+ * WCAG 2.2 contrast for opaque sRGB hex, so token pairs are checked rather than
+ * eyeballed. It lives here because nothing ships it: in `src/lib` it would count
+ * toward the source-line figure on /stats.
  */
 
-/** SC 1.4.3 — normal-size body text. */
+/** SC 1.4.3, normal-size body text. */
 const AA_TEXT = 4.5;
-
-/** SC 1.4.11 — non-text graphics and UI component boundaries. */
+/** SC 1.4.11, non-text graphics and UI component boundaries. */
 const AA_NON_TEXT = 3;
 
 /**
- * `#rgb` or `#rrggbb` to 0-255 channels. Alpha-bearing and unparseable values
- * throw rather than resolve: a translucent colour has no luminance until it is
- * composited, and dropping the alpha would score transparent black as opaque
+ * Anything but `#rrggbb` throws: a translucent colour has no luminance until it
+ * is composited, and dropping the alpha would score transparent black as opaque
  * black.
  */
-function parseHexColor(hex: string): [number, number, number] {
-  const body = hex.trim().replace(/^#/, '');
-
-  if ((body.length === 4 || body.length === 8) && /^[0-9a-fA-F]+$/.test(body)) {
-    throw new Error(
-      `Alpha-bearing hex colours need an explicit backdrop: ${hex}`,
-    );
-  }
-
-  const expanded =
-    body.length === 3
-      ? body
-          .split('')
-          .map((c) => c + c)
-          .join('')
-      : body;
-
-  if (!/^[0-9a-fA-F]{6}$/.test(expanded)) {
+function relativeLuminance(hex: string): number {
+  if (!/^#[0-9a-f]{6}$/i.test(hex)) {
     throw new Error(`Not an opaque sRGB hex colour: ${hex}`);
   }
 
-  return [
-    Number.parseInt(expanded.slice(0, 2), 16),
-    Number.parseInt(expanded.slice(2, 4), 16),
-    Number.parseInt(expanded.slice(4, 6), 16),
-  ];
-}
+  const [r, g, b] = (hex.slice(1).match(/../g) ?? []).map((pair) => {
+    const c = Number.parseInt(pair, 16) / 255;
 
-function linearize(channel: number): number {
-  const c = channel / 255;
+    return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+  });
 
-  return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
-}
-
-function relativeLuminance(hex: string): number {
-  const [r, g, b] = parseHexColor(hex);
-
-  return 0.2126 * linearize(r) + 0.7152 * linearize(g) + 0.0722 * linearize(b);
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 }
 
 function contrastRatio(a: string, b: string): number {
@@ -68,19 +40,16 @@ function contrastRatio(a: string, b: string): number {
 }
 
 const STYLES = join(process.cwd(), 'app', 'styles');
-const SURFACES = ['--color-bg', '--color-bg-alt'];
 
 function readTokens(file: string): Map<string, string> {
   const css = readFileSync(join(STYLES, file), 'utf8');
-  const tokens = new Map<string, string>();
 
-  for (const [, name, value] of css.matchAll(
-    /(--color-[\w-]+)\s*:\s*([^;]+);/g,
-  )) {
-    tokens.set(name, value.trim());
-  }
-
-  return tokens;
+  return new Map(
+    Array.from(css.matchAll(/(--color-[\w-]+)\s*:\s*([^;]+);/g), (match) => [
+      match[1],
+      match[2].trim(),
+    ]),
+  );
 }
 
 const light = readTokens('tokens/colors.css');
@@ -102,144 +71,89 @@ function resolve(theme: Map<string, string>, name: string): string {
   return value;
 }
 
-const lightToken = (name: string) => resolve(light, name);
-const darkToken = (name: string) => resolve(dark, name);
-const themes = [lightToken, darkToken];
+const PAPER = ['--color-bg', '--color-bg-alt'];
 
-function cssFiles(directory: string): string[] {
-  return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
-    const path = join(directory, entry.name);
-    return entry.isDirectory()
-      ? cssFiles(path)
-      : entry.name.endsWith('.css')
-        ? [path]
-        : [];
-  });
-}
+/** Foreground, the backdrops it must read against, and the floor. */
+const PAIRINGS: [string, string[], number][] = [
+  // Body text, annotations, and links.
+  ['--color-fg', PAPER, AA_TEXT],
+  ['--color-fg-bold', PAPER, AA_TEXT],
+  ['--color-fg-light', PAPER, AA_TEXT],
+  ['--color-accent', PAPER, AA_TEXT],
+  ['--color-accent-hover', PAPER, AA_TEXT],
+  // The live value as text, which is why it is a separate token from the mark.
+  ['--color-signal', PAPER, AA_TEXT],
+  // "Present" carries the current-role meaning in text, so the redundant mark is
+  // not a WCAG 1.4.11 requirement. The design still sets a 3:1 floor.
+  ['--color-signal-mark', PAPER, AA_NON_TEXT],
+  ['--color-control-border', PAPER, AA_NON_TEXT],
+  // The ring's offset puts it against the page.
+  ['--color-focus-ring-fill', PAPER, AA_NON_TEXT],
+  // A filled control's label, at rest and on hover.
+  [
+    '--color-on-accent',
+    ['--color-accent-fill', '--color-accent-fill-hover'],
+    AA_TEXT,
+  ],
+  // The hero uses this pair in both directions: pale on blue, blue on pale.
+  ['--color-on-hero', ['--color-hero'], AA_TEXT],
+];
 
-/** Every token/surface ratio in both themes, labelled for the failure output. */
-function ratiosOnSurfaces(token: string): [string, number][] {
-  return themes.flatMap((theme, index) =>
-    SURFACES.map((surface): [string, number] => [
-      `${index === 0 ? 'light' : 'dark'} ${token} on ${surface}`,
-      contrastRatio(theme(token), theme(surface)),
-    ]),
+describe('token contrast', () => {
+  it.each(
+    PAIRINGS.flatMap(([foreground, backgrounds, floor]) =>
+      backgrounds.flatMap((background) =>
+        [
+          { theme: 'light', tokens: light },
+          { theme: 'dark', tokens: dark },
+        ].map((entry) => ({ ...entry, foreground, background, floor })),
+      ),
+    ),
+  )(
+    '$theme $foreground on $background clears $floor:1',
+    ({ tokens, foreground, background, floor }) => {
+      expect(
+        contrastRatio(resolve(tokens, foreground), resolve(tokens, background)),
+      ).toBeGreaterThanOrEqual(floor);
+    },
   );
-}
 
-function below(token: string, threshold: number): string[] {
-  return ratiosOnSurfaces(token)
-    .filter(([, ratio]) => ratio < threshold)
-    .map(([label, ratio]) => `${label}: ${ratio.toFixed(2)}`);
-}
-
-describe('parseHexColor', () => {
-  it('accepts opaque shorthand and longhand hex', () => {
-    expect(parseHexColor('#abc')).toEqual([0xaa, 0xbb, 0xcc]);
-    expect(parseHexColor('bc770a')).toEqual([188, 119, 10]);
-  });
-
-  it('throws rather than scoring an unusable colour as opaque black', () => {
-    expect(() => parseHexColor('#0000')).toThrow(/explicit backdrop/);
-    expect(() => parseHexColor('#bc770aff')).toThrow(/explicit backdrop/);
-    expect(() => contrastRatio('#00000000', '#ffffff')).toThrow(
-      /explicit backdrop/,
-    );
-    expect(() => parseHexColor('rgba(35, 39, 46, 0.14)')).toThrow();
-    expect(() => parseHexColor('#12345')).toThrow();
-  });
-});
-
-describe('signal tokens', () => {
-  // "Present" carries the current-role meaning in text, so the redundant dot
-  // is not a WCAG 1.4.11 requirement. The design still sets a 3:1 floor.
-  it('keep the mark above 3:1 on every backdrop it is drawn on', () => {
-    expect(below('--color-signal-mark', AA_NON_TEXT)).toEqual([]);
-  });
-
-  it('keep the text value above 4.5:1, which is why it is a separate token', () => {
-    expect(below('--color-signal', AA_TEXT)).toEqual([]);
-  });
-});
-
-describe('--color-control-border', () => {
-  it('clears 3:1 on every surface it is drawn on', () => {
-    expect(below('--color-control-border', AA_NON_TEXT)).toEqual([]);
-  });
-});
-
-describe('--color-focus-ring-fill', () => {
-  it('separates from the fill that the default ring aliases', () => {
-    const fill = lightToken('--color-accent-fill');
+  it('separates the fill ring from the fill that the default ring aliases', () => {
+    const fill = resolve(light, '--color-accent-fill');
 
     expect(
-      contrastRatio(lightToken('--color-focus-ring-fill'), fill),
-    ).toBeGreaterThan(contrastRatio(lightToken('--color-focus-ring'), fill));
+      contrastRatio(resolve(light, '--color-focus-ring-fill'), fill),
+    ).toBeGreaterThan(
+      contrastRatio(resolve(light, '--color-focus-ring'), fill),
+    );
   });
 
-  it('reads against the page in both themes, which is where the offset puts it', () => {
-    expect(below('--color-focus-ring-fill', AA_NON_TEXT)).toEqual([]);
-  });
+  it.each(['#0000', '#bc770aff', 'rgba(35, 39, 46, 0.14)', '#12345'])(
+    'refuses to score %s rather than treating it as opaque',
+    (colour) => {
+      expect(() => contrastRatio(colour, '#ffffff')).toThrow(/opaque/);
+    },
+  );
 });
 
 describe('focus ring declarations', () => {
   it('use the semantic ring tokens instead of palette colours', () => {
-    const violations = cssFiles(STYLES).flatMap((file) => {
-      const css = readFileSync(file, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
-      return [...css.matchAll(/outline(?:-color)?\s*:\s*([^;]+);/g)]
-        .filter(([, value]) => {
-          const declaration = value.trim();
-          return (
-            declaration !== 'none' &&
-            !declaration.includes('var(--color-focus-ring')
+    const files = readdirSync(STYLES, { recursive: true })
+      .map(String)
+      .filter((file) => file.endsWith('.css'));
+
+    for (const file of files) {
+      const css = readFileSync(join(STYLES, file), 'utf8');
+
+      for (const [declaration, value] of css
+        .replace(/\/\*[\s\S]*?\*\//g, '')
+        .matchAll(/outline(?:-color)?\s*:\s*([^;]+);/g)) {
+        if (value.trim() !== 'none') {
+          expect(value, `${file}: ${declaration}`).toContain(
+            'var(--color-focus-ring',
           );
-        })
-        .map((match) => `${file.replace(`${STYLES}/`, '')}: ${match[0]}`);
-    });
-
-    expect(violations).toEqual([]);
-  });
-});
-
-describe('filled controls', () => {
-  it('keep their label legible on the fill and its hover in both themes', () => {
-    for (const theme of themes) {
-      for (const fill of ['--color-accent-fill', '--color-accent-fill-hover']) {
-        expect(
-          contrastRatio(theme('--color-on-accent'), theme(fill)),
-        ).toBeGreaterThanOrEqual(AA_TEXT);
-      }
-    }
-  });
-});
-
-describe('reading surfaces', () => {
-  it('keeps body text, annotations, and links readable on both paper surfaces in both themes', () => {
-    for (const theme of themes) {
-      for (const surface of SURFACES) {
-        for (const text of [
-          '--color-fg',
-          '--color-fg-bold',
-          '--color-fg-light',
-          '--color-accent',
-          '--color-accent-hover',
-        ]) {
-          expect(
-            contrastRatio(theme(text), theme(surface)),
-            `${text} on ${surface}`,
-          ).toBeGreaterThanOrEqual(AA_TEXT);
         }
       }
-    }
-  });
-
-  it('keeps poster text, links, its inverted button, and focus rings readable in both themes', () => {
-    // The hero uses this pair in both directions: pale text on blue, then
-    // blue text on the pale CTA. Its offset focus rings use the pale token.
-    for (const theme of themes) {
-      expect(
-        contrastRatio(theme('--color-on-hero'), theme('--color-hero')),
-      ).toBeGreaterThanOrEqual(AA_TEXT);
     }
   });
 });

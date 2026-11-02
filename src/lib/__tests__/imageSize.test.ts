@@ -25,25 +25,26 @@ function gif(width: number, height: number): Buffer {
   return buffer;
 }
 
-function extendedWebp(width: number, height: number): Buffer {
-  const buffer = Buffer.alloc(30);
+/** A RIFF container holding one WebP chunk of the given encoding. */
+function webp(encoding: 'VP8X' | 'VP8 ' | 'VP8L', length: number): Buffer {
+  const buffer = Buffer.alloc(length);
   buffer.write('RIFF', 0, 'ascii');
-  buffer.writeUInt32LE(buffer.length - 8, 4);
+  buffer.writeUInt32LE(length - 8, 4);
   buffer.write('WEBP', 8, 'ascii');
-  buffer.write('VP8X', 12, 'ascii');
-  buffer.writeUInt32LE(10, 16);
+  buffer.write(encoding, 12, 'ascii');
+  buffer.writeUInt32LE(length - 20, 16);
+  return buffer;
+}
+
+function extendedWebp(width: number, height: number): Buffer {
+  const buffer = webp('VP8X', 30);
   buffer.writeUIntLE(width - 1, 24, 3);
   buffer.writeUIntLE(height - 1, 27, 3);
   return buffer;
 }
 
 function lossyWebp(width: number, height: number): Buffer {
-  const buffer = Buffer.alloc(30);
-  buffer.write('RIFF', 0, 'ascii');
-  buffer.writeUInt32LE(buffer.length - 8, 4);
-  buffer.write('WEBP', 8, 'ascii');
-  buffer.write('VP8 ', 12, 'ascii');
-  buffer.writeUInt32LE(10, 16);
+  const buffer = webp('VP8 ', 30);
   buffer.set([0x9d, 0x01, 0x2a], 23);
   buffer.writeUInt16LE(width, 26);
   buffer.writeUInt16LE(height, 28);
@@ -51,42 +52,27 @@ function lossyWebp(width: number, height: number): Buffer {
 }
 
 function losslessWebp(width: number, height: number): Buffer {
-  const buffer = Buffer.alloc(25);
-  buffer.write('RIFF', 0, 'ascii');
-  buffer.writeUInt32LE(buffer.length - 8, 4);
-  buffer.write('WEBP', 8, 'ascii');
-  buffer.write('VP8L', 12, 'ascii');
-  buffer.writeUInt32LE(5, 16);
+  const buffer = webp('VP8L', 25);
   buffer[20] = 0x2f;
   buffer.writeUInt32LE((width - 1) | ((height - 1) << 14), 21);
   return buffer;
 }
 
+/** An APP0 segment exercises length-based skipping, then fill bytes before SOF. */
 function jpeg(width: number, height: number): Buffer {
-  return Buffer.from([
-    0xff,
-    0xd8,
-    // An APP0 segment exercises length-based skipping.
-    0xff,
-    0xe0,
-    0x00,
-    0x04,
-    0x12,
-    0x34,
-    // JPEG permits fill bytes before the SOF marker.
-    0xff,
-    0xff,
-    0xc2,
-    0x00,
-    0x08,
-    0x08,
-    (height >>> 8) & 0xff,
-    height & 0xff,
-    (width >>> 8) & 0xff,
-    width & 0xff,
-    0x00,
+  const size = Buffer.alloc(5);
+  size.writeUInt16BE(height, 0);
+  size.writeUInt16BE(width, 2);
+  return Buffer.concat([
+    Buffer.from([
+      0xff, 0xd8, 0xff, 0xe0, 0x00, 0x04, 0x12, 0x34, 0xff, 0xff, 0xc2, 0x00,
+      0x08, 0x08,
+    ]),
+    size,
   ]);
 }
+
+const OG = { '/og.png': { width: 1200, height: 630 } };
 
 describe('parseImageSize', () => {
   it.each([
@@ -118,12 +104,11 @@ describe('parseImageSize', () => {
 
 describe('readImageSize', () => {
   it('reads a real public image and ignores its query and fragment', () => {
-    expect(readImageSize('/og.png?version=1#card')).toEqual({
-      width: 1200,
-      height: 630,
-    });
+    expect(readImageSize('/og.png?version=1#card')).toEqual(OG['/og.png']);
   });
 
+  // An image the site renders. Deleting it reddens this test as well as the
+  // export, so it must not point at a file no page uses.
   it('reads the WebP encoding used by article assets', () => {
     expect(
       readImageSize(
@@ -140,95 +125,57 @@ describe('readImageSize', () => {
     ['/missing-article-image.png', 'NOT_FOUND'],
     ['/robots.txt', 'UNSUPPORTED_OR_MALFORMED'],
   ])('reports a specific failure for %s', (src, code) => {
-    expect.assertions(2);
-
-    try {
-      readImageSize(src);
-    } catch (error) {
-      expect(error).toBeInstanceOf(ImageSizeError);
-      expect((error as ImageSizeError).code).toBe(code);
-    }
+    expect(() => readImageSize(src)).toThrow(
+      expect.objectContaining({ name: ImageSizeError.name, code }),
+    );
   });
 });
 
 describe('readPostImageSizes', () => {
-  it('measures root-local Markdown images with every supported title form', () => {
-    const markdown = [
-      '![plain](/og.png)',
-      '![double](/og.png "Social card")',
-      "![single](/og.png 'Social card')",
-      '![parenthesized](</og.png> (Social card))',
-    ].join('\n');
-
-    expect(readPostImageSizes(markdown)).toEqual({
-      '/og.png': { width: 1200, height: 630 },
-    });
-  });
-
-  it('measures nested-alt, reference-style, and raw HTML images', () => {
-    const markdown = [
-      '![nested [alt]](/og.png)',
-      '![reference][card]',
-      '<img alt="social > card" src="/og.png">',
-      '',
-      '[card]: /og.png "Social card"',
-    ].join('\n');
-
-    expect(readPostImageSizes(markdown)).toEqual({
-      '/og.png': { width: 1200, height: 630 },
-    });
+  it.each([
+    ['![plain](/og.png)'],
+    ['![double](/og.png "Social card")'],
+    ["![single](/og.png 'Social card')"],
+    ['![parenthesized](</og.png> (Social card))'],
+    ['![nested [alt]](/og.png)'],
+    ['![reference][card]\n\n[card]: /og.png "Social card"'],
+    ['<img alt="social > card" src="/og.png">'],
+  ])('measures %s', (markdown) => {
+    expect(readPostImageSizes(markdown)).toEqual(OG);
   });
 
   it('keeps query-bearing src values as renderer lookup keys', () => {
     expect(
       readPostImageSizes('![card](/og.png?v=2#preview "Version 2")'),
     ).toEqual({
-      '/og.png?v=2#preview': { width: 1200, height: 630 },
+      '/og.png?v=2#preview': OG['/og.png'],
     });
   });
 
-  it('ignores images that cannot be measured from public/', () => {
-    expect(
-      readPostImageSizes(
-        [
-          '![remote](https://example.com/image.png)',
-          '![protocol relative](//example.com/image.png)',
-          '![data](data:image/png;base64,AAAA)',
-        ].join('\n'),
-      ),
-    ).toEqual({});
+  it.each([
+    '![remote](https://example.com/image.png)',
+    '![protocol relative](//example.com/image.png)',
+    '![data](data:image/png;base64,AAAA)',
+  ])('does not measure what public/ cannot hold: %s', (markdown) => {
+    expect(readPostImageSizes(markdown)).toEqual({});
   });
 
-  it('rejects relative local image paths instead of leaving them unmeasured', () => {
-    expect(() => readPostImageSizes('![relative](image.png)')).toThrow(
-      'Local article image path must be root-relative: image.png',
+  it.each([
+    ['![relative](image.png)', /must be root-relative: image\.png/],
+    ['![missing](/images/writing/gone.png "Gone")', /does not exist/],
+  ])('fails the build for %s', (markdown, message) => {
+    expect(() => readPostImageSizes(markdown)).toThrow(message);
+  });
+
+  it('lets only a missing draft image through the explicit preview option', () => {
+    const preview = { allowMissingLocalImages: true };
+
+    expect(readPostImageSizes('![gone](/gone.png)', preview)).toEqual({});
+    expect(() => readPostImageSizes('![bad](/robots.txt)', preview)).toThrow(
+      /unsupported or malformed header/,
     );
-  });
-
-  it('fails the build for a missing root-local Markdown image', () => {
     expect(() =>
-      readPostImageSizes(
-        '![missing](/images/writing/definitely-missing.png "Missing")',
-      ),
-    ).toThrow(/Local image does not exist/);
-  });
-
-  it('allows only a missing draft image through the explicit preview option', () => {
-    expect(
-      readPostImageSizes('![missing](/definitely-missing.png)', {
-        allowMissingLocalImages: true,
-      }),
-    ).toEqual({});
-
-    expect(() =>
-      readPostImageSizes('![malformed](/robots.txt)', {
-        allowMissingLocalImages: true,
-      }),
-    ).toThrow(/unsupported or malformed header/);
-    expect(() =>
-      readPostImageSizes('![traversal](/images/../robots.txt)', {
-        allowMissingLocalImages: true,
-      }),
+      readPostImageSizes('![up](/images/../robots.txt)', preview),
     ).toThrow(/outside public/);
   });
 });

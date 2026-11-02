@@ -18,14 +18,13 @@ export const READOUT_RULE = 2;
  *
  * Measured off rendered cards rather than added up from the styles, because
  * only the pixels decide where the row actually begins: satori resolves its own
- * default line box for the label and the value. This was 122 — 22px short of
- * the real row, which quietly spent half of `BOTTOM_GAP` before any title was
- * measured. `readoutTop` is now checked against every rendered card in
- * `og-measure.mjs`, and a test pins it against the committed ones.
+ * default line box for the label and the value. `readoutTop` is checked against
+ * every rendered card in `og-measure.mjs`, and a test pins it against the
+ * committed ones.
  */
 export const READOUT_HEIGHT = 142;
 /** Mono 25 at satori's default line height. */
-export const BYLINE_HEIGHT = 30;
+const BYLINE_HEIGHT = 30;
 export const TITLE_GAP = 28;
 export const TITLE_LINE_HEIGHT = 1.02;
 /**
@@ -39,7 +38,7 @@ export const DESCRIPTION_LINE_HEIGHT = 1.4;
 /** Prose wants a narrower measure than the card is wide. */
 export const DESCRIPTION_WIDTH = 880;
 /** Slack, so a line the estimate misjudges still has somewhere to go. */
-export const BOTTOM_GAP = 44;
+const BOTTOM_GAP = 44;
 
 /**
  * Character advance as a fraction of point size, by class, for each face.
@@ -85,11 +84,11 @@ function advance(text, advances, tracking) {
 /**
  * Lines the text will occupy, by wrapping it the way satori does.
  *
- * Dividing the whole string by an average line length was the other half of the
- * problem: it says a 34-character all-caps title fits on two lines because the
- * ink would, while greedy wrapping puts the last word on a third. Words are
- * placed one at a time here for the same reason the advances are per class —
- * every approximation is rounded towards more lines, never fewer.
+ * Dividing the whole string by an average line length would say a 34-character
+ * all-caps title fits on two lines because the ink would, while greedy wrapping
+ * puts the last word on a third. Words are placed one at a time for the same
+ * reason the advances are per class — every approximation is rounded towards
+ * more lines, never fewer.
  */
 function estimateLines(text, fontSize, width, advances, tracking) {
   const space = (advances.space + tracking) * fontSize;

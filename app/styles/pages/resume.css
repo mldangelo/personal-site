@@ -62,8 +62,7 @@
   background-image: none;
 }
 
-/* The reading face has no arrow, so this one was drawn by whichever fallback
-   came first with the glyph. The system UI face has it, and setting every
+/* The reading face has no arrow. The system UI face has it, and setting every
    arrow on the site in that one face is what lets them match. */
 .resume-note-arrow {
   font-family: system-ui, sans-serif;
@@ -138,13 +137,17 @@
    The bar is the sticky, opaque part and the row inside it is the part that
    scrolls and fades: a mask on the bar itself would let the page show through
    its faded edges. */
-.resume-nav {
+.resume-nav,
+.about-section-nav {
   position: sticky;
   top: var(--header-height);
   z-index: var(--z-sticky);
-  margin: var(--spacing-8) 0 var(--spacing-4);
   background: var(--color-bg-alt);
   border-block: var(--rule) solid var(--color-border);
+}
+
+.resume-nav {
+  margin: var(--spacing-8) 0 var(--spacing-4);
 }
 
 /* One row at every width, never wrapped: a second row of 44px targets makes
@@ -153,7 +156,8 @@
    and the row hangs that padding outside both rails to keep the first label
    on the page edge. `scroll-padding` is how far a focused or current link is
    kept from an edge, which is the width of the fades. */
-.resume-nav-row {
+.resume-nav-row,
+.about-section-nav-row {
   display: flex;
   margin: 0 -0.5rem;
   overflow-x: auto;
@@ -164,8 +168,10 @@
 
 /* The focus ring is drawn inside the target. The default one sits outside it,
    where the scrolling row clips it and the header covers what is left. The
-   colour change eases through the transition every link already has. */
-.resume-nav-link {
+   colour change eases through the transition every link already has. About's
+   link takes two classes to stay ahead of `.about-content a` and its hover. */
+.resume-nav-link,
+.about-content .about-section-nav-link {
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -176,22 +182,27 @@
   font-weight: var(--font-weight-medium);
   color: var(--color-fg-light);
   background-image: none;
+  text-decoration: none;
   white-space: nowrap;
   outline-offset: -4px;
 }
 
 .resume-nav-link:hover,
-.resume-nav-link:focus-visible {
+.resume-nav-link:focus-visible,
+.about-content .about-section-nav-link:hover,
+.about-content .about-section-nav-link:focus-visible {
   color: var(--color-fg-bold);
 }
 
-.resume-nav-link.active {
+.resume-nav-link.active,
+.about-content .about-section-nav-link.active {
   color: var(--color-accent);
 }
 
 /* Anchored to the link and inset to its label. A border, not a background:
    a forced palette keeps border colours and flattens fills. */
-.resume-nav-link.active::after {
+.resume-nav-link.active::after,
+.about-section-nav-link.active::after {
   content: '';
   position: absolute;
   inset: auto 0.5rem 0;
@@ -203,7 +214,8 @@
      each one slid past the end of the bar as a stray half-circle beside the
      first label. The shadow is the bar's own colour, carried out over the
      row's overhang. */
-  .resume-nav {
+  .resume-nav,
+  .about-section-nav {
     top: var(--header-height-mobile);
     box-shadow: -0.5rem 0 var(--color-bg-alt);
   }
@@ -214,7 +226,8 @@
      nothing is hidden there until the row has moved. The right one is fixed,
      and the spacer is as wide as it is, so the last label clears it once the
      row is scrolled to its end. */
-  .resume-nav-row {
+  .resume-nav-row,
+  .about-section-nav-row {
     mask-image: linear-gradient(
       90deg,
       #0000,
@@ -223,7 +236,8 @@
     );
   }
 
-  .resume-nav-row::after {
+  .resume-nav-row::after,
+  .about-section-nav-row::after {
     content: '';
     flex: none;
     width: 2rem;

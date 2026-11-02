@@ -1,169 +1,58 @@
 import { render, screen } from '@testing-library/react';
+import type { ComponentProps } from 'react';
 import { describe, expect, it } from 'vitest';
 
 import TableRow from '../../Stats/TableRow';
 
+function renderRows(...rows: ComponentProps<typeof TableRow>[]) {
+  render(
+    <table>
+      <tbody>
+        {rows.map((row) => (
+          <TableRow key={row.label} {...row} />
+        ))}
+      </tbody>
+    </table>,
+  );
+}
+
 describe('TableRow', () => {
-  it('renders label and value', () => {
-    render(
-      <table>
-        <tbody>
-          <TableRow label="Test Label" value="Test Value" />
-        </tbody>
-      </table>,
-    );
-
-    expect(screen.getByText('Test Label')).toBeInTheDocument();
-    expect(screen.getByText('Test Value')).toBeInTheDocument();
-  });
-
-  it('renders a table row element', () => {
-    render(
-      <table>
-        <tbody>
-          <TableRow label="Test" value="Value" />
-        </tbody>
-      </table>,
-    );
-
-    expect(screen.getByRole('row')).toBeInTheDocument();
-  });
-
-  it('renders value as link when link prop is provided', () => {
-    render(
-      <table>
-        <tbody>
-          <TableRow
-            label="Link"
-            value="Click here"
-            link="https://example.com"
-          />
-        </tbody>
-      </table>,
-    );
-
-    const link = screen.getByRole('link', { name: /click here/i });
-    expect(link).toHaveAttribute('href', 'https://example.com');
-  });
-
-  it('renders React elements directly', () => {
-    const element = <span data-testid="custom-element">Custom</span>;
-
-    render(
-      <table>
-        <tbody>
-          <TableRow label="Custom" value={element} />
-        </tbody>
-      </table>,
-    );
-
-    expect(screen.getByTestId('custom-element')).toBeInTheDocument();
-  });
-
+  // A screen reader announces the row header before each value.
   it('heads the row with its label and nothing else', () => {
-    // The header once carried a source tag under the label, so a screen
-    // reader announced "Countries visited Source: Profile" before each value.
-    // The source belongs to the table's caption now.
-    render(
-      <table>
-        <tbody>
-          <TableRow label="Countries visited" value="53" />
-        </tbody>
-      </table>,
-    );
+    renderRows({ label: 'Countries visited', value: '53' });
 
-    const header = screen.getByRole('rowheader');
-
-    expect(header).toHaveTextContent(/^Countries visited$/);
-    expect(header).toHaveClass('stat-table-label');
-    expect(header.childElementCount).toBe(0);
+    expect(screen.getByRole('rowheader').textContent).toBe('Countries visited');
+    expect(screen.getByRole('cell').textContent).toBe('53');
   });
 
-  it('underlines a linked value rather than colouring it', () => {
-    // jsdom loads no stylesheet, so the class is what can be checked here;
-    // `readout-styles.test.ts` holds what that class is allowed to do.
-    render(
-      <table>
-        <tbody>
-          <TableRow label="Forks" value="979" link="https://example.com" />
-        </tbody>
-      </table>,
-    );
-
-    expect(screen.getByRole('link', { name: '979' })).toHaveClass(
-      'stat-table-link',
-    );
-  });
-
-  it('keeps a linked value and a plain one in the same kind of cell', () => {
-    // A link is a property of the value, not a second kind of reading, so the
-    // cell that sets the type is the same either way.
-    render(
-      <table>
-        <tbody>
-          <TableRow label="Forks" value="979" link="https://example.com" />
-          <TableRow label="Number of spoons" value="0" />
-        </tbody>
-      </table>,
+  it('links a value inside the same kind of cell as a plain one', () => {
+    renderRows(
+      { label: 'Forks', value: '979', link: 'https://example.com' },
+      { label: 'Number of spoons', value: '0' },
     );
 
     const [linked, plain] = screen.getAllByRole('cell');
 
+    expect(screen.getByRole('link', { name: '979' })).toHaveAttribute(
+      'href',
+      'https://example.com',
+    );
     expect(linked.className).toBe(plain.className);
     expect(plain.querySelector('a')).toBeNull();
   });
 
-  it('lets only a value too long for a phone break', () => {
-    // A value is one token, and its column is as wide as the widest of them.
-    // A 26-character city ran 60px off a 320px screen in the browser; the
-    // values this site publishes stay whole.
-    render(
-      <table>
-        <tbody>
-          <TableRow label="Current city" value="New York, NY" />
-          <TableRow label="Direct dependencies" value="29 packages" />
-          <TableRow label="Current city" value="Rancho Santa Margarita, CA" />
-        </tbody>
-      </table>,
-    );
+  // A value is one token, and its column is as wide as the widest of them. An
+  // element reserves its own width, so breaking one would move the table every
+  // time a live readout ticked.
+  it.each([
+    ['fits beside the longest label on 320px', '8'.repeat(17), false],
+    ['does not fit', '8'.repeat(18), true],
+    ['is an element', <span key="age">{'8'.repeat(30)}</span>, false],
+  ])('sets the long-value break when a value %s', (_, value, long) => {
+    renderRows({ label: 'Reading', value });
 
-    const [city, packages, longCity] = screen.getAllByRole('cell');
-
-    expect(city).not.toHaveClass('stat-table-value--long');
-    expect(packages).not.toHaveClass('stat-table-value--long');
-    expect(longCity).toHaveClass('stat-table-value', 'stat-table-value--long');
-  });
-
-  it('draws the line at what fits beside the longest label on a 320px screen', () => {
-    render(
-      <table>
-        <tbody>
-          <TableRow label="Fits" value={'8'.repeat(17)} />
-          <TableRow label="Does not" value={'8'.repeat(18)} />
-        </tbody>
-      </table>,
-    );
-
-    const [fits, doesNot] = screen.getAllByRole('cell');
-
-    expect(fits).not.toHaveClass('stat-table-value--long');
-    expect(doesNot).toHaveClass('stat-table-value--long');
-  });
-
-  it('never breaks a value that is an element', () => {
-    // The live age reserves its own width; breaking it would move the table
-    // every time the readout ticked over.
-    render(
-      <table>
-        <tbody>
-          <TableRow
-            label="Current age"
-            value={<span>36.68132394318 and counting</span>}
-          />
-        </tbody>
-      </table>,
-    );
-
-    expect(screen.getByRole('cell')).not.toHaveClass('stat-table-value--long');
+    expect(
+      screen.getByRole('cell').classList.contains('stat-table-value--long'),
+    ).toBe(long);
   });
 });

@@ -2,13 +2,7 @@
 /**
  * Generates the site icon set and `app/manifest.json`.
  *
- * The previous set was 29 files and 275 KiB in `public/images/favicon/`,
- * produced by an online generator before the redesign. The files remained
- * directly addressable, but no page or manifest referenced them and browser
- * conventions do not discover arbitrary `public/` subdirectories. They also
- * still carried `#2e59ba`, an accent this palette dropped. Rather than
- * hand-edit binaries, the mark is rendered here from the live design tokens,
- * so a change to `--color-accent` cannot leave the icons behind —
+ * The mark is rendered from the live design tokens, so a change to `--color-accent` cannot leave the icons behind —
  * `scripts/__tests__/generate-icons.test.ts` fails when it does.
  *
  * Run with `npm run icons`. The output is committed, like `public/og.png`, so
@@ -312,8 +306,7 @@ await Promise.all(
 /**
  * Binds the committed art to the inputs that produced it, the way
  * `public/og.meta.json` binds the share card. Unlike that file this one lives
- * beside its generator rather than in `public/`: nothing serves it, and the
- * point of this change was to stop shipping bytes nothing asks for.
+ * beside its generator rather than in `public/`, because nothing serves it.
  */
 const generatorSources = await Promise.all(
   [
