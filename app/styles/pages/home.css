@@ -3,9 +3,7 @@
    inside it keeps to the page rails, so the name starts under the logo and the
    portrait ends under the header's last control.
 
-   The button inverts the poster pair, and its hover needs a cream of its own:
-   both fill tokens once pointed at `--color-on-hero`, so hovering changed
-   nothing.
+   The button inverts the poster pair, with a cream of its own on hover.
 
    The field's lower edge is the only boundary between it and the section
    below. The transparent border keeps that edge where the fill is not
@@ -77,8 +75,7 @@
 }
 
 /* The lede and the summary are one voice at two volumes: the reading face
-   throughout, a full step apart in size. They were a sans at 20px beside a
-   serif at 19px, each with its own right edge. */
+   throughout, a full step apart in size. */
 .hero-tagline {
   margin: 0 0 1.25rem;
   font-family: var(--font-body);
@@ -158,8 +155,8 @@
   height: auto;
 }
 
-/* One white. The photograph's studio backdrop was the brightest thing in the
-   field, a cold second white beside the cream button. Multiplying it by the
+/* One white. The photograph's studio backdrop would be a cold second white
+   beside the cream button. Multiplying it by the
    poster's own text colour brings the backdrop to within a few levels of that
    cream and leaves the darker tones nearly as they were. forced-colors.css
    and print.css take the tint away again, where `--color-on-hero` stops being
@@ -180,7 +177,7 @@
 
 /* dark-mode.css dims every portrait by a tenth so a white backdrop does not
    glare at night. This backdrop is already the poster's cream; dimmed again it
-   became a third tone beside the button. */
+   would be a third tone beside the button. */
 .hero-portrait .theme-portrait img {
   filter: none;
 }
@@ -192,9 +189,7 @@
 }
 
 /* The band's lower edge is this section's boundary, so it draws no rule of
-   its own: a 2px one used to sit directly under the field, two edges for one
-   break. The first column is never narrower than its heading, which 23% of a
-   tablet's width was. */
+   its own. The first column is never narrower than its heading. */
 .home-writing {
   display: grid;
   grid-template-columns: minmax(23%, max-content) minmax(0, 1fr);
@@ -202,7 +197,7 @@
   margin-top: 3.5rem;
 }
 
-/* Tight, not display, tracking: `--tracking-display` was drawn for the sans. */
+/* Tight, not display, tracking: `--tracking-display` is drawn for the sans. */
 .home-writing h2 {
   margin: 0;
   font-family: var(--font-body);
@@ -223,8 +218,8 @@
   background-image: none;
 }
 
-/* The unlayered colour above outranks the base layer's `a:hover`, which left
-   this link with no hover state at all. */
+/* The unlayered colour above outranks the base layer's `a:hover`, so this link
+   states its own. */
 .home-writing-all:hover {
   color: var(--color-accent);
 }
@@ -283,9 +278,8 @@
 }
 
 /* `→` and `↗` share a column, so they have to be one drawing. Neither is in
-   the self-hosted Inter subset, and left to fall back on their own they came
-   from two fonts (on macOS, Arial and a Korean system face), one arrow half
-   as long again as the other. The system UI face carries both. */
+   the self-hosted Inter subset, and left to fall back on their own they can
+   come from two fonts of different lengths. The system UI face carries both. */
 .home-writing-all span,
 .home-writing-arrow {
   font-family: system-ui, sans-serif;

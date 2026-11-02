@@ -239,8 +239,7 @@ describe('reading surfaces', () => {
     //
     // `.hero` points the page's button tokens at that pair, so the CTA is
     // checked through what home.css assigns rather than through the page-level
-    // values. Both of its fills once named `--color-on-hero`: legible, and no
-    // hover state at all.
+    // values. The two fills have to differ, or the button has no hover state.
     const homeCss = readFileSync(join(STYLES, 'pages/home.css'), 'utf8');
     const assignedInHero = readTokens('pages/home.css');
     const onPoster = (theme: (name: string) => string, name: string) => {
