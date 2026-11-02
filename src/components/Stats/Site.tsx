@@ -78,10 +78,8 @@ async function fetchGitHubCounts(): Promise<GitHubCounts | null> {
 /**
  * Site statistics are fully server-rendered and add no client JavaScript.
  *
- * The page used to carry more — dependency and lockfile counts, lint rules,
- * open issues, the build's commit and date — that were exact but told a reader
- * nothing worth knowing. A row belongs here when someone would be interested
- * in the number, not because it can be counted.
+ * A row belongs here when someone would be interested in the number, not
+ * because it can be counted.
  */
 export default async function SiteStats() {
   const fetched = await fetchGitHubCounts();

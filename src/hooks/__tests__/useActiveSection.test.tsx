@@ -287,8 +287,7 @@ describe('useActiveSection', () => {
     scrollTo(maxScroll());
     expect(current()).toBe('references');
 
-    // The observer this replaced only saw what crossed its band, so a jump
-    // straight back to the top left the previous section lit.
+    // A jump straight back to the top must not leave the previous section lit.
     scrollTo(0);
     expect(current()).toBe('experience');
 

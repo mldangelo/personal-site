@@ -72,10 +72,8 @@
   }
 }
 
-/* Tech tags — squared, quiet, mono, at the size mono takes everywhere else:
-   at 11px they were the smallest text on the projects page. A tag is not a
-   control and the card that used to light them is gone, so nothing here
-   answers the pointer. */
+/* Tech tags — squared, quiet, mono, at the size mono takes everywhere else. A
+   tag is not a control, so nothing here answers the pointer. */
 .tech-tag {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
@@ -88,8 +86,7 @@
 }
 
 /* Depth is the order each group is listed in, and the last tier is set a
-   tone fainter. Deep and working used to differ by one step of weight at
-   12px, which nobody could see, under a legend that explained three. */
+   tone fainter. */
 .skill-tag--familiar {
   color: var(--color-fg-light);
 }

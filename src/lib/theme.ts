@@ -267,8 +267,8 @@ export function syncThemeColor(doc: Document): void {
  * Built from the constants above so the bootstrap and the React control share
  * one vocabulary. Their storage parsing is necessarily duplicated inside the
  * generated script, so an agreement test guards it against drift. Each
- * `window` access is guarded separately: a `localStorage` that throws used to
- * abort the whole function and ship a page with no `data-theme` at all.
+ * `window` access is guarded separately, so a `localStorage` that throws cannot
+ * leave a page with no `data-theme` at all.
  *
  * It also adds the chrome colour's tag, in the same pass and from the same
  * resolved theme, because a returning visitor whose stored choice contradicts

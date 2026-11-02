@@ -23,8 +23,7 @@ export const SITE_IMAGE_DIMENSIONS = {
  *
  * Every page points at this one path explicitly. Next's `opengraph-image`
  * file convention is not used: a route-level `openGraph` object replaces the
- * inherited one wholesale, which left every subpage with no image at all, and
- * the metadata route emits an extensionless file that GitHub Pages serves as
+ * inherited one wholesale, and the metadata route emits an extensionless file that GitHub Pages serves as
  * application/octet-stream.
  */
 export const SHARE_IMAGE_PATH = '/og.png';

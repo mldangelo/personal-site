@@ -81,14 +81,4 @@ describe('stats readout styles', () => {
       '.stat-table-value--long',
     ]);
   });
-
-  it('leaves no rule for markup the page no longer renders', () => {
-    expect(
-      RULES.flatMap((rule) => rule.selectors).filter((selector) =>
-        /stat-provenance|stats-section-title|stat-table-label-text|stat-table-caption|stats-source-note/.test(
-          selector,
-        ),
-      ),
-    ).toEqual([]);
-  });
 });

@@ -11,8 +11,7 @@ export default function Course({ data }: CourseProps) {
       <a href={data.link}>
         <span className="course-number">{data.number}</span>
         {/* The columns separate code from title for the eye. Read aloud, the
-            link is one string, so the colon that used to be printed after
-            every code is kept for a screen reader only. */}
+            link is one string, so a screen reader gets a colon instead. */}
         <span className="sr-only">: </span>
         <span className="course-name">{smartQuotes(data.title)}</span>
       </a>

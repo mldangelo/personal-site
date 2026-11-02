@@ -324,9 +324,8 @@ describe('ThemeToggle', () => {
   });
 
   describe('server-rendered markup', () => {
-    // The control used to render `<div class="theme-toggle-placeholder" />`
-    // until it mounted, because it could not know the theme before then. The
-    // resolved choice is on <html> before first paint, so it can.
+    // The resolved choice is on <html> before first paint, so the control needs
+    // no placeholder until it mounts.
     it('ships a real button, not a placeholder', () => {
       const html = renderToStaticMarkup(<ThemeToggle />);
 
@@ -352,9 +351,8 @@ describe('ThemeToggle', () => {
     });
 
     it('promises no next step, which depends on a device it cannot see', () => {
-      // Each state used to ship "Switch to …" too. The cycle now opens on the
-      // theme opposite the device's, so that sentence would be read out wrong
-      // on one kind of device or the other until the page hydrated.
+      // The cycle opens on the theme opposite the device's, so "Switch to …"
+      // would be read out wrong on one kind of device until the page hydrated.
       const html = renderToStaticMarkup(<ThemeToggle />);
 
       expect(html).not.toMatch(/switch to/i);

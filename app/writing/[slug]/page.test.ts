@@ -25,10 +25,8 @@ import PostPage, { generateMetadata } from './page';
  * inject a fixture through, so the draft has to be a real file for the length
  * of this suite.
  *
- * It used to be whichever post happened to be unpublished, which made these
- * tests fail the moment that post was published — and the behaviour they pin
- * is not decoration: a draft once shipped carrying `index, follow`. Writing
- * the fixture keeps the guard independent of what the repository publishes.
+ * Writing the fixture keeps the guard independent of what the repository
+ * publishes.
  *
  * Safe to run alongside the other suites: every reader of the post set
  * (`getPostSlugs`, `getAllPosts`, the card generator, `verify-export`) filters

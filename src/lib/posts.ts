@@ -39,9 +39,8 @@ const postsDirectory = path.join(process.cwd(), 'content/writing');
  * Drafts are visible while running `next dev` and never anywhere else.
  *
  * Every reader of a post — static params, lookup, metadata, RSS, sitemap, and
- * the index — must go through this. Filtering in the list helpers alone is
- * what previously exported a full draft with `robots: index, follow`, because
- * `generateStaticParams` was reading filenames directly.
+ * the index — must go through this. Filtering in the list helpers alone would
+ * still export a draft through `generateStaticParams`.
  */
 function isPublished(post: Post): boolean {
   return !post.draft || process.env.NODE_ENV === 'development';

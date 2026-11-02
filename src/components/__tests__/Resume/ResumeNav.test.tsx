@@ -166,8 +166,8 @@ describe('ResumeNav', () => {
 
     render(<ResumeNav />);
 
-    // The section sits 500px down the last screen. Watching a band near the
-    // top of the viewport, the nav used to end the page still on "Courses".
+    // The section sits 500px down the last screen, so it never reaches a band
+    // near the top of the viewport.
     page.scrollTo(page.bottom);
     await waitFor(() => expect(current()).toBe('References'));
   });

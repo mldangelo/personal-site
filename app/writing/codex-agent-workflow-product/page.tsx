@@ -15,14 +15,10 @@ const DESCRIPTION = 'This post moved to a new URL.';
 /**
  * A stub kept only so an old shared URL does not 404.
  *
- * It carries `noindex` — without its own metadata it inherited the homepage
- * title, description, and og:url, and shipped indexable.
- *
- * The canonical and og:url are emitted only once the replacement is actually
- * published. It is published today, so both are emitted; the conditional stays
- * as a guard for the un-publish case, because pointing at an unexported post
- * advertises a canonical target that returns 404 — worse for a crawler than
- * declaring none at all.
+ * It carries `noindex` and its own metadata, so it inherits nothing from the
+ * homepage. The canonical and og:url are emitted only while the replacement is
+ * published: pointing at an unexported post advertises a canonical target that
+ * returns 404, which is worse for a crawler than declaring none at all.
  */
 export function generateMetadata(): Metadata {
   const replacementUrl = getPostBySlug(NEW_SLUG)
@@ -50,10 +46,8 @@ export function generateMetadata(): Metadata {
 }
 
 export default function LegacyPostSlugPage() {
-  // The replacement is published, so this renders the direct link. The branch
-  // stays as a guard: if the post is ever un-published it drops out of the
-  // export, and sending readers to a URL that 404s would be worse than
-  // sending them to the index.
+  // An unpublished post drops out of the export, and sending readers to a URL
+  // that 404s would be worse than sending them to the index.
   const replacement = getPostBySlug(NEW_SLUG);
 
   return (

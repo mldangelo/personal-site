@@ -128,10 +128,8 @@ describe('Course', () => {
   });
 
   /**
-   * Every code used to print a colon after it, in a layout whose columns
-   * already set it apart from the title. The colon is gone from sight and
-   * kept where it still does work: in the one string a screen reader is
-   * given for the link.
+   * The columns set the code apart from the title by sight. The colon exists
+   * only in the one string a screen reader is given for the link.
    */
   it('prints the code bare and still names the link with a separator', () => {
     render(<Course data={mockCourse} />);

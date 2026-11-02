@@ -22,9 +22,8 @@ describe('SkillTag', () => {
   });
 
   /**
-   * The tier used to be a numeric `aria-label` on a bare `<span>`, which maps
-   * to role `generic` and discards accessible names, so it reached nobody. It
-   * is real text now: hidden from sight, part of the phrase read aloud.
+   * The tier is real text, hidden from sight and part of the phrase read aloud:
+   * an `aria-label` on a bare `<span>` would be discarded with role `generic`.
    */
   it('states the competency tier in visually hidden text', () => {
     renderTag({ title: 'Python', competency: 5, category: ['Languages'] });

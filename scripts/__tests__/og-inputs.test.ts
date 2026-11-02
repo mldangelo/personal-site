@@ -85,9 +85,7 @@ describe('share card inputs', () => {
 
   it('leaves drafts out of the card set, the ledger, and public/', async () => {
     // Proven against a fixture rather than against whichever posts happen to
-    // be drafts today. This assertion used to require the repository to
-    // contain at least one draft, which meant publishing the last one turned
-    // the guard red instead of leaving it to keep working.
+    // be drafts today, so publishing the last draft cannot turn the guard red.
     const draftOnly = (await readPostCards(
       postFixture({
         title: 'Fixture title',

@@ -8,7 +8,7 @@
  * `data-scroll-behavior="smooth"` opt-in only covers the scroll Next performs
  * on a forward navigation, so it does not help.
  *
- * Nothing is smooth by default any more. A section nav asks for it per click
+ * Nothing is smooth by default. A section nav asks for it per click
  * by stamping this attribute on `<html>`, which `app/styles/base/reset.css`
  * keys the property off — and only when the visitor has not asked for reduced
  * motion, so nothing here needs to read that preference.

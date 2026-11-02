@@ -12,8 +12,7 @@ import Table from './Table';
 
 /**
  * The personal stats table stays server-rendered. Only its age value is a
- * client leaf, so no-JavaScript readers receive a real, dated snapshot instead
- * of the old dash placeholder.
+ * client leaf, so no-JavaScript readers receive a real, dated snapshot.
  */
 export default function PersonalStats() {
   const renderedAt = Date.now();

@@ -95,9 +95,8 @@ describe('projects page', () => {
   });
 
   /**
-   * The archive used to be picture cards under a list of plain rows, so five
-   * student projects out-weighed the work above them. It is the same list and
-   * the same row now, a size step down.
+   * The archive is the same list and the same row as the work above it, a size
+   * step down, so student projects cannot out-weigh it.
    */
   it('draws the archive with the same row as the work above it', () => {
     const { container } = render(<ProjectsPage />);
@@ -143,8 +142,7 @@ describe('projects page', () => {
   /**
    * An entry with nowhere to go is a plain record. It is told apart from a
    * linked one by what is missing — the link and its arrow — and by nothing
-   * added: the "No public link" label three archive cards used to carry is
-   * not there to apologise for it.
+   * added.
    */
   it('links a row only where the project has a destination', () => {
     const { container } = render(<ProjectsPage />);
@@ -170,8 +168,8 @@ describe('projects page', () => {
   });
 
   /**
-   * The page used to be reachable only through the footer, and `/contact`
-   * hides the footer — so from there it was reachable from nowhere at all.
+   * `/contact` hides the footer, so a page reachable only through the footer
+   * would be reachable from nowhere there.
    */
   it('is a primary navigation destination', () => {
     const route = routes.find((entry) => entry.path === '/projects');
