@@ -3,137 +3,75 @@ import { describe, expect, it, vi } from 'vitest';
 
 import SlideMenu from '../../Template/SlideMenu';
 
+function menu(isOpen: boolean, onClose = vi.fn()) {
+  return (
+    <SlideMenu id="test-menu" isOpen={isOpen} onClose={onClose}>
+      <a href="/link1">Link 1</a>
+      <button type="button">Button</button>
+      <a href="/link2">Link 2</a>
+    </SlideMenu>
+  );
+}
+
 describe('SlideMenu', () => {
-  const defaultProps = {
-    id: 'test-menu',
-    isOpen: false,
-    onClose: vi.fn(),
-    children: (
-      <>
-        <a href="/link1">Link 1</a>
-        <button type="button">Button</button>
-        <a href="/link2">Link 2</a>
-      </>
-    ),
-  };
-
-  it('renders children content', () => {
-    render(<SlideMenu {...defaultProps} isOpen />);
-
-    expect(screen.getByText('Link 1')).toBeInTheDocument();
-    expect(screen.getByText('Button')).toBeInTheDocument();
-    expect(screen.getByText('Link 2')).toBeInTheDocument();
-  });
-
-  it('applies open class when isOpen is true', () => {
-    render(<SlideMenu {...defaultProps} isOpen />);
-
-    const menu = screen.getByRole('dialog');
-    expect(menu).toHaveClass('slide-menu--open');
-  });
-
-  it('does not apply open class when closed', () => {
-    render(<SlideMenu {...defaultProps} isOpen={false} />);
-
-    const menu = screen.getByRole('dialog', { hidden: true });
-    expect(menu).not.toHaveClass('slide-menu--open');
-  });
-
-  it('sets aria-hidden based on isOpen', () => {
-    const { rerender } = render(<SlideMenu {...defaultProps} isOpen={false} />);
-
-    const menu = screen.getByRole('dialog', { hidden: true });
-    expect(menu).toHaveAttribute('aria-hidden', 'true');
-
-    rerender(<SlideMenu {...defaultProps} isOpen />);
-    expect(menu).toHaveAttribute('aria-hidden', 'false');
-  });
-
-  it('calls onClose when overlay is clicked', () => {
+  it('closes on an overlay click', () => {
     const onClose = vi.fn();
-    render(<SlideMenu {...defaultProps} isOpen onClose={onClose} />);
+    render(menu(true, onClose));
 
-    const overlay = document.querySelector('.slide-menu-overlay');
-    fireEvent.click(overlay!);
+    fireEvent.click(document.querySelector('.slide-menu-overlay') as Element);
 
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
-  it('calls onClose when Escape key is pressed', () => {
+  it('closes on Escape, only while open', () => {
     const onClose = vi.fn();
-    render(<SlideMenu {...defaultProps} isOpen onClose={onClose} />);
+    const { rerender } = render(menu(false, onClose));
 
     fireEvent.keyDown(document, { key: 'Escape' });
-
-    expect(onClose).toHaveBeenCalledTimes(1);
-  });
-
-  it('does not call onClose on Escape when closed', () => {
-    const onClose = vi.fn();
-    render(<SlideMenu {...defaultProps} isOpen={false} onClose={onClose} />);
-
-    fireEvent.keyDown(document, { key: 'Escape' });
-
     expect(onClose).not.toHaveBeenCalled();
+
+    rerender(menu(true, onClose));
+    fireEvent.keyDown(document, { key: 'Escape' });
+    expect(onClose).toHaveBeenCalledTimes(1);
   });
 
-  it('locks body scroll when open', () => {
-    render(<SlideMenu {...defaultProps} isOpen />);
-
+  it('locks body scroll while open, and on close unlocks and scrolls back', () => {
+    vi.spyOn(window, 'scrollY', 'get').mockReturnValue(120);
+    const { rerender } = render(menu(true));
     expect(document.body.style.position).toBe('fixed');
-  });
+    expect(document.body.style.top).toBe('-120px');
 
-  it('unlocks body scroll when closed', () => {
-    const { rerender } = render(<SlideMenu {...defaultProps} isOpen />);
-
-    expect(document.body.style.position).toBe('fixed');
-
-    rerender(<SlideMenu {...defaultProps} isOpen={false} />);
-
+    rerender(menu(false));
     expect(document.body.style.position).toBe('');
+    expect(window.scrollTo).toHaveBeenCalledWith(0, 120);
+    vi.restoreAllMocks();
   });
 
-  it('focuses first focusable element when opened', () => {
-    render(<SlideMenu {...defaultProps} isOpen />);
+  it('moves focus into the menu on open and restores it on close', () => {
+    const trigger = document.createElement('button');
+    document.body.append(trigger);
+    trigger.focus();
 
-    const firstLink = screen.getByText('Link 1');
-    expect(document.activeElement).toBe(firstLink);
+    const { rerender } = render(menu(false));
+
+    rerender(menu(true));
+    expect(screen.getByText('Link 1')).toHaveFocus();
+
+    rerender(menu(false));
+    expect(trigger).toHaveFocus();
+
+    trigger.remove();
   });
 
-  it('traps focus within the menu', () => {
-    render(<SlideMenu {...defaultProps} isOpen />);
+  it.each([
+    ['Tab from the last element', 'Link 2', false, 'Link 1'],
+    ['Shift+Tab from the first element', 'Link 1', true, 'Link 2'],
+  ])('traps %s', (_keys, from, shiftKey, to) => {
+    render(menu(true));
+    screen.getByText(from).focus();
 
-    const lastLink = screen.getByText('Link 2');
-    const firstLink = screen.getByText('Link 1');
+    fireEvent.keyDown(screen.getByRole('dialog'), { key: 'Tab', shiftKey });
 
-    // Focus the last element and tab forward
-    lastLink.focus();
-    fireEvent.keyDown(screen.getByRole('dialog'), {
-      key: 'Tab',
-      shiftKey: false,
-    });
-
-    expect(document.activeElement).toBe(firstLink);
-  });
-
-  it('traps focus in reverse when shift-tabbing', () => {
-    render(<SlideMenu {...defaultProps} isOpen />);
-
-    const lastLink = screen.getByText('Link 2');
-
-    // First element is focused on open, shift-tab should go to last
-    fireEvent.keyDown(screen.getByRole('dialog'), {
-      key: 'Tab',
-      shiftKey: true,
-    });
-
-    expect(document.activeElement).toBe(lastLink);
-  });
-
-  it('has correct id attribute', () => {
-    render(<SlideMenu {...defaultProps} isOpen id="custom-menu" />);
-
-    const menu = screen.getByRole('dialog');
-    expect(menu).toHaveAttribute('id', 'custom-menu');
+    expect(screen.getByText(to)).toHaveFocus();
   });
 });

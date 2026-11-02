@@ -6,15 +6,8 @@ import Entry from '@/components/Speaking/Entry';
 import PageWrapper from '@/components/Template/PageWrapper';
 import { getAppearances } from '@/data/speaking';
 import { createPageMetadata } from '@/lib/metadata';
-import {
-  breadcrumbNode,
-  collectionPageNode,
-  HOME_URL,
-  SITE_URL,
-} from '@/lib/schema';
+import { collectionPageNode, sectionPageNodes } from '@/lib/schema';
 import { AUTHOR_NAME } from '@/lib/utils';
-
-const SPEAKING_URL = `${SITE_URL}/speaking/`;
 
 const PAGE_TITLE = 'Speaking';
 
@@ -32,18 +25,12 @@ export default function SpeakingPage() {
   return (
     <PageWrapper>
       <SchemaGraph
-        nodes={[
-          collectionPageNode({
-            url: SPEAKING_URL,
-            name: PAGE_TITLE,
-            description: SPEAKING_DESCRIPTION,
-            hasBreadcrumb: true,
-          }),
-          breadcrumbNode(SPEAKING_URL, [
-            { name: 'Home', url: HOME_URL },
-            { name: PAGE_TITLE, url: SPEAKING_URL },
-          ]),
-        ]}
+        nodes={sectionPageNodes(
+          collectionPageNode,
+          '/speaking/',
+          PAGE_TITLE,
+          SPEAKING_DESCRIPTION,
+        )}
       />
       {/* The register's layout classes are shared with /projects. */}
       <div className="projects-page">

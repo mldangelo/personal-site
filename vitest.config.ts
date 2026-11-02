@@ -9,9 +9,7 @@ export default defineConfig({
     globals: false,
     // Run in a non-UTC zone so date guards can actually fail. Every CI runner
     // is UTC, where a UTC-pinned formatter and a host-local one produce the
-    // same string — which made the guard in
-    // `src/data/__tests__/stats/site.test.ts` unable to catch a regression on
-    // the machines that publish the site.
+    // same string.
     env: { TZ: 'America/Los_Angeles' },
     setupFiles: ['./vitest.setup.tsx'],
     include: ['**/__tests__/**/*.{ts,tsx}', '**/*.{test,spec}.{ts,tsx}'],

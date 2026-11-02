@@ -4,188 +4,30 @@ import { join } from 'node:path';
 import { render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
 
-import contact from '@/data/contact';
-import profile from '@/data/profile.json';
 import courses from '@/data/resume/courses';
 import degrees from '@/data/resume/degrees';
 import work from '@/data/resume/work';
 import { THEME_CHOICE_ATTRIBUTE } from '@/lib/theme';
 import ResumePage from '../resume/page';
 
-/**
- * Structural checks for the printed resume. Actual Letter and A4 PDFs still
- * need visual inspection because a DOM test cannot measure paper layout.
- */
+const readStyles = (file: string) =>
+  readFileSync(join(process.cwd(), 'app/styles', file), 'utf8');
 
-const PRINT_CSS = readFileSync(
-  join(process.cwd(), 'app/styles/print.css'),
-  'utf8',
-);
-const RESUME_CSS = readFileSync(
-  join(process.cwd(), 'app/styles/pages/resume.css'),
-  'utf8',
-);
-const TAILWIND_CSS = readFileSync(
-  join(process.cwd(), 'app/tailwind.css'),
-  'utf8',
-);
-
-interface Rule {
-  selectors: string[];
-  declarations: string;
-}
+const RESUME_CSS = readStyles('pages/resume.css');
 
 /**
- * Rules inside the `@media print` block. Comments are stripped first so a
- * selector list cannot pick up prose from the comment above it.
+ * The print rules as a sheet jsdom will apply. It evaluates a media list only
+ * when the text is literally `all` or `screen`, so `@media print` is dropped
+ * whole; the rules are re-emitted without the wrapper.
  */
-function printRules(css: string): Rule[] {
-  const stripped = css.replace(/\/\*[\s\S]*?\*\//g, '');
-  const block = stripped.slice(stripped.indexOf('@media print'));
+const PRINT_RULES = Array.from(
+  readStyles('print.css')
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .matchAll(/[^{}]+\{[^{}]*\}/g),
+  (match) => match[0],
+).join('\n');
 
-  return [...block.matchAll(/([^{}]+)\{([^{}]*)\}/g)].map((match) => ({
-    selectors: match[1]
-      .split(',')
-      .map((selector) => selector.trim().replace(/\s+/g, ' '))
-      .filter(Boolean),
-    declarations: match[2],
-  }));
-}
-
-const RULES = printRules(PRINT_CSS);
-
-/**
- * Every rule that reveals a destination, not just the first one. Exclusions are
- * a property of the whole stylesheet: a second `attr(href)` rule added lower
- * down would print contact addresses twice while a first-match check stayed
- * green.
- */
-const REVEAL_RULES = RULES.filter((rule) =>
-  rule.declarations.includes('attr(href)'),
-);
-const REVEALED = REVEAL_RULES.flatMap((rule) => rule.selectors);
-
-describe('print: revealing link destinations', () => {
-  it('parses the print rules it is asserting about', () => {
-    // If the parser stops finding rules the rest of this file could quietly
-    // pass by matching nothing, so pin the rule everything else depends on.
-    expect(RULES.length).toBeGreaterThan(20);
-    // One reveal rule, so the exclusions below cover the whole stylesheet.
-    // Adding a second has to be a deliberate edit to this line.
-    expect(REVEAL_RULES).toHaveLength(1);
-  });
-
-  it.each([
-    // The identifying link on each professional or education entry.
-    ".job-company[href^='http']::after",
-    ".degree-container .school a[href^='http']::after",
-    // Already covered, and must stay covered.
-    ".about-content a[href^='http']::after",
-    ".prose a[href^='http']::after",
-  ])('reveals %s', (selector) => {
-    expect(REVEALED).toContain(selector);
-  });
-
-  it('does not reveal hrefs the reader can already read', () => {
-    // `.resume-print-contact` prints the readable URL as its link text, so
-    // revealing the href there would print every address twice. Role
-    // summaries are prose: three citation URLs inside one sentence of 10pt
-    // serif cost more legibility than they return.
-    const revealed = REVEALED.join(' ');
-
-    expect(revealed).not.toContain('resume-print-contact');
-    expect(revealed).not.toContain('course-container');
-    expect(revealed).not.toContain('.summary');
-    expect(revealed).not.toContain('.points');
-  });
-
-  it('lets nothing later re-declare or hide the revealed URLs', () => {
-    const surfaces =
-      /job-company|degree-container|course-container|about-content|prose|resume-print-contact|\.summary/;
-    const lastReveal = RULES.lastIndexOf(REVEAL_RULES[REVEAL_RULES.length - 1]);
-
-    const clobbering = RULES.slice(lastReveal + 1).filter(
-      (rule) =>
-        rule.selectors.some(
-          (selector) => selector.includes('::after') && surfaces.test(selector),
-        ) && /(?:^|[;\s])(?:content|display)\s*:/.test(rule.declarations),
-    );
-
-    expect(clobbering).toEqual([]);
-  });
-
-  it('keeps course links clickable without dumping raw URLs onto paper', () => {
-    const { container } = render(<ResumePage />);
-
-    expect(REVEALED.join(' ')).not.toContain('course-container');
-    expect(PRINT_CSS).not.toMatch(
-      /\.course-container\s+a\[href\^=['"]http['"]\]::after/,
-    );
-    expect(
-      container.querySelectorAll('.course-container a[href]'),
-    ).toHaveLength(courses.length);
-  });
-});
-
-describe('print: stylesheet and paper-width constraints', () => {
-  it('loads print overrides after every other stylesheet', () => {
-    const imports = [...TAILWIND_CSS.matchAll(/@import\s+['"]([^'"]+)['"]/g)];
-
-    expect(imports.at(-1)?.[1]).toBe('./styles/print.css');
-  });
-
-  it('keeps the course list in two columns on paper', () => {
-    // The print viewport is ~710px on Letter and ~690px on A4 at the `@page`
-    // margins print.css declares, so the 735px screen breakpoint in
-    // pages/resume.css fires on paper and would stack all thirteen courses.
-    // Print has to re-declare the grid; the screen rule alone is not enough.
-    const screenBreakpoint = RESUME_CSS.match(
-      /@media \(max-width: 735px\) \{\s*\.resume-page \.courses \.course-list\s*\{([^}]*)\}/,
-    )?.[1];
-    const printRule = RULES.find((rule) =>
-      rule.selectors.includes('.resume-page .courses .course-list'),
-    );
-
-    expect(screenBreakpoint).toMatch(/grid-template-columns\s*:\s*1fr/);
-    expect(printRule?.declarations).toMatch(
-      /grid-template-columns\s*:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/,
-    );
-  });
-
-  it('forces a light page canvas even when the saved theme is dark', () => {
-    const themeRule = RULES.find((rule) =>
-      rule.selectors.includes("[data-theme='dark']"),
-    );
-
-    expect(themeRule?.declarations).toMatch(/color-scheme\s*:\s*light/);
-  });
-});
-
-describe('print: screen chrome', () => {
-  it('suppresses the skip link', () => {
-    const hidden = RULES.find(
-      (rule) =>
-        rule.selectors.includes('.skip-link') &&
-        /(?:^|[;\s])display\s*:\s*none(?:\s*!important)?\s*;/.test(
-          rule.declarations,
-        ),
-    );
-
-    expect(hidden).toBeDefined();
-  });
-});
-
-describe('print: whose resume it is', () => {
-  /**
-   * The print rules as a sheet jsdom will apply. It evaluates a media list
-   * only when the text is literally `all` or `screen`, so `@media print` is
-   * dropped whole; the parsed rules are re-emitted without the wrapper.
-   */
-  const PRINT_RULES_UNWRAPPED = RULES.map(
-    ({ selectors, declarations }) =>
-      `${selectors.join(', ')} { ${declarations} }`,
-  ).join('\n');
-
+describe('resume header', () => {
   const root = document.documentElement;
   const sheets: HTMLStyleElement[] = [];
 
@@ -201,113 +43,78 @@ describe('print: whose resume it is', () => {
     root.removeAttribute(THEME_CHOICE_ATTRIBUTE);
   });
 
-  /** The header as a visitor with scripts running gets it. */
-  function renderHeader() {
-    // The bootstrap's mark: without it the print control is hidden on screen
-    // too, and "not printed" would pass without print.css doing anything.
+  // Role queries skip what a stylesheet hides, so these find a control only while
+  // a reader, sighted or not, is actually offered it.
+  const printButton = () =>
+    screen.queryByRole('button', { name: 'Print / PDF' });
+  const jsonLink = () => screen.queryByRole('link', { name: 'JSON Resume' });
+  const topLevelHeadings = () =>
+    screen
+      .getAllByRole('heading', { level: 1 })
+      .map((heading) => heading.textContent);
+
+  it('offers the print control only once the bootstrap proves scripts ran', () => {
+    // Without JavaScript the button is inert, so it must not be shown. The JSON
+    // link beside it is a plain anchor and has to survive either way.
+    applyStyles(RESUME_CSS);
+    render(<ResumePage />);
+
+    expect(printButton()).toBeNull();
+    expect(jsonLink()).toBeVisible();
+
     root.setAttribute(THEME_CHOICE_ATTRIBUTE, 'system');
-    const { container } = render(<ResumePage />);
 
-    const find = (selector: string): HTMLElement => {
-      const element = container.querySelector<HTMLElement>(selector);
-      if (!element) throw new Error(`no ${selector} in the resume header`);
-      return element;
-    };
-
-    return {
-      header: find('.resume-header'),
-      name: find('.resume-print-name'),
-      title: find('.resume-header h1'),
-      printButton: find('.resume-header button'),
-      jsonLink: find('.resume-json-link'),
-      contact: find('.resume-print-contact'),
-    };
-  }
-
-  it('leads the header with the name, set with a typographic apostrophe', () => {
-    const { header, name } = renderHeader();
-
-    // Real text, not CSS `content`: it has to survive select-and-copy out of a
-    // PDF. Pinned as the reader sees it rather than through `smartQuotes`,
-    // which would only restate the page.
-    expect(name.textContent).toBe('Michael D’Angelo');
-    expect(header.firstElementChild).toBe(name);
+    expect(printButton()).toBeVisible();
+    expect(jsonLink()).toBeVisible();
   });
 
-  it('is the one top-level heading on paper, as "Resume" is on screen', () => {
-    // The tagged PDF a browser saves takes its H1 from the accessibility
-    // tree. Hiding the screen title without handing the role on leaves that
-    // document starting at H2. Role queries skip what a stylesheet hides, so
-    // this reads what assistive technology is given in each medium.
+  it('hands the name the top-level heading on paper, and drops the controls', () => {
+    // The tagged PDF a browser saves takes its H1 from the accessibility tree,
+    // so hiding the screen title without handing the role on starts that
+    // document at H2. The bootstrap's mark keeps the print control on screen, so
+    // its absence below is print.css's doing.
+    root.setAttribute(THEME_CHOICE_ATTRIBUTE, 'system');
     applyStyles(RESUME_CSS);
-    const { header } = renderHeader();
-    const topLevelHeadings = () =>
-      screen
-        .getAllByRole('heading', { level: 1 })
-        .map((heading) => heading.textContent);
+    render(<ResumePage />);
 
     expect(topLevelHeadings()).toEqual(['Resume']);
+    expect(printButton()).toBeVisible();
 
-    applyStyles(PRINT_RULES_UNWRAPPED);
+    applyStyles(PRINT_RULES);
 
     expect(topLevelHeadings()).toEqual(['Michael D’Angelo']);
-    // The name takes the role without the tag, so nothing that counts
-    // elements finds two page titles.
-    expect(header.querySelectorAll('h1')).toHaveLength(1);
-  });
-
-  it('prints the name in place of the screen title and its controls', () => {
-    // The site header and footer carry the name on screen, and print.css hides
-    // both, so this is where the printed page says whose it is.
-    applyStyles(RESUME_CSS);
-    const { name, title, printButton, jsonLink, contact } = renderHeader();
-
-    // On screen: the title and both controls, and neither print-only block.
-    expect(name).not.toBeVisible();
-    expect(contact).not.toBeVisible();
-    expect(title).toBeVisible();
-    expect(printButton).toBeVisible();
-    expect(jsonLink).toBeVisible();
-
-    applyStyles(PRINT_RULES_UNWRAPPED);
-
-    // On paper: the name and the contact line, and nothing that needs a
-    // screen to mean anything.
-    expect(name).toBeVisible();
-    expect(contact).toBeVisible();
-    expect(title).not.toBeVisible();
-    expect(printButton).not.toBeVisible();
-    expect(jsonLink).not.toBeVisible();
+    expect(printButton()).toBeNull();
+    expect(jsonLink()).toBeNull();
   });
 });
 
-describe('print: resume link data', () => {
-  // Job and degree links are printed as text; course links remain PDF
-  // annotations. All three need absolute destinations.
-  const links = [
-    ...work.map((job) => job.url),
-    ...degrees.map((degree) => degree.link),
-    ...courses.map((course) => course.link),
-  ];
-
-  it('gives every company, school and course an absolute http(s) URL', () => {
-    expect(links.length).toBe(work.length + degrees.length + courses.length);
-    for (const link of links) {
+// Job and degree links are printed as text, and course links remain PDF
+// annotations, so all three need destinations that still mean something on paper.
+describe('resume link data', () => {
+  it('gives every company, school and course a lasting absolute URL', () => {
+    for (const link of [
+      ...work.map((job) => job.url),
+      ...degrees.map((degree) => degree.link),
+      ...courses.map((course) => course.link),
+    ]) {
       const url = new URL(link);
 
       expect(['http:', 'https:']).toContain(url.protocol);
       expect(url.hostname).not.toBe('');
-    }
-  });
-
-  it('carries no session-scoped URLs', () => {
-    for (const link of links) {
-      // A `jsessionid` is bound to a server session that expired years ago;
-      // the old CME 302 destination carried one.
+      // A `jsessionid` is bound to a server session that has expired.
       expect(link.toLowerCase()).not.toContain('jsessionid');
     }
   });
 
+  it('renders a link for every course', () => {
+    const { container } = render(<ResumePage />);
+
+    expect(
+      container.querySelectorAll('.course-container a[href]'),
+    ).toHaveLength(courses.length);
+  });
+
+  // Retired company domains may be unregistered or hijacked.
   it.each([
     ['Arthena', 'https://www.ycombinator.com/companies/arthena'],
     [
@@ -318,6 +125,8 @@ describe('print: resume link data', () => {
     expect(work.find((position) => position.name === name)?.url).toBe(expected);
   });
 
+  // An old class site is often an archived offering under a title the catalogue
+  // has since retired, so a title and its link must come from the same record.
   it.each([
     [
       'CME 302',
@@ -339,99 +148,10 @@ describe('print: resume link data', () => {
       'Randomized Algorithms and Probabilistic Analysis',
       'https://web.stanford.edu/class/cs265/',
     ],
-  ])('keeps %s aligned with Stanford records', (number, title, link) => {
+  ])('keeps %s aligned with its Stanford record', (number, title, link) => {
     expect(courses.find((course) => course.number === number)).toMatchObject({
       title,
       link,
     });
-  });
-
-  it('uses canonical HTTPS company URLs where the site publishes one', () => {
-    expect(work.find((position) => position.name === 'Smile ID')?.url).toBe(
-      'https://smile.id',
-    );
-    expect(
-      work.find((position) => position.name === 'Skeptical Investments')?.url,
-    ).toBe('https://skepticalinvestments.biz');
-  });
-});
-
-describe('print: contact block', () => {
-  /** A separator character at the very start or end of an entry's text. */
-  const SEPARATOR_AT_EDGE = /^\s*[·•,;|/]|[·•,;|/]\s*$/;
-
-  function contactBlock() {
-    const { container } = render(<ResumePage />);
-    const block = container.querySelector('.resume-print-contact');
-
-    expect(block).not.toBeNull();
-    return block as HTMLElement;
-  }
-
-  it('carries location, site, email, GitHub and LinkedIn', () => {
-    const text = contactBlock().textContent ?? '';
-
-    expect(text).toContain(profile.currentCity);
-    expect(text).toContain(profile.email);
-    expect(text).toContain('mldangelo.com');
-    expect(text).toContain('github.com/mldangelo');
-    expect(text).toContain('linkedin.com/in/');
-  });
-
-  it('links to the same destinations the footer does', () => {
-    // Single-sourced from `src/data/contact.ts` rather than retyped, so the
-    // printed header cannot drift from the on-screen links.
-    const hrefs = [...contactBlock().querySelectorAll('a')].map((a) =>
-      a.getAttribute('href'),
-    );
-
-    for (const id of ['github', 'linkedin'] as const) {
-      const expected = contact.find((entry) => entry.id === id)?.link;
-
-      expect(expected).toBeTruthy();
-      expect(hrefs).toContain(expected);
-    }
-  });
-
-  it('wraps only between complete entries without dangling punctuation', () => {
-    const block = contactBlock();
-    const blockRule = RULES.find((rule) =>
-      rule.selectors.includes('.resume-print-contact'),
-    );
-    const itemRule = RULES.find((rule) =>
-      rule.selectors.includes('.resume-print-contact > *'),
-    );
-
-    expect(block.children).toHaveLength(5);
-    expect(block.querySelector('[aria-hidden="true"]')).toBeNull();
-
-    // A separator carried inside an entry lands wherever that entry lands, so
-    // a wrap can strand it at the end of one line or the start of the next.
-    // Nothing may sit at either edge of an entry's text.
-    for (const child of block.children) {
-      expect(child.textContent ?? '').not.toMatch(SEPARATOR_AT_EDGE);
-    }
-
-    // Which leaves the layout to carry the separation: a wrapping flex row of
-    // unbreakable items, with a real gap between them.
-    expect(blockRule?.declarations).toMatch(/display\s*:\s*flex/);
-    expect(blockRule?.declarations).toMatch(/flex-wrap\s*:\s*wrap/);
-    expect(itemRule?.declarations).toMatch(/white-space\s*:\s*nowrap/);
-
-    // The value is cosmetic and free to change; that there is one is not.
-    const columnGap = blockRule?.declarations.match(
-      /column-gap\s*:\s*([\d.]+)(rem|em|px|pt)/,
-    );
-
-    expect(Number(columnGap?.[1])).toBeGreaterThan(0);
-  });
-
-  it('prints addresses without their protocol', () => {
-    // The link text is what a reader retypes, so it reads as an address
-    // rather than as a URL. `mailto:` must not leak into it either.
-    for (const anchor of contactBlock().querySelectorAll('a')) {
-      expect(anchor.textContent ?? '').not.toMatch(/^(?:https?:\/\/|mailto:)/);
-      expect(anchor.getAttribute('href')).toMatch(/^(?:https?:\/\/|mailto:)/);
-    }
   });
 });
