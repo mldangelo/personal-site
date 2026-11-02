@@ -24,12 +24,15 @@ const mockJobs = [
 ];
 
 describe('Experience', () => {
-  it('renders the experience section with title', () => {
+  it('opens with the shared section heading, in sentence case', () => {
     render(<Experience data={mockJobs} />);
 
-    expect(
-      screen.getByRole('heading', { name: /experience/i }),
-    ).toBeInTheDocument();
+    const heading = screen.getByRole('heading', {
+      level: 2,
+      name: 'Experience',
+    });
+    expect(heading).toHaveClass('section-heading');
+    expect(heading.parentElement).toHaveClass('section-header');
   });
 
   it('renders all jobs', () => {
