@@ -3,8 +3,7 @@ import dayjs from 'dayjs';
 import type { Project } from '@/data/projects';
 
 /**
- * Month precision, because year precision was hiding the register: four
- * archive entries dated across 2015 all rendered as an identical "2015".
+ * Month precision, because several archive entries share a year.
  */
 const MONTH_YEAR = 'MMM YYYY';
 

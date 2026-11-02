@@ -586,11 +586,9 @@
   white-space: nowrap;
 }
 
-/* A linked value is ink over a rule. It was accent blue with no rule under
-   it, so colour was the only sign of a link, and beside an amber age it read
-   as a second data colour: one date blue and the next black looked like a
-   difference between the dates. The accent now only answers the pointer and
-   the keyboard.
+/* A linked value is ink over a rule, because beside an amber age an accent
+   colour would read as a second data colour. The accent only answers the
+   pointer and the keyboard.
 
    That leaves the rule as the only sign at rest, so it is drawn in
    `--color-control-border`, which is held to 3:1 on both page surfaces. In the

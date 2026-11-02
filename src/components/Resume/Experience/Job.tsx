@@ -13,9 +13,8 @@ import JobSummary from './JobSummary';
 export type JobTier = 'lead' | 'primary' | 'early';
 
 /**
- * Short months, as the projects register sets them. Spelled out, the ranges
- * were as uneven as the calendar: "January 2014 – January 2022" broke over two
- * lines of the gutter while "March 2026 – Present" sat on one.
+ * Short months, as the projects register sets them, so a range stays on one line
+ * of the gutter.
  */
 const MONTH_YEAR = 'MMM YYYY';
 
@@ -70,8 +69,7 @@ export default function Job({ data, tier = 'primary', now }: JobProps) {
             <a href={url} className="job-company">
               {smartQuotes(name)}
             </a>
-            {/* Only layout separates the two, so the heading was named as one
-                phrase: "UB Nanosatellite Program Program Manager". */}
+            {/* Only layout separates the two, so a screen reader needs the comma. */}
             <span className="sr-only">, </span>
             <span className="job-position">{smartQuotes(position)}</span>
           </h3>

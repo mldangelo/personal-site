@@ -34,9 +34,8 @@ const CHROME_COLORS: ThemeColors = {
  * Safari toolbar — and cannot be styled, so it can only be scoped by
  * `prefers-color-scheme`. That is the *device* preference, and no stylesheet
  * here reacts to it: dark is reached only through `<html data-theme='dark'>`,
- * which the bootstrap below sets. So a scoped pair painted dark chrome over a
- * light page for a no-JavaScript visitor on a dark-preferring device — it
- * described a dark theme they were never served.
+ * which the bootstrap below sets. So a scoped pair would paint dark chrome over
+ * a light page for a no-JavaScript visitor on a dark-preferring device.
  * `app/__tests__/theme-color.test.ts` re-derives that premise from the
  * stylesheets rather than trusting this comment.
  *

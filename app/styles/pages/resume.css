@@ -62,8 +62,7 @@
   background-image: none;
 }
 
-/* The reading face has no arrow, so this one was drawn by whichever fallback
-   came first with the glyph. The system UI face has it, and setting every
+/* The reading face has no arrow. The system UI face has it, and setting every
    arrow on the site in that one face is what lets them match. */
 .resume-note-arrow {
   font-family: system-ui, sans-serif;

@@ -8,7 +8,7 @@ interface CoursesProps {
 
 function getRows(courses: CourseType[]) {
   // Copy first: `sort` mutates in place, and this receives the imported
-  // module array, so rendering was reordering shared data as a side effect.
+  // module array.
   return [...courses]
     .sort(
       (a, b) =>

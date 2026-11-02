@@ -416,8 +416,7 @@ a.project-entry:focus-visible .project-entry-external {
   width: fit-content;
 }
 
-/* The page's primary copy, so it is in ink. Summary and bullets were the
-   secondary grey, and the body of the résumé read as an aside. */
+/* The page's primary copy, so it is in ink. */
 .summary {
   margin-bottom: 0.5em;
   font-size: var(--text-md);

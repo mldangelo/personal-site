@@ -161,7 +161,6 @@ export function getAllPosts(): Post[] {
 
   cachedPosts ??= readPublishedPosts();
 
-  // Copy: callers have historically sorted the array they were handed, and a
-  // shared reference would make that reorder everyone else's view.
+  // Copy: a caller sorting a shared reference would reorder everyone's view.
   return [...cachedPosts];
 }
