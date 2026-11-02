@@ -65,7 +65,7 @@ describe('categories data', () => {
     }
   });
 
-  // Data quality: categories should be sorted for filter button display order
+  // The page lists its groups, and /resume.json its skill sets, in this order.
   it('categories are sorted alphabetically by name', () => {
     const names = categories.map((c) => c.name);
     const sorted = [...names].sort();
