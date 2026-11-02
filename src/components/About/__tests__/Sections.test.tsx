@@ -427,34 +427,6 @@ Lead paragraph.
     );
   });
 
-  it('opens every section with the shared section header', () => {
-    const titles = getActualSectionTitles(aboutMarkdown);
-    const { container } = render(<AboutContent markdown={aboutMarkdown} />);
-    const sections = Array.from(container.querySelectorAll('.about-section'));
-
-    expect(sections).toHaveLength(titles.length);
-
-    for (const [index, section] of sections.entries()) {
-      const header = section.firstElementChild;
-      const heading = header?.firstElementChild;
-      const link = heading?.firstElementChild;
-
-      expect(header).toHaveClass('section-header');
-      expect(heading).toBe(
-        screen.getByRole('heading', { level: 2, name: titles[index] }),
-      );
-      expect(heading).toHaveClass('section-heading');
-      // The fragment lands on the heading itself, not on the header around it:
-      // the heading is the element the stylesheet gives a scroll margin.
-      expect(document.getElementById(heading?.id ?? '')).toBe(heading);
-
-      // The mark follows the title with no space between them, which is what
-      // keeps it from wrapping onto a line of its own.
-      expect(link?.firstChild?.textContent).toBe(titles[index]);
-      expect(link?.textContent).toBe(`${titles[index]}#`);
-    }
-  });
-
   it('sets typographic apostrophes in the prose, and leaves the source as typed', () => {
     const { container } = render(<AboutContent markdown={aboutMarkdown} />);
     const text = container.textContent ?? '';

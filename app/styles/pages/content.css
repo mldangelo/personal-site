@@ -107,10 +107,9 @@
 }
 
 /* The heading's type and the rule above it come from the shared section
-   header. The heading is still the fragment target, and that rule now sits
-   one `--spacing-5` above it, on the element around it — so the margin
-   carries that distance too, and a jump parks the rule clear of the sticky
-   section index, as it did when the heading drew the rule itself. */
+   header. The heading is the fragment target and the rule sits one
+   `--spacing-5` above it, on the element around it, so the margin carries that
+   distance too and a jump parks the rule clear of the sticky section index. */
 .about-section h2 {
   scroll-margin-top: calc(var(--header-height) + 5.5rem + var(--spacing-5));
 }
@@ -214,9 +213,9 @@
 /* On a screen each name is a target of its own, not a link in a sentence, so
    its row is 44px tall at phone sizes and the link answers across all of it.
    The pseudo-element is what reaches that far: the link's own box stays the
-   name, which is what its focus ring should fit — as a block it drew a ring
-   the width of the column. The negative margin takes back the row padding,
-   so the names start as far below their heading as any other list. None of
+   name, which is what its focus ring should fit. The negative margin takes
+   back the row padding, so the names start as far below their heading as any
+   other list. None of
    this means anything on paper. */
 @media screen {
   .about-section--links ul {
@@ -254,8 +253,7 @@
 
 /* Same gutter-then-spine-then-body arrangement as the resume, so the two
    records on the site read as one device. The marker shares the entry's first
-   baseline: it is words and figures now, and at any size that reads as one
-   line where a fixed offset tuned for 11px capitals did not. */
+   baseline, which holds at any size. */
 .about-section--log .log-entry {
   position: relative;
   display: grid;
@@ -360,9 +358,9 @@
   }
 }
 
-/* One link style, the article's, in paragraphs and lists alike. Links here
-   were ink with a hairline underline at 1.6:1, and in a paragraph the global
-   `p a` gradient drew a second line under the first. */
+/* One link style, the article's, in paragraphs and lists alike. Removing the
+   background image keeps the global `p a` gradient from drawing a second line
+   under the first. */
 .about-content a {
   color: var(--color-accent);
   text-decoration: underline;
@@ -372,8 +370,7 @@
 }
 
 /* dark-mode.css restates that gradient at (0,1,2), and its hover at (0,2,2),
-   after this file: both outrank the rule above, so at night a paragraph link
-   kept its second line. */
+   after this file, and both outrank the rule above. */
 [data-theme='dark'] .about-content p a,
 [data-theme='dark'] .about-content p a:hover {
   background-image: none;

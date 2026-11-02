@@ -42,8 +42,8 @@ describe('createHeadingId', () => {
   });
 
   it('still resolves the links made when those headings were in title case', () => {
-    // The headings were recast in sentence case. Their ids are public deep
-    // links, and an id is read from the words, not from how they are cased.
+    // Heading ids are public deep links, and an id is read from the words, not
+    // from how they are cased.
     const published = [
       'Some History',
       'I Like',
