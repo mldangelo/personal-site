@@ -88,6 +88,14 @@ export function smartQuotes(text: string): string {
     const next = index < text.length - 1 ? text[index + 1] : '';
 
     if (doubleOpen) {
+      // An inch mark inside a quotation: the closer is still to come, which
+      // leaves an odd number of quotes ahead of this one.
+      const quotesAhead = text.slice(index + 1).split('"').length - 1;
+      if (DIGIT.test(prev) && quotesAhead % 2 === 1) {
+        result += char;
+        continue;
+      }
+
       result += RIGHT_DOUBLE;
       doubleOpen = false;
       continue;
