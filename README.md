@@ -21,7 +21,7 @@ are personal, so a fork needs a full rebrand.
 - A statically exported Next.js 16 site deployed to GitHub Pages.
 - A responsive light/dark design system built from semantic CSS tokens.
 - Markdown writing with drafts, RSS, and page metadata.
-- A filterable résumé that still prints in full.
+- A résumé that prints in full and is also published as JSON Resume.
 - Tests for components, content, metadata, and the final static export.
 
 ## Get started
