@@ -1,16 +1,12 @@
-import declarations from '../../data/stats/site';
 import { countSourceLines } from '../../lib/loc';
-import {
-  formatReading,
-  type Measurement,
-  resolveReadings,
-} from '../../lib/readings';
 import { SOURCE_REPOSITORY } from '../../lib/telemetry';
 import Table from './Table';
 
 const COUNTS = ['stargazers_count', 'subscribers_count', 'forks'] as const;
+const REPOSITORY = `https://github.com/${SOURCE_REPOSITORY}`;
 
-type GitHubCounts = Record<(typeof COUNTS)[number], number>;
+type CountKey = (typeof COUNTS)[number];
+type GitHubCounts = Record<CountKey, number>;
 
 /**
  * Counts recorded on 2026-10-25, for builds that cannot reach the GitHub API —
@@ -23,6 +19,11 @@ const LAST_KNOWN: GitHubCounts = {
   subscribers_count: 23,
   forks: 978,
 };
+
+/** The locale is pinned so a published figure cannot depend on the build host. */
+function formatCount(count: number): string {
+  return count.toLocaleString('en-US');
+}
 
 /** Narrow untrusted JSON before any formatter can observe it. */
 function isGitHubCounts(value: unknown): value is GitHubCounts {
@@ -38,18 +39,12 @@ function isGitHubCounts(value: unknown): value is GitHubCounts {
   );
 }
 
-function lastKnownFloors(): Record<string, Measurement> {
-  return Object.fromEntries(
-    COUNTS.map((key) => [key, `${formatReading(LAST_KNOWN[key])}+`]),
-  );
-}
-
 /**
- * Fetch the repository's public counts at build time. Static export requires
- * a cacheable request; the Pages workflow avoids restoring Next's cache so
- * each deployment attempts a fresh read.
+ * Fetch the repository's public counts at build time, or `null` if they cannot
+ * be read. Static export requires a cacheable request; the Pages workflow
+ * avoids restoring Next's cache so each deployment attempts a fresh read.
  */
-async function fetchGitHubCounts(): Promise<Record<string, Measurement>> {
+async function fetchGitHubCounts(): Promise<GitHubCounts | null> {
   try {
     const token = process.env.GITHUB_TOKEN;
     const response = await fetch(
@@ -65,27 +60,59 @@ async function fetchGitHubCounts(): Promise<Record<string, Measurement>> {
 
     if (!response.ok) {
       console.warn(`GitHub API returned ${response.status}, using floors`);
-      return lastKnownFloors();
+      return null;
     }
 
     const data: unknown = await response.json();
     if (!isGitHubCounts(data)) {
       console.warn('GitHub API returned malformed counts, using floors');
-      return lastKnownFloors();
+      return null;
     }
-    return Object.fromEntries(COUNTS.map((key) => [key, data[key]]));
+    return data;
   } catch (error) {
     console.warn('Failed to fetch GitHub counts, using floors:', error);
-    return lastKnownFloors();
+    return null;
   }
 }
 
-/** Site statistics are fully server-rendered and add no client JavaScript. */
+/**
+ * Site statistics are fully server-rendered and add no client JavaScript.
+ *
+ * The page used to carry more — dependency and lockfile counts, lint rules,
+ * open issues, the build's commit and date — that were exact but told a reader
+ * nothing worth knowing. A row belongs here when someone would be interested
+ * in the number, not because it can be counted.
+ */
 export default async function SiteStats() {
-  const readings = resolveReadings(declarations, {
-    ...(await fetchGitHubCounts()),
-    source_lines: countSourceLines(),
-  });
+  const fetched = await fetchGitHubCounts();
+  const count = (key: CountKey) =>
+    fetched ? formatCount(fetched[key]) : `${formatCount(LAST_KNOWN[key])}+`;
 
-  return <Table data={readings} />;
+  return (
+    <Table
+      data={[
+        {
+          label: 'GitHub stars',
+          value: count('stargazers_count'),
+          link: `${REPOSITORY}/stargazers`,
+        },
+        {
+          label: 'Watchers',
+          value: count('subscribers_count'),
+          link: `${REPOSITORY}/watchers`,
+        },
+        {
+          label: 'Forks',
+          value: count('forks'),
+          link: `${REPOSITORY}/network`,
+        },
+        {
+          label: 'Lines of TypeScript powering this site',
+          value: formatCount(countSourceLines()),
+          link: REPOSITORY,
+        },
+        { label: 'Number of spoons', value: '0' },
+      ]}
+    />
+  );
 }

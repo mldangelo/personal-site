@@ -1,6 +1,11 @@
-import { isValidElement } from 'react';
+import type { ReactElement } from 'react';
 
-import type { TableRowProps } from './types';
+export interface StatRow {
+  label: string;
+  value: ReactElement | string;
+  /** Where the value points. */
+  link?: string;
+}
 
 /**
  * The most characters a value can run to and still be sure of fitting beside
@@ -16,16 +21,9 @@ import type { TableRowProps } from './types';
  */
 const LONGEST_UNBROKEN_VALUE = 17;
 
-export default function TableRow({
-  label,
-  link = null,
-  value = null,
-}: TableRowProps) {
-  // If value is a React element, render it directly
-  const displayValue = isValidElement(value) ? value : String(value);
+export default function TableRow({ label, link, value }: StatRow) {
   const breakable =
-    typeof displayValue === 'string' &&
-    displayValue.length > LONGEST_UNBROKEN_VALUE;
+    typeof value === 'string' && value.length > LONGEST_UNBROKEN_VALUE;
 
   // The label names its row, so it is a row header rather than a data cell —
   // that is what lets a screen reader announce the value with its label.
@@ -43,10 +41,10 @@ export default function TableRow({
       >
         {link ? (
           <a className="stat-table-link" href={link}>
-            {displayValue}
+            {value}
           </a>
         ) : (
-          displayValue
+          value
         )}
       </td>
     </tr>

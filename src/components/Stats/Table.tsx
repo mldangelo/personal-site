@@ -1,7 +1,6 @@
-import TableRow from './TableRow';
-import type { TableProps } from './types';
+import TableRow, { type StatRow } from './TableRow';
 
-export default function Table({ data }: TableProps) {
+export default function Table({ data }: { data: readonly StatRow[] }) {
   return (
     <table className="stat-table">
       <thead className="sr-only">
@@ -11,13 +10,8 @@ export default function Table({ data }: TableProps) {
         </tr>
       </thead>
       <tbody>
-        {data.map((reading) => (
-          <TableRow
-            key={reading.label}
-            label={reading.label}
-            link={reading.link}
-            value={reading.value}
-          />
+        {data.map((row) => (
+          <TableRow key={row.label} {...row} />
         ))}
       </tbody>
     </table>

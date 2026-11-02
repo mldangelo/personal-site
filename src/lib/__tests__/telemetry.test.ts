@@ -6,7 +6,6 @@ import {
   AGE_PRECISION_STATIC,
   ageAt,
   ageIntervalFor,
-  agePlaceholder,
   BIRTH_DATE,
   MS_PER_YEAR,
   utcDate,
@@ -49,21 +48,6 @@ describe('ageIntervalFor', () => {
   it('never schedules faster than the minimum interval', () => {
     expect(ageIntervalFor(AGE_PRECISION_FULL)).toBe(AGE_MIN_INTERVAL);
     expect(ageIntervalFor(20)).toBe(AGE_MIN_INTERVAL);
-  });
-});
-
-describe('agePlaceholder', () => {
-  it('reserves the width of a reading at the same precision', () => {
-    const reading = ageAt(
-      new Date(BIRTH_DATE).getTime() + MS_PER_YEAR * 36,
-      COMPACT_PRECISION,
-    );
-
-    expect(agePlaceholder(COMPACT_PRECISION)).toHaveLength(reading.length);
-  });
-
-  it('cannot be mistaken for a measurement', () => {
-    expect(agePlaceholder(AGE_PRECISION_FULL)).not.toMatch(/\d/);
   });
 });
 

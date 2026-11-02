@@ -37,12 +37,6 @@ export const SHARE_IMAGE_DIMENSIONS = {
 export const SITE_DESCRIPTION =
   'Member of the Technical Staff at OpenAI, working on Promptfoo and other cyber products. Co-founded Promptfoo before it joined OpenAI in 2026.';
 
-// Image dimension constants
-export const PROJECT_IMAGE = {
-  width: 600,
-  height: 400,
-} as const;
-
 // Skill competency
 export const MAX_COMPETENCY = 5;
 

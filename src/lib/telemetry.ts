@@ -13,9 +13,6 @@ export const BIRTH_DATE = profile.birthDate;
 /** Milliseconds in an average Gregorian year. */
 export const MS_PER_YEAR = 1000 * 60 * 60 * 24 * 365.2421897;
 
-/** Year the first computer arrived in the bedroom. */
-export const COMPUTING_SINCE = profile.computingSince;
-
 /** Countries visited to date. */
 export const COUNTRIES_VISITED = profile.countriesVisited;
 
@@ -50,11 +47,6 @@ export function ageIntervalFor(precision: number): number {
 export function ageAt(now: number, precision: number): string {
   const birthTime = new Date(BIRTH_DATE).getTime();
   return ((now - birthTime) / MS_PER_YEAR).toFixed(precision);
-}
-
-/** A same-width, digit-free fallback for an age with no server value. */
-export function agePlaceholder(precision: number): string {
-  return `--.${'-'.repeat(precision)}`;
 }
 
 /** Format an instant as a host-timezone-independent UTC date. */

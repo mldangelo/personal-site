@@ -1,12 +1,12 @@
-import { resolveReadings } from '@/lib/readings';
 import {
   AGE_PRECISION_FULL,
   AGE_PRECISION_STATIC,
   ageAt,
+  COUNTRIES_VISITED,
+  CURRENT_CITY,
   utcDate,
 } from '@/lib/telemetry';
 
-import declarations from '../../data/stats/personal';
 import LiveAge from './LiveAge';
 import Table from './Table';
 
@@ -17,15 +17,27 @@ import Table from './Table';
  */
 export default function PersonalStats() {
   const renderedAt = Date.now();
-  const readings = resolveReadings(declarations, {
-    age: (
-      <LiveAge
-        initial={ageAt(renderedAt, AGE_PRECISION_STATIC)}
-        note={`as of ${utcDate(renderedAt)}`}
-        precision={AGE_PRECISION_FULL}
-      />
-    ),
-  });
 
-  return <Table data={readings} />;
+  return (
+    <Table
+      data={[
+        {
+          label: 'Current age',
+          value: (
+            <LiveAge
+              initial={ageAt(renderedAt, AGE_PRECISION_STATIC)}
+              note={`as of ${utcDate(renderedAt)}`}
+              precision={AGE_PRECISION_FULL}
+            />
+          ),
+        },
+        {
+          label: 'Countries visited',
+          value: String(COUNTRIES_VISITED),
+          link: 'https://www.google.com/maps/d/embed?mid=1iBBTscqateQ93pWFVfHCUZXoDu8&z=2',
+        },
+        { label: 'Current city', value: CURRENT_CITY },
+      ]}
+    />
+  );
 }
