@@ -167,6 +167,12 @@ markup shape, or copy unless the string itself is the contract, and do not test
 what TypeScript or `verify-export` already enforces: the export gates check the
 real HTML, and how a page looks takes a browser.
 
+Suites run in parallel workers against the same checkout, so a test must never
+write into a directory the site reads, such as `content/writing/`. Another suite
+can list the file and then find it gone. Build fixtures in a temporary directory,
+or substitute them in the suite's own view of the filesystem, as
+`app/writing/[slug]/page.test.ts` does for its draft.
+
 ```bash
 npm test                        # Run all tests
 npm test -- --watch             # Watch mode
