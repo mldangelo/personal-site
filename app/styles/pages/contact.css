@@ -1,0 +1,180 @@
+/* ========================================
+   CONTACT PAGE
+   ======================================== */
+
+.contact-page {
+  width: 100%;
+  max-width: var(--measure-page);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.page-main--contact {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.contact-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.contact-header .page-title {
+  margin-bottom: 0;
+}
+
+.contact-content {
+  max-width: 100%;
+  text-align: center;
+}
+
+/* Email CTA block */
+.contact-email-block {
+  margin-bottom: 2.5rem;
+}
+
+.contact-email-container {
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+/* The address is the page's one instruction, so it is set as a
+   readout in mono rather than dressed up as a tinted button. */
+.contact-email-link {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  max-width: 100%;
+  padding: 0.875rem 0;
+  font-family: var(--font-mono);
+  font-size: clamp(var(--text-xl), 4vw, var(--text-3xl));
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+  color: var(--color-fg-bold);
+  background: transparent;
+  background-image: none;
+  border-radius: 0;
+  border-bottom: var(--rule-strong) solid var(--color-accent);
+  text-decoration: none;
+  /* The animated alias runs long — "you-can-email-me-at-literally-anything!"
+     pushed 438px of content into a 320px viewport. It has to be allowed to
+     break, mid-token if necessary. */
+  overflow-wrap: anywhere;
+  transition:
+    color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out);
+}
+
+.contact-email-link:hover {
+  background: transparent;
+  color: var(--color-accent);
+  border-bottom-color: var(--color-accent-hover);
+}
+
+/* Flex items default to min-width:auto and refuse to shrink below their
+   content, so the wrapping allowed on the link above never reached the long
+   animated alias. Both halves have to opt in individually. */
+.contact-email-prefix,
+.contact-email-domain {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.contact-email-prefix {
+  color: var(--color-accent);
+}
+
+.contact-email-domain {
+  color: var(--color-fg-bold);
+}
+
+.contact-hint {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-fg-light);
+  margin: 0;
+}
+
+/* Divider */
+.contact-divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  color: var(--color-fg-light);
+  font-size: var(--text-sm);
+  max-width: 280px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.contact-divider::before,
+.contact-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--color-border);
+}
+
+/* Social icons - inline style */
+.contact-content > .icons {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 0;
+}
+
+.contact-content > .icons li {
+  padding: 0;
+}
+
+.contact-content > .icons li a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  color: var(--color-fg-light);
+  background: transparent;
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+.contact-content > .icons li a:hover {
+  background: var(--color-accent-light);
+  color: var(--color-accent);
+}
+
+@media (max-width: 735px) {
+  .about-section-nav {
+    margin: var(--spacing-6) 0 var(--spacing-5);
+  }
+
+  .about-section h2 {
+    scroll-margin-top: calc(var(--header-height-mobile) + 4.5rem + var(--spacing-5));
+  }
+
+  .contact-email-link {
+    padding: 0.625rem 0;
+  }
+}
+
+@media (min-width: 980px) {
+  .about-header {
+    margin-bottom: var(--spacing-12);
+  }
+
+  .about-section {
+    margin-top: var(--spacing-16);
+  }
+}
