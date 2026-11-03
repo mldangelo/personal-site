@@ -98,6 +98,8 @@ describe('monthsBetween', () => {
     // Eleven months and thirty days is not a year.
     ['a partial month, truncated', '2020-01-01', '2020-12-31', 11],
     ['a full year', '2020-01-01', '2021-01-01', 12],
+    // A month from the 31st ends on the last day of a shorter month.
+    ['to the end of a shorter month', '2021-01-31', '2021-02-28', 1],
     ['to an epoch-millisecond instant', '2026-03-09', NOW, 4],
     ['a reversed range, as no tenure', '2022-01-01', '2014-01-01', 0],
   ])('counts %s', (_, start, end, months) => {
