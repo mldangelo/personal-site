@@ -42,24 +42,19 @@
   }
 }
 
-/* Links in running text look like links. The citations inside a role summary
-   were ink over a faint line, which read as emphasis. `background-image` is
-   restated under the pointer because the dark theme's `p a:hover` would
-   otherwise out-specify the first rule and draw a second underline. */
+/* Citations in a role summary are links in running text, and look like it. */
 .resume-content .summary a,
 .resume-content .resume-note a {
   color: var(--color-accent);
   text-decoration: underline;
   text-decoration-color: var(--color-accent-underline);
   text-underline-offset: 2px;
-  background-image: none;
 }
 
 .resume-content .summary a:hover,
 .resume-content .resume-note a:hover {
   color: var(--color-accent-hover);
   text-decoration-color: var(--color-accent);
-  background-image: none;
 }
 
 /* The reading face has no arrow. The system UI face has it, and setting every
@@ -100,7 +95,6 @@
   text-transform: uppercase;
   color: var(--color-fg-light);
   text-decoration: none;
-  background-image: none;
   padding: 0.35rem 0.6rem;
   border: var(--rule) solid var(--color-control-border);
   border-radius: var(--radius-sm);
@@ -181,7 +175,6 @@
   font-size: var(--text-ui);
   font-weight: var(--font-weight-medium);
   color: var(--color-fg-light);
-  background-image: none;
   text-decoration: none;
   white-space: nowrap;
   outline-offset: -4px;

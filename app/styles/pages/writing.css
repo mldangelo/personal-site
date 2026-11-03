@@ -28,7 +28,6 @@
   text-transform: uppercase;
   color: var(--color-fg-light);
   text-decoration: none;
-  background-image: none;
   padding: 0.35rem 0.6rem;
   border: var(--rule) solid var(--color-control-border);
   border-radius: var(--radius-sm);
@@ -61,7 +60,6 @@
   padding: 1.5rem 0;
   border-bottom: var(--rule) solid var(--color-border);
   text-decoration: none;
-  background-image: none;
   transition: background-color var(--duration-instant) var(--ease-out);
 }
 
@@ -352,7 +350,6 @@
   text-decoration: underline;
   text-decoration-color: var(--color-accent-underline);
   text-underline-offset: 2px;
-  background-image: none;
 }
 
 .prose a:hover,
@@ -360,7 +357,6 @@
 .prose li a:hover {
   color: var(--color-accent-hover);
   text-decoration-color: var(--color-accent);
-  background-image: none;
 }
 
 .prose strong {
