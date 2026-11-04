@@ -28,10 +28,12 @@ const DRAFT_SOURCE = [
   "date: '2026-01-08'",
   "description: 'Unpublished while it is being written.'",
   'draft: true',
+  // Both images are absent from `public/`: a draft may name images that have
+  // not been committed yet, and the page must still render.
+  `image: '/images/writing/${DRAFT_SLUG}/absent.png'`,
+  "imageAlt: 'A screenshot not yet committed'",
   '---',
   '',
-  // Absent from `public/`: a draft may reference an image that has not been
-  // committed yet, and the page must still render.
   `![Screenshot](/images/writing/${DRAFT_SLUG}/absent.png)`,
   '',
 ].join('\n');
