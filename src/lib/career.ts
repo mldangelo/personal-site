@@ -33,37 +33,33 @@ export function currentPosition(positions: Position[]): Position | undefined {
   );
 }
 
-/** A date-only string is a local calendar day, like every other date here. */
-function toDate(input: DateInput): Date {
-  return typeof input === 'string'
-    ? new Date(`${input}T00:00:00`)
-    : new Date(input);
+/**
+ * The calendar day a date names: a date-only string as written, an instant as
+ * the local day it falls on. Kept as numbers because a local midnight does not
+ * exist everywhere — where daylight saving starts at 00:00 it becomes 01:00,
+ * and a month counted to it from midnight is an hour short.
+ */
+function calendarDay(input: DateInput): [number, number, number] {
+  if (typeof input === 'string') {
+    const [year, month, day] = input.split('-').map(Number);
+    return [year, month - 1, day];
+  }
+  const date = new Date(input);
+
+  return [date.getFullYear(), date.getMonth(), date.getDate()];
 }
 
-/** `date` moved on by whole months, held to the last day of a shorter month. */
-function addMonths(date: Date, months: number): Date {
-  const moved = new Date(date);
-  moved.setDate(1);
-  moved.setMonth(moved.getMonth() + months);
-  const lastDay = new Date(
-    moved.getFullYear(),
-    moved.getMonth() + 1,
-    0,
-  ).getDate();
-  moved.setDate(Math.min(date.getDate(), lastDay));
-
-  return moved;
-}
-
-/** Whole months from `start` to `end`, truncated; a reversed range is 0. */
+/**
+ * Whole months from `start` to `end`, truncated; a reversed range is 0. A
+ * month from the 31st ends on the last day of a shorter month.
+ */
 export function monthsBetween(start: DateInput, end: DateInput): number {
-  const from = toDate(start);
-  const to = toDate(end);
-  const months =
-    (to.getFullYear() - from.getFullYear()) * 12 +
-    (to.getMonth() - from.getMonth());
+  const [fromYear, fromMonth, fromDay] = calendarDay(start);
+  const [toYear, toMonth, toDay] = calendarDay(end);
+  const months = (toYear - fromYear) * 12 + (toMonth - fromMonth);
+  const lastDay = new Date(Date.UTC(toYear, toMonth + 1, 0)).getUTCDate();
 
-  return Math.max(0, to < addMonths(from, months) ? months - 1 : months);
+  return Math.max(0, toDay < Math.min(fromDay, lastDay) ? months - 1 : months);
 }
 
 /** `7 yr 11 mo` for the date gutter, or spelled out for a `.sr-only` label. */
