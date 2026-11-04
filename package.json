@@ -41,7 +41,7 @@
     "@tailwindcss/postcss": "^4.3.3",
     "dayjs": "^1.11.23",
     "js-yaml": "^5.5.0",
-    "markdown-to-jsx": "^9.10.3",
+    "markdown-to-jsx": "^9.10.4",
     "next": "^16.4.3",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
