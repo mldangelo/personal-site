@@ -169,6 +169,12 @@
     display: none;
   }
 
+  /* The About intro sits a step above the printed body and below the section
+     headings, which its screen size would crowd. */
+  .about-intro p {
+    font-size: 12pt;
+  }
+
   .about-section--log ul {
     padding-left: 1.1rem;
     list-style: disc;
@@ -189,7 +195,6 @@
     align-items: baseline;
     gap: 0 0.4em;
     text-align: left;
-    padding-top: 0;
     margin-right: 0.5em;
   }
 

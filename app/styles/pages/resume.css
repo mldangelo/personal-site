@@ -126,7 +126,7 @@
 }
 
 /* Section index — sentence-case labels on a rule, not a pill bar. The About
-   page's index in pages/content.css is the same design.
+   page's index in pages/about.css is the same design.
 
    The bar is the sticky, opaque part and the row inside it is the part that
    scrolls and fades: a mask on the bar itself would let the page show through
