@@ -6,6 +6,7 @@ import { describe, expect, it } from 'vitest';
 
 import routes from '@/data/routes';
 import { THEME_CHOICE_ATTRIBUTE } from '@/lib/theme';
+import { smartQuotes } from '@/lib/typography';
 import Hamburger from '../../Template/Hamburger';
 
 describe('Hamburger', () => {
@@ -74,10 +75,14 @@ describe('Hamburger', () => {
     const primary = routes.filter((route) => route.primary !== false);
     expect(screen.getAllByRole('link')).toHaveLength(primary.length);
     for (const route of primary) {
-      expect(screen.getByRole('link', { name: route.label })).toBeVisible();
+      expect(
+        screen.getByRole('link', { name: smartQuotes(route.label) }),
+      ).toBeVisible();
     }
 
-    fireEvent.click(screen.getByRole('link', { name: primary[0].label }));
+    fireEvent.click(
+      screen.getByRole('link', { name: smartQuotes(primary[0].label) }),
+    );
     expect(button).toHaveAttribute('aria-expanded', 'false');
   });
 });
