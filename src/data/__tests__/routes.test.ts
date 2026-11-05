@@ -77,7 +77,10 @@ describe('routes', () => {
       .filter((route) => route.primary === false)
       .map((route) => route.path);
 
-    expect(secondaryPaths).toEqual(['/projects']);
+    expect(secondaryPaths).toEqual([
+      'https://vsco.co/kalyan-devv/gallery',
+      '/projects',
+    ]);
   });
 
   it('does not publish a Stats destination', () => {

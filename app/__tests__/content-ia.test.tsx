@@ -21,12 +21,12 @@ describe('retired writing information architecture', () => {
 });
 
 describe('professional content information architecture', () => {
-  it('promotes the external photography site from the homepage', () => {
+  it('points the homepage About Me CTA to the canonical About page', () => {
     render(<HomePage />);
 
     expect(screen.getByRole('link', { name: /about me/i })).toHaveAttribute(
       'href',
-      'https://vsco.co/kalyan-devv/gallery',
+      'https://pavankalyandosa.com/about/',
     );
   });
 

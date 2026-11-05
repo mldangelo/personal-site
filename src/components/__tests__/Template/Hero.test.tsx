@@ -46,9 +46,9 @@ describe('Hero', () => {
     const aboutButton = screen.getByRole('link', { name: /about me/i });
     expect(aboutButton).toHaveAttribute(
       'href',
-      'https://vsco.co/kalyan-devv/gallery',
+      'https://pavankalyandosa.com/about/',
     );
-    expect(aboutButton).toHaveAttribute('target', '_blank');
+    expect(aboutButton).not.toHaveAttribute('target');
     expect(aboutButton).toHaveClass('button');
 
     const resumeButton = screen.getByRole('link', { name: /view resume/i });
