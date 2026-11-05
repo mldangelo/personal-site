@@ -5,6 +5,7 @@ import { SchemaGraph } from '@/components/Schema';
 import Hero from '@/components/Template/Hero';
 import PageWrapper from '@/components/Template/PageWrapper';
 import { HOME_URL, profilePageNode } from '@/lib/schema';
+import { smartQuotes } from '@/lib/typography';
 import {
   AUTHOR_NAME,
   formatDate,
@@ -35,7 +36,7 @@ export default function HomePage() {
         <div className="home-writing-header">
           <h2 id="home-writing-title">Notes &amp; essays</h2>
           <Link href="/writing/" className="home-writing-all">
-            All writing <span aria-hidden="true">↗</span>
+            All writing <span aria-hidden="true">→</span>
           </Link>
         </div>
         <div className="home-writing-list">
@@ -43,13 +44,16 @@ export default function HomePage() {
             const content = (
               <>
                 <span className="home-writing-meta">
-                  {formatDate(item.date)} · {item.source}
+                  <time dateTime={item.date}>{formatDate(item.date)}</time> ·{' '}
+                  {item.source}
                 </span>
                 <div className="home-writing-copy">
-                  <h3>{item.title}</h3>
+                  <h3>{smartQuotes(item.title)}</h3>
                 </div>
+                {/* The arrow follows the destination: ↗ leaves the site in a
+                    new tab, → stays on it. */}
                 <span className="home-writing-arrow" aria-hidden="true">
-                  ↗
+                  {item.isExternal ? '↗' : '→'}
                 </span>
               </>
             );

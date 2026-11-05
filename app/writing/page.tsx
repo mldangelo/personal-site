@@ -9,6 +9,7 @@ import {
   sectionPageNodes,
   WRITING_DESCRIPTION,
 } from '@/lib/schema';
+import { smartQuotes } from '@/lib/typography';
 import { formatDate } from '@/lib/utils';
 import { getWritingItems, type WritingItem as Item } from '@/lib/writing';
 
@@ -48,8 +49,8 @@ function WritingItem({ featured, item }: { featured: boolean; item: Item }) {
           </span>
         )}
       </div>
-      <h3 className="writing-title">{item.title}</h3>
-      <p className="writing-description">{item.description}</p>
+      <h3 className="writing-title">{smartQuotes(item.title)}</h3>
+      <p className="writing-description">{smartQuotes(item.description)}</p>
       {item.isExternal && (
         // The arrow is decorative, so the warning has to be spoken.
         <span className="sr-only"> (opens in a new tab)</span>

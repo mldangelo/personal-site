@@ -136,6 +136,49 @@ describe('token contrast', () => {
   );
 });
 
+// `.hero` points the page's button tokens at the poster pair, and its summary is
+// a quieter mix of that pair, so the table above reaches neither.
+describe('hero poster', () => {
+  const posterTokens = readTokens('pages/home.css');
+  const [, summaryShare] =
+    /\.hero-summary\s*\{[^}]*color-mix\(\s*in srgb,\s*var\(--color-on-hero\)\s*(\d+)%,\s*var\(--color-hero\)\s*\)/.exec(
+      readFileSync(join(STYLES, 'pages/home.css'), 'utf8'),
+    ) ?? [];
+
+  /** `color-mix(in srgb, …)` interpolates the encoded channels, as this does. */
+  function mix(a: string, b: string, share: number): string {
+    const channel = (hex: string, index: number) =>
+      Number.parseInt(hex.slice(1 + index * 2, 3 + index * 2), 16);
+    const mixed = [0, 1, 2].map((index) =>
+      Math.round(channel(a, index) * share + channel(b, index) * (1 - share))
+        .toString(16)
+        .padStart(2, '0'),
+    );
+
+    return `#${mixed.join('')}`;
+  }
+
+  it.each([
+    { theme: 'light', tokens: new Map([...light, ...posterTokens]) },
+    { theme: 'dark', tokens: new Map([...dark, ...posterTokens]) },
+  ])('$theme keeps its button and summary readable', ({ tokens }) => {
+    const field = resolve(tokens, '--color-hero');
+    const label = resolve(tokens, '--color-on-accent');
+    const fill = resolve(tokens, '--color-accent-fill');
+    const hoverFill = resolve(tokens, '--color-accent-fill-hover');
+    const summary = mix(
+      resolve(tokens, '--color-on-hero'),
+      field,
+      Number(summaryShare) / 100,
+    );
+
+    expect(contrastRatio(label, fill)).toBeGreaterThanOrEqual(AA_TEXT);
+    expect(contrastRatio(label, hoverFill)).toBeGreaterThanOrEqual(AA_TEXT);
+    expect(hoverFill, 'the button does not change on hover').not.toBe(fill);
+    expect(contrastRatio(summary, field)).toBeGreaterThanOrEqual(AA_TEXT);
+  });
+});
+
 describe('focus ring declarations', () => {
   it('use the semantic ring tokens instead of palette colours', () => {
     const files = readdirSync(STYLES, { recursive: true })

@@ -38,7 +38,8 @@
 }
 
 /* An opaque paper header with a structural hairline. The colour is the page's
-   own, which `theme-color` also gives the browser chrome above it. */
+   own, which `theme-color` also gives the browser chrome above it. The measure
+   is capped at 100% so the centring bottoms out at the page's own 2rem gutter. */
 .site-header {
   align-items: center;
   background-color: var(--color-bg-alt);
@@ -48,7 +49,7 @@
   justify-content: space-between;
   left: 0;
   line-height: 1;
-  padding: 0 max(1.5rem, calc((100% - var(--measure-wide)) / 2 + 2rem));
+  padding: 0 max(1.5rem, calc((100% - min(var(--measure-page), 100%)) / 2 + 2rem));
   position: fixed;
   top: 0;
   width: 100%;
