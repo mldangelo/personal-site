@@ -157,3 +157,36 @@ describe('focus ring declarations', () => {
     }
   });
 });
+
+describe('--color-accent-underline', () => {
+  const channels = (hex: string) =>
+    (hex.slice(1).match(/../g) ?? []).map((pair) => Number.parseInt(pair, 16));
+
+  // A link's ink is about 2:1 against the body text around it, so the underline
+  // is what marks a link for a reader who cannot tell the colours apart.
+  it.each([
+    { theme: 'light', tokens: light },
+    { theme: 'dark', tokens: dark },
+  ])('clears 3:1 on every surface in $theme', ({ tokens }) => {
+    const share = Number(
+      /(\d+)%/.exec(resolve(tokens, '--color-accent-underline'))?.[1] ?? 0,
+    );
+    const accent = channels(resolve(tokens, '--color-accent'));
+
+    for (const surface of PAPER) {
+      const backdrop = resolve(tokens, surface);
+      const paper = channels(backdrop);
+      const underline = accent
+        .map((channel, index) =>
+          Math.round((channel * share + paper[index] * (100 - share)) / 100)
+            .toString(16)
+            .padStart(2, '0'),
+        )
+        .join('');
+
+      expect(contrastRatio(`#${underline}`, backdrop)).toBeGreaterThanOrEqual(
+        AA_NON_TEXT,
+      );
+    }
+  });
+});

@@ -1,48 +1,41 @@
 /* ========================================
    LINK STYLES
-   Animated underlines and hover states
+   Undecorated by default; one style for links in running text
    ======================================== */
 
 @layer base {
-  /* Modern link styling with animated underline */
+  /* A bare link carries no decoration, only a colour change on hover. Most
+     anchors here are navigation, rows, and controls that draw their own state. */
   a {
     color: var(--color-fg);
     text-decoration: none;
-    background-image: linear-gradient(var(--color-accent), var(--color-accent));
-    background-size: 0% 1.5px;
-    background-repeat: no-repeat;
-    background-position: left bottom;
-    transition:
-      color var(--duration-fast) var(--ease-out),
-      background-size var(--duration-normal) var(--ease-out);
+    transition: color var(--duration-fast) var(--ease-out);
   }
 
   a:hover {
     color: var(--color-accent);
-    background-size: 100% 1.5px;
   }
 
-  /* Persistent underline for inline prose links, replacing the animated one
-     so they do not double up.
+  /* Links in running text: accent ink over a real underline that firms up on
+     hover, matching article prose.
 
-     Scoped to `p` deliberately: the site uses `<li>` for plenty of non-prose
-     UI — navigation, icon rows, course listings. Prose lists get their
-     underline from their own container rules (`.about-content a`, `.prose a`)
-     instead. */
-  p a {
-    background-image: linear-gradient(
-      transparent calc(100% - 1.5px),
-      var(--color-accent-underline) 1.5px
-    );
-    background-size: 100% 100%;
-    background-position: left bottom;
-    transition:
-      color var(--duration-fast) var(--ease-out),
-      background-image var(--duration-fast) var(--ease-out);
-  }
+     Scoped to `p` deliberately. The site uses `<li>` for plenty of non-prose
+     UI (navigation, icon rows, course listings), so a prose list styles its
+     links from its own container (`.about-content a`, `.prose a`) instead.
 
-  p a:hover {
-    color: var(--color-accent-hover);
-    background-image: linear-gradient(transparent calc(100% - 1.5px), var(--color-accent) 1.5px);
+     Screen only: links carry no underline on paper, and the resume is the page
+     people print. */
+  @media screen {
+    p a {
+      color: var(--color-accent);
+      text-decoration: underline;
+      text-decoration-color: var(--color-accent-underline);
+      text-underline-offset: 2px;
+    }
+
+    p a:hover {
+      color: var(--color-accent-hover);
+      text-decoration-color: var(--color-accent);
+    }
   }
 }
