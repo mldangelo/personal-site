@@ -11,7 +11,6 @@
   min-height: 44px;
   gap: 0.5rem;
   text-decoration: none;
-  background-image: none;
 }
 
 .logo-text {
@@ -48,7 +47,6 @@
   letter-spacing: var(--tracking-normal);
   color: var(--color-fg-light);
   text-decoration: none;
-  background-image: none;
   line-height: 1;
   transition: color var(--duration-fast) var(--ease-out);
 }

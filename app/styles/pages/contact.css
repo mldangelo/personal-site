@@ -59,7 +59,6 @@
   line-height: var(--leading-tight);
   color: var(--color-fg-bold);
   background: transparent;
-  background-image: none;
   border-radius: 0;
   border-bottom: var(--rule-strong) solid var(--color-accent);
   text-decoration: none;

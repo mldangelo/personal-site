@@ -85,8 +85,6 @@
   border-bottom: var(--rule) solid var(--color-border);
   color: inherit;
   text-decoration: none;
-  /* base/links.css paints an accent underline on links in prose. */
-  background-image: none;
   transition: background-color var(--duration-instant) var(--ease-out);
 }
 
@@ -373,13 +371,11 @@ a.project-entry:focus-visible .project-entry-external {
 
 /* The identifying link of an entry is its title, so it stays in ink until it
    is asked for, and under the pointer or the keyboard it is unmistakably a
-   link. `background-image` is restated on the second rule because the dark theme's
-   `p a:hover` would otherwise out-specify the first and draw its own line. */
+   link. */
 .job-company,
 .degree-container .school a {
   color: inherit;
   text-decoration: none;
-  background-image: none;
 }
 
 .job-company:hover,
@@ -390,7 +386,6 @@ a.project-entry:focus-visible .project-entry-external {
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.15em;
-  background-image: none;
 }
 
 .jobs-container header h3 {
@@ -572,7 +567,6 @@ a.project-entry:focus-visible .project-entry-external {
   min-height: 2.75rem;
   margin: 0 -0.5rem;
   padding: 0.75rem 0.5rem;
-  background-image: none;
   transition: background-color var(--duration-fast) var(--ease-out);
 }
 
