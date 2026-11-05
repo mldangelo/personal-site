@@ -52,6 +52,13 @@ describe('smartQuotes', () => {
     expect(smartQuotes('a 15" display')).toBe('a 15" display');
   });
 
+  it('leaves an inch mark alone inside a quotation', () => {
+    expect(smartQuotes('He said "a 15" display".')).toBe(
+      'He said “a 15" display”.',
+    );
+    expect(smartQuotes('"in 1999" and "2000"')).toBe('“in 1999” and “2000”');
+  });
+
   it('still closes a quotation that ends in a digit', () => {
     expect(smartQuotes('version "2.1.0" shipped')).toBe(
       'version “2.1.0” shipped',

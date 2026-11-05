@@ -1,0 +1,307 @@
+/* ========================================
+   ABOUT PAGE
+   ======================================== */
+
+.about-page {
+  max-width: var(--measure-page);
+  margin: 0 auto;
+}
+
+.about-header {
+  margin-bottom: var(--spacing-8);
+}
+
+.about-header .page-title {
+  margin-bottom: 0;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+.about-content {
+  max-width: var(--measure-read);
+  line-height: 1.7;
+}
+
+/* Section index: the rules are shared with the résumé's in pages/resume.css. */
+.about-section-nav {
+  margin: var(--spacing-10) 0 var(--spacing-6);
+}
+
+.about-section {
+  margin-top: var(--spacing-12);
+}
+
+/* The heading's type and the rule above it come from the shared section
+   header. The heading is the fragment target and the rule sits one
+   `--spacing-5` above it, on the element around it, so the margin carries that
+   distance too and a jump parks the rule clear of the sticky section index. */
+.about-section h2 {
+  scroll-margin-top: calc(var(--header-height) + 5.5rem + var(--spacing-5));
+}
+
+/* The heading's own link is not prose. Two classes keep it ahead of
+   `.about-content a`, further down, and three ahead of that rule's hover. */
+.about-content .about-section-heading-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.about-content .about-section-heading-link:hover {
+  color: inherit;
+}
+
+/* A mark, not text, so it takes the muted ink. No space separates it from the
+   title in the markup, which is what keeps it from wrapping onto a line of
+   its own under a long heading on a phone. */
+.about-section-heading-hash {
+  margin-left: 0.35rem;
+  opacity: 0;
+  color: var(--color-fg-muted);
+  transition:
+    opacity var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+.about-section:hover .about-section-heading-hash,
+.about-section-heading-link:focus-visible .about-section-heading-hash {
+  opacity: 1;
+}
+
+/* Hovering anywhere in a section shows the mark; this is what says the
+   heading itself is the link. */
+.about-section-heading-link:hover .about-section-heading-hash {
+  color: var(--color-accent);
+}
+
+.about-content p {
+  margin: 0 0 var(--spacing-5);
+  color: var(--color-fg);
+  text-wrap: pretty;
+}
+
+.about-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* The intro is told apart by its ink. Its size is the reading size at every
+   width, so it does not outweigh the page title above it. */
+.about-intro p {
+  font-size: var(--text-md);
+  color: var(--color-fg-bold);
+}
+
+.about-content ul {
+  margin: var(--spacing-4) 0 var(--spacing-6);
+  padding-left: 1.1rem;
+}
+
+.about-content li {
+  margin-bottom: 0.65rem;
+  color: var(--color-fg);
+  line-height: 1.75;
+  text-wrap: pretty;
+}
+
+.about-content li::marker {
+  color: var(--color-fg-muted);
+}
+
+/* Lists of sentences read down one column, a size below the prose: they are
+   asides, and most entries are a line long, so they are also set closer than
+   the log. On paper they keep the printed body size. */
+.about-section--compact li {
+  margin-bottom: 0.4rem;
+  line-height: 1.6;
+}
+
+@media screen {
+  .about-section--compact li {
+    font-size: var(--text-base);
+  }
+}
+
+/* The one list of names, so the one list in columns: as many as fit, to
+   three. The longest name is 8.8em wide, so a 9em column never breaks one —
+   which gives a phone two columns from 360px and one below it. */
+.about-section--links ul {
+  columns: 3 9em;
+  column-gap: var(--spacing-6);
+  padding-left: 0;
+  list-style: none;
+}
+
+.about-section--links li {
+  padding-left: 0;
+  break-inside: avoid;
+}
+
+/* On a screen each name is a target of its own, not a link in a sentence, so
+   its row is 44px tall at phone sizes and the link answers across all of it.
+   The pseudo-element is what reaches that far: the link's own box stays the
+   name, which is what its focus ring should fit. The negative margin takes
+   back the row padding, so the names start as far below their heading as any
+   other list. None of
+   this means anything on paper. */
+@media screen {
+  .about-section--links ul {
+    margin-block: -0.5rem var(--spacing-4);
+  }
+
+  .about-section--links li {
+    margin-bottom: 0;
+    padding-block: 0.5rem;
+  }
+
+  .about-section--links li a {
+    position: relative;
+    display: inline-block;
+  }
+
+  .about-section--links li a::before {
+    content: '';
+    position: absolute;
+    inset: -0.5rem 0;
+  }
+}
+
+/* ========================================
+   ABOUT — LOG SECTIONS
+   The history and travel lists are a chronological record, so they
+   are set as log entries hanging off a spine rather than as bullets.
+   ======================================== */
+
+.about-section--log ul {
+  list-style: none;
+  margin: var(--spacing-5) 0 var(--spacing-6);
+  padding-left: 0;
+}
+
+/* Same gutter-then-spine-then-body arrangement as the resume, so the two
+   records on the site read as one device. The marker shares the entry's first
+   baseline, which holds at any size. */
+.about-section--log .log-entry {
+  position: relative;
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr);
+  align-items: baseline;
+  gap: 0 1.75rem;
+  margin-bottom: 1.1rem;
+  padding-left: 0;
+}
+
+/* Drawn per entry so the spine runs unbroken through the margin gaps. */
+.about-section--log .log-entry::before {
+  content: '';
+  position: absolute;
+  left: calc(4.5rem + 0.875rem);
+  top: 0;
+  bottom: -1.1rem;
+  width: var(--rule);
+  background: var(--color-border);
+}
+
+/* The record is open-ended, so the last segment fades rather than stops. */
+.about-section--log .log-entry:last-child::before {
+  bottom: auto;
+  height: 2.5em;
+  background: linear-gradient(to bottom, var(--color-border), transparent);
+}
+
+/* One tick per entry. */
+.about-section--log .log-entry::after {
+  content: '';
+  position: absolute;
+  left: calc(4.5rem + 0.875rem);
+  top: 0.68em;
+  width: 7px;
+  height: 7px;
+  transform: translate(-50%, -50%);
+  border: var(--rule) solid var(--color-fg-light);
+  background: var(--color-bg-alt);
+  border-radius: var(--radius-full);
+}
+
+/* Ink, not amber: hovering an entry is not a live value, and spending the
+   signal colour on decoration is what stops it meaning anything elsewhere. */
+.about-section--log .log-entry:hover::after {
+  border-color: var(--color-fg-bold);
+  background: var(--color-fg-bold);
+}
+
+/* Empty for entries that carry no marker; the column still holds so the
+   spine stays straight down the list. When the prose explicitly states both
+   year and age, stack them so the pair fits without widening the gutter. */
+.log-entry-marker {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.1em;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-fg-light);
+  text-align: right;
+  line-height: 1.4;
+}
+
+/* Give an explicitly stated year a little more ink than the secondary age. */
+.log-entry-year {
+  color: var(--color-fg);
+  font-weight: var(--font-weight-medium);
+}
+
+.log-entry-body {
+  min-width: 0;
+}
+
+@media (max-width: 640px) {
+  .about-section--log .log-entry {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.2rem;
+    padding-left: 1.5rem;
+  }
+
+  .about-section--log .log-entry::before,
+  .about-section--log .log-entry:last-child::before {
+    left: 0;
+  }
+
+  .about-section--log .log-entry::after {
+    left: 0;
+  }
+
+  /* No gutter column to stack inside, so a year-age pair sits on one line. */
+  .log-entry-marker {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 0 0.5em;
+    text-align: left;
+  }
+
+  .log-entry-marker:empty {
+    display: none;
+  }
+}
+
+/* One link style, the article's, in paragraphs and lists alike. Removing the
+   background image keeps the global `p a` gradient from drawing a second line
+   under the first. */
+.about-content a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-decoration-color: var(--color-accent-underline);
+  text-underline-offset: 2px;
+  background-image: none;
+}
+
+/* dark-mode.css restates that gradient at (0,1,2), and its hover at (0,2,2),
+   after this file, and both outrank the rule above. */
+[data-theme='dark'] .about-content p a,
+[data-theme='dark'] .about-content p a:hover {
+  background-image: none;
+}
+
+.about-content a:hover {
+  color: var(--color-accent-hover);
+  text-decoration-color: var(--color-accent);
+}
