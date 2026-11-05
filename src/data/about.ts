@@ -1,6 +1,6 @@
 export const aboutMarkdown = `# Intro
 
-I am Pavankalyan Dosa, a Senior SailPoint Engineer with more than six years of experience in identity and access management (IAM) and identity governance and administration (IGA). I build practical, secure identity programs using SailPoint IdentityIQ and IdentityNow / Identity Security Cloud.
+I am Pavankalyan Dosa, a Senior SailPoint Engineer with nearly seven years of experience in identity and access management (IAM) and identity governance and administration (IGA). I build practical, secure identity programs using SailPoint IdentityIQ and IdentityNow / Identity Security Cloud.
 
 # Focus
 

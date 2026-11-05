@@ -27,7 +27,7 @@ export default function ResumePage() {
         <header className="resume-header">
           <h1 className="resume-title">Resume</h1>
           <p className="resume-summary">
-            Senior SailPoint Engineer with more than six years of IAM and IGA
+            Senior SailPoint Engineer with nearly seven years of IAM and IGA
             experience across SailPoint IdentityIQ and IdentityNow / Identity
             Security Cloud. Experienced in lifecycle management, access
             governance, integrations, automation, and compliance.

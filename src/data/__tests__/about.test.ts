@@ -18,4 +18,9 @@ describe('about data', () => {
   it('contains no inherited biography', () => {
     expect(aboutMarkdown).not.toMatch(/OpenAI|Promptfoo|Michael D'Angelo/);
   });
+
+  it('uses a rounded duration for ongoing IAM experience', () => {
+    expect(aboutMarkdown).toContain('nearly seven years');
+    expect(aboutMarkdown).not.toContain('six years');
+  });
 });
