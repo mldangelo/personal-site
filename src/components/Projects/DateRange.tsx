@@ -1,14 +1,11 @@
-import dayjs from 'dayjs';
-
 import type { Project } from '@/data/projects';
-
-/** Month precision, because several archive entries share a year. */
-const MONTH_YEAR = 'MMM YYYY';
+import { formatMonthYear } from '@/lib/utils';
 
 type DateRangeProps = Pick<Project, 'date' | 'endDate' | 'ongoing'>;
 
 /**
- * The dates themselves, shared with the résumé's date line.
+ * The dates themselves, shared with the résumé's date line, to the month
+ * because several archive entries share a year.
  *
  * One-off entries render a single date; ranges render both ends; live work
  * renders `Present` in amber through `.daterange-present`, so the one meaning
@@ -19,7 +16,7 @@ export function DateSpan({ date, endDate, ongoing }: DateRangeProps) {
 
   return (
     <>
-      <time dateTime={date}>{dayjs(date).format(MONTH_YEAR)}</time>
+      <time dateTime={date}>{formatMonthYear(date)}</time>
       {isRange && (
         <>
           {/* The dash is decorative, so without the spoken "to" a screen
@@ -29,7 +26,7 @@ export function DateSpan({ date, endDate, ongoing }: DateRangeProps) {
           </span>
           <span className="sr-only"> to </span>
           {endDate ? (
-            <time dateTime={endDate}>{dayjs(endDate).format(MONTH_YEAR)}</time>
+            <time dateTime={endDate}>{formatMonthYear(endDate)}</time>
           ) : (
             <span className="daterange-present">Present</span>
           )}
