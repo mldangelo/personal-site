@@ -55,25 +55,15 @@ describe('Navigation', () => {
       screen.queryByRole('link', { name: /writing/i }),
     ).not.toBeInTheDocument();
     expect(screen.getByRole('link', { name: /contact/i })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /photography/i })).toHaveAttribute(
-      'href',
-      'https://vsco.co/kalyan-devv/gallery',
-    );
+    expect(
+      screen.queryByRole('link', { name: /photography/i }),
+    ).not.toBeInTheDocument();
     expect(
       screen.queryByRole('link', { name: /archive/i }),
     ).not.toBeInTheDocument();
     expect(
       screen.queryByRole('link', { name: /stats/i }),
     ).not.toBeInTheDocument();
-  });
-
-  it('opens external navigation routes safely in a new tab', () => {
-    render(<Navigation />);
-
-    const photography = screen.getByRole('link', { name: /photography/i });
-    expect(photography).toHaveAttribute('target', '_blank');
-    expect(photography).toHaveAttribute('rel', 'noopener noreferrer');
-    expect(photography).toHaveTextContent('(opens in new tab)');
   });
 
   it('marks home route as active when on homepage', () => {
