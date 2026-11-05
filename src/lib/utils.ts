@@ -39,17 +39,25 @@ export const SITE_DESCRIPTION =
 // Skill competency
 export const MAX_COMPETENCY = 5;
 
-/**
- * Formats a date string to a human-readable format.
- * Parses as UTC to avoid timezone shifts.
- */
+/** A `YYYY-MM-DD` day at local noon, which no time zone offset moves to another day. */
+function localNoon(dateStr: string): Date {
+  return new Date(`${dateStr}T12:00:00`);
+}
+
+/** `July 1, 2024`. */
 export function formatDate(dateStr: string): string {
   if (!dateStr) return '';
-  // Parse as UTC to avoid timezone shifts
-  const date = new Date(`${dateStr}T12:00:00`);
-  return date.toLocaleDateString('en-US', {
+  return localNoon(dateStr).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
+  });
+}
+
+/** `Jul 2024`. */
+export function formatMonthYear(dateStr: string): string {
+  return localNoon(dateStr).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
   });
 }

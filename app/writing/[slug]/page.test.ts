@@ -1,4 +1,4 @@
-import { rmSync, writeFileSync } from 'node:fs';
+import fs from 'node:fs';
 import { join } from 'node:path';
 import { renderToStaticMarkup } from 'react-dom/server';
 import {
@@ -18,35 +18,51 @@ import {
 } from '@/lib/utils';
 import PostPage, { generateMetadata } from './page';
 
-/**
- * The draft path reads `content/writing/` by slug, so the draft is a real file
- * for this suite. Every other reader of the post set filters drafts out.
- */
 const DRAFT_SLUG = 'zz-draft-preview-fixture';
 const DRAFT_TITLE = 'A Draft Held Back From Publication';
-const DRAFT_FILE = join(process.cwd(), 'content/writing', `${DRAFT_SLUG}.md`);
+const POSTS_DIRECTORY = join(process.cwd(), 'content/writing');
+const DRAFT_FILE = join(POSTS_DIRECTORY, `${DRAFT_SLUG}.md`);
+const DRAFT_SOURCE = [
+  '---',
+  `title: '${DRAFT_TITLE}'`,
+  "date: '2026-01-08'",
+  "description: 'Unpublished while it is being written.'",
+  'draft: true',
+  // Both images are absent from `public/`: a draft may name images that have
+  // not been committed yet, and the page must still render.
+  `image: '/images/writing/${DRAFT_SLUG}/absent.png'`,
+  "imageAlt: 'A screenshot not yet committed'",
+  '---',
+  '',
+  `![Screenshot](/images/writing/${DRAFT_SLUG}/absent.png)`,
+  '',
+].join('\n');
 
+type Read = (path: unknown, options?: unknown) => unknown;
+
+/**
+ * The draft exists only in this suite's view of `content/writing/`. Suites in
+ * other workers read that directory at the same time, so a real file there
+ * would join their post sets, or vanish between their listing and their read.
+ */
 beforeAll(() => {
-  writeFileSync(
-    DRAFT_FILE,
-    [
-      '---',
-      `title: '${DRAFT_TITLE}'`,
-      "date: '2026-01-08'",
-      "description: 'Unpublished while it is being written.'",
-      'draft: true',
-      '---',
-      '',
-      // Absent from `public/`: a draft may reference an image that has not been
-      // committed yet, and the page must still render.
-      `![Screenshot](/images/writing/${DRAFT_SLUG}/absent.png)`,
-      '',
-    ].join('\n'),
-  );
+  const readdirSync = fs.readdirSync as Read;
+  const readFileSync = fs.readFileSync as Read;
+
+  vi.spyOn(fs, 'readdirSync').mockImplementation(((path, options) => {
+    const entries = readdirSync(path, options) as string[];
+    return path === POSTS_DIRECTORY
+      ? [...entries, `${DRAFT_SLUG}.md`]
+      : entries;
+  }) as Read as typeof fs.readdirSync);
+  vi.spyOn(fs, 'readFileSync').mockImplementation(((path, options) =>
+    path === DRAFT_FILE
+      ? DRAFT_SOURCE
+      : readFileSync(path, options)) as Read as typeof fs.readFileSync);
 });
 
 afterAll(() => {
-  rmSync(DRAFT_FILE, { force: true });
+  vi.restoreAllMocks();
 });
 
 afterEach(() => {

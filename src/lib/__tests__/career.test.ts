@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import type { Position } from '@/data/resume/work';
 import {
@@ -98,10 +98,24 @@ describe('monthsBetween', () => {
     // Eleven months and thirty days is not a year.
     ['a partial month, truncated', '2020-01-01', '2020-12-31', 11],
     ['a full year', '2020-01-01', '2021-01-01', 12],
+    // A month from the 31st ends on the last day of a shorter month.
+    ['to the end of a shorter month', '2021-01-31', '2021-02-28', 1],
     ['to an epoch-millisecond instant', '2026-03-09', NOW, 4],
     ['a reversed range, as no tenure', '2022-01-01', '2014-01-01', 0],
   ])('counts %s', (_, start, end, months) => {
     expect(monthsBetween(start, end)).toBe(months);
+  });
+
+  it('counts a whole month across a daylight-saving change at midnight', () => {
+    // Paraguay's clocks went from 00:00 to 01:00 on 2017-10-01, so that local
+    // midnight never happened: both months below are whole.
+    vi.stubEnv('TZ', 'America/Asuncion');
+    try {
+      expect(monthsBetween('2017-09-15', '2017-10-15')).toBe(1);
+      expect(monthsBetween('2017-10-01', '2017-11-01')).toBe(1);
+    } finally {
+      vi.unstubAllEnvs();
+    }
   });
 });
 
