@@ -24,10 +24,13 @@ describe('ContactIcons', () => {
     );
   });
 
-  it('has correct number of contact links', () => {
+  it('draws a decorative glyph in every link', () => {
     render(<ContactIcons />);
-    const links = screen.getAllByRole('link');
-    expect(links.length).toBeGreaterThan(0);
+
+    for (const link of screen.getAllByRole('link')) {
+      const path = link.querySelector('svg[aria-hidden="true"] path');
+      expect(path?.getAttribute('d')).toMatch(/^M/);
+    }
   });
 
   it('can omit email when the page already has a primary email action', () => {
