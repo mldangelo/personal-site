@@ -1,9 +1,12 @@
 /**
- * Selected appearances: panels, talks, and demos with a public record.
+ * Public appearances: panels, talks, and demos with an organiser's own record.
  *
  * The record is credible only if a reader can check it, so every entry links
- * the organiser's own account of the session, and that page should name
- * Michael. Exceptions and limitations are explained beside the entry.
+ * the organiser's own page or post for the session, and it should name
+ * Michael. Where an organiser's published lineup is stale, the entry says so
+ * in a comment rather than linking something unofficial. Closed-door
+ * sessions, run on behalf of OpenAI, are mentioned on the page but never
+ * listed here.
  */
 
 /**
@@ -14,30 +17,30 @@ export type AppearanceFormat = 'Panel' | 'Arsenal Lab' | 'Tech session';
 
 export interface Appearance {
   /**
-   * The session's own title, or the event's name when no title is available.
+   * The session's own title, or the event's name when the session was a demo
+   * of a tool or its host published no title.
    */
   title: string;
   format: AppearanceFormat;
-  /** First day of the appearance or its event, `YYYY-MM-DD`. */
+  /** First day of the appearance, or of its event when no day is published. */
   date: string;
   /** City, as a reader would place the event. */
   place: string;
   /** What the title and format leave out: the host, the event, who else. */
   desc: string;
-  /** The organiser's public record, naming Michael. */
+  /** The organiser's own record of the session, naming Michael. */
   link: string;
 }
 
 const appearances: Appearance[] = [
-  // EY's post names Michael's tech session but not its title or day. The
-  // date is the first day of the event; the location is the event's hub.
-  // The post is on Lawrence's public profile rather than a session listing.
+  // EY's own post about its Codex Day names Michael's tech session but gives
+  // no title or day, so the entry takes the event's name and first day.
   {
     title: 'EY × OpenAI Codex Day 2026',
     format: 'Tech session',
     date: '2026-10-26',
-    place: 'Bengaluru + online',
-    desc: 'A technical session at EY’s two-day event on applied AI.',
+    place: 'Bengaluru',
+    desc: 'At EY’s two-day Codex event, held in person and online.',
     link: 'https://in.linkedin.com/in/lince',
   },
   {
