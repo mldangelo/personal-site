@@ -1,10 +1,11 @@
 'use client';
 
-import Markdown, { type MarkdownToJSX, RuleType } from 'markdown-to-jsx';
+import Markdown, { type MarkdownToJSX } from 'markdown-to-jsx';
 import { Children, type ReactNode } from 'react';
 import useActiveSection from '@/hooks/useActiveSection';
 import { createUniqueHeadingIds } from '@/lib/anchors';
 import { extractLogMarker } from '@/lib/logEntry';
+import { smartQuotesRule } from '@/lib/markdown';
 import { smartQuotes } from '@/lib/typography';
 
 interface AboutContentProps {
@@ -22,7 +23,7 @@ const LOG_VARIANT = 'about-section--log';
  * Entries that open with a link or carry no marker at all keep their text
  * intact and simply leave the gutter empty.
  *
- * The text arrives with its quotes already set (`renderRule`, below). No
+ * The text arrives with its quotes already set (`smartQuotesRule`). No
  * marker pattern contains a quote, so the reading is the same either way, and
  * the remainder is cut from the converted string rather than converted again
  * out of context.
@@ -64,21 +65,13 @@ function LogEntry({ children }: { children?: ReactNode }) {
   );
 }
 
-/**
- * The source is typed with the straight quotes a keyboard has; the page sets
- * typographic ones. Only prose is converted: a code span or a fenced block is
- * its own node type and never arrives here as text.
- */
-const renderRule: NonNullable<MarkdownToJSX.Options['renderRule']> = (
-  next,
-  node,
-) => (node.type === RuleType.text ? smartQuotes(node.text) : next());
-
-const MARKDOWN_OPTIONS: MarkdownToJSX.Options = { renderRule };
+const MARKDOWN_OPTIONS: MarkdownToJSX.Options = {
+  renderRule: smartQuotesRule,
+};
 
 const LOG_MARKDOWN_OPTIONS: MarkdownToJSX.Options = {
   overrides: { li: { component: LogEntry } },
-  renderRule,
+  renderRule: smartQuotesRule,
 };
 
 interface AboutSection {

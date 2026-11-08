@@ -17,7 +17,12 @@ import contact from '@/data/contact';
 import profile from '@/data/profile.json';
 import courses from '@/data/resume/courses';
 import degrees from '@/data/resume/degrees';
-import { categories, skills } from '@/data/resume/skills';
+import {
+  type Category,
+  categories,
+  type Skill,
+  skills,
+} from '@/data/resume/skills';
 import work from '@/data/resume/work';
 import { sortPositions } from '@/lib/career';
 import {
@@ -215,20 +220,27 @@ function buildEducation(): ResumeEducation[] {
 }
 
 /**
- * One entry per category, keywords ordered by competency. The 1–5 competency
- * scale has no counterpart in the schema's free-text `level`, so it shapes the
- * ordering rather than being translated into a word the data never claimed.
+ * One group per category, its skills ordered by competency: the order the
+ * résumé page and this document share. The 1–5 competency scale has no
+ * counterpart in the schema's free-text `level`, so it shapes the ordering
+ * rather than being translated into a word the data never claimed.
  */
-function buildSkills(): ResumeSkill[] {
-  return categories.map((category) => ({
+export function groupSkills(all: Skill[], categoryList: Category[]) {
+  return categoryList.map((category) => ({
     name: category.name,
-    keywords: skills
+    skills: all
       .filter((skill) => skill.category.includes(category.name))
       .sort(
         (a, b) =>
           b.competency - a.competency || a.title.localeCompare(b.title, 'en'),
-      )
-      .map((skill) => skill.title),
+      ),
+  }));
+}
+
+function buildSkills(): ResumeSkill[] {
+  return groupSkills(skills, categories).map((group) => ({
+    name: group.name,
+    keywords: group.skills.map((skill) => skill.title),
   }));
 }
 

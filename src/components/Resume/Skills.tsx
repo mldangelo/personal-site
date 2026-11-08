@@ -1,4 +1,5 @@
 import type { Category, Skill } from '@/data/resume/skills';
+import { groupSkills } from '@/lib/resumeJson';
 
 import SkillTag, { knowledgeTier } from './Skills/SkillTag';
 
@@ -15,17 +16,9 @@ interface SkillsProps {
  * missing from the page when it is printed.
  */
 export default function Skills({ skills, categories }: SkillsProps) {
-  const groups = categories
-    .map((category) => ({
-      name: category.name,
-      skills: skills
-        .filter((skill) => skill.category.includes(category.name))
-        .sort(
-          (a, b) =>
-            b.competency - a.competency || a.title.localeCompare(b.title, 'en'),
-        ),
-    }))
-    .filter((group) => group.skills.length > 0);
+  const groups = groupSkills(skills, categories).filter(
+    (group) => group.skills.length > 0,
+  );
 
   // The fainter tone is only worth explaining where something is set in it.
   const hasFamiliar = skills.some(

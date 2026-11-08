@@ -1,9 +1,9 @@
 'use client';
 
-import Markdown, { RuleType } from 'markdown-to-jsx';
+import Markdown from 'markdown-to-jsx';
 import type { ReactNode } from 'react';
 
-import { smartQuotes } from '@/lib/typography';
+import { smartQuotesRule } from '@/lib/markdown';
 
 function MarkdownPassthrough({ children }: { children?: ReactNode }) {
   return <>{children}</>;
@@ -33,14 +33,7 @@ export default function JobSummary({ summary }: JobSummaryProps) {
             component: MarkdownPassthrough,
           },
         },
-        // Quotes are set per text node, after parsing. Converting the source
-        // string instead reaches inside the markup: the anchors in these
-        // summaries quote their `href` with apostrophes, and a typographic
-        // one there becomes part of the address. Code spans are a different
-        // rule type, so they pass through as written.
-        renderRule(next, node) {
-          return node.type === RuleType.text ? smartQuotes(node.text) : next();
-        },
+        renderRule: smartQuotesRule,
       }}
     >
       {summary}
