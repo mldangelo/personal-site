@@ -738,7 +738,7 @@ if (!existsSync(sitemapPath)) {
 } else {
   const sitemap = readFileSync(sitemapPath, 'utf8');
   const locations = [...sitemap.matchAll(/<loc>\s*([^<]+?)\s*<\/loc>/gi)].map(
-    (match) => decodeHtml(match[1].trim()),
+    (match) => match[1].trim(),
   );
 
   if (locations.length === 0) {
