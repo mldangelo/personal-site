@@ -19,12 +19,9 @@ import {
 } from 'react';
 
 import { planMarkdownHeadingAnchors } from '@/lib/anchors';
+import type { ImageSize } from '@/lib/imageSize';
 import { smartQuotes } from '@/lib/typography';
-
-interface ImageSize {
-  width: number;
-  height: number;
-}
+import { isRootLocalImage } from '@/lib/utils';
 
 interface PostContentProps {
   content: string;
@@ -97,10 +94,6 @@ function headingOverrides(aliases: ReadonlyMap<string, string>) {
   );
 
   return Object.fromEntries(entries);
-}
-
-function isRootLocalImage(src: string): boolean {
-  return src.startsWith('/') && !src.startsWith('//');
 }
 
 /**

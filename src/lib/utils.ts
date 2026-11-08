@@ -44,6 +44,11 @@ function localNoon(dateStr: string): Date {
   return new Date(`${dateStr}T12:00:00`);
 }
 
+/** A root-relative path, which names a file under `public/`. */
+export function isRootLocalImage(src: string): boolean {
+  return src.startsWith('/') && !src.startsWith('//');
+}
+
 /** A post's canonical URL, with the trailing slash the export writes. */
 export function canonicalPostUrl(slug: string): string {
   return `${SITE_URL}/writing/${slug}/`;
