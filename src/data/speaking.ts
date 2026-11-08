@@ -1,8 +1,8 @@
 /**
- * Public appearances: panels, talks, and demos with an organiser's listing.
+ * Public appearances: panels, talks, and demos with an organiser's own record.
  *
  * The record is credible only if a reader can check it, so every entry links
- * the organiser's own page for the session, and that page should name
+ * the organiser's own page or post for the session, and it should name
  * Michael. Where an organiser's published lineup is stale, the entry says so
  * in a comment rather than linking something unofficial. Closed-door
  * sessions, run on behalf of OpenAI, are mentioned on the page but never
@@ -13,26 +13,36 @@
  * The format as the organiser billed it. An Arsenal Lab is a hands-on tool
  * demonstration, not a talk; extend this union rather than stretch a label.
  */
-export type AppearanceFormat = 'Panel' | 'Arsenal Lab';
+export type AppearanceFormat = 'Panel' | 'Arsenal Lab' | 'Tech session';
 
 export interface Appearance {
   /**
    * The session's own title, or the event's name when the session was a demo
-   * of a tool rather than a titled talk.
+   * of a tool or its host published no title.
    */
   title: string;
   format: AppearanceFormat;
-  /** First day of the appearance, `YYYY-MM-DD`. */
+  /** First day of the appearance, or of its event when no day is published. */
   date: string;
   /** City, as a reader would place the event. */
   place: string;
   /** What the title and format leave out: the host, the event, who else. */
   desc: string;
-  /** The organiser's listing for the session, naming Michael. */
+  /** The organiser's own record of the session, naming Michael. */
   link: string;
 }
 
 const appearances: Appearance[] = [
+  // The EY host's post about Codex Day names Michael's tech session but gives
+  // no title or day, so the entry takes the event's name and first day.
+  {
+    title: 'EY × OpenAI Codex Day 2026',
+    format: 'Tech session',
+    date: '2026-10-26',
+    place: 'Bengaluru',
+    desc: 'At EY’s two-day Codex event, held in person and online.',
+    link: 'https://www.linkedin.com/posts/lince_incredible-momentum-at-ey-x-openai-codex-ugcPost-7521395817572638720-0Ycx/',
+  },
   {
     title: 'The AI Security Panel: Unfiltered',
     format: 'Panel',
