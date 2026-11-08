@@ -128,6 +128,37 @@ describe('token contrast', () => {
     );
   });
 
+  // A link's ink is about 2:1 against the text beside it, so the translucent
+  // underline has to clear 3:1 by itself once composited over paper.
+  it.each([
+    { theme: 'light', tokens: light },
+    { theme: 'dark', tokens: dark },
+  ])('$theme link underline clears 3:1 on paper', ({ tokens }) => {
+    const accent = resolve(tokens, '--color-accent');
+    const share =
+      Number(/(\d+)%/.exec(resolve(tokens, '--color-accent-underline'))?.[1]) /
+      100;
+
+    for (const surface of PAPER) {
+      const paper = resolve(tokens, surface);
+      const channel = (hex: string, i: number) =>
+        Number.parseInt(hex.slice(i, i + 2), 16);
+      const underline = `#${[1, 3, 5]
+        .map((i) =>
+          Math.round(
+            channel(accent, i) * share + channel(paper, i) * (1 - share),
+          )
+            .toString(16)
+            .padStart(2, '0'),
+        )
+        .join('')}`;
+
+      expect(contrastRatio(underline, paper)).toBeGreaterThanOrEqual(
+        AA_NON_TEXT,
+      );
+    }
+  });
+
   it.each(['#0000', '#bc770aff', 'rgba(35, 39, 46, 0.14)', '#12345'])(
     'refuses to score %s rather than treating it as opaque',
     (colour) => {

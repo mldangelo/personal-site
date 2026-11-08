@@ -35,8 +35,9 @@
   --color-accent-fill-hover: var(--color-accent-hover);
   --color-on-accent: #ffffff;
   --color-accent-light: color-mix(in srgb, var(--color-accent) 12%, transparent);
-  --color-accent-underline: color-mix(in srgb, var(--color-accent) 32%, transparent);
-  --color-accent-underline-strong: color-mix(in srgb, var(--color-accent) 55%, transparent);
+  /* A link's ink is only about 2:1 against the text beside it, so its
+     underline has to clear 3:1 on paper by itself. */
+  --color-accent-underline: color-mix(in srgb, var(--color-accent) 68%, transparent);
 
   /* ===================
      FOCUS RING

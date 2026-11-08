@@ -43,7 +43,8 @@
 /* Page header styles */
 .page-title {
   font-size: var(--text-3xl);
-  font-weight: var(--font-weight-black);
+  /* The name's weight on the homepage, as every other page title. */
+  font-weight: var(--font-weight-medium);
   margin-bottom: 0.5rem;
 }
 
