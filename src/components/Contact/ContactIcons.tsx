@@ -2,13 +2,16 @@ import data from '@/data/contact';
 
 interface ContactIconsProps {
   includeEmail?: boolean;
+  /** Name each profile beside its mark, for a page where they are the content. */
+  labelled?: boolean;
 }
 
 export default function ContactIcons({
   includeEmail = true,
+  labelled = false,
 }: ContactIconsProps) {
   return (
-    <ul className="icons">
+    <ul className={labelled ? 'icons icons--labelled' : 'icons'}>
       {data
         .filter((item) => includeEmail || !item.link.startsWith('mailto:'))
         .map((s) => {
@@ -21,7 +24,11 @@ export default function ContactIcons({
               <a
                 href={s.link}
                 aria-label={
-                  isMailto ? s.label : `${s.label} (opens in new tab)`
+                  labelled
+                    ? undefined
+                    : isMailto
+                      ? s.label
+                      : `${s.label} (opens in new tab)`
                 }
                 {...(isMailto
                   ? {}
@@ -36,6 +43,14 @@ export default function ContactIcons({
                 >
                   <path d={s.icon.path} />
                 </svg>
+                {labelled && (
+                  <>
+                    {s.label}
+                    {!isMailto && (
+                      <span className="sr-only"> (opens in new tab)</span>
+                    )}
+                  </>
+                )}
               </a>
             </li>
           );

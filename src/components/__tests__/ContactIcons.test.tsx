@@ -33,6 +33,16 @@ describe('ContactIcons', () => {
     }
   });
 
+  it('names labelled links by their visible text, with the new-tab warning', () => {
+    render(<ContactIcons includeEmail={false} labelled />);
+
+    const github = screen.getByRole('link', {
+      name: /^GitHub\s*\(opens in new tab\)$/,
+    });
+    expect(github).not.toHaveAttribute('aria-label');
+    expect(github).toHaveTextContent(/^GitHub/);
+  });
+
   it('can omit email when the page already has a primary email action', () => {
     render(<ContactIcons includeEmail={false} />);
 
