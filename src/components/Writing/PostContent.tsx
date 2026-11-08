@@ -20,8 +20,7 @@ import {
 
 import { planMarkdownHeadingAnchors } from '@/lib/anchors';
 import type { ImageSize } from '@/lib/imageSize';
-import { smartQuotesRule } from '@/lib/markdown';
-import { isRootLocalImage } from '@/lib/utils';
+import { isRootLocalImage, smartQuotesRule } from '@/lib/markdown';
 
 interface PostContentProps {
   content: string;

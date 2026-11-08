@@ -18,3 +18,11 @@ export const smartQuotesRule: NonNullable<
   MarkdownToJSX.Options['renderRule']
 > = (next, node) =>
   node.type === RuleType.text ? smartQuotes(node.text) : next();
+
+/**
+ * An image source that names a file under `public/`: root-relative, and not
+ * protocol-relative.
+ */
+export function isRootLocalImage(src: string): boolean {
+  return src.startsWith('/') && !src.startsWith('//');
+}

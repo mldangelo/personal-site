@@ -1,8 +1,8 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
+import { isRootLocalImage } from './markdown';
 import { readMarkdownImageSources } from './markdown-assets.mjs';
-import { isRootLocalImage } from './utils';
 
 export interface ImageSize {
   width: number;
