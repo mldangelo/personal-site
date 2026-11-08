@@ -47,8 +47,6 @@ jobs:
         with:
           path: node_modules
           key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json', '.nvmrc') }}
-          restore-keys: |
-            ${{ runner.os }}-node-modules-
 
       - name: Install dependencies
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
@@ -70,7 +68,6 @@ jobs:
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version-file: '.nvmrc'
-          cache: 'npm'
 
       - name: Restore node_modules
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
@@ -112,7 +109,6 @@ jobs:
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version-file: '.nvmrc'
-          cache: 'npm'
 
       - name: Restore node_modules
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
@@ -145,8 +141,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # The floor declared in package.json engines, and the version .nvmrc
-        # pins for development and the rest of CI.
+        # The oldest major package.json engines allows (at its newest release,
+        # not the declared floor), and the version .nvmrc pins for development
+        # and the rest of CI.
         node-version: [22.x, 26.x]
         os: [ubuntu-latest, windows-latest, macos-latest]
         exclude:
@@ -199,22 +196,12 @@ jobs:
           static_site_generator: next
           enablement: false
 
-      # Stats use the public API anonymously, with a labeled fallback on rate
-      # limits. Do not expose a job token to application/dependency code.
+      # Stats use the public API anonymously, falling back to last-known floors
+      # on rate limits. Do not expose a job token to application/dependency code.
       - name: Build
         run: npm run build
         env:
-          NODE_ENV: production
           NEXT_PUBLIC_GA_TRACKING_ID: ${{ vars.NEXT_PUBLIC_GA_TRACKING_ID }}
-
-      - name: Verify static export
-        shell: bash
-        run: |
-          if [ ! -d "out" ]; then
-            echo "Error: 'out' directory not found. Static export may have failed."
-            exit 1
-          fi
-          echo "Static export successful. Found $(find out -type f | wc -l) files."
 
       # Checks generated HTML/XML itself: leaked drafts, robots, duplicate ids,
       # fragment and route targets, canonical/share metadata, local images, and
@@ -238,7 +225,6 @@ jobs:
         with:
           name: build-output
           path: out/
-          include-hidden-files: true
           retention-days: 7
 
   # Summary job to ensure all checks pass

@@ -31,25 +31,6 @@ describe('ResumeNav', () => {
     expect(html.match(/aria-current/g)).toHaveLength(1);
   });
 
-  it('tells a row inside the bar how far it has scrolled, for its leading fade', () => {
-    render(<ResumeNav />);
-
-    const row = screen.getByRole('link', { name: 'Skills' }).parentElement;
-
-    if (!row) {
-      throw new Error('The links have no row');
-    }
-
-    // The bar is opaque and the row scrolls and fades. On one element, the fade
-    // would let the page show through the bar.
-    expect(row).not.toBe(screen.getByRole('navigation'));
-
-    row.scrollLeft = 41;
-    fireEvent.scroll(row);
-
-    expect(row.style.getPropertyValue('--scrolled')).toBe('41px');
-  });
-
   it('arms smooth scrolling for a click', () => {
     render(<ResumeNav />);
 

@@ -13,7 +13,6 @@ import { afterEach, describe, expect, it } from 'vitest';
 
 const measurer = resolve(process.cwd(), 'scripts/measure-export.mjs');
 const fixtureRoots: string[] = [];
-const DOCUMENTED_JSON_COMMAND = 'npm run --silent measure-export -- --json -';
 const BUDGET = 'scripts/budget.json';
 
 const CSS = 'a'.repeat(4096);
@@ -25,7 +24,7 @@ const SITEMAP = 's'.repeat(30);
 const RSC_FULL = 'f'.repeat(100);
 const RSC_PAGE = 'p'.repeat(50);
 
-/** Stands in for one inlined FontAwesome icon. */
+/** Stands in for one inline SVG icon. */
 const ICON =
   '<svg class="svg-inline--fa" viewBox="0 0 512 512"><path d="M0 0h512v512H0z"></path></svg>';
 /** A second icon, as a design change adding one to the set would produce. */
@@ -228,19 +227,6 @@ describe('measurements', () => {
       widestSpread: 12,
     });
   });
-
-  it('prints a report a JSON consumer can read through the documented command', () => {
-    expect(readFileSync(measurer, 'utf8')).toContain(DOCUMENTED_JSON_COMMAND);
-    const { root } = createFixture();
-    const result = spawnSync(
-      `${DOCUMENTED_JSON_COMMAND} | "${process.execPath}" -p "JSON.parse(require('fs').readFileSync(0, 'utf8')).total.files"`,
-      { cwd: root, encoding: 'utf8', shell: true },
-    );
-
-    expect(result.status).toBe(0);
-    expect(result.stdout.trim()).toBe('11');
-    expect(result.stderr).toContain('by subsystem');
-  });
 });
 
 describe('budget gate', () => {
@@ -352,11 +338,7 @@ describe('failures', () => {
       'no HTML documents found in out/',
       remove('out/index.html', 'out/about/index.html'),
     ],
-    ...[['--json='], ['--json', '']].map((args): [string, Change, string[]] => [
-      '--json needs a file path (use `-` for stdout)',
-      noChange,
-      args,
-    ]),
+    ['--json needs a file path', noChange, ['--json']],
   ])('rejects: %s', (expected, change, args) => {
     const { root } = createFixture();
     change(root);

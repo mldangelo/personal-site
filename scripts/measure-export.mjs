@@ -16,11 +16,7 @@
  * Run after `npm run build`:
  *   npm run measure-export                       table plus budget gate
  *   npm run measure-export -- --json report.json also write the raw numbers
- *   npm run --silent measure-export -- --json -  raw numbers on stdout
  *   npm run measure-export -- --update-budget    ratchet scripts/budget.json
- *
- * The npm `--silent` flag is required when JSON goes to stdout; otherwise npm
- * writes its script banner ahead of the JSON.
  */
 import { existsSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { extname, isAbsolute, relative, resolve, sep } from 'node:path';
@@ -62,12 +58,7 @@ function parseArgv(argv) {
         options.json.length === 0 ||
         options.json.startsWith('--')
       ) {
-        die('--json needs a file path (use `-` for stdout)');
-      }
-    } else if (arg.startsWith('--json=')) {
-      options.json = arg.slice('--json='.length);
-      if (options.json.length === 0) {
-        die('--json needs a file path (use `-` for stdout)');
+        die('--json needs a file path');
       }
     } else {
       die(`unknown argument: ${arg}`);
@@ -87,10 +78,7 @@ const isInside = (parent, candidate) => {
   );
 };
 
-const jsonDestination =
-  options.json && options.json !== '-'
-    ? resolve(ROOT, options.json)
-    : undefined;
+const jsonDestination = options.json ? resolve(ROOT, options.json) : undefined;
 
 if (jsonDestination && isInside(OUT, jsonDestination)) {
   die(
@@ -275,7 +263,7 @@ const routes = documents
 
     let linkedAssetBytes = 0;
     for (const file of referencedBootstrapFiles(html, route)) {
-      linkedAssetBytes += bytesByPath.get(file) ?? statSync(file).size;
+      linkedAssetBytes += bytesByPath.get(file);
     }
 
     return {
@@ -491,12 +479,6 @@ report.budget = {
 // Output
 // ---------------------------------------------------------------------------
 
-const jsonToStdout = options.json === '-';
-const log = (line) => {
-  if (jsonToStdout) console.error(line);
-  else console.log(line);
-};
-
 const count = (value) => value.toLocaleString('en-US');
 const fixed = (value) =>
   value.toLocaleString('en-US', {
@@ -522,13 +504,13 @@ function table(rows, alignRight) {
 }
 
 function section(heading, rows, alignRight) {
-  log(`\n  ${heading}`);
+  console.log(`\n  ${heading}`);
   for (const line of table(rows, alignRight)) {
-    log(`    ${line}`);
+    console.log(`    ${line}`);
   }
 }
 
-log(
+console.log(
   `\n${LABEL}: ${count(files.length)} files, ${count(totalBytes)} bytes ` +
     `(${kib(totalBytes)} KiB) in out/`,
 );
@@ -582,11 +564,11 @@ section(
   new Set([1, 2, 3]),
 );
 
-log(
+console.log(
   `\n  inline SVG: ${count(inlineSvg.distinctBytes)} bytes of distinct markup ` +
     `across ${count(inlineSvg.distinct)} icons`,
 );
-log(
+console.log(
   `  ${count(inlineSvg.bytes)} bytes emitted in total, ${count(inlineSvg.repeatedBytes)} ` +
     `of it repeated past first use (widest spread: ${count(inlineSvg.widestSpread)} documents)`,
 );
@@ -609,13 +591,11 @@ section(
 );
 
 if (options.json) {
-  const serialized = `${JSON.stringify(report, null, 2)}\n`;
-  if (jsonToStdout) {
-    process.stdout.write(serialized);
-  } else {
-    writeFileSync(jsonDestination, serialized);
-    log(`\n  wrote ${options.json}`);
-  }
+  writeFileSync(
+    resolve(ROOT, options.json),
+    `${JSON.stringify(report, null, 2)}\n`,
+  );
+  console.log(`\n  wrote ${options.json}`);
 }
 
 if (options.updateBudget) {
@@ -625,7 +605,9 @@ if (options.updateBudget) {
     next[metric.id] = check.suggested;
   }
   writeFileSync(BUDGET_PATH, `${JSON.stringify(next, null, 2)}\n`);
-  log('\n  ratcheted scripts/budget.json to the measured sizes plus headroom');
+  console.log(
+    '\n  ratcheted scripts/budget.json to the measured sizes plus headroom',
+  );
   process.exit(0);
 }
 
@@ -647,4 +629,4 @@ if (exceeded.length > 0) {
   process.exit(1);
 }
 
-log(`\n${LABEL}: ${checks.length} budget(s) within limits\n`);
+console.log(`\n${LABEL}: ${checks.length} budget(s) within limits\n`);

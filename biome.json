@@ -7,7 +7,10 @@
     "enabled": true,
     "rules": {
       "preset": "none",
-      "complexity": { "noUselessTypeConstraint": "error" },
+      "complexity": {
+        "noArguments": "error",
+        "noUselessTypeConstraint": "error"
+      },
       "correctness": {
         "noUnusedImports": "error",
         "noUnusedVariables": "warn"
@@ -23,7 +26,8 @@
         "noNamespace": "error",
         "useArrayLiterals": "error",
         "useAsConstAssertion": "error",
-        "useBlockStatements": "off"
+        "useBlockStatements": "off",
+        "useConst": "error"
       },
       "suspicious": {
         "noDocumentImportInPage": "error",
@@ -33,6 +37,7 @@
         "noMisleadingInstantiator": "error",
         "noNonNullAssertedOptionalChain": "error",
         "noUnsafeDeclarationMerging": "error",
+        "noVar": "error",
         "useGoogleFontDisplay": "warn",
         "useNamespaceKeyword": "error"
       }
@@ -40,7 +45,6 @@
   },
   "javascript": { "formatter": { "quoteStyle": "single" } },
   "css": {
-    "parser": { "cssModules": true },
     "linter": { "enabled": true },
     "formatter": { "enabled": false }
   },
@@ -50,25 +54,6 @@
     {
       "includes": ["**/tailwind.css", "**/styles/tokens/*.css"],
       "css": { "parser": { "tailwindDirectives": true } }
-    },
-    {
-      "includes": ["*.ts", "*.tsx", "*.mts", "*.cts"],
-      "linter": {
-        "rules": {
-          "complexity": { "noArguments": "error" },
-          "style": { "useConst": "error" },
-          "suspicious": { "noVar": "error" }
-        }
-      }
-    },
-    {
-      "includes": ["*.config.ts", "*.config.js", "vitest.setup.tsx"],
-      "linter": {
-        "rules": {
-          "style": { "noCommonJs": "off" },
-          "suspicious": { "noExplicitAny": "off" }
-        }
-      }
     }
   ],
   "assist": {

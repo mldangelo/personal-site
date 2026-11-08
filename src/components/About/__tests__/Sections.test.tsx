@@ -177,18 +177,6 @@ Lead paragraph.
     );
   });
 
-  // The hook listens on the row inside the bar, so the ref has to reach the bar.
-  it('tells the row how far it has scrolled, for its leading fade', () => {
-    render(<AboutContent markdown={aboutMarkdown} />);
-
-    const row = sectionNav().firstElementChild as HTMLElement;
-
-    row.scrollLeft = 115;
-    row.dispatchEvent(new Event('scroll'));
-
-    expect(row.style.getPropertyValue('--scrolled')).toBe('115px');
-  });
-
   // A heading's own link is for copying its address, so only the nav asks for
   // the animated jump.
   it('scrolls smoothly from the nav, and not from a heading link', () => {

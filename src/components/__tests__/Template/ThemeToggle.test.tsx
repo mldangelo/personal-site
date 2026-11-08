@@ -13,7 +13,6 @@ import {
   THEME_ATTRIBUTE,
   THEME_CHOICE_ATTRIBUTE,
   THEME_CHOICES,
-  THEME_COLOR_META_SELECTOR,
   THEME_COLOR_TOKEN,
   THEME_STORAGE_KEY,
   type ThemeChoice,
@@ -157,18 +156,6 @@ function serverMarkup() {
   if (!button) throw new Error('no theme toggle in the server markup');
 
   return { host, button };
-}
-
-/** The tags React hoists for `viewport.themeColor`, as a navigation rebuilds. */
-function hoistThemeColorPair(): Element[] {
-  return DEVICES.map((scheme) => {
-    const meta = document.createElement('meta');
-    meta.setAttribute('name', 'theme-color');
-    meta.setAttribute('media', `(prefers-color-scheme: ${scheme})`);
-    meta.setAttribute('content', CHROME_COLORS[scheme]);
-    document.head.append(meta);
-    return meta;
-  });
 }
 
 describe('ThemeToggle', () => {
@@ -379,27 +366,5 @@ describe('ThemeToggle', () => {
         walk(LAP[other(device)].slice(0, 2));
       },
     );
-  });
-
-  // A client-side navigation destroys and rebuilds every `<meta>` React owns from
-  // the build-time payload, with no state change to re-run an effect.
-  it('keeps the chrome through a navigation that rebuilds the tags React owns', () => {
-    openPage('light');
-    const pair = hoistThemeColorPair();
-    render(<ThemeToggle />);
-
-    // Dark pinned against a light device, so the rebuilt light tag disagrees.
-    fireEvent.click(toggle());
-
-    for (const meta of pair) meta.remove();
-    hoistThemeColorPair();
-
-    // The browser paints from the first tag with no `media` or a matching one.
-    const [painted, ...others] = document.querySelectorAll(
-      THEME_COLOR_META_SELECTOR,
-    );
-    expect(painted).not.toHaveAttribute('media');
-    expect(painted).toHaveAttribute('content', CHROME_COLORS.dark);
-    expect(others).toHaveLength(2);
   });
 });

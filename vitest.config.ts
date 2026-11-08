@@ -13,19 +13,14 @@ export default defineConfig({
     env: { TZ: 'America/Los_Angeles' },
     setupFiles: ['./vitest.setup.tsx'],
     include: ['**/__tests__/**/*.{ts,tsx}', '**/*.{test,spec}.{ts,tsx}'],
-    exclude: ['node_modules', '.next', 'build', 'out'],
+    exclude: ['node_modules', '.next', 'out'],
     sequence: {
       shuffle: true,
     },
     coverage: {
       provider: 'v8',
       include: ['src/**/*.{ts,tsx}', 'app/**/*.{ts,tsx}'],
-      exclude: [
-        'src/**/*.d.ts',
-        'src/**/__tests__/**',
-        'src/**/*.test.{ts,tsx}',
-        'src/**/*.spec.{ts,tsx}',
-      ],
+      exclude: ['src/**/*.d.ts'],
     },
     css: true,
   },
