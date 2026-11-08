@@ -33,7 +33,7 @@ export interface Appearance {
 }
 
 const appearances: Appearance[] = [
-  // EY's own post about its Codex Day names Michael's tech session but gives
+  // The EY host's post about Codex Day names Michael's tech session but gives
   // no title or day, so the entry takes the event's name and first day.
   {
     title: 'EY × OpenAI Codex Day 2026',
@@ -41,7 +41,7 @@ const appearances: Appearance[] = [
     date: '2026-10-26',
     place: 'Bengaluru',
     desc: 'At EY’s two-day Codex event, held in person and online.',
-    link: 'https://in.linkedin.com/in/lince',
+    link: 'https://www.linkedin.com/posts/lince_incredible-momentum-at-ey-x-openai-codex-ugcPost-7521395817572638720-0Ycx/',
   },
   {
     title: 'The AI Security Panel: Unfiltered',
