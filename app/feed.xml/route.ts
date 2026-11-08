@@ -1,6 +1,6 @@
-import writing from '@/data/writing';
-import { getAllPosts } from '@/lib/posts';
+import { WRITING_DESCRIPTION } from '@/lib/schema';
 import { AUTHOR_NAME, SITE_URL } from '@/lib/utils';
+import { getWritingItems } from '@/lib/writing';
 
 export const dynamic = 'force-static';
 
@@ -14,42 +14,15 @@ function escapeXml(text: string): string {
 }
 
 function formatRssDate(dateStr: string): string {
-  if (!dateStr) return '';
-  const date = new Date(`${dateStr}T12:00:00Z`);
-  return date.toUTCString();
-}
-
-interface FeedItem {
-  title: string;
-  url: string;
-  date: string;
-  description: string;
+  return new Date(`${dateStr}T12:00:00Z`).toUTCString();
 }
 
 export async function GET() {
-  // Get internal posts
-  const internalPosts = getAllPosts();
-  const internalItems: FeedItem[] = internalPosts.map((post) => ({
-    title: post.title,
-    url: `${SITE_URL}/writing/${post.slug}/`,
-    date: post.date,
-    description: post.description,
-  }));
-
-  // Get external articles
-  const externalItems: FeedItem[] = writing
+  // The newest-first list `/writing` shows, less the undated guides: an RSS
+  // item is dated, and its link is absolute.
+  const items = getWritingItems()
     .filter((item) => item.date)
-    .map((item) => ({
-      title: item.title,
-      url: item.url,
-      date: item.date,
-      description: item.description,
-    }));
-
-  // Merge and sort
-  const items = [...internalItems, ...externalItems]
-    .filter((item) => item.date)
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    .map((item) => ({ ...item, url: new URL(item.url, SITE_URL).href }));
 
   const rssItems = items
     .map(
@@ -72,7 +45,7 @@ export async function GET() {
   <channel>
     <title>${escapeXml(AUTHOR_NAME)} - Writing</title>
     <link>${SITE_URL}/writing/</link>
-    <description>Articles on AI security, LLM red teaming, and trust &amp; safety by ${escapeXml(AUTHOR_NAME)}.</description>
+    <description>${escapeXml(WRITING_DESCRIPTION)}</description>
     <language>en-us</language>
     <lastBuildDate>${lastBuildDate}</lastBuildDate>
     <atom:link href="${SITE_URL}/feed.xml" rel="self" type="application/rss+xml"/>${rssItems}

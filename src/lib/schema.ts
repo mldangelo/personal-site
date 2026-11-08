@@ -5,6 +5,7 @@ import { currentPosition } from '@/lib/career';
 import type { Post } from '@/lib/posts';
 import {
   AUTHOR_NAME,
+  canonicalPostUrl,
   SHARE_IMAGE_DIMENSIONS,
   SHARE_IMAGE_PATH,
   SITE_DESCRIPTION,
@@ -240,7 +241,7 @@ export function blogPostingNode(
   post: Post,
   articleImage?: ArticleImage,
 ): SchemaNode {
-  const url = `${SITE_URL}/writing/${post.slug}/`;
+  const url = canonicalPostUrl(post.slug);
   const image = articleImage ?? {
     url: `${SITE_URL}${SHARE_IMAGE_PATH}`,
     width: SHARE_IMAGE_DIMENSIONS.width,
