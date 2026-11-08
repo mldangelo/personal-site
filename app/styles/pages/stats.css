@@ -22,8 +22,7 @@
 }
 
 /* A label is a phrase, so it is set as one: the reading face, in ink and in
-   sentence case. As 13px tracked capitals in a column fixed at 40%, "Stars
-   this repository has on GitHub" took three lines of a phone.
+   sentence case.
 
    Neither column declares a width. A value never breaks, so its column is
    exactly as wide as the widest value in that table and the label has all of
@@ -57,8 +56,7 @@
    pointer and the keyboard.
 
    That leaves the rule as the only sign at rest, so it is drawn in
-   `--color-control-border`, which is held to 3:1 on both page surfaces. In the
-   structural hairline it measured 1.61:1, and was a link nobody could find. */
+   `--color-control-border`, which is held to 3:1 on both page surfaces. */
 .stat-table-link {
   position: relative;
   color: inherit;
@@ -126,21 +124,10 @@
 /* Stats page layout */
 .stats-page {
   max-width: var(--measure-read);
-  margin: 0;
 }
 
 .stats-header {
-  text-align: left;
   margin-bottom: 3rem;
-}
-
-.stats-title {
-  font-family: var(--font-display);
-  font-size: var(--text-3xl);
-  font-weight: var(--font-weight-medium);
-  letter-spacing: var(--tracking-display);
-  margin-bottom: 0.5rem;
-  color: var(--color-fg-bold);
 }
 
 .stats-subtitle {

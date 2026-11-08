@@ -10,11 +10,6 @@
     font-weight: var(--font-weight-medium);
   }
 
-  em,
-  i {
-    font-style: italic;
-  }
-
   h1,
   h2,
   h3,
@@ -38,15 +33,6 @@
   h6 a {
     color: inherit;
     text-decoration: none;
-  }
-
-  h1 a:hover,
-  h2 a:hover,
-  h3 a:hover,
-  h4 a:hover,
-  h5 a:hover,
-  h6 a:hover {
-    color: var(--color-accent);
   }
 
   h1 {

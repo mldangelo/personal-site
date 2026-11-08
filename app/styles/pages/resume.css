@@ -55,13 +55,7 @@
 }
 
 /* Resume page specific */
-.resume-page {
-  max-width: var(--measure-page);
-  margin: 0 auto;
-}
-
 .resume-header {
-  text-align: left;
   margin-bottom: 2rem;
 }
 
@@ -174,10 +168,9 @@
 
 /* The focus ring is drawn inside the target. The default one sits outside it,
    where the scrolling row clips it and the header covers what is left. The
-   colour change eases through the transition every link already has. About's
-   link takes two classes to stay ahead of `.about-content a` and its hover. */
+   colour change eases through the transition every link already has. */
 .resume-nav-link,
-.about-content .about-section-nav-link {
+.about-section-nav-link {
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -194,13 +187,13 @@
 
 .resume-nav-link:hover,
 .resume-nav-link:focus-visible,
-.about-content .about-section-nav-link:hover,
-.about-content .about-section-nav-link:focus-visible {
+.about-section-nav-link:hover,
+.about-section-nav-link:focus-visible {
   color: var(--color-fg-bold);
 }
 
 .resume-nav-link.active,
-.about-content .about-section-nav-link.active {
+.about-section-nav-link.active {
   color: var(--color-accent);
 }
 

@@ -2,11 +2,6 @@
    ABOUT PAGE
    ======================================== */
 
-.about-page {
-  max-width: var(--measure-page);
-  margin: 0 auto;
-}
-
 .about-header {
   margin-bottom: var(--spacing-8);
 }
@@ -39,14 +34,8 @@
   scroll-margin-top: calc(var(--header-height) + 5.5rem + var(--spacing-5));
 }
 
-/* The heading's own link is not prose. Two classes keep it ahead of
-   `.about-content a`, further down, and three ahead of that rule's hover. */
-.about-content .about-section-heading-link {
-  color: inherit;
-  text-decoration: none;
-}
-
-.about-content .about-section-heading-link:hover {
+/* The heading stays in ink under the pointer: the mark beside it answers. */
+.about-section-heading-link:hover {
   color: inherit;
 }
 
@@ -283,15 +272,16 @@
   }
 }
 
-/* One link style, the article's, in paragraphs and lists alike. */
-.about-content a {
+/* The article's link style, in lists as well as paragraphs and on paper as
+   well as on screen. */
+.about-content :where(p, li) a {
   color: var(--color-accent);
   text-decoration: underline;
   text-decoration-color: var(--color-accent-underline);
   text-underline-offset: 2px;
 }
 
-.about-content a:hover {
+.about-content :where(p, li) a:hover {
   color: var(--color-accent-hover);
   text-decoration-color: var(--color-accent);
 }

@@ -3,8 +3,8 @@
    Windows High Contrast Mode, and any other user-forced palette.
 
    A forced palette replaces author colours and drops non-URL background
-   images, so gradient underlines, filled state, and blended portraits lose
-   their meaning. It remaps `border-color` and `outline-color` for you;
+   images, so gradient underlines and filled state lose their meaning.
+   It remaps `border-color` and `outline-color` for you;
    everything below is what it cannot do for itself. A mode override like
    dark-mode.css: unlayered, and ordered in tailwind.css.
    ======================================== */
@@ -16,8 +16,7 @@
      =================== */
 
   /* Active-item bars are pseudo-element backgrounds, which flatten to Canvas. */
-  .nav-link::after,
-  .resume-nav-link.active::after {
+  .nav-link::after {
     background-color: LinkText;
   }
 
@@ -76,14 +75,10 @@
 
   /* ===================
      COMPOSITING
-     Images keep their colours, but the blend and filter stack around them was
-     tuned for paper or ink, not for Canvas.
+     Images keep their colours, but the filter on them was tuned for paper or
+     ink, not for Canvas.
      =================== */
-  .theme-portrait img,
-  .hero-portrait img,
-  [data-theme='dark'] .hero-portrait img,
-  .site-footer-new .footer-avatar img {
-    mix-blend-mode: normal;
+  .theme-portrait img {
     filter: none;
   }
 
