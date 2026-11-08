@@ -6,7 +6,7 @@ I co-founded [Promptfoo](https://promptfoo.dev) before it joined OpenAI in 2026.
 
 In my spare time, I enjoy investing in people and ideas through a [small venture fund](https://skepticalinvestments.biz), focusing on projects with high social impact. If you think I can be helpful to you or your cause, or if you're interested in collaborating, feel free to get in touch.
 
-# Some History
+# Some history
 
 - My parents put a computer in my bedroom in 1993 when I was 3. It was an old Tandy that ran MS-DOS. My favorite games were Street Rod 2, Wolfenstein 3D, and Tom and Jerry. It had a mechanical keyboard and a turbo button. To this day, I still don't know what pressing the turbo button really did.
 - We subscribed to AOL in 1995. I still remember installing it from a floppy disk onto our brand-new Packard Bell. It took years for me to send my first email.
@@ -26,7 +26,7 @@ In my spare time, I enjoy investing in people and ideas through a [small venture
 
 Ask me in person for other stories that I'm afraid to share with the internet.
 
-# I Like
+# I like
 
 - Running.
 - Skiing.
@@ -39,7 +39,7 @@ Ask me in person for other stories that I'm afraid to share with the internet.
 - [Good design](/).
 - [Photography](https://instagram.com/dangelosaurus).
 
-# Travel / Geography
+# Travel / geography
 
 - I am originally from Buffalo, New York. I have since lived in Palo Alto, Mountain View, San Francisco, Seattle, and New York City.
 - I've been to approximately 50 countries, some of which I have forgotten, many of which I would like to revisit.
@@ -53,7 +53,7 @@ Ask me in person for other stories that I'm afraid to share with the internet.
 - In 2023, I visited France, the UK, Ireland, and Rwanda.
 - I am an Oregon Trail II enthusiast.
 
-# Fun Facts
+# Fun facts
 
 - I have a list of thousands of ideas, like creating matching bow ties for cats and humans.
 - I almost always have a sketchbook with me and a [01 Sakura Pigma Micron Pen](https://www.sakuraofamerica.com/product/pigma-micron/).
@@ -63,7 +63,7 @@ Ask me in person for other stories that I'm afraid to share with the internet.
 - I stack-rank coffee shops, restaurants, and every dog I see in New York.
 - I added this page because many people complained that my site was just my resume.
 
-# I Dream Of
+# I dream of
 
 - Inspiring and feeling inspired.
 - Enabling a brighter future for everyone, regardless of political or socioeconomic status.
@@ -72,7 +72,7 @@ Ask me in person for other stories that I'm afraid to share with the internet.
 - Continually improving.
 - You not checking the commit history for earlier drafts of this file.
 
-# Websites from People I Admire
+# Websites from people I admire
 
 - [Alex Peysakhovich](http://alexpeys.github.io/)
 - [Chris Lengerich](http://www.chrislengerich.com/)

@@ -34,7 +34,10 @@
 @import './styles/pages/home.css';
 @import './styles/pages/resume.css';
 @import './styles/pages/writing.css';
-@import './styles/pages/content.css';
+@import './styles/pages/about.css';
+@import './styles/pages/contact.css';
+@import './styles/pages/stats.css';
+@import './styles/pages/not-found.css';
 
 /* Theme Overrides */
 @import './styles/dark-mode.css';
