@@ -19,7 +19,7 @@
  *   npm run measure-export -- --update-budget    ratchet scripts/budget.json
  */
 import { existsSync, readFileSync, statSync, writeFileSync } from 'node:fs';
-import { extname, relative, resolve } from 'node:path';
+import { extname, isAbsolute, relative, resolve, sep } from 'node:path';
 
 import { attribute, elements, tags } from './lib/html.mjs';
 import {
@@ -69,6 +69,27 @@ function parseArgv(argv) {
 }
 
 const options = parseArgv(process.argv.slice(2));
+
+const isInside = (parent, candidate) => {
+  const offset = relative(parent, candidate);
+  return (
+    offset === '' ||
+    (offset !== '..' && !offset.startsWith(`..${sep}`) && !isAbsolute(offset))
+  );
+};
+
+const jsonDestination = options.json ? resolve(ROOT, options.json) : undefined;
+
+if (jsonDestination && isInside(OUT, jsonDestination)) {
+  die(
+    '--json must write outside out/ so the report cannot change the export ' +
+      'it measures',
+  );
+}
+
+if (jsonDestination && relative(BUDGET_PATH, jsonDestination) === '') {
+  die('--json must not overwrite scripts/budget.json');
+}
 
 // ---------------------------------------------------------------------------
 // Subsystems

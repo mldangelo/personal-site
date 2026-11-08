@@ -1,5 +1,6 @@
 import { spawnSync } from 'node:child_process';
 import {
+  existsSync,
   mkdirSync,
   mkdtempSync,
   readFileSync,
@@ -23,7 +24,7 @@ const SITEMAP = 's'.repeat(30);
 const RSC_FULL = 'f'.repeat(100);
 const RSC_PAGE = 'p'.repeat(50);
 
-/** Stands in for one inlined FontAwesome icon. */
+/** Stands in for one inline SVG icon. */
 const ICON =
   '<svg class="svg-inline--fa" viewBox="0 0 512 512"><path d="M0 0h512v512H0z"></path></svg>';
 /** A second icon, as a design change adding one to the set would produce. */
@@ -346,5 +347,23 @@ describe('failures', () => {
     expect(status).toBe(1);
     expect(output).toContain(expected);
     expect(output).not.toContain('budget(s) within limits');
+  });
+
+  // A report inside out/ changes the export it measures, and one written over
+  // the budget replaces the policy that gates it.
+  it.each([
+    ['out/report.json', '--json must write outside out/'],
+    [BUDGET, '--json must not overwrite scripts/budget.json'],
+  ])('refuses to write the JSON report to %s', (path, expected) => {
+    const { root } = createFixture();
+    const file = join(root, path);
+    const contents = () =>
+      existsSync(file) ? readFileSync(file, 'utf8') : undefined;
+    const before = contents();
+
+    const { status, output } = runMeasurer(root, ['--json', path]);
+    expect(status).toBe(1);
+    expect(output).toContain(expected);
+    expect(contents()).toBe(before);
   });
 });
