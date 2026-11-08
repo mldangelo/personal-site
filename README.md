@@ -1,6 +1,6 @@
 # Michael D'Angelo: Personal Site
 
-[![Build Status](https://img.shields.io/github/actions/workflow/status/mldangelo/personal-site/node.js.yml?branch=main)](https://github.com/mldangelo/personal-site/actions)
+[![CI status](https://github.com/mldangelo/personal-site/actions/workflows/node.js.yml/badge.svg?branch=main)](https://github.com/mldangelo/personal-site/actions/workflows/node.js.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 [![GitHub Stars](https://img.shields.io/github/stars/mldangelo/personal-site?style=social)](https://github.com/mldangelo/personal-site/stargazers)
 [![GitHub Forks](https://img.shields.io/github/forks/mldangelo/personal-site?style=social)](https://github.com/mldangelo/personal-site/network/members)
