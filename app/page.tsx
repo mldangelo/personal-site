@@ -34,7 +34,9 @@ export default function HomePage() {
       <Hero />
       <section className="home-writing" aria-labelledby="home-writing-title">
         <div className="home-writing-header">
-          <h2 id="home-writing-title">Notes &amp; essays</h2>
+          <h2 id="home-writing-title" className="section-heading">
+            Notes &amp; essays
+          </h2>
           <Link href="/writing/" className="home-writing-all">
             All writing <span aria-hidden="true">→</span>
           </Link>
