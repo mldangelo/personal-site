@@ -1,3 +1,5 @@
+import profile from './profile.json';
+
 export const aboutMarkdown = `# Intro
 
 I build products, companies, and teams across AI, security, and infrastructure. Today, I am a Member of the Technical Staff at [OpenAI](https://openai.com), working on [Promptfoo](https://promptfoo.dev) and other cyber products. I help secure AI systems and use AI to find software vulnerabilities.
@@ -42,7 +44,7 @@ Ask me in person for other stories that I'm afraid to share with the internet.
 # Travel / geography
 
 - I am originally from Buffalo, New York. I have since lived in Palo Alto, Mountain View, San Francisco, Seattle, and New York City.
-- I've been to approximately 50 countries, some of which I have forgotten, many of which I would like to revisit.
+- I've been to ${profile.countriesVisited} countries, some of which I have forgotten, many of which I would like to revisit.
 - In 2016, I visited Canada, Ethiopia, Austria, Germany, Belgium, Ireland, Northern Ireland, Italy, Romania, Sweden, Norway, Svalbard, Panama, Costa Rica, Uganda, Japan, and the UAE, mostly in that order.
 - In 2017, I visited Canada, Japan, Denmark, Germany, Sweden, Estonia, Russia, the Netherlands, Belgium, the UK, Spain, Iceland, France, Switzerland, Ethiopia, and Luxembourg.
 - In 2018, I visited Canada, France, Italy, Israel, and the UK.
@@ -60,7 +62,7 @@ Ask me in person for other stories that I'm afraid to share with the internet.
 - I can't locate every country on a map.
 - I operate a [small angel fund](http://skepticalinvestments.biz/) with terrible returns.
 - I break about 30 traffic laws on a skateboard or [bicycle](https://www.citibikenyc.com/) every single day.
-- I stack-rank coffee shops, restaurants, and every dog I see in New York.
+- I stack-rank coffee shops, restaurants, and every dog I see in New York and San Francisco.
 - I added this page because many people complained that my site was just my resume.
 
 # I dream of
