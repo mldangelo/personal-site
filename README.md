@@ -102,6 +102,7 @@ npm run measure-export  # Weigh the export against scripts/budget.json
 npm run og              # Regenerate the site and per-post share cards
 npm run og:check        # Verify the card ledger and a fresh byte-for-byte render
 npm run og:check:ledger # Verify the ledger alone, with no network access
+npm run icons           # Regenerate the favicon, app icon, and touch icon
 ```
 
 CI checks formatting, linting, types, the share cards, tests, the production

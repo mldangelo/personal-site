@@ -46,8 +46,7 @@ footer share that one measure.
 
 Blue handles links and controls on paper. The poster has its own surface/text
 pair so its pale copy and inverted button remain readable in both themes.
-The writing register stays on paper; green framing and background grain are
-absent. Amber remains reserved for live or in-progress values. Portraits and
+The writing register stays on paper. Amber remains reserved for live or in-progress values. Portraits and
 project imagery stay in color without requiring hover. New surface colors
 must retain readable text and links in both themes, and print resets them to
 ink on paper.
