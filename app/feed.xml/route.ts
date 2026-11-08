@@ -22,7 +22,10 @@ export async function GET() {
   // item is dated, and its link is absolute.
   const items = getWritingItems()
     .filter((item) => item.date)
-    .map((item) => ({ ...item, url: new URL(item.url, SITE_URL).href }));
+    .map((item) => ({
+      ...item,
+      url: item.isExternal ? item.url : `${SITE_URL}${item.url}`,
+    }));
 
   const rssItems = items
     .map(
