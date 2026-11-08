@@ -696,10 +696,11 @@ if (!home) {
   }
 }
 
+/** `raw` is already decoded: each caller decodes its own document's escaping. */
 function validateXmlUrl(raw, documentName, options = {}) {
   let url;
   try {
-    url = new URL(decodeHtml(raw.trim()));
+    url = new URL(raw.trim());
   } catch {
     fail(documentName, `invalid absolute URL: ${raw.trim()}`);
     return undefined;
@@ -738,7 +739,7 @@ if (!existsSync(sitemapPath)) {
 } else {
   const sitemap = readFileSync(sitemapPath, 'utf8');
   const locations = [...sitemap.matchAll(/<loc>\s*([^<]+?)\s*<\/loc>/gi)].map(
-    (match) => match[1].trim(),
+    (match) => decodeHtml(match[1].trim()),
   );
 
   if (locations.length === 0) {
@@ -783,10 +784,10 @@ if (!existsSync(feedPath)) {
 } else {
   const feed = readFileSync(feedPath, 'utf8');
   const textLinks = [...feed.matchAll(/<link>\s*([^<]+?)\s*<\/link>/gi)].map(
-    (match) => match[1],
+    (match) => decodeHtml(match[1]),
   );
   const guids = [...feed.matchAll(/<guid\b[^>]*>\s*([^<]+?)\s*<\/guid>/gi)].map(
-    (match) => match[1],
+    (match) => decodeHtml(match[1]),
   );
   const atomLinks = tags(feed, 'atom:link')
     .map((tag) => attribute(tag, 'href'))

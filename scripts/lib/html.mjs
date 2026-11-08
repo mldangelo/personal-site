@@ -12,18 +12,20 @@
  */
 
 export function decodeHtml(value) {
+  // `&amp;` goes last, so an escaped reference such as `&amp;#97;` decodes to
+  // the text `&#97;` rather than on through to `a`.
   return value
     .replace(/&quot;/g, '"')
     .replace(/&apos;|&#39;/g, "'")
     .replace(/&lt;/g, '<')
     .replace(/&gt;/g, '>')
-    .replace(/&amp;/g, '&')
     .replace(/&#x([0-9a-f]+);/gi, (_, hex) =>
       String.fromCodePoint(Number.parseInt(hex, 16)),
     )
     .replace(/&#([0-9]+);/g, (_, decimal) =>
       String.fromCodePoint(Number.parseInt(decimal, 10)),
-    );
+    )
+    .replace(/&amp;/g, '&');
 }
 
 /** Opening tags only. `name` defaults to any element. */
