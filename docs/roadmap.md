@@ -8,8 +8,6 @@ documented in the [README](../README.md). Items are not ordered or scheduled.
 - Add Playwright coverage for navigation, theme switching, and the static
   export.
 - Audit against WCAG 2.2 AA and fix confirmed failures.
-- Measure Font Awesome's contribution to shipped JavaScript before deciding
-  whether to replace it.
 
 ## Releases
 

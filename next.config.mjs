@@ -21,11 +21,6 @@ const nextConfig = {
     // path Next itself names in that error. Verified that type errors still
     // fail the build under this flag — see AGENTS.md.
     useTypeScriptCli: true,
-
-    optimizePackageImports: [
-      '@fortawesome/react-fontawesome',
-      '@fortawesome/fontawesome-svg-core',
-    ],
   },
 };
 

@@ -82,8 +82,9 @@ modify DNS. Report the exact external steps that remain.
 Read AGENTS.md and work on a topic branch. Do not commit, push, merge, or change
 account settings unless I explicitly authorize it.
 Add my [PLATFORM] profile at [URL]. Follow the existing src/data/contact.ts
-pattern and reuse the installed Font Awesome packages. Update affected tests,
-run the relevant checks, and show me the diff.
+pattern, copying the icon's viewBox and path from a freely licensed set and
+crediting it in the attribution comment. Update affected tests, run the
+relevant checks, and show me the diff.
 ```
 
 ### Add Google Analytics

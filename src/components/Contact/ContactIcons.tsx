@@ -1,5 +1,3 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
 import data from '@/data/contact';
 
 interface ContactIconsProps {
@@ -29,7 +27,15 @@ export default function ContactIcons({
                   ? {}
                   : { target: '_blank', rel: 'noopener noreferrer' })}
               >
-                <FontAwesomeIcon icon={s.icon} className="size-5" />
+                <svg
+                  viewBox={s.icon.viewBox}
+                  fill="currentColor"
+                  aria-hidden="true"
+                  focusable="false"
+                  className="size-5"
+                >
+                  <path d={s.icon.path} />
+                </svg>
               </a>
             </li>
           );

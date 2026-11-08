@@ -1,19 +1,10 @@
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import { faAngellist } from '@fortawesome/free-brands-svg-icons/faAngellist';
-import { faFacebookF } from '@fortawesome/free-brands-svg-icons/faFacebookF';
-import { faGithub } from '@fortawesome/free-brands-svg-icons/faGithub';
-import { faInstagram } from '@fortawesome/free-brands-svg-icons/faInstagram';
-import { faLinkedinIn } from '@fortawesome/free-brands-svg-icons/faLinkedinIn';
-import { faTwitter } from '@fortawesome/free-brands-svg-icons/faTwitter';
-import { faEnvelope } from '@fortawesome/free-regular-svg-icons/faEnvelope';
-
 import profile from './profile.json';
 
 export type ContactId =
   | 'linkedin'
   | 'github'
   | 'x'
-  | 'angellist'
+  | 'wellfound'
   | 'instagram'
   | 'facebook'
   | 'email';
@@ -22,52 +13,74 @@ export interface ContactItem {
   id: ContactId;
   link: string;
   label: string;
-  icon: IconDefinition;
+  icon: { viewBox: string; path: string };
 }
 
+// Glyphs: Font Awesome Free 7.3.1 (CC BY 4.0, https://fontawesome.com/license/free); Wellfound from Simple Icons (CC0).
 const data: ContactItem[] = [
   {
     id: 'linkedin',
     link: 'https://www.linkedin.com/in/michaelldangelo',
     label: 'LinkedIn',
-    icon: faLinkedinIn,
+    icon: {
+      viewBox: '0 0 448 512',
+      path: 'M100.3 448l-92.9 0 0-299.1 92.9 0 0 299.1zM53.8 108.1C24.1 108.1 0 83.5 0 53.8 0 39.5 5.7 25.9 15.8 15.8s23.8-15.8 38-15.8 27.9 5.7 38 15.8 15.8 23.8 15.8 38c0 29.7-24.1 54.3-53.8 54.3zM447.9 448l-92.7 0 0-145.6c0-34.7-.7-79.2-48.3-79.2-48.3 0-55.7 37.7-55.7 76.7l0 148.1-92.8 0 0-299.1 89.1 0 0 40.8 1.3 0c12.4-23.5 42.7-48.3 87.9-48.3 94 0 111.3 61.9 111.3 142.3l0 164.3-.1 0z',
+    },
   },
   {
     id: 'github',
     link: 'https://github.com/mldangelo',
     label: 'GitHub',
-    icon: faGithub,
+    icon: {
+      viewBox: '0 0 512 512',
+      path: 'M216.5 362.5c-66-8-112.5-55.5-112.5-117 0-25 9-52 24-70-6.5-16.5-5.5-51.5 2-66 20-2.5 47 8 63 22.5 19-6 39-9 63.5-9s44.5 3 62.5 8.5c15.5-14 43-24.5 63-22 7 13.5 8 48.5 1.5 65.5 16 19 24.5 44.5 24.5 70.5 0 61.5-46.5 108-113.5 116.5 17 11 28.5 35 28.5 62.5l0 52C323 491.5 335.5 500 350.5 494 441 459.5 512 369 512 257 512 115.5 397 0 255.5 0S0 115.5 0 257c0 111 70.5 203 165.5 237.5 13.5 5 26.5-4 26.5-17.5l0-40c-7 3-16 5-24 5-33 0-52.5-18-66.5-51.5-5.5-13.5-11.5-21.5-23-23-6-.5-8-3-8-6 0-6 10-10.5 20-10.5 14.5 0 27 9 40 27.5 10 14.5 20.5 21 33 21s20.5-4.5 32-16c8.5-8.5 15-16 21-21z',
+    },
   },
   {
     id: 'x',
     link: 'https://x.com/dangelosaurus',
     label: 'X',
-    icon: faTwitter,
+    icon: {
+      viewBox: '0 0 448 512',
+      path: 'M357.2 48L427.8 48 273.6 224.2 455 464 313 464 201.7 318.6 74.5 464 3.8 464 168.7 275.5-5.2 48 140.4 48 240.9 180.9 357.2 48zM332.4 421.8l39.1 0-252.4-333.8-42 0 255.3 333.8z',
+    },
   },
   {
-    id: 'angellist',
-    link: 'https://angel.co/michael-d-angelo',
-    label: 'Angel List',
-    icon: faAngellist,
+    id: 'wellfound',
+    link: 'https://wellfound.com/p/michael-d-angelo',
+    label: 'Wellfound',
+    icon: {
+      viewBox: '0 0 24 24',
+      path: 'M23.998 8.128c.063-1.379-1.612-2.376-2.795-1.664-1.23.598-1.322 2.52-.156 3.234 1.2.862 2.995-.09 2.951-1.57zm0 7.748c.063-1.38-1.612-2.377-2.795-1.665-1.23.598-1.322 2.52-.156 3.234 1.2.863 2.995-.09 2.951-1.57zm-20.5 1.762L0 6.364h3.257l2.066 8.106 2.245-8.106h3.267l2.244 8.106 2.065-8.106h3.257l-3.54 11.274H11.39c-.73-2.713-1.46-5.426-2.188-8.14l-2.233 8.14H3.5z',
+    },
   },
   {
     id: 'instagram',
     link: 'https://www.instagram.com/dangelosaurus/',
     label: 'Instagram',
-    icon: faInstagram,
+    icon: {
+      viewBox: '0 0 448 512',
+      path: 'M224.3 141a115 115 0 1 0 -.6 230 115 115 0 1 0 .6-230zm-.6 40.4a74.6 74.6 0 1 1 .6 149.2 74.6 74.6 0 1 1 -.6-149.2zm93.4-45.1a26.8 26.8 0 1 1 53.6 0 26.8 26.8 0 1 1 -53.6 0zm129.7 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM399 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z',
+    },
   },
   {
     id: 'facebook',
     link: 'https://facebook.com/d',
     label: 'Facebook',
-    icon: faFacebookF,
+    icon: {
+      viewBox: '0 0 320 512',
+      path: 'M80 299.3l0 212.7 116 0 0-212.7 86.5 0 18-97.8-104.5 0 0-34.6c0-51.7 20.3-71.5 72.7-71.5 16.3 0 29.4 .4 37 1.2l0-88.7C291.4 4 256.4 0 236.2 0 129.3 0 80 50.5 80 159.4l0 42.1-66 0 0 97.8 66 0z',
+    },
   },
   {
     id: 'email',
     // One public address, shared with the contact CTA and JSON-LD.
     link: `mailto:${profile.email}`,
     label: 'Email',
-    icon: faEnvelope,
+    icon: {
+      viewBox: '0 0 512 512',
+      path: 'M61.4 64C27.5 64 0 91.5 0 125.4 0 126.3 0 127.1 .1 128L0 128 0 384c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-256-.1 0c0-.9 .1-1.7 .1-2.6 0-33.9-27.5-61.4-61.4-61.4L61.4 64zM464 192.3L464 384c0 8.8-7.2 16-16 16L64 400c-8.8 0-16-7.2-16-16l0-191.7 154.8 117.4c31.4 23.9 74.9 23.9 106.4 0L464 192.3zM48 125.4C48 118 54 112 61.4 112l389.2 0c7.4 0 13.4 6 13.4 13.4 0 4.2-2 8.2-5.3 10.7L280.2 271.5c-14.3 10.8-34.1 10.8-48.4 0L53.3 136.1c-3.3-2.5-5.3-6.5-5.3-10.7z',
+    },
   },
 ];
 
