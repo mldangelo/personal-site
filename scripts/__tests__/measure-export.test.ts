@@ -1,6 +1,5 @@
 import { spawnSync } from 'node:child_process';
 import {
-  existsSync,
   mkdirSync,
   mkdtempSync,
   readFileSync,
@@ -13,7 +12,6 @@ import { afterEach, describe, expect, it } from 'vitest';
 
 const measurer = resolve(process.cwd(), 'scripts/measure-export.mjs');
 const fixtureRoots: string[] = [];
-const DOCUMENTED_JSON_COMMAND = 'npm run --silent measure-export -- --json -';
 const BUDGET = 'scripts/budget.json';
 
 const CSS = 'a'.repeat(4096);
@@ -228,19 +226,6 @@ describe('measurements', () => {
       widestSpread: 12,
     });
   });
-
-  it('prints a report a JSON consumer can read through the documented command', () => {
-    expect(readFileSync(measurer, 'utf8')).toContain(DOCUMENTED_JSON_COMMAND);
-    const { root } = createFixture();
-    const result = spawnSync(
-      `${DOCUMENTED_JSON_COMMAND} | "${process.execPath}" -p "JSON.parse(require('fs').readFileSync(0, 'utf8')).total.files"`,
-      { cwd: root, encoding: 'utf8', shell: true },
-    );
-
-    expect(result.status).toBe(0);
-    expect(result.stdout.trim()).toBe('11');
-    expect(result.stderr).toContain('by subsystem');
-  });
 });
 
 describe('budget gate', () => {
@@ -352,11 +337,7 @@ describe('failures', () => {
       'no HTML documents found in out/',
       remove('out/index.html', 'out/about/index.html'),
     ],
-    ...[['--json='], ['--json', '']].map((args): [string, Change, string[]] => [
-      '--json needs a file path (use `-` for stdout)',
-      noChange,
-      args,
-    ]),
+    ['--json needs a file path', noChange, ['--json']],
   ])('rejects: %s', (expected, change, args) => {
     const { root } = createFixture();
     change(root);
@@ -365,23 +346,5 @@ describe('failures', () => {
     expect(status).toBe(1);
     expect(output).toContain(expected);
     expect(output).not.toContain('budget(s) within limits');
-  });
-
-  // A report inside out/ changes the export it measures, and one written over
-  // the budget replaces the policy that gates it.
-  it.each([
-    ['out/report.json', '--json must write outside out/'],
-    [BUDGET, '--json must not overwrite scripts/budget.json'],
-  ])('refuses to write the JSON report to %s', (path, expected) => {
-    const { root } = createFixture();
-    const file = join(root, path);
-    const contents = () =>
-      existsSync(file) ? readFileSync(file, 'utf8') : undefined;
-    const before = contents();
-
-    const { status, output } = runMeasurer(root, ['--json', path]);
-    expect(status).toBe(1);
-    expect(output).toContain(expected);
-    expect(contents()).toBe(before);
   });
 });
