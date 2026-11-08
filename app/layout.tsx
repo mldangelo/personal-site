@@ -53,7 +53,7 @@ const CHROME_COLORS: ThemeColors = {
  * fallback exactly where it applies and nowhere React can reach.
  *
  * Interpolated straight into markup because `readColorToken` refuses anything
- * that is not a literal hex, so the value cannot carry a quote or a tag.
+ * that is not a literal colour, so the value cannot carry a quote or a tag.
  */
 const NO_SCRIPT_THEME_COLOR = `<meta name="theme-color" content="${CHROME_COLORS.light}">`;
 

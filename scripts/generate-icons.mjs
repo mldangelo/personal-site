@@ -32,7 +32,7 @@ import { createRequire } from 'node:module';
 import { join } from 'node:path';
 import { createElement as h } from 'react';
 
-import { readLiteralColorToken } from './lib/color-token.mjs';
+import { readColorToken } from '../src/lib/color-token.mjs';
 import { readImageRenderer, requireSharp } from './lib/image-renderer.mjs';
 
 // `next/og` ships as CommonJS with no ESM export condition, so it has to be
@@ -42,8 +42,6 @@ const { ImageResponse } = require('next/og');
 await requireSharp();
 
 const root = process.cwd();
-const TOKENS = join(root, 'app', 'styles', 'tokens', 'colors.css');
-const DARK_TOKENS = join(root, 'app', 'styles', 'dark-mode.css');
 const MANIFEST_ICON_DIR = join(root, 'public', 'images', 'icons');
 const META_OUTPUT = join(root, 'scripts', 'icons.meta.json');
 
@@ -60,24 +58,6 @@ const ICON_FONT = Object.freeze({
   url: 'https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZg.ttf',
   sha256: '8c883f63b2c4157d997319f2c8bc6995ed4357ef371940d31ca159004a4aae63',
 });
-
-/**
- * Reads one custom property out of a token stylesheet.
- *
- * Deliberately narrow: the value has to be a literal hex colour. `next/og`
- * cannot resolve `var()` or `color-mix()`, and neither can a `theme-color`
- * meta tag, so a token that grows into either should fail here rather than
- * bake the string "var(--color-accent)" into a PNG.
- *
- * `src/lib/tokens.ts` does the same read for the `theme-color` meta tags. The
- * two cannot share one implementation — this file is ESM run by node, that one
- * is TypeScript compiled into the app — so the test recomputes this file's
- * results through that reader instead, which fails if they ever disagree.
- */
-async function readColorToken(path, name) {
-  const css = await readFile(path, 'utf8');
-  return readLiteralColorToken(css, name, path);
-}
 
 /**
  * Downloads and verifies the only binary input not committed to the
@@ -211,13 +191,13 @@ function packIco(entries) {
   return Buffer.concat([header, directory, ...entries.map((e) => e.png)]);
 }
 
-const [profile, accent, onAccent, bgLight, bgDark] = await Promise.all([
-  readFile(join(root, 'src/data/profile.json'), 'utf8').then(JSON.parse),
-  readColorToken(TOKENS, '--color-accent'),
-  readColorToken(TOKENS, '--color-on-accent'),
-  readColorToken(TOKENS, '--color-bg-alt'),
-  readColorToken(DARK_TOKENS, '--color-bg-alt'),
-]);
+const profile = JSON.parse(
+  await readFile(join(root, 'src/data/profile.json'), 'utf8'),
+);
+const accent = readColorToken('--color-accent', 'light', root);
+const onAccent = readColorToken('--color-on-accent', 'light', root);
+const bgLight = readColorToken('--color-bg-alt', 'light', root);
+const bgDark = readColorToken('--color-bg-alt', 'dark', root);
 
 const colors = { accent, onAccent };
 const MONOGRAM = monogramFor(profile.name);
@@ -316,8 +296,8 @@ const generatorSources = await Promise.all(
       new URL('./lib/image-renderer.mjs', import.meta.url),
     ],
     [
-      'scripts/lib/color-token.mjs',
-      new URL('./lib/color-token.mjs', import.meta.url),
+      'src/lib/color-token.mjs',
+      new URL('../src/lib/color-token.mjs', import.meta.url),
     ],
   ].map(async ([path, url]) => [path, await readFile(url, 'utf8')]),
 );

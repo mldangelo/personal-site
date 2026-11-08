@@ -73,7 +73,7 @@ describe('generated icon set', () => {
     const digest = [
       'scripts/generate-icons.mjs',
       'scripts/lib/image-renderer.mjs',
-      'scripts/lib/color-token.mjs',
+      'src/lib/color-token.mjs',
     ]
       .reduce(
         (hash, path) =>

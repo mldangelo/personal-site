@@ -14,6 +14,7 @@ import { join } from 'node:path';
 
 import { parser, RuleType } from 'markdown-to-jsx/markdown';
 
+import { readColorToken } from '../src/lib/color-token.mjs';
 import { parseFrontmatter } from '../src/lib/frontmatter.mjs';
 import { readMarkdownReferences } from '../src/lib/markdown-assets.mjs';
 import { validatePostFrontmatterData } from '../src/lib/post-frontmatter.mjs';
@@ -73,6 +74,7 @@ const GENERATOR_SOURCES = [
   'scripts/generate-og.mjs',
   'scripts/lib/image-renderer.mjs',
   'scripts/og-inputs.mjs',
+  'src/lib/color-token.mjs',
   'src/lib/frontmatter.mjs',
   'scripts/og-layout.mjs',
   'src/lib/markdown-assets.mjs',
@@ -95,7 +97,6 @@ function ogProfileSnapshot(profile) {
 }
 
 const CONTENT_DIRECTORY = join('content', 'writing');
-const COLOR_TOKENS_FILE = join('app', 'styles', 'tokens', 'colors.css');
 
 /** Words per minute used for the reading-time readout. */
 const READING_WORDS_PER_MINUTE = 225;
@@ -127,63 +128,18 @@ const CARD_COLORS = {
 };
 
 /**
- * Literal colours only. `var()` and `color-mix()` need a browser to resolve,
- * so a token that moves to either form fails loudly here rather than painting
- * a card with a value satori silently drops.
- */
-const LITERAL_COLOR = /^(?:#[0-9a-f]{3,8}|rgba?\([^()]*\))$/i;
-
-function themeBlock(css) {
-  const declaration = css.indexOf('@theme');
-  const open = declaration === -1 ? -1 : css.indexOf('{', declaration);
-  if (open === -1) {
-    throw new Error(`${COLOR_TOKENS_FILE} has no @theme block`);
-  }
-
-  let depth = 0;
-  for (let index = open; index < css.length; index += 1) {
-    if (css[index] === '{') depth += 1;
-    else if (css[index] === '}') {
-      depth -= 1;
-      if (depth === 0) return css.slice(open + 1, index);
-    }
-  }
-
-  throw new Error(`${COLOR_TOKENS_FILE} has an unterminated @theme block`);
-}
-
-/**
  * The colours the cards paint with, resolved from the token stylesheet.
  *
- * Only the light `@theme` block is read: a baked PNG has no theme, and the
- * card is the paper one.
+ * Only the light theme is read: a baked PNG has no theme, and the card is the
+ * paper one.
  */
-export async function readCardColors(root = process.cwd()) {
-  const block = themeBlock(
-    await readFile(join(root, COLOR_TOKENS_FILE), 'utf8'),
+export function readCardColors(root = process.cwd()) {
+  return Object.fromEntries(
+    Object.entries(CARD_COLORS).map(([role, token]) => [
+      role,
+      readColorToken(token, 'light', root),
+    ]),
   );
-  const colors = {};
-
-  for (const [role, token] of Object.entries(CARD_COLORS)) {
-    const match = block.match(
-      new RegExp(`(?:^|[;{\\n])\\s*${token}\\s*:\\s*([^;]+);`),
-    );
-    const value = match?.[1]?.trim();
-
-    if (!value) {
-      throw new Error(`${COLOR_TOKENS_FILE} does not declare ${token}`);
-    }
-    if (!LITERAL_COLOR.test(value)) {
-      throw new Error(
-        `${token} is ${value}, which the card generator cannot resolve. ` +
-          'Share cards need a literal colour, not var() or color-mix().',
-      );
-    }
-
-    colors[role] = value;
-  }
-
-  return colors;
 }
 
 /**
