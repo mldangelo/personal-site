@@ -8,9 +8,7 @@
  *
  * Deliberately a subset of the schema: sections this résumé has no data for
  * (`volunteer`, `awards`, `certificates`, `publications`, `languages`,
- * `interests`, `projects`, `references`) are omitted rather than stubbed. The
- * printed page says references are available on request, which is not a
- * `references` entry — the schema wants a name and a quote.
+ * `interests`, `projects`, `references`) are omitted rather than stubbed.
  */
 
 import contact from '@/data/contact';

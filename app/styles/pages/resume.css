@@ -22,10 +22,9 @@
   }
 }
 
-/* A sentence that belongs to a section rather than to an entry in it: the key
-   under Skills, the line under References. Supporting copy, so the reading
-   face on a bounded measure, a tone back from the entries. The references
-   line was centred on a left-aligned page, in utility classes of its own. */
+/* A sentence that belongs to a section rather than to an entry in it, such as
+   the key under Skills. Supporting copy, so the reading face on a bounded
+   measure, a tone back from the entries. */
 .resume-note {
   max-width: 53ch;
   margin: 0;
@@ -43,24 +42,16 @@
 }
 
 /* Citations in a role summary are links in running text, and look like it. */
-.resume-content .summary a,
-.resume-content .resume-note a {
+.resume-content .summary a {
   color: var(--color-accent);
   text-decoration: underline;
   text-decoration-color: var(--color-accent-underline);
   text-underline-offset: 2px;
 }
 
-.resume-content .summary a:hover,
-.resume-content .resume-note a:hover {
+.resume-content .summary a:hover {
   color: var(--color-accent-hover);
   text-decoration-color: var(--color-accent);
-}
-
-/* The reading face has no arrow. The system UI face has it, and setting every
-   arrow on the site in that one face is what lets them match. */
-.resume-note-arrow {
-  font-family: system-ui, sans-serif;
 }
 
 /* Resume page specific */
