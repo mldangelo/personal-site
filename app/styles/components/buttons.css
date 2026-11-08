@@ -25,7 +25,6 @@
     padding: 0 1.75rem;
     text-align: center;
     text-decoration: none !important;
-    background-image: none;
     transition:
       background-color var(--duration-fast) var(--ease-out),
       border-color var(--duration-fast) var(--ease-out),

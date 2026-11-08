@@ -31,7 +31,6 @@
     border-radius: var(--radius-sm);
     color: var(--color-fg-light);
     text-decoration: none;
-    background-image: none;
     transition:
       color var(--duration-fast) var(--ease-out),
       background-color var(--duration-fast) var(--ease-out);
