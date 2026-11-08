@@ -4,9 +4,6 @@ import bundleAnalyzer from '@next/bundle-analyzer';
 const nextConfig = {
   output: 'export',
 
-  // AGENTS.md is written by hand; keep `next dev` from appending to it.
-  agentRules: false,
-
   // Hostname patterns, not origins: lets a phone on the LAN load the dev server.
   allowedDevOrigins: ['192.168.*.*'],
 
