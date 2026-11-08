@@ -12,10 +12,7 @@
 @media (forced-colors: active) {
   /* ===================
      LINKS
-     Links in running text and on the poster are underlined with real
-     `text-decoration` (base/links.css, home.css), which the palette keeps and
-     recolours, so they need nothing here. What follows is state drawn some
-     other way.
+     Underlines are real `text-decoration`, which the palette keeps.
      =================== */
 
   /* Active-item bars are pseudo-element backgrounds, which flatten to Canvas. */
