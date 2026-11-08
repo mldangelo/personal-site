@@ -23,7 +23,6 @@
   font-weight: var(--font-weight-normal);
   letter-spacing: var(--tracking-tight);
   line-height: var(--leading-tight);
-  text-transform: none;
   color: var(--color-fg-bold);
 }
 

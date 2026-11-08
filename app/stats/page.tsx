@@ -18,7 +18,7 @@ export default function StatsPage() {
     <PageWrapper>
       <section className="stats-page">
         <header className="stats-header">
-          <h1 className="stats-title">Stats</h1>
+          <h1 className="page-title">Stats</h1>
           <p className="stats-subtitle">Some fun numbers</p>
         </header>
         <div className="stats-content">

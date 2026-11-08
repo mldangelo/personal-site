@@ -24,12 +24,15 @@
    ======================================== */
 
 .projects-page {
+  /* The measure of the register's copy, in `ch`: the width of a zero, which is
+     a third wider than the average character of this copy in this face, so
+     53ch is a line of about 66 characters, not 53. */
+  --register-measure: 53ch;
   max-width: var(--measure-page);
   padding-bottom: 2rem;
 }
 
 .projects-header {
-  text-align: left;
   margin-bottom: 2.5rem;
 }
 
@@ -41,7 +44,7 @@
    than to the rows below: the negative margin takes back half of the gap the
    shared header leaves for a list. */
 .projects-group-note {
-  max-width: 53ch;
+  max-width: var(--register-measure);
   margin: -0.75rem 0 0.5rem;
   font-size: var(--text-base);
   line-height: 1.5;
@@ -117,12 +120,10 @@ a.project-entry:focus-visible .project-entry-title {
   color: var(--color-fg-light);
 }
 
-/* The role is a phrase to be read, not a reading off an instrument. As 11px
-   tracked capitals in this gutter "Co-founder & CTO through acquisition ·
-   Continued at OpenAI" ran to five lines. It stays at --color-fg-light:
-   --color-fg-muted is below the 4.5:1 text floor and is for marks only.
-   Balanced, because a 9rem column otherwise strands a last word on its own
-   line ("OpenAI · Research / preview"). */
+/* The role is a phrase to be read, not a reading off an instrument. It stays
+   at --color-fg-light: --color-fg-muted is below the 4.5:1 text floor and is
+   for marks only. Balanced, because a 9rem column otherwise strands a last
+   word on its own line ("OpenAI · Research / preview"). */
 .project-entry-role {
   display: block;
   margin-top: 0.25rem;
@@ -157,12 +158,9 @@ a.project-entry:focus-visible .project-entry-title {
   font-size: var(--text-md);
 }
 
-/* The page's primary copy, so it is set in ink at the body size. The measure
-   is in `ch`, which is the width of a zero — a third wider than the average
-   character of this copy in this face — so 53ch is a line of about 66
-   characters, not 53. */
+/* The page's primary copy, so it is set in ink at the body size. */
 .project-entry-desc {
-  max-width: 53ch;
+  max-width: var(--register-measure);
   margin: 0;
   font-size: var(--text-base);
   line-height: 1.5;
@@ -243,8 +241,6 @@ a.project-entry:focus-visible .project-entry-external {
 /* ========================================
    EXPERIENCE SPINE
    One continuous rule down the page with a dated tick per role.
-   Replaces the stack of identical cards, in which a current role
-   and a 2013 internship carried exactly the same weight.
    ======================================== */
 
 .experience-spine {
@@ -350,9 +346,7 @@ a.project-entry:focus-visible .project-entry-external {
 /* The résumé's two type roles, each set once for experience and education
    alike. The title of an entry — a company, a degree — is in the reading
    face. The line under it — the role held, the school attended — is the
-   second fact a reader looks for, so it is set to be read at a glance. The
-   two kinds of title were Inter at two different weights, and the role was
-   an 11px tracked label in grey. */
+   second fact a reader looks for, so it is set to be read at a glance. */
 .jobs-container header h3,
 .degree-container .degree {
   font-family: var(--font-body);
@@ -556,11 +550,9 @@ a.project-entry:focus-visible .project-entry-external {
 
 /* Code and title share the title's first baseline, and every row starts its
    first line the same distance down, so two courses side by side line up
-   whichever of them wraps. Centred, the code sat in the middle of each title
-   that ran to two lines, and a one-line row sat lower than its neighbour.
-   The padding is what makes a one-line row the 44px target. The wash under
-   the pointer runs past the text on both sides, so the codes stay on the
-   page's left rail without touching the edge of it. */
+   whichever of them wraps. The padding is what makes a one-line row the 44px
+   target. The wash under the pointer runs past the text on both sides, so the
+   codes stay on the page's left rail without touching the edge of it. */
 .course-container a {
   display: grid;
   grid-template-columns: 4.5rem minmax(0, 1fr);

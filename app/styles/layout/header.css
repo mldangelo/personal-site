@@ -85,7 +85,6 @@
 
 /* Slide menu panel */
 .slide-menu {
-  -webkit-overflow-scrolling: touch;
   background-color: var(--color-bg-alt);
   border-left: var(--rule) solid var(--color-fg-bold);
   bottom: 0;
@@ -103,12 +102,6 @@
 
 .slide-menu--open {
   transform: translateX(0);
-}
-
-.slide-menu ul {
-  color: var(--color-fg-bold);
-  margin-top: 0;
-  padding: 0;
 }
 
 /* Hamburger container */
@@ -151,7 +144,6 @@
   align-items: center;
   background: transparent;
   border: 0;
-  box-shadow: none;
   cursor: pointer;
   display: flex;
   min-width: 44px;
@@ -161,7 +153,6 @@
 }
 
 .hamburger-button:hover {
-  box-shadow: none;
   opacity: 0.5;
 }
 
@@ -272,7 +263,6 @@
   text-decoration: none;
   padding: 0.9rem 0;
   border-radius: 0;
-  transition: background-color var(--duration-fast) var(--ease-out);
 }
 
 /* `outline: none` here removed the only keyboard affordance inside a
@@ -282,19 +272,12 @@
   outline-offset: -2px;
 }
 
-.hamburger-ul li a:hover {
-  background-color: transparent;
-}
-
 /* Where you are, in the mobile menu. */
 .hamburger-ul li a.active span {
   color: var(--color-accent);
 }
 
 .hamburger-ul li a span {
-  margin: 0;
-  padding: 0;
-  border: none;
   font-family: var(--font-display);
   font-size: var(--text-ui);
   font-weight: var(--font-weight-medium);
@@ -319,15 +302,5 @@
   font-size: var(--text-md);
   font-weight: var(--font-weight-semibold);
   letter-spacing: var(--tracking-tight);
-  text-transform: none;
   color: var(--color-fg-bold);
-}
-
-/* Reduced motion support */
-@media (prefers-reduced-motion: reduce) {
-  .slide-menu-overlay,
-  .slide-menu,
-  .hamburger-icon span {
-    transition: none;
-  }
 }

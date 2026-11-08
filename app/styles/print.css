@@ -43,8 +43,6 @@
   }
 
   body {
-    background: #fff !important;
-    color: #000;
     font-size: 10.5pt;
     line-height: 1.45;
     padding-top: 0;
@@ -72,8 +70,6 @@
   }
 
   .page-main,
-  .resume-page,
-  .about-page,
   .writing-page,
   .post-page {
     max-width: none;
@@ -101,7 +97,7 @@
        whether it takes one line or two on Letter or A4. */
     letter-spacing: 0.02em;
     line-height: 1.5;
-    color: #333;
+    color: var(--color-fg-light);
   }
 
   .resume-print-contact a {
@@ -120,7 +116,6 @@
   }
 
   .resume-title,
-  .stats-title,
   .page-title {
     font-size: 22pt;
   }
@@ -292,18 +287,6 @@
 
   .stat-table-value {
     font-size: 14pt;
-  }
-
-  /* Section headers should not be stranded at the foot of a page. */
-  .resume-section,
-  .about-section {
-    break-before: auto;
-  }
-
-  .resume-page .title h2,
-  .about-section h2 {
-    break-after: avoid;
-    page-break-after: avoid;
   }
 
   /* Both inks print black, so on paper there is no fainter tone for the

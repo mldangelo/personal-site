@@ -27,8 +27,6 @@
      secondary ink rather than borrowing the signal colour. */
   color: var(--color-fg-light);
   line-height: 1;
-  background: none;
-  -webkit-text-fill-color: currentcolor;
   margin-bottom: 1.25rem;
 }
 
