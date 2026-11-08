@@ -49,8 +49,7 @@ export function createUniqueHeadingIds(
   });
 }
 
-export interface MarkdownHeadingPlan {
-  ids: string[];
+interface MarkdownHeadingPlan {
   aliases: Map<string, string>;
   slugify: (source: string) => string;
 }
@@ -205,5 +204,5 @@ export function planMarkdownHeadingAnchors(
     claimedIds.add(legacy);
   }
 
-  return { ids, aliases, slugify };
+  return { aliases, slugify };
 }

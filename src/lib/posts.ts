@@ -5,7 +5,7 @@ import { parseFrontmatter } from './frontmatter.mjs';
 
 import { validatePostFrontmatterData } from './post-frontmatter.mjs';
 
-export interface PostFrontmatter {
+interface PostFrontmatter {
   title: string;
   date: string;
   description: string;

@@ -93,7 +93,7 @@ interface ResumeSkill {
   keywords: string[];
 }
 
-export interface JsonResume {
+interface JsonResume {
   $schema: string;
   basics: ResumeBasics;
   work: ResumeWork[];

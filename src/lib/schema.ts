@@ -14,8 +14,6 @@ import {
   SITE_URL,
 } from '@/lib/utils';
 
-export { SITE_URL } from '@/lib/utils';
-
 /**
  * Centralised JSON-LD (schema.org) graph builders.
  *
@@ -46,17 +44,29 @@ interface Crumb {
 }
 
 /** Reference to the canonical Person node. */
-const personRef = () => ({ '@id': PERSON_ID });
+const PERSON_REF = { '@id': PERSON_ID };
 
 /** Reference to the canonical WebSite node. */
-const websiteRef = () => ({ '@id': WEBSITE_ID });
+const WEBSITE_REF = { '@id': WEBSITE_ID };
 
 /** Reference to the canonical Blog node. */
-const blogRef = () => ({ '@id': BLOG_ID });
+const BLOG_REF = { '@id': BLOG_ID };
+
+/** The portrait, under an `@id` of its own for each node that shows it. */
+function portraitImage(id: string): SchemaNode {
+  return {
+    '@type': 'ImageObject',
+    '@id': `${SITE_URL}/#${id}`,
+    url: SITE_IMAGE,
+    width: SITE_IMAGE_DIMENSIONS.width,
+    height: SITE_IMAGE_DIMENSIONS.height,
+    caption: AUTHOR_NAME,
+  };
+}
 
 /**
  * The canonical Person entity. Emitted site-wide so every page anchors to the
- * same node; other nodes reference it via {@link personRef} instead of
+ * same node; other nodes reference it via {@link PERSON_REF} instead of
  * repeating its properties.
  */
 export function personNode(): SchemaNode {
@@ -79,14 +89,7 @@ export function personNode(): SchemaNode {
     givenName,
     familyName,
     url: HOME_URL,
-    image: {
-      '@type': 'ImageObject',
-      '@id': `${SITE_URL}/#person-image`,
-      url: SITE_IMAGE,
-      width: SITE_IMAGE_DIMENSIONS.width,
-      height: SITE_IMAGE_DIMENSIONS.height,
-      caption: AUTHOR_NAME,
-    },
+    image: portraitImage('person-image'),
     description: SITE_DESCRIPTION,
     ...(currentJob && { jobTitle: currentJob.position }),
     ...(email && { email }),
@@ -119,15 +122,8 @@ export function websiteNode(): SchemaNode {
     alternateName: ['mldangelo.com', 'mldangelo'],
     description: SITE_DESCRIPTION,
     inLanguage: SITE_LANGUAGE,
-    publisher: personRef(),
-    image: {
-      '@type': 'ImageObject',
-      '@id': `${SITE_URL}/#website-image`,
-      url: SITE_IMAGE,
-      width: SITE_IMAGE_DIMENSIONS.width,
-      height: SITE_IMAGE_DIMENSIONS.height,
-      caption: AUTHOR_NAME,
-    },
+    publisher: PERSON_REF,
+    image: portraitImage('website-image'),
   };
 }
 
@@ -156,7 +152,7 @@ interface PageNodeOptions {
   hasBreadcrumb?: boolean;
 }
 
-export interface ArticleImage {
+interface ArticleImage {
   url: string;
   width: number;
   height: number;
@@ -172,7 +168,7 @@ function baseWebPage(
     '@id': `${url}#webpage`,
     url,
     name,
-    isPartOf: websiteRef(),
+    isPartOf: WEBSITE_REF,
     inLanguage: SITE_LANGUAGE,
     ...(description ? { description } : {}),
     ...(hasBreadcrumb ? { breadcrumb: { '@id': `${url}#breadcrumb` } } : {}),
@@ -201,7 +197,7 @@ export function sectionPageNodes(
 export function profilePageNode(options: PageNodeOptions): SchemaNode {
   return {
     ...baseWebPage('ProfilePage', options),
-    mainEntity: personRef(),
+    mainEntity: PERSON_REF,
   };
 }
 
@@ -209,7 +205,7 @@ export function profilePageNode(options: PageNodeOptions): SchemaNode {
 export function collectionPageNode(options: PageNodeOptions): SchemaNode {
   return {
     ...baseWebPage('CollectionPage', options),
-    about: personRef(),
+    about: PERSON_REF,
   };
 }
 
@@ -226,13 +222,13 @@ export function blogNode(dateModified?: string): SchemaNode {
   return {
     '@type': 'Blog',
     '@id': BLOG_ID,
-    isPartOf: websiteRef(),
+    isPartOf: WEBSITE_REF,
     mainEntityOfPage: { '@id': `${SITE_URL}/writing/#webpage` },
     name: `${AUTHOR_NAME}'s Writing`,
     description: WRITING_DESCRIPTION,
     inLanguage: SITE_LANGUAGE,
     ...(dateModified ? { dateModified } : {}),
-    publisher: personRef(),
+    publisher: PERSON_REF,
   };
 }
 
@@ -253,14 +249,14 @@ export function blogPostingNode(
     '@id': `${url}#blogposting`,
     url,
     mainEntityOfPage: { '@id': `${url}#webpage` },
-    isPartOf: blogRef(),
+    isPartOf: BLOG_REF,
     headline: post.title,
     description: post.description,
     inLanguage: SITE_LANGUAGE,
     datePublished: post.date,
     dateModified: post.date,
-    author: personRef(),
-    publisher: personRef(),
+    author: PERSON_REF,
+    publisher: PERSON_REF,
     image: {
       '@type': 'ImageObject',
       '@id': `${url}#blogposting-image`,

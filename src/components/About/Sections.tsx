@@ -101,46 +101,26 @@ interface ParsedAboutSection {
  * that is derived case-insensitively, so the deep links hold.
  */
 const sectionVariants: Record<string, string> = {
-  'Some history': 'about-section--log',
-  'Travel / geography': 'about-section--log',
+  'Some history': LOG_VARIANT,
+  'Travel / geography': LOG_VARIANT,
   'Fun facts': 'about-section--compact',
   'I like': 'about-section--compact',
   'I dream of': 'about-section--compact',
   'Websites from people I admire': 'about-section--links',
 };
 
+/** The page opens with `# Intro`, whose text runs unheaded above the sections. */
 function splitAboutMarkdown(markdown: string) {
-  const trimmed = markdown.trim();
-  const introHeading = '# Intro';
+  const [intro, ...sections] = markdown
+    .trim()
+    .replace(/^# Intro\s*/, '')
+    .split(/\n(?=# )/);
 
-  if (!trimmed.startsWith(introHeading)) {
-    return {
-      intro: '',
-      sections: parseSections(trimmed),
-    };
-  }
-
-  const withoutIntroHeading = trimmed.slice(introHeading.length).trimStart();
-  const nextHeadingIndex = withoutIntroHeading.search(/\n# /);
-
-  if (nextHeadingIndex === -1) {
-    return {
-      intro: withoutIntroHeading.trim(),
-      sections: [] as AboutSection[],
-    };
-  }
-
-  return {
-    intro: withoutIntroHeading.slice(0, nextHeadingIndex).trim(),
-    sections: parseSections(
-      withoutIntroHeading.slice(nextHeadingIndex + 1).trim(),
-    ),
-  };
+  return { intro: intro.trim(), sections: parseSections(sections) };
 }
 
-function parseSections(markdown: string): AboutSection[] {
-  const sections: ParsedAboutSection[] = markdown
-    .split(/\n(?=# )/)
+function parseSections(chunks: string[]): AboutSection[] {
+  const sections: ParsedAboutSection[] = chunks
     .map((section) => section.trim())
     .filter((section) => section !== '')
     .map((section) => {
@@ -164,10 +144,6 @@ function parseSections(markdown: string): AboutSection[] {
     title: smartQuotes(title),
     variant: sectionVariants[title],
   }));
-}
-
-function getSectionClassName(variant: string | undefined) {
-  return variant ? `about-section ${variant}` : 'about-section';
 }
 
 export default function AboutContent({ markdown }: AboutContentProps) {
@@ -216,7 +192,11 @@ export default function AboutContent({ markdown }: AboutContentProps) {
       {sections.map((section) => (
         <section
           key={section.id}
-          className={getSectionClassName(section.variant)}
+          className={
+            section.variant
+              ? `about-section ${section.variant}`
+              : 'about-section'
+          }
         >
           <div className="section-header">
             {/* The id stays on the heading: it is the public fragment, and

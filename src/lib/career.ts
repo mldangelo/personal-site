@@ -7,7 +7,7 @@ export type DateInput = string | number | Date;
 const ONGOING_END = '9999-12-31';
 
 /** Recency of involvement: an open-ended side role is placed by its start. */
-export function timelineKey(position: Position): string {
+function timelineKey(position: Position): string {
   if (position.endDate) return position.endDate;
 
   return position.commitment === 'part-time' ? position.startDate : ONGOING_END;

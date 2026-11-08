@@ -5,7 +5,7 @@ interface SkillTagProps {
   data: Skill;
 }
 
-export type SkillTier = 'deep' | 'working' | 'familiar';
+type SkillTier = 'deep' | 'working' | 'familiar';
 
 const TIER_DESCRIPTION: Record<SkillTier, string> = {
   deep: 'deep knowledge',
