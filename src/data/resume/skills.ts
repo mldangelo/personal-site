@@ -13,17 +13,17 @@ const skills: Skill[] = [
   {
     title: 'Python',
     competency: 5,
-    category: ['Languages', 'ML Engineering'],
+    category: ['Languages'],
   },
   {
     title: 'TypeScript',
     competency: 5,
-    category: ['Languages', 'Web Development'],
+    category: ['Languages'],
   },
   {
     title: 'SQL',
     competency: 4,
-    category: ['Languages', 'Databases'],
+    category: ['Databases'],
   },
   // AI & LLM
   {
@@ -59,7 +59,7 @@ const skills: Skill[] = [
   {
     title: 'Vector Databases',
     competency: 4,
-    category: ['ML Engineering', 'Databases'],
+    category: ['Databases'],
   },
   {
     title: 'PyTorch',
@@ -69,7 +69,7 @@ const skills: Skill[] = [
   {
     title: 'Pandas',
     competency: 5,
-    category: ['ML Engineering', 'Data Engineering'],
+    category: ['ML Engineering'],
   },
   // Web Development
   {
@@ -117,13 +117,13 @@ const skills: Skill[] = [
   {
     title: 'Observability',
     competency: 4,
-    category: ['Infrastructure', 'ML Engineering'],
+    category: ['Infrastructure'],
   },
 ].map((skill) => ({ ...skill, category: skill.category.sort() }));
 
 /**
- * The distinct category names, sorted, so the filter row and the group order
- * both fall out of the skill list itself.
+ * The distinct category names, sorted, so the group order falls out of the
+ * skill list itself.
  */
 function buildCategories(skillsList: Skill[]): Category[] {
   const uniqueCategories = Array.from(
