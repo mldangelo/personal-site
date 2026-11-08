@@ -137,7 +137,7 @@ export default function EmailLink() {
       >
         <span className="sr-only">Email {CONTACT_ADDRESS}</span>
         <span className="contact-email-prefix" aria-hidden="true">
-          {displayMessage}
+          <span dir="ltr">{displayMessage}</span>
         </span>
         <span className="contact-email-domain" aria-hidden="true">
           @{CONTACT_DOMAIN}
