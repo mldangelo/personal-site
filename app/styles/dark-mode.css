@@ -70,7 +70,3 @@
   background: var(--color-surface-hover);
   border-color: var(--color-border-bg);
 }
-
-[data-theme='dark'] blockquote {
-  border-left-color: var(--color-border-alt);
-}

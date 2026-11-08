@@ -266,9 +266,28 @@ describe('links, metadata, and icons', () => {
       ),
       'a sitemap that omits an indexable route',
     ],
+    [
+      'URL is not in canonical trailing-slash form',
+      replaceIn(
+        SITEMAP,
+        'https://example.com/about/',
+        'https://example.com/&amp;#97;bout/',
+      ),
+      'a sitemap URL that only resolves when decoded twice',
+    ],
   ]);
 
-  accepts([['root-relative, document-relative, and fragment links', () => {}]]);
+  accepts([
+    ['root-relative, document-relative, and fragment links', () => {}],
+    [
+      'an entity-escaped sitemap URL',
+      replaceIn(
+        SITEMAP,
+        'https://example.com/about/',
+        'https://example.com/&#97;bout/',
+      ),
+    ],
+  ]);
 });
 
 // Every helper that takes a public path has to work when that path carries the
