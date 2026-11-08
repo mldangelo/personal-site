@@ -44,14 +44,11 @@ export default function HomePage() {
             const content = (
               <>
                 <span className="home-writing-meta">
-                  <time dateTime={item.date}>{formatDate(item.date)}</time> ·{' '}
-                  {item.source}
+                  {formatDate(item.date)} · {item.source}
                 </span>
                 <div className="home-writing-copy">
                   <h3>{smartQuotes(item.title)}</h3>
                 </div>
-                {/* The arrow follows the destination: ↗ leaves the site in a
-                    new tab, → stays on it. */}
                 <span className="home-writing-arrow" aria-hidden="true">
                   {item.isExternal ? '↗' : '→'}
                 </span>

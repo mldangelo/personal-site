@@ -1,7 +1,6 @@
 import Link from 'next/link';
 
 import profile from '@/data/profile.json';
-import { smartQuotes } from '@/lib/typography';
 
 import ThemePortrait from './ThemePortrait';
 
@@ -12,7 +11,7 @@ export default function Hero() {
         <div className="hero-primary">
           <p className="hero-kicker">Software &amp; security</p>
           <h1 className="hero-title">
-            <span className="hero-name">{smartQuotes(profile.name)}</span>
+            <span className="hero-name">{profile.name}</span>
           </h1>
           <p className="hero-tagline">
             I’m a {profile.role} at{' '}
@@ -32,8 +31,6 @@ export default function Hero() {
             2026.
           </p>
 
-          {/* Neither link carries an arrow: both stay on the site, and ↗ is
-              reserved for a link that leaves it in a new tab. */}
           <div className="hero-cta">
             <Link href="/about" className="button">
               About me
