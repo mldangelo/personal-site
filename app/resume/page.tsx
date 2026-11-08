@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import Courses from '@/components/Resume/Courses';
 import Education from '@/components/Resume/Education';
 import Experience from '@/components/Resume/Experience';
+import PrintButton from '@/components/Resume/PrintButton';
 import References from '@/components/Resume/References';
 import ResumeNav from '@/components/Resume/ResumeNav';
 import Skills from '@/components/Resume/Skills';
@@ -16,6 +17,7 @@ import work from '@/data/resume/work';
 import { careerSpanYears } from '@/lib/career';
 import { createPageMetadata } from '@/lib/metadata';
 import { RESUME_JSON_PATH, RESUME_JSON_URL } from '@/lib/resumeJson';
+import { smartQuotes } from '@/lib/typography';
 import { AUTHOR_NAME, SITE_URL } from '@/lib/utils';
 
 const resumeMetadata = createPageMetadata({
@@ -68,23 +70,33 @@ export default function ResumePage() {
       <section className="resume-page">
         <header className="resume-header">
           <div className="resume-header-row">
-            <h1 className="resume-title">Resume</h1>
-            {/* The same affordance as the RSS chip on /writing. The href is
-                document-relative on purpose: /resume/ may live below a
-                repository base path, while a root-relative href would escape
-                it. ../resume.json resolves correctly in both deployments. */}
-            <a
-              href={`..${RESUME_JSON_PATH}`}
-              className="resume-json-link"
-              title="JSON Resume"
-              aria-label="JSON Resume"
-            >
-              JSON
-            </a>
+            {/* Paper hides the header and footer that carry the name, so
+                there the title is the name. */}
+            <h1 className="resume-title">
+              <span className="resume-screen-title">Resume</span>{' '}
+              <span className="resume-print-name">
+                {smartQuotes(profile.name)}
+              </span>
+            </h1>
+            <div className="resume-actions">
+              <PrintButton />
+              {/* The same affordance as the RSS chip on /writing. The href is
+                  document-relative on purpose: /resume/ may live below a
+                  repository base path, while a root-relative href would escape
+                  it. ../resume.json resolves correctly in both deployments. */}
+              <a
+                href={`..${RESUME_JSON_PATH}`}
+                className="resume-json-link"
+                title="JSON Resume"
+                aria-label="JSON Resume"
+              >
+                JSON
+              </a>
+            </div>
           </div>
           <p className="resume-summary">
             Engineering leader with a career spanning {careerSpan}+ years across
-            AI, security, and infrastructure. I&apos;m currently a Member of the
+            AI, security, and infrastructure. I’m currently a Member of the
             Technical Staff at OpenAI, working on Promptfoo and other cyber
             products. I help secure AI systems and use AI to find software
             vulnerabilities. I co-founded Promptfoo before it joined OpenAI in

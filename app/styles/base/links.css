@@ -1,48 +1,36 @@
 /* ========================================
    LINK STYLES
-   Animated underlines and hover states
+   Undecorated by default; one style for links in running text
    ======================================== */
 
 @layer base {
-  /* Modern link styling with animated underline */
+  /* Most anchors are navigation, rows, and controls that draw their own state,
+     so a bare link only changes colour on hover. */
   a {
     color: var(--color-fg);
     text-decoration: none;
-    background-image: linear-gradient(var(--color-accent), var(--color-accent));
-    background-size: 0% 1.5px;
-    background-repeat: no-repeat;
-    background-position: left bottom;
-    transition:
-      color var(--duration-fast) var(--ease-out),
-      background-size var(--duration-normal) var(--ease-out);
+    transition: color var(--duration-fast) var(--ease-out);
   }
 
   a:hover {
     color: var(--color-accent);
-    background-size: 100% 1.5px;
   }
 
-  /* Persistent underline for inline prose links, replacing the animated one
-     so they do not double up.
+  /* Links in running text, as article prose sets them. Scoped to `p` because
+     plenty of `<li>` UI is not prose; prose lists style their links from their
+     own container (`.about-content a`, `.prose a`). Screen only, because the
+     résumé is printed. */
+  @media screen {
+    p a {
+      color: var(--color-accent);
+      text-decoration: underline;
+      text-decoration-color: var(--color-accent-underline);
+      text-underline-offset: 2px;
+    }
 
-     Scoped to `p` deliberately: the site uses `<li>` for plenty of non-prose
-     UI — navigation, icon rows, course listings. Prose lists get their
-     underline from their own container rules (`.about-content a`, `.prose a`)
-     instead. */
-  p a {
-    background-image: linear-gradient(
-      transparent calc(100% - 1.5px),
-      var(--color-accent-underline) 1.5px
-    );
-    background-size: 100% 100%;
-    background-position: left bottom;
-    transition:
-      color var(--duration-fast) var(--ease-out),
-      background-image var(--duration-fast) var(--ease-out);
-  }
-
-  p a:hover {
-    color: var(--color-accent-hover);
-    background-image: linear-gradient(transparent calc(100% - 1.5px), var(--color-accent) 1.5px);
+    p a:hover {
+      color: var(--color-accent-hover);
+      text-decoration-color: var(--color-accent);
+    }
   }
 }

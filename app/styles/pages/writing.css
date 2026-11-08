@@ -265,7 +265,7 @@
 .post-title {
   font-family: var(--font-display);
   font-size: var(--text-2xl);
-  font-weight: var(--font-weight-black);
+  font-weight: var(--font-weight-medium);
   letter-spacing: var(--tracking-display);
   line-height: 1.1;
   margin: 0 0 0.75rem;
@@ -296,7 +296,7 @@
 .prose h2 {
   font-family: var(--font-display);
   font-size: var(--text-xl);
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--font-weight-semibold);
   letter-spacing: var(--tracking-tight);
   margin: 3rem 0 0.75rem;
   color: var(--color-fg-bold);
@@ -305,7 +305,7 @@
 .prose h3 {
   font-family: var(--font-display);
   font-size: var(--text-lg);
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--font-weight-semibold);
   letter-spacing: var(--tracking-tight);
   margin: 2rem 0 0.75rem;
   color: var(--color-fg-bold);
