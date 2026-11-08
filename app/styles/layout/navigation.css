@@ -1,23 +1,18 @@
 /* ========================================
    NAVIGATION
-   Logo, desktop nav links, and theme toggle
+   Desktop nav links and theme toggle
    ======================================== */
 
-/* The header is three tracks: brand, nav, controls. The brand takes whatever
-   the other two leave and is allowed to shrink (`min-width: 0`), so a longer
-   name or a larger default font size shortens the wordmark instead of pushing
-   the nav aside or running underneath it. From 736px the controls take the
-   same share, which is what centres the nav — see the end of this file. */
+/* The brand and the controls are equal tracks either side of the nav, which
+   centres it. The brand can shrink below the name; see `.logo-name`. */
 .site-brand {
   display: flex;
   flex: 1 1 0;
   min-width: 0;
+  container-type: inline-size;
 }
 
-/* The home link starts on the left rail: its text box is its own left edge.
-   The minimums are the hit target and nothing else. */
 .site-logo {
-  position: relative;
   display: flex;
   align-items: center;
   min-width: 44px;
@@ -26,8 +21,6 @@
   background-image: none;
 }
 
-/* The monogram, on the homepage only: the hero directly beneath it sets the
-   name at display size, and repeating it 20px above would be noise. */
 .logo-text {
   font-family: var(--font-display);
   font-size: var(--text-xl);
@@ -37,22 +30,37 @@
   line-height: 1;
 }
 
-/* The name, on every other page. The roomier line height is for the clipping
-   that an ellipsis needs: at `line-height: 1` it shaves the tail off the "g". */
-.site-logo--name .logo-text {
+/* The line height leaves room for the descender an ellipsis would clip. */
+.logo-name {
+  display: none;
   overflow: hidden;
+  font-family: var(--font-display);
   font-size: var(--text-base);
   font-weight: var(--font-weight-semibold);
+  color: var(--color-fg-bold);
   letter-spacing: var(--tracking-tight);
   line-height: var(--leading-snug);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-/* Sentence-case display type keeps navigation distinct from data labels.
-   The gap closes up as the header narrows, so at tablet widths the items stay
-   closer to each other than the first is to the wordmark, which would otherwise
-   read as one of them. */
+/* The name replaces the monogram where its track has room for it, except
+   under the homepage hero, which sets the name at display size. CSS decides
+   rather than the pathname, which GitHub Pages also reports as `/index.html`
+   for that page. */
+@container (min-width: 9rem) {
+  :root:not(:has(.hero)) .logo-name {
+    display: block;
+  }
+
+  :root:not(:has(.hero)) .logo-text {
+    display: none;
+  }
+}
+
+/* Sentence-case display type keeps navigation distinct from data labels. The
+   gap tightens at tablet widths so the items stay closer to each other than
+   to the name. */
 .nav-links {
   display: none;
   gap: clamp(1.25rem, 2.75vw, 1.75rem);
@@ -60,8 +68,6 @@
 }
 
 @media screen and (min-width: 736px) {
-  /* The margins are the least room the nav keeps on either side, for when the
-     wordmark is shortened to fit. They are equal, so they leave it centred. */
   .nav-links {
     display: flex;
     margin: 0 1.5rem;
@@ -85,11 +91,10 @@
   transition: color var(--duration-fast) var(--ease-out);
 }
 
-/* The bar under an active item lies over the header's own hairline, so it
-   reads as part of the drawn grid. The target is centred in the header's
-   content box, which is the header less its hairline, so the offset is the
-   distance from the target's bottom edge down to the header's. The percentage
-   is half the target's real height, which grows with the font size. */
+/* The bar under an active item lies on the header's hairline, so navigation
+   reads as part of the drawn grid. The link is centred in the header, so half
+   its height (the percentage) less half the header's reaches that edge at any
+   font size. */
 .nav-link::after {
   content: '';
   position: absolute;
@@ -113,6 +118,12 @@
   transform: scaleX(1);
 }
 
+.nav-link:focus-visible {
+  color: var(--color-fg-bold);
+  outline: var(--rule-strong) solid var(--color-focus-ring);
+  outline-offset: 4px;
+}
+
 .nav-link.active {
   color: var(--color-accent);
 }
@@ -121,31 +132,7 @@
   transform: scaleX(1);
 }
 
-/* The header's text links take their focus ring around the label, not around
-   the 44px target, which nearly fills the header. This box replaces the outline
-   it removes: with its 3px offset the ring is 2rem tall, centred on
-   the target, with half a rem of air at each end of the label. The offset and
-   radius are the global ring's, so its corners match the monogram's and the
-   theme toggle's, which nearly fill their targets and keep the ring there. */
-.site-logo--name:focus-visible,
-.nav-link:focus-visible {
-  outline: none;
-}
-
-.site-logo--name:focus-visible::before,
-.nav-link:focus-visible::before {
-  content: '';
-  position: absolute;
-  inset: calc(50% - 1rem + 3px) calc(3px - 0.5rem);
-  border-radius: var(--radius-xs);
-  outline: var(--rule-strong) solid var(--color-focus-ring);
-  outline-offset: 3px;
-}
-
-/* The glyphs sit on the right rail, not the buttons around them: each is 20px
-   wide in a 44px target, so the cluster is drawn 12px outward and the targets
-   keep their size. An offset rather than a negative margin, which would
-   shorten this track and pull the nav off centre by half as much. */
+/* Drawn 12px outward so the glyphs, not their 44px targets, end on the rail. */
 .nav-actions {
   position: relative;
   left: 12px;
@@ -154,7 +141,7 @@
   gap: 0.75rem;
 }
 
-/* Theme Toggle — one control with three states.
+/* Theme Toggle — one control cycling light / dark / system.
    The 44x44 box is the hit target and is reserved by the button itself, not by
    a placeholder waiting on hydration. */
 .theme-toggle {
@@ -192,8 +179,6 @@
   display: none;
 }
 
-/* Hover takes the accent, as focus does and as the menu trigger beside it
-   does. */
 .theme-toggle:hover,
 .theme-toggle:focus-visible {
   color: var(--color-accent);
@@ -220,17 +205,14 @@
   display: flex;
 }
 
+/* Hide hamburger on desktop */
 @media screen and (min-width: 736px) {
-  /* The same share as the brand track opposite, so the nav between them sits
-     on the header's centre whatever either side holds: a two-letter monogram
-     on the homepage, the name everywhere else, no theme control at all
-     without JavaScript. */
+  /* The brand's twin, even when no JavaScript means no theme control. */
   .nav-actions {
     flex: 1 1 0;
     justify-content: flex-end;
   }
 
-  /* Hide hamburger on desktop */
   .hamburger-button {
     display: none;
   }

@@ -11,32 +11,19 @@ import { AUTHOR_NAME } from '@/lib/utils';
 import Hamburger from './Hamburger';
 import ThemeToggle from './ThemeToggle';
 
-/**
- * Every address the homepage document is served at. GitHub Pages answers
- * `/index` and `/index.html` with the same file as `/`, and `usePathname`
- * reports the address bar, not the route that was prerendered. Asking only for
- * `/` would put the name where that file's HTML has the monogram, which React
- * treats as a hydration error.
- */
-const HOME_PATHS = new Set(['/', '/index', '/index.html']);
-
 export default function Navigation() {
   const pathname = usePathname();
-  // The hero sets the name at display size directly under the header, so the
-  // homepage keeps the monogram. Every other page shows the name itself.
-  const home = HOME_PATHS.has(pathname);
 
   return (
     <header className="site-header">
       <div className="site-brand">
         <Link
           href="/"
-          className={home ? 'site-logo' : 'site-logo site-logo--name'}
+          className="site-logo"
           aria-label={`${AUTHOR_NAME} — home`}
         >
-          <span className="logo-text">
-            {home ? 'md' : smartQuotes(AUTHOR_NAME)}
-          </span>
+          <span className="logo-text">md</span>
+          <span className="logo-name">{smartQuotes(AUTHOR_NAME)}</span>
         </Link>
       </div>
 
