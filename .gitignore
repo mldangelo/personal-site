@@ -1,18 +1,10 @@
 # Dependencies
 node_modules/
-yarn.lock
 
 # Logs
 logs/
 *.log
 npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Runtime data
-pids/
-*.pid
-*.seed
 
 # Environment
 .env
@@ -20,14 +12,10 @@ pids/
 
 # Coverage
 coverage/
-lib-cov/
 
 # Build outputs
-build/
-dist/
 tmp/
 out/
-public/dist/
 
 # Next.js
 .next/
@@ -35,9 +23,6 @@ public/dist/
 .turbo/
 next-env.d.ts
 tsconfig.tsbuildinfo
-
-# Compiled binary addons
-build/Release/
 
 # IDE
 .idea/
@@ -49,7 +34,5 @@ build/Release/
 .DS_Store
 Thumbs.db
 
-# Misc
-.grunt/
-.lock-wscript
-nohup.out
+# Local browser-automation output
+.playwright-mcp/
