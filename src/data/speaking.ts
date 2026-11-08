@@ -1,38 +1,45 @@
 /**
- * Public appearances: panels, talks, and demos with an organiser's listing.
+ * Selected appearances: panels, talks, and demos with a public record.
  *
  * The record is credible only if a reader can check it, so every entry links
- * the organiser's own page for the session, and that page should name
- * Michael. Where an organiser's published lineup is stale, the entry says so
- * in a comment rather than linking something unofficial. Closed-door
- * sessions, run on behalf of OpenAI, are mentioned on the page but never
- * listed here.
+ * the organiser's own account of the session, and that page should name
+ * Michael. Exceptions and limitations are explained beside the entry.
  */
 
 /**
  * The format as the organiser billed it. An Arsenal Lab is a hands-on tool
  * demonstration, not a talk; extend this union rather than stretch a label.
  */
-export type AppearanceFormat = 'Panel' | 'Arsenal Lab';
+export type AppearanceFormat = 'Panel' | 'Arsenal Lab' | 'Tech session';
 
 export interface Appearance {
   /**
-   * The session's own title, or the event's name when the session was a demo
-   * of a tool rather than a titled talk.
+   * The session's own title, or the event's name when no title is available.
    */
   title: string;
   format: AppearanceFormat;
-  /** First day of the appearance, `YYYY-MM-DD`. */
+  /** First day of the appearance or its event, `YYYY-MM-DD`. */
   date: string;
   /** City, as a reader would place the event. */
   place: string;
   /** What the title and format leave out: the host, the event, who else. */
   desc: string;
-  /** The organiser's listing for the session, naming Michael. */
+  /** The organiser's public record, naming Michael. */
   link: string;
 }
 
 const appearances: Appearance[] = [
+  // EY's post names Michael's tech session but not its title or day. The
+  // date is the first day of the event; the location is the event's hub.
+  // The post is on Lawrence's public profile rather than a session listing.
+  {
+    title: 'EY × OpenAI Codex Day 2026',
+    format: 'Tech session',
+    date: '2026-10-26',
+    place: 'Bengaluru + online',
+    desc: 'A technical session at EY’s two-day event on applied AI.',
+    link: 'https://in.linkedin.com/in/lince',
+  },
   {
     title: 'The AI Security Panel: Unfiltered',
     format: 'Panel',

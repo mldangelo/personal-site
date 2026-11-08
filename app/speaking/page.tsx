@@ -46,7 +46,7 @@ export default function SpeakingPage() {
         <section className="projects-group" aria-labelledby="speaking-public">
           <div className="section-header">
             <h2 id="speaking-public" className="section-heading">
-              Public sessions
+              Selected sessions
             </h2>
           </div>
           <ol className="projects-register">
@@ -66,8 +66,8 @@ export default function SpeakingPage() {
           </div>
           <p className="page-prose">
             I also run closed-door sessions with security and engineering teams
-            on behalf of OpenAI, which aren’t listed here. If you’re organizing
-            an event or working on the same problems,{' '}
+            on behalf of OpenAI, many of which aren’t listed here. If you’re
+            organizing an event or working on the same problems,{' '}
             <Link href="/contact/">get in touch</Link>.
           </p>
         </section>
