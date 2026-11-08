@@ -5,6 +5,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
 
+import { themeInitScript } from '@/lib/theme';
 import { readColorToken } from '@/lib/tokens';
 import * as rootLayout from '../layout';
 
@@ -78,7 +79,12 @@ describe('theme-color', () => {
   // strategy="beforeInteractive">` serialises the body into `self.__next_s`, which
   // Next's client bootstrap runs once its chunks have loaded.
   it('ships the theme bootstrap as a parser-blocking inline script', () => {
-    expect(BOOTSTRAP).toMatch(/^\(function\(\)\{/);
+    expect(BOOTSTRAP).toBe(
+      themeInitScript({
+        light: readColorToken('--color-bg-alt', 'light'),
+        dark: readColorToken('--color-bg-alt', 'dark'),
+      }),
+    );
     expect(HEAD).not.toContain('__next_s');
   });
 
