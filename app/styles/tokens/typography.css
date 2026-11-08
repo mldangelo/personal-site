@@ -49,7 +49,7 @@
      Display is set tight; mono labels are set wide so they
      read as instrument annotation rather than as copy.
      =================== */
-  --tracking-display: -0.035em;
+  --tracking-display: -0.025em;
   --tracking-tight: -0.015em;
   --tracking-normal: 0;
   --tracking-wide: 0.02em;
