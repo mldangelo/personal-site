@@ -283,22 +283,12 @@
   }
 }
 
-/* One link style, the article's, in paragraphs and lists alike. Removing the
-   background image keeps the global `p a` gradient from drawing a second line
-   under the first. */
+/* One link style, the article's, in paragraphs and lists alike. */
 .about-content a {
   color: var(--color-accent);
   text-decoration: underline;
   text-decoration-color: var(--color-accent-underline);
   text-underline-offset: 2px;
-  background-image: none;
-}
-
-/* dark-mode.css restates that gradient at (0,1,2), and its hover at (0,2,2),
-   after this file, and both outrank the rule above. */
-[data-theme='dark'] .about-content p a,
-[data-theme='dark'] .about-content p a:hover {
-  background-image: none;
 }
 
 .about-content a:hover {

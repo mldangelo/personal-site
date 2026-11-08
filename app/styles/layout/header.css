@@ -16,7 +16,6 @@
   font-size: var(--text-ui);
   font-weight: var(--font-weight-medium);
   text-decoration: none;
-  background-image: none;
   border-radius: var(--radius-sm);
   transform: translateY(-200%);
   transition: transform var(--duration-fast) var(--ease-out);
@@ -268,13 +267,9 @@
   border-top: var(--rule) solid var(--color-border);
 }
 
-/* Base `li a` paints an accent underline across the full width.
-   The desktop nav opts out the same way; without this the menu is
-   the only place on the site showing that rule. */
 .hamburger-ul li a {
   display: block;
   text-decoration: none;
-  background-image: none;
   padding: 0.9rem 0;
   border-radius: 0;
   transition: background-color var(--duration-fast) var(--ease-out);

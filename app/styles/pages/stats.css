@@ -58,14 +58,10 @@
 
    That leaves the rule as the only sign at rest, so it is drawn in
    `--color-control-border`, which is held to 3:1 on both page surfaces. In the
-   structural hairline it measured 1.61:1, and was a link nobody could find.
-
-   `background-image` clears the animated rule base/links.css draws under
-   every bare link. */
+   structural hairline it measured 1.61:1, and was a link nobody could find. */
 .stat-table-link {
   position: relative;
   color: inherit;
-  background-image: none;
   text-decoration: underline;
   text-decoration-color: var(--color-control-border);
   text-decoration-thickness: var(--rule);
