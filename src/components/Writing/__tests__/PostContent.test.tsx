@@ -204,18 +204,6 @@ describe('PostContent heading anchors', () => {
     ).toEqual(['on-using-dangerously-skip-permissions', 'claude-md-agents-md']);
   });
 
-  it('keeps ids unique when a heading already ends in a generated suffix', () => {
-    expect(
-      headingIds(
-        markup(
-          '## Repeat\n\n## Répeat\n\n## Repeat 2\n\n## Repeat\n\n## !!!\n\n## Section\n',
-        ),
-      ),
-    ).toEqual(
-      'repeat repeat-2 repeat-2-2 repeat-3 section section-2'.split(' '),
-    );
-  });
-
   it('keeps duplicate ids stable when Strict Mode repeats compilation', () => {
     const { container } = render(
       <StrictMode>

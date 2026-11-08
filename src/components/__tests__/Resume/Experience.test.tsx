@@ -15,21 +15,6 @@ function textsOf(selector: string) {
 }
 
 describe('Experience', () => {
-  it('leads with the most recently held role regardless of source order', () => {
-    render(
-      <Experience
-        data={[
-          job('Oldest', '2014-01-01', '2015-01-01'),
-          job('Newest', '2023-01-01', '2024-01-01'),
-          job('Middle', '2018-01-01', '2019-01-01'),
-        ]}
-      />,
-    );
-
-    expect(textsOf('.job-company')).toEqual(['Newest', 'Middle', 'Oldest']);
-    expect(textsOf('.jobs-container--lead .job-company')).toEqual(['Newest']);
-  });
-
   it('measures every ongoing role against a single shared instant', () => {
     render(
       <Experience

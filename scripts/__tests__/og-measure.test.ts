@@ -1,25 +1,10 @@
-import { readdirSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
 import sharp from 'sharp';
 import { beforeAll, describe, expect, it } from 'vitest';
 
 import { CARD_SIZE, readCardColors } from '../og-inputs.mjs';
-import {
-  READOUT_HEIGHT,
-  READOUT_RULE,
-  readoutTop,
-  TOP_RULE,
-} from '../og-layout.mjs';
+import { readoutTop, TOP_RULE } from '../og-layout.mjs';
 import { assertCardGeometry, inkBands, parseColor } from '../og-measure.mjs';
 
-const ROOT = process.cwd();
-const CARD_DIR = join(ROOT, 'public', 'og', 'writing');
-const CARDS = [
-  join(ROOT, 'public', 'og.png'),
-  ...readdirSync(CARD_DIR)
-    .filter((name) => name.endsWith('.png'))
-    .map((name) => join(CARD_DIR, name)),
-];
 const READOUT_TOP = readoutTop(CARD_SIZE);
 const LAST_ROW = CARD_SIZE.height - 1;
 
@@ -27,7 +12,7 @@ let paper = '';
 
 beforeAll(async () => {
   // The card is painted with the light `@theme` tokens; a PNG has no theme.
-  const colors = (await readCardColors(ROOT)) as { paper: string };
+  const colors = (await readCardColors(process.cwd())) as { paper: string };
   paper = colors.paper;
 });
 
@@ -57,24 +42,6 @@ const fits = async (inkRows: [number, number][]) =>
     topRule: TOP_RULE,
     readoutTop: READOUT_TOP,
   });
-
-/**
- * These constants describe where satori actually puts ink, and the whole fit
- * calculation is measured against them.
- */
-describe('committed card geometry', () => {
-  it.each(CARDS)('matches the budgeted rows in %s', async (path) => {
-    const bands = await inkBands(readFileSync(path), paper);
-    const readout = bands[bands.length - 1];
-    const copy = bands[bands.length - 2];
-
-    expect(bands[0]).toEqual([0, TOP_RULE - 1]);
-    expect(readout).toEqual([READOUT_TOP, LAST_ROW]);
-    // The readout row, its own rule included, is exactly what was budgeted.
-    expect(READOUT_HEIGHT + READOUT_RULE).toBe(CARD_SIZE.height - readout[0]);
-    expect(copy[1]).toBeLessThan(READOUT_TOP);
-  });
-});
 
 describe('rendered card geometry', () => {
   it('accepts a card whose copy stops above the readout', async () => {

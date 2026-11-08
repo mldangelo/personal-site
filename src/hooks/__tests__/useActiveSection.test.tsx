@@ -416,5 +416,14 @@ describe('useActiveSection', () => {
 
       expect(row.scrollLeft).toBe(0);
     });
+
+    it('tells the row how far it has scrolled, for its leading fade', () => {
+      const row = renderRow({});
+
+      row.scrollLeft = 41;
+      fireEvent.scroll(row);
+
+      expect(row.style.getPropertyValue('--scrolled')).toBe('41px');
+    });
   });
 });

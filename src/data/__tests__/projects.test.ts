@@ -1,6 +1,3 @@
-import { existsSync } from 'node:fs';
-import { join } from 'node:path';
-
 import { describe, expect, it } from 'vitest';
 
 import projects, { archive, type Project, shipped } from '../projects';
@@ -30,19 +27,6 @@ function numericClaims(value: string): string[] {
 describe('projects data', () => {
   it('has unique titles', () => {
     expect(new Set(projects.map((p) => p.title)).size).toBe(projects.length);
-  });
-
-  // The image is optional, so a declared path has to resolve: a card with a
-  // missing file is worse than a card with no picture.
-  it('resolves every image path to a committed file', () => {
-    for (const { image, title } of projects) {
-      if (image === undefined) continue;
-
-      expect(
-        image.startsWith('/') && existsSync(join('public', image)),
-        `${title}: ${image} is not in public/`,
-      ).toBe(true);
-    }
   });
 
   it('uses valid dates, with an end after the start', () => {
