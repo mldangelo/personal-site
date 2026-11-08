@@ -33,6 +33,6 @@
 
   /* Two page measures keep routes aligned without forcing component-sized
      details (portraits, status messages, controls) into page-level tokens. */
-  --measure-page: 56rem; /* Default pages, lists, resume, and footer */
+  --measure-page: 64rem; /* Every page, the header, and the footer */
   --measure-read: 40rem; /* Continuous prose and compact data views */
 }
