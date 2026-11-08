@@ -60,9 +60,8 @@
 }
 
 /* Its own underline in its own colour: page-link blue disappears into the
-   poster. The token is named, not `currentcolor`, because the optimiser folds
-   that into the shorthand and Safari before 26.2 reads the shorthand as the
-   line alone. */
+   poster. The colour is named because Safari before 26.2 reads the shorthand
+   as the line alone. */
 .hero .hero-highlight,
 .hero .hero-highlight:hover {
   color: inherit;

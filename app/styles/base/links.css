@@ -4,8 +4,8 @@
    ======================================== */
 
 @layer base {
-  /* A bare link carries no decoration, only a colour change on hover. Most
-     anchors here are navigation, rows, and controls that draw their own state. */
+  /* Most anchors are navigation, rows, and controls that draw their own state,
+     so a bare link only changes colour on hover. */
   a {
     color: var(--color-fg);
     text-decoration: none;
@@ -16,15 +16,10 @@
     color: var(--color-accent);
   }
 
-  /* Links in running text: accent ink over a real underline that firms up on
-     hover, matching article prose.
-
-     Scoped to `p` deliberately. The site uses `<li>` for plenty of non-prose
-     UI (navigation, icon rows, course listings), so a prose list styles its
-     links from its own container (`.about-content a`, `.prose a`) instead.
-
-     Screen only: links carry no underline on paper, and the resume is the page
-     people print. */
+  /* Links in running text, as article prose sets them. Scoped to `p` because
+     plenty of `<li>` UI is not prose; prose lists style their links from their
+     own container (`.about-content a`, `.prose a`). Screen only, because the
+     résumé is printed. */
   @media screen {
     p a {
       color: var(--color-accent);
