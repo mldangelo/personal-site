@@ -7,6 +7,7 @@ import { createPortal } from 'react-dom';
 
 import routes from '../../data/routes';
 import { isActiveRoute } from '../../lib/routes';
+import { smartQuotes } from '../../lib/typography';
 import SlideMenu from './SlideMenu';
 
 const MENU_ID = 'mobile-nav-menu';
@@ -51,7 +52,7 @@ export default function Hamburger() {
                   aria-current={active ? 'page' : undefined}
                 >
                   <span className={l.index ? 'index-li' : undefined}>
-                    {l.label}
+                    {smartQuotes(l.label)}
                   </span>
                 </Link>
               </li>

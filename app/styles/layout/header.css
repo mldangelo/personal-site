@@ -12,10 +12,9 @@
   padding: 0.75rem 1.25rem;
   background: var(--color-accent-fill);
   color: var(--color-on-accent);
-  font-family: var(--font-mono);
+  font-family: var(--font-display);
   font-size: var(--text-ui);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
+  font-weight: var(--font-weight-medium);
   text-decoration: none;
   background-image: none;
   border-radius: var(--radius-sm);
@@ -61,7 +60,7 @@
   .site-header {
     height: var(--header-height-mobile);
     line-height: var(--header-height-mobile);
-    padding: 0 1rem;
+    padding: 0 1.5rem;
   }
 }
 
@@ -314,8 +313,8 @@
   color: var(--color-fg-bold);
 }
 
-/* The index entry is the person's name, not a section label,
-   so it is set in display type and sits above the rule. */
+/* The index entry is the person's name, not a section label, so it is set
+   like the header's wordmark and sits above the rule. */
 .hamburger-ul li:has(.index-li) {
   border-bottom-color: var(--color-fg-bold);
 }
@@ -323,8 +322,8 @@
 .hamburger-ul li a .index-li {
   font-family: var(--font-display);
   font-size: var(--text-md);
-  font-weight: var(--font-weight-black);
-  letter-spacing: var(--tracking-display);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--tracking-tight);
   text-transform: none;
   color: var(--color-fg-bold);
 }
