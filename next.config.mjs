@@ -4,19 +4,17 @@ import bundleAnalyzer from '@next/bundle-analyzer';
 const nextConfig = {
   output: 'export',
 
-  // Allow dev server access from local network (mobile testing, etc.)
-  allowedDevOrigins: ['http://192.168.*.*:3000'],
+  // AGENTS.md is written by hand; keep `next dev` from appending to it.
+  agentRules: false,
+
+  // Hostname patterns, not origins: lets a phone on the LAN load the dev server.
+  allowedDevOrigins: ['192.168.*.*'],
 
   images: {
     unoptimized: true,
   },
 
   trailingSlash: true,
-
-  // Turbopack configuration (used in development)
-  turbopack: {
-    resolveExtensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
-  },
 
   // Experimental features
   experimental: {
