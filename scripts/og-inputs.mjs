@@ -8,7 +8,6 @@
  * here, once.
  */
 import { createHash } from 'node:crypto';
-import { readFileSync } from 'node:fs';
 import { readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
@@ -18,7 +17,9 @@ import { readColorToken } from '../src/lib/color-token.mjs';
 import { parseFrontmatter } from '../src/lib/frontmatter.mjs';
 import { readMarkdownReferences } from '../src/lib/markdown-assets.mjs';
 import { validatePostFrontmatterData } from '../src/lib/post-frontmatter.mjs';
+import { DISPLAY_FONT } from './lib/fonts.mjs';
 import { readImageRenderer } from './lib/image-renderer.mjs';
+import { readSiteConfig } from './lib/site.mjs';
 
 /** Every card is a `summary_large_image`, so every card is this size. */
 export const CARD_SIZE = { width: 1200, height: 630 };
@@ -28,23 +29,9 @@ export const HOME_CARD_PATH = '/og.png';
 export const POST_CARD_DIRECTORY = '/og/writing';
 export const LEDGER_PATH = '/og.meta.json';
 
-/**
- * Exact font files used by satori.
- *
- * Google Fonts' family CSS is mutable: resolving "Inter 500" on
- * two different days can return different bytes under the same generator
- * source. These versioned TTF URLs and their digests make a changed response a
- * hard failure instead of silently redrawing every committed card.
- */
+/** The three type roles, as exact checksummed TTFs (see `lib/fonts.mjs`). */
 export const CARD_FONTS = [
-  {
-    name: 'Display',
-    family: 'Inter',
-    weight: 500,
-    style: 'normal',
-    url: 'https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZg.ttf',
-    sha256: '8c883f63b2c4157d997319f2c8bc6995ed4357ef371940d31ca159004a4aae63',
-  },
+  DISPLAY_FONT,
   {
     name: 'Mono',
     family: 'JetBrains Mono',
@@ -72,6 +59,7 @@ export const CARD_FONTS = [
  */
 const GENERATOR_SOURCES = [
   'scripts/generate-og.mjs',
+  'scripts/lib/fonts.mjs',
   'scripts/lib/image-renderer.mjs',
   'scripts/og-inputs.mjs',
   'src/lib/color-token.mjs',
@@ -156,21 +144,14 @@ function assertSafeSlug(slug, file) {
 }
 
 /**
- * The site's own origin, from the one place the rest of the build reads it —
- * `verify-export.mjs` takes the same field for the same reason.
+ * The site's own origin, through the `homepage` reader the export scripts use.
  *
  * Resolved on demand rather than at import, so that reading a constant out of
  * this module never depends on the working directory having a package.json.
  */
 let cachedSiteOrigin;
 function siteOrigin() {
-  if (cachedSiteOrigin === undefined) {
-    const { homepage } = JSON.parse(
-      readFileSync(join(process.cwd(), 'package.json'), 'utf8'),
-    );
-    cachedSiteOrigin = new URL(homepage).origin;
-  }
-
+  cachedSiteOrigin ??= readSiteConfig(process.cwd(), 'og-inputs').origin;
   return cachedSiteOrigin;
 }
 
@@ -380,14 +361,4 @@ export async function readCardInputs(root = process.cwd()) {
 
 export function imageDigest(image) {
   return createHash('sha256').update(image).digest('hex');
-}
-
-export function assertCardFontDigest(font, data) {
-  const actual = imageDigest(data);
-  if (actual !== font.sha256) {
-    throw new Error(
-      `${font.family} ${font.weight} from ${font.url} has SHA-256 ${actual}; ` +
-        `expected ${font.sha256}. Refusing to generate cards from changed font bytes.`,
-    );
-  }
 }

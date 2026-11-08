@@ -15,12 +15,12 @@ import {
   validatePostFrontmatter,
 } from '@/lib/posts';
 import { formatDate } from '@/lib/utils';
+import { assertFontDigest } from '../lib/fonts.mjs';
 import {
   IMAGE_RENDERER_PACKAGES,
   readImageRenderer,
 } from '../lib/image-renderer.mjs';
 import {
-  assertCardFontDigest,
   CARD_FONTS,
   CARD_SIZE,
   countProseWords,
@@ -163,10 +163,10 @@ describe('share card fonts', () => {
     const data = Buffer.from('fixture font bytes');
     const font = { ...CARD_FONTS[0], sha256: imageDigest(data) };
 
-    expect(() => assertCardFontDigest(font, data)).not.toThrow();
+    expect(() => assertFontDigest(font, data)).not.toThrow();
     expect(() =>
-      assertCardFontDigest({ ...font, sha256: '0'.repeat(64) }, data),
-    ).toThrow(/Refusing to generate cards from changed font bytes/);
+      assertFontDigest({ ...font, sha256: '0'.repeat(64) }, data),
+    ).toThrow(/Refusing to generate images from changed font bytes/);
   });
 });
 

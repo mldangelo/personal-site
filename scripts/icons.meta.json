@@ -3,7 +3,6 @@
     "accent": "#36559a",
     "onAccent": "#ffffff",
     "backgroundLight": "#f6f3ed",
-    "backgroundDark": "#222329",
     "monogram": "MD",
     "name": "Michael D'Angelo",
     "font": {
@@ -32,7 +31,7 @@
       }
     ]
   },
-  "generatorDigest": "1e687f5079f16fe082665ee4dd197c3af261941f6118ccc5eda1306190c3ba6c",
+  "generatorDigest": "3d5c722baf3ec799e25be1b67bbe6c8e2415348ccbc6170cb98fb99cc8d6fc5e",
   "files": {
     "app/favicon.ico": "1a36375860b595f54b960ae03580627b62b72e20f44f0fb82066686e10ec41e1",
     "app/icon.png": "43291a11cdaa0d3333e6ec55216c112f7a0e5cb3c34c1b05869e00fc98057b5e",
