@@ -3,11 +3,11 @@ import type { Metadata } from 'next';
 import Courses from '@/components/Resume/Courses';
 import Education from '@/components/Resume/Education';
 import Experience from '@/components/Resume/Experience';
+import PrintButton from '@/components/Resume/PrintButton';
 import References from '@/components/Resume/References';
 import ResumeNav from '@/components/Resume/ResumeNav';
 import Skills from '@/components/Resume/Skills';
 import PageWrapper from '@/components/Template/PageWrapper';
-import PrintButton from '@/components/Template/PrintButton';
 import contact, { type ContactId } from '@/data/contact';
 import profile from '@/data/profile.json';
 import courses from '@/data/resume/courses';
@@ -69,22 +69,17 @@ export default function ResumePage() {
     <PageWrapper>
       <section className="resume-page">
         <header className="resume-header">
-          {/* The printed page's title: the site header and footer carry the
-              name on screen, and neither is printed. Real markup rather than
-              CSS `content`, like the contact line below, so it can be selected
-              and copied. It takes the heading role because the <h1> below is
-              hidden on paper, and without one here the tagged PDF a browser
-              saves starts at H2. Not a second <h1>, so anything that counts
-              tags still finds one page title. */}
-          <div className="resume-print-name" role="heading" aria-level={1}>
-            {smartQuotes(profile.name)}
-          </div>
           <div className="resume-header-row">
-            <h1 className="resume-title">Resume</h1>
+            {/* Paper hides the header and footer that carry the name, so
+                there the title is the name. */}
+            <h1 className="resume-title">
+              <span className="resume-screen-title">Resume</span>{' '}
+              <span className="resume-print-name">
+                {smartQuotes(profile.name)}
+              </span>
+            </h1>
             <div className="resume-actions">
-              <PrintButton className="resume-print-button">
-                Print / PDF
-              </PrintButton>
+              <PrintButton />
               {/* The same affordance as the RSS chip on /writing. The href is
                   document-relative on purpose: /resume/ may live below a
                   repository base path, while a root-relative href would escape

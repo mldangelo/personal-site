@@ -64,7 +64,8 @@
   .reading-progress,
   .resume-nav,
   .writing-rss-link,
-  .resume-json-link,
+  .resume-actions,
+  .resume-screen-title,
   .about-section-nav,
   .about-section-heading-hash {
     display: none !important;
@@ -116,23 +117,8 @@
     white-space: nowrap;
   }
 
-  /* On paper the resume is titled with the name, because the site header and
-     footer that carry it on screen are hidden above. Set as the home page sets
-     the name, in medium display type. */
   .resume-print-name {
-    display: block;
-    margin: 0 0 1.25rem;
-    font-family: var(--font-display);
-    font-size: 22pt;
-    font-weight: var(--font-weight-medium);
-    letter-spacing: var(--tracking-display);
-    line-height: var(--leading-tight);
-  }
-
-  /* The row it replaces: the screen title, and controls that do nothing for a
-     reader holding the page. */
-  .resume-header-row {
-    display: none !important;
+    display: inline;
   }
 
   .resume-title,

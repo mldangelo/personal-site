@@ -4,7 +4,6 @@ import ContactIcons from '@/components/Contact/ContactIcons';
 import work from '@/data/resume/work';
 import routes from '@/data/routes';
 import { currentPosition } from '@/lib/career';
-import { smartQuotes } from '@/lib/typography';
 import { AUTHOR_NAME } from '@/lib/utils';
 
 import ThemePortrait from './ThemePortrait';
@@ -20,7 +19,7 @@ export default function Footer() {
             <ThemePortrait width={80} height={80} />
           </Link>
           <div className="footer-info">
-            <span className="footer-name">{smartQuotes(AUTHOR_NAME)}</span>
+            <span className="footer-name">{AUTHOR_NAME}</span>
             {current ? (
               <p className="footer-role">{`${current.position} at ${current.name}`}</p>
             ) : null}
