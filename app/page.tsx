@@ -27,7 +27,7 @@ export default function HomePage() {
     .slice(0, 3);
 
   return (
-    <PageWrapper mainClassName="page-main--hero">
+    <PageWrapper>
       <SchemaGraph
         nodes={[profilePageNode({ url: HOME_URL, name: AUTHOR_NAME })]}
       />

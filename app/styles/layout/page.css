@@ -34,11 +34,6 @@
   }
 }
 
-/* The homepage's blue field sits flush under the header. */
-.page-main--hero {
-  padding-top: 0;
-}
-
 /* Page header styles */
 .page-title {
   font-size: var(--text-3xl);

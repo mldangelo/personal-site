@@ -1,7 +1,4 @@
-/* One ink-blue field, a square portrait, and a quiet editorial register. The
-   field runs to the viewport's edges while its contents keep the page rails:
-   the shadow paints the bleed, and the clip keeps it to the field's height.
-   Forced colours drop the shadow along with the fill. */
+/* One ink-blue field, a square portrait, and a quiet editorial register. */
 .hero {
   --hero-name-size: clamp(2.5rem, 6.5vw, 4rem);
   --color-focus-ring: var(--color-on-hero);
@@ -9,10 +6,8 @@
   --color-accent-fill: var(--color-on-hero);
   --color-accent-fill-hover: var(--color-on-hero-hover);
   --color-on-accent: var(--color-hero);
-  padding: 3.5rem 0 3.75rem;
+  padding: 2.75rem 2.5rem 3rem;
   background: var(--color-hero);
-  box-shadow: 0 0 0 100vmax var(--color-hero);
-  clip-path: inset(0 -100vmax);
   color: var(--color-on-hero);
 }
 
@@ -135,7 +130,8 @@
 
 .home-writing {
   display: grid;
-  grid-template-columns: 23% minmax(0, 1fr);
+  /* Never narrower than its heading. */
+  grid-template-columns: minmax(23%, max-content) minmax(0, 1fr);
   gap: 9%;
   margin-top: 2.25rem;
   padding-top: 1.5rem;
@@ -228,7 +224,7 @@
 
 @media (max-width: 640px) {
   .hero {
-    padding: 2.25rem 0 2.5rem;
+    padding: 2rem 1.5rem 2.25rem;
   }
 
   .hero-name {
