@@ -46,7 +46,7 @@
   justify-content: space-between;
   left: 0;
   line-height: 1;
-  padding: 0 max(1.5rem, calc((100% - var(--measure-wide)) / 2 + 2rem));
+  padding: 0 max(2rem, calc((100% - var(--measure-page)) / 2 + 2rem));
   position: fixed;
   top: 0;
   width: 100%;

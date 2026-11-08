@@ -1,6 +1,6 @@
 'use client';
 
-import Markdown from 'markdown-to-jsx';
+import Markdown, { RuleType } from 'markdown-to-jsx';
 import Image from 'next/image';
 import type {
   ElementType,
@@ -19,6 +19,7 @@ import {
 } from 'react';
 
 import { planMarkdownHeadingAnchors } from '@/lib/anchors';
+import { smartQuotes } from '@/lib/typography';
 
 interface ImageSize {
   width: number;
@@ -338,6 +339,9 @@ export default function PostContent({
         // One unique slug scheme for the whole site, plus safe aliases for the
         // published ids that differ from it.
         slugify: headingPlan.slugify,
+        // Typographic quotes in text a reader sees; code is a different node.
+        renderRule: (next, node) =>
+          node.type === RuleType.text ? smartQuotes(node.text) : next(),
         overrides: {
           ...headingOverrides(headingPlan.aliases),
           p: {

@@ -95,8 +95,9 @@ const PAIRINGS: [string, string[], number][] = [
     ['--color-accent-fill', '--color-accent-fill-hover'],
     AA_TEXT,
   ],
-  // The hero uses this pair in both directions: pale on blue, blue on pale.
-  ['--color-on-hero', ['--color-hero'], AA_TEXT],
+  // The hero uses this pair in both directions: pale on blue, and blue on the
+  // pale button at rest and on hover.
+  ['--color-hero', ['--color-on-hero', '--color-on-hero-hover'], AA_TEXT],
 ];
 
 describe('token contrast', () => {

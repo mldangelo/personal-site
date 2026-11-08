@@ -116,6 +116,7 @@
   letter-spacing: var(--tracking-tight);
   color: var(--color-fg-bold);
   margin: 0 0 0.4rem 0;
+  max-width: var(--measure-read);
   line-height: 1.25;
   transition: color var(--duration-instant) var(--ease-out);
 }
@@ -131,7 +132,9 @@
   font-size: var(--text-sm);
   color: var(--color-fg-light);
   margin: 0;
+  max-width: var(--measure-read);
   line-height: var(--leading-snug);
+  text-wrap: pretty;
 }
 
 @media (max-width: 640px) {
@@ -516,8 +519,8 @@
   text-wrap: pretty;
 }
 
-/* Above this width `.page-main` has reached its full --measure-page, so there is
-   real room beside the reading column for a wide figure to use. `100%` is the
+/* Above this width there is real room beside the reading column for a wide
+   figure to use. `100%` is the
    article's own content box, so this can never overflow the page. Scoped to
    `screen` so the printed article keeps its figures inside the text column. */
 @media screen and (min-width: 980px) {

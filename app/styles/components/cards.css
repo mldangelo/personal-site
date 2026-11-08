@@ -143,6 +143,7 @@ a.project-entry:focus-visible .project-entry-title {
   letter-spacing: -0.01em;
   line-height: 1.2;
   color: var(--color-fg-bold);
+  max-width: var(--measure-read);
   transition: color var(--duration-instant) var(--ease-out);
 }
 
@@ -298,6 +299,7 @@ a.project-entry:focus-visible .project-entry-external {
 
 .job-body {
   min-width: 0;
+  max-width: var(--measure-read);
 }
 
 /* Dates sit in the gutter, in mono, so the column scans as a timeline rather

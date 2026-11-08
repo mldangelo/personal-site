@@ -15,7 +15,7 @@ export default function Hero() {
             <span className="hero-name">{smartQuotes(profile.name)}</span>
           </h1>
           <p className="hero-tagline">
-            I&apos;m a {profile.role} at{' '}
+            I’m a {profile.role} at{' '}
             <a href="https://openai.com" className="hero-highlight">
               {profile.employer}
             </a>
@@ -34,7 +34,7 @@ export default function Hero() {
 
           <div className="hero-cta">
             <Link href="/about" className="button">
-              About me <span aria-hidden="true">↗</span>
+              About me
             </Link>
             <Link href="/resume" className="hero-resume-link">
               View resume

@@ -1,11 +1,12 @@
 /* One ink-blue field, a square portrait, and a quiet editorial register. */
 .hero {
+  --hero-name-size: clamp(2.5rem, 6.5vw, 4rem);
   --color-focus-ring: var(--color-on-hero);
   --color-focus-ring-fill: var(--color-on-hero);
   --color-accent-fill: var(--color-on-hero);
-  --color-accent-fill-hover: var(--color-on-hero);
+  --color-accent-fill-hover: var(--color-on-hero-hover);
   --color-on-accent: var(--color-hero);
-  padding: 2rem 2.25rem 2.25rem;
+  padding: 2.75rem 2.5rem 3rem;
   background: var(--color-hero);
   color: var(--color-on-hero);
 }
@@ -15,6 +16,7 @@
   font-family: var(--font-display);
   font-size: var(--text-xs);
   letter-spacing: var(--tracking-wide);
+  line-height: 1.25rem;
 }
 
 .hero-title {
@@ -26,7 +28,7 @@
   display: block;
   max-width: 10ch;
   font-family: var(--font-display);
-  font-size: clamp(2.5rem, 6.5vw, 4rem);
+  font-size: var(--hero-name-size);
   font-weight: var(--font-weight-medium);
   letter-spacing: -0.03em;
   line-height: 1.02;
@@ -35,28 +37,30 @@
 
 .hero-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
-  gap: 2.5rem;
-  align-items: center;
+  grid-template-columns: minmax(0, 1fr) min(17.5rem, 35%);
+  gap: 3rem;
+  align-items: start;
 }
 
 .hero-primary {
   min-width: 0;
 }
 
+/* The lede and the summary are one voice at two volumes. */
 .hero-tagline {
   max-width: 35ch;
   margin: 0 0 1.125rem;
-  font-family: var(--font-display);
-  font-size: 1.25rem;
-  line-height: var(--leading-snug);
+  font-family: var(--font-body);
+  font-size: var(--text-xl);
+  line-height: 1.28;
+  text-wrap: balance;
 }
 
 .hero-summary {
   max-width: 40ch;
   margin: 0 0 1.75rem;
-  font-size: 1.1875rem;
-  line-height: 1.45;
+  font-size: var(--text-md);
+  line-height: 1.5;
 }
 
 /* Its own underline in its own colour: page-link blue disappears into the
@@ -99,10 +103,11 @@
   text-decoration-thickness: 2px;
 }
 
+/* The portrait's top edge sits on the name's cap line: past the kicker's line
+   and margin, then the 0.15em from the top of the name's line box to its
+   capitals. */
 .hero-portrait {
-  width: min(100%, 13.75rem);
-  margin: 0;
-  justify-self: center;
+  margin: calc(2.625rem + 0.15 * var(--hero-name-size)) 0 0;
 }
 
 .hero-portrait .theme-portrait,
@@ -125,19 +130,12 @@
 
 .home-writing {
   display: grid;
-  grid-template-columns: 23% minmax(0, 1fr);
+  /* Never narrower than its heading. */
+  grid-template-columns: minmax(23%, max-content) minmax(0, 1fr);
   gap: 9%;
   margin-top: 2.25rem;
   padding-top: 1.5rem;
-  border-top: var(--rule-strong) solid var(--color-fg-bold);
-}
-
-.home-writing h2 {
-  margin: 0;
-  font-family: var(--font-body);
-  font-size: var(--text-xl);
-  font-weight: var(--font-weight-normal);
-  letter-spacing: var(--tracking-display);
+  border-top: var(--rule) solid var(--color-fg-bold);
 }
 
 .home-writing-all {
@@ -149,6 +147,10 @@
   font-family: var(--font-display);
   font-size: var(--text-ui);
   color: var(--color-fg-light);
+}
+
+.home-writing-all:hover {
+  color: var(--color-accent);
 }
 
 .home-writing-item {
@@ -172,7 +174,7 @@
 .home-writing-meta {
   grid-column: 1;
   font-family: var(--font-mono);
-  font-size: var(--text-2xs);
+  font-size: var(--text-xs);
   color: var(--color-fg-light);
 }
 
@@ -185,7 +187,7 @@
   margin: 0;
   font-family: var(--font-body);
   font-size: 1.5rem;
-  font-weight: var(--font-weight-normal);
+  font-weight: var(--font-weight-medium);
   letter-spacing: var(--tracking-tight);
   line-height: 1.2;
   text-wrap: pretty;
@@ -194,9 +196,16 @@
 .home-writing-arrow {
   grid-column: 2;
   grid-row: 2;
+  justify-self: end;
   color: var(--color-fg-light);
-  font-family: var(--font-display);
   font-size: var(--text-base);
+}
+
+/* → and ↗ are in none of the self-hosted subsets, so one system face draws
+   every arrow, as on the résumé. */
+.home-writing-all span,
+.home-writing-arrow {
+  font-family: system-ui, sans-serif;
 }
 
 .home-writing-item:hover h3,
@@ -206,9 +215,14 @@
   text-underline-offset: 0.2rem;
 }
 
+.home-writing-item:hover .home-writing-arrow,
+.home-writing-item:focus-visible .home-writing-arrow {
+  color: var(--color-accent);
+}
+
 @media (max-width: 640px) {
   .hero {
-    padding: 1.5rem 1.25rem;
+    padding: 2rem 1.5rem 2.25rem;
   }
 
   .hero-name {
@@ -221,11 +235,12 @@
   }
 
   .hero-tagline {
-    font-size: 1.1875rem;
+    font-size: var(--text-lg);
   }
 
   .hero-portrait {
     width: min(100%, 11rem);
+    margin-top: 0;
   }
 
   .home-writing {
