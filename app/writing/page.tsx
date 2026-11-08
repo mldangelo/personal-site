@@ -31,34 +31,40 @@ export const metadata: Metadata = {
   },
 };
 
-function WritingItem({ featured, item }: { featured: boolean; item: Item }) {
+/**
+ * One row of the writing register: the same row as /projects and /speaking,
+ * with the date and source in the gutter and the title in the reading face.
+ */
+function WritingItem({ item }: { item: Item }) {
   const content = (
     <>
-      <div className="writing-meta">
+      <div className="project-entry-meta">
         {item.date && (
-          <time className="writing-date" dateTime={item.date}>
+          <time className="project-dates" dateTime={item.date}>
             {formatDate(item.date)}
           </time>
         )}
         {item.isExternal && (
-          <span className="writing-source">
-            {item.source}
-            <span className="writing-external" aria-hidden="true">
-              ↗
-            </span>
-          </span>
+          <span className="project-entry-role">{item.source}</span>
         )}
       </div>
-      <h3 className="writing-title">{smartQuotes(item.title)}</h3>
-      <p className="writing-description">{smartQuotes(item.description)}</p>
-      {item.isExternal && (
-        // The arrow is decorative, so the warning has to be spoken.
-        <span className="sr-only"> (opens in a new tab)</span>
-      )}
+      <div className="project-entry-body">
+        <h3 className="project-entry-title">
+          {smartQuotes(item.title)}
+          {item.isExternal && (
+            <span className="project-entry-external" aria-hidden="true">
+              ↗
+            </span>
+          )}
+        </h3>
+        <p className="project-entry-desc">{smartQuotes(item.description)}</p>
+        {item.isExternal && (
+          // The arrow is decorative, so the warning has to be spoken.
+          <span className="sr-only"> (opens in a new tab)</span>
+        )}
+      </div>
     </>
   );
-
-  const className = `writing-item${featured ? ' writing-item--featured' : ''}`;
 
   if (item.isExternal) {
     return (
@@ -66,7 +72,7 @@ function WritingItem({ featured, item }: { featured: boolean; item: Item }) {
         href={item.url}
         target="_blank"
         rel="noopener noreferrer"
-        className={className}
+        className="project-entry"
       >
         {content}
       </a>
@@ -74,7 +80,7 @@ function WritingItem({ featured, item }: { featured: boolean; item: Item }) {
   }
 
   return (
-    <Link href={item.url} className={className}>
+    <Link href={item.url} className="project-entry">
       {content}
     </Link>
   );
@@ -113,36 +119,32 @@ export default function WritingPage() {
         nodes={[page, blogNode(latestDatedItem?.date), breadcrumb]}
       />
       <article className="writing-page">
-        <header className="writing-header">
-          <div className="writing-header-row">
-            <h1 className="page-title">Writing</h1>
-            <a
-              href="/feed.xml"
-              className="writing-rss-link"
-              title="RSS Feed"
-              aria-label="RSS Feed"
-            >
-              RSS
-            </a>
-          </div>
+        <header className="page-header">
+          <h1 className="page-title">Writing</h1>
+          <a
+            href="/feed.xml"
+            className="button button-secondary button-compact writing-rss-link"
+          >
+            RSS
+          </a>
         </header>
 
         {sections
           .filter(({ items }) => items.length > 0)
           .map(({ id, label, items }) => (
-            <section className="writing-group" aria-labelledby={id} key={id}>
-              <h2 id={id} className="writing-section-label">
-                {label}
-              </h2>
-              <div className="writing-list">
-                {items.map((item) => (
-                  <WritingItem
-                    key={item.url}
-                    item={item}
-                    featured={item.url === latestDatedItem?.url}
-                  />
-                ))}
+            <section className="projects-group" aria-labelledby={id} key={id}>
+              <div className="section-header">
+                <h2 id={id} className="section-heading">
+                  {label}
+                </h2>
               </div>
+              <ol className="projects-register">
+                {items.map((item) => (
+                  <li key={item.url}>
+                    <WritingItem item={item} />
+                  </li>
+                ))}
+              </ol>
             </section>
           ))}
       </article>

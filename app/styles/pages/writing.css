@@ -3,197 +3,14 @@
    Blog list and individual post pages
    ======================================== */
 
-.writing-page {
-  max-width: var(--measure-page);
-  margin: 0;
-  padding: 0;
-}
-
-.writing-header {
-  margin-bottom: 2rem;
-}
-
-.writing-header-row {
+/* The list itself is the register shared with /projects and /speaking
+   (cards.css); only the header row is the page's own. */
+.page-header {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 1rem;
-}
-
-.writing-rss-link {
-  font-family: var(--font-mono);
-  font-size: var(--text-ui);
-  font-weight: var(--font-weight-medium);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
-  color: var(--color-fg-light);
-  text-decoration: none;
-  padding: 0.35rem 0.6rem;
-  border: var(--rule) solid var(--color-control-border);
-  border-radius: var(--radius-sm);
-  transition:
-    color var(--duration-instant) var(--ease-out),
-    border-color var(--duration-instant) var(--ease-out);
-}
-
-.writing-rss-link:hover {
-  color: var(--color-accent);
-  border-color: var(--color-accent);
-}
-
-.writing-list {
-  display: flex;
-  flex-direction: column;
-}
-
-.writing-group + .writing-group {
-  margin-top: 2.75rem;
-}
-
-/* Posts are dated entries, so the date sits in a gutter beside the
-   title rather than as a caption above it. */
-.writing-item {
-  display: grid;
-  grid-template-columns: 9rem minmax(0, 1fr);
-  column-gap: 2rem;
-  position: relative;
-  padding: 1.5rem 0;
-  border-bottom: var(--rule) solid var(--color-border);
-  text-decoration: none;
-  transition: background-color var(--duration-instant) var(--ease-out);
-}
-
-.writing-item--featured {
-  padding-top: 2rem;
-  padding-bottom: 2rem;
-}
-
-.writing-item:first-child {
-  border-top: var(--rule) solid var(--color-fg-bold);
-}
-
-.writing-item:hover,
-.writing-item:focus-visible {
-  background-color: var(--color-surface-subtle);
-}
-
-.writing-item:hover .writing-title,
-.writing-item:focus-visible .writing-title {
-  color: var(--color-accent);
-}
-
-/* Provenance lives in the gutter: date first, then the source. External
-   destinations keep their arrow attached to that source rather than floating
-   anonymously at the far edge of the row. */
-.writing-meta {
-  grid-column: 1;
-  grid-row: 1 / span 2;
-  display: block;
-  padding-top: 0.4em;
-}
-
-.writing-date,
-.writing-source {
-  display: block;
-  font-family: var(--font-mono);
-  font-size: var(--text-2xs);
-  font-variant-numeric: tabular-nums;
-  letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
-  color: var(--color-fg-light);
-}
-
-.writing-date {
-  margin-bottom: 0.4rem;
-}
-
-.writing-title {
-  grid-column: 2;
-  grid-row: 1;
-  font-family: var(--font-display);
-  font-size: var(--text-md);
-  font-weight: var(--font-weight-bold);
-  letter-spacing: var(--tracking-tight);
-  color: var(--color-fg-bold);
-  margin: 0 0 0.4rem 0;
-  max-width: var(--measure-read);
-  line-height: 1.25;
-  transition: color var(--duration-instant) var(--ease-out);
-}
-
-.writing-item--featured .writing-title {
-  font-size: var(--text-xl);
-  line-height: var(--leading-tight);
-}
-
-.writing-description {
-  grid-column: 2;
-  grid-row: 2;
-  font-size: var(--text-sm);
-  color: var(--color-fg-light);
-  margin: 0;
-  max-width: var(--measure-read);
-  line-height: var(--leading-snug);
-  text-wrap: pretty;
-}
-
-@media (max-width: 640px) {
-  .writing-item {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .writing-meta {
-    grid-column: 1;
-    grid-row: 1;
-    padding-top: 0;
-    margin-bottom: 0.35rem;
-    display: flex;
-    align-items: baseline;
-    gap: 0.75rem;
-  }
-
-  .writing-title {
-    grid-column: 1;
-    grid-row: 2;
-  }
-
-  .writing-description {
-    grid-column: 1;
-    grid-row: 3;
-  }
-
-  .writing-item--featured .writing-title {
-    font-size: var(--text-lg);
-  }
-}
-
-.writing-external {
-  display: inline-block;
-  margin-left: 0.3rem;
-  font-family: var(--font-mono);
-  font-size: var(--text-ui);
-  color: var(--color-fg-light);
-  opacity: 1;
-  transition:
-    color var(--duration-instant) var(--ease-out),
-    transform var(--duration-instant) var(--ease-out);
-}
-
-.writing-item:hover .writing-external,
-.writing-item:focus-visible .writing-external {
-  color: var(--color-accent);
-  transform: translate(1px, -1px);
-}
-
-.writing-section-label {
-  margin: 0;
-  font-family: var(--font-mono);
-  font-size: var(--text-ui);
-  font-weight: var(--font-weight-medium);
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-label);
-  color: var(--color-fg-light);
-  padding: 0 0 0.75rem;
+  margin-bottom: 2.5rem;
 }
 
 /* ========================================
@@ -205,12 +22,6 @@
    the prose inside it, rather than to the article itself. Capping the article
    left a wide figure nothing to grow into: a block at `width: auto` fills its
    containing block, so a larger `max-width` on the figure did nothing. */
-.post-page {
-  max-width: var(--measure-page);
-  margin: 0;
-  padding: 0;
-}
-
 .reading-progress {
   position: fixed;
   z-index: var(--z-header);
@@ -254,11 +65,7 @@
 
 .post-date {
   display: block;
-  font-family: var(--font-mono);
-  font-size: var(--text-2xs);
-  font-variant-numeric: tabular-nums;
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
+  font-size: var(--text-xs);
   color: var(--color-fg-light);
   margin-bottom: 0.75rem;
 }
@@ -346,18 +153,14 @@
   margin: 1rem 0;
 }
 
-.prose a,
-.prose p a,
-.prose li a {
+.prose a {
   color: var(--color-accent);
   text-decoration: underline;
   text-decoration-color: var(--color-accent-underline);
   text-underline-offset: 2px;
 }
 
-.prose a:hover,
-.prose p a:hover,
-.prose li a:hover {
+.prose a:hover {
   color: var(--color-accent-hover);
   text-decoration-color: var(--color-accent);
 }
@@ -376,14 +179,6 @@
   margin: 0.5rem 0;
 }
 
-.prose ul > li {
-  list-style-type: disc;
-}
-
-.prose ol > li {
-  list-style-type: decimal;
-}
-
 .prose blockquote {
   border-left: var(--rule-strong) solid var(--color-accent);
   padding-left: 1.25rem;
@@ -396,15 +191,6 @@
 .prose em,
 .prose i {
   font-family: var(--font-newsreader-italic), var(--font-body);
-}
-
-.prose code {
-  font-family: var(--font-mono);
-  font-size: var(--text-sm);
-  background: var(--color-surface-subtle);
-  border: var(--rule) solid var(--color-border);
-  padding: 0.15em 0.4em;
-  border-radius: var(--radius-xs);
 }
 
 /* Long configuration names must wrap in prose without changing code fences. */
@@ -443,10 +229,7 @@
   background: linear-gradient(var(--color-bg-alt), var(--color-bg-alt)) center / 100%
     calc(var(--rule) + 2px) no-repeat;
   font-family: var(--font-mono);
-  font-size: var(--text-2xs);
-  font-weight: var(--font-weight-medium);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
+  font-size: var(--text-xs);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -504,17 +287,14 @@
   display: block;
 }
 
-/* The caption is annotation about the figure, so it is set in mono at the
-   annotation size rather than as prose. */
+/* A caption is a sentence, so it is set in the reading face, a size down. */
 .prose-figcaption {
   /* The figure may be wider than the reading measure; its caption is still
      text, so it is not. */
   max-width: var(--measure-read);
   margin-top: 0.6rem;
-  font-family: var(--font-mono);
-  font-size: var(--text-2xs);
+  font-size: var(--text-sm);
   line-height: var(--leading-snug);
-  letter-spacing: var(--tracking-wide);
   color: var(--color-fg-light);
   text-wrap: pretty;
 }
