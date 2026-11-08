@@ -24,10 +24,6 @@
    ======================================== */
 
 .projects-page {
-  /* The measure of the register's copy, in `ch`: the width of a zero, which is
-     a third wider than the average character of this copy in this face, so
-     53ch is a line of about 66 characters, not 53. */
-  --register-measure: 53ch;
   max-width: var(--measure-page);
   padding-bottom: 2rem;
 }
@@ -44,7 +40,7 @@
    than to the rows below: the negative margin takes back half of the gap the
    shared header leaves for a list. */
 .projects-group-note {
-  max-width: var(--register-measure);
+  max-width: 53ch;
   margin: -0.75rem 0 0.5rem;
   font-size: var(--text-base);
   line-height: 1.5;
@@ -158,9 +154,12 @@ a.project-entry:focus-visible .project-entry-title {
   font-size: var(--text-md);
 }
 
-/* The page's primary copy, so it is set in ink at the body size. */
+/* The page's primary copy, so it is set in ink at the body size. The measure
+   is in `ch`, the width of a zero, which is a third wider than the average
+   character of this copy in this face, so 53ch is a line of about 66
+   characters, not 53. */
 .project-entry-desc {
-  max-width: var(--register-measure);
+  max-width: 53ch;
   margin: 0;
   font-size: var(--text-base);
   line-height: 1.5;
