@@ -44,9 +44,13 @@ function localNoon(dateStr: string): Date {
   return new Date(`${dateStr}T12:00:00`);
 }
 
+/** A post's canonical URL, with the trailing slash the export writes. */
+export function canonicalPostUrl(slug: string): string {
+  return `${SITE_URL}/writing/${slug}/`;
+}
+
 /** `July 1, 2024`. */
 export function formatDate(dateStr: string): string {
-  if (!dateStr) return '';
   return localNoon(dateStr).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',

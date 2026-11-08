@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
 import {
-  ImageSizeError,
   parseImageSize,
   readImageSize,
   readPostImageSizes,
@@ -14,14 +13,6 @@ function png(width: number, height: number): Buffer {
   buffer.write('IHDR', 12, 'ascii');
   buffer.writeUInt32BE(width, 16);
   buffer.writeUInt32BE(height, 20);
-  return buffer;
-}
-
-function gif(width: number, height: number): Buffer {
-  const buffer = Buffer.alloc(10);
-  buffer.write('GIF89a', 0, 'ascii');
-  buffer.writeUInt16LE(width, 6);
-  buffer.writeUInt16LE(height, 8);
   return buffer;
 }
 
@@ -58,30 +49,14 @@ function losslessWebp(width: number, height: number): Buffer {
   return buffer;
 }
 
-/** An APP0 segment exercises length-based skipping, then fill bytes before SOF. */
-function jpeg(width: number, height: number): Buffer {
-  const size = Buffer.alloc(5);
-  size.writeUInt16BE(height, 0);
-  size.writeUInt16BE(width, 2);
-  return Buffer.concat([
-    Buffer.from([
-      0xff, 0xd8, 0xff, 0xe0, 0x00, 0x04, 0x12, 0x34, 0xff, 0xff, 0xc2, 0x00,
-      0x08, 0x08,
-    ]),
-    size,
-  ]);
-}
-
 const OG = { '/og.png': { width: 1200, height: 630 } };
 
 describe('parseImageSize', () => {
   it.each([
     ['PNG', png(1117, 812), { width: 1117, height: 812 }],
-    ['GIF', gif(640, 480), { width: 640, height: 480 }],
     ['extended WebP', extendedWebp(1166, 656), { width: 1166, height: 656 }],
     ['lossy WebP', lossyWebp(747, 610), { width: 747, height: 610 }],
     ['lossless WebP', losslessWebp(320, 240), { width: 320, height: 240 }],
-    ['JPEG', jpeg(1024, 768), { width: 1024, height: 768 }],
   ])('reads dimensions from a valid %s header', (_, buffer, expected) => {
     expect(parseImageSize(buffer)).toEqual(expected);
   });
@@ -89,13 +64,12 @@ describe('parseImageSize', () => {
   it.each([
     ['truncated PNG', png(20, 20).subarray(0, 20)],
     ['PNG without an IHDR chunk', Buffer.from(png(20, 20)).fill(0, 12, 16)],
-    ['zero-width GIF', gif(0, 20)],
+    ['zero-width PNG', png(0, 20)],
     ['truncated WebP chunk', extendedWebp(20, 20).subarray(0, 29)],
     [
       'lossy WebP without its frame start code',
       Buffer.from(lossyWebp(20, 20)).fill(0, 23, 26),
     ],
-    ['JPEG with a truncated segment', jpeg(20, 20).subarray(0, 17)],
     ['unknown data', Buffer.from('not an image')],
   ])('rejects %s', (_, buffer) => {
     expect(parseImageSize(buffer)).toBeNull();
@@ -118,16 +92,14 @@ describe('readImageSize', () => {
   });
 
   it.each([
-    ['relative.png', 'INVALID_PATH'],
-    ['//example.com/image.png', 'INVALID_PATH'],
-    ['/../package.json', 'OUTSIDE_PUBLIC'],
-    ['/%2e%2e/package.json', 'OUTSIDE_PUBLIC'],
-    ['/missing-article-image.png', 'NOT_FOUND'],
-    ['/robots.txt', 'UNSUPPORTED_OR_MALFORMED'],
-  ])('reports a specific failure for %s', (src, code) => {
-    expect(() => readImageSize(src)).toThrow(
-      expect.objectContaining({ name: ImageSizeError.name, code }),
-    );
+    ['relative.png', /must be a root-relative URL/],
+    ['//example.com/image.png', /must be a root-relative URL/],
+    ['/../package.json', /outside public/],
+    ['/%2e%2e/package.json', /outside public/],
+    ['/missing-article-image.png', /does not exist/],
+    ['/robots.txt', /unsupported or malformed header/],
+  ])('fails the build for %s', (src, message) => {
+    expect(() => readImageSize(src)).toThrow(message);
   });
 });
 

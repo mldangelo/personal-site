@@ -1,6 +1,6 @@
 'use client';
 
-import Markdown, { RuleType } from 'markdown-to-jsx';
+import Markdown from 'markdown-to-jsx';
 import Image from 'next/image';
 import type {
   ElementType,
@@ -19,12 +19,8 @@ import {
 } from 'react';
 
 import { planMarkdownHeadingAnchors } from '@/lib/anchors';
-import { smartQuotes } from '@/lib/typography';
-
-interface ImageSize {
-  width: number;
-  height: number;
-}
+import type { ImageSize } from '@/lib/imageSize';
+import { isRootLocalImage, smartQuotesRule } from '@/lib/markdown';
 
 interface PostContentProps {
   content: string;
@@ -97,10 +93,6 @@ function headingOverrides(aliases: ReadonlyMap<string, string>) {
   );
 
   return Object.fromEntries(entries);
-}
-
-function isRootLocalImage(src: string): boolean {
-  return src.startsWith('/') && !src.startsWith('//');
 }
 
 /**
@@ -340,8 +332,7 @@ export default function PostContent({
         // published ids that differ from it.
         slugify: headingPlan.slugify,
         // Typographic quotes in text a reader sees; code is a different node.
-        renderRule: (next, node) =>
-          node.type === RuleType.text ? smartQuotes(node.text) : next(),
+        renderRule: smartQuotesRule,
         overrides: {
           ...headingOverrides(headingPlan.aliases),
           p: {

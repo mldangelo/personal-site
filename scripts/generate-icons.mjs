@@ -8,7 +8,7 @@
  * Run with `npm run icons`. The output is committed, like `public/og.png`, so
  * builds stay deterministic and do not depend on Google Fonts being reachable
  * from CI. Regeneration downloads one exact, versioned TTF and rejects it
- * unless its bytes match the digest recorded below.
+ * unless its bytes match the digest pinned in `scripts/lib/fonts.mjs`.
  *
  * What each output is for, and how it is reached:
  *   app/favicon.ico              /favicon.ico — linked by Next and also
@@ -32,7 +32,8 @@ import { createRequire } from 'node:module';
 import { join } from 'node:path';
 import { createElement as h } from 'react';
 
-import { readLiteralColorToken } from './lib/color-token.mjs';
+import { readColorToken } from '../src/lib/color-token.mjs';
+import { DISPLAY_FONT, loadFont } from './lib/fonts.mjs';
 import { readImageRenderer, requireSharp } from './lib/image-renderer.mjs';
 
 // `next/og` ships as CommonJS with no ESM export condition, so it has to be
@@ -42,65 +43,8 @@ const { ImageResponse } = require('next/og');
 await requireSharp();
 
 const root = process.cwd();
-const TOKENS = join(root, 'app', 'styles', 'tokens', 'colors.css');
-const DARK_TOKENS = join(root, 'app', 'styles', 'dark-mode.css');
 const MANIFEST_ICON_DIR = join(root, 'public', 'images', 'icons');
 const META_OUTPUT = join(root, 'scripts', 'icons.meta.json');
-
-/**
- * Satori cannot read the self-hosted WOFF2 files used by the site, so icon
- * generation needs a TTF. Both the versioned URL and the expected bytes are
- * pinned: the network is transport, not an unrecorded generator input.
- */
-const ICON_FONT = Object.freeze({
-  name: 'Display',
-  family: 'Inter',
-  weight: 500,
-  style: 'normal',
-  url: 'https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZg.ttf',
-  sha256: '8c883f63b2c4157d997319f2c8bc6995ed4357ef371940d31ca159004a4aae63',
-});
-
-/**
- * Reads one custom property out of a token stylesheet.
- *
- * Deliberately narrow: the value has to be a literal hex colour. `next/og`
- * cannot resolve `var()` or `color-mix()`, and neither can a `theme-color`
- * meta tag, so a token that grows into either should fail here rather than
- * bake the string "var(--color-accent)" into a PNG.
- *
- * `src/lib/tokens.ts` does the same read for the `theme-color` meta tags. The
- * two cannot share one implementation — this file is ESM run by node, that one
- * is TypeScript compiled into the app — so the test recomputes this file's
- * results through that reader instead, which fails if they ever disagree.
- */
-async function readColorToken(path, name) {
-  const css = await readFile(path, 'utf8');
-  return readLiteralColorToken(css, name, path);
-}
-
-/**
- * Downloads and verifies the only binary input not committed to the
- * repository. A changed response fails before any generated file is written.
- */
-async function loadIconFont() {
-  const response = await fetch(ICON_FONT.url);
-  if (!response.ok) {
-    throw new Error(
-      `Failed to download ${ICON_FONT.family}: ${response.status}`,
-    );
-  }
-
-  const font = Buffer.from(await response.arrayBuffer());
-  const digest = createHash('sha256').update(font).digest('hex');
-  if (digest !== ICON_FONT.sha256) {
-    throw new Error(
-      `Unexpected ${ICON_FONT.family} font digest: expected ${ICON_FONT.sha256}, received ${digest}`,
-    );
-  }
-
-  return font;
-}
 
 /**
  * The monogram, derived from the profile name rather than typed in, so a fork
@@ -145,8 +89,8 @@ function mark(size, ratio, colors, monogram) {
       {
         style: {
           display: 'flex',
-          fontFamily: ICON_FONT.name,
-          fontWeight: ICON_FONT.weight,
+          fontFamily: DISPLAY_FONT.name,
+          fontWeight: DISPLAY_FONT.weight,
           fontSize: Math.round(size * ratio),
           // No optical tracking. The share card tightens the big name to
           // -0.045em, but satori charges that to the layout box without
@@ -161,18 +105,11 @@ function mark(size, ratio, colors, monogram) {
   );
 }
 
-async function renderPng(size, ratio, colors, monogram, fontData) {
+async function renderPng(size, ratio, colors, monogram, font) {
   const response = new ImageResponse(mark(size, ratio, colors, monogram), {
     width: size,
     height: size,
-    fonts: [
-      {
-        name: ICON_FONT.name,
-        data: fontData,
-        weight: ICON_FONT.weight,
-        style: ICON_FONT.style,
-      },
-    ],
+    fonts: [font],
   });
 
   return Buffer.from(await response.arrayBuffer());
@@ -211,13 +148,12 @@ function packIco(entries) {
   return Buffer.concat([header, directory, ...entries.map((e) => e.png)]);
 }
 
-const [profile, accent, onAccent, bgLight, bgDark] = await Promise.all([
-  readFile(join(root, 'src/data/profile.json'), 'utf8').then(JSON.parse),
-  readColorToken(TOKENS, '--color-accent'),
-  readColorToken(TOKENS, '--color-on-accent'),
-  readColorToken(TOKENS, '--color-bg-alt'),
-  readColorToken(DARK_TOKENS, '--color-bg-alt'),
-]);
+const profile = JSON.parse(
+  await readFile(join(root, 'src/data/profile.json'), 'utf8'),
+);
+const accent = readColorToken('--color-accent', 'light', root);
+const onAccent = readColorToken('--color-on-accent', 'light', root);
+const bgLight = readColorToken('--color-bg-alt', 'light', root);
 
 const colors = { accent, onAccent };
 const MONOGRAM = monogramFor(profile.name);
@@ -240,7 +176,9 @@ const RASTERS = [
   { size: 512, ratio: 0.38, key: 'maskable512' },
 ];
 
-const display = await loadIconFont();
+// Fetched before anything is rendered, so a changed font fails before any
+// generated file is written.
+const display = await loadFont(DISPLAY_FONT);
 
 const rendered = new Map();
 for (const { size, ratio, text, key } of RASTERS) {
@@ -311,13 +249,14 @@ await Promise.all(
 const generatorSources = await Promise.all(
   [
     ['scripts/generate-icons.mjs', new URL(import.meta.url)],
+    ['scripts/lib/fonts.mjs', new URL('./lib/fonts.mjs', import.meta.url)],
     [
       'scripts/lib/image-renderer.mjs',
       new URL('./lib/image-renderer.mjs', import.meta.url),
     ],
     [
-      'scripts/lib/color-token.mjs',
-      new URL('./lib/color-token.mjs', import.meta.url),
+      'src/lib/color-token.mjs',
+      new URL('../src/lib/color-token.mjs', import.meta.url),
     ],
   ].map(async ([path, url]) => [path, await readFile(url, 'utf8')]),
 );
@@ -325,10 +264,9 @@ const inputs = {
   accent,
   onAccent,
   backgroundLight: bgLight,
-  backgroundDark: bgDark,
   monogram: MONOGRAM,
   name: profile.name,
-  font: ICON_FONT,
+  font: DISPLAY_FONT,
   renderer: await readImageRenderer(root),
 };
 

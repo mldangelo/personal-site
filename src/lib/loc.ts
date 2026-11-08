@@ -13,8 +13,7 @@ function isTestFile(name: string): boolean {
  * Lines in a file's contents.
  *
  * A file ending in a newline — which nearly every source file does — yields an
- * empty final segment from `split`. Counting that segment inflated the figure
- * by one per file, or 71 phantom lines across this repository.
+ * empty final segment from `split`, which is not a line.
  */
 function countLines(contents: string): number {
   if (contents === '') {

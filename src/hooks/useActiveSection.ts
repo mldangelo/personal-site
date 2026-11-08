@@ -20,7 +20,7 @@ const LINE_ALLOWANCE = 8;
 /** Scroll offsets are fractional, so "at the bottom" needs a couple of pixels. */
 const BOTTOM_TOLERANCE = 2;
 
-export interface ActiveSection<Id extends string> {
+interface ActiveSection<Id extends string> {
   /** The section the reader is in; the first one until any has been reached. */
   activeId: Id | undefined;
   /** Goes on the sticky bar that holds the section links. */

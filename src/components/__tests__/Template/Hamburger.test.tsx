@@ -53,12 +53,12 @@ describe('Hamburger', () => {
     const menu = document.getElementById(
       button.getAttribute('aria-controls') ?? '',
     );
-    expect(menu).toHaveAttribute('aria-hidden', 'true');
+    expect(menu).toHaveAttribute('inert');
 
     fireEvent.click(button);
     expect(button).toHaveAttribute('aria-expanded', 'true');
     expect(button).toHaveAttribute('aria-label', 'Close navigation menu');
-    expect(menu).toHaveAttribute('aria-hidden', 'false');
+    expect(menu).not.toHaveAttribute('inert');
 
     fireEvent.click(button);
     expect(button).toHaveAttribute('aria-expanded', 'false');
@@ -69,7 +69,9 @@ describe('Hamburger', () => {
   // demoted one. The count stops a demotion passing unmentioned.
   it('lists every primary route and closes when one is followed', () => {
     render(<Hamburger />);
-    const button = screen.getByRole('button');
+    const button = screen.getByRole('button', {
+      name: 'Open navigation menu',
+    });
     fireEvent.click(button);
 
     const primary = routes.filter((route) => route.primary !== false);

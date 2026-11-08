@@ -1,6 +1,8 @@
+import { join } from 'node:path';
+
+import sharp from 'sharp';
 import { describe, expect, it } from 'vitest';
 
-import { readImageSize } from '@/lib/imageSize';
 import type { Post } from '@/lib/posts';
 import {
   BLOG_ID,
@@ -99,13 +101,17 @@ describe('schema nodes', () => {
     expect(blogNode().dateModified).toBeUndefined();
   });
 
-  it('splits the name and declares a real image on the Person', () => {
+  it('splits the name and declares the portrait at its real size', async () => {
+    const { width, height } = await sharp(
+      join(process.cwd(), 'public', SITE_IMAGE_PATH),
+    ).metadata();
+
+    expect(SITE_IMAGE_DIMENSIONS).toEqual({ width, height });
     expect(personNode()).toMatchObject({
       givenName: 'Michael',
       familyName: "D'Angelo",
       image: { url: `${SITE_URL}/images/me.jpg`, ...SITE_IMAGE_DIMENSIONS },
     });
-    expect(SITE_IMAGE_DIMENSIONS).toEqual(readImageSize(SITE_IMAGE_PATH));
   });
 
   it('mirrors the share image on a post unless given an article image', () => {

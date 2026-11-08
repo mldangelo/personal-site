@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
+import { isRootLocalImage } from './markdown';
 import { readMarkdownImageSources } from './markdown-assets.mjs';
 
 export interface ImageSize {
@@ -8,28 +9,18 @@ export interface ImageSize {
   height: number;
 }
 
-export type ImageSizeErrorCode =
-  | 'INVALID_PATH'
-  | 'NOT_FOUND'
-  | 'OUTSIDE_PUBLIC'
-  | 'UNREADABLE'
-  | 'UNSUPPORTED_OR_MALFORMED';
-
 /** A local article image that cannot be safely measured at build time. */
 export class ImageSizeError extends Error {
-  readonly code: ImageSizeErrorCode;
-  readonly publicPath: string;
+  /** Set only for a missing file, the one failure a draft preview may skip. */
+  readonly code?: 'NOT_FOUND';
 
   constructor(
-    code: ImageSizeErrorCode,
-    publicPath: string,
     message: string,
-    options?: ErrorOptions,
+    options?: ErrorOptions & { code?: 'NOT_FOUND' },
   ) {
     super(message, options);
     this.name = 'ImageSizeError';
-    this.code = code;
-    this.publicPath = publicPath;
+    this.code = options?.code;
   }
 }
 
@@ -42,14 +33,14 @@ function validSize(width: number, height: number): ImageSize | null {
 }
 
 /**
- * Reads intrinsic dimensions from a supported image header.
+ * Reads intrinsic dimensions from a PNG or WebP header, the formats posts use.
  *
  * This intentionally validates only the header needed for dimensions, not the
  * complete image payload. A corrupt body remains the browser/asset pipeline's
  * concern; a forged or truncated header is rejected here.
  */
 export function parseImageSize(buffer: Buffer): ImageSize | null {
-  return png(buffer) ?? webp(buffer) ?? gif(buffer) ?? jpeg(buffer);
+  return png(buffer) ?? webp(buffer);
 }
 
 /**
@@ -68,22 +59,18 @@ export function readImageSize(publicPath: string): ImageSize {
   try {
     buffer = readFileSync(filePath);
   } catch (error) {
-    const code = getNodeErrorCode(error);
+    const missing = getNodeErrorCode(error) === 'ENOENT';
     throw new ImageSizeError(
-      code === 'ENOENT' ? 'NOT_FOUND' : 'UNREADABLE',
-      publicPath,
-      code === 'ENOENT'
+      missing
         ? `Local image does not exist: ${publicPath}`
         : `Local image could not be read: ${publicPath}`,
-      { cause: error },
+      { cause: error, code: missing ? 'NOT_FOUND' : undefined },
     );
   }
 
   const size = parseImageSize(buffer);
   if (!size) {
     throw new ImageSizeError(
-      'UNSUPPORTED_OR_MALFORMED',
-      publicPath,
       `Local image has an unsupported or malformed header: ${publicPath}`,
     );
   }
@@ -99,8 +86,6 @@ function resolvePublicImage(publicPath: string): string {
     publicPath.includes('\0')
   ) {
     throw new ImageSizeError(
-      'INVALID_PATH',
-      publicPath,
       `Local image path must be a root-relative URL: ${publicPath}`,
     );
   }
@@ -111,8 +96,6 @@ function resolvePublicImage(publicPath: string): string {
     pathname = decodeURIComponent(rawPathname);
   } catch (error) {
     throw new ImageSizeError(
-      'INVALID_PATH',
-      publicPath,
       `Local image path is not a valid URL: ${publicPath}`,
       { cause: error },
     );
@@ -120,8 +103,6 @@ function resolvePublicImage(publicPath: string): string {
 
   if (pathname.includes('\\') || pathname.includes('\0')) {
     throw new ImageSizeError(
-      'INVALID_PATH',
-      publicPath,
       `Local image path contains an invalid separator: ${publicPath}`,
     );
   }
@@ -129,8 +110,6 @@ function resolvePublicImage(publicPath: string): string {
   const publicDirectory = resolve(process.cwd(), 'public');
   if (pathname.split('/').includes('..')) {
     throw new ImageSizeError(
-      'OUTSIDE_PUBLIC',
-      publicPath,
       `Local image resolves outside public/: ${publicPath}`,
     );
   }
@@ -156,18 +135,6 @@ function png(buffer: Buffer): ImageSize | null {
   }
 
   return validSize(buffer.readUInt32BE(16), buffer.readUInt32BE(20));
-}
-
-function gif(buffer: Buffer): ImageSize | null {
-  const signature = buffer.toString('ascii', 0, 6);
-  if (
-    buffer.length < 10 ||
-    (signature !== 'GIF87a' && signature !== 'GIF89a')
-  ) {
-    return null;
-  }
-
-  return validSize(buffer.readUInt16LE(6), buffer.readUInt16LE(8));
 }
 
 function webp(buffer: Buffer): ImageSize | null {
@@ -218,63 +185,13 @@ function webp(buffer: Buffer): ImageSize | null {
   return null;
 }
 
-function jpeg(buffer: Buffer): ImageSize | null {
-  if (buffer.length < 4 || buffer.readUInt16BE(0) !== 0xffd8) {
-    return null;
-  }
-
-  let offset = 2;
-  while (offset < buffer.length) {
-    // JPEG permits any number of 0xff fill bytes before a marker.
-    while (offset < buffer.length && buffer[offset] === 0xff) {
-      offset += 1;
-    }
-    if (offset >= buffer.length) {
-      return null;
-    }
-
-    const marker = buffer[offset];
-    offset += 1;
-
-    // Byte stuffing is only valid inside scan data, which this parser never
-    // enters. Standalone markers have no length field.
-    if (marker === 0x00) {
-      return null;
-    }
-    if (marker === 0xd9 || marker === 0xda) {
-      return null;
-    }
-    if (marker === 0x01 || (marker >= 0xd0 && marker <= 0xd7)) {
-      continue;
-    }
-    if (offset + 2 > buffer.length) {
-      return null;
-    }
-
-    const segmentLength = buffer.readUInt16BE(offset);
-    if (segmentLength < 2 || offset + segmentLength > buffer.length) {
-      return null;
-    }
-
-    // SOF0-SOF15, excluding the non-frame markers DHT/JPG/DAC.
-    if (
-      marker >= 0xc0 &&
-      marker <= 0xcf &&
-      ![0xc4, 0xc8, 0xcc].includes(marker)
-    ) {
-      if (segmentLength < 8) {
-        return null;
-      }
-      return validSize(
-        buffer.readUInt16BE(offset + 5),
-        buffer.readUInt16BE(offset + 3),
-      );
-    }
-
-    offset += segmentLength;
-  }
-
-  return null;
+interface ReadPostImageSizeOptions {
+  /**
+   * Drafts may deliberately refer to images kept outside public/. Let their
+   * development preview render with a fallback ratio, without weakening the
+   * published-post build boundary.
+   */
+  allowMissingLocalImages?: boolean;
 }
 
 /**
@@ -286,15 +203,6 @@ function jpeg(buffer: Buffer): ImageSize | null {
  * root-relative public paths; published posts require every one to exist with
  * a supported, measurable header.
  */
-interface ReadPostImageSizeOptions {
-  /**
-   * Drafts may deliberately refer to images kept outside public/. Let their
-   * development preview render with a fallback ratio, without weakening the
-   * published-post build boundary.
-   */
-  allowMissingLocalImages?: boolean;
-}
-
 export function readPostImageSizes(
   markdown: string,
   options: ReadPostImageSizeOptions = {},
@@ -317,18 +225,12 @@ export function readPostImageSizes(
       }
     } else if (!isExternalImage(src)) {
       throw new ImageSizeError(
-        'INVALID_PATH',
-        src,
         `Local article image path must be root-relative: ${src}`,
       );
     }
   }
 
   return sizes;
-}
-
-function isRootLocalImage(src: string): boolean {
-  return src.startsWith('/') && !src.startsWith('//');
 }
 
 function isExternalImage(src: string): boolean {

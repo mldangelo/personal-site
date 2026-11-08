@@ -1,4 +1,4 @@
-import { AUTHOR_NAME } from '@/lib/utils';
+import { AUTHOR_NAME, SITE_IMAGE_PATH } from '@/lib/utils';
 
 interface ThemePortraitProps {
   width: number;
@@ -22,7 +22,7 @@ export default function ThemePortrait({
     <span className="theme-portrait">
       {/* biome-ignore lint/performance/noImgElement: Using native img to avoid next/image runtime overhead for static export */}
       <img
-        src="/images/me.jpg"
+        src={SITE_IMAGE_PATH}
         alt={AUTHOR_NAME}
         width={width}
         height={height}

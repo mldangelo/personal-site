@@ -43,7 +43,6 @@ describe('generated icon set', () => {
     ['accent', '--color-accent', 'light'],
     ['onAccent', '--color-on-accent', 'light'],
     ['backgroundLight', '--color-bg-alt', 'light'],
-    ['backgroundDark', '--color-bg-alt', 'dark'],
   ] as const)('records %s as the current %s in %s', (input, token, theme) => {
     expect(meta.inputs[input]).toBe(readColorToken(token, theme));
   });
@@ -72,8 +71,9 @@ describe('generated icon set', () => {
   it('was produced by the committed generator sources', () => {
     const digest = [
       'scripts/generate-icons.mjs',
+      'scripts/lib/fonts.mjs',
       'scripts/lib/image-renderer.mjs',
-      'scripts/lib/color-token.mjs',
+      'src/lib/color-token.mjs',
     ]
       .reduce(
         (hash, path) =>

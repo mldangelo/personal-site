@@ -6,7 +6,7 @@ import { ageAt, ageIntervalFor } from '@/lib/telemetry';
 
 import usePrefersReducedMotion from './usePrefersReducedMotion';
 
-export interface LiveAgeState<T extends HTMLElement> {
+interface LiveAgeState<T extends HTMLElement> {
   /** True only while a visible-page timer is actively updating the value. */
   live: boolean;
   /** Attach to the element whose text contains the age. */

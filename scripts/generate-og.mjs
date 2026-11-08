@@ -22,9 +22,9 @@ import { mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { join } from 'node:path';
 import { createElement as h } from 'react';
+import { loadFont } from './lib/fonts.mjs';
 import { requireSharp } from './lib/image-renderer.mjs';
 import {
-  assertCardFontDigest,
   HOME_CARD_PATH,
   imageDigest,
   LEDGER_PATH,
@@ -99,41 +99,6 @@ const READOUT = [
 
 const [FIRST_NAME, ...REST_OF_NAME] = profile.name.split(' ');
 const AUTHOR = profile.name.replace("'", '’');
-
-/** Fetches one exact TTF and refuses any response whose bytes have changed. */
-async function loadCardFont(source) {
-  let lastError;
-
-  for (let attempt = 1; attempt <= 2; attempt += 1) {
-    let data;
-    try {
-      const response = await fetch(source.url, {
-        signal: AbortSignal.timeout(15_000),
-      });
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      data = Buffer.from(await response.arrayBuffer());
-    } catch (error) {
-      lastError = error;
-      continue;
-    }
-
-    // A digest mismatch is not a transient network failure: do not retry it
-    // and obscure the exact changed-byte error.
-    assertCardFontDigest(source, data);
-
-    return {
-      name: source.name,
-      data,
-      weight: source.weight,
-      style: source.style,
-    };
-  }
-
-  throw new Error(
-    `Failed to download ${source.family} ${source.weight} after two 15-second attempts`,
-    { cause: lastError },
-  );
-}
 
 function readoutCell(cell, index) {
   return h(
@@ -300,9 +265,9 @@ function postCard(post) {
 }
 
 // The three type roles are fetched once and reused for every card. The URLs are
-// versioned and the bytes checksummed in `og-inputs.mjs`, so this network read
-// cannot silently choose a newer font revision.
-const fonts = await Promise.all(fontSources.map(loadCardFont));
+// versioned and the bytes checksummed, so this network read cannot silently
+// choose a newer font revision.
+const fonts = await Promise.all(fontSources.map(loadFont));
 
 /**
  * Renders one card and reads back the geometry it actually drew.

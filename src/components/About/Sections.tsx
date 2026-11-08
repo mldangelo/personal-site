@@ -1,10 +1,11 @@
 'use client';
 
-import Markdown, { type MarkdownToJSX, RuleType } from 'markdown-to-jsx';
+import Markdown, { type MarkdownToJSX } from 'markdown-to-jsx';
 import { Children, type ReactNode } from 'react';
 import useActiveSection from '@/hooks/useActiveSection';
 import { createUniqueHeadingIds } from '@/lib/anchors';
 import { extractLogMarker } from '@/lib/logEntry';
+import { smartQuotesRule } from '@/lib/markdown';
 import { smartQuotes } from '@/lib/typography';
 
 interface AboutContentProps {
@@ -22,7 +23,7 @@ const LOG_VARIANT = 'about-section--log';
  * Entries that open with a link or carry no marker at all keep their text
  * intact and simply leave the gutter empty.
  *
- * The text arrives with its quotes already set (`renderRule`, below). No
+ * The text arrives with its quotes already set (`smartQuotesRule`). No
  * marker pattern contains a quote, so the reading is the same either way, and
  * the remainder is cut from the converted string rather than converted again
  * out of context.
@@ -64,21 +65,13 @@ function LogEntry({ children }: { children?: ReactNode }) {
   );
 }
 
-/**
- * The source is typed with the straight quotes a keyboard has; the page sets
- * typographic ones. Only prose is converted: a code span or a fenced block is
- * its own node type and never arrives here as text.
- */
-const renderRule: NonNullable<MarkdownToJSX.Options['renderRule']> = (
-  next,
-  node,
-) => (node.type === RuleType.text ? smartQuotes(node.text) : next());
-
-const MARKDOWN_OPTIONS: MarkdownToJSX.Options = { renderRule };
+const MARKDOWN_OPTIONS: MarkdownToJSX.Options = {
+  renderRule: smartQuotesRule,
+};
 
 const LOG_MARKDOWN_OPTIONS: MarkdownToJSX.Options = {
   overrides: { li: { component: LogEntry } },
-  renderRule,
+  renderRule: smartQuotesRule,
 };
 
 interface AboutSection {
@@ -108,46 +101,26 @@ interface ParsedAboutSection {
  * that is derived case-insensitively, so the deep links hold.
  */
 const sectionVariants: Record<string, string> = {
-  'Some history': 'about-section--log',
-  'Travel / geography': 'about-section--log',
+  'Some history': LOG_VARIANT,
+  'Travel / geography': LOG_VARIANT,
   'Fun facts': 'about-section--compact',
   'I like': 'about-section--compact',
   'I dream of': 'about-section--compact',
   'Websites from people I admire': 'about-section--links',
 };
 
+/** The page opens with `# Intro`, whose text runs unheaded above the sections. */
 function splitAboutMarkdown(markdown: string) {
-  const trimmed = markdown.trim();
-  const introHeading = '# Intro';
+  const [intro, ...sections] = markdown
+    .trim()
+    .replace(/^# Intro\s*/, '')
+    .split(/\n(?=# )/);
 
-  if (!trimmed.startsWith(introHeading)) {
-    return {
-      intro: '',
-      sections: parseSections(trimmed),
-    };
-  }
-
-  const withoutIntroHeading = trimmed.slice(introHeading.length).trimStart();
-  const nextHeadingIndex = withoutIntroHeading.search(/\n# /);
-
-  if (nextHeadingIndex === -1) {
-    return {
-      intro: withoutIntroHeading.trim(),
-      sections: [] as AboutSection[],
-    };
-  }
-
-  return {
-    intro: withoutIntroHeading.slice(0, nextHeadingIndex).trim(),
-    sections: parseSections(
-      withoutIntroHeading.slice(nextHeadingIndex + 1).trim(),
-    ),
-  };
+  return { intro: intro.trim(), sections: parseSections(sections) };
 }
 
-function parseSections(markdown: string): AboutSection[] {
-  const sections: ParsedAboutSection[] = markdown
-    .split(/\n(?=# )/)
+function parseSections(chunks: string[]): AboutSection[] {
+  const sections: ParsedAboutSection[] = chunks
     .map((section) => section.trim())
     .filter((section) => section !== '')
     .map((section) => {
@@ -171,10 +144,6 @@ function parseSections(markdown: string): AboutSection[] {
     title: smartQuotes(title),
     variant: sectionVariants[title],
   }));
-}
-
-function getSectionClassName(variant: string | undefined) {
-  return variant ? `about-section ${variant}` : 'about-section';
 }
 
 export default function AboutContent({ markdown }: AboutContentProps) {
@@ -223,7 +192,11 @@ export default function AboutContent({ markdown }: AboutContentProps) {
       {sections.map((section) => (
         <section
           key={section.id}
-          className={getSectionClassName(section.variant)}
+          className={
+            section.variant
+              ? `about-section ${section.variant}`
+              : 'about-section'
+          }
         >
           <div className="section-header">
             {/* The id stays on the heading: it is the public fragment, and

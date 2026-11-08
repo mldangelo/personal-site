@@ -14,7 +14,7 @@
 /** A plausible four-digit year; the surrounding patterns supply date context. */
 const YEAR_PATTERN = /(?:1[89]|20)\d{2}/;
 
-export interface LogMarker {
+interface LogMarker {
   /** Explicit age or age range, e.g. "Age 7". */
   age?: string;
   /** Explicit year or year range. */

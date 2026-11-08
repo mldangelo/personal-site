@@ -1,7 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
-  applyThemeColor,
   DARK_SCHEME_QUERY,
   RESOLVED_THEME_COLOR_SELECTOR,
   readStoredThemeChoice,
@@ -66,7 +65,7 @@ describe('theme', () => {
     vi.unstubAllGlobals();
     root.removeAttribute(THEME_ATTRIBUTE);
     root.removeAttribute(THEME_CHOICE_ATTRIBUTE);
-    for (const node of document.head.querySelectorAll('meta')) {
+    for (const node of document.head.querySelectorAll('meta, style')) {
       node.remove();
     }
   });
@@ -130,38 +129,34 @@ describe('theme', () => {
 
   // Unscoped so it always matches, first so it always wins. React rebuilds the
   // tags it owns on navigation, so those are never written to.
-  it.each([
-    ['the bootstrap', runThemeInitScript],
-    ['applyThemeColor', () => applyThemeColor(document, CHROME_COLORS.dark)],
-  ])(
-    '%s adds one unscoped tag ahead of the page tags, untouched',
-    (_who, add) => {
-      const pair = addThemeColorMetas();
+  it('the bootstrap adds one unscoped tag ahead of the page tags, untouched', () => {
+    const pair = addThemeColorMetas();
 
-      add();
+    runThemeInitScript();
 
-      const [first, ...others] = document.querySelectorAll(
-        THEME_COLOR_META_SELECTOR,
-      );
-      expect(first).not.toHaveAttribute('media');
-      expect(first.matches(RESOLVED_THEME_COLOR_SELECTOR)).toBe(true);
-      expect(others).toEqual(pair);
-      expect(others.map((meta) => meta.getAttribute('content'))).toEqual([
-        CHROME_COLORS.light,
-        CHROME_COLORS.dark,
-      ]);
-    },
-  );
+    const [first, ...others] = document.querySelectorAll(
+      THEME_COLOR_META_SELECTOR,
+    );
+    expect(first).not.toHaveAttribute('media');
+    expect(first.matches(RESOLVED_THEME_COLOR_SELECTOR)).toBe(true);
+    expect(others).toEqual(pair);
+    expect(others.map((meta) => meta.getAttribute('content'))).toEqual([
+      CHROME_COLORS.light,
+      CHROME_COLORS.dark,
+    ]);
+  });
 
-  it('writes to the tag the bootstrap created rather than adding a second', () => {
+  it('writes the cascade colour to the tag the bootstrap created', () => {
     // The script cannot import the selector it is built from, so this is what
     // keeps the created tag and the written tag the same tag.
     runThemeInitScript();
+    const style = document.createElement('style');
+    style.textContent = `:root{${THEME_COLOR_TOKEN}:${CHROME_COLORS.dark}}`;
+    document.head.append(style);
 
-    applyThemeColor(document, CHROME_COLORS.dark);
-    applyThemeColor(document, CHROME_COLORS.light);
+    syncThemeColor(document);
 
-    expect(chromeColors()).toEqual([CHROME_COLORS.light]);
+    expect(chromeColors()).toEqual([CHROME_COLORS.dark]);
   });
 
   it('adds no tag when no token resolves, leaving the declared fallback', () => {

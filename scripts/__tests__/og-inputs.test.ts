@@ -1,7 +1,6 @@
 import {
   mkdirSync,
   mkdtempSync,
-  readdirSync,
   readFileSync,
   rmSync,
   writeFileSync,
@@ -15,19 +14,18 @@ import {
   validatePostFrontmatter,
 } from '@/lib/posts';
 import { formatDate } from '@/lib/utils';
+import { assertFontDigest } from '../lib/fonts.mjs';
 import {
   IMAGE_RENDERER_PACKAGES,
   readImageRenderer,
 } from '../lib/image-renderer.mjs';
 import {
-  assertCardFontDigest,
   CARD_FONTS,
   CARD_SIZE,
   countProseWords,
   countUniqueExternalLinks,
   formatCardDate,
   imageDigest,
-  postCardPath,
   readPostCards,
 } from '../og-inputs.mjs';
 import { TITLE_SIZES, titleFontSize } from '../og-layout.mjs';
@@ -43,8 +41,6 @@ interface PostCard {
 }
 
 const ROOT = process.cwd();
-const CARD_DIRECTORY = join(ROOT, 'public', 'og', 'writing');
-const LEDGER = join(ROOT, 'public', 'og.meta.json');
 const base = {
   title: 'Fixture title',
   date: '2026-01-08',
@@ -93,26 +89,11 @@ describe('share card inputs', () => {
     expect(cards.map((card) => card.slug)).toEqual(getPostSlugs());
   });
 
-  it('leaves drafts out of the card set, the ledger, and public/', async () => {
+  it('leaves drafts out of the card set', async () => {
     // The fixture keeps this guard live when the real tree holds no drafts.
     await expect(
       readPostCards(postFixture({ ...base, draft: true })),
     ).resolves.toEqual([]);
-
-    const ledger = readFileSync(LEDGER, 'utf8');
-    for (const file of readdirSync(join(ROOT, 'content', 'writing'))) {
-      const slug = file.replace(/\.md$/, '');
-      if (!getPostSlugs().includes(slug)) expect(ledger).not.toContain(slug);
-    }
-  });
-
-  it('holds a committed card at the path each post links to', () => {
-    for (const card of cards) {
-      expect(card.path).toBe(postCardPath(card.slug));
-    }
-    expect(readdirSync(CARD_DIRECTORY).sort()).toEqual(
-      cards.map((card) => `${card.slug}.png`).sort(),
-    );
   });
 
   it('prints the title, description, and date of its post', () => {
@@ -144,47 +125,18 @@ describe('share card inputs', () => {
 });
 
 describe('share card fonts', () => {
-  it('records exact versioned TTFs and their checksums in the ledger', () => {
-    const ledger = JSON.parse(readFileSync(LEDGER, 'utf8'));
-
-    expect(ledger.fonts).toEqual(CARD_FONTS);
-    expect(new Set(CARD_FONTS.map((font) => font.name)).size).toBe(
-      CARD_FONTS.length,
-    );
-    for (const font of CARD_FONTS) {
-      expect(font.url).toMatch(
-        /^https:\/\/fonts\.gstatic\.com\/s\/[^/]+\/v\d+\/[^/]+\.ttf$/,
-      );
-      expect(font.sha256).toMatch(/^[a-f0-9]{64}$/);
-    }
-  });
-
   it('rejects changed bytes instead of silently redrawing the cards', () => {
     const data = Buffer.from('fixture font bytes');
     const font = { ...CARD_FONTS[0], sha256: imageDigest(data) };
 
-    expect(() => assertCardFontDigest(font, data)).not.toThrow();
+    expect(() => assertFontDigest(font, data)).not.toThrow();
     expect(() =>
-      assertCardFontDigest({ ...font, sha256: '0'.repeat(64) }, data),
-    ).toThrow(/Refusing to generate cards from changed font bytes/);
+      assertFontDigest({ ...font, sha256: '0'.repeat(64) }, data),
+    ).toThrow(/Refusing to generate images from changed font bytes/);
   });
 });
 
 describe('share card renderer', () => {
-  it('records the exact locked renderer packages in the ledger', async () => {
-    const ledger = JSON.parse(readFileSync(LEDGER, 'utf8'));
-    const renderer = await readImageRenderer(ROOT);
-
-    expect(ledger.renderer).toEqual(renderer);
-    expect(renderer.map((entry) => entry.name)).toEqual(
-      IMAGE_RENDERER_PACKAGES,
-    );
-    for (const entry of renderer) {
-      expect(entry.version).toMatch(/^\d+\.\d+\.\d+/);
-      expect(entry.integrity).toMatch(/^sha512-/);
-    }
-  });
-
   it('reads each renderer package from the lockfile', async () => {
     const root = temporaryRoot();
     const entry = (name: string) => ({

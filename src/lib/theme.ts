@@ -7,9 +7,8 @@
  *   keys off this and nothing else.
  * - `data-theme-choice` is what the visitor actually asked for, including
  *   `system`. It exists because `data-theme` cannot tell "dark" from
- *   "following a device that is currently dark", so the control has no way to
- *   render its own state — which is what forced it to wait for hydration and
- *   leave a 44x44 hole in the header.
+ *   "following a device that is currently dark", so without it the control
+ *   could not render its own state before hydration.
  *
  * The browser chrome follows `data-theme` too, for the same reason every
  * stylesheet does: an explicit choice is allowed to disagree with the device,
@@ -57,9 +56,10 @@ export const THEME_COLOR_META_SELECTOR = 'meta[name="theme-color"]';
  * {@link themeInitScript} before first paint and never rendered by React. It
  * carries no `media`, so it always matches, and it is prepended to `<head>`, so
  * it is first in tree order — the two things that make the browser paint from
- * it. React cannot revert what it does not own.
+ * it. Landing above `<meta charset>` costs nothing: the encoding is settled
+ * before any script runs. React cannot revert what it does not own.
  */
-export const RESOLVED_THEME_COLOR_ATTRIBUTE = 'data-theme-color';
+const RESOLVED_THEME_COLOR_ATTRIBUTE = 'data-theme-color';
 
 /** The script-owned tag from {@link RESOLVED_THEME_COLOR_ATTRIBUTE}, alone. */
 export const RESOLVED_THEME_COLOR_SELECTOR = `${THEME_COLOR_META_SELECTOR}[${RESOLVED_THEME_COLOR_ATTRIBUTE}]`;
@@ -105,9 +105,9 @@ const UNREADABLE_SCHEME: ResolvedTheme = 'light';
  * matches the device, returning to `system` — after the visitor has twice
  * seen the control work, and the icon changing is the feedback for it.
  *
- * `system` is a real, reachable state, not just the pre-first-click default:
- * before it existed the first click pinned a theme in `localStorage` forever
- * with no route back to following the device.
+ * `system` is a real, reachable state, not just the pre-first-click default,
+ * so a visitor who picks a theme always has a route back to following the
+ * device.
  *
  * `systemScheme` is whichever reading of the device the caller orders by —
  * `ThemeToggle` holds on to the one a lap set out under, so a flip part-way
@@ -190,69 +190,26 @@ export function readSystemScheme(): ResolvedTheme | null {
 }
 
 /**
- * The script-owned `theme-color` meta, created on first use.
- *
- * Prepended rather than appended: the browser paints from the first tag in
- * tree order whose `media` matches, and this one carries no `media`, so being
- * first is what makes it the answer whatever else the page ships. Landing
- * above `<meta charset>` costs nothing — the document was decoded while it was
- * parsed, and this runs after that.
- */
-function resolvedThemeColorMeta(doc: Document): HTMLMetaElement {
-  const existing = doc.head.querySelector<HTMLMetaElement>(
-    RESOLVED_THEME_COLOR_SELECTOR,
-  );
-  if (existing) return existing;
-
-  const meta = doc.createElement('meta');
-  meta.setAttribute('name', 'theme-color');
-  meta.setAttribute(RESOLVED_THEME_COLOR_ATTRIBUTE, '');
-  doc.head.prepend(meta);
-
-  return meta;
-}
-
-/**
- * Point the browser chrome at one colour.
- *
- * An empty colour is a no-op rather than an empty `content`, and rather than a
- * tag at all: a tag with no usable value is skipped by the browser, so an
- * empty one would drop the page back to default chrome instead of to the
- * `<noscript>` value `app/layout.tsx` ships.
- */
-export function applyThemeColor(doc: Document, color: string): void {
-  if (!color) return;
-
-  resolvedThemeColorMeta(doc).setAttribute('content', color);
-}
-
-/**
- * The colour the page is actually painted with, read back off `<html>`.
- *
- * Deliberately the computed token rather than a hex handed to the client: the
- * cascade has already answered this question, so this cannot disagree with
- * what is on screen the way a second copy of the palette could. Returns `''`
- * when the stylesheet has not resolved — {@link applyThemeColor} then adds no
- * tag at all.
- */
-export function renderedThemeColor(doc: Document): string {
-  const view = doc.defaultView;
-  if (!view) return '';
-
-  return view
-    .getComputedStyle(doc.documentElement)
-    .getPropertyValue(THEME_COLOR_TOKEN)
-    .trim();
-}
-
-/**
  * Bring the browser chrome back in step with `<html data-theme>`.
  *
  * Call after `data-theme` settles, on every change: the attribute is what the
  * visitor chose, and the device preference the meta tags are scoped by is not.
+ *
+ * The colour is the computed token rather than a hex handed to the client: the
+ * cascade has already answered this question, so the chrome cannot disagree
+ * with what is on screen the way a second copy of the palette could. It is
+ * written to the tag {@link themeInitScript} created, and no tag is added. An
+ * unresolved token leaves that tag as it is, because an empty `content` is
+ * skipped by the browser and would drop the page back to default chrome.
  */
 export function syncThemeColor(doc: Document): void {
-  applyThemeColor(doc, renderedThemeColor(doc));
+  const meta = doc.head.querySelector(RESOLVED_THEME_COLOR_SELECTOR);
+  const color = doc.defaultView
+    ?.getComputedStyle(doc.documentElement)
+    .getPropertyValue(THEME_COLOR_TOKEN)
+    .trim();
+
+  if (meta && color) meta.setAttribute('content', color);
 }
 
 /**
@@ -268,9 +225,9 @@ export function syncThemeColor(doc: Document): void {
  * resolved theme, because a returning visitor whose stored choice contradicts
  * their device would otherwise read the whole first paint with the address bar
  * painted from a device preference nothing else here follows. This is the only
- * place that tag is created — {@link applyThemeColor} finds it afterwards and
- * would otherwise create a second one, which `theme.test.ts` checks by running
- * this script and then calling that function. The colours are passed in rather
+ * place that tag is created; {@link syncThemeColor} writes to it afterwards,
+ * which `theme.test.ts` checks by running this script and then calling that
+ * function. The colours are passed in rather
  * than read here: they come from `readColorToken`, which reads the filesystem
  * and must not reach the client bundle. They are embedded through
  * `JSON.stringify` so a value can never break out of the string literal.
