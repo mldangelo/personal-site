@@ -79,39 +79,10 @@
   display: none;
 }
 
-/* Mono chips for the machine-readable and printed résumé, deliberately the
-   same affordance as `.writing-rss-link`. `--text-ui`, not `--text-2xs`,
-   because they are interactive rather than annotation. */
-.resume-json-link,
-.resume-print-button {
-  font: inherit;
-  font-family: var(--font-mono);
-  font-size: var(--text-ui);
-  font-weight: var(--font-weight-medium);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
-  color: var(--color-fg-light);
-  text-decoration: none;
-  padding: 0.35rem 0.6rem;
-  border: var(--rule) solid var(--color-control-border);
-  border-radius: var(--radius-sm);
-  background-color: transparent;
-  cursor: pointer;
-  transition:
-    color var(--duration-instant) var(--ease-out),
-    border-color var(--duration-instant) var(--ease-out);
-}
-
 /* Printing takes a script, so the button waits for the bootstrap's mark, as
    the theme toggle does. */
 :root:not([data-theme-choice]) .resume-print-button {
   display: none;
-}
-
-.resume-json-link:hover,
-.resume-print-button:hover {
-  color: var(--color-accent);
-  border-color: var(--color-accent);
 }
 
 .resume-title {

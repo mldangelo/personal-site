@@ -14,27 +14,15 @@ export const metadata: Metadata = createPageMetadata({
 
 export default function ContactPage() {
   return (
-    <PageWrapper hideFooter mainClassName="page-main--contact">
+    <PageWrapper hideFooter>
       <section className="contact-page">
-        <header className="contact-header">
-          <h1 className="page-title">Get in Touch</h1>
-        </header>
-
-        <div className="contact-content">
-          <div className="contact-email-block">
-            <EmailLink />
-            <p className="contact-hint">Usually respond within 24 hours</p>
-            <p className="contact-hint">
-              For speaking invitations, email is best
-            </p>
-          </div>
-
-          <div className="contact-divider">
-            <span>or find me on</span>
-          </div>
-
-          <ContactIcons includeEmail={false} />
-        </div>
+        <h1 className="page-title">Get in touch</h1>
+        <EmailLink />
+        <p className="contact-hint page-prose">
+          I usually respond within 24 hours. For speaking invitations, email is
+          best.
+        </p>
+        <ContactIcons includeEmail={false} />
       </section>
     </PageWrapper>
   );

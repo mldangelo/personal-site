@@ -70,20 +70,9 @@
     background: var(--color-surface-subtle);
   }
 
-  /* Actions list */
-  .actions {
-    list-style: none;
-    margin: var(--spacing-element) 0 0 0;
-    padding: 0;
-  }
-
-  .actions li {
-    display: inline-block;
-    margin: 0 0.75em 0 0;
-    padding: 0;
-  }
-
-  .actions li:last-child {
-    margin-right: 0;
+  /* A page-level action that sits beside a page title: RSS, JSON, print. */
+  .button-compact {
+    height: 2rem;
+    padding: 0 0.75rem;
   }
 }
