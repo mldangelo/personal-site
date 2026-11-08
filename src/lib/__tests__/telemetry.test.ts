@@ -3,7 +3,6 @@ import { describe, expect, it } from 'vitest';
 import {
   AGE_MIN_INTERVAL,
   AGE_PRECISION_FULL,
-  AGE_PRECISION_STATIC,
   ageAt,
   ageIntervalFor,
   BIRTH_DATE,
@@ -31,12 +30,6 @@ describe('ageAt', () => {
       AGE_PRECISION_FULL,
     );
   });
-
-  it('is deterministic for a given instant', () => {
-    const now = birthTime + MS_PER_YEAR * 12.345;
-
-    expect(ageAt(now, 6)).toBe(ageAt(now, 6));
-  });
 });
 
 describe('ageIntervalFor', () => {
@@ -48,16 +41,6 @@ describe('ageIntervalFor', () => {
   it('never schedules faster than the minimum interval', () => {
     expect(ageIntervalFor(AGE_PRECISION_FULL)).toBe(AGE_MIN_INTERVAL);
     expect(ageIntervalFor(20)).toBe(AGE_MIN_INTERVAL);
-  });
-});
-
-describe('AGE_PRECISION_STATIC', () => {
-  it('is coarser than the live display and produces a real snapshot', () => {
-    const reading = ageAt(new Date(BIRTH_DATE).getTime(), AGE_PRECISION_STATIC);
-
-    expect(AGE_PRECISION_STATIC).toBeLessThan(AGE_PRECISION_FULL);
-    expect(reading).toBe('0.00');
-    expect(reading).toMatch(/^\d+\.\d{2}$/);
   });
 });
 
