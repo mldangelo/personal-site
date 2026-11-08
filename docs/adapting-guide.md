@@ -117,6 +117,7 @@ Identity data starts in shared files, but some text and links are hard-coded.
 | RSS title and description                                      | `app/feed.xml/route.ts`                                             |
 | Repository statistics and GitHub API URL                       | `SOURCE_REPOSITORY` in `src/lib/telemetry.ts`                       |
 | Countries map                                                  | `src/components/Stats/Personal.tsx`                                 |
+| Vulnerability reporting contact                                | `SECURITY.md`                                                       |
 
 Page titles and descriptions also contain personal copy in `app/layout.tsx` and
 the `page.tsx` files under `app/`. Structured data is assembled in
