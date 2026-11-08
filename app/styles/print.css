@@ -64,7 +64,8 @@
   .reading-progress,
   .resume-nav,
   .writing-rss-link,
-  .resume-json-link,
+  .resume-actions,
+  .resume-screen-title,
   .about-section-nav,
   .about-section-heading-hash {
     display: none !important;
@@ -114,6 +115,10 @@
     /* Break only between complete entries. Punctuation separators can dangle
        at either edge of a wrapped line, so spacing carries the separation. */
     white-space: nowrap;
+  }
+
+  .resume-print-name {
+    display: inline;
   }
 
   .resume-title,
