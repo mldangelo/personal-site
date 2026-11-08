@@ -99,10 +99,9 @@
   display: none;
 }
 
-/* Mono chips for the machine-readable and printed résumé. Deliberately the
-   same affordance as `.writing-rss-link`: a label-sized control that opts out
-   of the accent underline `base/links.css` paints on prose links. `--text-ui`,
-   not `--text-2xs`, because it is interactive rather than annotation. */
+/* Mono chips for the machine-readable and printed résumé, deliberately the
+   same affordance as `.writing-rss-link`. `--text-ui`, not `--text-2xs`,
+   because they are interactive rather than annotation. */
 .resume-json-link,
 .resume-print-button {
   font: inherit;
@@ -113,10 +112,11 @@
   text-transform: uppercase;
   color: var(--color-fg-light);
   text-decoration: none;
-  background: none;
+  background-image: none;
   padding: 0.35rem 0.6rem;
   border: var(--rule) solid var(--color-control-border);
   border-radius: var(--radius-sm);
+  background-color: transparent;
   cursor: pointer;
   transition:
     color var(--duration-instant) var(--ease-out),
