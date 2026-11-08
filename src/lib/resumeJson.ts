@@ -99,65 +99,25 @@ export interface JsonResume {
   };
 }
 
-const NAMED_ENTITIES: Record<string, string> = {
-  amp: '&',
-  apos: "'",
-  gt: '>',
-  lt: '<',
-  nbsp: ' ',
-  quot: '"',
-};
-
-/** Unicode scalar values exclude surrogates and stop at U+10FFFF. */
-function isUnicodeScalarValue(codePoint: number): boolean {
-  return (
-    Number.isInteger(codePoint) &&
-    codePoint >= 0 &&
-    codePoint <= 0x10ffff &&
-    (codePoint < 0xd800 || codePoint > 0xdfff)
-  );
-}
-
-function decodeEntity(entity: string): string {
-  const literal = `&${entity};`;
-  const numeric = entity.match(/^#(x)?([0-9a-f]+)$/i);
-  if (numeric) {
-    const codePoint = Number.parseInt(numeric[2], numeric[1] ? 16 : 10);
-    return isUnicodeScalarValue(codePoint)
-      ? String.fromCodePoint(codePoint)
-      : literal;
-  }
-  return NAMED_ENTITIES[entity.toLowerCase()] ?? literal;
-}
-
 /**
  * Reduces résumé prose to the plain text JSON Resume expects.
  *
  * The `summary` strings in `src/data/resume/work.ts` are Markdown with inline
- * HTML — `JobSummary` renders them through `markdown-to-jsx`, and three of them
- * carry real `<a href>` anchors. The rendered page depends on that markup, so
- * this strips it for the artifact rather than flattening the source data and
- * costing the page its links. Anchor text survives, but inline destinations do
- * not: JSON Resume summaries are plain strings. Each employer's own URL remains
- * available separately on the work entry.
+ * `<a href>` anchors, which `JobSummary` renders through `markdown-to-jsx`.
+ * The rendered page depends on that markup, so this strips it for the artifact
+ * rather than flattening the source data and costing the page its links.
+ * Anchor text survives, but inline destinations do not: JSON Resume summaries
+ * are plain strings. Each employer's own URL remains available separately on
+ * the work entry.
  *
- * Underscore emphasis is intentionally left alone: `_x_` would eat the
- * underscores out of an identifier like `snake_case_name`.
+ * Only the anchor tags are stripped, so technical prose such as comparisons
+ * and `Map<K, V>` survives; any other markup stays visible to the export
+ * verifier.
  */
 export function toPlainText(value: string): string {
   return (
     value
-      .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1') // [text](url)
-      // The maintained source contains anchors. Strip only those known tags so
-      // technical prose such as comparisons and `Map<K, V>` survives; any new
-      // HTML construct stays visible to the export verifier until supported.
       .replace(/<\/?a(?:\s[^>]*)?>/gi, '')
-      .replace(/\*\*([^*]+)\*\*/g, '$1') // **strong**
-      .replace(/\*([^*]+)\*/g, '$1') // *emphasis*
-      .replace(/`([^`]+)`/g, '$1') // `code`
-      .replace(/&(#x?[0-9a-f]+|[a-z]+);/gi, (_match, entity: string) =>
-        decodeEntity(entity),
-      )
       // Template literals in the data files wrap across lines and indent.
       .replace(/\s+/g, ' ')
       .trim()
