@@ -3,8 +3,8 @@
  *
  * `html { scroll-behavior: smooth }` reads as a nicety for in-page links, but
  * the property also governs the browser's own scroll restoration. With it set
- * globally, pressing Back into a long article started at the top and scrolled
- * itself through some 140 positions for 1.2 seconds before arriving. Next's
+ * globally, pressing Back into a long article starts at the top and animates
+ * all the way down to the restored position. Next's
  * `data-scroll-behavior="smooth"` opt-in only covers the scroll Next performs
  * on a forward navigation, so it does not help.
  *
@@ -40,8 +40,7 @@ let release: (() => void) | undefined;
  * A Back press while the jump is still running ends it where it began. The
  * browser does restore the earlier position, but the animation it was already
  * playing carries on to the section and leaves the page there, under an
- * address that no longer names it: a second after a mistaken click, Back put
- * the visitor at the foot of the page.
+ * address that no longer names it.
  */
 export function armSmoothScroll(): void {
   release?.();
@@ -69,7 +68,7 @@ export function armSmoothScroll(): void {
   };
 
   // `hashchange`, not `popstate`: a fragment navigation fires `popstate` for
-  // itself, so listening for that ended every jump as it began. The click's
+  // itself, so listening for that would end every jump as it began. The click's
   // own `hashchange` arrives at the fragment; only a traversal arrives back
   // at the address the click left.
   const returned = (event: HashChangeEvent) => {
@@ -80,8 +79,8 @@ export function armSmoothScroll(): void {
     done();
     // An explicit scroll is what stops the animation; `instant` so that it
     // cannot become one itself. Then once more on the next frame: the
-    // animation had a last step already under way, which lands after the
-    // first and left the page up to 57px past where it started.
+    // animation has a last step already under way, which lands after the
+    // first and would leave the page past where it started.
     const settle = () => window.scrollTo({ ...from, behavior: 'instant' });
     settle();
     window.requestAnimationFrame(settle);

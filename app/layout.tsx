@@ -48,9 +48,8 @@ const CHROME_COLORS: ThemeColors = {
  * back up by `content`, `name`, `property`, `http-equiv` and `charset` — never
  * `media` — so any React-rendered `theme-color` tag whose colour can equal a
  * rendered theme will claim the script-owned tag instead and then destroy it on
- * the next `<Link>` press. Measured before this changed: React owned the
- * `media=light` node while it carried the dark colour. `<noscript>` puts the
- * fallback exactly where it applies and nowhere React can reach.
+ * the next `<Link>` press. `<noscript>` puts the fallback exactly where it
+ * applies and nowhere React can reach.
  *
  * Interpolated straight into markup because `readColorToken` refuses anything
  * that is not a literal colour, so the value cannot carry a quote or a tag.
@@ -89,9 +88,7 @@ export const metadata: Metadata = {
   creator: AUTHOR_NAME,
   metadataBase: new URL(SITE_URL),
   // The root is the origin of the share metadata, so it uses the same shared
-  // blocks as every other page. Hand-writing them here is what left the
-  // homepage advertising a different og:image:alt from the rest of the site
-  // for the identical image.
+  // blocks as every other page rather than hand-writing a copy that can drift.
   openGraph: {
     ...sharedOpenGraph,
     type: 'website',

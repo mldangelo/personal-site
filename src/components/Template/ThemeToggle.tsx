@@ -72,9 +72,8 @@ function labelFor(choice: ThemeChoice, next: ThemeChoice): string {
  * The rendered markup is deliberately identical for all three states: every
  * state is present, and CSS shows the one matching `data-theme-choice` on
  * `<html>`, which the `<head>` bootstrap resolves before first paint. That is
- * what lets a real button ship in the static HTML — the previous version could
- * not know the theme until it mounted, so it reserved a blank 44x44 hole in
- * the header and swapped a button in on hydration.
+ * what lets a real button ship in the static HTML rather than a placeholder
+ * swapped for one on hydration.
  */
 export default function ThemeToggle() {
   const systemScheme = usePrefersColorScheme();
@@ -94,9 +93,8 @@ export default function ThemeToggle() {
   useEffect(() => {
     // A press can get here first (see `cycle`), and its choice is the newer
     // one. Storage normally hands the same value straight back, but storage
-    // that throws reads as `system`, and adopting that undid the press: the
-    // control's first press did nothing at all for a visitor with site data
-    // blocked.
+    // that throws reads as `system`, and adopting that would undo the first
+    // press for a visitor with site data blocked.
     setChoice((pressed) => pressed ?? readStoredThemeChoice());
     // A visitor who arrives on an explicit choice is part-way round already.
     setLapScheme(readSystemScheme());
@@ -140,10 +138,8 @@ export default function ThemeToggle() {
   const cycle = useCallback(() => {
     // `next` is `null` when the press beat the mount effects: the handler is
     // still the hydration render's, where neither the stored choice nor the
-    // device has been read. Measured against the export, every press made as
-    // early as Chromium would deliver one landed in that gap. Ask both
-    // directly rather than order the cycle by a guess, which would hand a dark
-    // device the no-op first press.
+    // device has been read. Ask both directly rather than order the cycle by a
+    // guess, which would hand a dark device the no-op first press.
     const scheme = next === null ? readSystemScheme() : orderScheme;
     const to = next ?? nextThemeChoice(readStoredThemeChoice(), scheme);
 

@@ -7,9 +7,8 @@
  *   keys off this and nothing else.
  * - `data-theme-choice` is what the visitor actually asked for, including
  *   `system`. It exists because `data-theme` cannot tell "dark" from
- *   "following a device that is currently dark", so the control has no way to
- *   render its own state — which is what forced it to wait for hydration and
- *   leave a 44x44 hole in the header.
+ *   "following a device that is currently dark", so without it the control
+ *   could not render its own state before hydration.
  *
  * The browser chrome follows `data-theme` too, for the same reason every
  * stylesheet does: an explicit choice is allowed to disagree with the device,
@@ -106,9 +105,9 @@ const UNREADABLE_SCHEME: ResolvedTheme = 'light';
  * matches the device, returning to `system` — after the visitor has twice
  * seen the control work, and the icon changing is the feedback for it.
  *
- * `system` is a real, reachable state, not just the pre-first-click default:
- * before it existed the first click pinned a theme in `localStorage` forever
- * with no route back to following the device.
+ * `system` is a real, reachable state, not just the pre-first-click default,
+ * so a visitor who picks a theme always has a route back to following the
+ * device.
  *
  * `systemScheme` is whichever reading of the device the caller orders by —
  * `ThemeToggle` holds on to the one a lap set out under, so a flip part-way

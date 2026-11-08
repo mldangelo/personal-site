@@ -6,14 +6,10 @@ interface PageWrapperProps {
   mainClassName?: string;
 }
 
-/**
- * Server component wrapper for page layout.
- * Provides consistent page structure with optional footer.
- * Relies on Next.js built-in scroll restoration for navigation.
- */
 /** Target for the skip link in the root layout. */
 export const MAIN_CONTENT_ID = 'main-content';
 
+/** The structure every page shares: its main landmark, then the footer. */
 export default function PageWrapper({
   children,
   hideFooter = false,
