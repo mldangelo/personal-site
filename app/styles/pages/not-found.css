@@ -1,0 +1,57 @@
+/* ========================================
+   NOT FOUND PAGE (404)
+   ======================================== */
+
+.not-found-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - var(--header-height) - 4rem);
+  padding: 2rem;
+  text-align: center;
+}
+
+.not-found-content {
+  max-width: 480px;
+}
+
+/* A 404 is a status code, so it is reported as one: mono, plain,
+   and no more prominent than the sentence explaining it. */
+.not-found-code {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-label);
+  /* A 404 is a static fact, not a live reading, so it stays in the
+     secondary ink rather than borrowing the signal colour. */
+  color: var(--color-fg-light);
+  line-height: 1;
+  background: none;
+  -webkit-text-fill-color: currentcolor;
+  margin-bottom: 1.25rem;
+}
+
+.not-found-title {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: var(--font-weight-black);
+  color: var(--color-fg-bold);
+  margin-bottom: 0.75rem;
+  letter-spacing: var(--tracking-display);
+}
+
+.not-found-message {
+  font-size: var(--text-md);
+  color: var(--color-fg-light);
+  line-height: var(--leading-snug);
+  margin-bottom: 2rem;
+}
+
+.not-found-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
