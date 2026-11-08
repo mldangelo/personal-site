@@ -1,0 +1,185 @@
+/* ========================================
+   STATS PAGE
+   ======================================== */
+
+/* Readings, not a spreadsheet: a label to read beside a value set large enough
+   to be read off at a glance. The ink rule above each table belongs to the
+   section header, so the table draws none of its own. */
+.stat-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+}
+
+/* Both cells, not just `td`. Labels became `th[scope="row"]` for screen
+   readers, which dropped them out of this rule and left half-width row
+   rules and mismatched alignment. */
+.stat-table th,
+.stat-table td {
+  padding-block: 1rem;
+  border-bottom: var(--rule) solid var(--color-border);
+  vertical-align: baseline;
+}
+
+/* A label is a phrase, so it is set as one: the reading face, in ink and in
+   sentence case. As 13px tracked capitals in a column fixed at 40%, "Stars
+   this repository has on GitHub" took three lines of a phone.
+
+   Neither column declares a width. A value never breaks, so its column is
+   exactly as wide as the widest value in that table and the label has all of
+   the rest. The gap is the least that keeps the two apart: at 360px the
+   longest label fits on two lines with 2.5px to spare, and took a third when
+   the gap was 1rem. */
+.stat-table-label {
+  padding-right: 0.5rem;
+  text-align: left;
+  text-wrap: balance;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--leading-snug);
+  color: var(--color-fg);
+}
+
+.stat-table-value {
+  text-align: right;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xl);
+  font-weight: var(--font-weight-medium);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-fg-bold);
+  line-height: var(--leading-tight);
+  white-space: nowrap;
+}
+
+/* A linked value is ink over a rule, because beside an amber age an accent
+   colour would read as a second data colour. The accent only answers the
+   pointer and the keyboard.
+
+   That leaves the rule as the only sign at rest, so it is drawn in
+   `--color-control-border`, which is held to 3:1 on both page surfaces. In the
+   structural hairline it measured 1.61:1, and was a link nobody could find.
+
+   `background-image` clears the animated rule base/links.css draws under
+   every bare link. */
+.stat-table-link {
+  position: relative;
+  color: inherit;
+  background-image: none;
+  text-decoration: underline;
+  text-decoration-color: var(--color-control-border);
+  text-decoration-thickness: var(--rule);
+  text-underline-offset: 0.18em;
+  transition:
+    color var(--duration-fast) var(--ease-out),
+    text-decoration-color var(--duration-fast) var(--ease-out);
+}
+
+.stat-table-link:hover,
+.stat-table-link:focus-visible {
+  color: var(--color-accent);
+  text-decoration-color: var(--color-accent);
+}
+
+/* A count can be one digit, which is an 11px target on a phone. The link
+   answers across 44px each way without its box, and so its focus ring,
+   growing past the figure. It grows leftwards: the figure sits on the right
+   rail, and anything further right is off the page. */
+.stat-table-link::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: max(100%, 2.75rem);
+  height: max(100%, 2.75rem);
+  transform: translateY(-50%);
+}
+
+/* The age starts as a dated server snapshot and upgrades in place. Reserve the
+   eleven-decimal width so that precision change cannot resize its table cell. */
+.stat-readout-value {
+  display: inline-block;
+  min-width: var(--readout-width, auto);
+}
+
+/* Amber means the value is actively ticking. Static and reduced-motion
+   snapshots remain ordinary ink. */
+.stat-readout-value[data-live='true'] {
+  color: var(--color-signal);
+}
+
+/* The note always occupies one line: a snapshot date or an explicit Live
+   status. Keeping it mounted avoids a vertical shift during hydration. */
+.stat-readout-note {
+  display: block;
+  margin-top: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-normal);
+  white-space: nowrap;
+  color: var(--color-fg-light);
+}
+
+/* A printed table stays whole rather than leaving rows overleaf. */
+@media print {
+  .stat-table {
+    break-inside: avoid;
+  }
+}
+
+/* Stats page layout */
+.stats-page {
+  max-width: var(--measure-read);
+  margin: 0;
+}
+
+.stats-header {
+  text-align: left;
+  margin-bottom: 3rem;
+}
+
+.stats-title {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: var(--font-weight-black);
+  letter-spacing: var(--tracking-display);
+  margin-bottom: 0.5rem;
+  color: var(--color-fg-bold);
+}
+
+.stats-subtitle {
+  font-size: var(--text-md);
+  color: var(--color-fg-light);
+  margin: 0;
+}
+
+.stats-content {
+  display: flex;
+  flex-direction: column;
+  gap: 3.5rem;
+}
+
+@media (max-width: 640px) {
+  .stat-table-value {
+    font-size: clamp(var(--text-md), 4vw, var(--text-xl));
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-email-link {
+    font-size: var(--text-lg);
+  }
+
+  .stat-table-value {
+    font-size: var(--text-md);
+  }
+
+  /* `TableRow` marks a value too long to be sure of fitting beside its label
+     on a phone. Only that one may break, mid-token if it has to: letting every
+     value wrap here made its column give way to a long label first, which
+     broke "29 packages" in two while there was still room for it. */
+  .stat-table-value--long {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+}

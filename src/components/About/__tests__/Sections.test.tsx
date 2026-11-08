@@ -14,17 +14,17 @@ const MARKDOWN = `# Intro
 
 Hello from the intro.
 
-# Some History
+# Some history
 
 - We subscribed to AOL in 1995.
 - At 7, I discovered the mini-games.
 - I have a list of ideas.
 
-# I Like
+# I like
 
 - Running
 
-# Websites from People I Admire
+# Websites from people I admire
 
 - [Example](https://example.com)`;
 
@@ -84,6 +84,97 @@ describe('AboutContent', () => {
     expect(leading.body).toBe('I discovered the mini-games.');
 
     expect(undated.marker).toBeEmptyDOMElement();
+  });
+
+  // A heading renamed in the data without its `sectionVariants` key raises
+  // nothing and quietly renders as a plain list.
+  it('matches every real section to a layout, by its title as authored', () => {
+    const { container } = render(<AboutContent markdown={aboutMarkdown} />);
+    const sections = container.querySelectorAll('.about-section');
+
+    expect(sections).toHaveLength(titles.length);
+    for (const section of sections) {
+      expect(section.className).toMatch(/about-section--/);
+    }
+  });
+
+  it('sets typographic quotes in the real prose', () => {
+    const { container } = render(<AboutContent markdown={aboutMarkdown} />);
+
+    expect(container.textContent).not.toMatch(/['"]/);
+  });
+
+  it('leaves code as it was typed', () => {
+    const { container } = render(
+      <AboutContent
+        markdown={[
+          '# Intro',
+          '',
+          "It's `don't` here.",
+          '',
+          '```',
+          "const quote = 'x';",
+          '```',
+        ].join('\n')}
+      />,
+    );
+
+    expect(container.querySelector('p')).toHaveTextContent("It’s don't here.");
+    expect(container.querySelector('pre')).toHaveTextContent(
+      "const quote = 'x';",
+    );
+  });
+
+  it('reads a marker from an entry whose words carry an apostrophe', () => {
+    const { container } = render(
+      <AboutContent
+        markdown={`# Intro
+
+Lead paragraph.
+
+# Some history
+
+- When I was 12, I didn't sleep.
+- We didn't have a computer in 1993.`}
+      />,
+    );
+
+    // The gutter reads typeset text, and the remainder keeps its apostrophe.
+    expect(
+      Array.from(container.querySelectorAll('.log-entry'), (entry) => [
+        entry.querySelector('.log-entry-marker')?.textContent,
+        entry.querySelector('.log-entry-body')?.textContent,
+      ]),
+    ).toEqual([
+      ['Age 12', 'I didn’t sleep.'],
+      ['1993', 'We didn’t have a computer in 1993.'],
+    ]);
+  });
+
+  it('prints a title the same way in the nav and above its section', () => {
+    render(
+      <AboutContent
+        markdown={`# Intro
+
+Lead paragraph.
+
+# Michael's notes
+
+- A note.`}
+      />,
+    );
+
+    const name = 'Michael’s notes';
+
+    // Typeset once for both, while the id is read from the title as typed.
+    expect(screen.getByRole('heading', { name })).toHaveAttribute(
+      'id',
+      'michaels-notes',
+    );
+    expect(within(sectionNav()).getByRole('link', { name })).toHaveAttribute(
+      'href',
+      '#michaels-notes',
+    );
   });
 
   // The hook listens on the row inside the bar, so the ref has to reach the bar.
