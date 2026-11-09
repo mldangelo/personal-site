@@ -245,6 +245,8 @@ or substitute them in the suite's own view of the filesystem, as
 
 **Testing what `next/script` emits**: `renderToStaticMarkup` supplies no `HeadManagerContext`, and `next/script` reads `appDir` from it to choose the App Router form, so a `beforeInteractive` `<Script>` renders nothing and any assertion about how it was queued passes against every implementation. Render inside `HeadManagerContext.Provider value={{ appDir: true }}` (from `next/dist/shared/lib/head-manager-context.shared-runtime`), as `app/__tests__/theme-color.test.ts` does. `data-nscript` is set only client-side, so it never appears in server markup and is no marker.
 
+**jsdom styles a 1024x768 desktop, and nothing else**: its media queries read a frozen internal viewport, not `window.innerWidth`, so a stylesheet a test loads always takes the desktop side of every breakpoint. It also matches `:focus-visible` on every focus, so it cannot tell a key press from a mouse press. `Hamburger.test.tsx` reaches a phone by moving the breakpoint in the stylesheet text it loads, and `useActiveSection.test.tsx` supplies the browser's `:focus-visible` answer.
+
 `vitest.config.ts` pins `TZ` to a non-UTC zone for the whole run. Every CI runner is UTC, where a UTC-pinned formatter and a host-local one produce identical strings — so a date guard written on a UTC host asserts nothing on the machines that publish the site. Keep it set, and be wary of any test whose assertion restates the implementation (`toBe(x.toLocaleString('en-US'))`): pin the literal the reader would see instead, or the guard can never fail.
 
 ## Further Reading
