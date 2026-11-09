@@ -5,7 +5,7 @@ export default function PrintButton() {
   return (
     <button
       type="button"
-      className="resume-print-button"
+      className="button button-secondary button-compact resume-print-button"
       onClick={() => window.print()}
     >
       Print / PDF

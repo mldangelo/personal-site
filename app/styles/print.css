@@ -135,7 +135,7 @@
   .degree-container,
   .skill-group,
   .about-section--log li,
-  .writing-item,
+  .project-entry,
   .course-container {
     break-inside: avoid;
     page-break-inside: avoid;

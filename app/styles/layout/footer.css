@@ -1,17 +1,15 @@
 /* ========================================
    FOOTER LAYOUT
-   Full-width footer with bio
+   Identity on the left rail, routes and profiles on the right
    ======================================== */
 
 /* A hairline closes the page without competing with the content. */
 .site-footer-new {
-  background: transparent;
   border-top: var(--rule) solid var(--color-border);
-  padding: 2.5rem 0 2rem;
+  padding: 2.5rem 0;
   margin-top: auto;
 }
 
-/* Footer content - 2-column signature card layout */
 .footer-content {
   box-sizing: border-box;
   width: 100%;
@@ -19,55 +17,16 @@
   padding-inline: 2rem;
   margin: 0 auto;
   display: flex;
-  flex-direction: column;
-  gap: 2.5rem;
-  align-items: center;
-  text-align: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem 3rem;
 }
 
-@media screen and (max-width: 735px) {
-  .footer-content {
-    padding-inline: 1.5rem;
-  }
-}
-
-@media screen and (min-width: 900px) {
-  .footer-content {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-start;
-    text-align: left;
-    gap: 3rem;
-  }
-}
-
-/* Left column - Identity block */
 .footer-identity {
   display: flex;
   align-items: flex-start;
-  gap: 1.25rem;
-}
-
-@media screen and (max-width: 899px) {
-  .footer-identity {
-    flex-direction: column;
-    align-items: center;
-  }
-}
-
-/* Right column - Nav and social */
-.footer-right {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-@media screen and (min-width: 900px) {
-  .footer-right {
-    flex-direction: row;
-    gap: 3rem;
-  }
+  gap: 1rem;
 }
 
 /* A quiet square portrait closes the page. */
@@ -91,7 +50,6 @@
   object-fit: cover;
 }
 
-/* Footer info block */
 .footer-info {
   display: flex;
   flex-direction: column;
@@ -101,8 +59,7 @@
 .footer-name {
   font-family: var(--font-display);
   font-size: var(--text-md);
-  font-weight: var(--font-weight-bold);
-  margin: 0;
+  font-weight: var(--font-weight-semibold);
   letter-spacing: var(--tracking-tight);
 }
 
@@ -113,11 +70,10 @@
 }
 
 .footer-copyright {
-  font-family: var(--font-mono);
-  font-size: var(--text-2xs);
-  letter-spacing: var(--tracking-wide);
+  font-family: var(--font-display);
+  font-size: var(--text-ui);
   color: var(--color-fg-light);
-  margin: 0.75rem 0 0;
+  margin: 0.5rem 0 0;
 }
 
 .footer-copyright a {
@@ -126,132 +82,66 @@
 }
 
 .footer-copyright a:hover {
-  color: var(--color-accent);
+  color: var(--color-fg-bold);
 }
 
-/* Footer links section */
-.footer-links {
+/* Routes, then profiles, both set right on the rail. */
+.footer-right {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  align-items: flex-end;
+  gap: 1rem;
 }
 
-.footer-links-label,
-.footer-social-label {
-  font-family: var(--font-mono);
-  font-size: var(--text-2xs);
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.5rem 1.25rem;
+}
+
+.footer-links a {
+  font-family: var(--font-display);
+  font-size: var(--text-ui);
   font-weight: var(--font-weight-medium);
-  color: var(--color-fg-light);
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-label);
-  margin-bottom: 0.25rem;
-}
-
-/* 2x2 nav grid */
-.footer-links-grid {
-  display: grid;
-  grid-template-columns: repeat(2, auto);
-  gap: 0.5rem 1.5rem;
-}
-
-.footer-links-grid a {
-  font-size: var(--text-sm);
   color: var(--color-fg-light);
   text-decoration: none;
   transition: color var(--duration-fast) var(--ease-out);
 }
 
-.footer-links-grid a:hover {
+.footer-links a:hover {
   color: var(--color-fg-bold);
 }
 
-/* Social section */
-.footer-social {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  align-items: center;
-}
-
-@media screen and (min-width: 900px) {
-  .footer-social {
-    align-items: flex-start;
-  }
-}
-
-/* Tone down social icons in footer */
+/* The last mark's ink, not its target, sits on the rail. */
 .site-footer-new .icons {
-  display: flex;
-  /* Wraps rather than forcing a 400px row into a 320px viewport. */
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  gap: 0.25rem;
-  margin-bottom: 0;
+  justify-content: flex-end;
+  margin-right: -0.75rem;
 }
 
-@media screen and (max-width: 899px) {
-  .site-footer-new .icons {
-    justify-content: center;
-  }
-}
-
-.site-footer-new .icons li {
-  padding: 0;
-}
-
-.site-footer-new .icons li a {
-  width: 44px;
-  height: 44px;
-  background: transparent;
-  border: 1px solid var(--color-border);
-  opacity: 0.7;
-  transition:
-    opacity var(--duration-fast) var(--ease-out),
-    border-color var(--duration-fast) var(--ease-out),
-    color var(--duration-fast) var(--ease-out);
-}
-
-.site-footer-new .icons li a:hover {
-  opacity: 1;
-  border-color: var(--color-accent);
-  color: var(--color-accent);
-  background: transparent;
-}
-
-@media screen and (max-width: 640px) {
-  .site-footer-new {
-    padding: 1.75rem 1rem 1.5rem;
-  }
-
+@media screen and (max-width: 735px) {
   .footer-content {
-    gap: 1.5rem;
+    padding-inline: 1.5rem;
   }
+}
 
-  .footer-identity {
-    flex-direction: row;
-    align-items: center;
-    text-align: left;
+/* One column on the left rail, like every page above it, once identity and
+   routes no longer fit side by side. */
+@media screen and (max-width: 899px) {
+  .footer-content {
+    flex-direction: column;
   }
 
   .footer-right {
-    width: 100%;
-    gap: 1.25rem;
+    align-items: flex-start;
   }
 
-  .footer-links {
-    gap: 0.5rem;
+  .footer-links,
+  .site-footer-new .icons {
+    justify-content: flex-start;
   }
 
-  .footer-links-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0.5rem;
-  }
-
-  .footer-links-grid a {
-    text-align: center;
-  }
-
-  .footer-social {
-    gap: 0.5rem;
+  .site-footer-new .icons {
+    margin: 0 0 0 -0.75rem;
   }
 }

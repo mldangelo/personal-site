@@ -79,13 +79,12 @@ export default function ResumePage() {
             </h1>
             <div className="resume-actions">
               <PrintButton />
-              {/* The same affordance as the RSS chip on /writing. The href is
-                  document-relative on purpose: /resume/ may live below a
+              {/* Document-relative on purpose: /resume/ may live below a
                   repository base path, while a root-relative href would escape
                   it. ../resume.json resolves correctly in both deployments. */}
               <a
                 href={`..${RESUME_JSON_PATH}`}
-                className="resume-json-link"
+                className="button button-secondary button-compact"
                 title="JSON Resume"
                 aria-label="JSON Resume"
               >

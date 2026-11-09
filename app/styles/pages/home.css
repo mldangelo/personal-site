@@ -123,8 +123,7 @@
 
 .hero-portrait figcaption {
   margin-top: 0.75rem;
-  font-family: var(--font-mono);
-  font-size: var(--text-2xs);
+  font-size: var(--text-sm);
   text-align: center;
 }
 
