@@ -22,7 +22,7 @@ export default function ContactPage() {
           I usually respond within 24 hours. For speaking invitations, email is
           best.
         </p>
-        <ContactIcons includeEmail={false} />
+        <ContactIcons includeEmail={false} labelled />
       </section>
     </PageWrapper>
   );

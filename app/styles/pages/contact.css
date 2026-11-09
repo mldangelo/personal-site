@@ -7,10 +7,11 @@
 }
 
 /* The address is the page's one instruction, so it is set as a
-   readout in mono rather than dressed up as a tinted button. */
+   readout in mono rather than dressed up as a tinted button. It holds one
+   line whatever the animation shows, so nothing below it ever moves. */
 .contact-email-link {
-  display: inline-flex;
-  flex-wrap: wrap;
+  display: inline-grid;
+  grid-template-columns: minmax(0, max-content) max-content;
   align-items: baseline;
   max-width: 100%;
   padding: 0.875rem 0;
@@ -22,9 +23,6 @@
   color: var(--color-fg-bold);
   border-bottom: var(--rule-strong) solid var(--color-accent);
   text-decoration: none;
-  /* The animated alias runs long ("you-can-email-me-at-literally-anything!")
-     and has to be allowed to break, mid-token if necessary, on a 320px phone. */
-  overflow-wrap: anywhere;
   transition:
     color var(--duration-fast) var(--ease-out),
     border-color var(--duration-fast) var(--ease-out);
@@ -35,30 +33,26 @@
   border-bottom-color: var(--color-accent-hover);
 }
 
-/* Flex items refuse to shrink below their content, so both halves opt in to
-   the wrapping allowed on the link above. */
-.contact-email-prefix,
-.contact-email-domain {
-  min-width: 0;
-  overflow-wrap: anywhere;
-}
-
+/* The alias types into its own slot. One too long for the line keeps its
+   newest characters in view, the way a terminal does: right-to-left overflow
+   clips the start behind an ellipsis, while the `dir="ltr"` text inside still
+   reads left to right. */
 .contact-email-prefix {
+  overflow: hidden;
+  white-space: pre;
+  text-overflow: ellipsis;
+  direction: rtl;
   color: var(--color-accent);
 }
 
 .contact-email-domain {
+  white-space: nowrap;
   color: var(--color-fg-bold);
 }
 
 .contact-hint {
   margin: 0 0 1.5rem;
   color: var(--color-fg-light);
-}
-
-/* The first mark's ink, not its target, sits on the rail. */
-.contact-page .icons {
-  margin-left: -0.75rem;
 }
 
 @media (max-width: 735px) {

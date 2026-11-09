@@ -35,4 +35,21 @@
   .icons li a:hover {
     color: var(--color-fg-bold);
   }
+
+  /* Named marks wrap like words, each a full-height target. */
+  .icons--labelled {
+    flex-wrap: wrap;
+    column-gap: 1.5rem;
+  }
+
+  .icons--labelled li {
+    width: auto;
+  }
+
+  .icons--labelled li a {
+    gap: 0.5rem;
+    font-family: var(--font-display);
+    font-size: var(--text-ui);
+    font-weight: var(--font-weight-medium);
+  }
 }
