@@ -2,47 +2,74 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 
 import routes from '@/data/routes';
 import { THEME_CHOICE_ATTRIBUTE } from '@/lib/theme';
 import { smartQuotes } from '@/lib/typography';
 import Hamburger from '../../Template/Hamburger';
 
+/** Adds the header stylesheets in `files` order, as `app/tailwind.css` would. */
+function addStyles(files: readonly string[], width: 'phone' | 'desktop') {
+  for (const file of files) {
+    const css = readFileSync(
+      join(process.cwd(), 'app/styles/layout', file),
+      'utf8',
+    );
+    const style = document.createElement('style');
+    // jsdom matches media queries against a fixed 1024px viewport, so they
+    // always take the desktop side. A phone moves the 735/736px breakpoint out
+    // of its reach.
+    style.textContent =
+      width === 'phone'
+        ? css.replaceAll(/\((min|max)-width: 73[56]px\)/g, '($1-width: 1e5px)')
+        : css;
+    style.dataset.test = '';
+    document.head.append(style);
+  }
+}
+
+/** The button's own `display`: `toBeVisible()` would read an ancestor's. */
+function display() {
+  const button = document.querySelector('.hamburger-button') as Element;
+  return window.getComputedStyle(button).display;
+}
+
 describe('Hamburger', () => {
+  afterEach(() => {
+    document.documentElement.removeAttribute(THEME_CHOICE_ATTRIBUTE);
+    for (const style of document.querySelectorAll('style[data-test]')) {
+      style.remove();
+    }
+  });
+
   // The gate in navigation.css has to beat header.css's `display: flex` whichever
-  // `@import` comes first. Asserts the button's own `display`: jsdom drops the
-  // `@media (max-width: 735px)`, so `toBeVisible()` sees an ancestor's `none`.
+  // `@import` comes first.
   it.each([
     ['header.css', 'navigation.css'],
     ['navigation.css', 'header.css'],
   ])(
-    'stays hidden until the bootstrap proves scripts ran (%s, then %s)',
+    'stays hidden on a phone until the bootstrap proves scripts ran (%s, then %s)',
     (...files) => {
-      const root = document.documentElement;
-      const styles = files.map((file) => {
-        const style = document.createElement('style');
-        style.textContent = readFileSync(
-          join(process.cwd(), 'app/styles/layout', file),
-          'utf8',
-        );
-        document.head.append(style);
-        return style;
-      });
-
+      addStyles(files, 'phone');
       render(<Hamburger />);
-      const button = document.querySelector('.hamburger-button') as Element;
-      const display = () => window.getComputedStyle(button).display;
 
       expect(display()).toBe('none');
 
-      root.setAttribute(THEME_CHOICE_ATTRIBUTE, 'system');
+      document.documentElement.setAttribute(THEME_CHOICE_ATTRIBUTE, 'system');
       expect(display()).toBe('flex');
-
-      root.removeAttribute(THEME_CHOICE_ATTRIBUTE);
-      for (const style of styles) style.remove();
     },
   );
+
+  // A gate that restored the button on the attribute, rather than hiding it on
+  // its absence, would outrank the desktop hide and put it on every desktop.
+  it('stays hidden on a desktop once the bootstrap has run', () => {
+    addStyles(['header.css', 'navigation.css'], 'desktop');
+    render(<Hamburger />);
+
+    document.documentElement.setAttribute(THEME_CHOICE_ATTRIBUTE, 'system');
+    expect(display()).toBe('none');
+  });
 
   it('opens and closes the menu it controls, and says which it will do', () => {
     render(<Hamburger />);

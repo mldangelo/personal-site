@@ -396,12 +396,24 @@ describe('useActiveSection', () => {
       },
     );
 
+    /**
+     * Focuses `target` as a key press (`visible`) or a mouse press would. A
+     * browser decides `:focus-visible` from how focus arrived; jsdom matches it
+     * on every focus, so the browser's answer is supplied here.
+     */
+    function focus(target: HTMLElement, { visible }: { visible: boolean }) {
+      const matches = target.matches.bind(target);
+      vi.spyOn(target, 'matches').mockImplementation((selectors: string) =>
+        selectors === ':focus-visible' ? visible : matches(selectors),
+      );
+      act(() => target.focus());
+    }
+
     it('brings a link focused from the keyboard out from under the fade', () => {
       // Chromium only scrolls a focused link into view when none of it shows.
       const row = renderRow({ references: [296, 383] });
 
-      fireEvent.keyDown(document.body, { key: 'Tab' });
-      act(() => link('references').focus());
+      focus(link('references'), { visible: true });
 
       expect(row.scrollLeft).toBe(41);
     });
@@ -411,8 +423,7 @@ describe('useActiveSection', () => {
       // under the pointer, and the click would land on its neighbour.
       const row = renderRow({ references: [296, 383] });
 
-      fireEvent.mouseDown(link('references'));
-      act(() => link('references').focus());
+      focus(link('references'), { visible: false });
 
       expect(row.scrollLeft).toBe(0);
     });
