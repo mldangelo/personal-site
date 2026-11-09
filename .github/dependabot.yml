@@ -23,6 +23,13 @@ updates:
           - 'react-dom'
           - '@types/react'
           - '@types/react-dom'
+      # @tailwindcss/postcss pins the tailwindcss its compiler loads. Bumped
+      # alone, tailwindcss moves while the build keeps compiling with a nested
+      # copy of the old version.
+      tailwind:
+        patterns:
+          - 'tailwindcss'
+          - '@tailwindcss/*'
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
