@@ -6,20 +6,9 @@ account or DNS changes still require your approval.
 
 ## Set up the workspace
 
-Ask your agent to use the Node version in `.nvmrc`, install the locked
-dependencies, and start the development server. To set up the fork manually,
-run:
-
-```bash
-git clone https://github.com/YOUR-USER/personal-site.git
-cd personal-site
-nvm install
-npm ci
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000). If you use another version
-manager, choose a release accepted by `engines.node` in `package.json`.
+Fork the repository and start the site as the README's
+[Get started](../README.md#get-started) section describes, then open
+[http://localhost:3000](http://localhost:3000).
 
 ## Copyable requests
 
@@ -104,21 +93,20 @@ needs.
 
 Identity data starts in shared files, but some text and links are hard-coded.
 
-| Content                                                        | Location                                                            |
-| -------------------------------------------------------------- | ------------------------------------------------------------------- |
-| Name, role, employer, location, email, and personal statistics | `src/data/profile.json`                                             |
-| Canonical URL, social handle, descriptions, and image settings | `src/lib/utils.ts`                                                  |
-| Social links                                                   | `src/data/contact.ts`                                               |
-| Homepage biography and employer links                          | `src/components/Template/Hero.tsx`                                  |
-| Logo initials                                                  | `src/components/Template/Navigation.tsx`                            |
-| Footer source link                                             | `src/components/Template/Footer.tsx`                                |
-| Portrait and its alt text                                      | `public/images/me.jpg`, `src/components/Template/ThemePortrait.tsx` |
-| Web app name and icon monogram                                 | Derived from `src/data/profile.json` by `npm run icons`             |
-| Sitemap URL for crawlers                                       | `public/robots.txt`                                                 |
-| RSS title and description                                      | `app/feed.xml/route.ts`                                             |
-| Repository statistics and GitHub API URL                       | `SOURCE_REPOSITORY` in `src/lib/telemetry.ts`                       |
-| Countries map                                                  | `src/components/Stats/Personal.tsx`                                 |
-| Vulnerability reporting contact                                | `SECURITY.md`                                                       |
+| Content                                                        | Location                                                             |
+| -------------------------------------------------------------- | -------------------------------------------------------------------- |
+| Name, role, employer, location, email, and personal statistics | `src/data/profile.json`                                              |
+| Canonical URL, social handle, descriptions, and image settings | `src/lib/utils.ts`                                                   |
+| Social links                                                   | `src/data/contact.ts`                                                |
+| Homepage biography and employer links                          | `src/components/Template/Hero.tsx`                                   |
+| Logo initials                                                  | `src/components/Template/Navigation.tsx`                             |
+| Footer source link                                             | `src/components/Template/Footer.tsx`                                 |
+| Portrait                                                       | `public/images/me.jpg`, with its path and size in `src/lib/utils.ts` |
+| Web app name and icon monogram                                 | Derived from `src/data/profile.json` by `npm run icons`              |
+| Sitemap URL for crawlers                                       | `public/robots.txt`                                                  |
+| Writing description, on `/writing/` and in the RSS feed        | `WRITING_DESCRIPTION` in `src/lib/schema.ts`                         |
+| Repository statistics and GitHub API URL                       | `SOURCE_REPOSITORY` in `src/lib/telemetry.ts`                        |
+| Vulnerability reporting contact                                | `SECURITY.md`                                                        |
 
 Page titles and descriptions also contain personal copy in `app/layout.tsx` and
 the `page.tsx` files under `app/`. Structured data is assembled in
@@ -165,25 +153,17 @@ Your content here.
 
 The required fields are `title`, `date`, and `description`. `draft: true` shows
 a post during development without including it in the production export. An
-optional `image` must be a root-relative path under `public/` and must be paired
-with `imageAlt`.
+optional `image` must be paired with `imageAlt`. Images, in the frontmatter or
+the body, use root-relative paths to files under `public/`, such as
+`/images/writing/my-post/figure.png`.
 
 The production export requires at least one published post. It cannot build the
 dynamic post route when `generateStaticParams()` has no published slugs.
 
-Removing the Writing link from `src/data/routes.ts` only hides it from
-navigation. The homepage still promotes writing, and the routes remain
-available by URL.
-
-Full removal requires a consumer search before any files are deleted:
-
-```bash
-rg -n -i "writing|feed\\.xml|getWritingItems|getAllPosts" app src scripts
-```
-
-A complete removal touches the writing routes, feed, content loaders, homepage
-section, sitemap, schema, export verifier, styles, and tests. Run a production
-build after the refactor.
+Removing the Writing entry from `src/data/routes.ts` only takes it out of
+navigation; the routes, feed, and homepage section remain. To remove writing
+entirely, use the request under
+[Remove a page or feature](#remove-a-page-or-feature).
 
 ### Visual identity
 
@@ -197,40 +177,24 @@ build after the refactor.
 | Share-card generator       | `scripts/generate-og.mjs`               |
 
 The icon set is generated, not hand-drawn: `npm run icons` renders the monogram
-from `--color-accent` and your name in `src/data/profile.json`, writing
+from the colour tokens and your name in `src/data/profile.json`, writing
 `app/favicon.ico`, `app/icon.png`, `app/apple-icon.png`, `app/manifest.json`,
-and the manifest icons under `public/images/icons/`. Commit those together with
-`scripts/icons.meta.json`; a test fails if they drift from the tokens.
+and the manifest icons under `public/images/icons/`. Commit them with
+`scripts/icons.meta.json`; a test fails when they fall behind the tokens.
 
-After changing profile fields on the share cards, their design, the colour
-tokens, or a published post in `content/writing/`, run:
+The share cards are generated the same way. After changing the profile fields
+they show, their design, the colour tokens, or a published post, run
+`npm run og` and commit `public/og.png`, `public/og/writing/`, and the
+`public/og.meta.json` ledger together. `npm run og:check` re-renders every card
+from checksum-pinned fonts and compares it byte for byte, so it needs network
+access and Sharp; `npm run og:check:ledger` is its offline half. Both ledgers
+record the locked Next, React, and Sharp versions, so upgrading any of them
+means running `npm run icons` and `npm run og` even when no pixel changes.
 
-```bash
-npm run og
-npm run og:check
-```
-
-`npm run og` updates `public/og.png`, one card per published post under
-`public/og/writing/`, and the `public/og.meta.json` ledger. The images and the
-ledger must stay in sync, and drafts never get a card. The ledger also binds
-the locked Next, React, and Sharp renderer packages, so an upgrade to one of
-them requires regeneration even when the card source itself did not change.
-`npm run og:check` then fetches the checksum-pinned fonts and compares a fresh
-render byte for byte, so changing an image and its editable ledger digest
-together does not pass verification. Image generation and the fresh render check
-need network access and Sharp installed — `next/og`
-rasterizes with Sharp when it is present and with a bundled WebAssembly renderer
-when it is not, which changes every byte — so it refuses to run without it. Use
-`npm run og:check:ledger` for the offline half when fonts.gstatic.com is
-unreachable.
-
-Keep draft-only screenshots and downloads outside `public/`, which is copied
-verbatim into the deployed export. Draft Markdown may retain root-relative
-references to those absent files for local editing; the development page
-reserves a fallback image ratio. `npm run verify-export` parses inline,
-reference-style, and relative resources, and parses or rejects raw HTML
-fail-closed. It fails if a file referenced only by a draft appears in `out/`;
-relative image paths still cannot be used by the page renderer.
+Keep draft-only screenshots and downloads outside `public/`, which ships
+verbatim. A draft can still reference them while you write, and
+`npm run verify-export` fails if a file referenced only by a draft reaches
+`out/`.
 
 ## Audit the result
 
@@ -251,18 +215,9 @@ Some tests assert the site's public content, so exact-text expectations may
 need updates. Do not weaken structural checks for metadata, canonical URLs,
 draft isolation, accessibility, or export integrity.
 
-The full validation suite is:
-
-```bash
-npm run format
-npm run lint
-npm run type-check
-npm test
-npm run og:check
-npm run build
-npm run verify-export
-npm run measure-export
-```
+The full validation suite is the command list under
+[Validate the change](./contributing.md#validate-the-change) in the
+contributing guide.
 
 ## Deployment reference
 
@@ -317,32 +272,27 @@ assets and absolute URL construction.
 
 ### Security boundaries and hosting headers
 
-The résumé and About pages are intentionally public. Their content is authored
-in repository files, with the same review and publishing authority as the site
-code; the application has no CMS, résumé upload, or user-supplied Markdown path.
-The Markdown renderer's default sanitization remains enabled. Treat an external
-content source as a new trust boundary if you add one.
+Everything the site publishes, including the public résumé and About page, is
+authored in repository files and reviewed like code. There is no CMS, upload,
+or user-supplied Markdown, and the Markdown renderer keeps its default
+sanitization. Treat any external content source you add as a new trust
+boundary.
 
-Only the deployment job has Pages write permissions. Builds read existing Pages
-metadata to configure Next's base path, and fetch public GitHub statistics
-without a job token. If the anonymous API is rate limited, the page identifies
-its fallback readings rather than failing the export. Keep action references
-pinned to full commit SHAs; the GitHub Actions Dependabot configuration maintains
-those pins.
+Only the deployment job can write to Pages. The build reads Pages settings to
+configure Next's base path and fetches public GitHub statistics without a token;
+when that anonymous API is rate limited, `/stats` shows its last-known counts as
+floors instead of failing the export. Keep actions pinned to full commit SHAs;
+Dependabot maintains the pins.
 
-GitHub Pages controls the HTTP response headers. The site remains on Pages;
-it does not currently provide `X-Frame-Options`, CSP `frame-ancestors`, or
-`X-Content-Type-Options: nosniff`. These are hosting limitations, not protections
-supplied by this repository. Next's `headers()` and Helmet require a running
-server, and a `_headers` file is not a GitHub Pages configuration mechanism.
-HTML meta tags cannot substitute for these protections; in particular,
-[`frame-ancestors` is unsupported in meta policies](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy/frame-ancestors).
-
-If anti-framing or MIME-sniffing headers become a requirement, use a separately
-approved proxy or host that supports response-header configuration, then verify
-the deployed responses. Do not add ineffective meta tags or frame-busting
-JavaScript to silence a scanner. The current site has no authenticated actions,
-and no concrete clickjacking or MIME-sniffing exploit has been established.
+GitHub Pages sets the HTTP response headers, and it sends no `X-Frame-Options`,
+CSP `frame-ancestors`, or `X-Content-Type-Options: nosniff`. Nothing in this
+repository can add them: Next's `headers()` and Helmet need a running server,
+Pages does not read a `_headers` file, and
+[`frame-ancestors` is ignored in a meta policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy/frame-ancestors).
+If those headers become a requirement, put the site behind an approved proxy or
+host that sets them, then verify the deployed responses. Do not add meta tags or
+frame-busting JavaScript to quiet a scanner. The site has no authenticated
+actions, and no concrete clickjacking or MIME-sniffing exploit is known.
 
 ## Troubleshooting
 
