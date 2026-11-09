@@ -34,7 +34,7 @@
     "@fontsource-variable/jetbrains-mono": "^5.3.0",
     "@fontsource-variable/newsreader": "^5.3.0",
     "@next/third-parties": "^16.4.5",
-    "@tailwindcss/postcss": "^4.3.3",
+    "@tailwindcss/postcss": "^4.3.4",
     "js-yaml": "^5.5.0",
     "markdown-to-jsx": "^9.10.4",
     "next": "^16.4.5",
