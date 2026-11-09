@@ -35,21 +35,21 @@ migration.
 ## Visual design
 
 The visual system pairs ink blue with porcelain paper, with neutral charcoal
-at night. Inter handles headings, navigation, and buttons; Newsreader handles
-prose and the homepage writing titles; JetBrains Mono identifies dates, data,
-and annotations. Flat surfaces, hairlines, and spacing keep the composition
+at night. Inter handles the name, page titles, navigation, and buttons;
+Newsreader handles prose, section headings, and the titles of posts, companies,
+projects, and degrees; JetBrains Mono identifies dates, data, and annotations. Flat surfaces, hairlines, and spacing keep the composition
 crisp. The homepage uses one blue poster field on the page measure, with the
 name and introduction in the left column and a square color portrait on the
 right. On mobile, the portrait follows the copy. Its location caption is
 centered beneath the image in both layouts. The header, every page, and the
 footer share that one measure.
 
-Blue handles links and controls on paper. The poster has its own surface/text
-pair so its pale copy and inverted button remain readable in both themes.
-The writing register stays on paper. Amber remains reserved for live or in-progress values. Portraits and
-project imagery stay in color without requiring hover. New surface colors
-must retain readable text and links in both themes, and print resets them to
-ink on paper.
+Blue handles links and controls on paper. The poster has its own surface and
+text pair, so its pale copy and inverted button stay readable in both themes.
+The writing register stays on paper. Amber is reserved for live or in-progress
+values. Portraits and project imagery stay in color without requiring hover.
+New surface colors must keep text and links readable in both themes, and print
+resets them to ink on paper.
 
 The implementation lives in [`app/styles/tokens/`](../app/styles/tokens/).
 

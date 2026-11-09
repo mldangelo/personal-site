@@ -30,7 +30,7 @@
     "Missing same-origin bootstrap assets fail instead of making a route look smaller.",
     "",
     "Inline SVG is gated on the distinct markup, which is the icon set itself: it",
-    "moves when an icon is added, swapped, or the library changes, and it does not",
+    "moves when an icon is added or swapped, and it does not",
     "move when a page is added. The repeated total is printed instead, because it",
     "is arithmetically the distinct markup times the page count. It is also only an",
     "upper-bound deduplication opportunity rather than exact sprite savings, since",
