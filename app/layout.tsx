@@ -19,8 +19,7 @@ import './tailwind.css';
 /**
  * The colour immediately under the browser's own chrome, per theme, read from
  * the stylesheets at build time rather than typed here so it cannot drift from
- * the tokens. `--color-bg-alt` is the page background the sticky header tints;
- * `--color-bg` is the raised surface and would put two colours side by side.
+ * the tokens: `--color-bg-alt`, the page and header background.
  */
 const CHROME_COLORS: ThemeColors = {
   light: readColorToken(THEME_COLOR_TOKEN, 'light'),

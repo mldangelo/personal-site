@@ -16,7 +16,6 @@
        outside the html/body boxes. Without this, a saved dark preference
        leaves dark margins around an otherwise white PDF. */
     color-scheme: light;
-    --color-bg: #fff;
     --color-bg-alt: #fff;
     --color-fg: #000;
     --color-fg-bold: #000;
