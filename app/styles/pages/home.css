@@ -110,7 +110,7 @@
   margin: calc(2.625rem + 0.15 * var(--hero-name-size)) 0 0;
 }
 
-.hero-portrait .theme-portrait,
+.hero-portrait .portrait,
 .hero-portrait img {
   display: block;
   width: 100%;

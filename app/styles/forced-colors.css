@@ -78,7 +78,7 @@
      Images keep their colours, but the filter on them was tuned for paper or
      ink, not for Canvas.
      =================== */
-  .theme-portrait img {
+  .portrait img {
     filter: none;
   }
 

@@ -3,7 +3,7 @@ import Link from 'next/link';
 import profile from '@/data/profile.json';
 import { smartQuotes } from '@/lib/typography';
 
-import ThemePortrait from './ThemePortrait';
+import Portrait from './Portrait';
 
 export default function Hero() {
   return (
@@ -43,7 +43,7 @@ export default function Hero() {
         </div>
 
         <figure className="hero-portrait">
-          <ThemePortrait width={320} height={320} priority />
+          <Portrait width={320} height={320} priority />
           <figcaption>{profile.currentCity}</figcaption>
         </figure>
       </div>

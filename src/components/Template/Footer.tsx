@@ -8,7 +8,7 @@ import { SOURCE_REPOSITORY } from '@/lib/telemetry';
 import { smartQuotes } from '@/lib/typography';
 import { AUTHOR_NAME } from '@/lib/utils';
 
-import ThemePortrait from './ThemePortrait';
+import Portrait from './Portrait';
 
 export default function Footer() {
   const current = currentPosition(work);
@@ -18,7 +18,7 @@ export default function Footer() {
       <div className="footer-content">
         <div className="footer-identity">
           <Link href="/" className="footer-avatar">
-            <ThemePortrait width={80} height={80} />
+            <Portrait width={80} height={80} />
           </Link>
           <div className="footer-info">
             <span className="footer-name">{smartQuotes(AUTHOR_NAME)}</span>

@@ -1,6 +1,6 @@
 import { AUTHOR_NAME, SITE_IMAGE_PATH } from '@/lib/utils';
 
-interface ThemePortraitProps {
+interface PortraitProps {
   width: number;
   height: number;
   priority?: boolean;
@@ -13,13 +13,13 @@ interface ThemePortraitProps {
  * - Avoid shipping next/image runtime for static export
  * - Reduce client-side JavaScript bundle
  */
-export default function ThemePortrait({
+export default function Portrait({
   width,
   height,
   priority = false,
-}: ThemePortraitProps) {
+}: PortraitProps) {
   return (
-    <span className="theme-portrait">
+    <span className="portrait">
       {/* biome-ignore lint/performance/noImgElement: Using native img to avoid next/image runtime overhead for static export */}
       <img
         src={SITE_IMAGE_PATH}
