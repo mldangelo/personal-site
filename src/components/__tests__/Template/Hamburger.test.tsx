@@ -17,22 +17,27 @@ function addStyles(files: readonly string[], width: 'phone' | 'desktop') {
       'utf8',
     );
     const style = document.createElement('style');
-    // jsdom matches media queries against a fixed 1024px viewport, so they
-    // always take the desktop side. A phone moves the 735/736px breakpoint out
-    // of its reach.
+    // jsdom has no container layout and a fixed 1024px media-query viewport.
+    // Supply the layout decision here to exercise the real cascade; actual
+    // sizing and enlarged-text reflow need a browser.
+    const layoutCss = css.replace(
+      /@container site-header\s*\([^)]*\)/g,
+      `@media (min-width: ${width === 'desktop' ? '0' : '1e5'}px)`,
+    );
     style.textContent =
       width === 'phone'
-        ? css.replaceAll(/\((min|max)-width: 73[56]px\)/g, '($1-width: 1e5px)')
-        : css;
+        ? layoutCss.replaceAll(
+            /\((min|max)-width: 73[56]px\)/g,
+            '($1-width: 1e5px)',
+          )
+        : layoutCss;
     style.dataset.test = '';
     document.head.append(style);
   }
 }
 
-/** The button's own `display`: `toBeVisible()` would read an ancestor's. */
-function display() {
-  const button = document.querySelector('.hamburger-button') as Element;
-  return window.getComputedStyle(button).display;
+function menuButton() {
+  return document.querySelector('.hamburger-button') as HTMLElement;
 }
 
 describe('Hamburger', () => {
@@ -56,21 +61,19 @@ describe('Hamburger', () => {
       addStyles(files, 'phone');
       render(<Hamburger />);
 
-      expect(display()).toBe('none');
+      expect(menuButton()).not.toBeVisible();
 
       document.documentElement.setAttribute(THEME_CHOICE_ATTRIBUTE, 'system');
-      expect(display()).toBe('flex');
+      expect(menuButton()).toBeVisible();
     },
   );
 
-  // A gate that restored the button on the attribute, rather than hiding it on
-  // its absence, would outrank the desktop hide and put it on every desktop.
-  it('stays hidden on a desktop once the bootstrap has run', () => {
+  it('stays hidden when the desktop links fit, even after the bootstrap runs', () => {
     addStyles(['header.css', 'navigation.css'], 'desktop');
     render(<Hamburger />);
 
     document.documentElement.setAttribute(THEME_CHOICE_ATTRIBUTE, 'system');
-    expect(display()).toBe('none');
+    expect(menuButton()).not.toBeVisible();
   });
 
   it('opens and closes the menu it controls, and says which it will do', () => {

@@ -38,6 +38,7 @@
 /* An opaque paper header with a structural hairline. The colour is the page's
    own, which `theme-color` also gives the browser chrome above it. */
 .site-header {
+  container: site-header / inline-size;
   align-items: center;
   background-color: var(--color-bg-alt);
   border-bottom: var(--rule) solid var(--color-border);
@@ -106,13 +107,7 @@
 
 /* Hamburger container */
 .hamburger-container {
-  display: none;
-}
-
-@media (max-width: 735px) {
-  .hamburger-container {
-    display: block;
-  }
+  display: block;
 }
 
 /* Hamburger nav structure */
