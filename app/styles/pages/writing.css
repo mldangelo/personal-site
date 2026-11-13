@@ -22,6 +22,12 @@
    the prose inside it, rather than to the article itself. Capping the article
    left a wide figure nothing to grow into: a block at `width: auto` fills its
    containing block, so a larger `max-width` on the figure did nothing. */
+.post-page {
+  /* The reading progress timeline: 0 when the article's top reaches the top
+     of the viewport, 1 when its end reaches the bottom. */
+  view-timeline: --post-page block;
+}
+
 .reading-progress {
   position: fixed;
   z-index: var(--z-header);
@@ -39,9 +45,29 @@
   width: 100%;
   height: 100%;
   background: var(--color-signal-mark);
-  transform: scaleX(var(--reading-progress, 0));
   transform-origin: left center;
-  will-change: transform;
+  /* The shorthand resets the timeline and range, so they follow it. */
+  animation: reading-progress linear both;
+  animation-timeline: --post-page;
+  animation-range: contain;
+}
+
+@keyframes reading-progress {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Without scroll timelines nothing drives the bar, and the shorthand alone
+   would finish at once and draw it full, so it is not drawn at all. */
+@supports not (animation-timeline: view()) {
+  .reading-progress {
+    display: none;
+  }
 }
 
 @media (max-width: 735px) {
