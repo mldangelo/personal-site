@@ -59,17 +59,17 @@ export function getWritingItems(): WritingItem[] {
 }
 
 /**
- * The posts either side of one, in the order /writing lists them: the next
- * newer, then the next older. External writing is left out, because these rows
- * are for reading on from the end of a post here.
+ * The posts either side of one, in the order /writing lists them. Writing
+ * elsewhere is left out: these links read on from the end of a post here.
  */
-export function getAdjacentPosts(slug: string): WritingItem[] {
+export function getAdjacentPosts(slug: string): {
+  newer?: WritingItem;
+  older?: WritingItem;
+} {
   const posts = getWritingItems().filter((item) => !item.isExternal);
   const index = posts.findIndex((item) => item.url === postPath(slug));
 
-  if (index === -1) return [];
+  if (index === -1) return {};
 
-  return [posts[index - 1], posts[index + 1]].filter(
-    (item): item is WritingItem => item !== undefined,
-  );
+  return { newer: posts[index - 1], older: posts[index + 1] };
 }

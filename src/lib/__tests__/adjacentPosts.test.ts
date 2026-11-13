@@ -30,8 +30,10 @@ vi.mock('@/data/writing', () => ({
   ],
 }));
 
-const neighbours = (slug: string) =>
-  getAdjacentPosts(slug).map((item) => item.url);
+const neighbours = (slug: string) => {
+  const { newer, older } = getAdjacentPosts(slug);
+  return [newer?.url, older?.url];
+};
 
 describe('getAdjacentPosts', () => {
   it('pairs the next newer post with the next older, skipping writing elsewhere', () => {
@@ -41,9 +43,9 @@ describe('getAdjacentPosts', () => {
     ]);
   });
 
-  it('offers one neighbour at either end and none for an unknown post', () => {
-    expect(neighbours('newest')).toEqual(['/writing/middle/']);
-    expect(neighbours('oldest')).toEqual(['/writing/middle/']);
-    expect(neighbours('missing')).toEqual([]);
+  it('leaves a side empty at either end, and both for an unknown post', () => {
+    expect(neighbours('newest')).toEqual([undefined, '/writing/middle/']);
+    expect(neighbours('oldest')).toEqual(['/writing/middle/', undefined]);
+    expect(neighbours('missing')).toEqual([undefined, undefined]);
   });
 });

@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { SchemaGraph } from '@/components/Schema';
 import PageWrapper from '@/components/Template/PageWrapper';
-import KeepReading from '@/components/Writing/KeepReading';
 import PostContent from '@/components/Writing/PostContent';
+import PostPager from '@/components/Writing/PostPager';
 import ReadingProgress from '@/components/Writing/ReadingProgress';
 import {
   type ImageSize,
@@ -199,7 +199,7 @@ export default async function PostPage({ params }: PageProps) {
           />
         </div>
       </article>
-      <KeepReading posts={getAdjacentPosts(post.slug)} />
+      <PostPager {...getAdjacentPosts(post.slug)} />
     </PageWrapper>
   );
 }
