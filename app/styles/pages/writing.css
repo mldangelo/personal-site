@@ -308,3 +308,24 @@
     width: min(var(--figure-width, 100%), 100%);
   }
 }
+
+/* ========================================
+   KEEP READING
+   The posts either side of this one, as rows of the /writing register
+   ======================================== */
+
+.post-more {
+  margin-top: 4rem;
+}
+
+.post-more-all {
+  font-family: var(--font-display);
+  font-size: var(--text-ui);
+  color: var(--color-fg-light);
+}
+
+/* → is in none of the self-hosted subsets, so a system face draws it, as on
+   the homepage. */
+.post-more-all span {
+  font-family: system-ui, sans-serif;
+}

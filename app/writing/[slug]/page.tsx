@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { SchemaGraph } from '@/components/Schema';
 import PageWrapper from '@/components/Template/PageWrapper';
+import KeepReading from '@/components/Writing/KeepReading';
 import PostContent from '@/components/Writing/PostContent';
 import ReadingProgress from '@/components/Writing/ReadingProgress';
 import {
@@ -24,6 +25,7 @@ import {
   formatDate,
   SITE_URL,
 } from '@/lib/utils';
+import { getAdjacentPosts } from '@/lib/writing';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -197,6 +199,7 @@ export default async function PostPage({ params }: PageProps) {
           />
         </div>
       </article>
+      <KeepReading posts={getAdjacentPosts(post.slug)} />
     </PageWrapper>
   );
 }
