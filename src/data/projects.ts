@@ -8,10 +8,11 @@
  * - `archive` — student-era experiments. A register that deletes its own
  *   history is a brochure, so these stay, stepped down rather than removed.
  *
- * Every shipped entry declares the role in `src/data/resume/work.ts` that
- * backs its dates and numeric claims. Archive entries are maintained here
- * directly. Those checks establish internal consistency; factual claims and
- * public destinations still need primary-source and live-link review.
+ * Shipped entries cite either a role in `src/data/resume/work.ts` or the
+ * source repository for a personal project. Résumé-backed dates and numeric
+ * claims are cross-checked; repository evidence is reviewed when adding or
+ * updating an entry. Archive entries are maintained here directly. Public
+ * destinations still need live-link review.
  */
 export type ProjectStatus = 'shipped' | 'archive';
 
@@ -26,6 +27,8 @@ export interface Project {
   link?: string;
   /** Résumé role that backs a shipped entry's dates and numeric claims. */
   sourceWork?: string;
+  /** Source repository backing a personal project's dates and description. */
+  sourceRepository?: string;
   /**
    * Screenshot, where one exists. Optional: the card and the register row are
    * both designed to read on type and rules alone, so a new entry does not
@@ -47,7 +50,7 @@ export interface Project {
    */
   ongoing?: boolean;
   desc: string;
-  /** Technologies the résumé names for this work. Omitted when it names none. */
+  /** Technologies named by the résumé or source repository. */
   tech?: string[];
   status: ProjectStatus;
 }
@@ -58,6 +61,17 @@ export interface Project {
  * date. `projects.test.ts` pins the complete comparator, including ties.
  */
 const data: Project[] = [
+  {
+    title: 'SF Run Club Index',
+    subtitle: 'Personal project',
+    link: 'https://mldangelo.github.io/run/',
+    sourceRepository: 'https://github.com/mldangelo/run',
+    // Repository created on November 8, 2026; dates render at month precision.
+    date: '2026-11-08',
+    ongoing: true,
+    desc: 'A searchable directory of running clubs, group runs, and races in San Francisco and nearby Bay Area communities. Filter by day, neighborhood, distance, and experience, with meeting details and links to organizer sources.',
+    status: 'shipped',
+  },
   {
     title: 'Codex Security',
     subtitle: 'OpenAI · Research preview',

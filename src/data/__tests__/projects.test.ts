@@ -48,14 +48,16 @@ describe('projects data', () => {
   });
 
   it('links over https with no embedded credentials', () => {
-    for (const { link, title } of projects) {
-      if (!link) continue;
+    for (const { link, sourceRepository, title } of projects) {
+      for (const url of [link, sourceRepository]) {
+        if (!url) continue;
 
-      expect(new URL(link), title).toMatchObject({
-        protocol: 'https:',
-        username: '',
-        password: '',
-      });
+        expect(new URL(url), title).toMatchObject({
+          protocol: 'https:',
+          username: '',
+          password: '',
+        });
+      }
     }
   });
 
@@ -67,23 +69,32 @@ describe('projects data', () => {
   });
 
   /**
-   * A shipped entry must agree with the résumé role it names. This is a
+   * A résumé-backed entry must agree with the role it names. This is a
    * consistency gate, not proof of external truth or link health. A project may
    * outlive the job, so only a declared project end date is compared.
    */
   describe('agreement with the résumé', () => {
     const byName = new Map(work.map((position) => [position.name, position]));
-    const sourced = shipped.map((project) => ({
-      project,
-      position: byName.get(project.sourceWork ?? ''),
-    }));
+    const sourced = shipped
+      .filter((project) => project.sourceWork)
+      .map((project) => ({
+        project,
+        position: byName.get(project.sourceWork ?? ''),
+      }));
 
-    it('names a source role for every shipped entry and no archived one', () => {
+    it('cites one source for each shipped entry and validates named roles', () => {
+      for (const project of shipped) {
+        expect(
+          Boolean(project.sourceWork) !== Boolean(project.sourceRepository),
+          project.title,
+        ).toBe(true);
+      }
       for (const { project, position } of sourced) {
         expect(position, project.title).toBeDefined();
       }
       for (const project of archive) {
         expect(project.sourceWork, project.title).toBeUndefined();
+        expect(project.sourceRepository, project.title).toBeUndefined();
       }
     });
 
