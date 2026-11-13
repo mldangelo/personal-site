@@ -1,8 +1,8 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { fireEvent, render, screen } from '@testing-library/react';
-import { afterEach, describe, expect, it } from 'vitest';
+import { act, fireEvent, render, screen } from '@testing-library/react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import routes from '@/data/routes';
 import { THEME_CHOICE_ATTRIBUTE } from '@/lib/theme';
@@ -37,6 +37,8 @@ function display() {
 
 describe('Hamburger', () => {
   afterEach(() => {
+    vi.restoreAllMocks();
+    vi.unstubAllGlobals();
     document.documentElement.removeAttribute(THEME_CHOICE_ATTRIBUTE);
     for (const style of document.querySelectorAll('style[data-test]')) {
       style.remove();
@@ -90,6 +92,50 @@ describe('Hamburger', () => {
     fireEvent.click(button);
     expect(button).toHaveAttribute('aria-expanded', 'false');
     expect(button).toHaveAttribute('aria-label', 'Open navigation menu');
+  });
+
+  it('closes and unlocks scrolling when CSS hides the trigger, and can reopen', () => {
+    let notifyResize = () => {};
+    const disconnect = vi.fn();
+    vi.stubGlobal(
+      'ResizeObserver',
+      class implements ResizeObserver {
+        observe = vi.fn();
+        unobserve = vi.fn();
+        disconnect = disconnect;
+        constructor(callback: ResizeObserverCallback) {
+          notifyResize = () => callback([], this);
+        }
+      },
+    );
+    vi.spyOn(window, 'scrollY', 'get').mockReturnValue(240);
+    const { unmount } = render(<Hamburger />);
+    const button = screen.getByRole('button', { name: 'Open navigation menu' });
+    // jsdom has no layout. A rendered button has a box; display:none has none.
+    const boxes = vi
+      .spyOn(button, 'getClientRects')
+      .mockReturnValue({ length: 1 } as DOMRectList);
+
+    fireEvent.click(button);
+    act(() => notifyResize());
+    expect(button).toHaveAttribute('aria-expanded', 'true');
+    expect(document.body.style.position).toBe('fixed');
+
+    boxes.mockReturnValue({ length: 0 } as DOMRectList);
+    act(() => notifyResize());
+    expect(button).toHaveAttribute('aria-expanded', 'false');
+    expect(document.getElementById('mobile-nav-menu')).toHaveAttribute('inert');
+    expect(document.body.style.position).toBe('');
+    expect(window.scrollTo).toHaveBeenLastCalledWith(0, 240);
+    expect(disconnect).toHaveBeenCalledTimes(1);
+
+    boxes.mockReturnValue({ length: 1 } as DOMRectList);
+    fireEvent.click(button);
+    act(() => notifyResize());
+    expect(button).toHaveAttribute('aria-expanded', 'true');
+    unmount();
+    expect(disconnect).toHaveBeenCalledTimes(2);
+    expect(document.body.style.position).toBe('');
   });
 
   // The only nav a phone gets, so every promoted route has to be in it and no

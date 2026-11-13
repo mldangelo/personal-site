@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import routes from '../../data/routes';
@@ -16,6 +16,7 @@ export default function Hamburger() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -23,6 +24,30 @@ export default function Hamburger() {
 
   const toggleMenu = useCallback(() => setOpen((prev) => !prev), []);
   const closeMenu = useCallback(() => setOpen(false), []);
+
+  useEffect(() => {
+    const button = buttonRef.current;
+    if (!open || !button) return;
+
+    // Observe the trigger so CSS owns the breakpoint. Hiding it alone leaves
+    // the portalled menu open and the body locked on a wider viewport.
+    const observer = new ResizeObserver(() => {
+      if (button.getClientRects().length > 0) return;
+
+      closeMenu();
+
+      // The hidden trigger cannot receive restored focus. Hand it to the
+      // current desktop route, or the home link when no route is selected.
+      const header = button.closest('header');
+      const target =
+        header?.querySelector<HTMLAnchorElement>('a[aria-current="page"]') ??
+        header?.querySelector<HTMLAnchorElement>('a[href]');
+      target?.focus({ preventScroll: true });
+    });
+
+    observer.observe(button);
+    return () => observer.disconnect();
+  }, [open, closeMenu]);
 
   const slideMenu = (
     <SlideMenu id={MENU_ID} isOpen={open} onClose={closeMenu}>
@@ -69,6 +94,7 @@ export default function Hamburger() {
           <ul>
             <li className="menu">
               <button
+                ref={buttonRef}
                 type="button"
                 onClick={toggleMenu}
                 className="hamburger-button"
