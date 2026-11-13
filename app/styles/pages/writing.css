@@ -308,3 +308,47 @@
     width: min(var(--figure-width, 100%), 100%);
   }
 }
+
+/* The end of a post: the older post on the left and the newer on the right,
+   as pages turn, on the reading column under a register hairline. */
+.post-pager {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-6) var(--spacing-8);
+  max-width: var(--measure-read);
+  margin-top: var(--spacing-16);
+  padding-top: var(--spacing-6);
+  border-top: var(--rule) solid var(--color-border);
+}
+
+.post-pager-newer {
+  grid-column: 2;
+  text-align: right;
+}
+
+.post-pager-label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-family: var(--font-display);
+  font-size: var(--text-ui);
+  color: var(--color-fg-light);
+}
+
+.post-pager-title {
+  font-family: var(--font-body);
+  font-size: var(--text-md);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--leading-snug);
+  text-wrap: pretty;
+}
+
+@media (max-width: 640px) {
+  .post-pager {
+    grid-template-columns: 1fr;
+  }
+
+  .post-pager-newer {
+    grid-column: auto;
+    text-align: left;
+  }
+}

@@ -25,6 +25,11 @@ export function compareWritingItems(a: WritingItem, b: WritingItem): number {
   );
 }
 
+/** The route of a post on this site, in its canonical trailing-slash form. */
+function postPath(slug: string): string {
+  return `/writing/${slug}/`;
+}
+
 function externalSource(url: string): string {
   const hostname = new URL(url).hostname.replace(/^www\./, '');
 
@@ -38,7 +43,7 @@ function externalSource(url: string): string {
 export function getWritingItems(): WritingItem[] {
   const internal: WritingItem[] = getAllPosts().map((post) => ({
     title: post.title,
-    url: `/writing/${post.slug}/`,
+    url: postPath(post.slug),
     date: post.date,
     description: post.description,
     isExternal: false,
@@ -51,4 +56,20 @@ export function getWritingItems(): WritingItem[] {
   }));
 
   return [...internal, ...external].sort(compareWritingItems);
+}
+
+/**
+ * The posts either side of one, in the order /writing lists them. Writing
+ * elsewhere is left out: these links read on from the end of a post here.
+ */
+export function getAdjacentPosts(slug: string): {
+  newer?: WritingItem;
+  older?: WritingItem;
+} {
+  const posts = getWritingItems().filter((item) => !item.isExternal);
+  const index = posts.findIndex((item) => item.url === postPath(slug));
+
+  if (index === -1) return {};
+
+  return { newer: posts[index - 1], older: posts[index + 1] };
 }
