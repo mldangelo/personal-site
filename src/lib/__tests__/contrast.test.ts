@@ -71,7 +71,7 @@ function resolve(theme: Map<string, string>, name: string): string {
   return value;
 }
 
-const PAPER = ['--color-bg', '--color-bg-alt'];
+const PAPER = ['--color-bg-alt'];
 
 /** Foreground, the backdrops it must read against, and the floor. */
 const PAIRINGS: [string, string[], number][] = [

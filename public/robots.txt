@@ -1,4 +1,4 @@
 User-agent: *
-Disallow: /api
+Allow: /
 
 Sitemap: https://mldangelo.com/sitemap.xml

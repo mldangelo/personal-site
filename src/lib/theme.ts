@@ -32,10 +32,7 @@ export const THEME_ATTRIBUTE = 'data-theme';
 export const THEME_CHOICE_ATTRIBUTE = 'data-theme-choice';
 export const DARK_SCHEME_QUERY = '(prefers-color-scheme: dark)';
 
-/**
- * The token whose value the browser chrome is painted with: the page
- * background the sticky header tints, not the raised surface.
- */
+/** The token the browser chrome is painted with: the page and header background. */
 export const THEME_COLOR_TOKEN = '--color-bg-alt';
 
 /** Every `theme-color` meta, whoever created it. */

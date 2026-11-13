@@ -6,7 +6,6 @@
 /* Neutral charcoal surrounds the same deep-blue poster after dark. */
 [data-theme='dark'] {
   /* Core colors */
-  --color-bg: #2b2c33;
   --color-bg-alt: #222329;
   --color-fg: #ece9e3;
   --color-fg-bold: #f4f0e9;
@@ -48,7 +47,7 @@
 }
 
 /* Keep the portrait in color while softening its white field at night. */
-[data-theme='dark'] :where(.theme-portrait) img {
+[data-theme='dark'] :where(.portrait) img {
   filter: brightness(0.9);
 }
 

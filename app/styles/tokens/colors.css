@@ -7,10 +7,8 @@
 @theme {
   /* ===================
      CORE PALETTE
-     --color-bg     = raised surface (cards, header)
-     --color-bg-alt = page background
+     --color-bg-alt = page and header background
      =================== */
-  --color-bg: #faf7f1;
   --color-bg-alt: #f6f3ed;
   --color-fg: #292a2e;
   --color-fg-bold: #292a2e;

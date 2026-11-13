@@ -87,15 +87,4 @@ describe('theme-color', () => {
     );
     expect(HEAD).not.toContain('__next_s');
   });
-
-  // The header tints the page background, so the raised surface would sit visibly
-  // wrong beside the browser chrome.
-  it('builds the bootstrap from the page background, not the raised surface', () => {
-    for (const scheme of ['light', 'dark'] as const) {
-      expect(BOOTSTRAP).toContain(
-        JSON.stringify(readColorToken('--color-bg-alt', scheme)),
-      );
-      expect(HEAD).not.toContain(readColorToken('--color-bg', scheme));
-    }
-  });
 });

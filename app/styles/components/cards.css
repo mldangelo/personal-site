@@ -5,7 +5,7 @@
 
 /* Portrait image */
 @layer components {
-  .theme-portrait {
+  .portrait {
     display: inline-block;
     position: relative;
     line-height: 0;
