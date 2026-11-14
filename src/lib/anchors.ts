@@ -51,6 +51,7 @@ export function createUniqueHeadingIds(
 
 interface MarkdownHeadingPlan {
   aliases: Map<string, string>;
+  sections: Array<{ id: string; title: string }>;
   slugify: (source: string) => string;
 }
 
@@ -138,7 +139,9 @@ export function planMarkdownHeadingAnchors(
 
       headings.push({ source, legacy });
 
-      return legacy;
+      // Temporary parser ids associate AST nodes with the canonical plan,
+      // including repeated titles and headings nested in quoted examples.
+      return String(headings.length - 1);
     },
   });
 
@@ -204,5 +207,14 @@ export function planMarkdownHeadingAnchors(
     claimedIds.add(legacy);
   }
 
-  return { aliases, slugify };
+  // Only the document's own main sections belong in its contents. The parser
+  // excludes fenced examples; looking at the root excludes quoted/listed ones.
+  const sections = ast.flatMap((node) => {
+    if (node.type !== RuleType.heading || node.level !== 2) return [];
+
+    const index = Number(node.id);
+    return [{ id: ids[index], title: headings[index].source }];
+  });
+
+  return { aliases, sections, slugify };
 }

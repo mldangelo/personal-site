@@ -113,6 +113,50 @@
   line-height: var(--leading-snug);
 }
 
+/* A compact outline before the prose, expanded with the browser's own
+   disclosure control. Native markers and links survive forced colours. */
+.post-contents {
+  max-width: var(--measure-read);
+  margin-bottom: var(--spacing-8);
+  border-bottom: var(--rule) solid var(--color-border);
+}
+
+.post-contents summary {
+  padding: 0 0 var(--spacing-4);
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-size: var(--text-ui);
+  color: var(--color-fg-bold);
+}
+
+.post-contents-count {
+  float: right;
+  margin-left: var(--spacing-4);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-fg-light);
+}
+
+.post-contents ol {
+  margin: 0 0 var(--spacing-4);
+  padding: 0;
+  list-style: none;
+}
+
+.post-contents a {
+  display: block;
+  padding: 0.4rem 0;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading-snug);
+  overflow-wrap: anywhere;
+}
+
+.post-contents a:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 /* Prose styling for markdown content */
 .prose {
   font-family: var(--font-body);

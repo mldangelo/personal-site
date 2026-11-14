@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { SchemaGraph } from '@/components/Schema';
 import PageWrapper from '@/components/Template/PageWrapper';
 import PostContent from '@/components/Writing/PostContent';
+import PostContents from '@/components/Writing/PostContents';
 import PostPager from '@/components/Writing/PostPager';
 import ReadingProgress from '@/components/Writing/ReadingProgress';
 import {
@@ -191,6 +192,7 @@ export default async function PostPage({ params }: PageProps) {
           <h1 className="post-title">{smartQuotes(post.title)}</h1>
           <p className="post-description">{smartQuotes(post.description)}</p>
         </header>
+        <PostContents content={post.content} />
         <div className="post-content prose">
           <PostContent
             content={post.content}
