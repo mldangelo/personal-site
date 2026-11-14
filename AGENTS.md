@@ -173,6 +173,7 @@ Each entry below is a rule and the trap behind it. Git history has the stories.
 - **`max-width` cannot widen a block**: a block at `width: auto` fills its containing block, so a figure wider than the reading measure needs an explicit `width`, and the prose blocks, not the article, carry `--measure-read` so there is room to grow into. For measured local images `--figure-width` is the build-time intrinsic width, so `min()` against it prevents upscaling; remote images use the documented fallback dimensions
 - **Print**: `app/styles/print.css` is imported last so it overrides both themes. The résumé is the page people print; check it there after changing its layout. Paper hides the site header and footer, the only chrome that carries the name, so the résumé's one `<h1>` swaps its screen text for the name there
 - **No placeholder stylesheets**: a stylesheet in the import graph ships rules, or it goes
+- **Reflow follows the available space and text size**: the footer's flex columns stay within the page rails, its identity can stack, and its profile targets can wrap when glyphs grow. Check a 320px viewport at both normal and 200% text size; a viewport breakpoint alone cannot catch text enlargement. Article prose allows long words and URLs to break, while preformatted fences scroll independently
 
 ## Behaviour
 

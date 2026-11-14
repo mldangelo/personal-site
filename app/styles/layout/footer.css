@@ -25,8 +25,17 @@
 
 .footer-identity {
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-start;
   gap: 1rem;
+}
+
+/* Flex items otherwise keep their content's minimum width even in the
+   single-column layout. Let the name and navigation use the actual rail. */
+.footer-identity,
+.footer-right {
+  min-width: 0;
+  max-width: 100%;
 }
 
 /* A quiet square portrait closes the page. */
@@ -52,7 +61,9 @@
 
 .footer-info {
   display: flex;
+  flex: 1 1 12rem;
   flex-direction: column;
+  min-width: 0;
   gap: 0.25rem;
 }
 
@@ -115,8 +126,22 @@
 
 /* The last mark's ink, not its target, sits on the rail. */
 .site-footer-new .icons {
+  flex-wrap: wrap;
   justify-content: flex-end;
+  max-width: calc(100% + 0.75rem);
   margin-right: -0.75rem;
+}
+
+/* Keep seven marks on a normal phone row, but give enlarged glyphs room to
+   move onto another row instead of squeezing them into touching targets. */
+.site-footer-new .icons li {
+  flex: 1 1 2rem;
+  width: 2.75rem;
+  max-width: 2.75rem;
+}
+
+.site-footer-new .icons li a {
+  height: 2.75rem;
 }
 
 @media screen and (max-width: 735px) {
