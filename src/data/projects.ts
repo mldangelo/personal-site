@@ -74,8 +74,8 @@ const data: Project[] = [
   },
   {
     title: 'Codex Security',
-    subtitle: 'OpenAI · Research preview',
-    link: 'https://openai.com/index/codex-security-now-in-research-preview/',
+    subtitle: 'OpenAI',
+    link: 'https://openai.com/business/solutions/cybersecurity/',
     sourceWork: 'OpenAI',
     // Michael's involvement began with his OpenAI role. The public research
     // preview launched three days earlier; month-precision UI shows Mar 2026.
