@@ -24,9 +24,9 @@ concurrency:
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
-  # Shared job for installing dependencies with caching
-  install:
-    name: Install Dependencies
+  # Lint, format, and type check
+  code-quality:
+    name: Code Quality
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -41,39 +41,8 @@ jobs:
           node-version-file: '.nvmrc'
           cache: 'npm'
 
-      - name: Cache node_modules
-        id: cache-node-modules
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json', '.nvmrc') }}
-
       - name: Install dependencies
-        if: steps.cache-node-modules.outputs.cache-hit != 'true'
         run: npm ci
-
-  # Lint, format, and type check
-  code-quality:
-    name: Code Quality
-    needs: install
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-        with:
-          persist-credentials: false
-
-      - name: Setup Node.js
-        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
-        with:
-          node-version-file: '.nvmrc'
-
-      - name: Restore node_modules
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json', '.nvmrc') }}
 
       - name: Type Check
         run: npm run type-check
@@ -96,7 +65,6 @@ jobs:
   # Run tests
   test:
     name: Test
-    needs: install
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -109,12 +77,10 @@ jobs:
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version-file: '.nvmrc'
+          cache: 'npm'
 
-      - name: Restore node_modules
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json', '.nvmrc') }}
+      - name: Install dependencies
+        run: npm ci
 
       - name: Run tests
         run: npm run test:coverage
@@ -130,7 +96,6 @@ jobs:
   # Build on multiple OS and Node versions
   build:
     name: Build (${{ matrix.os }}, Node ${{ matrix.node-version }})
-    needs: install
     runs-on: ${{ matrix.os }}
     timeout-minutes: 10
     # Configure Pages only reads the existing site metadata. Application and
