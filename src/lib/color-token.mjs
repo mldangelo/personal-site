@@ -16,9 +16,8 @@ import { join } from 'node:path';
 
 /**
  * Where each theme's values are declared. Light values live in the `@theme`
- * block; dark values are the `[data-theme='dark']` overrides, which is the
- * attribute the inline script in `app/layout.tsx` sets from a stored site
- * choice first, then from `prefers-color-scheme`.
+ * block; dark values are the overrides in `dark-mode.css`, written once inside
+ * the `dark` variant that `app/tailwind.css` defines.
  */
 const STYLESHEET = {
   light: ['app', 'styles', 'tokens', 'colors.css'],

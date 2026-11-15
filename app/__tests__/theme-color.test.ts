@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { HeadManagerContext } from 'next/dist/shared/lib/head-manager-context.shared-runtime';
 import { createElement } from 'react';
@@ -39,30 +39,19 @@ const BOOTSTRAP =
   /<script id="theme-init">([\s\S]*?)<\/script>/.exec(HEAD)?.[1] ?? '';
 
 describe('theme-color', () => {
-  it('declares one unscoped light value for a reader with no JavaScript', () => {
-    expect(NOSCRIPT).toContain('name="theme-color"');
-    expect(NOSCRIPT).toContain(
-      `content="${readColorToken('--color-bg-alt', 'light')}"`,
+  // Without JavaScript the page follows the device, so the chrome does too:
+  // each colour scoped by the same media query as the stylesheet's dark branch.
+  it('scopes the no-JavaScript chrome colour by the device preference', () => {
+    for (const scheme of ['light', 'dark'] as const) {
+      expect(NOSCRIPT).toContain(
+        `content="${readColorToken('--color-bg-alt', scheme)}" media="(prefers-color-scheme: ${scheme})"`,
+      );
+    }
+    expect(
+      readFileSync(join(process.cwd(), 'app', 'tailwind.css'), 'utf8'),
+    ).toMatch(
+      /@media \(prefers-color-scheme: dark\) \{\s*&:where\(:not\(\[data-theme\]\)\)/,
     );
-    expect(NOSCRIPT).not.toContain('media=');
-  });
-
-  // Unscoped is honest only while dark is reached solely through `[data-theme]`.
-  // A `prefers-color-scheme` block, including one from a Tailwind `dark:` utility,
-  // would mean the fallback above has to change with it.
-  it('has no stylesheet reacting to the device preference', () => {
-    const dir = join(process.cwd(), 'app', 'styles');
-    const css = [
-      join(process.cwd(), 'app', 'tailwind.css'),
-      ...readdirSync(dir, { recursive: true, encoding: 'utf8' })
-        .filter((name) => name.endsWith('.css'))
-        .map((name) => join(dir, name)),
-    ]
-      .map((path) => readFileSync(path, 'utf8'))
-      .join('\n');
-
-    expect(css).not.toContain('prefers-color-scheme');
-    expect(css).toContain("[data-theme='dark']");
   });
 
   // React re-creates its hoisted `<meta>` elements on every client-side navigation
