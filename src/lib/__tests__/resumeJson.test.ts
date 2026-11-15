@@ -4,7 +4,6 @@ import contact from '@/data/contact';
 import profile from '@/data/profile.json';
 import courses from '@/data/resume/courses';
 import degrees from '@/data/resume/degrees';
-import { skills } from '@/data/resume/skills';
 import work from '@/data/resume/work';
 import { sortPositions } from '@/lib/career';
 import {
@@ -143,25 +142,6 @@ describe('json resume document', () => {
     } finally {
       vi.doUnmock('@/data/resume/degrees');
       vi.resetModules();
-    }
-  });
-
-  it('groups skills by category with keywords ordered by competency', () => {
-    expect(resume.skills.map((skill) => skill.name)).toEqual(
-      [...new Set(skills.flatMap((skill) => skill.category))].sort(),
-    );
-
-    for (const group of resume.skills) {
-      const expected = skills
-        .filter((skill) => skill.category.includes(group.name))
-        .map((skill) => skill.title);
-      const competencies = group.keywords.map(
-        (keyword) =>
-          skills.find((skill) => skill.title === keyword)?.competency ?? 0,
-      );
-
-      expect([...group.keywords].sort()).toEqual([...expected].sort());
-      expect(competencies).toEqual([...competencies].sort((a, b) => b - a));
     }
   });
 

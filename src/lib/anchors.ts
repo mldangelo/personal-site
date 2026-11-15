@@ -150,13 +150,10 @@ export function planMarkdownHeadingAnchors(
   const renderIdsBySource = new Map<string, string[]>();
 
   for (const [index, { source }] of headings.entries()) {
-    const id = ids[index];
-    if (id) {
-      renderIdsBySource.set(source, [
-        ...(renderIdsBySource.get(source) ?? []),
-        id,
-      ]);
-    }
+    renderIdsBySource.set(source, [
+      ...(renderIdsBySource.get(source) ?? []),
+      ids[index],
+    ]);
   }
 
   // markdown-to-jsx calls the same slugifier for footnote footer ids after it
@@ -186,7 +183,7 @@ export function planMarkdownHeadingAnchors(
     // React Strict Mode may evaluate markdown-to-jsx's memoized compiler more
     // than once. Cycling over each source's complete id sequence makes every
     // full evaluation deterministic instead of exhausting a one-shot cursor.
-    return sourceIds[call % sourceIds.length] ?? legacySlugify(source);
+    return sourceIds[call % sourceIds.length];
   };
 
   const canonicalIds = new Set(ids);
@@ -194,13 +191,11 @@ export function planMarkdownHeadingAnchors(
   const claimedIds = new Set([...reservedIds, ...canonicalIds]);
 
   for (const [index, { legacy }] of headings.entries()) {
-    const canonical = ids[index];
-
-    if (!canonical || !legacy || claimedIds.has(legacy)) {
+    if (!legacy || claimedIds.has(legacy)) {
       continue;
     }
 
-    aliases.set(canonical, legacy);
+    aliases.set(ids[index], legacy);
     claimedIds.add(legacy);
   }
 

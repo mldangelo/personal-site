@@ -83,11 +83,6 @@ interface AboutSection {
   variant: string | undefined;
 }
 
-interface ParsedAboutSection {
-  body: string;
-  title: string;
-}
-
 /**
  * Sections whose lists are chronological get the log treatment: entries
  * hang off a spine with a tick each, the same device the resume uses.
@@ -120,17 +115,14 @@ function splitAboutMarkdown(markdown: string) {
 }
 
 function parseSections(chunks: string[]): AboutSection[] {
-  const sections: ParsedAboutSection[] = chunks
-    .map((section) => section.trim())
-    .filter((section) => section !== '')
-    .map((section) => {
-      const [heading, ...rest] = section.split('\n');
+  const sections = chunks.map((chunk) => {
+    const [heading, ...rest] = chunk.trim().split('\n');
 
-      return {
-        title: heading.replace(/^#\s+/, '').trim(),
-        body: rest.join('\n').trim(),
-      };
-    });
+    return {
+      title: heading.replace(/^#\s+/, '').trim(),
+      body: rest.join('\n').trim(),
+    };
+  });
 
   const sectionIds = createUniqueHeadingIds(
     sections.map((section) => section.title),
@@ -140,7 +132,7 @@ function parseSections(chunks: string[]): AboutSection[] {
   // reader sees is converted, and once, so the nav and the heading agree.
   return sections.map(({ body, title }, index) => ({
     body,
-    id: sectionIds[index] ?? 'section',
+    id: sectionIds[index],
     title: smartQuotes(title),
     variant: sectionVariants[title],
   }));

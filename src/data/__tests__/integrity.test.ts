@@ -39,13 +39,11 @@ describe('data the site publishes', () => {
     }
   });
 
-  it('orders dated writing and appearances newest first', () => {
+  // Hand-ordered in the source; appearances are sorted when read.
+  it('orders dated writing newest first', () => {
     const dated = writing.map((item) => item.date).filter(Boolean);
 
     expect(isDescending(dated)).toBe(true);
-    expect(isDescending(getAppearances().map((entry) => entry.date))).toBe(
-      true,
-    );
   });
 
   it('dates every appearance with a real calendar day', () => {
