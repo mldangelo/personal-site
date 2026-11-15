@@ -22,6 +22,4 @@
      =================== */
   --z-sticky: 100; /* Sticky elements below header (e.g., resume nav) */
   --z-header: 10000;
-  --z-overlay: 10001;
-  --z-menu: 10002;
 }

@@ -1,10 +1,12 @@
 'use client';
 
-import { type ReactNode, useCallback, useEffect, useRef } from 'react';
-
-// Selector for focusable elements within the menu
-const FOCUSABLE_SELECTOR =
-  'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+import {
+  type MouseEvent,
+  type PointerEvent,
+  type ReactNode,
+  useLayoutEffect,
+  useRef,
+} from 'react';
 
 interface SlideMenuProps {
   id: string;
@@ -14,9 +16,12 @@ interface SlideMenuProps {
 }
 
 /**
- * Accessible slide-out menu panel.
- * Features: focus trapping, focus restoration, escape-to-close,
- * body scroll lock (iOS-safe), reduced-motion support via CSS.
+ * The mobile navigation drawer, a native modal `<dialog>`.
+ *
+ * `showModal()` puts it in the top layer, makes the page behind it inert,
+ * moves focus to its first control, closes it on Escape or a platform back
+ * gesture, and returns focus to the trigger when it closes. None of that is
+ * reimplemented here.
  */
 export default function SlideMenu({
   id,
@@ -24,106 +29,43 @@ export default function SlideMenu({
   onClose,
   children,
 }: SlideMenuProps) {
-  const menuRef = useRef<HTMLDivElement>(null);
-  const previousActiveElement = useRef<HTMLElement | null>(null);
+  const dialogRef = useRef<HTMLDialogElement>(null);
 
-  // Save scroll position and lock body scroll (iOS-safe)
-  useEffect(() => {
-    if (!isOpen) return;
+  // A layout effect, so a caller that closes the menu and then moves focus
+  // (`Hamburger`, when its trigger disappears) can flush the close first:
+  // nothing outside a modal dialog can take focus.
+  useLayoutEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
 
-    const scrollY = window.scrollY;
-    const { body } = document;
-
-    body.style.position = 'fixed';
-    body.style.top = `-${scrollY}px`;
-    body.style.left = '0';
-    body.style.right = '0';
-
-    return () => {
-      body.style.position = '';
-      body.style.top = '';
-      body.style.left = '';
-      body.style.right = '';
-      window.scrollTo(0, scrollY);
-    };
+    if (isOpen && !dialog.open) dialog.showModal();
+    if (!isOpen && dialog.open) dialog.close();
   }, [isOpen]);
 
-  // Handle escape key
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        e.preventDefault();
-        onClose();
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose]);
-
-  // Focus management: trap focus and restore on close
-  useEffect(() => {
-    if (isOpen) {
-      // Save currently focused element
-      previousActiveElement.current = document.activeElement as HTMLElement;
-
-      // Focus first focusable element in menu
-      const focusableElements =
-        menuRef.current?.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR);
-      if (focusableElements?.length) {
-        focusableElements[0].focus();
-      }
-    } else if (previousActiveElement.current) {
-      // Restore focus when closing
-      previousActiveElement.current.focus();
-      previousActiveElement.current = null;
+  // The sheet fills the dialog, so a press that lands on the dialog itself
+  // landed on its backdrop. Both ends of the click must: a drag from inside
+  // the sheet to the backdrop clicks their common ancestor, the dialog.
+  const pressedBackdrop = useRef(false);
+  const notePress = (event: PointerEvent<HTMLDialogElement>) => {
+    pressedBackdrop.current = event.target === event.currentTarget;
+  };
+  const closeFromBackdrop = (event: MouseEvent<HTMLDialogElement>) => {
+    if (pressedBackdrop.current && event.target === event.currentTarget) {
+      onClose();
     }
-  }, [isOpen]);
-
-  // Focus trapping
-  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-    if (e.key !== 'Tab') return;
-
-    const focusableElements =
-      menuRef.current?.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR);
-
-    if (!focusableElements?.length) return;
-
-    const firstElement = focusableElements[0];
-    const lastElement = focusableElements[focusableElements.length - 1];
-
-    if (e.shiftKey && document.activeElement === firstElement) {
-      e.preventDefault();
-      lastElement.focus();
-    } else if (!e.shiftKey && document.activeElement === lastElement) {
-      e.preventDefault();
-      firstElement.focus();
-    }
-  }, []);
+  };
 
   return (
-    <>
-      {/* Overlay - click to close */}
-      <div
-        className={`slide-menu-overlay${isOpen ? ' slide-menu-overlay--open' : ''}`}
-        onClick={onClose}
-        aria-hidden="true"
-      />
-      {/* Menu panel */}
-      <div
-        ref={menuRef}
-        id={id}
-        role="dialog"
-        aria-modal="true"
-        aria-label="Navigation menu"
-        className={`slide-menu${isOpen ? ' slide-menu--open' : ''}`}
-        inert={!isOpen}
-        onKeyDown={handleKeyDown}
-      >
-        {children}
-      </div>
-    </>
+    <dialog
+      ref={dialogRef}
+      id={id}
+      aria-label="Navigation menu"
+      className="slide-menu"
+      onClose={onClose}
+      onPointerDown={notePress}
+      onClick={closeFromBackdrop}
+    >
+      <div className="slide-menu-sheet">{children}</div>
+    </dialog>
   );
 }
