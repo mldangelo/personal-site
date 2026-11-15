@@ -5,8 +5,8 @@ import Job, { type JobTier } from './Experience/Job';
 
 interface ExperienceProps {
   data: Position[];
-  /** Instant every ongoing tenure is measured to. Defaults to one clock read. */
-  now?: DateInput;
+  /** Instant every ongoing tenure is measured to. */
+  now: DateInput;
 }
 
 /** Year before which a role is treated as student-era. */
@@ -16,8 +16,8 @@ const STUDENT_ERA_BEFORE = 2013;
  * Year from an ISO date, read from the string rather than parsed.
  *
  * `new Date('2013-01-01')` is UTC midnight, which `getFullYear()` renders as
- * 2012 anywhere west of Greenwich — so the student-era boundary moved with
- * the reader's timezone.
+ * 2012 anywhere west of Greenwich, so parsing would move the student-era
+ * boundary with the reader's timezone.
  */
 function isoYear(date: string): number {
   return Number.parseInt(date.slice(0, 4), 10);
@@ -54,10 +54,7 @@ export function tierFor(job: Position, positions: Position[]): JobTier {
   return 'primary';
 }
 
-export default function Experience({
-  data,
-  now = Date.now(),
-}: ExperienceProps) {
+export default function Experience({ data, now }: ExperienceProps) {
   const positions = sortPositions(data);
 
   return (

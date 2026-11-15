@@ -10,7 +10,7 @@ export interface ImageSize {
 }
 
 /** A local article image that cannot be safely measured at build time. */
-export class ImageSizeError extends Error {
+class ImageSizeError extends Error {
   /** Set only for a missing file, the one failure a draft preview may skip. */
   readonly code?: 'NOT_FOUND';
 

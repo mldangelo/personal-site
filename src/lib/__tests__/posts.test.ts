@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import { getPostBySlug, validatePostFrontmatter } from '../posts';
+import { validatePostFrontmatterData } from '../post-frontmatter.mjs';
+import { getPostBySlug } from '../posts';
 
 const validFrontmatter = {
   title: 'A useful title',
@@ -8,10 +9,10 @@ const validFrontmatter = {
   description: 'A useful description.',
 };
 
-describe('validatePostFrontmatter', () => {
+describe('validatePostFrontmatterData', () => {
   it('accepts and trims required fields', () => {
     expect(
-      validatePostFrontmatter({
+      validatePostFrontmatterData({
         title: '  A useful title  ',
         date: '2026-07-25',
         description: '  A useful description.  ',
@@ -31,13 +32,13 @@ describe('validatePostFrontmatter', () => {
     [{ ...validFrontmatter, imageAlt: 'A card' }, '"image"'],
   ])('rejects malformed frontmatter %#', (frontmatter, field) => {
     expect(() =>
-      validatePostFrontmatter(frontmatter, 'content/writing/example.md'),
+      validatePostFrontmatterData(frontmatter, 'content/writing/example.md'),
     ).toThrow(`Invalid frontmatter in content/writing/example.md: ${field}`);
   });
 
   it('accepts an explicitly described article image', () => {
     expect(
-      validatePostFrontmatter({
+      validatePostFrontmatterData({
         ...validFrontmatter,
         image: '/images/writing/card.png',
         imageAlt: 'A descriptive alternative',

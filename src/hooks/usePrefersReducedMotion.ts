@@ -1,33 +1,14 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import useMediaQuery from './useMediaQuery';
 
-export const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
+const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
 
 /**
- * Whether the visitor has asked for reduced motion.
- *
- * Returns `false` on the server and for the first client paint so markup
- * matches, then settles to the real preference. It also subscribes to changes,
- * so toggling the OS setting takes effect without a reload.
- *
- * `matchMedia` is optional-chained because jsdom does not implement it; a
- * missing preference is treated as "no preference".
+ * Whether the visitor has asked for reduced motion: `false` until the
+ * preference is known, so the server and first client paint match, then the
+ * live answer, which follows the OS setting without a reload.
  */
 export default function usePrefersReducedMotion(): boolean {
-  const [prefersReduced, setPrefersReduced] = useState(false);
-
-  useEffect(() => {
-    const media = window.matchMedia?.(REDUCED_MOTION_QUERY);
-    if (!media) return;
-
-    const sync = () => setPrefersReduced(media.matches);
-
-    sync();
-    media.addEventListener?.('change', sync);
-
-    return () => media.removeEventListener?.('change', sync);
-  }, []);
-
-  return prefersReduced;
+  return useMediaQuery(REDUCED_MOTION_QUERY) ?? false;
 }

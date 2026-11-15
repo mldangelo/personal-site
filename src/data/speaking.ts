@@ -13,7 +13,7 @@
  * The format as the organiser billed it. An Arsenal Lab is a hands-on tool
  * demonstration, not a talk; extend this union rather than stretch a label.
  */
-export type AppearanceFormat = 'Panel' | 'Arsenal Lab' | 'Tech session';
+type AppearanceFormat = 'Panel' | 'Arsenal Lab' | 'Tech session';
 
 export interface Appearance {
   /**

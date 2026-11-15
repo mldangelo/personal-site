@@ -22,9 +22,9 @@ const DIGIT = /\d/;
  * A letter or digit: ASCII plus accented Latin, written out as ranges.
  *
  * Not `\p{L}`. For the browsers this site still targets, the build expands a
- * Unicode property escape into every code-point range it covers, which put
- * about 41 kB into each client bundle that imported this file. The same class
- * is repeated in the two lookaheads below for that reason.
+ * Unicode property escape into every code-point range it covers, which would
+ * put about 41 kB into each client bundle that imports this file. The same
+ * class is repeated in the two lookaheads below for that reason.
  */
 const WORD = /[A-Za-z0-9\u00C0-\u024F]/;
 

@@ -11,7 +11,7 @@ import contact, { type ContactId } from '@/data/contact';
 import profile from '@/data/profile.json';
 import courses from '@/data/resume/courses';
 import degrees from '@/data/resume/degrees';
-import { categories, skills } from '@/data/resume/skills';
+import { skills } from '@/data/resume/skills';
 import work from '@/data/resume/work';
 import { careerSpanYears } from '@/lib/career';
 import { createPageMetadata } from '@/lib/metadata';
@@ -124,7 +124,7 @@ export default function ResumePage() {
           </section>
 
           <section id="skills" className="resume-section">
-            <Skills skills={skills} categories={categories} />
+            <Skills skills={skills} />
           </section>
 
           <section id="courses" className="resume-section">

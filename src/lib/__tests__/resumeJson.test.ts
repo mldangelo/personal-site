@@ -4,7 +4,7 @@ import contact from '@/data/contact';
 import profile from '@/data/profile.json';
 import courses from '@/data/resume/courses';
 import degrees from '@/data/resume/degrees';
-import { categories, skills } from '@/data/resume/skills';
+import { skills } from '@/data/resume/skills';
 import work from '@/data/resume/work';
 import { sortPositions } from '@/lib/career';
 import {
@@ -148,7 +148,7 @@ describe('json resume document', () => {
 
   it('groups skills by category with keywords ordered by competency', () => {
     expect(resume.skills.map((skill) => skill.name)).toEqual(
-      categories.map((category) => category.name),
+      [...new Set(skills.flatMap((skill) => skill.category))].sort(),
     );
 
     for (const group of resume.skills) {

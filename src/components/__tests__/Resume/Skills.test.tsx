@@ -1,12 +1,10 @@
 import { render } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
-import { categories, skills } from '@/data/resume/skills';
+import { skills } from '@/data/resume/skills';
 import { buildJsonResume } from '@/lib/resumeJson';
 
 import Skills from '../../Resume/Skills';
-
-const mockCategories = [{ name: 'Lang' }, { name: 'ML' }, { name: 'Web' }];
 
 // Out of order, so a list that merely echoed its input could not pass for one
 // that sorts.
@@ -29,13 +27,8 @@ function groupsIn(container: HTMLElement) {
 }
 
 describe('Skills', () => {
-  it('lists each skill under its categories, deepest first, and skips empty ones', () => {
-    const { container } = render(
-      <Skills
-        skills={mockSkills}
-        categories={[...mockCategories, { name: 'Databases' }]}
-      />,
-    );
+  it('lists each skill under each of its categories, deepest first', () => {
+    const { container } = render(<Skills skills={mockSkills} />);
 
     expect(groupsIn(container)).toEqual([
       { name: 'Lang', skills: ['Python', 'TypeScript', 'JavaScript'] },
@@ -47,15 +40,16 @@ describe('Skills', () => {
   it('sorts a copy, leaving the skills it was given as they were', () => {
     const given = [...mockSkills];
 
-    render(<Skills skills={given} categories={mockCategories} />);
+    render(<Skills skills={given} />);
 
     expect(given).toEqual(mockSkills);
   });
 
   it('states the tier of every tag as text', () => {
-    const { container } = render(
-      <Skills skills={mockSkills} categories={[{ name: 'Web' }]} />,
-    );
+    const web = mockSkills
+      .filter((skill) => skill.category.includes('Web'))
+      .map((skill) => ({ ...skill, category: ['Web'] }));
+    const { container } = render(<Skills skills={web} />);
 
     expect(
       [...container.querySelectorAll('.skill-tag')].map(
@@ -71,9 +65,7 @@ describe('Skills', () => {
   // The order holds for everyone; the tone is described only on screen, and
   // only when a tag is set in it.
   it('explains a fainter tone once, to those who can see it', () => {
-    const { container } = render(
-      <Skills skills={mockSkills} categories={mockCategories} />,
-    );
+    const { container } = render(<Skills skills={mockSkills} />);
 
     expect(container.querySelectorAll('.skill-tier-legend')).toHaveLength(1);
     expect(container.querySelector('.skill-tier-legend-tone')).toHaveAttribute(
@@ -82,9 +74,7 @@ describe('Skills', () => {
     );
 
     const strong = mockSkills.filter((skill) => skill.competency > 3);
-    const { container: strongOnly } = render(
-      <Skills skills={strong} categories={mockCategories} />,
-    );
+    const { container: strongOnly } = render(<Skills skills={strong} />);
 
     expect(strongOnly.querySelector('.skill-tier-legend')?.textContent).toBe(
       'Strongest first.',
@@ -94,9 +84,7 @@ describe('Skills', () => {
   // `/resume.json` publishes the same list, and the résumé must not disagree
   // with itself.
   it('lists the real data in the groups and order /resume.json publishes', () => {
-    const { container } = render(
-      <Skills skills={skills} categories={categories} />,
-    );
+    const { container } = render(<Skills skills={skills} />);
 
     expect(groupsIn(container)).toEqual(
       buildJsonResume().skills.map((group) => ({

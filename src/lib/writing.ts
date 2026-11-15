@@ -1,11 +1,7 @@
-import externalWriting from '@/data/writing';
+import externalWriting, { type WritingEntry } from '@/data/writing';
 import { getAllPosts } from '@/lib/posts';
 
-export interface WritingItem {
-  title: string;
-  url: string;
-  date: string;
-  description: string;
+export interface WritingItem extends WritingEntry {
   isExternal: boolean;
   source: string;
 }

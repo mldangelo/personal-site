@@ -1,9 +1,8 @@
+import profile from '@/data/profile.json';
 import {
   AGE_PRECISION_FULL,
   AGE_PRECISION_STATIC,
   ageAt,
-  COUNTRIES_VISITED,
-  CURRENT_CITY,
   utcDate,
 } from '@/lib/telemetry';
 
@@ -32,10 +31,10 @@ export default function PersonalStats() {
         },
         {
           label: 'Countries visited',
-          value: String(COUNTRIES_VISITED),
+          value: String(profile.countriesVisited),
           link: 'https://www.google.com/maps/d/embed?mid=1iBBTscqateQ93pWFVfHCUZXoDu8&z=2',
         },
-        { label: 'Current city', value: CURRENT_CITY },
+        { label: 'Current city', value: profile.currentCity },
       ]}
     />
   );
