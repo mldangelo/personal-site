@@ -82,7 +82,6 @@ Ask me in person for other stories that I'm afraid to share with the internet.
 - [Duncan Tomlin](https://duncantomlin.com/)
 - [Ed Kearney](https://edkearney.com/)
 - [Gia Jung](https://giajung.com/)
-- [Hawley Moore](http://hawleymoore.com/)
 - [Holman Gao](https://golmansax.com/)
 - [Ian Webster](https://ianww.com/)
 - [Johanna Flato](https://www.johannaflato.com/)
