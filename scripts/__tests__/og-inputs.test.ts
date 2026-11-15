@@ -8,11 +8,8 @@ import {
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, beforeAll, describe, expect, it } from 'vitest';
-import {
-  getAllPosts,
-  getPostSlugs,
-  validatePostFrontmatter,
-} from '@/lib/posts';
+import { validatePostFrontmatterData } from '@/lib/post-frontmatter.mjs';
+import { getAllPosts, getPostSlugs } from '@/lib/posts';
 import { formatDate } from '@/lib/utils';
 import { assertFontDigest } from '../lib/fonts.mjs';
 import {
@@ -175,7 +172,7 @@ describe('share card frontmatter validation', () => {
     'rejects the same malformed frontmatter as the route reader %#',
     async (frontmatter, message) => {
       expect(() =>
-        validatePostFrontmatter(
+        validatePostFrontmatterData(
           frontmatter,
           join('content', 'writing', 'example.md'),
         ),
@@ -196,7 +193,8 @@ describe('share card frontmatter validation', () => {
     const [card] = (await readPostCards(
       postFixture(frontmatter),
     )) as PostCard[];
-    const { title, date, description } = validatePostFrontmatter(frontmatter);
+    const { title, date, description } =
+      validatePostFrontmatterData(frontmatter);
 
     expect(card).toMatchObject({ title, date, description });
   });

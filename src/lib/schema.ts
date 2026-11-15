@@ -1,4 +1,5 @@
-import contact from '@/data/contact';
+import { profiles } from '@/data/contact';
+import profile from '@/data/profile.json';
 import degrees from '@/data/resume/degrees';
 import work from '@/data/resume/work';
 import { currentPosition } from '@/lib/career';
@@ -70,13 +71,7 @@ function portraitImage(id: string): SchemaNode {
  * repeating its properties.
  */
 export function personNode(): SchemaNode {
-  const socialLinks = contact
-    .filter((item) => !item.link.startsWith('mailto:'))
-    .map((item) => item.link);
-
-  const emailItem = contact.find((item) => item.link.startsWith('mailto:'));
-  const email = emailItem?.link.replace('mailto:', '');
-
+  const socialLinks = profiles.map((item) => item.link);
   const currentJob = currentPosition(work);
 
   const [givenName, ...familyParts] = AUTHOR_NAME.split(' ');
@@ -92,7 +87,7 @@ export function personNode(): SchemaNode {
     image: portraitImage('person-image'),
     description: SITE_DESCRIPTION,
     ...(currentJob && { jobTitle: currentJob.position }),
-    ...(email && { email }),
+    email: profile.email,
     sameAs: socialLinks,
     ...(currentJob && {
       worksFor: {

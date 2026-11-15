@@ -14,7 +14,7 @@
  * updating an entry. Archive entries are maintained here directly. Public
  * destinations still need live-link review.
  */
-export type ProjectStatus = 'shipped' | 'archive';
+type ProjectStatus = 'shipped' | 'archive';
 
 export interface Project {
   title: string;

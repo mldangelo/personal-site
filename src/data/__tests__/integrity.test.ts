@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import courses from '../resume/courses';
 import degrees from '../resume/degrees';
-import { categories, skills } from '../resume/skills';
+import { skills } from '../resume/skills';
 import { getAppearances } from '../speaking';
 import writing from '../writing';
 
@@ -15,7 +15,6 @@ describe('data the site publishes', () => {
   it('has no duplicate entries', () => {
     expect(unique(courses.map((course) => course.number))).toBe(true);
     expect(unique(degrees.map((degree) => degree.school))).toBe(true);
-    expect(unique(categories.map((category) => category.name))).toBe(true);
     expect(unique(writing.map((item) => item.url))).toBe(true);
     expect(unique(getAppearances().map((entry) => entry.link))).toBe(true);
   });
@@ -33,12 +32,10 @@ describe('data the site publishes', () => {
     }
   });
 
-  it('files every skill under a category that exists', () => {
-    const names = new Set(categories.map((category) => category.name));
-
+  // A skill with no category belongs to no group, so the résumé would drop it.
+  it('files every skill under at least one category', () => {
     for (const skill of skills) {
       expect(skill.category.length).toBeGreaterThan(0);
-      expect(skill.category.every((name) => names.has(name))).toBe(true);
     }
   });
 

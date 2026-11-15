@@ -1,6 +1,6 @@
 import { AUTHOR_NAME } from '@/lib/utils';
 
-export interface Route {
+interface Route {
   label: string;
   path: string;
   index?: boolean;

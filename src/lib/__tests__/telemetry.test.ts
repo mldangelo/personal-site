@@ -1,11 +1,12 @@
 import { describe, expect, it } from 'vitest';
 
+import profile from '@/data/profile.json';
+
 import {
   AGE_MIN_INTERVAL,
   AGE_PRECISION_FULL,
   ageAt,
   ageIntervalFor,
-  BIRTH_DATE,
   MS_PER_YEAR,
   utcDate,
 } from '../telemetry';
@@ -13,7 +14,7 @@ import {
 const COMPACT_PRECISION = 8;
 
 describe('ageAt', () => {
-  const birthTime = new Date(BIRTH_DATE).getTime();
+  const birthTime = new Date(profile.birthDate).getTime();
 
   it('returns zero at the moment of birth', () => {
     expect(ageAt(birthTime, 2)).toBe('0.00');

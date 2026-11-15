@@ -113,7 +113,7 @@ function headingOverrides(aliases: ReadonlyMap<string, string>) {
  * prop: a post may embed raw HTML that also carries `src` — `<video>`,
  * `<audio>`, `<iframe>` — and those are neither figures nor measurable. Only
  * Markdown image syntax is measured at build time, so routing a `<video src>`
- * through the sizer failed the production export outright.
+ * through the sizer would fail the production export.
  */
 function figureImage(
   node: ReactNode,

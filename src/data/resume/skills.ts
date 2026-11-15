@@ -4,10 +4,6 @@ export interface Skill {
   category: string[];
 }
 
-export interface Category {
-  name: string;
-}
-
 const skills: Skill[] = [
   // Languages
   {
@@ -119,20 +115,6 @@ const skills: Skill[] = [
     competency: 4,
     category: ['Infrastructure'],
   },
-].map((skill) => ({ ...skill, category: skill.category.sort() }));
+];
 
-/**
- * The distinct category names, sorted, so the group order falls out of the
- * skill list itself.
- */
-function buildCategories(skillsList: Skill[]): Category[] {
-  const uniqueCategories = Array.from(
-    new Set(skillsList.flatMap(({ category }) => category)),
-  ).sort();
-
-  return uniqueCategories.map((category) => ({ name: category }));
-}
-
-const categories: Category[] = buildCategories(skills);
-
-export { categories, skills };
+export { skills };

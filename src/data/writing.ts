@@ -1,11 +1,11 @@
-export interface WritingItem {
+export interface WritingEntry {
   title: string;
   url: string;
   date: string;
   description: string;
 }
 
-const data: WritingItem[] = [
+const data: WritingEntry[] = [
   {
     title:
       "McKinsey's Lilli Looks More Like an API Security Failure Than a Model Jailbreak",

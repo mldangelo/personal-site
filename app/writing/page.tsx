@@ -21,8 +21,8 @@ const writingMetadata = createPageMetadata({
 
 export const metadata: Metadata = {
   ...writingMetadata,
-  // Spread rather than replace: `alternates` also carries the canonical, and
-  // overwriting the whole object dropped it from this page.
+  // Spread rather than replace: `alternates` also carries the canonical,
+  // which a new object would drop from this page.
   alternates: {
     ...writingMetadata.alternates,
     types: {

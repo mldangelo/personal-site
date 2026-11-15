@@ -1,37 +1,21 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-
 import { DARK_SCHEME_QUERY, type ResolvedTheme } from '@/lib/theme';
+
+import useMediaQuery from './useMediaQuery';
 
 /**
  * The colour scheme the visitor's device is currently asking for.
  *
- * Returns `null` on the server and for the first client paint. Unlike reduced
- * motion there is no safe default to assume — assuming `light` would flash a
+ * `null` on the server and for the first client paint. Unlike reduced motion
+ * there is no safe default to assume — assuming `light` would flash a
  * dark-mode visitor — and `<html data-theme>` already carries the answer from
  * the pre-paint bootstrap, so callers should leave it alone until this settles.
- *
- * It subscribes to `change`, so a device that flips at sunset takes the page
- * with it. Use this rather than a hand-rolled `matchMedia` read.
- *
- * `matchMedia` is optional-chained because jsdom does not implement it; with no
- * way to ask, the preference stays unknown.
+ * It follows the device live, so one that flips at sunset takes the page with
+ * it. Use this rather than a hand-rolled `matchMedia` read.
  */
 export default function usePrefersColorScheme(): ResolvedTheme | null {
-  const [scheme, setScheme] = useState<ResolvedTheme | null>(null);
+  const dark = useMediaQuery(DARK_SCHEME_QUERY);
 
-  useEffect(() => {
-    const media = window.matchMedia?.(DARK_SCHEME_QUERY);
-    if (!media) return;
-
-    const sync = () => setScheme(media.matches ? 'dark' : 'light');
-
-    sync();
-    media.addEventListener?.('change', sync);
-
-    return () => media.removeEventListener?.('change', sync);
-  }, []);
-
-  return scheme;
+  return dark === null ? null : dark ? 'dark' : 'light';
 }

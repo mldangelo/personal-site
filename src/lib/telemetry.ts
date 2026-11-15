@@ -7,17 +7,8 @@ import profile from '@/data/profile.json';
  * read the same values.
  */
 
-/** Birth instant, including Buffalo's UTC offset. */
-export const BIRTH_DATE = profile.birthDate;
-
 /** Milliseconds in an average Gregorian year. */
 export const MS_PER_YEAR = 1000 * 60 * 60 * 24 * 365.2421897;
-
-/** Countries visited to date. */
-export const COUNTRIES_VISITED = profile.countriesVisited;
-
-/** Current home city. */
-export const CURRENT_CITY = profile.currentCity;
 
 /** Decimal places used by the live age. The excessive precision is deliberate. */
 export const AGE_PRECISION_FULL = 11;
@@ -45,7 +36,7 @@ export function ageIntervalFor(precision: number): number {
 
 /** Age in years at a given instant, fixed to `precision` decimal places. */
 export function ageAt(now: number, precision: number): string {
-  const birthTime = new Date(BIRTH_DATE).getTime();
+  const birthTime = new Date(profile.birthDate).getTime();
   return ((now - birthTime) / MS_PER_YEAR).toFixed(precision);
 }
 

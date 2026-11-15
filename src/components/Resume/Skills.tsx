@@ -1,11 +1,10 @@
-import type { Category, Skill } from '@/data/resume/skills';
+import type { Skill } from '@/data/resume/skills';
 import { groupSkills } from '@/lib/resumeJson';
 
 import SkillTag, { knowledgeTier } from './Skills/SkillTag';
 
 interface SkillsProps {
   skills: Skill[];
-  categories: Category[];
 }
 
 /**
@@ -15,10 +14,8 @@ interface SkillsProps {
  * There is no filter state: nothing here can be hidden, so nothing can be
  * missing from the page when it is printed.
  */
-export default function Skills({ skills, categories }: SkillsProps) {
-  const groups = groupSkills(skills, categories).filter(
-    (group) => group.skills.length > 0,
-  );
+export default function Skills({ skills }: SkillsProps) {
+  const groups = groupSkills(skills);
 
   // The fainter tone is only worth explaining where something is set in it.
   const hasFamiliar = skills.some(
