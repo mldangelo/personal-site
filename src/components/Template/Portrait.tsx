@@ -27,6 +27,7 @@ export default function Portrait({
         width={width}
         height={height}
         loading={priority ? 'eager' : 'lazy'}
+        fetchPriority={priority ? 'high' : undefined}
         decoding="async"
       />
     </span>

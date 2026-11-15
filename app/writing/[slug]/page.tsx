@@ -7,6 +7,7 @@ import PostPager from '@/components/Writing/PostPager';
 import ReadingProgress from '@/components/Writing/ReadingProgress';
 import {
   type ImageSize,
+  leadImageSource,
   readImageSize,
   readPostImageSizes,
 } from '@/lib/imageSize';
@@ -195,6 +196,7 @@ export default async function PostPage({ params }: PageProps) {
           <PostContent
             content={post.content}
             imageSizes={imageSizes}
+            leadImage={leadImageSource(post.content)}
             allowMissingLocalImages={allowMissingLocalImages}
           />
         </div>

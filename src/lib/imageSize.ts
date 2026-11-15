@@ -233,6 +233,35 @@ export function readPostImageSizes(
   return sizes;
 }
 
+/**
+ * How many Markdown blocks under a post's header still fall in the first
+ * viewport: a heading and a couple of short paragraphs.
+ */
+const LEAD_IMAGE_BLOCKS = 3;
+
+/** A reference definition, `[label]: destination`, as CommonMark indents it. */
+const REFERENCE_DEFINITION = /^ {0,3}\[[^\]]+\]:\s*\S/;
+
+/**
+ * The image a post shows within its first few blocks, which on a wide screen
+ * is in the first viewport and usually its largest paint, so `PostContent`
+ * preloads it there instead of waiting for lazy loading. Blocks are split on
+ * blank lines, so a fence with blank lines only makes the window shorter.
+ * Reference definitions from the rest of the post come along, so a
+ * reference-style image in the window still resolves.
+ */
+export function leadImageSource(markdown: string): string | undefined {
+  const blocks = markdown.trim().split(/\n\s*\n/);
+  const definitions = blocks
+    .slice(LEAD_IMAGE_BLOCKS)
+    .flatMap((block) => block.split('\n'))
+    .filter((line) => REFERENCE_DEFINITION.test(line));
+
+  return readMarkdownImageSources(
+    [...blocks.slice(0, LEAD_IMAGE_BLOCKS), ...definitions].join('\n\n'),
+  )[0];
+}
+
 function isExternalImage(src: string): boolean {
   return src.startsWith('//') || /^[a-z][a-z\d+.-]*:/i.test(src);
 }

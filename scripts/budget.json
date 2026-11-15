@@ -45,6 +45,6 @@
   "cssBytes": 87040,
   "fontBytes": 271360,
   "maxFileBytes": 273408,
-  "maxRouteBootstrapBytes": 1092608,
+  "maxRouteBootstrapBytes": 1275904,
   "distinctInlineSvgBytes": 7168
 }
