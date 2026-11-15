@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useReducer } from 'react';
+import { Fragment, useEffect, useReducer } from 'react';
 
 import profile from '@/data/profile.json';
 import usePrefersReducedMotion from '@/hooks/usePrefersReducedMotion';
@@ -140,7 +140,20 @@ export default function EmailLink() {
           <span dir="ltr">{displayMessage}</span>
         </span>
         <span className="contact-email-domain" aria-hidden="true">
-          @{CONTACT_DOMAIN}
+          @
+          {/* Where the address has to stack, its domain breaks only before a
+              dot. <wbr> adds nothing to text copied from the page. */}
+          {CONTACT_DOMAIN.split('.').map((part, index) => (
+            // A domain's labels can repeat but never reorder.
+            <Fragment key={index}>
+              {index > 0 && (
+                <>
+                  <wbr />.
+                </>
+              )}
+              {part}
+            </Fragment>
+          ))}
         </span>
       </a>
     </div>
