@@ -39,8 +39,9 @@
   list-style: none;
 }
 
-/* Squared, quiet, mono, and never broken across two lines. A tag is not a
-   control, so nothing here answers the pointer. */
+/* Squared, quiet, and mono. The list wraps between tags, so a tag's own text
+   wraps only when the tag alone is wider than the row, as at 200% text on a
+   phone. A tag is not a control, so nothing here answers the pointer. */
 .skill-tag {
   padding: 0.3em 0.7em;
   border: var(--rule) solid var(--color-border);
@@ -48,7 +49,6 @@
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   line-height: 1.5;
-  white-space: nowrap;
   color: var(--color-fg);
 }
 

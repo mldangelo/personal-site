@@ -19,6 +19,15 @@
   }
 }
 
+/* Every page's content, the 404 included. Text grows with the reader's
+   setting, so at 200% on a phone one word (a title, a URL, a course name) can
+   be wider than the column; it breaks rather than push the page sideways.
+   Text that must stay whole sets `white-space: nowrap` and makes room some
+   other way. */
+main {
+  overflow-wrap: anywhere;
+}
+
 /* Main content area */
 .page-main {
   flex: 1;
@@ -40,10 +49,6 @@
   /* The name's weight on the homepage, as every other page title. */
   font-weight: var(--font-weight-medium);
   margin-bottom: 0.5rem;
-  /* The title keeps growing with the reader's text, so at 200% on a phone a
-     one-word title is wider than the column; it breaks, as the hero name
-     does, rather than push the page sideways. */
-  overflow-wrap: anywhere;
 }
 
 .page-subtitle {

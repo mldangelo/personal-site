@@ -21,7 +21,7 @@
     font-size: var(--text-ui);
     font-weight: var(--font-weight-medium);
     letter-spacing: var(--tracking-normal);
-    height: 2.875rem;
+    min-height: 2.875rem;
     padding: 0 1.75rem;
     text-align: center;
     text-decoration: none !important;
@@ -72,7 +72,7 @@
 
   /* A page-level action that sits beside a page title: RSS, JSON, print. */
   .button-compact {
-    height: 2rem;
+    min-height: 2rem;
     padding: 0 0.75rem;
   }
 }

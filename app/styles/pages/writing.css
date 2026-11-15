@@ -24,9 +24,6 @@
    left a wide figure nothing to grow into: a block at `width: auto` fills its
    containing block, so a larger `max-width` on the figure did nothing. */
 .post-page {
-  /* Long words and URLs must fit even inside an indented list at large text
-     sizes. Preformatted fences keep their own horizontal scrolling. */
-  overflow-wrap: anywhere;
   /* The reading progress timeline: 0 when the article's top reaches the top
      of the viewport, 1 when its end reaches the bottom. */
   view-timeline: --post-page block;
