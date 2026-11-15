@@ -40,6 +40,17 @@ global.ResizeObserver = class ResizeObserverMock {
   disconnect = vi.fn();
 };
 
+// jsdom has no showModal() or close(). Open and close by the attribute, and
+// fire `close` as a browser does whenever a dialog closes.
+HTMLDialogElement.prototype.showModal ??= function showModal() {
+  this.setAttribute('open', '');
+};
+HTMLDialogElement.prototype.close ??= function close() {
+  if (!this.hasAttribute('open')) return;
+  this.removeAttribute('open');
+  this.dispatchEvent(new Event('close'));
+};
+
 // Mock window.scrollTo for jsdom
 Object.defineProperty(window, 'scrollTo', {
   value: vi.fn(),

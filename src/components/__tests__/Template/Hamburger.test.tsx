@@ -85,19 +85,19 @@ describe('Hamburger', () => {
     const menu = document.getElementById(
       button.getAttribute('aria-controls') ?? '',
     );
-    expect(menu).toHaveAttribute('inert');
+    expect(menu).not.toHaveAttribute('open');
 
     fireEvent.click(button);
     expect(button).toHaveAttribute('aria-expanded', 'true');
     expect(button).toHaveAttribute('aria-label', 'Close navigation menu');
-    expect(menu).not.toHaveAttribute('inert');
+    expect(menu).toHaveAttribute('open');
 
     fireEvent.click(button);
     expect(button).toHaveAttribute('aria-expanded', 'false');
     expect(button).toHaveAttribute('aria-label', 'Open navigation menu');
   });
 
-  it('closes and unlocks scrolling when CSS hides the trigger, and can reopen', () => {
+  it('closes when CSS hides the trigger, and can reopen', () => {
     let notifyResize = () => {};
     const disconnect = vi.fn();
     vi.stubGlobal(
@@ -111,7 +111,6 @@ describe('Hamburger', () => {
         }
       },
     );
-    vi.spyOn(window, 'scrollY', 'get').mockReturnValue(240);
     const { unmount } = render(<Hamburger />);
     const button = screen.getByRole('button', { name: 'Open navigation menu' });
     // jsdom has no layout. A rendered button has a box; display:none has none.
@@ -122,14 +121,13 @@ describe('Hamburger', () => {
     fireEvent.click(button);
     act(() => notifyResize());
     expect(button).toHaveAttribute('aria-expanded', 'true');
-    expect(document.body.style.position).toBe('fixed');
 
     boxes.mockReturnValue({ length: 0 } as DOMRectList);
     act(() => notifyResize());
     expect(button).toHaveAttribute('aria-expanded', 'false');
-    expect(document.getElementById('mobile-nav-menu')).toHaveAttribute('inert');
-    expect(document.body.style.position).toBe('');
-    expect(window.scrollTo).toHaveBeenLastCalledWith(0, 240);
+    expect(document.getElementById('mobile-nav-menu')).not.toHaveAttribute(
+      'open',
+    );
     expect(disconnect).toHaveBeenCalledTimes(1);
 
     boxes.mockReturnValue({ length: 1 } as DOMRectList);
@@ -138,7 +136,6 @@ describe('Hamburger', () => {
     expect(button).toHaveAttribute('aria-expanded', 'true');
     unmount();
     expect(disconnect).toHaveBeenCalledTimes(2);
-    expect(document.body.style.position).toBe('');
   });
 
   // The only nav a phone gets, so every promoted route has to be in it and no

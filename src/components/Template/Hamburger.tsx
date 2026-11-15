@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
+import { createPortal, flushSync } from 'react-dom';
 
 import routes from '../../data/routes';
 import { isActiveRoute } from '../../lib/routes';
@@ -30,11 +30,13 @@ export default function Hamburger() {
     if (!open || !button) return;
 
     // Observe the trigger so CSS owns the breakpoint. Hiding it alone leaves
-    // the portalled menu open and the body locked on a wider viewport.
+    // the portalled dialog open, and modal, on a wider viewport.
     const observer = new ResizeObserver(() => {
       if (button.getClientRects().length > 0) return;
 
-      closeMenu();
+      // Flushed, so the dialog is closed before focus moves: nothing outside
+      // a modal dialog can take focus.
+      flushSync(closeMenu);
 
       // The hidden trigger cannot receive restored focus. Hand it to the
       // current desktop route, or the home link when no route is selected.
@@ -51,8 +53,8 @@ export default function Hamburger() {
 
   const slideMenu = (
     <SlideMenu id={MENU_ID} isOpen={open} onClose={closeMenu}>
-      {/* The trap keeps focus inside the dialog, so it needs a way out that
-          is not the Escape key alone. */}
+      {/* A modal dialog keeps focus inside it, so it needs a way out that is
+          not the Escape key alone. */}
       <button
         type="button"
         className="slide-menu-close"

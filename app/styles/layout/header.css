@@ -62,44 +62,72 @@
 }
 
 /* ========================================
-   SLIDE MENU (native implementation)
+   SLIDE MENU
    ======================================== */
 
-/* Slide menu overlay */
-.slide-menu-overlay {
-  background: var(--color-overlay-darker);
-  inset: 0;
-  opacity: 0;
-  pointer-events: none;
-  position: fixed;
-  transition: opacity var(--duration-normal) var(--ease-menu);
-  z-index: var(--z-overlay);
-}
-
-.slide-menu-overlay--open {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-/* Slide menu panel */
+/* A native modal dialog. The UA's centred, bordered, padded box is reset to a
+   full-height panel against the right edge, and the sheet fills it, so a
+   click on the dialog itself is a click on its backdrop. */
 .slide-menu {
-  background-color: var(--color-bg-alt);
-  border-left: var(--rule) solid var(--color-fg-bold);
-  bottom: 0;
-  max-width: 82vw;
-  overflow-y: auto;
-  padding: 1.5rem 1.5rem 0;
-  position: fixed;
-  top: 0;
-  transition: transform var(--duration-normal) var(--ease-menu);
+  inset: 0 0 0 auto;
   width: 300px;
-  z-index: var(--z-menu);
-  right: 0;
+  max-width: 82vw;
+  /* The UA sizes a dialog to its content; the panel runs the full height. */
+  height: auto;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-left: var(--rule) solid var(--color-fg-bold);
+  background-color: var(--color-bg-alt);
+  color: inherit;
+  overflow-y: auto;
+  /* Scrolling stops at the menu's edges instead of moving the page, and the
+     backdrop below does the same. Safari does not yet honour this on a box
+     that cannot scroll, so there the page behind the backdrop still can; a
+     `position: fixed` body lock would jump the scroll position instead. */
+  overscroll-behavior: contain;
   transform: translateX(100%);
+  /* `display` and `overlay` keep the dialog in the top layer until it has
+     slid out. Browsers without `overlay` close it at once. */
+  transition:
+    transform var(--duration-normal) var(--ease-menu),
+    display var(--duration-normal) allow-discrete,
+    overlay var(--duration-normal) allow-discrete;
 }
 
-.slide-menu--open {
+.slide-menu[open] {
   transform: translateX(0);
+}
+
+.slide-menu::backdrop {
+  background: var(--color-overlay-darker);
+  opacity: 0;
+  overflow: hidden;
+  overscroll-behavior: contain;
+  transition:
+    opacity var(--duration-normal) var(--ease-menu),
+    display var(--duration-normal) allow-discrete,
+    overlay var(--duration-normal) allow-discrete;
+}
+
+.slide-menu[open]::backdrop {
+  opacity: 1;
+}
+
+@starting-style {
+  .slide-menu[open] {
+    transform: translateX(100%);
+  }
+
+  .slide-menu[open]::backdrop {
+    opacity: 0;
+  }
+}
+
+.slide-menu-sheet {
+  min-height: 100%;
+  padding: 1.5rem 1.5rem 0;
 }
 
 .hamburger-container .main ul {
