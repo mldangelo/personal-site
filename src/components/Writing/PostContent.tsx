@@ -17,6 +17,7 @@ import {
   useEffect,
   useRef,
 } from 'react';
+import { preload } from 'react-dom';
 
 import { planMarkdownHeadingAnchors } from '@/lib/anchors';
 import type { ImageSize } from '@/lib/imageSize';
@@ -29,12 +30,17 @@ interface PostContentProps {
    * each image reserves its real ratio and the page does not shift as it loads.
    */
   imageSizes?: Record<string, ImageSize>;
+  /** The image near the top of the post, preloaded on wide screens. */
+  leadImage?: string;
   /**
    * Draft previews may point at intentionally unpublished local images. The
    * production path remains strict and refuses invented dimensions.
    */
   allowMissingLocalImages?: boolean;
 }
+
+/** The width at which the header shows its desktop links (`header.css`). */
+const WIDE_SCREEN_QUERY = '(min-width: 736px)';
 
 /** Remote/data images cannot be inspected from the repository at build time. */
 const FALLBACK_SIZE: ImageSize = { width: 1200, height: 675 };
@@ -270,6 +276,7 @@ export default function PostContent({
   allowMissingLocalImages = false,
   content,
   imageSizes = {},
+  leadImage,
 }: PostContentProps) {
   function sizeFor(src: string): ImageSize {
     const measuredSize = imageSizes[src];
@@ -301,6 +308,18 @@ export default function PostContent({
     }
 
     const { width, height } = sizeFor(src);
+
+    // On a wide screen the lead image is in the first viewport and usually the
+    // largest paint, so the head fetches it at high priority. On a phone it is
+    // below the fold, where fetching it early takes bandwidth from the opening
+    // text, so there it stays lazy like every other image.
+    if (src === leadImage) {
+      preload(src, {
+        as: 'image',
+        fetchPriority: 'high',
+        media: WIDE_SCREEN_QUERY,
+      });
+    }
 
     return (
       <Image

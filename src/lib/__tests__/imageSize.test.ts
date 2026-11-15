@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  leadImageSource,
   parseImageSize,
   readImageSize,
   readPostImageSizes,
@@ -149,5 +150,23 @@ describe('readPostImageSizes', () => {
     expect(() =>
       readPostImageSizes('![up](/images/../robots.txt)', preview),
     ).toThrow(/outside public/);
+  });
+});
+
+describe('leadImageSource', () => {
+  const paragraph = 'A short paragraph.';
+
+  it('names an image among the opening blocks, and nothing further down', () => {
+    expect(
+      leadImageSource(
+        `## Context\n\n${paragraph}\n\n![lead](/images/lead.png)`,
+      ),
+    ).toBe('/images/lead.png');
+    expect(
+      leadImageSource(
+        `${paragraph}\n\n${paragraph}\n\n${paragraph}\n\n![late](/images/late.png)`,
+      ),
+    ).toBeUndefined();
+    expect(leadImageSource(`${paragraph}\n\n${paragraph}`)).toBeUndefined();
   });
 });

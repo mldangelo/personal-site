@@ -233,6 +233,28 @@ export function readPostImageSizes(
   return sizes;
 }
 
+/**
+ * How many Markdown blocks under a post's header still fall in the first
+ * viewport: a heading and a couple of short paragraphs.
+ */
+const LEAD_IMAGE_BLOCKS = 3;
+
+/**
+ * The image a post shows within its first few blocks, which on a wide screen
+ * is in the first viewport and usually its largest paint, so `PostContent`
+ * preloads it there instead of waiting for lazy loading. Blocks are split on
+ * blank lines, so a fence with blank lines only makes the window shorter.
+ */
+export function leadImageSource(markdown: string): string | undefined {
+  const opening = markdown
+    .trim()
+    .split(/\n\s*\n/)
+    .slice(0, LEAD_IMAGE_BLOCKS)
+    .join('\n\n');
+
+  return readMarkdownImageSources(opening)[0];
+}
+
 function isExternalImage(src: string): boolean {
   return src.startsWith('//') || /^[a-z][a-z\d+.-]*:/i.test(src);
 }
