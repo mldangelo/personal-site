@@ -99,6 +99,7 @@ npm test                # Run Vitest
 npm run build           # Build the production static export
 npm run verify-export   # Inspect the generated HTML and XML
 npm run measure-export  # Weigh the export against scripts/budget.json
+npm run check-reflow    # Fail if a page scrolls sideways on a phone or at 200% text
 npm run og              # Regenerate the site and per-post share cards
 npm run og:check        # Verify the card ledger and a fresh byte-for-byte render
 npm run og:check:ledger # Verify the ledger alone, with no network access

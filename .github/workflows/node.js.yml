@@ -216,6 +216,15 @@ jobs:
       - name: Measure export against size budget
         run: npm run measure-export
 
+      # Loads every exported page in headless Chrome at a 320px phone width,
+      # at the default text size and at 200%, and at 1280px, and fails when a
+      # page is wider than its viewport. jsdom has no layout, so no component
+      # test can see this. One leg is enough: the fonts are self-hosted, so the
+      # other platforms lay the pages out the same way.
+      - name: Check pages fit narrow screens and enlarged text
+        if: matrix.os == 'ubuntu-latest' && matrix.node-version == env.DEPLOY_NODE
+        run: npm run check-reflow
+
       - name: Upload build artifacts
         if: >-
           matrix.os == 'ubuntu-latest' &&
