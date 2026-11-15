@@ -21,7 +21,7 @@ import {
  * Every node carries a stable `@id` so crawlers can merge the same entity
  * across pages (e.g. the homepage Person and a blog post's author resolve to
  * one knowledge-graph node). Pages compose these builders into a single
- * `@graph` document via {@link buildGraph}.
+ * `@graph` document through `SchemaGraph`.
  */
 
 // Stable node identifiers, referenced across pages.
@@ -260,13 +260,5 @@ export function blogPostingNode(
       height: image.height,
       ...(image.alt ? { caption: image.alt } : {}),
     },
-  };
-}
-
-/** Wraps nodes into a single `@graph` JSON-LD document. */
-export function buildGraph(nodes: SchemaNode[]): Record<string, unknown> {
-  return {
-    '@context': 'https://schema.org',
-    '@graph': nodes,
   };
 }

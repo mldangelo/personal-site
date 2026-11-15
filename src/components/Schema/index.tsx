@@ -1,4 +1,4 @@
-import { buildGraph, personNode, websiteNode } from '@/lib/schema';
+import { personNode, websiteNode } from '@/lib/schema';
 
 /**
  * Renders an array of schema.org nodes as a single JSON-LD `@graph` document.
@@ -10,7 +10,10 @@ export function SchemaGraph({ nodes }: { nodes: Record<string, unknown>[] }) {
     <script
       type="application/ld+json"
       dangerouslySetInnerHTML={{
-        __html: JSON.stringify(buildGraph(nodes)).replace(/</g, '\\u003c'),
+        __html: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@graph': nodes,
+        }).replace(/</g, '\\u003c'),
       }}
     />
   );
