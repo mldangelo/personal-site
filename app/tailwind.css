@@ -6,6 +6,23 @@
 @import 'tailwindcss/theme.css' layer(theme);
 @import 'tailwindcss/preflight.css' layer(base);
 
+/* Where the dark theme applies: `<html data-theme='dark'>`, which the inline
+   bootstrap sets from a stored choice or the device, or, with no bootstrap to
+   run, the device's own preference. Both branches add exactly the specificity
+   `[data-theme='dark']` did, so print.css still overrides them. Write dark
+   rules once, inside `@variant dark { ... }`. */
+@custom-variant dark {
+  &:where([data-theme='dark']) {
+    @slot;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    &:where(:not([data-theme])) {
+      @slot;
+    }
+  }
+}
+
 /* ========================================
    DESIGN SYSTEM ENTRY POINT
    All styles are organized in modular files

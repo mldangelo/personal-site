@@ -1,57 +1,59 @@
 /* ========================================
    DARK MODE
-   Supports both system preference and manual toggle
+   A stored choice or the device's preference; see the `dark` variant in
+   tailwind.css for how both reach these rules.
    ======================================== */
 
 /* Neutral charcoal surrounds the same deep-blue poster after dark. */
-[data-theme='dark'] {
-  /* Core colors */
-  --color-bg-alt: #222329;
-  --color-fg: #ece9e3;
-  --color-fg-bold: #f4f0e9;
-  --color-fg-light: #bebac0;
+:root {
+  @variant dark {
+    /* Core colors */
+    --color-bg-alt: #222329;
+    --color-fg: #ece9e3;
+    --color-fg-bold: #f4f0e9;
+    --color-fg-light: #bebac0;
 
-  /* Overlay colors for dark mode */
-  --color-overlay-darker: rgba(0, 0, 0, 0.6);
+    /* Overlay colors for dark mode */
+    --color-overlay-darker: rgba(0, 0, 0, 0.6);
 
-  /* Links and filled controls keep separate, contrast-tested color pairs. */
-  --color-accent: #b8c9ee;
-  --color-accent-hover: #d0dcf6;
+    /* Links and filled controls keep separate, contrast-tested color pairs. */
+    --color-accent: #b8c9ee;
+    --color-accent-hover: #d0dcf6;
 
-  --color-hero: #304b83;
-  --color-on-hero: #f3eee5;
-  --color-on-hero-hover: #e2dccf;
+    --color-hero: #304b83;
+    --color-on-hero: #f3eee5;
+    --color-on-hero-hover: #e2dccf;
 
-  --color-accent-fill: #b8c9ee;
-  --color-accent-fill-hover: #d0dcf6;
-  --color-on-accent: #1b2a52;
-  --color-accent-underline: color-mix(in srgb, var(--color-accent) 50%, transparent);
+    --color-accent-fill: #b8c9ee;
+    --color-accent-fill-hover: #d0dcf6;
+    --color-on-accent: #1b2a52;
+    --color-accent-underline: color-mix(in srgb, var(--color-accent) 50%, transparent);
 
-  /* Amber remains reserved for live or in-progress values. */
-  --color-signal: #f0a202;
-  --color-signal-mark: #f0a202;
+    /* Amber remains reserved for live or in-progress values. */
+    --color-signal: #f0a202;
+    --color-signal-mark: #f0a202;
 
-  /* Interactive boundaries meet the same 3:1 floor as the light theme. */
-  --color-control-border: #8b929c;
+    /* Interactive boundaries meet the same 3:1 floor as the light theme. */
+    --color-control-border: #8b929c;
 
-  /* Borders */
-  --color-border: rgba(255, 255, 255, 0.12);
-  --color-border-bg: rgba(255, 255, 255, 0.07);
-  --color-border-alt: rgba(255, 255, 255, 0.2);
+    /* Borders */
+    --color-border: rgba(255, 255, 255, 0.12);
+    --color-border-bg: rgba(255, 255, 255, 0.07);
+    --color-border-alt: rgba(255, 255, 255, 0.2);
 
-  /* Semantic surface tokens */
-  --color-surface-subtle: rgba(255, 255, 255, 0.04);
-  --color-surface-hover: rgba(255, 255, 255, 0.07);
-  --color-fg-muted: rgba(255, 255, 255, 0.5);
-}
+    /* Semantic surface tokens */
+    --color-surface-subtle: rgba(255, 255, 255, 0.04);
+    --color-surface-hover: rgba(255, 255, 255, 0.07);
+    --color-fg-muted: rgba(255, 255, 255, 0.5);
 
-/* Keep the portrait in color while softening its white field at night. */
-[data-theme='dark'] :where(.portrait) img {
-  filter: brightness(0.9);
-}
+    /* Keep the portrait in color while softening its white field at night. */
+    & :where(.portrait) img {
+      filter: brightness(0.9);
+    }
 
-/* Misc dark mode overrides */
-[data-theme='dark'] code {
-  background: var(--color-surface-hover);
-  border-color: var(--color-border-bg);
+    & code {
+      background: var(--color-surface-hover);
+      border-color: var(--color-border-bg);
+    }
+  }
 }

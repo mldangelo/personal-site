@@ -52,7 +52,12 @@
   "yaml": { "formatter": { "enabled": false } },
   "overrides": [
     {
-      "includes": ["**/tailwind.css", "**/styles/tokens/*.css"],
+      "includes": [
+        "**/tailwind.css",
+        "**/styles/tokens/*.css",
+        "**/styles/dark-mode.css",
+        "**/styles/base/reset.css"
+      ],
       "css": { "parser": { "tailwindDirectives": true } }
     }
   ],

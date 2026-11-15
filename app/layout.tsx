@@ -31,16 +31,11 @@ const CHROME_COLORS: ThemeColors = {
  *
  * `theme-color` paints the browser's own chrome — the Android address bar, the
  * Safari toolbar — and cannot be styled, so it can only be scoped by
- * `prefers-color-scheme`. That is the *device* preference, and no stylesheet
- * here reacts to it: dark is reached only through `<html data-theme='dark'>`,
- * which the bootstrap below sets. So a scoped pair would paint dark chrome over
- * a light page for a no-JavaScript visitor on a dark-preferring device.
- * `app/__tests__/theme-color.test.ts` re-derives that premise from the
- * stylesheets rather than trusting this comment.
- *
- * One unscoped light value is therefore the whole truth without JavaScript:
- * that is the only page a reader can get, on any device. `app/manifest.json`
- * says the same thing with its single `theme_color`.
+ * `prefers-color-scheme`. Without the bootstrap that is exactly what the page
+ * follows: the `dark` variant in `app/tailwind.css` applies the dark theme on a
+ * dark-preferring device whenever `<html>` has no `data-theme`. So the pair
+ * below scopes each colour the same way, and the chrome matches the page.
+ * `app/__tests__/theme-color.test.ts` holds the two to the same condition.
  *
  * It lives in `<noscript>` because React must not own it. React re-creates its
  * hoisted `<meta>` elements on every client-side navigation and matches them
@@ -53,7 +48,12 @@ const CHROME_COLORS: ThemeColors = {
  * Interpolated straight into markup because `readColorToken` refuses anything
  * that is not a literal colour, so the value cannot carry a quote or a tag.
  */
-const NO_SCRIPT_THEME_COLOR = `<meta name="theme-color" content="${CHROME_COLORS.light}">`;
+const NO_SCRIPT_THEME_COLOR = (['light', 'dark'] as const)
+  .map(
+    (scheme) =>
+      `<meta name="theme-color" content="${CHROME_COLORS[scheme]}" media="(prefers-color-scheme: ${scheme})">`,
+  )
+  .join('');
 
 /**
  * The icon set and the web app manifest are not declared here. They come from
