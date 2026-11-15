@@ -28,11 +28,12 @@ export default function TableRow({ label, link, value }: StatRow) {
   // The label names its row, so it is a row header rather than a data cell —
   // that is what lets a screen reader announce the value with its label.
   return (
-    <tr>
-      <th scope="row" className="stat-table-label">
+    <tr role="row">
+      <th scope="row" role="rowheader" className="stat-table-label">
         {label}
       </th>
       <td
+        role="cell"
         className={
           breakable
             ? 'stat-table-value stat-table-value--long'

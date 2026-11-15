@@ -2,6 +2,14 @@
    STATS PAGE
    ======================================== */
 
+/* The frame sets the value's size, which every cell but the label inherits,
+   so the container query at the end of this file measures in the value's own
+   em and one threshold holds at every breakpoint. */
+.stat-table-frame {
+  container: stat-table / inline-size;
+  font-size: var(--text-2xl);
+}
+
 /* Readings, not a spreadsheet: a label to read beside a value set large enough
    to be read off at a glance. The ink rule above each table belongs to the
    section header, so the table draws none of its own. */
@@ -28,9 +36,14 @@
    exactly as wide as the widest value in that table and the label has all of
    the rest. The gap is the least that keeps the two apart: at 360px the
    longest label fits on two lines with 2.5px to spare, and took a third when
-   the gap was 1rem. */
+   the gap was 1rem.
+
+   A label keeps its words whole. Squeezed below its longest word, the row
+   should have stacked, and an overflow shows `check-reflow` that it did not,
+   where a label set a letter a line would pass. */
 .stat-table-label {
   padding-right: 0.5rem;
+  overflow-wrap: break-word;
   text-align: left;
   text-wrap: balance;
   font-family: var(--font-body);
@@ -43,7 +56,6 @@
 .stat-table-value {
   text-align: right;
   font-family: var(--font-mono);
-  font-size: var(--text-2xl);
   font-weight: var(--font-weight-medium);
   font-variant-numeric: tabular-nums;
   color: var(--color-fg-bold);
@@ -143,17 +155,13 @@
 }
 
 @media (max-width: 640px) {
-  .stat-table-value {
+  .stat-table-frame {
     font-size: clamp(var(--text-md), 4vw, var(--text-xl));
   }
 }
 
 @media (max-width: 480px) {
-  .contact-email-link {
-    font-size: var(--text-lg);
-  }
-
-  .stat-table-value {
+  .stat-table-frame {
     font-size: var(--text-md);
   }
 
@@ -164,5 +172,37 @@
   .stat-table-value--long {
     white-space: normal;
     overflow-wrap: anywhere;
+  }
+}
+
+/* A row with no room for its value beside its label, as at 200% text on a
+   phone, stacks the value under the label, where a value with no space breaks
+   wherever it must. 13.5em of the value's size is fourteen digits of age plus
+   a label's longest word and the gap, so at the default text size no phone
+   stacks. */
+@container stat-table (width < 13.5em) {
+  .stat-table tbody,
+  .stat-table tr,
+  .stat-table th,
+  .stat-table td {
+    display: block;
+  }
+
+  .stat-table th {
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
+
+  .stat-table-value {
+    text-align: left;
+    white-space: normal;
+  }
+
+  .stat-readout-value {
+    min-width: min(var(--readout-width), 100%);
+  }
+
+  .stat-readout-note {
+    white-space: normal;
   }
 }
