@@ -17,9 +17,8 @@
   }
 
   /* Links in running text, as article prose sets them. Scoped to `p` because
-     plenty of `<li>` UI is not prose; prose lists style their links from their
-     own container (`.about-content a`, `.prose a`). Screen only, because the
-     résumé is printed. */
+     plenty of `<li>` UI is not prose; prose lists take the same style from
+     their container, below. Screen only, because the résumé is printed. */
   @media screen {
     p a {
       color: var(--color-accent);
@@ -33,4 +32,24 @@
       text-decoration-color: var(--color-accent);
     }
   }
+}
+
+/* The same style where a container is known to hold running text, in lists as
+   well as paragraphs and on paper as well as on screen: article prose, the
+   About page, and the citations in a résumé role summary. Unlayered, so it
+   wins over the components' own link colours inside that text. */
+.prose a,
+.about-content :where(p, li) a,
+.resume-content .summary a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-decoration-color: var(--color-accent-underline);
+  text-underline-offset: 2px;
+}
+
+.prose a:hover,
+.about-content :where(p, li) a:hover,
+.resume-content .summary a:hover {
+  color: var(--color-accent-hover);
+  text-decoration-color: var(--color-accent);
 }

@@ -77,7 +77,6 @@
   letter-spacing: var(--tracking-normal);
   color: var(--color-fg-light);
   line-height: 1;
-  transition: color var(--duration-fast) var(--ease-out);
 }
 
 /* The bar under an active item lies on the header's hairline, so navigation
@@ -108,7 +107,6 @@
 }
 
 .nav-link:focus-visible {
-  color: var(--color-fg-bold);
   outline-offset: 4px;
 }
 

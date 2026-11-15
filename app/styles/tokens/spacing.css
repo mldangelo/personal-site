@@ -23,7 +23,6 @@
      SEMANTIC SPACING
      =================== */
   --spacing-element: var(--spacing-7); /* 1.75rem - between block elements */
-  --scroll-offset-resume: var(--spacing-24); /* 6rem - resume section scroll offset */
 
   /* ===================
      LAYOUT DIMENSIONS

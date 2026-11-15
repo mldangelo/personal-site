@@ -88,7 +88,6 @@
 
 .footer-copyright a {
   color: inherit;
-  transition: color var(--duration-fast) var(--ease-out);
 }
 
 .footer-copyright a:hover {
@@ -115,7 +114,6 @@
   font-size: var(--text-ui);
   font-weight: var(--font-weight-medium);
   color: var(--color-fg-light);
-  transition: color var(--duration-fast) var(--ease-out);
 }
 
 .footer-links a:hover {

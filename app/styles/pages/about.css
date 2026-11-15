@@ -265,20 +265,6 @@
   }
 }
 
-/* The article's link style, in lists as well as paragraphs and on paper as
-   well as on screen. */
-.about-content :where(p, li) a {
-  color: var(--color-accent);
-  text-decoration: underline;
-  text-decoration-color: var(--color-accent-underline);
-  text-underline-offset: 2px;
-}
-
-.about-content :where(p, li) a:hover {
-  color: var(--color-accent-hover);
-  text-decoration-color: var(--color-accent);
-}
-
 @media (max-width: 735px) {
   .about-section-nav {
     margin: var(--spacing-6) 0 var(--spacing-5);

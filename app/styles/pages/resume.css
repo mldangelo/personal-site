@@ -14,9 +14,9 @@
   margin: 0;
 }
 
-/* Paper falls under this breakpoint too — the print viewport is ~690-710px —
-   so `print.css` re-declares the two-column grid for print. */
-@media (max-width: 735px) {
+/* Screens only: the print viewport is narrower than this breakpoint, and paper
+   keeps two columns. */
+@media screen and (max-width: 735px) {
   .resume-page .courses .course-list {
     grid-template-columns: 1fr;
   }
@@ -39,19 +39,6 @@
   .resume-note {
     font-size: 10pt;
   }
-}
-
-/* Citations in a role summary are links in running text, and look like it. */
-.resume-content .summary a {
-  color: var(--color-accent);
-  text-decoration: underline;
-  text-decoration-color: var(--color-accent-underline);
-  text-underline-offset: 2px;
-}
-
-.resume-content .summary a:hover {
-  color: var(--color-accent-hover);
-  text-decoration-color: var(--color-accent);
 }
 
 /* Resume page specific */
@@ -114,7 +101,7 @@
 }
 
 .resume-section {
-  scroll-margin-top: calc(var(--header-height) + var(--scroll-offset-resume));
+  scroll-margin-top: calc(var(--header-height) + var(--spacing-24));
 }
 
 /* Printed resumes need contact details, which live in the footer on screen.
