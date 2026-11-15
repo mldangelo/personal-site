@@ -328,6 +328,28 @@ describe('ThemeToggle', () => {
     });
   });
 
+  // The browser fires `storage` only in the tabs that did not write, so this is
+  // what a press in another tab looks like from here.
+  it('follows a choice made in another tab', () => {
+    openPage('light');
+    render(<ThemeToggle />);
+
+    const otherTab = (key: string | null) =>
+      act(() => {
+        window.dispatchEvent(new StorageEvent('storage', { key }));
+      });
+
+    window.localStorage.setItem(THEME_STORAGE_KEY, 'dark');
+    otherTab(THEME_STORAGE_KEY);
+    expect(reading()).toEqual(stopOf('light', 'dark'));
+    walk(LAP.light.slice(2));
+
+    // Clearing site data elsewhere arrives with no key, and reads as `system`.
+    window.localStorage.clear();
+    otherTab(null);
+    expect(reading()).toEqual(LAP.light[0]);
+  });
+
   // A lap finishes in the order it set out in, or a flip makes the next press an
   // avoidable no-op. Only `system`, where a lap starts, asks the device again.
   describe('when the device flips', () => {

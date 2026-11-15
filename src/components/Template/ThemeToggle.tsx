@@ -15,6 +15,7 @@ import {
   THEME_ATTRIBUTE,
   THEME_CHOICE_ATTRIBUTE,
   THEME_CHOICES,
+  THEME_STORAGE_KEY,
   type ThemeChoice,
 } from '@/lib/theme';
 
@@ -98,6 +99,20 @@ export default function ThemeToggle() {
     setChoice((pressed) => pressed ?? readStoredThemeChoice());
     // A visitor who arrives on an explicit choice is part-way round already.
     setLapScheme(readSystemScheme());
+  }, []);
+
+  // A press in another tab, which the browser reports only to the tabs that
+  // did not write. Taken up as an arrival would be, reading storage back rather
+  // than trusting the event's value; a `null` key means storage was cleared.
+  useEffect(() => {
+    const adopt = (event: StorageEvent) => {
+      if (event.key !== null && event.key !== THEME_STORAGE_KEY) return;
+      setChoice(readStoredThemeChoice());
+      setLapScheme(readSystemScheme());
+    };
+
+    window.addEventListener('storage', adopt);
+    return () => window.removeEventListener('storage', adopt);
   }, []);
 
   useEffect(() => {
