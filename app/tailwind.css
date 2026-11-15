@@ -1,4 +1,10 @@
-@import 'tailwindcss';
+/* Tailwind's theme and preflight reset, and the compiler for the `@theme`
+   token blocks, without its utilities: every class here is the site's own.
+   `@import 'tailwindcss'` would bring back utilities generated from any word
+   in any file, prose included. */
+@layer theme, base, components;
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/preflight.css' layer(base);
 
 /* ========================================
    DESIGN SYSTEM ENTRY POINT

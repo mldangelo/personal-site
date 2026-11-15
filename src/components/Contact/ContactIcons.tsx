@@ -39,7 +39,6 @@ export default function ContactIcons({
                   fill="currentColor"
                   aria-hidden="true"
                   focusable="false"
-                  className="size-5"
                 >
                   <path d={s.icon.path} />
                 </svg>
