@@ -55,8 +55,7 @@
 
 @media (max-width: 735px) {
   .site-header {
-    height: var(--header-height-mobile);
-    line-height: var(--header-height-mobile);
+    line-height: var(--header-height);
     padding: 0 1.5rem;
   }
 }

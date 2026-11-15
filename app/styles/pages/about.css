@@ -285,7 +285,7 @@
   }
 
   .about-section h2 {
-    scroll-margin-top: calc(var(--header-height-mobile) + 4.5rem + var(--spacing-5));
+    scroll-margin-top: calc(var(--header-height) + 4.5rem + var(--spacing-5));
   }
 }
 

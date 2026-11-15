@@ -13,12 +13,6 @@
   min-height: calc(100dvh - var(--header-height));
 }
 
-@media (max-width: 735px) {
-  .page-container {
-    min-height: calc(100dvh - var(--header-height-mobile));
-  }
-}
-
 /* Every page's content, the 404 included. Text grows with the reader's
    setting, so at 200% on a phone one word (a title, a URL, a course name) can
    be wider than the column; it breaks rather than push the page sideways.
