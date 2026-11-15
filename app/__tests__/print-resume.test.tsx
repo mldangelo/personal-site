@@ -57,9 +57,19 @@ describe('resume link data', () => {
       'https://bulletin.stanford.edu/courses/1174062',
     ],
     [
+      'CME 307',
+      'Optimization',
+      'https://bulletin.stanford.edu/courses/1045842',
+    ],
+    [
       'CME 308',
       'Stochastic Methods in Engineering',
       'https://web.stanford.edu/class/cme308/',
+    ],
+    [
+      'CS 131',
+      'Computer Vision: Foundations and Applications',
+      'https://bulletin.stanford.edu/courses/2149051',
     ],
     [
       'CS 265',

@@ -60,7 +60,7 @@ Ask me in person for other stories that I'm afraid to share with the internet.
 - I have a list of thousands of ideas, like creating matching bow ties for cats and humans.
 - I almost always have a sketchbook with me and a [01 Sakura Pigma Micron Pen](https://www.sakuraofamerica.com/product/pigma-micron/).
 - I can't locate every country on a map.
-- I operate a [small angel fund](http://skepticalinvestments.biz/) with terrible returns.
+- I operate a [small angel fund](https://skepticalinvestments.biz/) with terrible returns.
 - I break about 30 traffic laws on a skateboard or [bicycle](https://www.citibikenyc.com/) every single day.
 - I stack-rank coffee shops, restaurants, and every dog I see in New York and San Francisco.
 - I added this page because many people complained that my site was just my resume.
@@ -77,19 +77,19 @@ Ask me in person for other stories that I'm afraid to share with the internet.
 # Websites from people I admire
 
 - [Alex Peysakhovich](http://alexpeys.github.io/)
-- [Chris Lengerich](http://www.chrislengerich.com/)
+- [Chris Lengerich](https://www.chrislengerich.com/)
 - [Chris Saad](https://www.chrissaad.com/)
-- [Duncan Tomlin](http://duncantomlin.com/)
+- [Duncan Tomlin](https://duncantomlin.com/)
 - [Ed Kearney](https://edkearney.com/)
-- [Gia Jung](http://giajung.com/)
+- [Gia Jung](https://giajung.com/)
 - [Hawley Moore](http://hawleymoore.com/)
 - [Holman Gao](https://golmansax.com/)
-- [Ian Webster](http://ianww.com/)
+- [Ian Webster](https://ianww.com/)
 - [Johanna Flato](https://www.johannaflato.com/)
-- [Judy Mou](http://www.judymou.com/)
+- [Judy Mou](https://www.judymou.com/)
 - [Judy Suh](https://www.judysuh.com/)
 - [Kristina Monakhova](https://kristinamonakhova.com/)
-- [Noah Trueblood](http://notrueblood.com/)
+- [Noah Trueblood](https://notrueblood.com/)
 - [Ruoxi Wang](http://ruoxiw.com/)
 - [Tom Sachs](https://www.tomsachs.org/)
 - [Will Holley](https://willholley.com/)

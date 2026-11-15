@@ -15,19 +15,19 @@ const courses: Course[] = [
   {
     title: 'Convex Optimization',
     number: 'EE 364a',
-    link: 'http://stanford.edu/class/ee364a/',
+    link: 'https://web.stanford.edu/class/ee364a/',
     university: 'Stanford University',
   },
   {
     title: 'Machine Learning',
     number: 'CS 229',
-    link: 'http://cs229.stanford.edu/',
+    link: 'https://cs229.stanford.edu/',
     university: 'Stanford University',
   },
   {
     title: 'Convolutional Neural Networks for Visual Recognition',
     number: 'CS 231n',
-    link: 'http://cs231n.stanford.edu/',
+    link: 'https://cs231n.stanford.edu/',
     university: 'Stanford University',
   },
   {
@@ -43,13 +43,13 @@ const courses: Course[] = [
   {
     title: 'Numerical Optimization',
     number: 'CME 304',
-    link: 'http://web.stanford.edu/class/cme304/',
+    link: 'https://web.stanford.edu/class/cme304/',
     university: 'Stanford University',
   },
   {
     title: 'Discrete Mathematics and Algorithms',
     number: 'CME 305',
-    link: 'http://stanford.edu/~rezab/discrete/',
+    link: 'https://stanford.edu/~rezab/discrete/',
     university: 'Stanford University',
   },
   {
@@ -61,9 +61,10 @@ const courses: Course[] = [
     university: 'Stanford University',
   },
   {
+    // The class site is gone; the Bulletin record lasts.
     title: 'Optimization',
     number: 'CME 307',
-    link: 'http://stanford.edu/class/cme307/',
+    link: 'https://bulletin.stanford.edu/courses/1045842',
     university: 'Stanford University',
   },
   {
@@ -81,19 +82,20 @@ const courses: Course[] = [
   {
     title: 'Deep Learning for Natural Language Processing',
     number: 'CS 224d',
-    link: 'http://cs224d.stanford.edu',
+    link: 'https://cs224d.stanford.edu/',
     university: 'Stanford University',
   },
   {
     title: 'Mining Massive Data Sets',
     number: 'CS 246',
-    link: 'http://web.stanford.edu/class/cs246/',
+    link: 'https://web.stanford.edu/class/cs246/',
     university: 'Stanford University',
   },
   {
+    // The class site is gone; the Bulletin record lasts.
     title: 'Computer Vision: Foundations and Applications',
     number: 'CS 131',
-    link: 'http://vision.stanford.edu/teaching/cs131_fall1415/index.html',
+    link: 'https://bulletin.stanford.edu/courses/2149051',
     university: 'Stanford University',
   },
 ];
