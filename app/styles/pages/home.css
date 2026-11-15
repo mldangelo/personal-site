@@ -32,7 +32,6 @@
   font-weight: var(--font-weight-medium);
   letter-spacing: -0.03em;
   line-height: 1.02;
-  overflow-wrap: anywhere;
 }
 
 .hero-grid {
