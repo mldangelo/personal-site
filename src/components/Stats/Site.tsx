@@ -92,12 +92,15 @@ export default async function SiteStats() {
         {
           label: 'GitHub stars',
           value: count('stargazers_count'),
-          link: `${REPOSITORY}/stargazers`,
+          // GitHub shows the stargazer and watcher lists only to signed-in
+          // visitors and answers everyone else with a 404. The repository page
+          // shows both counts to anyone.
+          link: REPOSITORY,
         },
         {
           label: 'Watchers',
           value: count('subscribers_count'),
-          link: `${REPOSITORY}/watchers`,
+          link: REPOSITORY,
         },
         {
           label: 'Forks',
