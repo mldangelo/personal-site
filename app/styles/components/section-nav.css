@@ -70,7 +70,6 @@
      first label. The shadow is the bar's own colour, carried out over the
      row's overhang. */
   .section-nav {
-    top: var(--header-height-mobile);
     box-shadow: -0.5rem 0 var(--color-bg-alt);
   }
 

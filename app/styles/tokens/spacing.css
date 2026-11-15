@@ -28,10 +28,19 @@
      LAYOUT DIMENSIONS
      =================== */
   --header-height: 4rem;
-  --header-height-mobile: 3.5rem;
 
   /* Two page measures keep routes aligned without forcing component-sized
      details (portraits, status messages, controls) into page-level tokens. */
   --measure-page: 64rem; /* Every page, the header, and the footer */
   --measure-read: 40rem; /* Continuous prose and compact data views */
+}
+
+/* Phones take a shorter header. Everything placed against it reads this one
+   token: the body's offset, the sticky bars, scroll margins. Outside the
+   `@theme` block, which cannot hold a media query; unlayered, so it wins over
+   the theme layer. */
+@media (max-width: 735px) {
+  :root {
+    --header-height: 3.5rem;
+  }
 }
