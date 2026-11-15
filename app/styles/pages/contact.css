@@ -54,15 +54,15 @@
 }
 
 /* Where the whole address is wider than its column, as at 200% text on a
-   phone, it stacks: the alias on one row and the domain under it, a step
-   smaller and breaking only before a dot. The query measures the container
-   against the real address's 16 characters, never the alias on screen, so
-   nothing moves while an alias types. Another address needs its own length
-   here. */
+   phone, it stacks: the alias on one row and the domain under it, breaking
+   only before a dot. At `--text-md`, the domain's name ("@mldangelo") still
+   fits a 320px phone whole at 200%. The query measures the container against
+   the real address's 16 characters, never the alias on screen, so nothing
+   moves while an alias types. Another address needs its own length here. */
 @container contact-email (width < 16ch) {
   .contact-email-link {
     grid-template-columns: minmax(0, max-content);
-    font-size: 0.8em;
+    font-size: var(--text-md);
   }
 
   /* The row is wider than a short alias now, and the slot's right-to-left
