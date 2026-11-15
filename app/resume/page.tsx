@@ -71,7 +71,7 @@ export default function ResumePage() {
           <div className="resume-header-row">
             {/* Paper hides the header and footer that carry the name, so
                 there the title is the name. */}
-            <h1 className="resume-title">
+            <h1 className="page-title">
               <span className="resume-screen-title">Resume</span>{' '}
               <span className="resume-print-name">
                 {smartQuotes(profile.name)}

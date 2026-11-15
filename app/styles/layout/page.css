@@ -40,6 +40,10 @@
   /* The name's weight on the homepage, as every other page title. */
   font-weight: var(--font-weight-medium);
   margin-bottom: 0.5rem;
+  /* The title keeps growing with the reader's text, so at 200% on a phone a
+     one-word title is wider than the column; it breaks, as the hero name
+     does, rather than push the page sideways. */
+  overflow-wrap: anywhere;
 }
 
 .page-subtitle {
