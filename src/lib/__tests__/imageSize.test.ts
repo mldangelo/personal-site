@@ -169,4 +169,12 @@ describe('leadImageSource', () => {
     ).toBeUndefined();
     expect(leadImageSource(`${paragraph}\n\n${paragraph}`)).toBeUndefined();
   });
+
+  it('resolves a reference-style lead image defined further down', () => {
+    expect(
+      leadImageSource(
+        `${paragraph}\n\n![lead][card]\n\n${paragraph}\n\n[card]: /images/card.png`,
+      ),
+    ).toBe('/images/card.png');
+  });
 });
