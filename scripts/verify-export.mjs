@@ -202,6 +202,33 @@ function localExportedResource(raw, baseRoute) {
 }
 
 /**
+ * Every resource a page's markup asks the browser to fetch, labelled for a
+ * failure message: `src`, `data`, and `poster` on embedded media, and each
+ * `srcset` candidate. The public-asset collection and each page's validation
+ * read this one list, so the two cannot drift apart.
+ */
+function resourceReferences(html) {
+  const references = [];
+  for (const tag of tags(
+    html,
+    'img|source|audio|embed|iframe|object|track|video',
+  )) {
+    const label = /^<img\b/i.test(tag) ? 'image' : 'media';
+    for (const name of ['src', 'data', 'poster']) {
+      const target = attribute(tag, name);
+      if (target !== undefined) references.push([label, target]);
+    }
+    const srcset = attribute(tag, 'srcset');
+    if (srcset) {
+      for (const target of parseSrcset(srcset)) {
+        references.push(['srcset candidate', target]);
+      }
+    }
+  }
+  return references;
+}
+
+/**
  * Assets already used by an exported page are public independently of a
  * draft. The draft gate below targets the dangerous remainder: files copied
  * into `out/` that only unpublished Markdown asks the browser to fetch.
@@ -225,20 +252,8 @@ function exportedPageAssets() {
     for (const tag of tags(record.html, 'a')) {
       add(attribute(tag, 'href'), record.route);
     }
-    for (const tag of tags(record.html, 'img|source')) {
-      add(attribute(tag, 'src'), record.route);
-      const srcset = attribute(tag, 'srcset');
-      if (srcset) {
-        for (const source of parseSrcset(srcset)) add(source, record.route);
-      }
-    }
-    for (const tag of tags(
-      record.html,
-      'audio|embed|iframe|object|track|video',
-    )) {
-      add(attribute(tag, 'src'), record.route);
-      add(attribute(tag, 'data'), record.route);
-      add(attribute(tag, 'poster'), record.route);
+    for (const [, target] of resourceReferences(record.html)) {
+      add(target, record.route);
     }
   }
 
@@ -550,23 +565,9 @@ for (const record of records) {
     }
   }
 
-  // Validate the same resource forms collected above for public ownership.
   // An absent file must fail even when no draft also references it.
-  for (const tag of tags(
-    html,
-    'img|source|audio|embed|iframe|object|track|video',
-  )) {
-    const label = /^<img\b/i.test(tag) ? 'image' : 'media';
-    for (const name of ['src', 'data', 'poster']) {
-      const target = attribute(tag, name);
-      if (target !== undefined) validateInternalTarget(target, record, label);
-    }
-    const srcset = attribute(tag, 'srcset');
-    if (srcset) {
-      for (const target of parseSrcset(srcset)) {
-        validateInternalTarget(target, record, 'srcset candidate');
-      }
-    }
+  for (const [label, target] of resourceReferences(html)) {
+    validateInternalTarget(target, record, label);
   }
 
   if (isIndexable && !tags(html, 'title').length) {

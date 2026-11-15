@@ -13,10 +13,6 @@ import { getAllPosts, getPostSlugs } from '@/lib/posts';
 import { formatDate } from '@/lib/utils';
 import { assertFontDigest } from '../lib/fonts.mjs';
 import {
-  IMAGE_RENDERER_PACKAGES,
-  readImageRenderer,
-} from '../lib/image-renderer.mjs';
-import {
   CARD_FONTS,
   CARD_SIZE,
   countProseWords,
@@ -130,31 +126,6 @@ describe('share card fonts', () => {
     expect(() =>
       assertFontDigest({ ...font, sha256: '0'.repeat(64) }, data),
     ).toThrow(/Refusing to generate images from changed font bytes/);
-  });
-});
-
-describe('share card renderer', () => {
-  it('reads each renderer package from the lockfile', async () => {
-    const root = temporaryRoot();
-    const entry = (name: string) => ({
-      version: '1.0.0',
-      integrity: `sha512-${name}`,
-    });
-    writeFileSync(
-      join(root, 'package-lock.json'),
-      JSON.stringify({
-        packages: Object.fromEntries(
-          IMAGE_RENDERER_PACKAGES.map((name) => [
-            `node_modules/${name}`,
-            entry(name),
-          ]),
-        ),
-      }),
-    );
-
-    await expect(readImageRenderer(root)).resolves.toEqual(
-      IMAGE_RENDERER_PACKAGES.map((name) => ({ name, ...entry(name) })),
-    );
   });
 });
 

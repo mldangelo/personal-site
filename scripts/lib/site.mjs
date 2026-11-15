@@ -45,18 +45,11 @@ export const toUrlPath = (path) => path.split(sep).join('/');
 
 /** Every file under `dir`, or nothing if it does not exist. */
 export function walkFiles(dir) {
-  const found = [];
-  if (!existsSync(dir)) return found;
+  if (!existsSync(dir)) return [];
 
-  for (const entry of readdirSync(dir)) {
-    const path = join(dir, entry);
-    if (statSync(path).isDirectory()) {
-      found.push(...walkFiles(path));
-    } else {
-      found.push(path);
-    }
-  }
-  return found;
+  return readdirSync(dir, { recursive: true, withFileTypes: true })
+    .filter((entry) => entry.isFile())
+    .map((entry) => join(entry.parentPath, entry.name));
 }
 
 /**
