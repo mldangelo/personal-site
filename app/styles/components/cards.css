@@ -7,7 +7,6 @@
 @layer components {
   .portrait {
     display: inline-block;
-    position: relative;
     line-height: 0;
   }
 }
@@ -138,7 +137,6 @@ a.project-entry:focus-visible .project-entry-title {
   font-weight: var(--font-weight-medium);
   letter-spacing: -0.01em;
   line-height: 1.2;
-  color: var(--color-fg-bold);
   max-width: var(--measure-read);
   transition: color var(--duration-instant) var(--ease-out);
 }
@@ -240,10 +238,6 @@ a.project-entry:focus-visible .project-entry-external {
    EXPERIENCE SPINE
    One continuous rule down the page with a dated tick per role.
    ======================================== */
-
-.experience-spine {
-  position: relative;
-}
 
 /* Two columns: a dated gutter, then the role. Both measures are set once, on
    `.resume-content`, and the skills rows read the same pair, so the page

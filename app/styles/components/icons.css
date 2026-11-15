@@ -28,7 +28,6 @@
     width: 100%;
     height: 44px;
     color: var(--color-fg-light);
-    transition: color var(--duration-fast) var(--ease-out);
   }
 
   .icons svg {

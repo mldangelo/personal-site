@@ -22,8 +22,6 @@
   font-size: var(--text-xl);
   font-weight: var(--font-weight-normal);
   letter-spacing: var(--tracking-tight);
-  line-height: var(--leading-tight);
-  color: var(--color-fg-bold);
 }
 
 /* A count or other annotation opposite the heading. It is data, so it is mono. */

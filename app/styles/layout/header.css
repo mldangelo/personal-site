@@ -239,14 +239,12 @@
 .hamburger-ul {
   display: flex;
   flex-direction: column;
-  gap: 0;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
 .hamburger-ul li {
-  display: block;
   border-bottom: var(--rule) solid var(--color-border);
 }
 

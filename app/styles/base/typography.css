@@ -42,7 +42,6 @@
 
   h2 {
     font-size: var(--text-2xl);
-    font-weight: var(--font-weight-bold);
     letter-spacing: var(--tracking-display);
   }
 
