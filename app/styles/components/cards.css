@@ -83,7 +83,6 @@
   padding: 1.5rem 0;
   border-bottom: var(--rule) solid var(--color-border);
   color: inherit;
-  text-decoration: none;
   transition: background-color var(--duration-instant) var(--ease-out);
 }
 

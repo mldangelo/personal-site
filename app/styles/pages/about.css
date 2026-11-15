@@ -17,7 +17,7 @@
   line-height: 1.7;
 }
 
-/* Section index: the rules are shared with the résumé's in pages/resume.css. */
+/* The section index's own spacing; the rest is components/section-nav.css. */
 .about-section-nav {
   margin: var(--spacing-10) 0 var(--spacing-6);
 }
@@ -64,8 +64,6 @@
 
 .about-content p {
   margin: 0 0 var(--spacing-5);
-  color: var(--color-fg);
-  text-wrap: pretty;
 }
 
 .about-content p:last-child {
@@ -86,7 +84,6 @@
 
 .about-content li {
   margin-bottom: 0.65rem;
-  color: var(--color-fg);
   line-height: 1.75;
   text-wrap: pretty;
 }
@@ -251,10 +248,6 @@
   }
 
   .about-section--log .log-entry::before,
-  .about-section--log .log-entry:last-child::before {
-    left: 0;
-  }
-
   .about-section--log .log-entry::after {
     left: 0;
   }
@@ -284,4 +277,24 @@
 .about-content :where(p, li) a:hover {
   color: var(--color-accent-hover);
   text-decoration-color: var(--color-accent);
+}
+
+@media (max-width: 735px) {
+  .about-section-nav {
+    margin: var(--spacing-6) 0 var(--spacing-5);
+  }
+
+  .about-section h2 {
+    scroll-margin-top: calc(var(--header-height-mobile) + 4.5rem + var(--spacing-5));
+  }
+}
+
+@media (min-width: 980px) {
+  .about-header {
+    margin-bottom: var(--spacing-12);
+  }
+
+  .about-section {
+    margin-top: var(--spacing-16);
+  }
 }

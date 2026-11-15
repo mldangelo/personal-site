@@ -56,22 +56,17 @@
   .site-footer-new,
   .slide-menu,
   .slide-menu-overlay,
-  .hamburger-container,
-  .theme-toggle,
   .reading-progress,
   .post-pager,
-  .resume-nav,
+  .section-nav,
   .writing-rss-link,
   .resume-actions,
   .resume-screen-title,
-  .about-section-nav,
   .about-section-heading-hash {
     display: none !important;
   }
 
-  .page-main,
-  .writing-page,
-  .post-page {
+  .page-main {
     max-width: none;
     margin: 0;
     padding: 0;
@@ -102,7 +97,6 @@
 
   .resume-print-contact a {
     color: inherit;
-    text-decoration: none;
   }
 
   .resume-print-contact > * {

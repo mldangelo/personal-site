@@ -162,11 +162,11 @@ export default function AboutContent({ markdown }: AboutContentProps) {
       {sections.length > 0 ? (
         <nav
           ref={navRef}
-          className="about-section-nav"
+          className="section-nav about-section-nav"
           aria-label="About sections"
         >
           {/* The bar stays opaque while this row scrolls and fades inside it. */}
-          <div className="about-section-nav-row">
+          <div className="section-nav-row">
             {sections.map((section) => {
               const current = activeId === section.id;
 
@@ -175,9 +175,7 @@ export default function AboutContent({ markdown }: AboutContentProps) {
                   key={section.id}
                   href={`#${section.id}`}
                   className={
-                    current
-                      ? 'about-section-nav-link active'
-                      : 'about-section-nav-link'
+                    current ? 'section-nav-link active' : 'section-nav-link'
                   }
                   aria-current={current ? 'location' : undefined}
                   onClick={onLinkClick}

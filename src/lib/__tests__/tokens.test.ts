@@ -15,12 +15,12 @@ describe('readColorToken', () => {
   });
 
   /**
-   * `--color-accent-light` is a `color-mix()`. A meta tag or a PNG cannot
+   * `--color-accent-underline` is a `color-mix()`. A meta tag or a PNG cannot
    * resolve that, so it has to fail rather than return the function call as a
    * colour string.
    */
   it('refuses a token that is not a literal colour', () => {
-    expect(() => readColorToken('--color-accent-light', 'light')).toThrow(
+    expect(() => readColorToken('--color-accent-underline', 'light')).toThrow(
       /not a literal colour/,
     );
   });

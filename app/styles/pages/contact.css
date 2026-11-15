@@ -25,7 +25,6 @@
   line-height: var(--leading-tight);
   color: var(--color-fg-bold);
   border-bottom: var(--rule-strong) solid var(--color-accent);
-  text-decoration: none;
   transition:
     color var(--duration-fast) var(--ease-out),
     border-color var(--duration-fast) var(--ease-out);
@@ -83,26 +82,8 @@
 }
 
 @media (max-width: 735px) {
-  .about-section-nav {
-    margin: var(--spacing-6) 0 var(--spacing-5);
-  }
-
-  .about-section h2 {
-    scroll-margin-top: calc(var(--header-height-mobile) + 4.5rem + var(--spacing-5));
-  }
-
   .contact-email-link {
     padding: 0.625rem 0;
-  }
-}
-
-@media (min-width: 980px) {
-  .about-header {
-    margin-bottom: var(--spacing-12);
-  }
-
-  .about-section {
-    margin-top: var(--spacing-16);
   }
 }
 

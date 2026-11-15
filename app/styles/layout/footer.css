@@ -11,7 +11,6 @@
 }
 
 .footer-content {
-  box-sizing: border-box;
   width: 100%;
   max-width: var(--measure-page);
   padding-inline: 2rem;
@@ -116,7 +115,6 @@
   font-size: var(--text-ui);
   font-weight: var(--font-weight-medium);
   color: var(--color-fg-light);
-  text-decoration: none;
   transition: color var(--duration-fast) var(--ease-out);
 }
 
