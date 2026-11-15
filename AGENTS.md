@@ -1,23 +1,60 @@
 # AGENTS.md
 
-Guidance for AI coding agents working on this Next.js personal portfolio site.
+Rules for AI coding agents working on this Next.js personal site. Claude Code
+reads `CLAUDE.md`, which imports this file, and most other agents read this
+file directly, so every agent works from the same rules.
 
-## Quick Commands
+## Start here
+
+- **Find the right document.** This file holds the rules, each with the trap
+  behind it. A fork or rebrand starts from
+  [docs/adapting-guide.md](./docs/adapting-guide.md), which lists the inputs to
+  gather and maps every personal detail and generated asset.
+  [docs/contributing.md](./docs/contributing.md) covers pull requests, and
+  [docs/design-goals.md](./docs/design-goals.md) the intent behind the design.
+- **Never invent a personal fact.** The site is one person's public record.
+  Names, dates, roles, metrics, talks, and links come from the owner or a
+  primary source; ask when one is missing. Never relabel someone else's writing,
+  projects, or talks as the owner's.
+- **Ask before acting outside the branch.** Merging, pushing to `main`, GitHub
+  settings, Pages, secrets and variables, DNS, and other hosting accounts each
+  need the owner's explicit go-ahead for that step.
+- **Change inputs, not generated files.** Each generated file below is rebuilt
+  from its inputs, and a test or check fails when the two disagree.
+
+| Generated                                                                                                                           | Rebuild with                                | When                                                                                                                      |
+| ----------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `app/favicon.ico`, `app/icon.png`, `app/apple-icon.png`, `app/manifest.json`, `public/images/icons/`, and `scripts/icons.meta.json` | `npm run icons`                             | The colour tokens, the profile name, the display font, the generator, or the locked Next, React, or Sharp version changes |
+| `public/og.png`, `public/og/writing/`, and `public/og.meta.json`                                                                    | `npm run og`                                | Anything a card shows or is drawn with changes: profile facts, colour tokens, a published post, fonts, or the generator   |
+| Limits in `scripts/budget.json`                                                                                                     | `npm run measure-export -- --update-budget` | Only on purpose, with the reason in the pull request                                                                      |
+| `out/` and `.next/`                                                                                                                 | `npm run build`                             | Never committed                                                                                                           |
+
+### Definition of done
+
+A change is done when the checks CI runs pass locally, in this order:
 
 ```bash
-npm run dev          # Start dev server (localhost:3000)
-npm run format       # Format with Prettier + Biome
-npm run lint         # Biome linting
-npm run type-check   # TypeScript checking
-npm test             # Vitest tests
-npm run build        # Production build + static export
+npm run format:check   # `npm run format` rewrites the files it flags
+npm run lint
+npm run type-check
+npm run test:coverage  # CI's form of `npm test`; it also loads the coverage provider
+npm run og:check       # Fetches the pinned fonts, so it needs network access
+npm run build
+npm run verify-export  # These three read out/, so they follow the build
+npm run measure-export
+npm run check-reflow   # Needs Chrome; set CHROME_PATH where it is not found
 ```
 
-**File-scoped (faster feedback):**
+Report each check you could not run and why: a passing subset is not a pass.
+Tests and gates cannot see a layout, so check a visual change in a browser at
+phone and desktop width, in both themes.
+
+While working, narrower commands give faster feedback:
 
 ```bash
-npx biome check path/to/file.tsx            # Lint single file
-npm test -- ComponentName                    # Test single component
+npm run dev                         # localhost:3000, on Turbopack
+npx biome check path/to/file.tsx    # Lint one file
+npm test -- ComponentName           # Run the suites whose path matches
 ```
 
 ## Project Structure

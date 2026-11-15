@@ -25,6 +25,23 @@ performance before adding complexity intended to improve it.
 - Add a dependency when it is maintained and clearly cheaper than owning the
   equivalent code.
 
+## Safe to change with an agent
+
+Coding agents make many of the changes here, and a person reviews them. So the
+repository carries its own rules instead of relying on anyone's memory:
+
+- Each rule lives in [AGENTS.md](../AGENTS.md) as the rule and the trap behind
+  it, filed under the part of the site it governs.
+- Where a check can enforce a rule, one does: a unit test, a gate on the
+  exported site, a size budget, or a ledger for generated assets. A rule an
+  agent forgets should fail CI, not ship.
+- Generated files are rebuilt from their inputs, never edited by hand, and
+  numbers about the site are counted from the source rather than typed.
+- Facts about the owner come from the owner or a primary source. An agent asks
+  instead of guessing.
+- Actions outside the repository, such as merging, account settings, secrets,
+  and DNS, wait for the owner's approval.
+
 ## Stable for forks
 
 Prefer mature tools, explicit types, and repeatable builds. Test published
@@ -37,8 +54,8 @@ migration.
 The visual system pairs ink blue with porcelain paper, with neutral charcoal
 at night. Inter handles the name, page titles, navigation, and buttons;
 Newsreader handles prose, section headings, and the titles of posts, companies,
-projects, and degrees; JetBrains Mono identifies dates, data, and annotations. Flat surfaces, hairlines, and spacing keep the composition
-crisp. The homepage uses one blue poster field on the page measure, with the
+projects, and degrees; JetBrains Mono identifies dates, data, and annotations.
+Flat surfaces, hairlines, and spacing keep the composition crisp. The homepage uses one blue poster field on the page measure, with the
 name and introduction in the left column and a square color portrait on the
 right. On mobile, the portrait follows the copy. Its location caption is
 centered beneath the image in both layouts. The header, every page, and the

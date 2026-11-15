@@ -8,8 +8,9 @@ change, open an issue so the approach can be discussed.
 - Keep each pull request focused. Split unrelated changes.
 - Review the [design goals](./design-goals.md).
 - Follow the [Contributor Covenant](https://www.contributor-covenant.org/).
-- If you use a coding agent, have it read [AGENTS.md](../AGENTS.md) and give it
-  a focused task.
+- If you use a coding agent, give it a focused task. It reads
+  [AGENTS.md](../AGENTS.md) on its own, or through `CLAUDE.md` for Claude Code,
+  and that file tells it what needs your approval.
 
 ## Set up the project
 
@@ -20,26 +21,13 @@ branch rather than `main`, and give commits and the pull request title a
 
 ## Validate the change
 
-Ask your coding agent to run the local equivalents of the checks CI runs, or
-run them yourself:
-
-```bash
-npm run format
-npm run lint
-npm run type-check
-npm test
-npm run og:check
-npm run build
-npm run verify-export
-npm run measure-export
-npm run check-reflow
-```
-
-`verify-export`, `measure-export`, and `check-reflow` read the files
-`npm run build` writes, so keep that order. `measure-export` fails when the
-export outgrows a budget in `scripts/budget.json`, and `check-reflow`, which
-needs Chrome, fails when a page is wider than a 320px phone at the default or
-doubled text size. Add or update tests when behavior changes.
+Run the [definition of done](../AGENTS.md#definition-of-done) in `AGENTS.md`:
+the checks CI runs, in the order they need. It is kept in that one place so
+people and agents run the same list. `measure-export` fails when the export
+outgrows a budget in `scripts/budget.json`, and `check-reflow`, which needs
+Chrome, fails when a page is wider than a 320px phone at the default or doubled
+text size. Add or update tests when behavior changes, and check a visual change
+in a browser.
 
 ## Open the pull request
 

@@ -1,14 +1,42 @@
 # Adapting This Website
 
-A coding agent can handle the repository changes once you provide your
+A coding agent can make every repository change once you provide your
 identity, content, assets, and target URL. You decide what to publish, and
-account or DNS changes still require your approval.
+account or DNS changes still need your approval.
+
+The agent reads [AGENTS.md](../AGENTS.md) for the rules it follows while it
+works. This guide covers what a fork adds: the inputs to gather, copyable
+requests, and a map of every personal detail in the repository.
 
 ## Set up the workspace
 
 Fork the repository and start the site as the README's
 [Get started](../README.md#get-started) section describes, then open
 [http://localhost:3000](http://localhost:3000).
+
+## Gather the inputs
+
+Give the agent everything you can up front. It asks for a missing fact instead
+of inventing one, so anything you leave out comes back as a question.
+
+| Input                                                                 | Where it goes                                                                 |
+| --------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| Name, role, employer, city, and contact email                         | `src/data/profile.json`                                                       |
+| Birth date, the year you started computing, and countries visited     | `src/data/profile.json`, read by `/stats`, the About page, and the share card |
+| A one-line bio and the homepage introduction                          | `SITE_DESCRIPTION` in `src/lib/utils.ts`, `src/components/Template/Hero.tsx`  |
+| A square portrait, 1024×1024 or larger                                | `public/images/me.jpg`, with its size in `SITE_IMAGE_DIMENSIONS`              |
+| Your résumé: roles with dates and summaries, degrees, skills, courses | `src/data/resume/`                                                            |
+| Projects, with links, dates, and optional 16:10 thumbnails            | `src/data/projects.ts`, `public/images/projects/`                             |
+| Talks, each with the organiser's own listing for the session          | `src/data/speaking.ts`                                                        |
+| Posts as Markdown, and links to writing published elsewhere           | `content/writing/`, `src/data/writing.ts`                                     |
+| The About page: biography, history, and lists                         | `src/data/about.ts`                                                           |
+| Social profile URLs and your X handle                                 | `src/data/contact.ts`, `TWITTER_HANDLE` in `src/lib/utils.ts`                 |
+| The final site URL                                                    | See the [deployment reference](#deployment-reference)                         |
+| Optional: a GA4 measurement ID                                        | A `NEXT_PUBLIC_GA_TRACKING_ID` repository variable                            |
+| Optional: colours, fonts, and a design direction                      | See [Visual identity](#visual-identity)                                       |
+
+For anything you leave out, decide whether the agent should keep the upstream
+content with its original attribution, replace it, or remove the feature.
 
 ## Copyable requests
 
@@ -26,8 +54,22 @@ Use content/writing/ for local posts and src/data/writing.ts for external
 links. Preserve draft isolation, RSS, the homepage writing section, metadata,
 and valid post slugs. Pair each frontmatter `image` with `imageAlt`, and give
 Markdown images descriptive alt text. Keep at least one published post unless I
-asked you to remove writing completely. Run the full validation suite and
-report unresolved content decisions or validation failures.
+asked you to remove writing completely. Run the definition of done in AGENTS.md
+and report unresolved content decisions or failing checks.
+```
+
+### Update the résumé, projects, or talks
+
+```text
+Read AGENTS.md and work on a topic branch. Do not commit, push, merge, or change
+account settings unless I explicitly authorize it.
+Update [THE RÉSUMÉ, PROJECTS, OR TALKS] with the details below. Use only facts I
+give you or that a primary source states, and list anything you could not
+confirm. Keep the current role in step everywhere AGENTS.md lists it, keep
+project dates consistent with the résumé, and link each talk to the
+organiser's own listing. Run the definition of done in AGENTS.md and show me
+the diff.
+[DETAILS]
 ```
 
 ### Remove a page or feature
@@ -38,8 +80,8 @@ account settings unless I explicitly authorize it.
 Remove [PAGE OR FEATURE] completely. Before deleting anything, trace its route,
 navigation entry, homepage references, data imports, sitemap entries, schema,
 feed integration, styles, tests, and export verifier checks. Do not change
-unrelated routes or URLs. Run the full validation suite and report any
-remaining references.
+unrelated routes or URLs. Run the definition of done in AGENTS.md and report
+any remaining references.
 ```
 
 ### Change the visual identity
@@ -50,8 +92,8 @@ account settings unless I explicitly authorize it.
 Rebrand the visual identity using [COLORS], [FONTS], [PORTRAIT], and
 [DESIGN DIRECTION]. Work through the existing semantic tokens. Keep light and
 dark themes, print behavior, accessibility, and the signal-color rules intact.
-Regenerate and verify the share cards and the icon set, then run the full
-validation suite.
+Regenerate and verify the share cards and the icon set, then run the definition
+of done in AGENTS.md and check the pages in a browser in both themes.
 ```
 
 ### Prepare deployment
@@ -61,8 +103,8 @@ Read AGENTS.md and work on a topic branch. Do not commit, push, merge, or change
 account settings unless I explicitly authorize it.
 Read the deployment reference in docs/adapting-guide.md, then prepare this
 repository for [FINAL URL] on [HOST]. Make every required repository change,
-run the full validation suite, and inspect out/. Do not create secrets or
-modify DNS. Report the exact external steps that remain.
+run the definition of done in AGENTS.md, and inspect out/. Do not create
+secrets or modify DNS. Report the exact external steps that remain.
 ```
 
 ### Add a social link
@@ -91,41 +133,52 @@ needs.
 
 ### Identity and contact details
 
-Identity data starts in shared files, but some text and links are hard-coded.
+Identity data starts in shared files, but some text and links are written into
+components.
 
-| Content                                                        | Location                                                             |
-| -------------------------------------------------------------- | -------------------------------------------------------------------- |
-| Name, role, employer, location, email, and personal statistics | `src/data/profile.json`                                              |
-| Canonical URL, social handle, descriptions, and image settings | `src/lib/utils.ts`                                                   |
-| Social links                                                   | `src/data/contact.ts`                                                |
-| Homepage biography and employer links                          | `src/components/Template/Hero.tsx`                                   |
-| Logo initials                                                  | `src/components/Template/Navigation.tsx`                             |
-| Footer source link                                             | `src/components/Template/Footer.tsx`                                 |
-| Portrait                                                       | `public/images/me.jpg`, with its path and size in `src/lib/utils.ts` |
-| Web app name and icon monogram                                 | Derived from `src/data/profile.json` by `npm run icons`              |
-| Sitemap URL for crawlers                                       | `public/robots.txt`                                                  |
-| Writing description, on `/writing/` and in the RSS feed        | `WRITING_DESCRIPTION` in `src/lib/schema.ts`                         |
-| Repository statistics and GitHub API URL                       | `SOURCE_REPOSITORY` in `src/lib/telemetry.ts`                        |
-| Vulnerability reporting contact                                | `SECURITY.md`                                                        |
+| Content                                                                   | Location                                                                                                               |
+| ------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| Name, role, employer, city, email, and personal statistics                | `src/data/profile.json`                                                                                                |
+| Canonical URL, X handle, one-line bio, and the portrait's path and size   | `src/lib/utils.ts`                                                                                                     |
+| Social links                                                              | `src/data/contact.ts`                                                                                                  |
+| Homepage kicker, introduction, and employer links                         | `src/components/Template/Hero.tsx`                                                                                     |
+| Header monogram                                                           | `src/components/Template/Navigation.tsx`                                                                               |
+| Portrait                                                                  | `public/images/me.jpg`                                                                                                 |
+| Contact page note                                                         | `app/contact/page.tsx`                                                                                                 |
+| Aliases the contact page types into the address, which assume a catch-all | `messages` in `src/components/Contact/EmailLink.tsx`                                                                   |
+| The address length the contact page lays out for                          | The `contact-email` container query in `app/styles/pages/contact.css`                                                  |
+| Web app name and icon monogram                                            | Derived from `src/data/profile.json` by `npm run icons`                                                                |
+| Sitemap URL for crawlers                                                  | `public/robots.txt`                                                                                                    |
+| Upstream custom domain                                                    | `public/CNAME`, which a fork deletes (see [Actions outside the repository](#actions-outside-the-repository))           |
+| Writing description, on `/writing/` and in the RSS feed                   | `WRITING_DESCRIPTION` in `src/lib/schema.ts`                                                                           |
+| Source repository: the footer's Source link and the `/stats` counts       | `SOURCE_REPOSITORY` in `src/lib/telemetry.ts`, with fallback counts in `LAST_KNOWN` in `src/components/Stats/Site.tsx` |
+| Vulnerability reporting contact                                           | `SECURITY.md`                                                                                                          |
+| Copyright notice                                                          | `LICENSE`, which keeps the upstream notice because MIT requires it; add your own line beside it                        |
 
 Page titles and descriptions also contain personal copy in `app/layout.tsx` and
 the `page.tsx` files under `app/`. Structured data is assembled in
 `src/lib/schema.ts`.
 
-### About, résumé, and projects
+The current role appears in several places, which `AGENTS.md` lists under
+**Profile copy**: the profile, the one-line bio, the homepage, the About page,
+the résumé's work history and summary, and the `/speaking/` introduction.
+Update them together.
 
-| Content        | Location                     |
-| -------------- | ---------------------------- |
-| About page     | `src/data/about.ts`          |
-| Work history   | `src/data/resume/work.ts`    |
-| Education      | `src/data/resume/degrees.ts` |
-| Skills         | `src/data/resume/skills.ts`  |
-| Courses        | `src/data/resume/courses.ts` |
-| Projects       | `src/data/projects.ts`       |
-| Project images | `public/images/projects/`    |
+### About, résumé, projects, and talks
 
-The current role appears in the profile, homepage, résumé, and page metadata.
-Update those together.
+| Content                                 | Location                                                                 |
+| --------------------------------------- | ------------------------------------------------------------------------ |
+| About page                              | `src/data/about.ts`                                                      |
+| About section layouts, by exact heading | `sectionVariants` in `src/components/About/Sections.tsx`                 |
+| Work history                            | `src/data/resume/work.ts`                                                |
+| Résumé summary                          | `app/resume/page.tsx`                                                    |
+| Education                               | `src/data/resume/degrees.ts`                                             |
+| Skills                                  | `src/data/resume/skills.ts`                                              |
+| Courses                                 | `src/data/resume/courses.ts`                                             |
+| Projects                                | `src/data/projects.ts`                                                   |
+| Project images                          | `public/images/projects/`                                                |
+| Talks                                   | `src/data/speaking.ts`, with the introduction in `app/speaking/page.tsx` |
+| Header and footer navigation            | `src/data/routes.ts`                                                     |
 
 ### Writing
 
@@ -198,26 +251,28 @@ verbatim. A draft can still reference them while you write, and
 
 ## Audit the result
 
-Require the final search output and validation results, not only a completion
+Require the final search output and check results, not only a completion
 claim. This search covers the current name, domain, handle, employer, and
 repository:
 
 ```bash
 rg -n -i "Michael|mldangelo|dangelosaurus|mldangelo\\.com|OpenAI|Promptfoo" \
-  app content public scripts src package.json README.md
+  app content public scripts src package.json README.md SECURITY.md AGENTS.md docs
 ```
 
 Repeat it with any other upstream names or URLs the search uncovers. This
 catches details in page descriptions, tests, images, and links that a checklist
-can miss.
+can miss. Matches that stay are upstream content you chose to keep with its
+original attribution. `LICENSE` is left out of the search on purpose: it keeps
+the upstream copyright line, which MIT requires.
 
 Some tests assert the site's public content, so exact-text expectations may
 need updates. Do not weaken structural checks for metadata, canonical URLs,
 draft isolation, accessibility, or export integrity.
 
-The full validation suite is the command list under
-[Validate the change](./contributing.md#validate-the-change) in the
-contributing guide.
+Finish with the [definition of done](../AGENTS.md#definition-of-done) in
+`AGENTS.md`, and look at every page in a browser at phone and desktop width in
+both themes.
 
 ## Deployment reference
 
@@ -228,7 +283,8 @@ A coding agent can prepare and verify the repository:
 - Set `SITE_URL` in `src/lib/utils.ts` to the final public URL without a
   trailing slash.
 - Set `homepage` in `package.json` to the same URL with a trailing slash.
-- Update `public/robots.txt` and other URL-bearing files.
+- Update `public/robots.txt` and other URL-bearing files, and delete
+  `public/CNAME`.
 - Build the site and inspect `out/`.
 
 The site works as written at a root URL, such as a custom domain. A GitHub user
@@ -263,7 +319,8 @@ For GitHub Pages:
 7. After reviewing the branch, push or merge it to `main` to deploy.
 
 GitHub ignores `public/CNAME` when a custom Actions workflow publishes the
-site. The agent can delete the upstream file from the fork.
+site, so the upstream file does nothing in a fork except name someone else's
+domain.
 
 For another static host, the agent can build `out/` and prepare the deployment.
 Uploading it to the hosting account still requires explicit authorization. A
@@ -296,14 +353,17 @@ actions, and no concrete clickjacking or MIME-sniffing exploit is known.
 
 ## Troubleshooting
 
-| Problem                                 | Check                                                                                         |
-| --------------------------------------- | --------------------------------------------------------------------------------------------- |
-| `EBADENGINE` warning or install failure | Run `nvm install`, then retry `npm ci`                                                        |
-| Port 3000 is in use                     | Run `npm run dev -- -p 3001`                                                                  |
-| Images do not appear                    | Use a URL such as `/images/photo.jpg`, not `public/images/photo.jpg`                          |
-| `missing "generateStaticParams()"`      | Keep at least one published Markdown post                                                     |
-| Assets return 404 on a project site     | Review the repository subpath limitation in the [deployment reference](#deployment-reference) |
-| The export verifier fails               | Run `npm run build` first, then inspect the named file or route                               |
+| Problem                                    | Check                                                                                         |
+| ------------------------------------------ | --------------------------------------------------------------------------------------------- |
+| `EBADENGINE` warning or install failure    | Run `nvm install`, then retry `npm ci`                                                        |
+| Port 3000 is in use                        | Run `npm run dev -- -p 3001`                                                                  |
+| Images do not appear                       | Use a URL such as `/images/photo.jpg`, not `public/images/photo.jpg`                          |
+| `missing "generateStaticParams()"`         | Keep at least one published Markdown post                                                     |
+| Assets return 404 on a project site        | Review the repository subpath limitation in the [deployment reference](#deployment-reference) |
+| The export verifier fails                  | Run `npm run build` first, then inspect the named file or route                               |
+| `npm run og:check` fails without a network | Run `npm run og:check:ledger`, its offline half, and leave the render check to CI             |
+| `npm run check-reflow` cannot find Chrome  | Set `CHROME_PATH` to a Chrome or Chromium executable                                          |
+| The icon test or `og:check` reports stale  | Run `npm run icons` or `npm run og`, then commit the files with their ledger                  |
 
 ## Getting help
 
