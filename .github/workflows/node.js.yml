@@ -245,11 +245,17 @@ jobs:
           name: build-output
           path: out
 
+      # Artifacts outlive the attempt that uploaded them, and deploy-pages
+      # refuses a run holding two of the same name, so each attempt packages
+      # under its own. Re-running a failed deploy then deploys its own upload.
       - name: Package GitHub Pages artifact
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5
         with:
+          name: github-pages-${{ github.run_attempt }}
           path: out
 
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5
+        with:
+          artifact_name: github-pages-${{ github.run_attempt }}
