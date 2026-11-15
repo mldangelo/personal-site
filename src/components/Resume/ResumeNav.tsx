@@ -17,9 +17,13 @@ export default function ResumeNav() {
   const { activeId, navRef, onLinkClick } = useActiveSection(sectionIds);
 
   return (
-    <nav ref={navRef} className="resume-nav" aria-label="Resume sections">
+    <nav
+      ref={navRef}
+      className="section-nav resume-nav"
+      aria-label="Resume sections"
+    >
       {/* The bar stays opaque while this row scrolls and fades inside it. */}
-      <div className="resume-nav-row">
+      <div className="section-nav-row">
         {sections.map((section) => {
           const current = activeId === section.id;
 
@@ -27,7 +31,9 @@ export default function ResumeNav() {
             <a
               key={section.id}
               href={`#${section.id}`}
-              className={current ? 'resume-nav-link active' : 'resume-nav-link'}
+              className={
+                current ? 'section-nav-link active' : 'section-nav-link'
+              }
               aria-current={current ? 'location' : undefined}
               onClick={onLinkClick}
             >

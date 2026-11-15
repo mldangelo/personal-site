@@ -17,7 +17,6 @@
   align-items: center;
   min-width: 44px;
   min-height: 44px;
-  text-decoration: none;
 }
 
 .logo-text {
@@ -77,7 +76,6 @@
   font-weight: var(--font-weight-medium);
   letter-spacing: var(--tracking-normal);
   color: var(--color-fg-light);
-  text-decoration: none;
   line-height: 1;
   transition: color var(--duration-fast) var(--ease-out);
 }
@@ -111,7 +109,6 @@
 
 .nav-link:focus-visible {
   color: var(--color-fg-bold);
-  outline: var(--rule-strong) solid var(--color-focus-ring);
   outline-offset: 4px;
 }
 
@@ -141,9 +138,6 @@
   justify-content: center;
   width: 44px;
   height: 44px;
-  padding: 0;
-  background: transparent;
-  border: none;
   border-radius: var(--radius-sm);
   color: var(--color-fg);
   cursor: pointer;
@@ -159,9 +153,7 @@
    presence. A restore has to out-specify `.hamburger-button { display: flex }`
    in header.css: at equal specificity the gate would be decided by @import
    order alone. The desktop layout hides the whole hamburger container below;
-   this gate only hides the inactive button when scripts have not run.
-   `print.css` hides `.theme-toggle` with `!important`, so the `display: flex`
-   base above stays hidden on paper. */
+   this gate only hides the inactive button when scripts have not run. */
 :root:not([data-theme-choice]) .theme-toggle {
   display: none;
 }
@@ -176,7 +168,6 @@
 }
 
 .theme-toggle:focus-visible {
-  outline: var(--rule-strong) solid var(--color-focus-ring);
   outline-offset: 2px;
 }
 
