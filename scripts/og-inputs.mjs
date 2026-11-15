@@ -89,7 +89,7 @@ const CONTENT_DIRECTORY = join('content', 'writing');
 /** Words per minute used for the reading-time readout. */
 const READING_WORDS_PER_MINUTE = 225;
 
-export function postCardPath(slug) {
+function postCardPath(slug) {
   return `${POST_CARD_DIRECTORY}/${slug}.png`;
 }
 

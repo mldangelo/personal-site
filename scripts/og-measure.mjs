@@ -17,33 +17,6 @@ const SIGNATURE = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
 /** Ignore antialiasing against the paper, count anything a reader would see. */
 const INK_THRESHOLD = 8;
 
-/** `#rgb`, `#rrggbb`, or `rgb()/rgba()` — the forms the tokens are allowed. */
-export function parseColor(value) {
-  const hex = value.trim().match(/^#([0-9a-f]{3,8})$/i)?.[1];
-  if (hex) {
-    const digits =
-      hex.length < 6
-        ? [...hex].map((digit) => digit + digit).join('')
-        : hex.padEnd(6, '0');
-    return [0, 2, 4].map((offset) =>
-      Number.parseInt(digits.slice(offset, offset + 2), 16),
-    );
-  }
-
-  const channels = value
-    .trim()
-    .match(/^rgba?\(([^()]*)\)$/i)?.[1]
-    ?.split(/[\s,/]+/)
-    .filter(Boolean)
-    .slice(0, 3)
-    .map(Number);
-  if (channels?.length === 3 && channels.every(Number.isFinite)) {
-    return channels;
-  }
-
-  throw new Error(`Cannot measure a card painted ${value}`);
-}
-
 /**
  * Rows carrying ink, grouped into the unbroken bands a reader sees as elements.
  *
@@ -64,7 +37,12 @@ export async function inkBands(image, paper) {
     .toBuffer({ resolveWithObject: true });
   const { width, height, channels } = info;
   const stride = width * channels;
-  const [red, green, blue] = parseColor(paper);
+  // Sharp reads every form a colour token may take (hex, `rgb()`, `rgba()`).
+  const [red, green, blue] = await sharp({
+    create: { width: 1, height: 1, channels: 3, background: paper },
+  })
+    .raw()
+    .toBuffer();
   const bands = [];
   let start;
 

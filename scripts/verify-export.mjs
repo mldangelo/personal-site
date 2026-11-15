@@ -153,7 +153,6 @@ const records = pages.map((file) => {
     .filter((id) => id !== undefined);
 
   return {
-    file,
     relativePath,
     route: routeForHtml(relativePath),
     html,
@@ -178,27 +177,6 @@ function pageAt(pathname) {
 
 function exportedFileExists(pathname) {
   return exportFileFor(pathname) !== undefined;
-}
-
-function localExportedResource(raw, baseRoute) {
-  let url;
-  try {
-    url = new URL(raw, siteUrlForRoute(baseRoute));
-  } catch {
-    return undefined;
-  }
-
-  if (
-    !['http:', 'https:'].includes(url.protocol) ||
-    url.origin !== SITE_ORIGIN ||
-    routeForPublicPath(url.pathname) === undefined ||
-    pageAt(url.pathname) ||
-    !exportedFileExists(url.pathname)
-  ) {
-    return undefined;
-  }
-
-  return url.pathname;
 }
 
 /**
@@ -228,92 +206,10 @@ function resourceReferences(html) {
   return references;
 }
 
-/**
- * Assets already used by an exported page are public independently of a
- * draft. The draft gate below targets the dangerous remainder: files copied
- * into `out/` that only unpublished Markdown asks the browser to fetch.
- */
-function exportedPageAssets() {
-  const assets = new Set();
-
-  function add(raw, route) {
-    if (!raw) return;
-    const path = localExportedResource(raw, route);
-    if (path) assets.add(path);
-  }
-
-  for (const record of records) {
-    for (const image of metaValues(record.html, 'property', 'og:image')) {
-      add(image, record.route);
-    }
-    for (const image of metaValues(record.html, 'name', 'twitter:image')) {
-      add(image, record.route);
-    }
-    for (const tag of tags(record.html, 'a')) {
-      add(attribute(tag, 'href'), record.route);
-    }
-    for (const [, target] of resourceReferences(record.html)) {
-      add(target, record.route);
-    }
-  }
-
-  return assets;
-}
-
-const publicPageAssets = exportedPageAssets();
-
-/**
- * Draft assets need not contain the draft slug. Parse the source with the same
- * grammar used by the renderer, resolve relative URLs from the eventual post
- * route, and reject any referenced file that otherwise has no public owner.
- *
- * Missing files are allowed: that is how a local draft can retain image slots
- * while the underlying screenshots stay outside public/. The development
- * renderer has a draft-only fallback for precisely that preview state.
- */
-for (const draft of drafts) {
-  const references = readMarkdownReferences(draft.content);
-  if (draft.frontmatter.image) {
-    references.push({ kind: 'image', target: draft.frontmatter.image });
-  }
-
-  for (const { kind, target } of references) {
-    const route = `/writing/${draft.slug}/`;
-    let url;
-    try {
-      url = new URL(target, siteUrlForRoute(route));
-    } catch {
-      fail(draft.source, `draft has an invalid ${kind} URL: ${target}`);
-      continue;
-    }
-
-    if (!['http:', 'https:'].includes(url.protocol)) continue;
-    if (url.origin !== SITE_ORIGIN) continue;
-    if (isOutsideBasePath(url, draft.source, `draft ${kind}`, target)) continue;
-    if (kind === 'link' && pageAt(url.pathname)) continue;
-    if (
-      exportedFileExists(url.pathname) &&
-      !publicPageAssets.has(url.pathname)
-    ) {
-      fail(
-        draft.source,
-        `draft references a publicly exported ${kind}: ${url.pathname}`,
-      );
-    }
-  }
-}
-
 function parseHttpUrl(raw, baseRoute, page, label) {
-  let url;
-  try {
-    url = new URL(raw, siteUrlForRoute(baseRoute));
-  } catch {
-    fail(page, `${label} is not a valid URL: ${raw}`);
-    return undefined;
-  }
-
-  if (!['http:', 'https:'].includes(url.protocol)) return undefined;
-  return url;
+  const url = URL.parse(raw, siteUrlForRoute(baseRoute));
+  if (!url) fail(page, `${label} is not a valid URL: ${raw}`);
+  return ['http:', 'https:'].includes(url?.protocol) ? url : undefined;
 }
 
 function hasCanonicalPathFormat(raw, url) {
@@ -345,6 +241,7 @@ function validateInternalTarget(raw, source, label) {
     fail(source.relativePath, `${label} points at missing export: ${raw}`);
     return;
   }
+  if (!targetPage) publicPageAssets.add(url.pathname);
 
   const fragment = url.hash.slice(1);
   if (!fragment || fragment.startsWith(':~:text=') || !targetPage) return;
@@ -385,37 +282,47 @@ function validateExportedHeadAsset(raw, source, label) {
   return url;
 }
 
-function validateAbsoluteMetadataUrl(raw, source, label) {
-  let url;
-  try {
-    url = new URL(raw);
-  } catch {
-    fail(source.relativePath, `${label} is not an absolute URL: ${raw}`);
+/**
+ * An absolute URL in page metadata, the sitemap, the feed, or resume.json.
+ * `raw` is already decoded: each caller decodes its own document's escaping.
+ * Same-origin URLs must name an exported, published page or file in canonical
+ * form; `external` allows other origins.
+ */
+function validateAbsoluteUrl(raw, page, label, { external = false } = {}) {
+  const url = URL.parse(raw);
+  if (!url) {
+    fail(page, `${label} is not an absolute URL: ${raw}`);
     return undefined;
   }
 
   if (url.origin !== SITE_ORIGIN) {
-    fail(
-      source.relativePath,
-      `${label} uses ${url.origin}; expected ${SITE_ORIGIN}`,
-    );
+    if (!external) {
+      fail(page, `${label} uses ${url.origin}; expected ${SITE_ORIGIN}`);
+    }
+    return url;
   }
-  isOutsideBasePath(url, source.relativePath, label, raw);
+  if (isOutsideBasePath(url, page, label, raw)) return url;
+  if (isDraftPath(url.pathname)) {
+    fail(page, `${label} exposes a draft route: ${url.pathname}`);
+  }
   if (!hasCanonicalPathFormat(raw, url)) {
     fail(
-      source.relativePath,
+      page,
       `${label} must have no query/hash and use the canonical trailing-slash form: ${raw}`,
     );
   }
-  if (isDraftPath(url.pathname)) {
-    fail(
-      source.relativePath,
-      `${label} exposes a draft route: ${url.pathname}`,
-    );
+  if (!pageAt(url.pathname) && !exportedFileExists(url.pathname)) {
+    fail(page, `${label} points at missing export: ${url.pathname}`);
   }
-
   return url;
 }
+
+/**
+ * Exported files an exported page references, which are public independently
+ * of a draft. Collected while the pages are validated below, so the draft gate
+ * that reads it reaches the same resources by the same resolution.
+ */
+const publicPageAssets = new Set();
 
 const REQUIRED_SOCIAL_META = [
   ['property', 'og:title'],
@@ -490,7 +397,7 @@ for (const record of records) {
   checkUrlCount(canonicals, 'canonical links');
 
   const canonicalUrl = canonicals[0]
-    ? validateAbsoluteMetadataUrl(canonicals[0], record, 'canonical')
+    ? validateAbsoluteUrl(canonicals[0], relativePath, 'canonical')
     : undefined;
   if (
     isIndexable &&
@@ -502,22 +409,11 @@ for (const record of records) {
       `canonical path ${canonicalUrl.pathname} does not match exported route ${publicPathForRoute(route)}`,
     );
   }
-  if (
-    canonicalUrl &&
-    !pageAt(canonicalUrl.pathname) &&
-    !exportedFileExists(canonicalUrl.pathname)
-  ) {
-    fail(
-      relativePath,
-      `canonical points at missing export: ${canonicalUrl.pathname}`,
-    );
-  }
-
   const ogUrls = metaValues(html, 'property', 'og:url');
   checkUrlCount(ogUrls, 'og:url tags');
 
   const ogUrl = ogUrls[0]
-    ? validateAbsoluteMetadataUrl(ogUrls[0], record, 'og:url')
+    ? validateAbsoluteUrl(ogUrls[0], relativePath, 'og:url')
     : undefined;
   if (canonicalUrl && ogUrl && canonicalUrl.href !== ogUrl.href) {
     fail(
@@ -532,10 +428,10 @@ for (const record of records) {
   ]) {
     for (const image of metaValues(html, key, name)) {
       const imageUrl = parseHttpUrl(image, route, relativePath, name);
-      if (
-        imageUrl?.origin === SITE_ORIGIN &&
-        !exportedFileExists(imageUrl.pathname)
-      ) {
+      if (imageUrl?.origin !== SITE_ORIGIN) continue;
+      if (exportedFileExists(imageUrl.pathname)) {
+        publicPageAssets.add(imageUrl.pathname);
+      } else {
         fail(
           relativePath,
           `${name} file missing from export: ${imageUrl.pathname}`,
@@ -574,25 +470,19 @@ for (const record of records) {
     fail(relativePath, 'no <title>');
   }
 
-  const manifestLinks = linkTagsForRel(html, 'manifest');
-  const iconLinks = linkTagsForRel(html, 'icon');
-  const appleIconLinks = linkTagsForRel(html, 'apple-touch-icon');
-
-  for (const [label, links, expected] of [
-    ['manifest link', manifestLinks, 1],
-    ['icon links', iconLinks, 2],
-    ['apple-touch-icon link', appleIconLinks, 1],
+  for (const [rel, expected] of [
+    ['manifest', 1],
+    ['icon', 2],
+    ['apple-touch-icon', 1],
   ]) {
+    const label = `${rel} link`;
+    const links = linkTagsForRel(html, rel);
     if (links.length !== expected) {
-      fail(relativePath, `has ${links.length} ${label}; expected ${expected}`);
+      fail(
+        relativePath,
+        `has ${links.length} ${label}(s); expected ${expected}`,
+      );
     }
-  }
-
-  for (const [label, links] of [
-    ['manifest link', manifestLinks],
-    ['icon link', iconLinks],
-    ['apple-touch-icon link', appleIconLinks],
-  ]) {
     for (const tag of links) {
       const href = attribute(tag, 'href');
       if (href === undefined) {
@@ -604,20 +494,51 @@ for (const record of records) {
   }
 }
 
+/**
+ * Draft assets need not contain the draft slug. Parse the source with the same
+ * grammar used by the renderer, resolve relative URLs from the eventual post
+ * route, and reject any referenced file that otherwise has no public owner.
+ *
+ * Missing files are allowed: that is how a local draft can retain image slots
+ * while the underlying screenshots stay outside public/. The development
+ * renderer has a draft-only fallback for precisely that preview state.
+ */
+for (const draft of drafts) {
+  const references = readMarkdownReferences(draft.content);
+  if (draft.frontmatter.image) {
+    references.push({ kind: 'image', target: draft.frontmatter.image });
+  }
+
+  for (const { kind, target } of references) {
+    const route = `/writing/${draft.slug}/`;
+    const url = parseHttpUrl(target, route, draft.source, `draft ${kind}`);
+    if (url?.origin !== SITE_ORIGIN) continue;
+    if (isOutsideBasePath(url, draft.source, `draft ${kind}`, target)) continue;
+    if (kind === 'link' && pageAt(url.pathname)) continue;
+    if (
+      exportedFileExists(url.pathname) &&
+      !publicPageAssets.has(url.pathname)
+    ) {
+      fail(
+        draft.source,
+        `draft references a publicly exported ${kind}: ${url.pathname}`,
+      );
+    }
+  }
+}
+
 const home = recordsByRoute.get('/');
 if (!home) {
   fail('manifest.json', 'cannot validate manifest without exported home page');
 } else {
+  // The page pass above has already reported a bad manifest link.
   const manifestTag = linkTagsForRel(home.html, 'manifest')[0];
-  const manifestHref = manifestTag ? attribute(manifestTag, 'href') : undefined;
-  const manifestUrl = manifestHref
-    ? validateExportedHeadAsset(manifestHref, home, 'manifest link')
-    : undefined;
-  const manifestFile = manifestUrl
-    ? exportFileFor(manifestUrl.pathname)
-    : undefined;
+  const manifestHref = manifestTag && attribute(manifestTag, 'href');
+  const manifestUrl =
+    manifestHref && URL.parse(manifestHref, siteUrlForRoute('/'));
+  const manifestFile = manifestUrl && exportFileFor(manifestUrl.pathname);
 
-  if (manifestFile && manifestUrl) {
+  if (manifestFile) {
     let manifest;
     try {
       manifest = JSON.parse(readFileSync(manifestFile, 'utf8'));
@@ -631,10 +552,8 @@ if (!home) {
         return undefined;
       }
 
-      let url;
-      try {
-        url = new URL(raw, manifestUrl);
-      } catch {
+      const url = URL.parse(raw, manifestUrl);
+      if (!url) {
         fail('manifest.json', `${name} is not a valid URL: ${raw}`);
         return undefined;
       }
@@ -697,43 +616,6 @@ if (!home) {
   }
 }
 
-/** `raw` is already decoded: each caller decodes its own document's escaping. */
-function validateXmlUrl(raw, documentName, options = {}) {
-  let url;
-  try {
-    url = new URL(raw.trim());
-  } catch {
-    fail(documentName, `invalid absolute URL: ${raw.trim()}`);
-    return undefined;
-  }
-
-  if (options.requireSiteOrigin && url.origin !== SITE_ORIGIN) {
-    fail(
-      documentName,
-      `URL uses ${url.origin}; expected ${SITE_ORIGIN}: ${raw.trim()}`,
-    );
-    return url;
-  }
-
-  if (url.origin === SITE_ORIGIN) {
-    if (isOutsideBasePath(url, documentName, 'URL', raw.trim())) return url;
-    if (isDraftPath(url.pathname)) {
-      fail(documentName, `exposes draft route: ${url.pathname}`);
-    }
-    if (!hasCanonicalPathFormat(raw.trim(), url)) {
-      fail(
-        documentName,
-        `URL is not in canonical trailing-slash form: ${raw.trim()}`,
-      );
-    }
-    if (!pageAt(url.pathname) && !exportedFileExists(url.pathname)) {
-      fail(documentName, `URL points at missing export: ${url.pathname}`);
-    }
-  }
-
-  return url;
-}
-
 const sitemapPath = join(OUT, 'sitemap.xml');
 if (!existsSync(sitemapPath)) {
   fail('sitemap.xml', 'missing from export');
@@ -759,9 +641,7 @@ if (!existsSync(sitemapPath)) {
 
   const sitemapRoutes = new Set();
   for (const location of locations) {
-    const url = validateXmlUrl(location, 'sitemap.xml', {
-      requireSiteOrigin: true,
-    });
+    const url = validateAbsoluteUrl(location, 'sitemap.xml', 'URL');
     if (url) {
       const route = routeForPublicPath(url.pathname);
       if (route !== undefined) sitemapRoutes.add(route);
@@ -795,7 +675,7 @@ if (!existsSync(feedPath)) {
     .filter((href) => href !== undefined);
 
   for (const url of [...textLinks, ...guids, ...atomLinks]) {
-    validateXmlUrl(url, 'feed.xml');
+    validateAbsoluteUrl(url, 'feed.xml', 'URL', { external: true });
   }
 }
 
@@ -861,20 +741,18 @@ if (!existsSync(resumeJsonPath)) {
   fail('resume.json', 'missing from export');
 } else {
   let resume;
-  let parsed = false;
   try {
     resume = JSON.parse(readFileSync(resumeJsonPath, 'utf8'));
-    parsed = true;
   } catch (error) {
     fail('resume.json', `is not valid JSON: ${error.message}`);
   }
 
   if (
-    parsed &&
+    resume !== undefined &&
     (resume === null || typeof resume !== 'object' || Array.isArray(resume))
   ) {
     fail('resume.json', 'root must be a JSON object');
-  } else if (parsed) {
+  } else if (resume !== undefined) {
     for (const key of Object.keys(resume)) {
       if (!JSON_RESUME_ROOT_KEYS.has(key)) {
         fail(
@@ -913,7 +791,7 @@ if (!existsSync(resumeJsonPath)) {
 
     for (const [path, value] of stringLeaves(resume)) {
       if (/^https?:\/\//i.test(value)) {
-        validateXmlUrl(value, 'resume.json');
+        validateAbsoluteUrl(value, 'resume.json', path, { external: true });
         continue;
       }
       // JSON Resume prose is plain text. The work summaries are Markdown with

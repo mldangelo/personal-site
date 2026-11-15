@@ -333,7 +333,7 @@ describe('failures', () => {
       'no HTML documents found in out/',
       remove('out/index.html', 'out/about/index.html'),
     ],
-    ['--json needs a file path', noChange, ['--json']],
+    ["'--json <value>' argument missing", noChange, ['--json']],
   ])('rejects: %s', (expected, change, args) => {
     const { root } = createFixture();
     change(root);

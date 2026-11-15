@@ -20,6 +20,7 @@
  */
 import { existsSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { extname, isAbsolute, relative, resolve, sep } from 'node:path';
+import { parseArgs } from 'node:util';
 
 import { attribute, elements, linkTagsForRel, tags } from './lib/html.mjs';
 import {
@@ -43,32 +44,18 @@ const die = (message) => {
 // Arguments
 // ---------------------------------------------------------------------------
 
-function parseArgv(argv) {
-  const options = { json: undefined, updateBudget: false };
-
-  for (let index = 0; index < argv.length; index += 1) {
-    const arg = argv[index];
-    if (arg === '--update-budget') {
-      options.updateBudget = true;
-    } else if (arg === '--json') {
-      options.json = argv[index + 1];
-      index += 1;
-      if (
-        options.json === undefined ||
-        options.json.length === 0 ||
-        options.json.startsWith('--')
-      ) {
-        die('--json needs a file path');
-      }
-    } else {
-      die(`unknown argument: ${arg}`);
-    }
-  }
-
-  return options;
+let options;
+try {
+  ({ values: options } = parseArgs({
+    options: {
+      json: { type: 'string' },
+      'update-budget': { type: 'boolean', default: false },
+    },
+  }));
+} catch (error) {
+  die(error.message);
 }
-
-const options = parseArgv(process.argv.slice(2));
+if (options.json === '') die('--json needs a file path');
 
 const isInside = (parent, candidate) => {
   const offset = relative(parent, candidate);
@@ -383,7 +370,7 @@ const describeBudgetValue = (value) =>
 
 function readBudget() {
   if (!existsSync(BUDGET_PATH)) {
-    if (options.updateBudget) return {};
+    if (options['update-budget']) return {};
     die(
       'scripts/budget.json is missing. Create it with ' +
         '`npm run measure-export -- --update-budget`.',
@@ -432,7 +419,7 @@ function readBudget() {
   }
 
   const missing = [...known].filter((key) => budget[key] === undefined);
-  if (missing.length > 0 && !options.updateBudget) {
+  if (missing.length > 0 && !options['update-budget']) {
     die(
       `scripts/budget.json is missing required budget(s): ${missing.join(
         ', ',
@@ -454,11 +441,9 @@ const checks = BUDGET_METRICS.map((metric) => {
     actual,
     limit: budget[metric.id],
     suggested: withHeadroom(metric, actual),
+    ok: budget[metric.id] === undefined || actual <= budget[metric.id],
   };
-}).map((check) => ({
-  ...check,
-  ok: check.limit === undefined || check.actual <= check.limit,
-}));
+});
 
 report.budget = {
   checks: checks.map(({ id, label, actual, limit, ok }) => ({
@@ -586,19 +571,13 @@ section(
 );
 
 if (options.json) {
-  writeFileSync(
-    resolve(ROOT, options.json),
-    `${JSON.stringify(report, null, 2)}\n`,
-  );
+  writeFileSync(jsonDestination, `${JSON.stringify(report, null, 2)}\n`);
   console.log(`\n  wrote ${options.json}`);
 }
 
-if (options.updateBudget) {
+if (options['update-budget']) {
   const next = { _policy: budget._policy ?? [] };
-  for (const metric of BUDGET_METRICS) {
-    const check = checks.find((candidate) => candidate.id === metric.id);
-    next[metric.id] = check.suggested;
-  }
+  for (const { id, suggested } of checks) next[id] = suggested;
   writeFileSync(BUDGET_PATH, `${JSON.stringify(next, null, 2)}\n`);
   console.log(
     '\n  ratcheted scripts/budget.json to the measured sizes plus headroom',

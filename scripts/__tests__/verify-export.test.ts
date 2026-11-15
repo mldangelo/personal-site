@@ -267,7 +267,7 @@ describe('links, metadata, and icons', () => {
       'a sitemap that omits an indexable route',
     ],
     [
-      'URL is not in canonical trailing-slash form',
+      'URL must have no query/hash and use the canonical trailing-slash form',
       replaceIn(
         SITEMAP,
         'https://example.com/about/',
@@ -450,7 +450,7 @@ describe('machine-readable resume', () => {
 describe('drafts', () => {
   rejects([
     [
-      'sitemap.xml\n    exposes draft route: /writing/secret-draft/',
+      'sitemap.xml\n    URL exposes a draft route: /writing/secret-draft/',
       replaceIn(
         SITEMAP,
         '</urlset>',
@@ -459,7 +459,7 @@ describe('drafts', () => {
       'a draft route in the sitemap',
     ],
     [
-      'feed.xml\n    exposes draft route: /writing/secret-draft/',
+      'feed.xml\n    URL exposes a draft route: /writing/secret-draft/',
       replaceIn(
         FEED,
         '</channel>',
