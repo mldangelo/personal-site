@@ -21,7 +21,7 @@
 import { existsSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { extname, isAbsolute, relative, resolve, sep } from 'node:path';
 
-import { attribute, elements, tags } from './lib/html.mjs';
+import { attribute, elements, linkTagsForRel, tags } from './lib/html.mjs';
 import {
   exportLayout,
   readSiteConfig,
@@ -207,13 +207,8 @@ const BOOTSTRAP_RELS = new Set(['stylesheet', 'preload', 'modulepreload']);
 
 function referencedBootstrapFiles(html, route) {
   const references = [
-    ...tags(html, 'link')
-      .filter((tag) =>
-        (attribute(tag, 'rel') ?? '')
-          .toLowerCase()
-          .split(/\s+/)
-          .some((rel) => BOOTSTRAP_RELS.has(rel)),
-      )
+    ...[...BOOTSTRAP_RELS]
+      .flatMap((rel) => linkTagsForRel(html, rel))
       .map((tag) => attribute(tag, 'href')),
     ...tags(html, 'script').map((tag) => attribute(tag, 'src')),
   ].filter((reference) => reference !== undefined);

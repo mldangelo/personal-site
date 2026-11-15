@@ -482,12 +482,12 @@ describe('drafts', () => {
         '<!doctype html><html><head><meta name="robots" content="noindex"></head><body>Draft-derived page</body></html>',
       ),
     ],
+    // How each destination resolves against the site. The Markdown and raw
+    // HTML forms are the shared parser's, which markdown-assets.test.ts covers.
     ...[
-      '![private][asset]\n\n[asset]: /images/private.png',
       '![private](../../images/private.png)',
       '![private](https://example.com/images/private.png)',
       '![private](//example.com/images/private.png)',
-      '<img alt="private > screenshot" src="/images/private.png">',
     ].map(
       (body): Rejection => [
         'content/writing/secret-draft.md\n    draft references a publicly exported image: /images/private.png',
