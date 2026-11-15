@@ -2,6 +2,7 @@
 
 import {
   type MouseEvent,
+  type PointerEvent,
   type ReactNode,
   useLayoutEffect,
   useRef,
@@ -41,10 +42,17 @@ export default function SlideMenu({
     if (!isOpen && dialog.open) dialog.close();
   }, [isOpen]);
 
-  // The sheet fills the dialog, so a click that lands on the dialog itself
-  // landed on its backdrop.
+  // The sheet fills the dialog, so a press that lands on the dialog itself
+  // landed on its backdrop. Both ends of the click must: a drag from inside
+  // the sheet to the backdrop clicks their common ancestor, the dialog.
+  const pressedBackdrop = useRef(false);
+  const notePress = (event: PointerEvent<HTMLDialogElement>) => {
+    pressedBackdrop.current = event.target === event.currentTarget;
+  };
   const closeFromBackdrop = (event: MouseEvent<HTMLDialogElement>) => {
-    if (event.target === event.currentTarget) onClose();
+    if (pressedBackdrop.current && event.target === event.currentTarget) {
+      onClose();
+    }
   };
 
   return (
@@ -54,6 +62,7 @@ export default function SlideMenu({
       aria-label="Navigation menu"
       className="slide-menu"
       onClose={onClose}
+      onPointerDown={notePress}
       onClick={closeFromBackdrop}
     >
       <div className="slide-menu-sheet">{children}</div>

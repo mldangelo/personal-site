@@ -36,13 +36,22 @@ describe('SlideMenu', () => {
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
-  it('closes on a backdrop click but not on a click inside the sheet', () => {
+  it('closes on a backdrop click, not on a click or drag from the sheet', () => {
     const onClose = vi.fn();
     render(menu(true, onClose));
+    const link = screen.getByText('Link 1');
 
-    fireEvent.click(screen.getByText('Link 1'));
+    fireEvent.pointerDown(link);
+    fireEvent.click(link);
     expect(onClose).not.toHaveBeenCalled();
 
+    // Pressed in the sheet and released over the backdrop: the click lands on
+    // their common ancestor, the dialog.
+    fireEvent.pointerDown(link);
+    fireEvent.click(dialog());
+    expect(onClose).not.toHaveBeenCalled();
+
+    fireEvent.pointerDown(dialog());
     fireEvent.click(dialog());
     expect(onClose).toHaveBeenCalledTimes(1);
   });
