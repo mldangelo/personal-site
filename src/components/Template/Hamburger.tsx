@@ -92,32 +92,24 @@ export default function Hamburger() {
   return (
     <>
       <div className="hamburger-container">
-        <div className="main" id="hamburger-nav">
-          <ul>
-            <li className="menu">
-              <button
-                ref={buttonRef}
-                type="button"
-                onClick={toggleMenu}
-                className="hamburger-button"
-                aria-label={
-                  open ? 'Close navigation menu' : 'Open navigation menu'
-                }
-                aria-expanded={open}
-                aria-controls={MENU_ID}
-              >
-                {/* CSS-based hamburger/close icon for cross-platform consistency */}
-                <span
-                  className={`hamburger-icon${open ? ' hamburger-icon--open' : ''}`}
-                >
-                  <span />
-                  <span />
-                  <span />
-                </span>
-              </button>
-            </li>
-          </ul>
-        </div>
+        <button
+          ref={buttonRef}
+          type="button"
+          onClick={toggleMenu}
+          className="hamburger-button"
+          aria-label={open ? 'Close navigation menu' : 'Open navigation menu'}
+          aria-expanded={open}
+          aria-controls={MENU_ID}
+        >
+          {/* CSS-based hamburger/close icon for cross-platform consistency */}
+          <span
+            className={`hamburger-icon${open ? ' hamburger-icon--open' : ''}`}
+          >
+            <span />
+            <span />
+            <span />
+          </span>
+        </button>
       </div>
       {mounted && createPortal(slideMenu, document.body)}
     </>

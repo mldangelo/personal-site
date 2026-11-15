@@ -130,15 +130,9 @@
   padding: 1.5rem 1.5rem 0;
 }
 
-.hamburger-container .main ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.hamburger-container .main ul li.menu {
-  display: flex;
-  align-items: center;
+/* Half a step between the theme toggle and the menu button. */
+.hamburger-container {
+  padding-left: 0.5em;
 }
 
 /* Hamburger button: an explicit 44x44 target, because its wrappers take
