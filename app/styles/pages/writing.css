@@ -7,6 +7,7 @@
    (cards.css); only the header row is the page's own. */
 .page-header {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
   gap: 1rem;

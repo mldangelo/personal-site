@@ -36,7 +36,11 @@
 
 /* Page header styles */
 .page-title {
-  font-size: var(--text-3xl);
+  /* A one-word title cannot wrap, so its size is capped by the column: the
+     viewport less the narrow layout's 3rem of gutters, over 4.5 so that
+     "Speaking" (about 4em, the longest title) fits a 320px phone at 200%
+     text. */
+  font-size: min(var(--text-3xl), (100vw - 3rem) / 4.5);
   /* The name's weight on the homepage, as every other page title. */
   font-weight: var(--font-weight-medium);
   margin-bottom: 0.5rem;
