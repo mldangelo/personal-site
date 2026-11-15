@@ -2,7 +2,7 @@
 
 import Markdown, { type MarkdownToJSX } from 'markdown-to-jsx';
 import { Children, type ReactNode } from 'react';
-import useActiveSection from '@/hooks/useActiveSection';
+import SectionNav from '@/components/Template/SectionNav';
 import { createUniqueHeadingIds } from '@/lib/anchors';
 import { extractLogMarker } from '@/lib/logEntry';
 import { smartQuotesRule } from '@/lib/markdown';
@@ -148,9 +148,6 @@ function parseSections(chunks: string[]): AboutSection[] {
 
 export default function AboutContent({ markdown }: AboutContentProps) {
   const { intro, sections } = splitAboutMarkdown(markdown);
-  const { activeId, navRef, onLinkClick } = useActiveSection(
-    sections.map((section) => section.id),
-  );
 
   return (
     <article className="about-content">
@@ -160,32 +157,11 @@ export default function AboutContent({ markdown }: AboutContentProps) {
         </div>
       ) : null}
       {sections.length > 0 ? (
-        <nav
-          ref={navRef}
-          className="section-nav about-section-nav"
-          aria-label="About sections"
-        >
-          {/* The bar stays opaque while this row scrolls and fades inside it. */}
-          <div className="section-nav-row">
-            {sections.map((section) => {
-              const current = activeId === section.id;
-
-              return (
-                <a
-                  key={section.id}
-                  href={`#${section.id}`}
-                  className={
-                    current ? 'section-nav-link active' : 'section-nav-link'
-                  }
-                  aria-current={current ? 'location' : undefined}
-                  onClick={onLinkClick}
-                >
-                  {section.title}
-                </a>
-              );
-            })}
-          </div>
-        </nav>
+        <SectionNav
+          label="About sections"
+          className="about-section-nav"
+          sections={sections}
+        />
       ) : null}
       {sections.map((section) => (
         <section
