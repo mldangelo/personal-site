@@ -248,7 +248,9 @@ or substitute them in the suite's own view of the filesystem, as
 
 **jsdom styles a 1024x768 desktop, and nothing else**: its media queries read a frozen internal viewport, not `window.innerWidth`, so a stylesheet a test loads always takes the desktop side of every breakpoint. It also matches `:focus-visible` on every focus, so it cannot tell a key press from a mouse press. `Hamburger.test.tsx` supplies the header container-query result and moves the media breakpoint in the stylesheet text it loads, and `useActiveSection.test.tsx` supplies the browser's `:focus-visible` answer.
 
-`vitest.config.ts` pins `TZ` to a non-UTC zone for the whole run. Every CI runner is UTC, where a UTC-pinned formatter and a host-local one produce identical strings — so a date guard written on a UTC host asserts nothing on the machines that publish the site. Keep it set, and be wary of any test whose assertion restates the implementation (`toBe(x.toLocaleString('en-US'))`): pin the literal the reader would see instead, or the guard can never fail.
+The Vitest config is `vitest.config.mts`, not `.ts`: `package.json` declares no module type, so Vite's native config loader, its planned default, reads ESM syntax in a `.ts` file as CommonJS. Being real ESM, it takes its directory from `import.meta.dirname`, and `tsconfig.json` lists it by name because `**/*.ts` does not match `.mts`.
+
+`vitest.config.mts` pins `TZ` to a non-UTC zone for the whole run. Every CI runner is UTC, where a UTC-pinned formatter and a host-local one produce identical strings — so a date guard written on a UTC host asserts nothing on the machines that publish the site. Keep it set, and be wary of any test whose assertion restates the implementation (`toBe(x.toLocaleString('en-US'))`): pin the literal the reader would see instead, or the guard can never fail.
 
 ## Further Reading
 
