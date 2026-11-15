@@ -9,7 +9,7 @@ import { join } from 'node:path';
  * The lock entries are therefore inputs just as surely as the generator source
  * and fonts are.
  */
-export const IMAGE_RENDERER_PACKAGES = ['next', 'react', 'sharp'];
+const IMAGE_RENDERER_PACKAGES = ['next', 'react', 'sharp'];
 
 /** Exact lockfile identities of the packages that render image pixels. */
 export async function readImageRenderer(root = process.cwd()) {

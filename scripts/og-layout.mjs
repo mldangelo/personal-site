@@ -19,10 +19,9 @@ export const READOUT_RULE = 2;
  * Measured off rendered cards rather than added up from the styles, because
  * only the pixels decide where the row actually begins: satori resolves its own
  * default line box for the label and the value. `readoutTop` is checked against
- * every rendered card in `og-measure.mjs`, and a test pins it against the
- * committed ones.
+ * every rendered card in `og-measure.mjs`.
  */
-export const READOUT_HEIGHT = 142;
+const READOUT_HEIGHT = 142;
 /** Mono 25 at satori's default line height. */
 const BYLINE_HEIGHT = 30;
 export const TITLE_GAP = 28;
