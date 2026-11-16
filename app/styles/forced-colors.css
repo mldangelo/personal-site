@@ -20,12 +20,6 @@
     background-color: LinkText;
   }
 
-  /* Every navigation link maps to LinkText, losing the current-page colour. */
-  .hamburger-ul li a.active span {
-    text-decoration: underline;
-    text-underline-offset: 0.25em;
-  }
-
   /* ===================
      CONTROLS
      `.button` is usually an `<a>`, so the UA gives it no button treatment and
