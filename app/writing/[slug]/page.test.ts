@@ -18,31 +18,65 @@ import {
 } from '@/lib/utils';
 import PostPage, { generateMetadata } from './page';
 
+// `npm run og` draws a card for every real post, but none for these fixtures.
+vi.mock('@/lib/imageSize', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/lib/imageSize')>();
+  return {
+    ...actual,
+    readImageSize: (path: string) =>
+      /^\/og\/writing\/zz-.*-fixture\.png$/.test(path)
+        ? { width: 1200, height: 630 }
+        : actual.readImageSize(path),
+  };
+});
+
 const DRAFT_SLUG = 'zz-draft-preview-fixture';
 const DRAFT_TITLE = 'A Draft Held Back From Publication';
 const POSTS_DIRECTORY = join(process.cwd(), 'content/writing');
-const DRAFT_FILE = join(POSTS_DIRECTORY, `${DRAFT_SLUG}.md`);
-const DRAFT_SOURCE = [
-  '---',
-  `title: '${DRAFT_TITLE}'`,
-  "date: '2026-01-08'",
-  "description: 'Unpublished while it is being written.'",
-  'draft: true',
-  // Both images are absent from `public/`: a draft may name images that have
-  // not been committed yet, and the page must still render.
-  `image: '/images/writing/${DRAFT_SLUG}/absent.png'`,
-  "imageAlt: 'A screenshot not yet committed'",
-  '---',
-  '',
-  `![Screenshot](/images/writing/${DRAFT_SLUG}/absent.png)`,
-  '',
-].join('\n');
+
+const post = (frontmatter: string[], body = 'Text.') =>
+  ['---', ...frontmatter, '---', '', body, ''].join('\n');
+
+/** Posts that exist only in this suite, so it passes whatever a fork publishes. */
+const FIXTURES: Record<string, string> = {
+  [DRAFT_SLUG]: post(
+    [
+      `title: '${DRAFT_TITLE}'`,
+      "date: '2026-01-08'",
+      "description: 'Unpublished while it is being written.'",
+      'draft: true',
+      // Both images are absent from `public/`: a draft may name images that
+      // have not been committed yet, and the page must still render.
+      `image: '/images/writing/${DRAFT_SLUG}/absent.png'`,
+      "imageAlt: 'A screenshot not yet committed'",
+    ],
+    `![Screenshot](/images/writing/${DRAFT_SLUG}/absent.png)`,
+  ),
+  'zz-with-image-fixture': post([
+    "title: 'A Post With A Screenshot'",
+    "date: '2026-01-09'",
+    "description: 'Names a representative image.'",
+    "image: '/og.png'",
+    "imageAlt: 'The site card'",
+  ]),
+  'zz-without-image-fixture': post([
+    "title: 'A Post Without One'",
+    "date: '2026-01-10'",
+    "description: 'Names no image.'",
+  ]),
+};
+const FIXTURE_FILES = new Map(
+  Object.entries(FIXTURES).map(([slug, source]) => [
+    join(POSTS_DIRECTORY, `${slug}.md`),
+    source,
+  ]),
+);
 
 type Read = (path: unknown, options?: unknown) => unknown;
 
 /**
- * The draft exists only in this suite's view of `content/writing/`. Suites in
- * other workers read that directory at the same time, so a real file there
+ * The fixtures exist only in this suite's view of `content/writing/`. Suites
+ * in other workers read that directory at the same time, so a real file there
  * would join their post sets, or vanish between their listing and their read.
  */
 beforeAll(() => {
@@ -52,12 +86,12 @@ beforeAll(() => {
   vi.spyOn(fs, 'readdirSync').mockImplementation(((path, options) => {
     const entries = readdirSync(path, options) as string[];
     return path === POSTS_DIRECTORY
-      ? [...entries, `${DRAFT_SLUG}.md`]
+      ? [...entries, ...Object.keys(FIXTURES).map((slug) => `${slug}.md`)]
       : entries;
   }) as Read as typeof fs.readdirSync);
   vi.spyOn(fs, 'readFileSync').mockImplementation(((path, options) =>
-    path === DRAFT_FILE
-      ? DRAFT_SOURCE
+    typeof path === 'string' && FIXTURE_FILES.has(path)
+      ? FIXTURE_FILES.get(path)
       : readFileSync(path, options)) as Read as typeof fs.readFileSync);
 });
 
@@ -124,17 +158,13 @@ describe('writing post structured data', () => {
   // The share card replaces an article image only for social metadata: the
   // JSON-LD `image` keeps the representative screenshot and its real dimensions.
   it.each([
+    ['zz-with-image-fixture', { url: '/og.png', width: 1200, height: 630 }],
     [
-      'shipping-with-claude-code',
+      'zz-without-image-fixture',
       {
-        url: '/images/writing/api-costs-july-2025.png',
-        width: 1117,
-        height: 812,
+        url: '/og/writing/zz-without-image-fixture.png',
+        ...SHARE_IMAGE_DIMENSIONS,
       },
-    ],
-    [
-      'claude-code-outage',
-      { url: '/og/writing/claude-code-outage.png', ...SHARE_IMAGE_DIMENSIONS },
     ],
   ])('publishes the right image for %s', async (slug, { url, ...size }) => {
     expect((await blogPostingFor(slug)).image).toMatchObject({

@@ -287,7 +287,8 @@ Suites run in parallel workers against the same checkout, so a test must never
 write into a directory the site reads, such as `content/writing/`. Another suite
 can list the file and then find it gone. Build fixtures in a temporary directory,
 or substitute them in the suite's own view of the filesystem, as
-`app/writing/[slug]/page.test.ts` does for its draft.
+`app/writing/[slug]/page.test.ts` does for its posts. A fork replaces the
+sample posts, so a test that names one fails there.
 
 **Testing what `next/script` emits**: render inside `HeadManagerContext.Provider value={{ appDir: true }}` (from `next/dist/shared/lib/head-manager-context.shared-runtime`), as `app/__tests__/theme-color.test.ts` does. Without it, `renderToStaticMarkup` renders a `beforeInteractive` `<Script>` as nothing, so any assertion about how it was queued passes against every implementation. `data-nscript` is set only client-side and is no marker.
 
