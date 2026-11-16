@@ -334,6 +334,13 @@ export default function PostContent({
     );
   }
 
+  /** A local figure that is not already a link links to its own file. */
+  function opensFullSize(node: ReactNode, src: string): boolean {
+    return (
+      isValidElement(node) && node.type === ProseImage && isRootLocalImage(src)
+    );
+  }
+
   const headingPlan = planMarkdownHeadingAnchors(content);
 
   return (
@@ -380,7 +387,20 @@ export default function PostContent({
                   }
                 >
                   <CaptionedFigure value={image.caption !== undefined}>
-                    {items[0]}
+                    {opensFullSize(items[0], image.src) ? (
+                      // A figure is drawn no wider than the column, so on a
+                      // phone a screenshot's text is often too small to read.
+                      // Its file opens at full size, to zoom into.
+                      <a
+                        href={withBasePath(image.src)}
+                        className="prose-figure-full"
+                      >
+                        {items[0]}
+                        <span className="sr-only"> (full size)</span>
+                      </a>
+                    ) : (
+                      items[0]
+                    )}
                   </CaptionedFigure>
                   {image.caption ? (
                     <figcaption className="prose-figcaption">
