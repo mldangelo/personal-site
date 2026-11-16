@@ -399,8 +399,6 @@ describe('drafts under a base path', () => {
   );
 });
 
-// A submit control can override a valid form destination, so both attributes are
-// checked at root and repository-site deployments.
 describe('rendered pages', () => {
   rejects([
     [
@@ -410,6 +408,34 @@ describe('rendered pages', () => {
   ]);
 });
 
+describe('feed.xml', () => {
+  rejects([
+    ['feed.xml\n    has no <rss> channel', addFile(FEED, ''), 'an empty feed'],
+    [
+      'is not well-formed XML: it contains a character XML cannot carry',
+      replaceIn(FEED, '<channel>', '<channel>\u000b'),
+    ],
+    [
+      'is not well-formed XML: it contains a bare &',
+      replaceIn(FEED, '<channel>', '<channel><title>A & B</title>'),
+    ],
+    [
+      'is not well-formed XML: it closes <channel> out of order',
+      replaceIn(FEED, '<channel>', '<channel><item>'),
+    ],
+    [
+      'has more than one item with guid',
+      replaceIn(
+        FEED,
+        '</channel>',
+        '<item><link>https://example.com/about/</link><guid isPermaLink="true">https://example.com/about/</guid></item></channel>',
+      ),
+    ],
+  ]);
+});
+
+// A submit control can override a valid form destination, so both attributes are
+// checked at root and repository-site deployments.
 describe.each(['', BASE_PATH])('form targets at base path "%s"', (basePath) => {
   rejects(
     [

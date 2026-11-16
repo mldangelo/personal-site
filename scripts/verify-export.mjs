@@ -726,11 +726,44 @@ if (!existsSync(sitemapPath)) {
   }
 }
 
+/**
+ * Why `xml` is not well-formed, or undefined. Not a parser: the ways a
+ * generated feed breaks for every reader at once, which are a character XML
+ * cannot carry, a bare `&`, and elements that do not nest.
+ */
+function xmlProblem(xml) {
+  if (/[^\t\n\r\u0020-\uD7FF\uE000-\uFFFD\u{10000}-\u{10FFFF}]/u.test(xml)) {
+    return 'contains a character XML cannot carry';
+  }
+  if (/&(?!(?:amp|lt|gt|quot|apos|#\d+|#x[\da-f]+);)/i.test(xml)) {
+    return 'contains a bare &';
+  }
+  const open = [];
+  for (const [, closing, name, selfClosing] of xml.matchAll(
+    /<(\/?)([A-Za-z_][\w:.-]*)(?:\s(?:[^>"'/]|\/(?!>)|"[^"]*"|'[^']*')*)?(\/?)>/g,
+  )) {
+    if (selfClosing) continue;
+    if (!closing) {
+      open.push(name);
+    } else if (open.pop() !== name) {
+      return `closes <${name}> out of order`;
+    }
+  }
+  return open.length > 0 ? `leaves <${open.at(-1)}> open` : undefined;
+}
+
 const feedPath = join(OUT, 'feed.xml');
 if (!existsSync(feedPath)) {
   fail('feed.xml', 'missing from export');
 } else {
   const feed = readFileSync(feedPath, 'utf8');
+  const problem = xmlProblem(feed);
+  if (problem) fail('feed.xml', `is not well-formed XML: it ${problem}`);
+  if (
+    !/<rss\b[^>]*>[\s\S]*<channel>[\s\S]*<\/channel>[\s\S]*<\/rss>/.test(feed)
+  ) {
+    fail('feed.xml', 'has no <rss> channel');
+  }
   const textLinks = [...feed.matchAll(/<link>\s*([^<]+?)\s*<\/link>/gi)].map(
     (match) => decodeHtml(match[1]),
   );
@@ -743,6 +776,10 @@ if (!existsSync(feedPath)) {
 
   for (const url of [...textLinks, ...guids, ...atomLinks]) {
     validateAbsoluteUrl(url, 'feed.xml', 'URL', { external: true });
+  }
+  // A reader treats items with one guid as one item.
+  for (const guid of new Set(guids.filter((g, i) => guids.indexOf(g) !== i))) {
+    fail('feed.xml', `has more than one item with guid ${guid}`);
   }
 }
 
