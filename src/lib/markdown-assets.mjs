@@ -1,5 +1,7 @@
 import { parser, RuleType } from 'markdown-to-jsx/markdown';
 
+import { splitSrcset } from './site-url.mjs';
+
 /**
  * Resource-bearing HTML attributes accepted inside Markdown.
  *
@@ -43,59 +45,12 @@ const SAFE_RASTER_DATA_URL =
   /^data:image\/(?:avif|bmp|gif|jpeg|png|vnd\.microsoft\.icon|webp|x-icon)(?:[;,])/i;
 
 /**
- * Parse a `srcset` value the way the HTML parser does.
- *
- * A candidate's URL runs to the next whitespace, so a file name or data URL may
- * contain commas, and trailing commas end a candidate that has no descriptor.
+ * The URLs of a `srcset`, split as `splitSrcset` does, failing closed on a
+ * descriptor the HTML parser would reject.
  */
 export function parseSrcset(value) {
-  const sources = [];
-  let index = 0;
-
-  while (index < value.length) {
-    while (index < value.length && /[\t\n\f\r ,]/.test(value[index])) {
-      index += 1;
-    }
-    if (index >= value.length) break;
-
-    const urlStart = index;
-    while (index < value.length && !/[\t\n\f\r ]/.test(value[index])) {
-      index += 1;
-    }
-
-    const url = value.slice(urlStart, index);
-    if (url.endsWith(',')) {
-      sources.push(url.replace(/,+$/, ''));
-      continue;
-    }
-
-    while (index < value.length && /[\t\n\f\r ]/.test(value[index])) {
-      index += 1;
-    }
-
-    const descriptorStart = index;
-    let parentheses = 0;
-    while (index < value.length) {
-      const character = value[index];
-      if (character === '(') parentheses += 1;
-      if (character === ')') {
-        parentheses -= 1;
-        if (parentheses < 0) {
-          throw new TypeError(`Invalid srcset descriptor in: ${value}`);
-        }
-      }
-      if (character === ',' && parentheses === 0) break;
-      index += 1;
-    }
-    if (parentheses !== 0) {
-      throw new TypeError(`Invalid srcset descriptor in: ${value}`);
-    }
-
-    const descriptors = value
-      .slice(descriptorStart, index)
-      .trim()
-      .split(/\s+/)
-      .filter(Boolean);
+  return splitSrcset(value).map(({ url, descriptor }) => {
+    const descriptors = descriptor.split(/\s+/).filter(Boolean);
     if (
       descriptors.length > 1 ||
       (descriptors[0] &&
@@ -103,12 +58,8 @@ export function parseSrcset(value) {
     ) {
       throw new TypeError(`Invalid srcset descriptor in: ${value}`);
     }
-
-    sources.push(url);
-    if (value[index] === ',') index += 1;
-  }
-
-  return sources;
+    return url;
+  });
 }
 
 /**

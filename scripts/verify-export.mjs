@@ -16,6 +16,7 @@ import {
   parseSrcset,
   readMarkdownReferences,
 } from '../src/lib/markdown-assets.mjs';
+import { listPostFiles } from '../src/lib/post-files.mjs';
 import { validatePostFrontmatterData } from '../src/lib/post-frontmatter.mjs';
 import { prefixBasePath } from '../src/lib/site-url.mjs';
 import {
@@ -91,14 +92,13 @@ if (pages.length === 0) {
   process.exit(1);
 }
 
-const mdFiles = walkFiles(CONTENT).filter((path) => path.endsWith('.md'));
-const posts = mdFiles.map((path) => {
+const posts = listPostFiles(CONTENT).map(({ slug, path }) => {
   const source = toUrlPath(relative(ROOT, path));
   const { data, content } = parseFrontmatter(readFileSync(path, 'utf8'));
   const frontmatter = validatePostFrontmatterData(data, source);
 
   return {
-    slug: basename(path, '.md'),
+    slug,
     source,
     content,
     frontmatter,
@@ -204,17 +204,23 @@ function exportedFileExists(pathname) {
 
 /**
  * Every resource a page's markup asks the browser to fetch, labelled for a
- * failure message: `src`, `data`, and `poster` on embedded media, and each
- * `srcset` candidate. The public-asset collection and each page's validation
- * read this one list, so the two cannot drift apart.
+ * failure message: `src`, `data`, and `poster` on embedded media and image
+ * submit buttons, and each `srcset` candidate. The public-asset collection and
+ * each page's validation read this one list, so the two cannot drift apart.
  */
 function resourceReferences(html) {
   const references = [];
   for (const tag of tags(
     html,
-    'img|source|audio|embed|iframe|object|track|video',
+    'img|input|source|audio|embed|iframe|object|track|video',
   )) {
-    const label = /^<img\b/i.test(tag) ? 'image' : 'media';
+    if (
+      /^<input\b/i.test(tag) &&
+      attribute(tag, 'type')?.trim().toLowerCase() !== 'image'
+    ) {
+      continue;
+    }
+    const label = /^<(?:img|input)\b/i.test(tag) ? 'image' : 'media';
     for (const name of ['src', 'data', 'poster']) {
       const target = attribute(tag, name);
       if (target !== undefined) references.push([label, target]);
@@ -251,6 +257,15 @@ function validateInternalTarget(raw, source, label) {
   );
   if (!url || url.origin !== SITE_ORIGIN) return;
 
+  // A project site shares its origin with the owner's other GitHub Pages
+  // sites, so a full URL outside the base path names one of those. A relative
+  // one was meant for this site and missed the prefix.
+  if (
+    routeForPublicPath(url.pathname) === undefined &&
+    /^(?:[a-z][a-z\d+.-]*:)?\/\//i.test(raw.trim())
+  ) {
+    return;
+  }
   if (isOutsideBasePath(url, source.relativePath, label, raw)) return;
 
   if (isDraftPath(url.pathname)) {

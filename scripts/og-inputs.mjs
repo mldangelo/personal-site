@@ -8,7 +8,7 @@
  * here, once.
  */
 import { createHash } from 'node:crypto';
-import { readdir, readFile } from 'node:fs/promises';
+import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
 import { parser, RuleType } from 'markdown-to-jsx/markdown';
@@ -16,6 +16,7 @@ import { parser, RuleType } from 'markdown-to-jsx/markdown';
 import { readColorToken } from '../src/lib/color-token.mjs';
 import { parseFrontmatter } from '../src/lib/frontmatter.mjs';
 import { readMarkdownReferences } from '../src/lib/markdown-assets.mjs';
+import { listPostFiles } from '../src/lib/post-files.mjs';
 import { validatePostFrontmatterData } from '../src/lib/post-frontmatter.mjs';
 import { DISPLAY_FONT } from './lib/fonts.mjs';
 import { readImageRenderer } from './lib/image-renderer.mjs';
@@ -135,14 +136,6 @@ export function readCardColors(root = process.cwd()) {
  * same shape `isSafeSlug` in `src/lib/posts.ts` accepts. A post whose slug that
  * function rejects has no route to share anyway.
  */
-function assertSafeSlug(slug, file) {
-  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
-    throw new Error(
-      `${file} has a slug the site cannot route: ${slug}. Use lowercase words separated by single hyphens.`,
-    );
-  }
-}
-
 /**
  * The site's own origin, through the `homepage` reader the export scripts use.
  *
@@ -286,20 +279,11 @@ function measurePost(markdown) {
  * the repository rather than rendered per request.
  */
 export async function readPostCards(root = process.cwd()) {
-  const directory = join(root, CONTENT_DIRECTORY);
-  const files = (await readdir(directory)).filter((file) =>
-    file.endsWith('.md'),
-  );
   const cards = [];
 
-  for (const file of files.sort()) {
-    const { data, content } = parseFrontmatter(
-      await readFile(join(directory, file), 'utf8'),
-    );
-
-    const slug = file.replace(/\.md$/, '');
-    const source = join(CONTENT_DIRECTORY, file);
-    assertSafeSlug(slug, source);
+  for (const { slug, path } of listPostFiles(join(root, CONTENT_DIRECTORY))) {
+    const { data, content } = parseFrontmatter(await readFile(path, 'utf8'));
+    const source = join(CONTENT_DIRECTORY, `${slug}.md`);
     const frontmatter = validatePostFrontmatterData(data, source);
 
     if (frontmatter.draft === true) continue;

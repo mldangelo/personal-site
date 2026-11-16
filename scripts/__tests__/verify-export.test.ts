@@ -333,6 +333,7 @@ describe('at a repository-site base path', () => {
         '<embed src="media/missing.pdf">',
         '<iframe src="media/missing.html"></iframe>',
         '<picture><source srcset="images/photo.png 1x, media/missing.png 2x"></picture>',
+        '<form><input type="image" src="media/missing.png" alt="Go"></form>',
       ].map(
         (markup): Rejection => [
           'points at missing export: media/missing.',
@@ -354,6 +355,12 @@ describe('at a repository-site base path', () => {
           inHomeBody(
             '<video src="media/demo.mp4" poster="images/photo.png"><source src="https://media.example/demo.webm"></video>',
           ),
+        ),
+      ],
+      [
+        "the owner's other project sites on the same origin",
+        inHomeBody(
+          '<a href="https://example.com/other-project/">Other</a><a href="//example.com/another/">Another</a>',
         ),
       ],
     ],
