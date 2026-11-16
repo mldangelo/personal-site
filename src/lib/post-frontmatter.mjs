@@ -73,7 +73,8 @@ function requiredText(value, field, source) {
   return value.trim();
 }
 
-function isCalendarDate(value) {
+/** A `YYYY-MM-DD` date that exists: no February 30. */
+export function isCalendarDate(value) {
   const parts = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
   if (!parts) {
     return false;
