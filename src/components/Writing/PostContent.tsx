@@ -1,8 +1,10 @@
 'use client';
 
-import Markdown from 'markdown-to-jsx';
+import { decodeEntity } from 'markdown-to-jsx/entities';
+import Markdown from 'markdown-to-jsx/react';
 import Image from 'next/image';
 import type {
+  ComponentProps,
   ElementType,
   HTMLAttributes,
   KeyboardEvent as ReactKeyboardEvent,
@@ -21,7 +23,11 @@ import { preload } from 'react-dom';
 
 import { planMarkdownHeadingAnchors } from '@/lib/anchors';
 import type { ImageSize } from '@/lib/imageSize';
-import { isRootLocalImage, sanitizeUrl, smartQuotesRule } from '@/lib/markdown';
+import {
+  createElementWithBasePath,
+  isRootLocalImage,
+  smartQuotesRule,
+} from '@/lib/markdown';
 import { withBasePath } from '@/lib/utils';
 
 interface PostContentProps {
@@ -212,9 +218,47 @@ function scrollCodeFence(event: ReactKeyboardEvent<HTMLPreElement>) {
  * There is no landmark role: the preformatted content already supplies the
  * useful semantics, and repeated code-block regions would just add noise.
  */
-function CodeFence({ children }: { children?: ReactNode }) {
+/**
+ * A raw `<pre>`'s body as the text it shows: tags dropped, entities decoded.
+ * The parser keeps that body as opaque text, so as HTML it could carry markup
+ * the Markdown checks never read: a `style` URL, an image, a script link.
+ */
+function rawPreText(html: string): string {
+  return html
+    .replace(/<[^>]*>/g, '')
+    .replace(/&(#x[\da-f]+|#\d+|[a-z][\da-z]*);/gi, (entity, name: string) => {
+      if (name[0] !== '#') return decodeEntity(name) ?? entity;
+      const code =
+        name[1] === 'x' || name[1] === 'X'
+          ? Number.parseInt(name.slice(2), 16)
+          : Number.parseInt(name.slice(1), 10);
+      return code > 0 && code <= 0x10ffff && (code < 0xd800 || code > 0xdfff)
+        ? String.fromCodePoint(code)
+        : '\uFFFD';
+    });
+}
+
+function CodeFence({
+  children,
+  dangerouslySetInnerHTML: raw,
+}: {
+  children?: ReactNode;
+  /** A raw `<pre>` arrives as its own inner HTML, not as children. */
+  dangerouslySetInnerHTML?: { __html: string };
+}) {
   const preRef = useRef<HTMLPreElement>(null);
-  const language = fenceLanguage(children);
+  const language =
+    fenceLanguage(children) ??
+    raw?.__html.match(/^<code\b[^>]*\bclass="[^"]*\blanguage-([\w-]+)/)?.[1];
+  const body = raw ? (
+    <code
+      className={language ? `language-${language} lang-${language}` : undefined}
+    >
+      {rawPreText(raw.__html)}
+    </code>
+  ) : (
+    children
+  );
 
   useEffect(() => {
     const pre = preRef.current;
@@ -254,7 +298,7 @@ function CodeFence({ children }: { children?: ReactNode }) {
       window.removeEventListener('resize', syncTabStop);
       observer?.disconnect();
     };
-  }, [children]);
+  }, [children, raw]);
 
   return (
     <div className="prose-fence">
@@ -267,7 +311,7 @@ function CodeFence({ children }: { children?: ReactNode }) {
         </>
       ) : null}
       <pre ref={preRef} onKeyDown={scrollCodeFence}>
-        {children}
+        {body}
       </pre>
     </div>
   );
@@ -360,17 +404,19 @@ export default function PostContent({
         slugify: headingPlan.slugify,
         // Typographic quotes in text a reader sees; code is a different node.
         renderRule: smartQuotesRule,
-        sanitizer: sanitizeUrl,
+        createElement: createElementWithBasePath,
         overrides: {
           ...headingOverrides(headingPlan.aliases),
           p: {
-            component: ({ children }: { children?: ReactNode }) => {
+            component: ({ children, ...attributes }: ComponentProps<'p'>) => {
               const items = Children.toArray(children);
               const image =
                 items.length === 1 ? figureImage(items[0], ProseImage) : null;
 
+              // A raw paragraph keeps what its author wrote on it: `hidden`,
+              // an `id` a link targets, `lang`, `dir`.
               if (!image) {
-                return <p>{children}</p>;
+                return <p {...attributes}>{children}</p>;
               }
 
               return (

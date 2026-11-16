@@ -3,10 +3,10 @@
  */
 
 import profile from '@/data/profile.json';
-import { homepage } from '../../package.json';
+import packageJson from '../../package.json';
 import { parseSiteUrl, prefixBasePath } from './site-url.mjs';
 
-const site = parseSiteUrl(homepage);
+const site = parseSiteUrl(packageJson.homepage);
 
 /**
  * The public URL with no trailing slash, from `homepage` in `package.json`,

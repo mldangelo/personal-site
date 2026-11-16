@@ -135,7 +135,7 @@ const data: Project[] = [
   {
     title: 'Nearest Dollar',
     subtitle: 'BVP Hackathon',
-    image: '/images/projects/nearestdollar.jpg',
+    image: '/images/projects/nearestdollar.webp',
     date: '2015-11-20',
     desc: 'Connected to bank accounts to round up purchases and donate spare change to charity.',
     tech: ['React', 'Node.js', 'Plaid API', 'MongoDB'],
@@ -145,7 +145,7 @@ const data: Project[] = [
     title: 'Harvest',
     subtitle: '3rd place at TechCrunch Disrupt SF',
     link: 'https://devpost.com/software/harvest',
-    image: '/images/projects/harvest.jpg',
+    image: '/images/projects/harvest.webp',
     date: '2015-09-20',
     desc: 'Low-cost crop monitoring to catch irrigation leaks and nutrient deficiencies.',
     tech: ['Python', 'Arduino', 'Computer vision', 'AWS'],
@@ -154,7 +154,7 @@ const data: Project[] = [
   {
     title: 'Space Potato',
     subtitle: 'Kickstarter-funded weather balloon',
-    image: '/images/projects/spacepotato.jpg',
+    image: '/images/projects/spacepotato.webp',
     date: '2015-06-28',
     desc: 'Potato-powered weather balloon with cameras. Photos published in a coffee table book.',
     tech: ['Hardware', 'GPS', 'Photography'],
@@ -163,7 +163,7 @@ const data: Project[] = [
   {
     title: 'Cat Detector',
     subtitle: 'CNN for cat breed classification',
-    image: '/images/projects/catdetector.jpg',
+    image: '/images/projects/catdetector.webp',
     date: '2015-05-15',
     desc: 'Classified 60,000+ cats across 80 breeds before server costs shut it down.',
     // TensorFlow was not open-sourced until November 2015, six months after
