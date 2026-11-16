@@ -16,6 +16,7 @@ import {
   parseSrcset,
   readMarkdownReferences,
 } from '../src/lib/markdown-assets.mjs';
+import { listPostFiles } from '../src/lib/post-files.mjs';
 import { validatePostFrontmatterData } from '../src/lib/post-frontmatter.mjs';
 import { prefixBasePath } from '../src/lib/site-url.mjs';
 import {
@@ -71,14 +72,13 @@ if (pages.length === 0) {
   process.exit(1);
 }
 
-const mdFiles = walkFiles(CONTENT).filter((path) => path.endsWith('.md'));
-const posts = mdFiles.map((path) => {
+const posts = listPostFiles(CONTENT).map(({ slug, path }) => {
   const source = toUrlPath(relative(ROOT, path));
   const { data, content } = parseFrontmatter(readFileSync(path, 'utf8'));
   const frontmatter = validatePostFrontmatterData(data, source);
 
   return {
-    slug: basename(path, '.md'),
+    slug,
     source,
     content,
     frontmatter,
