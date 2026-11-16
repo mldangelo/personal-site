@@ -6,6 +6,10 @@ import { prefixSrcset } from './site-url.mjs';
 import { smartQuotes } from './typography';
 import { BASE_PATH, withBasePath } from './utils';
 
+/** Raw HTML elements whose text is code, kept exactly as written. */
+const RAW_CODE_TAGS = new Set(['code', 'kbd', 'pre', 'samp', 'var']);
+let rawCodeDepth = 0;
+
 /**
  * The `renderRule` every Markdown renderer here shares: typographic quotes in
  * the text a reader sees.
@@ -20,8 +24,22 @@ import { BASE_PATH, withBasePath } from './utils';
  */
 export const smartQuotesRule: NonNullable<
   MarkdownToJSX.Options['renderRule']
-> = (next, node) =>
-  node.type === RuleType.text ? smartQuotes(node.text) : next();
+> = (next, node) => {
+  // Raw HTML code is parsed as ordinary text nodes, so it is skipped by tag:
+  // `<code>{"ok":true}</code>` copied with curly quotes no longer parses.
+  // Rendering is synchronous and depth-first, so a counter tracks the nesting.
+  if (node.type === RuleType.htmlBlock && RAW_CODE_TAGS.has(node.tag)) {
+    rawCodeDepth += 1;
+    try {
+      return next();
+    } finally {
+      rawCodeDepth -= 1;
+    }
+  }
+  return node.type === RuleType.text && rawCodeDepth === 0
+    ? smartQuotes(node.text)
+    : next();
+};
 
 /** Element props that hold a single URL the browser fetches or follows. */
 const URL_PROPS = ['href', 'src', 'poster', 'action', 'formAction'];

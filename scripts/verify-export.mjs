@@ -491,6 +491,14 @@ for (const record of records) {
     }
   }
 
+  // A refresh moves the reader to another address without asking, and no
+  // page here has one; the Markdown check sees the source, this the result.
+  for (const tag of tags(html, 'meta')) {
+    if (attribute(tag, 'http-equiv')?.trim().toLowerCase() === 'refresh') {
+      fail(relativePath, 'has a meta refresh');
+    }
+  }
+
   // Raw HTML forms survive Markdown rendering. Submit controls can override
   // their form's destination, so checking only action misses broken targets.
   for (const [elements, name] of [
