@@ -40,6 +40,13 @@
     outline: none;
   }
 
+  /* Focus scrolls a control only just into view, which is under the fixed
+     header, and on some pages a sticky bar below it. `--top-chrome` is their
+     combined height, and the margin clears it with room for the focus ring. */
+  :where(a[href], button, input, select, summary, textarea, [tabindex]) {
+    scroll-margin-top: calc(var(--top-chrome, var(--header-height)) + 0.5rem);
+  }
+
   /* Color scheme for native elements (scrollbars, form controls, etc.) */
   html {
     color-scheme: light;
