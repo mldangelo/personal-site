@@ -9,6 +9,11 @@ export interface Course {
    * would silently drop the courses from `/resume.json`.
    */
   university: string;
+  /**
+   * The `Degree.degree` it counted toward, needed only where one school
+   * awarded more than one degree; the build stops when it is missing there.
+   */
+  degree?: string;
 }
 
 const courses: Course[] = [

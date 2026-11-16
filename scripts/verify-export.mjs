@@ -869,6 +869,15 @@ if (!existsSync(resumeJsonPath)) {
     }
 
     for (const [path, value] of stringLeaves(resume)) {
+      // The schema's URI fields take a URI as written: a browser resolves
+      // `//planet.com` and encodes a space, but the schema rejects both.
+      if (
+        /(?:^|\.)(?:url|image|canonical)$/.test(path) &&
+        !/^https?:\/\/[\w\-.~:/?#[\]@!$&'()*+,;=%]+$/i.test(value)
+      ) {
+        fail('resume.json', `${path} is not an absolute URI: ${value}`);
+        continue;
+      }
       if (/^https?:\/\//i.test(value)) {
         validateAbsoluteUrl(value, 'resume.json', path, { external: true });
         continue;
