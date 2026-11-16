@@ -18,6 +18,7 @@ import degrees from '@/data/resume/degrees';
 import { type Skill, skills } from '@/data/resume/skills';
 import work from '@/data/resume/work';
 import { sortPositions } from '@/lib/career';
+import { publishedMarkdown } from '@/lib/published-markdown.mjs';
 import {
   AUTHOR_NAME,
   SITE_DESCRIPTION,
@@ -167,7 +168,9 @@ function buildWork(): ResumeWork[] {
     url: position.url,
     startDate: position.startDate,
     ...(position.endDate ? { endDate: position.endDate } : {}),
-    ...(position.summary ? { summary: toPlainText(position.summary) } : {}),
+    ...(position.summary
+      ? { summary: toPlainText(publishedMarkdown(position.summary)) }
+      : {}),
     ...(position.highlights
       ? { highlights: position.highlights.map(toPlainText) }
       : {}),
