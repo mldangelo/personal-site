@@ -1,4 +1,4 @@
-import { AUTHOR_NAME, SITE_IMAGE_PATH } from '@/lib/utils';
+import { AUTHOR_NAME, SITE_IMAGE_PATH, withBasePath } from '@/lib/utils';
 
 interface PortraitProps {
   width: number;
@@ -22,7 +22,7 @@ export default function Portrait({
     <span className="portrait">
       {/* biome-ignore lint/performance/noImgElement: Using native img to avoid next/image runtime overhead for static export */}
       <img
-        src={SITE_IMAGE_PATH}
+        src={withBasePath(SITE_IMAGE_PATH)}
         alt={AUTHOR_NAME}
         width={width}
         height={height}

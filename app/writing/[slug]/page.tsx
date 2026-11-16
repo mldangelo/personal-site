@@ -43,7 +43,7 @@ function measureImage(publicPath: string, alt: string): PostImage {
   return {
     ...readImageSize(publicPath),
     alt,
-    url: new URL(publicPath, SITE_URL).toString(),
+    url: `${SITE_URL}${publicPath}`,
   };
 }
 

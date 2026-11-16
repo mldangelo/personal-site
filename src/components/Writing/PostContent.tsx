@@ -21,7 +21,8 @@ import { preload } from 'react-dom';
 
 import { planMarkdownHeadingAnchors } from '@/lib/anchors';
 import type { ImageSize } from '@/lib/imageSize';
-import { isRootLocalImage, smartQuotesRule } from '@/lib/markdown';
+import { isRootLocalImage, sanitizeUrl, smartQuotesRule } from '@/lib/markdown';
+import { withBasePath } from '@/lib/utils';
 
 interface PostContentProps {
   content: string;
@@ -314,7 +315,7 @@ export default function PostContent({
     // below the fold, where fetching it early takes bandwidth from the opening
     // text, so there it stays lazy like every other image.
     if (src === leadImage) {
-      preload(src, {
+      preload(withBasePath(src), {
         as: 'image',
         fetchPriority: 'high',
         media: WIDE_SCREEN_QUERY,
@@ -323,7 +324,7 @@ export default function PostContent({
 
     return (
       <Image
-        src={src}
+        src={withBasePath(src)}
         alt={alt || ''}
         width={width}
         height={height}
@@ -352,6 +353,7 @@ export default function PostContent({
         slugify: headingPlan.slugify,
         // Typographic quotes in text a reader sees; code is a different node.
         renderRule: smartQuotesRule,
+        sanitizer: sanitizeUrl,
         overrides: {
           ...headingOverrides(headingPlan.aliases),
           p: {

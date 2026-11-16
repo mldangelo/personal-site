@@ -78,9 +78,8 @@ describe.each(workflows)('$name credential boundaries', ({ workflow }) => {
     const configure = build.steps?.find((step) =>
       step.uses?.startsWith('actions/configure-pages@'),
     );
-    expect(configure?.with).toMatchObject({
-      static_site_generator: 'next',
-      enablement: false,
-    });
+    // No `static_site_generator`: it rewrites next.config.mjs with a second
+    // base path, where `homepage` is the one source.
+    expect(configure?.with).toEqual({ enablement: false });
   });
 });

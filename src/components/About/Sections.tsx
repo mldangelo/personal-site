@@ -5,7 +5,7 @@ import { Children, type ReactNode } from 'react';
 import SectionNav from '@/components/Template/SectionNav';
 import { createUniqueHeadingIds } from '@/lib/anchors';
 import { extractLogMarker } from '@/lib/logEntry';
-import { smartQuotesRule } from '@/lib/markdown';
+import { sanitizeUrl, smartQuotesRule } from '@/lib/markdown';
 import { smartQuotes } from '@/lib/typography';
 
 interface AboutContentProps {
@@ -67,11 +67,13 @@ function LogEntry({ children }: { children?: ReactNode }) {
 
 const MARKDOWN_OPTIONS: MarkdownToJSX.Options = {
   renderRule: smartQuotesRule,
+  sanitizer: sanitizeUrl,
 };
 
 const LOG_MARKDOWN_OPTIONS: MarkdownToJSX.Options = {
   overrides: { li: { component: LogEntry } },
   renderRule: smartQuotesRule,
+  sanitizer: sanitizeUrl,
 };
 
 interface AboutSection {

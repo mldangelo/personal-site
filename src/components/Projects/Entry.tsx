@@ -2,6 +2,7 @@ import Image from 'next/image';
 
 import type { Project } from '@/data/projects';
 import { smartQuotes } from '@/lib/typography';
+import { withBasePath } from '@/lib/utils';
 
 import DateRange from './DateRange';
 
@@ -62,7 +63,7 @@ export default function Entry({ data }: EntryProps) {
         // follow; the wide layout places it by column, whatever the order.
         <Image
           className="project-entry-thumb"
-          src={image}
+          src={withBasePath(image)}
           alt=""
           width={THUMBNAIL.width}
           height={THUMBNAIL.height}

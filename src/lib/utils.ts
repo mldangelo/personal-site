@@ -3,9 +3,25 @@
  */
 
 import profile from '@/data/profile.json';
+import { homepage } from '../../package.json';
+import { parseSiteUrl, prefixBasePath } from './site-url.mjs';
 
-// Site configuration
-export const SITE_URL = 'https://mldangelo.com';
+const site = parseSiteUrl(homepage);
+
+/**
+ * The public URL with no trailing slash, from `homepage` in `package.json`,
+ * base path included: `https://user.github.io/repo` on a project site.
+ */
+export const SITE_URL = site.siteUrl;
+
+/** `''` at a root URL, `/repo` on a project site. */
+export const BASE_PATH = site.basePath;
+
+/** A root-relative path for a raw `src` or `href`, which Next does not prefix. */
+export function withBasePath(path: string): string {
+  return prefixBasePath(BASE_PATH, path);
+}
+
 export const AUTHOR_NAME = profile.name;
 export const TWITTER_HANDLE = '@dangelosaurus';
 /**

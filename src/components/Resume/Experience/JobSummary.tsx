@@ -3,7 +3,7 @@
 import Markdown from 'markdown-to-jsx';
 import type { ReactNode } from 'react';
 
-import { smartQuotesRule } from '@/lib/markdown';
+import { sanitizeUrl, smartQuotesRule } from '@/lib/markdown';
 
 function MarkdownPassthrough({ children }: { children?: ReactNode }) {
   return <>{children}</>;
@@ -34,6 +34,7 @@ export default function JobSummary({ summary }: JobSummaryProps) {
           },
         },
         renderRule: smartQuotesRule,
+        sanitizer: sanitizeUrl,
       }}
     >
       {summary}
