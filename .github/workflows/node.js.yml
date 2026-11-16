@@ -172,7 +172,7 @@ jobs:
       # The other Linux leg builds the site as a fork publishes it at
       # https://USER.github.io/REPO/, so the export gates below fail on any
       # address that misses the base path. `homepage` is all it changes.
-      - name: Build as a project site
+      - name: Use a project-site URL
         if: matrix.os == 'ubuntu-latest' && matrix.node-version != env.DEPLOY_NODE
         run: npm pkg set homepage=https://example.github.io/personal-site/
 
