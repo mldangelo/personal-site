@@ -4,6 +4,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 
 import type { ImageSize } from '@/lib/imageSize';
+import { withBasePath } from '@/lib/utils';
 
 import PostContent from '../PostContent';
 
@@ -116,7 +117,7 @@ describe('PostContent figures', () => {
     // Chrome names it "Alt (full size)"; jsdom's name computation drops the space.
     expect(
       figure.getByRole('link', { name: /^Alt\s*\(full size\)$/ }),
-    ).toHaveAttribute('href', '/og.png');
+    ).toHaveAttribute('href', withBasePath('/og.png'));
     figure.unmount();
 
     // The authored destination is kept, with no second link inside it.
@@ -138,7 +139,7 @@ describe('PostContent figures', () => {
       <PostContent content={'Intro.\n\n<video src="/demo.mp4"></video>\n'} />,
     );
 
-    expect(html).toContain('<video src="/demo.mp4"');
+    expect(html).toContain(`<video src="${withBasePath('/demo.mp4')}"`);
     expect(html).not.toContain('<figure');
   });
 });

@@ -90,10 +90,16 @@ beforeAll(() => {
   const readFileSync = fs.readFileSync as Read;
 
   vi.spyOn(fs, 'readdirSync').mockImplementation(((path, options) => {
-    const entries = readdirSync(path, options) as string[];
-    return path === POSTS_DIRECTORY
-      ? [...entries, ...Object.keys(FIXTURES).map((slug) => `${slug}.md`)]
-      : entries;
+    const entries = readdirSync(path, options) as unknown[];
+    const withTypes = (options as { withFileTypes?: boolean } | undefined)
+      ?.withFileTypes;
+    const fixtures = Object.keys(FIXTURES).map((slug) => {
+      const name = `${slug}.md`;
+      return withTypes
+        ? { name, isDirectory: () => false, isFile: () => true }
+        : name;
+    });
+    return path === POSTS_DIRECTORY ? [...entries, ...fixtures] : entries;
   }) as Read as typeof fs.readdirSync);
   vi.spyOn(fs, 'readFileSync').mockImplementation(((path, options) =>
     typeof path === 'string' && FIXTURE_FILES.has(path)
