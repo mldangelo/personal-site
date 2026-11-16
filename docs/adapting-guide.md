@@ -47,86 +47,82 @@ specific change.
 ### Manage writing
 
 ```text
-Read AGENTS.md and work on a topic branch. Do not commit, push, merge, or change
-account settings unless I explicitly authorize it.
-Manage writing for this site as follows: [ADD, UPDATE, OR REMOVE CONTENT].
-Use content/writing/ for local posts and src/data/writing.ts for external
-links. Preserve draft isolation, RSS, the homepage writing section, metadata,
-and valid post slugs. Pair each frontmatter `image` with `imageAlt`, and give
-Markdown images descriptive alt text. Keep at least one published post unless I
-asked you to remove writing completely. Run the definition of done in AGENTS.md
-and report unresolved content decisions or failing checks.
+Work on a topic branch. Do not commit, push, merge, or change account settings
+unless I explicitly authorize it. Manage writing for this site as follows: [ADD,
+UPDATE, OR REMOVE CONTENT]. Use content/writing/ for local posts and
+src/data/writing.ts for external links. Preserve draft isolation, RSS, the
+homepage writing section, metadata, and valid post slugs. Pair each frontmatter
+`image` with `imageAlt`, and give Markdown images descriptive alt text. Keep at
+least one published post unless I asked you to remove writing completely. Run
+the project checks and report unresolved content decisions or failing checks.
 ```
 
 ### Update the résumé, projects, or talks
 
 ```text
-Read AGENTS.md and work on a topic branch. Do not commit, push, merge, or change
-account settings unless I explicitly authorize it.
-Update [THE RÉSUMÉ, PROJECTS, OR TALKS] with the details below. Use only facts I
-give you or that a primary source states, and list anything you could not
-confirm. Keep the current role in step everywhere AGENTS.md lists it, keep
-project dates consistent with the résumé, and link each talk to the
-organiser's own listing. Run the definition of done in AGENTS.md and show me
-the diff.
+Work on a topic branch. Do not commit, push, merge, or change account settings
+unless I explicitly authorize it. Update [THE RÉSUMÉ, PROJECTS, OR TALKS] with
+the details below. Use only facts I give you or that a primary source states,
+and list anything you could not confirm. Keep the current role in step
+everywhere it appears, keep project dates consistent with the résumé, and link
+each talk to the organiser's own listing. Run the project checks and show me the
+diff.
 [DETAILS]
 ```
 
 ### Remove a page or feature
 
 ```text
-Read AGENTS.md and work on a topic branch. Do not commit, push, merge, or change
-account settings unless I explicitly authorize it.
-Remove [PAGE OR FEATURE] completely. Before deleting anything, trace its route,
-navigation entry, homepage references, data imports, sitemap entries, schema,
-feed integration, styles, tests, and export verifier checks. Do not change
-unrelated routes or URLs. Run the definition of done in AGENTS.md and report
-any remaining references.
+Work on a topic branch. Do not commit, push, merge, or change account settings
+unless I explicitly authorize it. Remove [PAGE OR FEATURE] completely. Before
+deleting anything, trace its route, navigation entry, homepage references, data
+imports, sitemap entries, schema, feed integration, styles, tests, and export
+verifier checks. Do not change unrelated routes or URLs. Run the project checks
+and report any remaining references.
 ```
 
 ### Change the visual identity
 
 ```text
-Read AGENTS.md and work on a topic branch. Do not commit, push, merge, or change
-account settings unless I explicitly authorize it.
-Rebrand the visual identity using [COLORS], [FONTS], [PORTRAIT], and
-[DESIGN DIRECTION]. Work through the existing semantic tokens. Keep light and
-dark themes, print behavior, accessibility, and the signal-color rules intact.
-Regenerate and verify the share cards and the icon set, then run the definition
-of done in AGENTS.md and check the pages in a browser in both themes.
+Work on a topic branch. Do not commit, push, merge, or change account settings
+unless I explicitly authorize it. Rebrand the visual identity using [COLORS],
+[FONTS], [PORTRAIT], and [DESIGN DIRECTION]. Work through the existing semantic
+tokens. Keep light and dark themes, print behavior, accessibility, and the
+signal-color rules intact. Regenerate and verify the share cards and the icon
+set, then run the project checks and check the pages in a browser in both
+themes.
 ```
 
 ### Prepare deployment
 
 ```text
-Read AGENTS.md and work on a topic branch. Do not commit, push, merge, or change
-account settings unless I explicitly authorize it.
-Read the deployment reference in docs/adapting-guide.md, then prepare this
-repository for [FINAL URL] on [HOST]. Make every required repository change,
-run the definition of done in AGENTS.md, and inspect out/. Do not create
-secrets or modify DNS. Report the exact external steps that remain.
+Work on a topic branch. Do not commit, push, merge, or change account settings
+unless I explicitly authorize it. Read the deployment reference in
+docs/adapting-guide.md, then prepare this repository for [FINAL URL] on [HOST].
+Make every required repository change, run the project checks, and inspect out/.
+Do not create secrets or modify DNS. Report the exact external steps that
+remain.
 ```
 
 ### Add a social link
 
 ```text
-Read AGENTS.md and work on a topic branch. Do not commit, push, merge, or change
-account settings unless I explicitly authorize it.
-Add my [PLATFORM] profile at [URL]. Follow the existing src/data/contact.ts
-pattern, copying the icon's viewBox and path from a freely licensed set and
-crediting it in the attribution comment. Update affected tests, run the
-relevant checks, and show me the diff.
+Work on a topic branch. Do not commit, push, merge, or change account settings
+unless I explicitly authorize it. Add my [PLATFORM] profile at [URL]. Follow the
+existing src/data/contact.ts pattern, copying the icon's viewBox and path from a
+freely licensed set and crediting it in the attribution comment. Update affected
+tests, run the relevant checks, and show me the diff.
 ```
 
 ### Add Google Analytics
 
 ```text
-Read AGENTS.md and work on a topic branch. Do not commit, push, merge, or change
-account settings unless I explicitly authorize it.
-Configure this fork to use GA4 measurement ID [G-XXXXXXX]. Use the existing
-NEXT_PUBLIC_GA_TRACKING_ID integration. Put the local value in .env.local and
-keep that file untracked. Tell me which GitHub repository variable production
-needs.
+Work on a topic branch. Do not commit, push, merge, or change account settings
+unless I explicitly authorize it. Configure this fork to use GA4 measurement ID
+[G-XXXXXXX]. Use the existing NEXT_PUBLIC_GA_TRACKING_ID integration. Put the
+local value in .env.local and keep that file untracked. Tell me which GitHub
+repository variable production needs; a variable on the github-pages environment
+never reaches the build.
 ```
 
 ## Reference map
