@@ -78,7 +78,9 @@ export default function useActiveSection<Id extends string>(
   ids: readonly Id[],
 ): ActiveSection<Id> {
   const navRef = useRef<HTMLElement>(null);
-  const [activeId, setActiveId] = useState<Id | undefined>(ids[0]);
+  // Nothing is current in the static HTML: without scripts, a page opened at
+  // `#courses` would otherwise say it is on the first section.
+  const [activeId, setActiveId] = useState<Id | undefined>();
   /** The fragment the reader last asked for by name, until they leave it. */
   const requested = useRef('');
   const remeasure = useRef(() => {});
@@ -232,6 +234,8 @@ export default function useActiveSection<Id extends string>(
 
     requested.current = window.location.hash.slice(1);
     remeasure.current = schedule;
+    // A page too short to scroll is never measured, so it starts on the first.
+    setActiveId((current) => current ?? sectionIds[0]);
     measure();
 
     window.addEventListener('scroll', schedule, { passive: true });

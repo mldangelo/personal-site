@@ -36,7 +36,8 @@ describe('LiveAge', () => {
     const { container } = render(subject());
 
     expect(screen.getByText('Live')).toBeInTheDocument();
-    expect(container.children).toHaveLength(2);
+    // The value, its note, and the snapshot only print shows.
+    expect(container.children).toHaveLength(3);
   });
 
   it('keeps the snapshot and its date under reduced motion', () => {
