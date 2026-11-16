@@ -160,4 +160,18 @@ describe('Hamburger', () => {
     );
     expect(button).toHaveAttribute('aria-expanded', 'false');
   });
+
+  it('closes when Back or Forward changes the page under it', () => {
+    render(<Hamburger />);
+    const button = screen.getByRole('button', {
+      name: 'Open navigation menu',
+    });
+    fireEvent.click(button);
+    expect(button).toHaveAttribute('aria-expanded', 'true');
+
+    act(() => {
+      window.dispatchEvent(new PopStateEvent('popstate'));
+    });
+    expect(button).toHaveAttribute('aria-expanded', 'false');
+  });
 });

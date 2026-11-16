@@ -25,6 +25,14 @@ export default function Hamburger() {
   const toggleMenu = useCallback(() => setOpen((prev) => !prev), []);
   const closeMenu = useCallback(() => setOpen(false), []);
 
+  // Back and Forward change the page under the menu, which would stay modal
+  // and keep the new page inert.
+  useEffect(() => {
+    if (!open) return;
+    window.addEventListener('popstate', closeMenu);
+    return () => window.removeEventListener('popstate', closeMenu);
+  }, [open, closeMenu]);
+
   useEffect(() => {
     const button = buttonRef.current;
     if (!open || !button) return;
