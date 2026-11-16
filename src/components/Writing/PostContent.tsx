@@ -1,6 +1,7 @@
 'use client';
 
 import Markdown from 'markdown-to-jsx';
+import { decodeEntity } from 'markdown-to-jsx/entities';
 import Image from 'next/image';
 import type {
   ComponentProps,
@@ -213,13 +214,31 @@ function scrollCodeFence(event: ReactKeyboardEvent<HTMLPreElement>) {
  * There is no landmark role: the preformatted content already supplies the
  * useful semantics, and repeated code-block regions would just add noise.
  */
+/**
+ * A raw `<pre>`'s body as the text it shows: tags dropped, entities decoded.
+ * The parser keeps that body as opaque text, so as HTML it could carry markup
+ * the Markdown checks never read: a `style` URL, an image, a script link.
+ */
+function rawPreText(html: string): string {
+  return html
+    .replace(/<[^>]*>/g, '')
+    .replace(/&(#x[\da-f]+|#\d+|[a-z][\da-z]*);/gi, (entity, name: string) => {
+      if (name[0] !== '#') return decodeEntity(name) ?? entity;
+      const code =
+        name[1] === 'x' || name[1] === 'X'
+          ? Number.parseInt(name.slice(2), 16)
+          : Number.parseInt(name.slice(1), 10);
+      return code > 0 && code <= 0x10ffff && (code < 0xd800 || code > 0xdfff)
+        ? String.fromCodePoint(code)
+        : '\uFFFD';
+    });
+}
+
 function CodeFence({
   children,
-  className,
   dangerouslySetInnerHTML: raw,
 }: {
   children?: ReactNode;
-  className?: string;
   /** A raw `<pre>` arrives as its own inner HTML, not as children. */
   dangerouslySetInnerHTML?: { __html: string };
 }) {
@@ -227,6 +246,15 @@ function CodeFence({
   const language =
     fenceLanguage(children) ??
     raw?.__html.match(/^<code\b[^>]*\bclass="[^"]*\blanguage-([\w-]+)/)?.[1];
+  const body = raw ? (
+    <code
+      className={language ? `language-${language} lang-${language}` : undefined}
+    >
+      {rawPreText(raw.__html)}
+    </code>
+  ) : (
+    children
+  );
 
   useEffect(() => {
     const pre = preRef.current;
@@ -278,13 +306,8 @@ function CodeFence({
           <span className="sr-only">{language} code block</span>
         </>
       ) : null}
-      <pre
-        ref={preRef}
-        onKeyDown={scrollCodeFence}
-        className={className || undefined}
-        dangerouslySetInnerHTML={raw}
-      >
-        {raw ? undefined : children}
+      <pre ref={preRef} onKeyDown={scrollCodeFence}>
+        {body}
       </pre>
     </div>
   );
