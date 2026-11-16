@@ -533,6 +533,20 @@ describe('drafts', () => {
       ],
     ),
     [
+      'draft references a publicly exported image: /images/private.png',
+      both(
+        replaceIn(
+          'package.json',
+          '{',
+          '{"repository":{"url":"git+https://github.com/Fixture/site.git"},',
+        ),
+        draftAsset(
+          '![private](https://fixture.github.io/site/images/private.png)',
+        ),
+      ),
+      "a draft-only asset reached through the repository's GitHub Pages address",
+    ],
+    [
       'draft references a publicly exported link: /downloads/private-notes.pdf',
       draftAsset(
         '[private notes][notes]\n\n[notes]: /downloads/private-notes.pdf',
@@ -591,6 +605,10 @@ describe('drafts', () => {
       'a generated share card for a published post',
       addFile('out/og/writing/about.png'),
     ],
+    [
+      'a draft linking the icons every page and the manifest use',
+      inDraftBody('![icon](/favicon.ico) ![app](/images/icons/app.png)'),
+    ],
   ]);
 
   // Post slugs are ordinary words, so a draft sharing a name with one of the
@@ -598,7 +616,16 @@ describe('drafts', () => {
   describe.each(['about', 'og', 'sitemap', 'feed', 'photo', 'index'])(
     'called "%s"',
     (draftSlug) => {
-      accepts([['the site’s own routes and assets', () => {}]], { draftSlug });
+      accepts(
+        [
+          [
+            'the site’s own routes and assets',
+            // The writing listing's payload, which a draft called `index` shares a name with.
+            addFile('out/writing/index.txt'),
+          ],
+        ],
+        { draftSlug },
+      );
     },
   );
 });

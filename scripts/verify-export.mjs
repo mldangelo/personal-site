@@ -51,6 +51,7 @@ function isOutsideBasePath(url, page, label, raw) {
   return true;
 }
 
+const SITE = readSiteConfig(ROOT, 'verify-export');
 const {
   origin: SITE_ORIGIN,
   basePath: SITE_BASE_PATH,
@@ -59,10 +60,29 @@ const {
   routeForHtml,
   routeForPublicPath,
   siteUrlForRoute,
-} = exportLayout({
-  outDir: OUT,
-  ...readSiteConfig(ROOT, 'verify-export'),
-});
+} = exportLayout({ outDir: OUT, ...SITE });
+
+/**
+ * `url` as this site, when it goes through the repository's GitHub Pages
+ * address, which redirects here: otherwise a draft could reach a public file
+ * through a link the origin check reads as external.
+ */
+function throughPagesAlias(url) {
+  const alias = SITE.pagesAlias;
+  const prefix = alias?.pathPrefix.toLowerCase();
+  const path = url?.pathname.toLowerCase();
+  if (
+    !alias ||
+    url.host.toLowerCase() !== alias.host ||
+    (prefix && path !== prefix && !path.startsWith(`${prefix}/`))
+  ) {
+    return url;
+  }
+  const rest = url.pathname.slice(alias.pathPrefix.length) || '/';
+  return new URL(
+    `${SITE_ORIGIN}${SITE_BASE_PATH}${rest}${url.search}${url.hash}`,
+  );
+}
 
 const pages = walkFiles(OUT).filter((path) => path.endsWith('.html'));
 
@@ -122,8 +142,10 @@ function isDraftDerivedPath(path) {
     (slug) =>
       // A generated share card: one file per post, named for its slug.
       (directory === CARD_DIRECTORY && name === slug) ||
-      // Anything at all exported on the draft's own route.
-      (directory === 'writing' && name === slug) ||
+      // Anything at all exported on the draft's own route. `writing/index.*`
+      // is the writing listing itself, so a draft called `index` owns only
+      // its folder.
+      (directory === 'writing' && name === slug && slug !== 'index') ||
       directory === `writing/${slug}` ||
       directory.startsWith(`writing/${slug}/`),
   );
@@ -277,7 +299,9 @@ function validateExportedHeadAsset(raw, source, label) {
     return url;
   }
   if (isOutsideBasePath(url, source.relativePath, label, raw)) return url;
-  if (!exportedFileExists(url.pathname)) {
+  if (exportedFileExists(url.pathname)) {
+    publicPageAssets.add(url.pathname);
+  } else {
     fail(source.relativePath, `${label} points at missing export: ${raw}`);
   }
   return url;
@@ -495,46 +519,6 @@ for (const record of records) {
   }
 }
 
-/**
- * Draft assets need not contain the draft slug. Parse the source with the same
- * grammar used by the renderer, resolve relative URLs from the eventual post
- * route, and reject any referenced file that otherwise has no public owner.
- *
- * Missing files are allowed: that is how a local draft can retain image slots
- * while the underlying screenshots stay outside public/. The development
- * renderer has a draft-only fallback for precisely that preview state.
- */
-for (const draft of drafts) {
-  const references = readMarkdownReferences(draft.content);
-  if (draft.frontmatter.image) {
-    references.push({ kind: 'image', target: draft.frontmatter.image });
-  }
-
-  for (const { kind, target } of references) {
-    const route = `/writing/${draft.slug}/`;
-    // Markdown is written root-relative, as if at the site root; the renderer
-    // adds the base path, so the check resolves the address it will emit.
-    const url = parseHttpUrl(
-      prefixBasePath(SITE_BASE_PATH, target),
-      route,
-      draft.source,
-      `draft ${kind}`,
-    );
-    if (url?.origin !== SITE_ORIGIN) continue;
-    if (isOutsideBasePath(url, draft.source, `draft ${kind}`, target)) continue;
-    if (kind === 'link' && pageAt(url.pathname)) continue;
-    if (
-      exportedFileExists(url.pathname) &&
-      !publicPageAssets.has(url.pathname)
-    ) {
-      fail(
-        draft.source,
-        `draft references a publicly exported ${kind}: ${url.pathname}`,
-      );
-    }
-  }
-}
-
 const home = recordsByRoute.get('/');
 if (!home) {
   fail('manifest.json', 'cannot validate manifest without exported home page');
@@ -610,16 +594,64 @@ if (!home) {
         const iconUrl = memberUrl(icon?.src, name);
 
         if (
-          iconUrl?.origin === SITE_ORIGIN &&
-          routeForPublicPath(iconUrl.pathname) !== undefined &&
-          !exportedFileExists(iconUrl.pathname)
+          iconUrl?.origin !== SITE_ORIGIN ||
+          routeForPublicPath(iconUrl.pathname) === undefined
         ) {
+          continue;
+        }
+        if (exportedFileExists(iconUrl.pathname)) {
+          publicPageAssets.add(iconUrl.pathname);
+        } else {
           fail(
             'manifest.json',
             `${name} points at missing export: ${icon.src}`,
           );
         }
       }
+    }
+  }
+}
+
+/**
+ * Draft assets need not contain the draft slug. Parse the source with the same
+ * grammar used by the renderer, resolve relative URLs from the eventual post
+ * route, and reject any referenced file that otherwise has no public owner:
+ * no page, head link, or manifest icon, which is why this runs after the
+ * manifest.
+ *
+ * Missing files are allowed: that is how a local draft can retain image slots
+ * while the underlying screenshots stay outside public/. The development
+ * renderer has a draft-only fallback for precisely that preview state.
+ */
+for (const draft of drafts) {
+  const references = readMarkdownReferences(draft.content);
+  if (draft.frontmatter.image) {
+    references.push({ kind: 'image', target: draft.frontmatter.image });
+  }
+
+  for (const { kind, target } of references) {
+    const route = `/writing/${draft.slug}/`;
+    // Markdown is written root-relative, as if at the site root; the renderer
+    // adds the base path, so the check resolves the address it will emit.
+    const url = throughPagesAlias(
+      parseHttpUrl(
+        prefixBasePath(SITE_BASE_PATH, target),
+        route,
+        draft.source,
+        `draft ${kind}`,
+      ),
+    );
+    if (url?.origin !== SITE_ORIGIN) continue;
+    if (isOutsideBasePath(url, draft.source, `draft ${kind}`, target)) continue;
+    if (kind === 'link' && pageAt(url.pathname)) continue;
+    if (
+      exportedFileExists(url.pathname) &&
+      !publicPageAssets.has(url.pathname)
+    ) {
+      fail(
+        draft.source,
+        `draft references a publicly exported ${kind}: ${url.pathname}`,
+      );
     }
   }
 }
