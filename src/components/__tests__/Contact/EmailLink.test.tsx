@@ -5,6 +5,12 @@ import EmailLink from '../../Contact/EmailLink';
 
 const [localPart] = profile.email.split('@');
 
+/** An address as a `mailto:` URL carries it. */
+const mailto = (address: string) => {
+  const [local, domain] = address.split('@');
+  return `${encodeURIComponent(local)}@${domain}`;
+};
+
 /** Far enough in to be typing out a long alias, past the opening holds. */
 const MID_ALIAS_MS = 9000;
 /** Longer than one full cycle of every message. */
@@ -48,8 +54,25 @@ describe('EmailLink', () => {
       const link = screen.getByRole('link', {
         name: `Email ${profile.email}`,
       });
-      expect(link).toHaveAttribute('href', `mailto:${profile.email}`);
+      expect(link).toHaveAttribute('href', `mailto:${mailto(profile.email)}`);
     }
+  });
+
+  // RFC 6068: unencoded, a `#` would start a fragment and a `?` the headers.
+  it('keeps reserved characters in the address it opens', async () => {
+    vi.resetModules();
+    vi.doMock('@/data/profile.json', () => ({
+      default: { ...profile, email: 'hi#notes?x@example.com' },
+    }));
+    const { default: ForkLink } = await import('../../Contact/EmailLink');
+
+    render(<ForkLink />);
+
+    expect(screen.getByRole('link')).toHaveAttribute(
+      'href',
+      'mailto:hi%23notes%3Fx@example.com',
+    );
+    vi.doUnmock('@/data/profile.json');
   });
 
   // An empty message for a single tick would snap the prefix back to the real
