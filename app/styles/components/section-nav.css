@@ -14,6 +14,12 @@
   border-block: var(--rule) solid var(--color-border);
 }
 
+/* The bar is part of the chrome a focused control has to clear (see
+   `base/reset.css`): its 2.75rem targets and two rules. */
+:root:has(.section-nav) {
+  --top-chrome: calc(var(--header-height) + 2.75rem + 2 * var(--rule));
+}
+
 /* One row at every width, never wrapped: a second row of 44px targets makes
    the bar 90px, and a heading on the About page parks only 88px under the
    header. The links are spaced by their own padding so their targets meet,
@@ -44,6 +50,9 @@
   color: var(--color-fg-light);
   white-space: nowrap;
   outline-offset: -4px;
+  /* Stuck under the header, so clearing only the header: the bar's own
+     height would scroll the page to push the bar below itself. */
+  scroll-margin-top: var(--header-height);
 }
 
 .section-nav-link:hover,
