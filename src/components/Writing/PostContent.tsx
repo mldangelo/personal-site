@@ -1,6 +1,6 @@
 'use client';
 
-import Markdown from 'markdown-to-jsx';
+import Markdown from 'markdown-to-jsx/react';
 import Image from 'next/image';
 import type {
   ElementType,
@@ -21,7 +21,11 @@ import { preload } from 'react-dom';
 
 import { planMarkdownHeadingAnchors } from '@/lib/anchors';
 import type { ImageSize } from '@/lib/imageSize';
-import { isRootLocalImage, sanitizeUrl, smartQuotesRule } from '@/lib/markdown';
+import {
+  createElementWithBasePath,
+  isRootLocalImage,
+  smartQuotesRule,
+} from '@/lib/markdown';
 import { withBasePath } from '@/lib/utils';
 
 interface PostContentProps {
@@ -360,7 +364,7 @@ export default function PostContent({
         slugify: headingPlan.slugify,
         // Typographic quotes in text a reader sees; code is a different node.
         renderRule: smartQuotesRule,
-        sanitizer: sanitizeUrl,
+        createElement: createElementWithBasePath,
         overrides: {
           ...headingOverrides(headingPlan.aliases),
           p: {
