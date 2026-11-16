@@ -1,6 +1,12 @@
 'use client';
 
-import { Fragment, useEffect, useReducer } from 'react';
+import {
+  type ClipboardEvent,
+  Fragment,
+  useEffect,
+  useReducer,
+  useState,
+} from 'react';
 
 import profile from '@/data/profile.json';
 import usePrefersReducedMotion from '@/hooks/usePrefersReducedMotion';
@@ -12,6 +18,8 @@ const HOLD_TICKS_AFTER_MESSAGE = 50; // Ticks to wait after message completes
 /** The address the link always resolves to, whatever the animation shows. */
 const CONTACT_ADDRESS = profile.email;
 const [CONTACT_LOCAL_PART, CONTACT_DOMAIN] = CONTACT_ADDRESS.split('@');
+/** A `#`, `?`, or `%` in the local part would otherwise end the address. */
+const MAILTO = `mailto:${encodeURIComponent(CONTACT_LOCAL_PART)}@${CONTACT_DOMAIN}`;
 
 const messages = [
   CONTACT_LOCAL_PART,
@@ -38,7 +46,7 @@ interface AnimationState {
   isActive: boolean;
 }
 
-type AnimationAction = { type: 'TICK' | 'PAUSE' | 'RESUME' };
+type AnimationAction = { type: 'TICK' };
 
 /**
  * The opening frame of a message. It already shows the first character, so the
@@ -78,17 +86,11 @@ function animationReducer(
       const nextIdx = state.idx + 1;
 
       if (nextIdx === messages.length) {
-        // Completion is recorded in `idx`, not only in `isActive`, so RESUME
-        // cannot re-arm a finished animation.
         return { ...state, idx: messages.length, isActive: false };
       }
 
       return startOf(nextIdx);
     }
-    case 'PAUSE':
-      return { ...state, isActive: false };
-    case 'RESUME':
-      return { ...state, isActive: state.idx < messages.length };
   }
 }
 
@@ -104,7 +106,11 @@ export default function EmailLink() {
     isActive: true,
   });
 
-  const animating = state.isActive && !reducedMotion;
+  // Hover and focus each hold the animation, so leaving with the pointer
+  // never restarts it under a keyboard user's focus.
+  const [hovered, setHovered] = useState(false);
+  const [focused, setFocused] = useState(false);
+  const animating = state.isActive && !reducedMotion && !hovered && !focused;
 
   useEffect(() => {
     if (!animating) return;
@@ -113,31 +119,49 @@ export default function EmailLink() {
     return () => clearInterval(id);
   }, [animating]);
 
-  // The reducer never yields an empty prefix, so the only reason to override
-  // it is reduced motion, where the real address should simply stand.
-  const displayMessage = reducedMotion ? CONTACT_LOCAL_PART : state.message;
+  // The reducer never yields an empty prefix. The real address stands under
+  // reduced motion, and while the link has focus, so the address a keyboard
+  // user is about to open is the one on screen.
+  const displayMessage =
+    reducedMotion || focused ? CONTACT_LOCAL_PART : state.message;
 
-  const handlePause = () => dispatch({ type: 'PAUSE' });
-  const handleResume = () => dispatch({ type: 'RESUME' });
+  // Whatever alias is showing, a copy from the address is the address. A
+  // selection that reaches past it copies as the browser would.
+  const copyAddress = (event: ClipboardEvent<HTMLElement>) => {
+    const selection = window.getSelection();
+    const within = (node: Node | null | undefined) =>
+      node != null && event.currentTarget.contains(node);
+    if (!within(selection?.anchorNode) || !within(selection?.focusNode)) {
+      return;
+    }
+    event.preventDefault();
+    event.clipboardData.setData('text/plain', CONTACT_ADDRESS);
+  };
 
   return (
     <div
       className="contact-email-container"
-      onMouseEnter={handlePause}
-      onMouseLeave={handleResume}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onCopy={copyAddress}
     >
       {/* Always a real link to a real address. The animation cycles through
           joke aliases, some of which are not valid local-parts, so the shown
           alias is decorative and the destination never changes. */}
       <a
-        href={`mailto:${CONTACT_ADDRESS}`}
+        href={MAILTO}
         className="contact-email-link"
-        onFocus={handlePause}
-        onBlur={handleResume}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
       >
         <span className="sr-only">Email {CONTACT_ADDRESS}</span>
         <span className="contact-email-prefix" aria-hidden="true">
           <span dir="ltr">{displayMessage}</span>
+        </span>
+        {/* Paper takes whatever frame is showing, so print has the real
+            local part in the alias's place. */}
+        <span className="contact-email-print" aria-hidden="true">
+          {CONTACT_LOCAL_PART}
         </span>
         <span className="contact-email-domain" aria-hidden="true">
           @

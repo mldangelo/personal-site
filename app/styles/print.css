@@ -75,6 +75,16 @@
     min-height: 0;
   }
 
+  /* A page printed mid-animation would carry a joke alias. The real local
+     part takes the alias's grid cell instead. */
+  .contact-email-prefix {
+    display: none;
+  }
+
+  .contact-email-print {
+    display: inline;
+  }
+
   /* Contact details belong on a printed resume. Rendered as real markup in
      ResumePage rather than CSS content, so the line is selectable, linkable,
      and sourced from the same profile and contact data as the screen UI. */

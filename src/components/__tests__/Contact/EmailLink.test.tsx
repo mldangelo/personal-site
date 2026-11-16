@@ -91,6 +91,41 @@ describe('EmailLink', () => {
     expect(prefix()).not.toBe(paused);
   });
 
+  // The visible name of a focused link is the address it opens, and the
+  // pointer leaving does not restart the animation under keyboard focus.
+  it('shows and holds the real address while the link has focus', () => {
+    const { container } = render(<EmailLink />);
+    const wrapper = container.firstElementChild as HTMLElement;
+    const link = screen.getByRole('link');
+    advance(MID_ALIAS_MS);
+    expect(prefix()).not.toBe(localPart);
+
+    act(() => link.focus());
+    fireEvent.mouseEnter(wrapper);
+    fireEvent.mouseLeave(wrapper);
+    advance(2000);
+    expect(prefix()).toBe(localPart);
+
+    act(() => link.blur());
+    advance(500);
+    expect(prefix()).not.toBe(localPart);
+  });
+
+  it('copies the real address whatever alias is showing', () => {
+    render(<EmailLink />);
+    advance(MID_ALIAS_MS);
+    const link = screen.getByRole('link');
+    window.getSelection()?.selectAllChildren(link);
+
+    const clipboardData = { setData: vi.fn() };
+    fireEvent.copy(link, { clipboardData });
+
+    expect(clipboardData.setData).toHaveBeenCalledWith(
+      'text/plain',
+      profile.email,
+    );
+  });
+
   it('stays settled once the animation completes, even after a hover', () => {
     const { container } = render(<EmailLink />);
     const wrapper = container.firstElementChild as HTMLElement;
