@@ -1,21 +1,36 @@
-import { describe, expect, it } from 'vitest';
-
-import { getWritingItems } from '@/lib/writing';
+import { describe, expect, it, vi } from 'vitest';
 
 import { GET } from '../route';
 
+const data = vi.hoisted(() => ({ description: 'A description.' }));
+vi.mock('@/lib/writing', () => ({
+  getWritingItems: () => [
+    {
+      title: 'A post',
+      url: 'https://example.com/post/',
+      date: '2026-01-15',
+      description: data.description,
+      isExternal: true,
+      source: 'Example',
+    },
+  ],
+}));
+
 describe('feed.xml route', () => {
-  it('derives lastBuildDate from content rather than the build clock', async () => {
-    const response = await GET();
-    const xml = await response.text();
+  // Optional, and the newest item's date cannot say when the feed changed:
+  // an edit, or a backdated post published later, leaves it where it was.
+  it('states no lastBuildDate', async () => {
+    const xml = await (await GET()).text();
 
-    // Derived from the content, so publishing something newer cannot fail it.
-    // The noon timestamp is what still excludes the build clock: the route
-    // builds every date as `${date}T12:00:00Z`, so a wall-clock value would
-    // have to land on exactly 12:00:00 GMT to pass.
-    const newest = getWritingItems().find((item) => item.date);
-    const expected = new Date(`${newest?.date}T12:00:00Z`).toUTCString();
+    expect(xml).not.toContain('lastBuildDate');
+  });
 
-    expect(xml).toContain(`<lastBuildDate>${expected}</lastBuildDate>`);
+  // XML 1.0 cannot carry a vertical tab even escaped, and one makes the
+  // whole feed unreadable.
+  it('leaves out characters XML cannot carry', async () => {
+    data.description = 'Before\u000bafter & more';
+    const xml = await (await GET()).text();
+
+    expect(xml).toContain('<description>Beforeafter &amp; more</description>');
   });
 });

@@ -119,11 +119,23 @@ export async function openPage(executable) {
     });
 
   const exited = new Promise((resolve) => chrome.once('exit', resolve));
-  /** Waits for Chrome to exit, since it writes to its profile until then. */
+  /**
+   * Waits for Chrome to exit, since it writes to its profile until then. Asked
+   * to quit, it shuts its helper processes down first; a signal ends only the
+   * main one, and on Linux the helpers then write into a profile being
+   * deleted, which fails with ENOTEMPTY.
+   */
   const close = async () => {
-    chrome.kill();
+    send('Browser.close').catch(() => {});
+    const timeout = setTimeout(() => chrome.kill(), 5000);
     await exited;
-    rmSync(profile, { recursive: true, force: true, maxRetries: 5 });
+    clearTimeout(timeout);
+    rmSync(profile, {
+      recursive: true,
+      force: true,
+      maxRetries: 10,
+      retryDelay: 100,
+    });
   };
 
   try {

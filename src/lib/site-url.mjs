@@ -40,3 +40,57 @@ export function prefixBasePath(basePath, path) {
     ? `${basePath}${path}`
     : path;
 }
+
+/**
+ * The candidates of a `srcset`, split the way the HTML parser splits them: a
+ * URL runs to the next whitespace, so a file name or data URL may contain
+ * commas, and trailing commas end a candidate that has no descriptor. The
+ * descriptor is returned as written, for the caller to judge.
+ */
+export function splitSrcset(value) {
+  const candidates = [];
+  let index = 0;
+
+  while (index < value.length) {
+    while (index < value.length && /[\t\n\f\r ,]/.test(value[index])) {
+      index += 1;
+    }
+    if (index >= value.length) break;
+
+    const urlStart = index;
+    while (index < value.length && !/[\t\n\f\r ]/.test(value[index])) {
+      index += 1;
+    }
+
+    const url = value.slice(urlStart, index);
+    if (url.endsWith(',')) {
+      candidates.push({ url: url.replace(/,+$/, ''), descriptor: '' });
+      continue;
+    }
+
+    const descriptorStart = index;
+    let parentheses = 0;
+    while (index < value.length) {
+      const character = value[index];
+      if (character === '(') parentheses += 1;
+      if (character === ')') parentheses -= 1;
+      if (character === ',' && parentheses <= 0) break;
+      index += 1;
+    }
+    candidates.push({
+      url,
+      descriptor: value.slice(descriptorStart, index).trim(),
+    });
+  }
+
+  return candidates;
+}
+
+/** A `srcset` with the base path on each root-relative candidate. */
+export function prefixSrcset(basePath, value) {
+  return splitSrcset(value)
+    .map(({ url, descriptor }) =>
+      [prefixBasePath(basePath, url), descriptor].filter(Boolean).join(' '),
+    )
+    .join(', ');
+}
