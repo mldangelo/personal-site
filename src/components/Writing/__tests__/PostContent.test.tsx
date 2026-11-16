@@ -108,13 +108,28 @@ describe('PostContent figures', () => {
   });
 
   it('links a local figure to its file, unless it already links elsewhere', () => {
-    expect(markup('Intro.\n\n![Alt](/og.png)\n')).toContain(
-      '<a href="/og.png" class="prose-figure-full"><img',
+    const figure = render(
+      <PostContent
+        content={'Intro.\n\n![Alt](/og.png)\n'}
+        imageSizes={OG_SIZE}
+      />,
     );
+    // Chrome names it "Alt (full size)"; jsdom's name computation drops the space.
+    expect(
+      figure.getByRole('link', { name: /^Alt\s*\(full size\)$/ }),
+    ).toHaveAttribute('href', '/og.png');
+    figure.unmount();
 
-    const linked = markup('Intro.\n\n[![Alt](/og.png)](https://example.com)\n');
-    expect(linked).toContain('<a href="https://example.com">');
-    expect(linked).not.toContain('prose-figure-full');
+    // The authored destination is kept, with no second link inside it.
+    const linked = render(
+      <PostContent
+        content={'Intro.\n\n[![Alt](/og.png)](https://example.com)\n'}
+        imageSizes={OG_SIZE}
+      />,
+    );
+    expect(
+      linked.getAllByRole('link').map((link) => link.getAttribute('href')),
+    ).toEqual(['https://example.com']);
   });
 
   // A `src` is not an image: promoting one sends it to the build-time sizer,
