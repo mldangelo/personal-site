@@ -8,7 +8,10 @@ export default function Education({ data }: { data: Degree[] }) {
         <h2 className="section-heading">Education</h2>
       </div>
       {data.map((degree) => (
-        <article className="degree-container" key={degree.school}>
+        <article
+          className="degree-container"
+          key={`${degree.school}-${degree.degree}`}
+        >
           <header>
             <h3 className="degree">{smartQuotes(degree.degree)}</h3>
             <p className="school">
