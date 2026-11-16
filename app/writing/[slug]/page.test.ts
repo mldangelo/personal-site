@@ -18,15 +18,21 @@ import {
 } from '@/lib/utils';
 import PostPage, { generateMetadata } from './page';
 
-// `npm run og` draws a card for every real post, but none for these fixtures.
+// `npm run og` draws a card for every real post, but none for these
+// fixtures, and the screenshot one of them names is not in `public/`. Its size
+// is not a card's, so a card standing in for it would show.
 vi.mock('@/lib/imageSize', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@/lib/imageSize')>();
   return {
     ...actual,
-    readImageSize: (path: string) =>
-      /^\/og\/writing\/zz-.*-fixture\.png$/.test(path)
+    readImageSize: (path: string) => {
+      if (path === '/images/writing/zz-fixture/screenshot.png') {
+        return { width: 1117, height: 812 };
+      }
+      return /^\/og\/writing\/zz-.*-fixture\.png$/.test(path)
         ? { width: 1200, height: 630 }
-        : actual.readImageSize(path),
+        : actual.readImageSize(path);
+    },
   };
 });
 
@@ -56,8 +62,8 @@ const FIXTURES: Record<string, string> = {
     "title: 'A Post With A Screenshot'",
     "date: '2026-01-09'",
     "description: 'Names a representative image.'",
-    "image: '/og.png'",
-    "imageAlt: 'The site card'",
+    "image: '/images/writing/zz-fixture/screenshot.png'",
+    "imageAlt: 'A representative screenshot'",
   ]),
   'zz-without-image-fixture': post([
     "title: 'A Post Without One'",
@@ -158,7 +164,14 @@ describe('writing post structured data', () => {
   // The share card replaces an article image only for social metadata: the
   // JSON-LD `image` keeps the representative screenshot and its real dimensions.
   it.each([
-    ['zz-with-image-fixture', { url: '/og.png', width: 1200, height: 630 }],
+    [
+      'zz-with-image-fixture',
+      {
+        url: '/images/writing/zz-fixture/screenshot.png',
+        width: 1117,
+        height: 812,
+      },
+    ],
     [
       'zz-without-image-fixture',
       {
