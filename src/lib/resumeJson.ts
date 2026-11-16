@@ -11,6 +11,8 @@
  * `interests`, `projects`, `references`) are omitted rather than stubbed.
  */
 
+import { type MarkdownToJSX, parser, RuleType } from 'markdown-to-jsx/markdown';
+
 import { profiles } from '@/data/contact';
 import profile from '@/data/profile.json';
 import courses from '@/data/resume/courses';
@@ -114,12 +116,71 @@ interface JsonResume {
  */
 export function toPlainText(value: string): string {
   return (
-    value
-      .replace(/<\/?a(?:\s[^>]*)?>/gi, '')
+    textOf(parser(value))
       // Template literals in the data files wrap across lines and indent.
       .replace(/\s+/g, ' ')
       .trim()
   );
+}
+
+/**
+ * Inline HTML a summary may use. Any other tag is prose: résumé text is
+ * technical, and `vector<int>` parses as an element called `int`.
+ */
+const INLINE_ELEMENTS = new Set([
+  'a',
+  'abbr',
+  'b',
+  'br',
+  'cite',
+  'code',
+  'del',
+  'em',
+  'i',
+  'ins',
+  'kbd',
+  'mark',
+  'q',
+  's',
+  'samp',
+  'small',
+  'span',
+  'strong',
+  'sub',
+  'sup',
+  'u',
+  'var',
+]);
+
+/** The text a reader sees in parsed Markdown, with unknown tags as written. */
+function textOf(nodes: MarkdownToJSX.ASTNode[]): string {
+  return nodes
+    .map((node) => {
+      switch (node.type) {
+        case RuleType.text:
+        case RuleType.codeInline:
+          return node.text;
+        case RuleType.htmlComment:
+        case RuleType.refCollection:
+          return '';
+        case RuleType.htmlSelfClosing:
+          if (INLINE_ELEMENTS.has(node.tag))
+            return node.tag === 'br' ? ' ' : '';
+          // `u` is the source as written; the parser does not type it.
+          return (node as { u?: string }).u ?? `<${node.tag}>`;
+        case RuleType.htmlBlock: {
+          const inner = textOf(node.children ?? []);
+          return INLINE_ELEMENTS.has(node.tag)
+            ? inner
+            : `<${node.tag}>${inner}</${node.tag}>`;
+        }
+        default:
+          return 'children' in node && Array.isArray(node.children)
+            ? ` ${textOf(node.children)} `
+            : '';
+      }
+    })
+    .join('');
 }
 
 /**
@@ -198,6 +259,19 @@ function buildEducation(): ResumeEducation[] {
     // coursework twice.
     const schoolCourses = courses
       .filter((course) => course.university === degree.school)
+      .filter((course) => {
+        // A second degree from one school would otherwise list the school's
+        // coursework under both, so there each course names its degree.
+        if (course.degree) return course.degree === degree.degree;
+        if (
+          degrees.filter(({ school }) => school === degree.school).length > 1
+        ) {
+          throw new Error(
+            `${course.number} at ${course.university} needs a "degree": the school has more than one`,
+          );
+        }
+        return true;
+      })
       .map((course) => `${course.number} - ${course.title}`);
 
     return {

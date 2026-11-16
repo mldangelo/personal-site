@@ -435,6 +435,12 @@ describe('machine-readable resume', () => {
       'basics.name must be a non-empty string',
       replaceIn(RESUME, '"Fixture Person"', '[]'),
     ],
+    ...['//work.example/', 'https://work.example/field notes'].map(
+      (url): Rejection => [
+        `work[0].url is not an absolute URI: ${url}`,
+        replaceIn(RESUME, 'https://work.example/', url),
+      ],
+    ),
     [
       'work[0] must be a JSON object',
       replaceIn(RESUME, /"work":\[.*?\]/, '"work":[1]'),

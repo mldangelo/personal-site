@@ -22,6 +22,12 @@ describe('toPlainText', () => {
   it.each([
     ["see <a href='https://example.com'>the docs</a>", 'see the docs'],
     ['one\n    two\n\n  three ', 'one two three'],
+    // Markdown the page renders as a link, and a raw one whose title holds
+    // a `>` that a tag pattern reads as the tag's end.
+    ['see [the docs](https://example.com)', 'see the docs'],
+    ['see <a href="https://example.com" title="a > b">B</a>', 'see B'],
+    ['a note<!-- not for readers --> ends', 'a note ends'],
+    ['typed as vector<int> here', 'typed as vector<int> here'],
   ])('flattens %s', (input, expected) => {
     expect(toPlainText(input)).toBe(expected);
   });
