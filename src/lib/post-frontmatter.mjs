@@ -4,9 +4,26 @@
  * Keeping this dependency-free lets both boundaries reject the same malformed
  * YAML before either a route or a generated public asset can be published.
  */
+const KEYS = ['title', 'date', 'description', 'draft', 'image', 'imageAlt'];
+
 export function validatePostFrontmatterData(value, source = 'post') {
   if (!isRecord(value)) {
     throw frontmatterError(source, 'must be a YAML object');
+  }
+
+  // An unread key is a setting the author believes is in force: `Draft: true`
+  // would publish the post it was meant to hold back.
+  for (const key of Object.keys(value)) {
+    if (KEYS.includes(key)) continue;
+    const meant = KEYS.find(
+      (known) => known.toLowerCase() === key.toLowerCase(),
+    );
+    throw frontmatterError(
+      source,
+      meant
+        ? `"${key}" must be spelled "${meant}"`
+        : `"${key}" is not a frontmatter key; use ${KEYS.map((known) => `"${known}"`).join(', ')}`,
+    );
   }
 
   const title = requiredText(value.title, 'title', source);
