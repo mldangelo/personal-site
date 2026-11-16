@@ -127,7 +127,7 @@ describe('writing post structured data', () => {
     [
       'shipping-with-claude-code',
       {
-        url: '/images/writing/api-costs-july-2025.png',
+        url: '/images/writing/api-costs-july-2025.webp',
         width: 1117,
         height: 812,
       },
