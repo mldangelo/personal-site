@@ -2,6 +2,7 @@ import { render } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { reloadPage } from '@/lib/reload';
+import { withBasePath } from '@/lib/utils';
 import FragmentHistory from '../../Template/FragmentHistory';
 
 let pathname = '/resume/';
@@ -35,10 +36,10 @@ describe('FragmentHistory', () => {
     ['/about/#more', false],
   ])('loads a stateless entry for %s in full: %s', (url, reloads) => {
     pathname = '/about/';
-    window.history.replaceState({ __NA: true }, '', '/about/');
+    window.history.replaceState({ __NA: true }, '', withBasePath('/about/'));
     render(<FragmentHistory />);
 
-    window.history.pushState(null, '', url);
+    window.history.pushState(null, '', withBasePath(url));
     window.dispatchEvent(new PopStateEvent('popstate', { state: null }));
 
     expect(vi.mocked(reloadPage).mock.calls.length > 0).toBe(reloads);
