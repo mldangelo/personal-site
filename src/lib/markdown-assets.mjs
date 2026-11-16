@@ -43,12 +43,10 @@ const SAFE_RASTER_DATA_URL =
   /^data:image\/(?:avif|bmp|gif|jpeg|png|vnd\.microsoft\.icon|webp|x-icon)(?:[;,])/i;
 
 /**
- * Parse a `srcset` value without silently dropping candidates.
+ * Parse a `srcset` value the way the HTML parser does.
  *
- * The HTML grammar permits commas inside data URLs. Those URLs never identify
- * repository files, but an ambiguous data URL could otherwise hide a later
- * local candidate. Requiring a descriptor before another candidate makes that
- * boundary explicit and fail-closed.
+ * A candidate's URL runs to the next whitespace, so a file name or data URL may
+ * contain commas, and trailing commas end a candidate that has no descriptor.
  */
 export function parseSrcset(value) {
   const sources = [];
@@ -60,25 +58,15 @@ export function parseSrcset(value) {
     }
     if (index >= value.length) break;
 
-    const startsWithData = value
-      .slice(index, index + 5)
-      .toLowerCase()
-      .startsWith('data:');
     const urlStart = index;
-
-    if (startsWithData) {
-      while (index < value.length && !/[\t\n\f\r ]/.test(value[index])) {
-        index += 1;
-      }
-    } else {
-      while (index < value.length && !/[\t\n\f\r ,]/.test(value[index])) {
-        index += 1;
-      }
+    while (index < value.length && !/[\t\n\f\r ]/.test(value[index])) {
+      index += 1;
     }
 
     const url = value.slice(urlStart, index);
-    if (!url) {
-      throw new TypeError(`Invalid srcset candidate in: ${value}`);
+    if (url.endsWith(',')) {
+      sources.push(url.replace(/,+$/, ''));
+      continue;
     }
 
     while (index < value.length && /[\t\n\f\r ]/.test(value[index])) {
@@ -115,11 +103,6 @@ export function parseSrcset(value) {
     ) {
       throw new TypeError(`Invalid srcset descriptor in: ${value}`);
     }
-    if (startsWithData && !descriptors.length && index < value.length) {
-      throw new TypeError(
-        `Ambiguous data URL in srcset; add a descriptor before another candidate: ${value}`,
-      );
-    }
 
     sources.push(url);
     if (value[index] === ',') index += 1;
@@ -133,7 +116,9 @@ export function parseSrcset(value) {
  *
  * Reference-style Markdown has already been resolved by the parser. A generic
  * AST walk is deliberate: lists, tables, block quotes, and inline formatting
- * store descendants under different fields.
+ * store descendants under different fields. Footnote text is the exception: the
+ * parser keeps it as raw Markdown, which the renderer parses when it draws the
+ * notes, so it is parsed here with the document's references.
  */
 export function readMarkdownReferences(markdown) {
   const references = [];
@@ -160,7 +145,9 @@ export function readMarkdownReferences(markdown) {
     }
     if (!value || typeof value !== 'object') return;
 
-    if (value.type === RuleType.image) {
+    if (value.type === RuleType.refCollection) {
+      visit(parseFootnotes(value.refs));
+    } else if (value.type === RuleType.image) {
       add('image', value.target);
     } else if (value.type === RuleType.link) {
       add('link', value.target);
@@ -236,6 +223,43 @@ export function readMarkdownImageSources(markdown) {
   return readMarkdownReferences(markdown)
     .filter(({ kind }) => kind === 'image')
     .map(({ target }) => target);
+}
+
+const REFERENCE_PLACEHOLDER = 'markdown-assets:reference:';
+
+/**
+ * Each footnote's text parsed as a document of its own, with the reference
+ * definitions it may use. A definition points at a placeholder that is then
+ * swapped for its target: the targets are already decoded, and writing them
+ * back into Markdown would decode them a second time.
+ */
+function parseFootnotes(refs = {}) {
+  const entries = Object.entries(refs);
+  const references = entries.filter(([label]) => !label.startsWith('^'));
+  const definitions = references
+    .map(([label], index) => `[${label}]: ${REFERENCE_PLACEHOLDER}${index}`)
+    .join('\n');
+
+  function restore(node) {
+    if (Array.isArray(node)) {
+      for (const item of node) restore(item);
+      return;
+    }
+    if (!node || typeof node !== 'object') return;
+    if (node.target?.startsWith?.(REFERENCE_PLACEHOLDER)) {
+      const index = Number(node.target.slice(REFERENCE_PLACEHOLDER.length));
+      node.target = references[index]?.[1].target ?? node.target;
+    }
+    for (const child of Object.values(node)) restore(child);
+  }
+
+  return entries
+    .filter(([label]) => label.startsWith('^'))
+    .map(([, { target }]) => {
+      const footnote = parser(`${target}\n\n${definitions}`);
+      restore(footnote);
+      return footnote;
+    });
 }
 
 function resourceKind(tag, attribute, attributes) {
