@@ -17,7 +17,7 @@ interface SkillsProps {
 export default function Skills({ skills }: SkillsProps) {
   const groups = groupSkills(skills);
 
-  // The fainter tone is only worth explaining where something is set in it.
+  // The dashed tier is only worth explaining where something is set in it.
   const hasFamiliar = skills.some(
     (skill) => knowledgeTier(skill.competency) === 'familiar',
   );
@@ -30,11 +30,12 @@ export default function Skills({ skills }: SkillsProps) {
       <p className="resume-note skill-tier-legend">
         Strongest first.
         {hasFamiliar ? (
-          // Says what a tone means, which is no use to anyone who cannot see
-          // it; each tag already carries its tier as text for a screen reader.
+          // Says what a border means, which is no use to anyone who cannot
+          // see it; each tag already carries its tier as text for a screen
+          // reader.
           <span className="skill-tier-legend-tone" aria-hidden="true">
             {' '}
-            Fainter tags mark familiarity, not working knowledge.
+            Dashed tags mark familiarity, not working knowledge.
           </span>
         ) : null}
       </p>

@@ -86,15 +86,9 @@
 }
 
 /* Depth is the order each group is listed in, and the last tier is set a
-   tone fainter. */
+   tone fainter on a dashed border. The tone alone is a difference of colour,
+   which a forced palette removes; the dash is a shape, which survives it. */
 .skill-tag--familiar {
   color: var(--color-fg-light);
-}
-
-/* A forced palette draws every tag in one colour, which leaves the legend's
-   second sentence describing a tone that is not there. */
-@media (forced-colors: active) {
-  .skill-tier-legend-tone {
-    display: none;
-  }
+  border-style: dashed;
 }

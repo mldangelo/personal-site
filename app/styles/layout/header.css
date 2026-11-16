@@ -257,9 +257,14 @@
   outline-offset: -2px;
 }
 
-/* Where you are, in the mobile menu. */
+/* Where you are, in the mobile menu: an underline as well as the accent,
+   since the two inks sit too close in value to tell apart by colour alone. */
 .hamburger-ul li a.active span {
   color: var(--color-accent);
+  text-decoration-line: underline;
+  text-decoration-thickness: var(--rule-strong);
+  text-decoration-color: currentcolor;
+  text-underline-offset: 0.35em;
 }
 
 .hamburger-ul li a span {

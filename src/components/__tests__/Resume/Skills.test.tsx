@@ -62,9 +62,9 @@ describe('Skills', () => {
     ]);
   });
 
-  // The order holds for everyone; the tone is described only on screen, and
-  // only when a tag is set in it.
-  it('explains a fainter tone once, to those who can see it', () => {
+  // The order holds for everyone; the dashed tier is described only on
+  // screen, and only when a tag is set in it.
+  it('explains the dashed tier once, to those who can see it', () => {
     const { container } = render(<Skills skills={mockSkills} />);
 
     expect(container.querySelectorAll('.skill-tier-legend')).toHaveLength(1);
