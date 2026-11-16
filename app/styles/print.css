@@ -281,12 +281,6 @@
     font-size: 14pt;
   }
 
-  /* Both inks print black, so on paper there is no fainter tone for the
-     legend's second sentence to explain. The order it names still holds. */
-  .skill-tier-legend-tone {
-    display: none;
-  }
-
   .skills .skill-tier-legend {
     margin: 0 0 0.5rem;
   }
