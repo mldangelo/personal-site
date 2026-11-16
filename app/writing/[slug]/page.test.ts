@@ -50,10 +50,13 @@ beforeAll(() => {
   const readFileSync = fs.readFileSync as Read;
 
   vi.spyOn(fs, 'readdirSync').mockImplementation(((path, options) => {
-    const entries = readdirSync(path, options) as string[];
-    return path === POSTS_DIRECTORY
-      ? [...entries, `${DRAFT_SLUG}.md`]
-      : entries;
+    const entries = readdirSync(path, options) as unknown[];
+    const name = `${DRAFT_SLUG}.md`;
+    const listed = (options as { withFileTypes?: boolean } | undefined)
+      ?.withFileTypes
+      ? { name, isDirectory: () => false, isFile: () => true }
+      : name;
+    return path === POSTS_DIRECTORY ? [...entries, listed] : entries;
   }) as Read as typeof fs.readdirSync);
   vi.spyOn(fs, 'readFileSync').mockImplementation(((path, options) =>
     path === DRAFT_FILE
