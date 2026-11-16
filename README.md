@@ -69,14 +69,16 @@ the shared copy and metadata to update when adding your own profile.
 
 ### With a coding agent
 
-Open the repository in your preferred coding agent and describe the change.
-For example:
+Open the repository in your preferred coding agent. You can paste your résumé
+into the chat, attach a résumé file, or share a link to your résumé or LinkedIn
+profile. Include any project links you want featured. For example:
 
 ```text
-Update the résumé and projects with the details below. Use the customization
-guide in docs/adapting-guide.md to find related content. Keep the current
-design, flag any missing facts, and run the project checks.
-[YOUR DETAILS]
+Update this site's bio, résumé, and projects using my résumé or LinkedIn
+profile and any extra details I provide. Follow docs/adapting-guide.md to update
+related content, and keep the current design. Ask me about missing details or
+links you can't access, and run the project checks.
+[PASTE YOUR RÉSUMÉ OR PROVIDE FILES AND LINKS]
 ```
 
 The guide includes [more example requests](./docs/adapting-guide.md#copyable-requests)
