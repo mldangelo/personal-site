@@ -68,6 +68,19 @@ describe('json resume document', () => {
       sortPositions(work).map((position) => position.name),
     );
     expect(resume.work[0]).not.toHaveProperty('endDate');
+    // The page says which role runs alongside the main one, and so does this.
+    expect(
+      resume.work
+        .filter((position) => position.commitment === 'part-time')
+        .map((position) => position.name),
+    ).toEqual(
+      work
+        .filter((position) => position.commitment === 'part-time')
+        .map((position) => position.name),
+    );
+    expect(
+      resume.work.some((position) => position.commitment === 'part-time'),
+    ).toBe(true);
   });
 
   // Summaries are Markdown with inline anchors, so this reads the real prose.

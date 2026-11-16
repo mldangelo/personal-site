@@ -24,7 +24,9 @@ function isoYear(date: string): number {
 }
 
 function isEarlyCareer(job: Position): boolean {
-  if (/intern/i.test(job.position)) {
+  // A whole word: "International Director" and "Internal Systems" are not
+  // internships.
+  if (/\bintern(?:ship)?\b/i.test(job.position)) {
     return true;
   }
 
@@ -32,26 +34,22 @@ function isEarlyCareer(job: Position): boolean {
 }
 
 /**
- * Which step of the spine's type scale a role takes. The lead is the newest
- * substantive, non-side-role start date rather than array position, so
- * reordering the source data cannot change the visual hierarchy.
+ * Which step of the spine's type scale a role takes. The lead is the one role
+ * with the newest substantive, non-side-role start date rather than array
+ * position, so reordering the source data cannot change the visual
+ * hierarchy, and a side role that began the same day does not share it.
  */
 export function tierFor(job: Position, positions: Position[]): JobTier {
   if (isEarlyCareer(job)) return 'early';
 
-  const newestStartDate = positions
+  const lead = positions
     .filter(
       (position) =>
         !isEarlyCareer(position) && position.commitment !== 'part-time',
     )
-    .map((position) => position.startDate)
-    .sort((a, b) => b.localeCompare(a))[0];
+    .sort((a, b) => b.startDate.localeCompare(a.startDate))[0];
 
-  if (job.startDate === newestStartDate) {
-    return 'lead';
-  }
-
-  return 'primary';
+  return job === lead ? 'lead' : 'primary';
 }
 
 export default function Experience({ data, now }: ExperienceProps) {
