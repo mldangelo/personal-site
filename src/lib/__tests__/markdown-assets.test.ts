@@ -73,6 +73,22 @@ describe('readMarkdownReferences', () => {
     ]);
   });
 
+  // The renderer reads footnote text inline, so this fence is text and the
+  // link inside it is live, while code spans stay code.
+  it('reads a footnote with inline rules, as the renderer does', () => {
+    const markdown = [
+      'Text.[^1]',
+      '',
+      '[^1]: ~~~',
+      '    [download](/downloads/private.pdf) `[code](/not-a-link.pdf)`',
+      '    ~~~',
+    ].join('\n');
+
+    expect(readMarkdownReferences(markdown)).toEqual([
+      { kind: 'link', target: '/downloads/private.pdf' },
+    ]);
+  });
+
   it('decodes a footnote reference destination once, as the renderer does', () => {
     const markdown = [
       'A claim.[^1]',

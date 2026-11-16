@@ -1,6 +1,7 @@
 import { DateSpan } from '@/components/Projects/DateRange';
 import type { Position } from '@/data/resume/work';
 import { type DateInput, formatDuration, monthsBetween } from '@/lib/career';
+import { publishedMarkdown } from '@/lib/published-markdown.mjs';
 import { smartQuotes } from '@/lib/typography';
 
 import JobSummary from './JobSummary';
@@ -56,7 +57,7 @@ export default function Job({ data, tier = 'primary', now }: JobProps) {
             <span className="job-position">{smartQuotes(position)}</span>
           </h3>
         </header>
-        {summary ? <JobSummary summary={summary} /> : null}
+        {summary ? <JobSummary summary={publishedMarkdown(summary)} /> : null}
         {highlights ? (
           <ul className="points">
             {highlights.map((highlight) => (
