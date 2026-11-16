@@ -71,6 +71,8 @@ interface ResumeWork {
   url: string;
   startDate: string;
   endDate?: string;
+  /** An extension, as nested objects allow: a role beside the main career. */
+  commitment?: 'part-time';
   summary?: string;
   highlights?: string[];
 }
@@ -242,6 +244,7 @@ function buildWork(): ResumeWork[] {
     url: position.url,
     startDate: position.startDate,
     ...(position.endDate ? { endDate: position.endDate } : {}),
+    ...(position.commitment ? { commitment: position.commitment } : {}),
     ...(position.summary
       ? { summary: toPlainText(publishedMarkdown(position.summary)) }
       : {}),

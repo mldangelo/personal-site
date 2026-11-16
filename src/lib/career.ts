@@ -22,14 +22,19 @@ export function sortPositions(positions: Position[]): Position[] {
   );
 }
 
-/** The job held now, wherever it sits in the array — never `work[0]`. */
+/**
+ * The job held now, wherever it sits in the array — never `work[0]`. The
+ * primary career first, then a side role that is still going; between jobs
+ * with neither, nothing, since a role that has ended is not held.
+ */
 export function currentPosition(positions: Position[]): Position | undefined {
-  const ordered = sortPositions(positions);
+  const ongoing = sortPositions(positions).filter(
+    (position) => !position.endDate,
+  );
 
   return (
-    ordered.find(
-      (position) => !position.endDate && position.commitment !== 'part-time',
-    ) ?? ordered[0]
+    ongoing.find((position) => position.commitment !== 'part-time') ??
+    ongoing[0]
   );
 }
 

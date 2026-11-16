@@ -28,6 +28,15 @@ describe('tierFor', () => {
     expect(tierFor(entry, [entry])).toBe('early');
   });
 
+  it.each(['International Director', 'Head of Internal Systems'])(
+    'keeps %s at full weight: not an internship',
+    (title) => {
+      expect(tierFor(role(title, '2020-01-01', '2024-01-01'), [])).toBe(
+        'primary',
+      );
+    },
+  );
+
   it('keeps the first day after the student era at full weight', () => {
     expect(tierFor(role('Engineer', '2010-01-01', '2013-01-01'), [])).toBe(
       'primary',
@@ -43,6 +52,18 @@ describe('tierFor', () => {
     const positions = [sideRole, currentJob];
 
     expect(tierFor(sideRole, positions)).toBe('primary');
+    expect(tierFor(currentJob, positions)).toBe('lead');
+  });
+
+  it('leads with one role when a side role began the same day', () => {
+    const currentJob = role('Current Job', '2026-01-01');
+    const advisor: Position = {
+      ...role('Advisor', '2026-01-01'),
+      commitment: 'part-time',
+    };
+    const positions = [advisor, currentJob];
+
+    expect(tierFor(advisor, positions)).toBe('primary');
     expect(tierFor(currentJob, positions)).toBe('lead');
   });
 });

@@ -34,6 +34,15 @@ describe('Job', () => {
     );
   });
 
+  // A side role overlaps the main one on the timeline, on paper too.
+  it('says a part-time role is one', () => {
+    renderJob({ commitment: 'part-time' });
+
+    expect(screen.getByRole('heading', { level: 3 }).textContent).toBe(
+      'Acme Corp, Senior Engineer, part-time',
+    );
+  });
+
   it('sets the range in short months and reads it aloud with "to"', () => {
     renderJob();
 
