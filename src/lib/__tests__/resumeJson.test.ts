@@ -28,6 +28,10 @@ describe('toPlainText', () => {
     ['see <a href="https://example.com" title="a > b">B</a>', 'see B'],
     ['a note<!-- not for readers --> ends', 'a note ends'],
     ['typed as vector<int> here', 'typed as vector<int> here'],
+    // Markup goes; the prose around it stays as written.
+    ['See [docs](https://example.com).', 'See docs.'],
+    ['Built **fast**-path APIs', 'Built fast-path APIs'],
+    ['first  \nsecond', 'first second'],
   ])('flattens %s', (input, expected) => {
     expect(toPlainText(input)).toBe(expected);
   });

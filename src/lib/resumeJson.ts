@@ -174,9 +174,22 @@ function textOf(nodes: MarkdownToJSX.ASTNode[]): string {
             ? inner
             : `<${node.tag}>${inner}</${node.tag}>`;
         }
+        case RuleType.breakLine:
+          return ' ';
+        // A block ends a run of prose; an inline node such as a link or
+        // emphasis sits inside one, so only blocks get space around them.
+        case RuleType.paragraph:
+        case RuleType.heading:
+        case RuleType.blockQuote:
+          return ` ${textOf(node.children)} `;
+        case RuleType.codeBlock:
+          return ` ${node.text} `;
+        case RuleType.orderedList:
+        case RuleType.unorderedList:
+          return ` ${node.items.map(textOf).join(' ')} `;
         default:
           return 'children' in node && Array.isArray(node.children)
-            ? ` ${textOf(node.children)} `
+            ? textOf(node.children)
             : '';
       }
     })
