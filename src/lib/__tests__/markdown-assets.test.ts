@@ -56,6 +56,23 @@ describe('readMarkdownReferences', () => {
     ]);
   });
 
+  it('reads the links and images in footnote text', () => {
+    const markdown = [
+      'A claim.[^1]',
+      '',
+      '[^1]: See [the paper](/downloads/paper.pdf), ![chart](/images/chart.png),',
+      '    and [the notes][notes].',
+      '',
+      '[notes]: /downloads/notes.pdf',
+    ].join('\n');
+
+    expect(readMarkdownReferences(markdown)).toEqual([
+      { kind: 'link', target: '/downloads/paper.pdf' },
+      image('/images/chart.png'),
+      { kind: 'link', target: '/downloads/notes.pdf' },
+    ]);
+  });
+
   it('ignores resource-looking text inside code', () => {
     expect(
       readMarkdownReferences(
@@ -105,21 +122,21 @@ describe('readMarkdownReferences', () => {
 describe('parseSrcset', () => {
   it.each([
     ['/a.png 1x, /b.png 960w, /c.png', ['/a.png', '/b.png', '/c.png']],
-    // A described data URL stays separate from a later local candidate.
+    // A URL runs to whitespace, so its commas are its own, and a trailing
+    // comma ends a candidate without a descriptor.
+    ['/a,b.png 1x, /c.png 2x', ['/a,b.png', '/c.png']],
     [
-      'data:image/png;base64,AAAA 1x, /local.png 2x',
+      'data:image/png;base64,AAAA, /local.png 2x',
       ['data:image/png;base64,AAAA', '/local.png'],
     ],
   ])('parses %s', (srcset, expected) => {
     expect(parseSrcset(srcset)).toEqual(expected);
   });
 
-  it.each([
-    '/one.png 1x 2x',
-    '/one.png nope',
-    '/one.png calc(1x',
-    'data:image/png;base64,AAAA, /hidden.png 2x',
-  ])('fails closed for malformed or ambiguous srcset: %s', (srcset) => {
-    expect(() => parseSrcset(srcset)).toThrow(/srcset/i);
-  });
+  it.each(['/one.png 1x 2x', '/one.png nope', '/one.png calc(1x'])(
+    'fails closed for malformed srcset: %s',
+    (srcset) => {
+      expect(() => parseSrcset(srcset)).toThrow(/srcset/i);
+    },
+  );
 });
