@@ -138,10 +138,20 @@ function plainText(nodes: MarkdownToJSX.ASTNode[]): string {
 function splitAboutMarkdown(markdown: string) {
   const intro: MarkdownToJSX.ASTNode[] = [];
   const chunks: AboutChunk[] = [];
+  let footnotes: MarkdownToJSX.ASTNode | undefined;
 
-  for (const node of parser(markdown)) {
-    // Its definitions are already resolved into the links that use them.
-    if (node.type === RuleType.refCollection) continue;
+  // Raw HTML attributes are read while parsing, so the URL rule applies here
+  // as well as when rendering.
+  for (const node of parser(markdown, { sanitizer: sanitizeUrl })) {
+    // Link definitions are already resolved into the links that use them.
+    // Footnotes are not: the collection renders their notes, so it opens the
+    // last part, and the notes close the page once.
+    if (node.type === RuleType.refCollection) {
+      if (Object.keys(node.refs).some((label) => label.startsWith('^'))) {
+        footnotes = node;
+      }
+      continue;
+    }
     if (node.type === RuleType.heading && node.level === 1) {
       const title = plainText(node.children).trim();
       if (chunks.length > 0 || title !== 'Intro') {
@@ -151,6 +161,8 @@ function splitAboutMarkdown(markdown: string) {
       (chunks.at(-1)?.nodes ?? intro).push(node);
     }
   }
+
+  if (footnotes) (chunks.at(-1)?.nodes ?? intro).unshift(footnotes);
 
   return { intro, sections: parseSections(chunks) };
 }
