@@ -108,33 +108,15 @@ deployment, plus a map of the files an agent should inspect.
 ## Commands
 
 ```bash
-# Develop
-npm run dev               # Development server at localhost:3000
-npm test                  # Vitest once; `npm run test:watch` reruns on change
-
-# Check: read-only, and what CI runs
-npm run format:check      # Prettier and Biome formatting
-npm run lint              # Biome checks
-npm run type-check        # TypeScript
-npm run test:coverage     # Vitest with the coverage provider
-npm run og:check          # Share-card ledger, then a fresh byte-for-byte render (needs network)
-npm run og:check:ledger   # The ledger half alone, offline
-npm run build             # Production static export to out/
-npm run verify-export     # Inspect the exported HTML, XML, and JSON
-npm run measure-export    # Weigh out/ against scripts/budget.json
-npm run check-reflow      # Fail if a page scrolls sideways on a phone or at 200% text (needs Chrome)
-
-# Write: these change files
-npm run format            # Fix formatting with Prettier and Biome
-npm run og                # Regenerate the site and per-post share cards and their ledger
-npm run icons             # Regenerate the favicon, app icons, manifest, and their ledger
-npm run analyze           # Build with the bundle analyzer
+npm run dev      # Start the site at localhost:3000
+npm test         # Run the tests
+npm run format   # Fix formatting
+npm run build    # Build the static site into out/
 ```
 
-The check commands, in the order the
-[definition of done](./AGENTS.md#definition-of-done) gives, are what CI runs on
-every pull request. The build runs on Linux, macOS, and Windows, and the leg
-that deploys also runs `check-reflow`.
+CI runs a few more checks on every pull request. The
+[definition of done](./AGENTS.md#definition-of-done) lists them, and a coding
+agent runs them for you.
 
 ## Deploy
 
