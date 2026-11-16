@@ -4,8 +4,14 @@ import { getWritingItems } from '@/lib/writing';
 
 export const dynamic = 'force-static';
 
+/**
+ * Text as XML 1.0 can carry it. A control character such as a vertical tab
+ * cannot be written in XML at all, even escaped, and one in any description
+ * makes the whole feed unreadable, so it is dropped; nobody sees it.
+ */
 function escapeXml(text: string): string {
   return text
+    .replace(/[^\t\n\r\u0020-\uD7FF\uE000-\uFFFD\u{10000}-\u{10FFFF}]/gu, '')
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
@@ -17,6 +23,9 @@ function formatRssDate(dateStr: string): string {
   return new Date(`${dateStr}T12:00:00Z`).toUTCString();
 }
 
+// No `lastBuildDate`: it is optional, and the newest item's date, the only
+// one the content gives, says nothing about an edit, or a backdated post
+// published later.
 export async function GET() {
   // The newest-first list `/writing` shows, less the undated guides: an RSS
   // item is dated, and its link is absolute.
@@ -39,9 +48,6 @@ export async function GET() {
     </item>`,
     )
     .join('');
-  const lastBuildDate = items[0]?.date
-    ? formatRssDate(items[0].date)
-    : new Date(0).toUTCString();
 
   const rss = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
@@ -50,7 +56,6 @@ export async function GET() {
     <link>${SITE_URL}/writing/</link>
     <description>${escapeXml(WRITING_DESCRIPTION)}</description>
     <language>en-us</language>
-    <lastBuildDate>${lastBuildDate}</lastBuildDate>
     <atom:link href="${SITE_URL}/feed.xml" rel="self" type="application/rss+xml"/>${rssItems}
   </channel>
 </rss>`;

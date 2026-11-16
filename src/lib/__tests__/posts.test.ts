@@ -30,6 +30,9 @@ describe('validatePostFrontmatterData', () => {
     [{ ...validFrontmatter, image: 'card.png' }, '"image"'],
     [{ ...validFrontmatter, image: '/card.png' }, '"imageAlt"'],
     [{ ...validFrontmatter, imageAlt: 'A card' }, '"image"'],
+    // An unread key would publish without the setting its author meant.
+    [{ ...validFrontmatter, Draft: true }, '"Draft" must be spelled "draft"'],
+    [{ ...validFrontmatter, tags: ['ai'] }, '"tags" is not a frontmatter key'],
   ])('rejects malformed frontmatter %#', (frontmatter, field) => {
     expect(() =>
       validatePostFrontmatterData(frontmatter, 'content/writing/example.md'),
