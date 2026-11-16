@@ -140,9 +140,7 @@ function splitAboutMarkdown(markdown: string) {
   const chunks: AboutChunk[] = [];
   let footnotes: MarkdownToJSX.ASTNode | undefined;
 
-  // Raw HTML attributes are read while parsing, so the URL rule applies here
-  // as well as when rendering.
-  for (const node of parser(markdown, { sanitizer: sanitizeUrl })) {
+  for (const node of parser(markdown)) {
     // Link definitions are already resolved into the links that use them.
     // Footnotes are not: the collection renders their notes, so it opens the
     // last part, and the notes close the page once.
