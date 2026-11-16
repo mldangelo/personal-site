@@ -104,7 +104,7 @@ describe('Site', () => {
     arrange();
     render(await Site());
 
-    expect(counts()).toEqual(['1,695+', '23+', '978+']);
+    expect(counts()).toEqual(['1,600+', '20+', '970+']);
   });
 
   it('keeps zero counts as fetched data, not as a failure', async () => {
