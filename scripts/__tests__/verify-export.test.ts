@@ -20,6 +20,7 @@ const RESUME = 'out/resume.json';
 const MANIFEST = 'out/manifest.json';
 const SITEMAP = 'out/sitemap.xml';
 const FEED = 'out/feed.xml';
+const LLMS = 'out/llms.txt';
 const DRAFT = 'content/writing/secret-draft.md';
 const BASE_PATH = '/personal-site';
 const CANONICAL = 'rel="canonical" href="https://example.com/about';
@@ -133,6 +134,7 @@ function createFixture({
   <url><loc>${site}about/</loc></url>
   <url><loc>${site}resume/</loc></url>
 </urlset>`,
+    [LLMS]: `# Fixture Person\n\n- [About](${site}about/)\n- [Elsewhere](https://elsewhere.example/post)\n`,
     [FEED]: `<rss xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <link>${site}</link>
@@ -226,6 +228,10 @@ describe('links, metadata, and icons', () => {
     [
       'image points at missing export: images/missing.png',
       replaceIn(HOME, 'images/photo.png', 'images/missing.png'),
+    ],
+    [
+      'llms.txt\n    URL points at missing export: /missing/',
+      replaceIn(LLMS, 'about/)', 'missing/)'),
     ],
     [
       'indexable page has 2 canonical links; expected 1',

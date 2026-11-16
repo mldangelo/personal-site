@@ -161,6 +161,7 @@ Each entry below is a rule and the trap behind it. Git history has the stories.
 ## Content
 
 - **Blog posts** are Markdown files in `content/writing/` with `title`, `date`, and `description` frontmatter; the slug is the filename. External links on `/writing` go in `src/data/writing.ts`, dated entries newest first
+- **`/llms.txt` is generated**: `app/llms.txt/route.ts` lists every route with the description from that page's own `metadata`, every post, and the writing published elsewhere, in the llms.txt format. A route in `src/data/routes.ts` with no entry in its `PAGES` map fails the build rather than appearing bare, and `verify-export` resolves its links as it does the feed's
 - **Drafts**: every read of a post goes through `isPublished` in `src/lib/posts.ts`, and `generateStaticParams` uses `getPostSlugs()`, never raw filenames.
   - `public/` ships verbatim, so draft-only screenshots and downloads live outside it. The development route uses the generic card and may reserve a fallback ratio only for a missing root-relative draft image
   - `verify-export.mjs` parses the same inline, reference-style, footnote, relative, and passive raw-HTML resource forms as the renderer, reading `srcset` as the HTML parser does, then resolves them from the post route, and fails when an asset referenced only by a draft reaches `out/`. Active raw tags and uninspectable CSS or data documents fail closed
