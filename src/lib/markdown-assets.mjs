@@ -183,6 +183,10 @@ const REFERENCE_PLACEHOLDER = 'markdown-assets:reference:';
  * definitions it may use. A definition points at a placeholder that is then
  * swapped for its target: the targets are already decoded, and writing them
  * back into Markdown would decode them a second time.
+ *
+ * The renderer reads a footnote with inline rules only, so a `~~~` line in one
+ * is text and the link after it is live. The public parser has no inline mode,
+ * so the text goes on one line after a word, where no block rule can begin.
  */
 function parseFootnotes(refs = {}) {
   const entries = Object.entries(refs);
@@ -207,7 +211,8 @@ function parseFootnotes(refs = {}) {
   return entries
     .filter(([label]) => label.startsWith('^'))
     .map(([, { target }]) => {
-      const footnote = parser(`${target}\n\n${definitions}`);
+      const inline = target.replace(/\s*\n\s*/g, ' ');
+      const footnote = parser(`x ${inline}\n\n${definitions}`);
       restore(footnote);
       return footnote;
     });

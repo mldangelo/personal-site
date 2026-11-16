@@ -55,6 +55,12 @@ const inHomeBody = (markup: string) =>
   replaceIn(HOME, '</body>', `${markup}</body>`);
 const inDraftBody = (body: string) => replaceIn(DRAFT, /$/, `\n${body}\n`);
 const inSummary = (text: string) => replaceIn(RESUME, 'Did the work.', text);
+/** The repository `package.json` names, and so its GitHub Pages address. */
+const withRepository = replaceIn(
+  'package.json',
+  '{',
+  '{"repository":{"url":"git+https://github.com/Fixture/site.git"},',
+);
 /** An exported file that only the draft's body asks for. */
 const draftAsset = (body: string, path = 'images/private.png') =>
   both(addFile(`out/${path}`), inDraftBody(body));
@@ -540,6 +546,16 @@ describe('drafts', () => {
       ],
     ),
     [
+      'draft references a publicly exported image: /images/private.png',
+      both(
+        withRepository,
+        draftAsset(
+          '![private](https://fixture.github.io/site/images/private.png)',
+        ),
+      ),
+      "a draft-only asset reached through the repository's GitHub Pages address",
+    ],
+    [
       'draft references a publicly exported link: /downloads/private-notes.pdf',
       draftAsset(
         '[private notes][notes]\n\n[notes]: /downloads/private-notes.pdf',
@@ -598,6 +614,26 @@ describe('drafts', () => {
       'a generated share card for a published post',
       addFile('out/og/writing/about.png'),
     ],
+    [
+      'a draft linking the icons every page and the manifest use',
+      inDraftBody('![icon](/favicon.ico) ![app](/images/icons/app.png)'),
+    ],
+    // With a repository configured, the GitHub Pages address is read for
+    // every reference: one that is not a web URL has none, and a file a page
+    // reaches through that address has a public owner.
+    [
+      'non-web draft references and a file a page shares through the Pages address',
+      both(
+        withRepository,
+        addFile('out/media/shared.png'),
+        inHomeBody(
+          '<img src="https://fixture.github.io/site/media/shared.png" alt="">',
+        ),
+        inDraftBody(
+          '[email](mailto:hello@example.com) ![pixel](data:image/png;base64,AAAA) ![shared](/media/shared.png)',
+        ),
+      ),
+    ],
   ]);
 
   // Post slugs are ordinary words, so a draft sharing a name with one of the
@@ -605,7 +641,16 @@ describe('drafts', () => {
   describe.each(['about', 'og', 'sitemap', 'feed', 'photo', 'index'])(
     'called "%s"',
     (draftSlug) => {
-      accepts([['the site’s own routes and assets', () => {}]], { draftSlug });
+      accepts(
+        [
+          [
+            'the site’s own routes and assets',
+            // The writing listing's payload, which a draft called `index` shares a name with.
+            addFile('out/writing/index.txt'),
+          ],
+        ],
+        { draftSlug },
+      );
     },
   );
 });
