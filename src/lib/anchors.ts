@@ -3,7 +3,7 @@ import {
   type MarkdownToJSX,
   parser,
   RuleType,
-} from 'markdown-to-jsx';
+} from 'markdown-to-jsx/react';
 
 export function createHeadingId(title: string): string {
   const slug = title

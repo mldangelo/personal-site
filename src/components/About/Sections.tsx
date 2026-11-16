@@ -1,6 +1,11 @@
 'use client';
 
-import Markdown, { type MarkdownToJSX } from 'markdown-to-jsx';
+import {
+  astToJSX,
+  type MarkdownToJSX,
+  parser,
+  RuleType,
+} from 'markdown-to-jsx/react';
 import { Children, type ReactNode } from 'react';
 import SectionNav from '@/components/Template/SectionNav';
 import { createUniqueHeadingIds } from '@/lib/anchors';
@@ -77,7 +82,7 @@ const LOG_MARKDOWN_OPTIONS: MarkdownToJSX.Options = {
 };
 
 interface AboutSection {
-  body: string;
+  nodes: MarkdownToJSX.ASTNode[];
   id: string;
   /** As a reader sees it: the heading and the section nav both print this. */
   title: string;
@@ -106,34 +111,57 @@ const sectionVariants: Record<string, string> = {
   'Websites from people I admire': 'about-section--links',
 };
 
-/** The page opens with `# Intro`, whose text runs unheaded above the sections. */
-function splitAboutMarkdown(markdown: string) {
-  const [intro, ...sections] = markdown
-    .trim()
-    .replace(/^# Intro\s*/, '')
-    .split(/\n(?=# )/);
-
-  return { intro: intro.trim(), sections: parseSections(sections) };
+interface AboutChunk {
+  nodes: MarkdownToJSX.ASTNode[];
+  title: string;
 }
 
-function parseSections(chunks: string[]): AboutSection[] {
-  const sections = chunks.map((chunk) => {
-    const [heading, ...rest] = chunk.trim().split('\n');
+/** A heading's text as authored, without its formatting. */
+function plainText(nodes: MarkdownToJSX.ASTNode[]): string {
+  return nodes
+    .map((node) => {
+      if ('text' in node && typeof node.text === 'string') return node.text;
+      if ('children' in node && Array.isArray(node.children)) {
+        return plainText(node.children);
+      }
+      return '';
+    })
+    .join('');
+}
 
-    return {
-      title: heading.replace(/^#\s+/, '').trim(),
-      body: rest.join('\n').trim(),
-    };
-  });
+/**
+ * The page as one parsed document, divided at its top-level headings. Parsing
+ * before dividing keeps a `#` line in a code fence or an HTML comment from
+ * opening a section, and lets a link use a reference defined in another one.
+ * The page opens with `# Intro`, whose content runs unheaded above the rest.
+ */
+function splitAboutMarkdown(markdown: string) {
+  const intro: MarkdownToJSX.ASTNode[] = [];
+  const chunks: AboutChunk[] = [];
 
-  const sectionIds = createUniqueHeadingIds(
-    sections.map((section) => section.title),
-  );
+  for (const node of parser(markdown)) {
+    // Its definitions are already resolved into the links that use them.
+    if (node.type === RuleType.refCollection) continue;
+    if (node.type === RuleType.heading && node.level === 1) {
+      const title = plainText(node.children).trim();
+      if (chunks.length > 0 || title !== 'Intro') {
+        chunks.push({ title, nodes: [] });
+      }
+    } else {
+      (chunks.at(-1)?.nodes ?? intro).push(node);
+    }
+  }
+
+  return { intro, sections: parseSections(chunks) };
+}
+
+function parseSections(chunks: AboutChunk[]): AboutSection[] {
+  const sectionIds = createUniqueHeadingIds(chunks.map(({ title }) => title));
 
   // The id and the variant are read from the title as authored. Only what a
   // reader sees is converted, and once, so the nav and the heading agree.
-  return sections.map(({ body, title }, index) => ({
-    body,
+  return chunks.map(({ nodes, title }, index) => ({
+    nodes,
     id: sectionIds[index],
     title: smartQuotes(title),
     variant: sectionVariants[title],
@@ -145,10 +173,8 @@ export default function AboutContent({ markdown }: AboutContentProps) {
 
   return (
     <article className="about-content">
-      {intro ? (
-        <div className="about-intro">
-          <Markdown options={MARKDOWN_OPTIONS}>{intro}</Markdown>
-        </div>
+      {intro.length > 0 ? (
+        <div className="about-intro">{astToJSX(intro, MARKDOWN_OPTIONS)}</div>
       ) : null}
       {sections.length > 0 ? (
         <SectionNav
@@ -178,15 +204,12 @@ export default function AboutContent({ markdown }: AboutContentProps) {
               </a>
             </h2>
           </div>
-          <Markdown
-            options={
-              section.variant === LOG_VARIANT
-                ? LOG_MARKDOWN_OPTIONS
-                : MARKDOWN_OPTIONS
-            }
-          >
-            {section.body}
-          </Markdown>
+          {astToJSX(
+            section.nodes,
+            section.variant === LOG_VARIANT
+              ? LOG_MARKDOWN_OPTIONS
+              : MARKDOWN_OPTIONS,
+          )}
         </section>
       ))}
     </article>

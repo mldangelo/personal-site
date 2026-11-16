@@ -33,6 +33,49 @@ function sectionNav() {
 }
 
 describe('AboutContent', () => {
+  // Each of these split the source text at a "# " line the parser would not
+  // call a heading, or rendered a section without the rest of the document.
+  it('divides the page where the parsed document has its headings', () => {
+    const { container } = render(
+      <AboutContent
+        markdown={[
+          '# Introduction',
+          '',
+          'See [the source][source].',
+          '',
+          '<!--',
+          '# Fun facts',
+          '',
+          '- A hidden fact',
+          '-->',
+          '',
+          '# Setup',
+          '',
+          '```sh',
+          '# install it',
+          'npm ci',
+          '```',
+          '',
+          '[source]: https://example.com/source',
+        ].join('\n')}
+      />,
+    );
+
+    expect(
+      within(sectionNav())
+        .getAllByRole('link')
+        .map((link) => link.textContent),
+    ).toEqual(['Introduction', 'Setup']);
+    expect(screen.getByRole('link', { name: 'the source' })).toHaveAttribute(
+      'href',
+      'https://example.com/source',
+    );
+    expect(container.querySelector('pre')).toHaveTextContent(
+      '# install it npm ci',
+    );
+    expect(container).not.toHaveTextContent(/hidden fact|-->/);
+  });
+
   it('renders the intro unheaded and gives each section its variant', () => {
     const { container } = render(<AboutContent markdown={MARKDOWN} />);
 

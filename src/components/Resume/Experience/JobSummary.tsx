@@ -1,6 +1,6 @@
 'use client';
 
-import Markdown from 'markdown-to-jsx';
+import Markdown from 'markdown-to-jsx/react';
 import type { ReactNode } from 'react';
 
 import { sanitizeUrl, smartQuotesRule } from '@/lib/markdown';

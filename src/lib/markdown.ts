@@ -1,4 +1,4 @@
-import { type MarkdownToJSX, RuleType, sanitizer } from 'markdown-to-jsx';
+import { type MarkdownToJSX, RuleType, sanitizer } from 'markdown-to-jsx/react';
 
 import { smartQuotes } from './typography';
 import { withBasePath } from './utils';
