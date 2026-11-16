@@ -161,6 +161,7 @@ Each entry below is a rule and the trap behind it. Git history has the stories.
 
 ## Content
 
+- **The README welcomes readers and forks**: lead with what the site offers, runnable setup, and where to edit it. Keep detailed agent rules here; agents discover this file themselves. Customization guidance should help people make the changes they want, without requiring a redesign or full rebrand
 - **Blog posts** are Markdown files in `content/writing/` with `title`, `date`, and `description` frontmatter; the slug is the filename. External links on `/writing` go in `src/data/writing.ts`, dated entries newest first
 - **`/llms.txt` is generated**: `app/llms.txt/route.ts` lists every route with the description from that page's own `metadata`, every post, and the writing published elsewhere, in the llms.txt format. A route in `src/data/routes.ts` with no entry in its `PAGES` map fails the build rather than appearing bare, and `verify-export` resolves its links as it does the feed's
 - **Drafts**: every read of a post goes through `isPublished` in `src/lib/posts.ts`, and `generateStaticParams` uses `getPostSlugs()`, never raw filenames.
