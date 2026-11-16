@@ -3,8 +3,7 @@ import { StrictMode } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 
-import { type ImageSize, readPostImageSizes } from '@/lib/imageSize';
-import { getPostBySlug } from '@/lib/posts';
+import type { ImageSize } from '@/lib/imageSize';
 import { withBasePath } from '@/lib/utils';
 
 import PostContent from '../PostContent';
@@ -145,6 +144,37 @@ describe('PostContent figures', () => {
   });
 });
 
+// Raw HTML in a post renders as its author wrote it.
+describe('PostContent raw HTML', () => {
+  // Its body is opaque to the Markdown checks, so it renders as text: markup
+  // inside it can neither fetch nor run.
+  it('keeps a raw code block as text, with its language', () => {
+    const html = markup(
+      '<pre><code class="language-js" style="background:url(/x.png)">const a = <b>"b"</b> &lt; c;<img src="/private.png"></code></pre>\n',
+    );
+
+    expect(html).toContain(
+      '<code class="language-js lang-js">const a = &quot;b&quot; &lt; c;</code>',
+    );
+    expect(html).toContain('js code block');
+    expect(html).not.toMatch(/style=|<img|<b>/);
+  });
+
+  it('keeps the attributes on a raw paragraph', () => {
+    expect(
+      markup('<p hidden id="note" lang="fr" dir="rtl">Bonjour</p>\n'),
+    ).toMatch(/<p hidden="" id="note" lang="fr" dir="rtl">Bonjour<\/p>/);
+  });
+
+  // Copied with curly quotes, `{"ok":true}` no longer parses as JSON.
+  it('sets quotes in prose but not in raw code', () => {
+    const html = markup('A "quote" and <code>{"ok":true}</code>.\n');
+
+    expect(html).toContain('A \u201cquote\u201d');
+    expect(html).toContain('<code>{&quot;ok&quot;:true}</code>');
+  });
+});
+
 describe('PostContent code fences', () => {
   const FENCE = '```text\nA deliberately long line\n```\n';
 
@@ -240,13 +270,18 @@ describe('PostContent heading anchors', () => {
     expect(headingIds(container.innerHTML)).toEqual(['repeat', 'repeat-2']);
   });
 
-  it('keeps the legacy ids of a published post resolving as hidden aliases', () => {
-    const post = getPostBySlug('shipping-with-claude-code');
-    if (!post) {
-      throw new Error('expected shipping-with-claude-code to be published');
-    }
-
-    const html = markup(post.content, readPostImageSizes(post.content));
+  // Headings published in an early post, whose ids the renderer then wrote
+  // itself. A heading the two schemes agree on needs no alias.
+  it('keeps the legacy ids of published headings resolving as hidden aliases', () => {
+    const html = markup(
+      [
+        '## Context',
+        '## On using `--dangerously-skip-permissions`',
+        '## Browser automation: `--chrome` for interaction, Playwright MCP for screenshots',
+        '## Plan Mode + writing plans to files',
+        '## CLAUDE.md + AGENTS.md',
+      ].join('\n\n'),
+    );
 
     expect(aliasIds(html).sort()).toEqual([
       'browser-automation---chrome-for-interaction-playwright-mcp-for-screenshots',

@@ -1,5 +1,7 @@
 import externalWriting, { type WritingEntry } from '@/data/writing';
+import { isCalendarDate } from '@/lib/post-frontmatter.mjs';
 import { getAllPosts } from '@/lib/posts';
+import { SITE_URL } from '@/lib/utils';
 
 export interface WritingItem extends WritingEntry {
   isExternal: boolean;
@@ -51,7 +53,33 @@ export function getWritingItems(): WritingItem[] {
     source: externalSource(item.url),
   }));
 
-  return [...internal, ...external].sort(compareWritingItems);
+  const items = [...internal, ...external];
+  assertDistinctDatedItems(items);
+  return items.sort(compareWritingItems);
+}
+
+/**
+ * Stops the build on an entry the feed and the lists would publish wrong: a
+ * date that does not exist, which renders as "Invalid Date" or rolls into
+ * another month, or an address listed twice, which gives two items one RSS
+ * guid. Posts are checked by their frontmatter; this covers the rest.
+ */
+function assertDistinctDatedItems(items: WritingItem[]): void {
+  const seen = new Set<string>();
+  for (const item of items) {
+    if (item.date && !isCalendarDate(item.date)) {
+      throw new Error(
+        `src/data/writing.ts: "${item.title}" has date "${item.date}"; use a real YYYY-MM-DD date`,
+      );
+    }
+    // A post is listed by its path; the feed and an external entry use the
+    // absolute address.
+    const address = item.isExternal ? item.url : `${SITE_URL}${item.url}`;
+    if (seen.has(address)) {
+      throw new Error(`Writing lists ${address} twice`);
+    }
+    seen.add(address);
+  }
 }
 
 /**

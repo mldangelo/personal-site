@@ -20,15 +20,33 @@ import { parseSiteUrl } from '../../src/lib/site-url.mjs';
 export function readSiteConfig(root, label) {
   const packagePath = resolve(root, 'package.json');
   try {
-    const { homepage } = JSON.parse(readFileSync(packagePath, 'utf8'));
+    const { homepage, repository } = JSON.parse(
+      readFileSync(packagePath, 'utf8'),
+    );
     const { origin, basePath } = parseSiteUrl(homepage);
-    return { origin, basePath };
+    return { origin, basePath, pagesAlias: pagesAddress(repository) };
   } catch (error) {
     console.error(
       `${label}: cannot read the canonical site URL from package.json: ${error.message}`,
     );
     process.exit(1);
   }
+}
+
+/**
+ * Where GitHub Pages serves the repository `package.json` names, as a host and
+ * a path prefix: `owner.github.io` and `/repo`, or no prefix for the owner's
+ * own `owner.github.io` repository. With a custom domain it redirects there,
+ * so a link through it still reaches this site's files.
+ */
+function pagesAddress(repository) {
+  const url = typeof repository === 'string' ? repository : repository?.url;
+  const [, owner, repo] =
+    /github\.com[/:]([^/]+)\/([^/]+?)(?:\.git)?\/?$/i.exec(url ?? '') ?? [];
+  if (!owner) return undefined;
+
+  const host = `${owner}.github.io`.toLowerCase();
+  return { host, pathPrefix: repo.toLowerCase() === host ? '' : `/${repo}` };
 }
 
 /** URLs always use forward slashes; `relative` uses the platform separator. */

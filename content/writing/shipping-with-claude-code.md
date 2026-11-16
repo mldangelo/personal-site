@@ -2,7 +2,7 @@
 title: What I learned shipping 1,000+ PRs with Claude Code
 date: '2026-01-03'
 description: 'Notes from using Claude Code in parallel git worktrees: Plan Mode, ultrathink, verification loops, and Chrome automation.'
-image: /images/writing/api-costs-july-2025.png
+image: /images/writing/api-costs-july-2025.webp
 imageAlt: 'Anthropic API costs for July 2025 showing $9,986.20 in token usage'
 ---
 
@@ -10,7 +10,7 @@ imageAlt: 'Anthropic API costs for July 2025 showing $9,986.20 in token usage'
 
 I spend most of my time building [Promptfoo](https://github.com/promptfoo/promptfoo), an open-source LLM evaluation tool. I was an avid Cursor user before experimenting with Claude Code earlier in 2025, but usage picked up significantly in July. By the end of that month I was spending close to $10K in API credits, just on interactive development work, not production traffic.
 
-![Anthropic API costs for July 2025 showing $9,986.20 in token usage](/images/writing/api-costs-july-2025.png)
+![Anthropic API costs for July 2025 showing $9,986.20 in token usage](/images/writing/api-costs-july-2025.webp)
 
 Anthropic gave us a generous credit grant for Promptfoo, so this didn't actually cost us anything, but I'm grateful for their support. At that usage volume, switching to a Max subscription made sense. I now run two Max subscriptions because I hit the weekly usage limits on a single account.
 
@@ -117,7 +117,7 @@ Running 6 panes in parallel lets work proceed concurrently: one agent implements
 
 In 2025 I merged 1,000+ PRs to Promptfoo:
 
-[![8,482 GitHub contributions in 2025](/images/writing/github-contributions-2025.png 'GitHub counts commits, pull requests, reviews, and issue activity here; I use the total as a rough proxy for output.')](https://github.com/mldangelo?tab=overview&from=2025-01-01&to=2025-12-31)
+[![8,482 GitHub contributions in 2025](/images/writing/github-contributions-2025.webp 'GitHub counts commits, pull requests, reviews, and issue activity here; I use the total as a rough proxy for output.')](https://github.com/mldangelo?tab=overview&from=2025-01-01&to=2025-12-31)
 
 For comparison, I had [5,396 contributions in 2024](https://github.com/mldangelo?tab=overview&from=2024-01-01&to=2024-12-31), before these workflows were mature. Same person, different tooling.
 

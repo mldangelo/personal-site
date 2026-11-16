@@ -5,6 +5,7 @@ import { parseFrontmatter } from './frontmatter.mjs';
 import { listPostFiles } from './post-files.mjs';
 
 import { validatePostFrontmatterData } from './post-frontmatter.mjs';
+import { publishedMarkdown } from './published-markdown.mjs';
 
 interface PostFrontmatter {
   title: string;
@@ -59,7 +60,7 @@ function readPost({
     path.relative(process.cwd(), fullPath),
   ) as PostFrontmatter;
 
-  return { ...frontmatter, slug, content };
+  return { ...frontmatter, slug, content: publishedMarkdown(content) };
 }
 
 /**

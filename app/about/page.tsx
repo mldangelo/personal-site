@@ -6,6 +6,7 @@ import PageWrapper from '@/components/Template/PageWrapper';
 import { aboutMarkdown } from '@/data/about';
 import profile from '@/data/profile.json';
 import { createPageMetadata } from '@/lib/metadata';
+import { publishedMarkdown } from '@/lib/published-markdown.mjs';
 import { profilePageNode, sectionPageNodes } from '@/lib/schema';
 import { AUTHOR_NAME } from '@/lib/utils';
 
@@ -32,7 +33,7 @@ export default function AboutPage() {
         <header className="about-header">
           <h1 className="page-title">About</h1>
         </header>
-        <AboutContent markdown={aboutMarkdown} />
+        <AboutContent markdown={publishedMarkdown(aboutMarkdown)} />
       </section>
     </PageWrapper>
   );
