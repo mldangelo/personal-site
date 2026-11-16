@@ -5,6 +5,12 @@ import EmailLink from '../../Contact/EmailLink';
 
 const [localPart] = profile.email.split('@');
 
+/** An address as a `mailto:` URL carries it. */
+const mailto = (address: string) => {
+  const [local, domain] = address.split('@');
+  return `${encodeURIComponent(local)}@${domain}`;
+};
+
 /** Far enough in to be typing out a long alias, past the opening holds. */
 const MID_ALIAS_MS = 9000;
 /** Longer than one full cycle of every message. */
@@ -48,8 +54,25 @@ describe('EmailLink', () => {
       const link = screen.getByRole('link', {
         name: `Email ${profile.email}`,
       });
-      expect(link).toHaveAttribute('href', `mailto:${profile.email}`);
+      expect(link).toHaveAttribute('href', `mailto:${mailto(profile.email)}`);
     }
+  });
+
+  // RFC 6068: unencoded, a `#` would start a fragment and a `?` the headers.
+  it('keeps reserved characters in the address it opens', async () => {
+    vi.resetModules();
+    vi.doMock('@/data/profile.json', () => ({
+      default: { ...profile, email: 'hi#notes?x@example.com' },
+    }));
+    const { default: ForkLink } = await import('../../Contact/EmailLink');
+
+    render(<ForkLink />);
+
+    expect(screen.getByRole('link')).toHaveAttribute(
+      'href',
+      'mailto:hi%23notes%3Fx@example.com',
+    );
+    vi.doUnmock('@/data/profile.json');
   });
 
   // An empty message for a single tick would snap the prefix back to the real
@@ -89,6 +112,41 @@ describe('EmailLink', () => {
     fireEvent.mouseLeave(wrapper);
     advance(500);
     expect(prefix()).not.toBe(paused);
+  });
+
+  // The visible name of a focused link is the address it opens, and the
+  // pointer leaving does not restart the animation under keyboard focus.
+  it('shows and holds the real address while the link has focus', () => {
+    const { container } = render(<EmailLink />);
+    const wrapper = container.firstElementChild as HTMLElement;
+    const link = screen.getByRole('link');
+    advance(MID_ALIAS_MS);
+    expect(prefix()).not.toBe(localPart);
+
+    act(() => link.focus());
+    fireEvent.mouseEnter(wrapper);
+    fireEvent.mouseLeave(wrapper);
+    advance(2000);
+    expect(prefix()).toBe(localPart);
+
+    act(() => link.blur());
+    advance(500);
+    expect(prefix()).not.toBe(localPart);
+  });
+
+  it('copies the real address whatever alias is showing', () => {
+    render(<EmailLink />);
+    advance(MID_ALIAS_MS);
+    const link = screen.getByRole('link');
+    window.getSelection()?.selectAllChildren(link);
+
+    const clipboardData = { setData: vi.fn() };
+    fireEvent.copy(link, { clipboardData });
+
+    expect(clipboardData.setData).toHaveBeenCalledWith(
+      'text/plain',
+      profile.email,
+    );
   });
 
   it('stays settled once the animation completes, even after a hover', () => {

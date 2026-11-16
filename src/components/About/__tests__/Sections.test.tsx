@@ -1,4 +1,5 @@
 import { render, screen, within } from '@testing-library/react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
 
 import { aboutMarkdown } from '@/data/about';
@@ -127,6 +128,14 @@ describe('AboutContent', () => {
     expect(sections[0]).toHaveClass('about-section--log');
     expect(sections[1]).toHaveClass('about-section--compact');
     expect(sections[2]).toHaveClass('about-section--links');
+  });
+
+  // Without scripts, a page opened at a later section would otherwise claim
+  // to be on the first.
+  it('marks no section current until the page can see where it is', () => {
+    expect(
+      renderToStaticMarkup(<AboutContent markdown={aboutMarkdown} />),
+    ).not.toContain('aria-current');
   });
 
   it('pairs each real section with a nav link and marks the first current', () => {

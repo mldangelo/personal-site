@@ -14,7 +14,8 @@ export const metadata: Metadata = createPageMetadata({
 
 export default function ContactPage() {
   return (
-    <PageWrapper hideFooter>
+    // The page is the contact details, so its footer keeps only the links.
+    <PageWrapper footer="links">
       <section className="contact-page">
         <h1 className="page-title">Get in touch</h1>
         <EmailLink />

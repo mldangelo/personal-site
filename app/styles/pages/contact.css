@@ -52,6 +52,11 @@
   color: var(--color-fg-bold);
 }
 
+/* Takes the alias's place on paper; see print.css. */
+.contact-email-print {
+  display: none;
+}
+
 /* Where the whole address is wider than its column, as at 200% text on a
    phone, it stacks: the alias on one row and the domain under it, breaking
    only before a dot. At `--text-md`, the domain's name ("@mldangelo") still

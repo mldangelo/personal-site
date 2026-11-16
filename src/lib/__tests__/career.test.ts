@@ -79,12 +79,20 @@ describe('currentPosition', () => {
       'the primary career over an open-ended side role',
       [sideFund, role('Found', '2022-01-01')],
     ],
-    [
-      'the most recent involvement between jobs',
-      [sideFund, role('Found', '2022-01-01', '2023-01-01')],
-    ],
   ])('finds %s', (_, positions) => {
     expect(currentPosition(positions)?.name).toBe('Found');
+  });
+
+  // Between jobs, the footer and the Person data must not name the employer
+  // just left: the side role still going is the one held.
+  it('falls back to an ongoing side role, never a role that has ended', () => {
+    expect(
+      currentPosition([sideFund, role('Left', '2022-01-01', '2026-01-01')])
+        ?.name,
+    ).toBe('Side fund');
+    expect(
+      currentPosition([role('Left', '2022-01-01', '2026-01-01')]),
+    ).toBeUndefined();
   });
 
   it('reports nothing for an empty career rather than throwing', () => {

@@ -75,6 +75,16 @@
     min-height: 0;
   }
 
+  /* A page printed mid-animation would carry a joke alias. The real local
+     part takes the alias's grid cell instead. */
+  .contact-email-prefix {
+    display: none;
+  }
+
+  .contact-email-print {
+    display: inline;
+  }
+
   /* Contact details belong on a printed resume. Rendered as real markup in
      ResumePage rather than CSS content, so the line is selectable, linkable,
      and sourced from the same profile and contact data as the screen UI. */
@@ -279,12 +289,6 @@
 
   .stat-table-value {
     font-size: 14pt;
-  }
-
-  /* Both inks print black, so on paper there is no fainter tone for the
-     legend's second sentence to explain. The order it names still holds. */
-  .skill-tier-legend-tone {
-    display: none;
   }
 
   .skills .skill-tier-legend {

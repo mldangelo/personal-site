@@ -23,6 +23,7 @@ type ReadoutStyle = CSSProperties & {
  * React always owns `initial`; the hook upgrades the text node in place while
  * the page is visible. The note line stays mounted so hydration does not move
  * later rows, and it states "Live" whenever the amber signal is active.
+ * Print shows a second, React-owned copy of the snapshot instead.
  */
 export default function LiveAge({ initial, note, precision }: LiveAgeProps) {
   const { ref, live } = useLiveAge<HTMLSpanElement>(precision, initial);
@@ -41,6 +42,12 @@ export default function LiveAge({ initial, note, precision }: LiveAgeProps) {
         {initial}
       </span>
       <span className="stat-readout-note">{live ? 'Live' : note}</span>
+      {/* Paper cannot tick, so it gets the dated snapshot whatever the screen
+          shows; the timer writes only to the span above. */}
+      <span className="stat-readout-print" aria-hidden="true">
+        {initial}
+        <span className="stat-readout-note">{note}</span>
+      </span>
     </>
   );
 }

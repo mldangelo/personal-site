@@ -19,4 +19,11 @@ describe('isActiveRoute', () => {
     expect(isActiveRoute('/about', '/')).toBe(false);
     expect(isActiveRoute(null, '/')).toBe(false);
   });
+
+  // GitHub Pages serves a page's file by name as well as by its directory.
+  it('reads a page opened by its file name as that page', () => {
+    expect(isActiveRoute('/index.html', '/')).toBe(true);
+    expect(isActiveRoute('/about/index.html', '/about')).toBe(true);
+    expect(isActiveRoute('/about/index.html', '/')).toBe(false);
+  });
 });
