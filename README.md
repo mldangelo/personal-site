@@ -2,135 +2,130 @@
 
 [![CI status](https://github.com/mldangelo/personal-site/actions/workflows/node.js.yml/badge.svg?branch=main)](https://github.com/mldangelo/personal-site/actions/workflows/node.js.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
-[![GitHub Stars](https://img.shields.io/github/stars/mldangelo/personal-site?style=social)](https://github.com/mldangelo/personal-site)
-[![GitHub Forks](https://img.shields.io/github/forks/mldangelo/personal-site?style=social)](https://github.com/mldangelo/personal-site/network/members)
 
-The source for [mldangelo.com](https://mldangelo.com), a portfolio, résumé,
-project archive, and writing site built with
-[Next.js](https://nextjs.org/), [React](https://react.dev/),
-[TypeScript](https://www.typescriptlang.org/), and
-[Tailwind CSS](https://tailwindcss.com/).
+This repository contains the source for [mldangelo.com](https://mldangelo.com),
+Michael D'Angelo's portfolio, résumé, and blog. It uses [Next.js](https://nextjs.org/),
+[React](https://react.dev/), [TypeScript](https://www.typescriptlang.org/), and
+[Tailwind CSS](https://tailwindcss.com/) and builds to static files hosted on GitHub Pages.
 
-The architecture is reusable and MIT licensed. The content and visual design
-are personal, so a fork needs a full rebrand.
+You're welcome to use it as a starting point for your own site or reuse parts
+of it in another project.
 
-**[Visit the live site →](https://mldangelo.com)**
+[Live site](https://mldangelo.com) · [Get started](#get-started) · [Customize](#customize)
 
-## What is here
+## Features
 
-- A statically exported Next.js 16 site deployed to GitHub Pages.
-- A responsive light/dark design system built from semantic CSS tokens.
-- Markdown writing with drafts, RSS, and page metadata.
-- A résumé that prints in full and is also published as JSON Resume.
-- Tests for components, content, metadata, and the final static export.
-
-## How the documentation is organized
-
-The documentation is written for coding agents and the people who direct them.
-Most agents read [AGENTS.md](./AGENTS.md) automatically; Claude Code reads
-`CLAUDE.md`, which imports it. So every agent works from one set of rules, and
-many of those rules are also enforced by a test or a check on the built site,
-so a forgotten rule fails CI instead of shipping.
-
-| To                                        | Read                                                                                                                       |
-| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| Change anything, with or without an agent | [AGENTS.md](./AGENTS.md): what needs your approval, the definition of done, and every rule with the trap behind it         |
-| Fork and rebrand the site                 | [docs/adapting-guide.md](./docs/adapting-guide.md): the inputs to gather, copyable requests, and a map of personal details |
-| Open a pull request                       | [docs/contributing.md](./docs/contributing.md)                                                                             |
-| Understand the design                     | [docs/design-goals.md](./docs/design-goals.md)                                                                             |
-| Report a vulnerability                    | [SECURITY.md](./SECURITY.md)                                                                                               |
+- Responsive layouts with light and dark themes.
+- Markdown posts with draft previews, RSS, and a sitemap.
+- Generated social cards and page metadata.
+- A printable résumé with a JSON Resume export.
+- Pages for projects, talks, and writing published elsewhere.
+- Automated checks for content, links, export size, and layout overflow.
 
 ## Get started
 
-### With a coding agent
+You'll need [Git](https://git-scm.com/) and [Node.js](https://nodejs.org/) with npm.
+Use the Node version in [`.nvmrc`](./.nvmrc); supported versions are listed in
+[`package.json`](./package.json) under `engines.node`. If you use
+[nvm](https://github.com/nvm-sh/nvm), run `nvm install` after cloning.
 
-Open your fork in a coding agent and ask:
-
-```text
-Read AGENTS.md, use the Node version in .nvmrc, install the locked
-dependencies, and start the development server. Do not change the site yet.
-Tell me the local URL and report any setup failure with its exact output.
-```
-
-### Manual setup
-
-With [GitHub CLI](https://cli.github.com/) and
-[nvm](https://github.com/nvm-sh/nvm) installed:
+To make your own site, [fork this repository](https://github.com/mldangelo/personal-site/fork)
+and use your fork's URL in the clone command. To try this version locally:
 
 ```bash
-gh repo fork mldangelo/personal-site --clone
+git clone https://github.com/mldangelo/personal-site.git
 cd personal-site
-nvm install
 npm ci
 npm run dev
 ```
 
-If you use another version manager, choose a release accepted by `engines.node`
-in `package.json`.
+Open [localhost:3000](http://localhost:3000). The site updates as you save changes.
 
 ### GitHub Codespaces
 
-1. Click **Fork** at the top of this page.
-2. In your fork, click **Code**, choose **Codespaces**, then create a codespace.
-3. Run:
+In your fork, select **Code → Codespaces → Create codespace**, then run
+`nvm install`, `npm ci`, and `npm run dev`. Open the forwarded port 3000 to
+preview the site in your browser.
 
-```bash
-nvm install
-npm ci
-npm run dev
-```
+## Customize
 
-Codespaces provides the tools, so you do not need to install them locally.
+Edit content in Markdown and the files under `src/data/`. Start with the part
+you want to change:
 
-## Adapt it with a coding agent
+| To change                       | Start here                                                                                         |
+| ------------------------------- | -------------------------------------------------------------------------------------------------- |
+| Profile and contact details     | [`src/data/profile.json`](./src/data/profile.json), [`src/data/contact.ts`](./src/data/contact.ts) |
+| Homepage introduction           | [`src/components/Template/Hero.tsx`](./src/components/Template/Hero.tsx)                           |
+| About page and résumé           | [`src/data/about.ts`](./src/data/about.ts), [`src/data/resume/`](./src/data/resume/)               |
+| Projects and talks              | [`src/data/projects.ts`](./src/data/projects.ts), [`src/data/speaking.ts`](./src/data/speaking.ts) |
+| Blog posts and external writing | [`content/writing/`](./content/writing/), [`src/data/writing.ts`](./src/data/writing.ts)           |
+| Colors, typography, and layout  | [`app/styles/`](./app/styles/), with shared values in [`tokens/`](./app/styles/tokens/)            |
+| Navigation                      | [`src/data/routes.ts`](./src/data/routes.ts)                                                       |
 
-When you are ready to customize the site, gather the inputs the
-[adapting guide](./docs/adapting-guide.md#gather-the-inputs) lists: your
-résumé, profile details, links, images, and intended site URL. Then try:
+The [customization guide](./docs/adapting-guide.md) covers profile details used
+across pages, adding posts, and regenerating icons and social cards.
+
+### With a coding agent
+
+You can also open the repository in your preferred coding agent. Paste your résumé
+into the chat, attach a résumé file, or share a link to your résumé or LinkedIn
+profile. Include any project links you want featured. For example:
 
 ```text
-Read AGENTS.md and docs/adapting-guide.md, set up the repository, then rebrand
-this fork for [NAME] with the details and assets I provide. Work on a topic
-branch and preserve the current routes and design unless I say otherwise.
-Inventory the existing posts, external writing, résumé, projects, and talks
-before changing the shared identity. Do not relabel that content as mine. Ask
-whether unmatched personal content should keep its original attribution, be
-replaced, or be removed. Use the guide's reference map to update every identity
-surface and generated asset. Run the guide's audit search and the definition of
-done in AGENTS.md. Do not commit, push, merge, change GitHub settings, create
-secrets, or modify DNS. Report the external steps that remain.
+Update this site's bio, résumé, and projects using my résumé or LinkedIn
+profile and any extra details I provide. Follow docs/adapting-guide.md to update
+related content, and keep the current design. Ask me about missing details or
+links you can't access, and run the project checks.
+[Paste your résumé or add files and links here.]
 ```
 
-The **[adapting guide](./docs/adapting-guide.md)** has focused requests for
-writing, the résumé and projects, feature removal, visual changes, and
-deployment, plus a map of the files an agent should inspect.
+The guide includes [more example requests](./docs/adapting-guide.md#copyable-requests)
+for writing, visual changes, and deployment.
 
 ## Commands
 
-```bash
-npm run dev      # Start the site at localhost:3000
-npm test         # Run the tests
-npm run format   # Fix formatting
-npm run build    # Build the static site into out/
-```
+| Command              | What it does                      |
+| -------------------- | --------------------------------- |
+| `npm run dev`        | Start the development server      |
+| `npm test`           | Run the test suite                |
+| `npm run test:watch` | Rerun tests as files change       |
+| `npm run format`     | Format code, Markdown, and CSS    |
+| `npm run lint`       | Check code with Biome             |
+| `npm run type-check` | Check TypeScript types            |
+| `npm run build`      | Build the static site into `out/` |
 
-CI runs a few more checks on every pull request. The
-[definition of done](./AGENTS.md#definition-of-done) lists them, and a coding
-agent runs them for you.
+The [contributing guide](./docs/contributing.md#validate-the-change) covers the
+full validation process, including checks on the built site.
 
 ## Deploy
 
-Pushes to `main` deploy the same static build that CI validates. The site's
-address is one setting, `homepage` in `package.json`: a fork published at
-`https://YOUR-USER.github.io/personal-site/` sets that and nothing else. See the
-[adapting guide](./docs/adapting-guide.md#deployment-reference) for Pages and
-domain setup.
+The included workflow builds and deploys to GitHub Pages after checks pass on
+`main`. To set up a fork:
+
+1. Set `homepage` in `package.json` to your public URL, including a trailing
+   slash: `https://YOUR-USER.github.io/YOUR-REPO/` for a project site, or your
+   custom domain.
+2. Remove `public/CNAME`, which contains the original site's domain.
+3. Enable workflows in your fork's **Actions** tab, and select **GitHub Actions**
+   under **Settings → Pages → Build and deployment → Source**.
+4. Commit your changes to a branch and merge a pull request into `main` to deploy.
+
+The [deployment guide](./docs/adapting-guide.md#deployment-reference) covers
+custom domains and other static hosts. For another host, set `homepage` to its
+public URL, build with `npm run build`, and publish `out/`.
 
 ## Contributing
 
-See the [contributing guide](./docs/contributing.md) for setup, branch and commit
-conventions, validation, and pull request expectations.
+Questions, bug reports, and improvements to the code or documentation are welcome.
+Check the [existing issues](https://github.com/mldangelo/personal-site/issues)
+before opening a new one. For a bug report, include steps to reproduce it,
+what you expected, and your Node.js version.
+
+The [contributing guide](./docs/contributing.md) explains how to prepare a pull
+request. For larger changes, open an issue to discuss the approach first; the
+[design goals](./docs/design-goals.md) provide context. Report vulnerabilities
+privately using the instructions in [SECURITY.md](./SECURITY.md).
 
 ## License
 
-[MIT](./LICENSE). Use it however you want.
+Licensed under the [MIT License](./LICENSE).

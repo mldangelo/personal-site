@@ -40,9 +40,9 @@ content with its original attribution, replace it, or remove the feature.
 
 ## Copyable requests
 
-Use the full rebrand prompt in the
-[README](../README.md#adapt-it-with-a-coding-agent) for a first pass. For a
-smaller change, copy one of these.
+Start with the example in the
+[README](../README.md#with-a-coding-agent), or copy a request below for a
+specific change.
 
 ### Manage writing
 
