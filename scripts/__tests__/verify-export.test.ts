@@ -349,6 +349,37 @@ describe('at a repository-site base path', () => {
   );
 });
 
+// Drafts are written root-relative, like published posts. Under a base path
+// their targets resolve where the renderer puts them, not at the origin root.
+describe('drafts under a base path', () => {
+  rejects(
+    [
+      [
+        'draft references a publicly exported image: /personal-site/images/private.png',
+        draftAsset('![private](/images/private.png)'),
+        'a draft-only image written root-relative',
+      ],
+    ],
+    { basePath: BASE_PATH },
+  );
+
+  accepts(
+    [
+      [
+        'links to public pages, shared assets, and absent private files',
+        inDraftBody(
+          [
+            '[About](/about/)',
+            '![shared](/images/photo.png)',
+            '![kept outside public](/images/not-published.png)',
+          ].join('\n'),
+        ),
+      ],
+    ],
+    { basePath: BASE_PATH },
+  );
+});
+
 // A submit control can override a valid form destination, so both attributes are
 // checked at root and repository-site deployments.
 describe.each(['', BASE_PATH])('form targets at base path "%s"', (basePath) => {
