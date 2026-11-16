@@ -269,6 +269,10 @@
   display: block;
 }
 
+.prose-figure-full {
+  cursor: zoom-in;
+}
+
 /* A caption is a sentence, so it is set in the reading face, a size down. */
 .prose-figcaption {
   /* The figure may be wider than the reading measure; its caption is still

@@ -107,6 +107,16 @@ describe('PostContent figures', () => {
     }
   });
 
+  it('links a local figure to its file, unless it already links elsewhere', () => {
+    expect(markup('Intro.\n\n![Alt](/og.png)\n')).toContain(
+      '<a href="/og.png" class="prose-figure-full"><img',
+    );
+
+    const linked = markup('Intro.\n\n[![Alt](/og.png)](https://example.com)\n');
+    expect(linked).toContain('<a href="https://example.com">');
+    expect(linked).not.toContain('prose-figure-full');
+  });
+
   // A `src` is not an image: promoting one sends it to the build-time sizer,
   // which only measures Markdown image syntax, and `next build` fails.
   it('leaves a standalone raw-HTML embed alone', () => {
