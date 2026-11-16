@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import { parseFrontmatter } from './frontmatter.mjs';
+import { listPostFiles } from './post-files.mjs';
 
 import { validatePostFrontmatterData } from './post-frontmatter.mjs';
 
@@ -40,24 +41,14 @@ function isPublished(post: Post): boolean {
   return !post.draft || process.env.NODE_ENV === 'development';
 }
 
-/** Every Markdown filename, drafts included. Internal to this module. */
-function readAllSlugs(): string[] {
-  if (!fs.existsSync(postsDirectory)) {
-    return [];
-  }
-  return fs
-    .readdirSync(postsDirectory)
-    .filter((file) => file.endsWith('.md'))
-    .map((file) => file.replace(/\.md$/, ''));
-}
-
 /** Reads a post off disk without considering draft status. */
-function readPost(slug: string): Post | null {
-  if (!isSafeSlug(slug)) {
-    return null;
-  }
-
-  const fullPath = path.join(postsDirectory, `${slug}.md`);
+function readPost({
+  slug,
+  path: fullPath,
+}: {
+  slug: string;
+  path: string;
+}): Post {
   const fileContents = fs.readFileSync(fullPath, 'utf8');
   const { data, content } = parseFrontmatter(fileContents);
   // A TypeScript assertion on parsed YAML does not protect a static build:
@@ -69,10 +60,6 @@ function readPost(slug: string): Post | null {
   ) as PostFrontmatter;
 
   return { ...frontmatter, slug, content };
-}
-
-function isSafeSlug(slug: string): boolean {
-  return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug);
 }
 
 /**
@@ -98,9 +85,8 @@ export function getPostBySlug(slug: string): Post | null {
 }
 
 function readPublishedPosts(): Post[] {
-  return readAllSlugs()
+  return listPostFiles(postsDirectory)
     .map(readPost)
-    .filter((post): post is Post => post !== null)
     .filter(isPublished)
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
