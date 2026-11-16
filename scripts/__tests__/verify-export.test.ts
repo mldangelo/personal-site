@@ -55,6 +55,12 @@ const inHomeBody = (markup: string) =>
   replaceIn(HOME, '</body>', `${markup}</body>`);
 const inDraftBody = (body: string) => replaceIn(DRAFT, /$/, `\n${body}\n`);
 const inSummary = (text: string) => replaceIn(RESUME, 'Did the work.', text);
+/** The repository `package.json` names, and so its GitHub Pages address. */
+const withRepository = replaceIn(
+  'package.json',
+  '{',
+  '{"repository":{"url":"git+https://github.com/Fixture/site.git"},',
+);
 /** An exported file that only the draft's body asks for. */
 const draftAsset = (body: string, path = 'images/private.png') =>
   both(addFile(`out/${path}`), inDraftBody(body));
@@ -535,11 +541,7 @@ describe('drafts', () => {
     [
       'draft references a publicly exported image: /images/private.png',
       both(
-        replaceIn(
-          'package.json',
-          '{',
-          '{"repository":{"url":"git+https://github.com/Fixture/site.git"},',
-        ),
+        withRepository,
         draftAsset(
           '![private](https://fixture.github.io/site/images/private.png)',
         ),
@@ -608,6 +610,22 @@ describe('drafts', () => {
     [
       'a draft linking the icons every page and the manifest use',
       inDraftBody('![icon](/favicon.ico) ![app](/images/icons/app.png)'),
+    ],
+    // With a repository configured, the GitHub Pages address is read for
+    // every reference: one that is not a web URL has none, and a file a page
+    // reaches through that address has a public owner.
+    [
+      'non-web draft references and a file a page shares through the Pages address',
+      both(
+        withRepository,
+        addFile('out/media/shared.png'),
+        inHomeBody(
+          '<img src="https://fixture.github.io/site/media/shared.png" alt="">',
+        ),
+        inDraftBody(
+          '[email](mailto:hello@example.com) ![pixel](data:image/png;base64,AAAA) ![shared](/media/shared.png)',
+        ),
+      ),
     ],
   ]);
 

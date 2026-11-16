@@ -69,10 +69,10 @@ const {
  */
 function throughPagesAlias(url) {
   const alias = SITE.pagesAlias;
-  const prefix = alias?.pathPrefix.toLowerCase();
-  const path = url?.pathname.toLowerCase();
+  if (!url || !alias) return url;
+  const prefix = alias.pathPrefix.toLowerCase();
+  const path = url.pathname.toLowerCase();
   if (
-    !alias ||
     url.host.toLowerCase() !== alias.host ||
     (prefix && path !== prefix && !path.startsWith(`${prefix}/`))
   ) {
@@ -246,7 +246,9 @@ function hasCanonicalPathFormat(raw, url) {
 }
 
 function validateInternalTarget(raw, source, label) {
-  const url = parseHttpUrl(raw, source.route, source.relativePath, label);
+  const url = throughPagesAlias(
+    parseHttpUrl(raw, source.route, source.relativePath, label),
+  );
   if (!url || url.origin !== SITE_ORIGIN) return;
 
   if (isOutsideBasePath(url, source.relativePath, label, raw)) return;
@@ -452,7 +454,9 @@ for (const record of records) {
     ['name', 'twitter:image'],
   ]) {
     for (const image of metaValues(html, key, name)) {
-      const imageUrl = parseHttpUrl(image, route, relativePath, name);
+      const imageUrl = throughPagesAlias(
+        parseHttpUrl(image, route, relativePath, name),
+      );
       if (imageUrl?.origin !== SITE_ORIGIN) continue;
       if (exportedFileExists(imageUrl.pathname)) {
         publicPageAssets.add(imageUrl.pathname);
