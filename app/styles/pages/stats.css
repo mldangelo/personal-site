@@ -126,10 +126,27 @@
   color: var(--color-fg-light);
 }
 
-/* A printed table stays whole rather than leaving rows overleaf. */
+/* Shown only on paper, in place of the value and note above it. */
+.stat-readout-print {
+  display: none;
+}
+
 @media print {
+  /* A printed table stays whole rather than leaving rows overleaf. */
   .stat-table {
     break-inside: avoid;
+  }
+
+  /* A page printed while the age ticks would freeze an eleven-decimal value
+     over the word "Live". Paper gets the dated snapshot. */
+  .stat-readout-value,
+  .stat-readout-note {
+    display: none;
+  }
+
+  .stat-readout-print,
+  .stat-readout-print .stat-readout-note {
+    display: block;
   }
 }
 

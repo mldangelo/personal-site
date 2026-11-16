@@ -10,8 +10,35 @@ import { AUTHOR_NAME } from '@/lib/utils';
 
 import Portrait from './Portrait';
 
-export default function Footer() {
+interface FooterProps {
+  /** Only the site's routes: for a page that already shows the rest. */
+  linksOnly?: boolean;
+}
+
+export default function Footer({ linksOnly = false }: FooterProps) {
   const current = currentPosition(work);
+
+  // Every route, including the ones the header leaves out. Without scripts it
+  // is the only way around the site on a phone, whose menu needs them.
+  const siteLinks = (
+    <nav className="footer-links" aria-label="Site">
+      {routes
+        .filter((route) => !route.index)
+        .map((route) => (
+          <Link key={route.path} href={route.path}>
+            {route.label}
+          </Link>
+        ))}
+    </nav>
+  );
+
+  if (linksOnly) {
+    return (
+      <footer className="site-footer-new">
+        <div className="footer-content">{siteLinks}</div>
+      </footer>
+    );
+  }
 
   return (
     <footer className="site-footer-new">
@@ -40,17 +67,7 @@ export default function Footer() {
         </div>
 
         <div className="footer-right">
-          {/* Every route, including the ones the header leaves out. */}
-          <nav className="footer-links" aria-label="Site">
-            {routes
-              .filter((route) => !route.index)
-              .map((route) => (
-                <Link key={route.path} href={route.path}>
-                  {route.label}
-                </Link>
-              ))}
-          </nav>
-
+          {siteLinks}
           <ContactIcons />
         </div>
       </div>
