@@ -9,29 +9,20 @@
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, resolve, sep } from 'node:path';
 
+import { parseSiteUrl } from '../../src/lib/site-url.mjs';
+
 /**
- * `label` prefixes the failure message so the caller is identifiable in CI
- * logs. Exits rather than throwing: every caller is a build gate.
+ * The site URL from `package.json` `homepage`, through the parser the site
+ * itself uses. `label` prefixes the failure message so the caller is
+ * identifiable in CI logs. Exits rather than throwing: every caller is a build
+ * gate.
  */
 export function readSiteConfig(root, label) {
   const packagePath = resolve(root, 'package.json');
   try {
     const { homepage } = JSON.parse(readFileSync(packagePath, 'utf8'));
-    const url = new URL(homepage);
-    if (
-      url.protocol !== 'https:' ||
-      url.search ||
-      url.hash ||
-      !url.pathname.endsWith('/')
-    ) {
-      throw new Error(
-        'homepage must be an HTTPS URL with a trailing slash and no query/hash',
-      );
-    }
-
-    const basePath =
-      url.pathname === '/' ? '' : url.pathname.replace(/\/+$/, '');
-    return { origin: url.origin, basePath };
+    const { origin, basePath } = parseSiteUrl(homepage);
+    return { origin, basePath };
   } catch (error) {
     console.error(
       `${label}: cannot read the canonical site URL from package.json: ${error.message}`,

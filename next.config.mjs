@@ -1,8 +1,20 @@
+import { readFileSync } from 'node:fs';
+
 import bundleAnalyzer from '@next/bundle-analyzer';
+
+import { parseSiteUrl } from './src/lib/site-url.mjs';
+
+const { homepage } = JSON.parse(
+  readFileSync(new URL('./package.json', import.meta.url), 'utf8'),
+);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'export',
+
+  // `/repo` when `homepage` is a project site such as
+  // `https://user.github.io/repo/`, and empty at a root URL.
+  basePath: parseSiteUrl(homepage).basePath,
 
   // Hostname patterns, not origins: lets a phone on the LAN load the dev server.
   allowedDevOrigins: ['192.168.*.*'],
@@ -24,9 +36,6 @@ const nextConfig = {
   },
 };
 
-// Keep the default export as a direct config identifier. GitHub's
-// configure-pages action edits this object before repository-site builds to
-// inject their basePath; it cannot see through a wrapping function call.
 if (process.env.ANALYZE === 'true') {
   Object.assign(nextConfig, bundleAnalyzer({ enabled: true })(nextConfig));
 }

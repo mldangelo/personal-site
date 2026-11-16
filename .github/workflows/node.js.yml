@@ -148,18 +148,33 @@ jobs:
           fi
           echo "Deploy candidate Node $wanted matches .nvmrc."
 
-      # This matrix entry becomes the deployment candidate on main. Pages
-      # configuration has to run before Next builds so repository-site forks
-      # receive their basePath in generated links and assets.
-      - name: Configure GitHub Pages build
+      # This matrix entry becomes the deployment candidate on main. `homepage`
+      # in package.json is the site's one public URL: Next's base path and
+      # every published address derive from it. Reading the Pages settings
+      # first fails the deployment, with the fix, when the two disagree, as
+      # in a fork that still names the upstream site.
+      - name: Read GitHub Pages settings
+        id: pages
         if: >-
           matrix.os == 'ubuntu-latest' &&
           matrix.node-version == env.DEPLOY_NODE &&
           github.ref == 'refs/heads/main'
         uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6
         with:
-          static_site_generator: next
           enablement: false
+
+      - name: Check homepage is the GitHub Pages URL
+        if: steps.pages.outcome == 'success'
+        run: node scripts/check-pages-url.mjs
+        env:
+          PAGES_URL: ${{ steps.pages.outputs.base_url }}
+
+      # The other Linux leg builds the site as a fork publishes it at
+      # https://USER.github.io/REPO/, so the export gates below fail on any
+      # address that misses the base path. `homepage` is all it changes.
+      - name: Use a project-site URL
+        if: matrix.os == 'ubuntu-latest' && matrix.node-version != env.DEPLOY_NODE
+        run: npm pkg set homepage=https://example.github.io/personal-site/
 
       # Stats use the public API anonymously, falling back to last-known floors
       # on rate limits. Do not expose a job token to application/dependency code.

@@ -17,6 +17,7 @@ import {
   readMarkdownReferences,
 } from '../src/lib/markdown-assets.mjs';
 import { validatePostFrontmatterData } from '../src/lib/post-frontmatter.mjs';
+import { prefixBasePath } from '../src/lib/site-url.mjs';
 import {
   attribute,
   canonicalValues,
@@ -511,7 +512,14 @@ for (const draft of drafts) {
 
   for (const { kind, target } of references) {
     const route = `/writing/${draft.slug}/`;
-    const url = parseHttpUrl(target, route, draft.source, `draft ${kind}`);
+    // Markdown is written root-relative, as if at the site root; the renderer
+    // adds the base path, so the check resolves the address it will emit.
+    const url = parseHttpUrl(
+      prefixBasePath(SITE_BASE_PATH, target),
+      route,
+      draft.source,
+      `draft ${kind}`,
+    );
     if (url?.origin !== SITE_ORIGIN) continue;
     if (isOutsideBasePath(url, draft.source, `draft ${kind}`, target)) continue;
     if (kind === 'link' && pageAt(url.pathname)) continue;

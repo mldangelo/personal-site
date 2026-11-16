@@ -98,7 +98,7 @@ describe('readImageSize', () => {
     ['/../package.json', /outside public/],
     ['/%2e%2e/package.json', /outside public/],
     ['/missing-article-image.png', /does not exist/],
-    ['/robots.txt', /unsupported or malformed header/],
+    ['/og.meta.json', /unsupported or malformed header/],
   ])('fails the build for %s', (src, message) => {
     expect(() => readImageSize(src)).toThrow(message);
   });
@@ -144,11 +144,11 @@ describe('readPostImageSizes', () => {
     const preview = { allowMissingLocalImages: true };
 
     expect(readPostImageSizes('![gone](/gone.png)', preview)).toEqual({});
-    expect(() => readPostImageSizes('![bad](/robots.txt)', preview)).toThrow(
+    expect(() => readPostImageSizes('![bad](/og.meta.json)', preview)).toThrow(
       /unsupported or malformed header/,
     );
     expect(() =>
-      readPostImageSizes('![up](/images/../robots.txt)', preview),
+      readPostImageSizes('![up](/images/../og.meta.json)', preview),
     ).toThrow(/outside public/);
   });
 });

@@ -10,7 +10,7 @@ import {
   WRITING_DESCRIPTION,
 } from '@/lib/schema';
 import { smartQuotes } from '@/lib/typography';
-import { formatDate } from '@/lib/utils';
+import { formatDate, withBasePath } from '@/lib/utils';
 import { getWritingItems, type WritingItem as Item } from '@/lib/writing';
 
 const writingMetadata = createPageMetadata({
@@ -122,7 +122,7 @@ export default function WritingPage() {
         <header className="page-header">
           <h1 className="page-title">Writing</h1>
           <a
-            href="/feed.xml"
+            href={withBasePath('/feed.xml')}
             className="button button-secondary button-compact writing-rss-link"
           >
             RSS
