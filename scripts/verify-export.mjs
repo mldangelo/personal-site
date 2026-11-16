@@ -687,6 +687,18 @@ if (!existsSync(feedPath)) {
   }
 }
 
+// llms.txt lists every page and post as a Markdown link, each of which must
+// resolve the way the feed's do.
+const llmsPath = join(OUT, 'llms.txt');
+if (!existsSync(llmsPath)) {
+  fail('llms.txt', 'missing from export');
+} else {
+  const llms = readFileSync(llmsPath, 'utf8');
+  for (const [, url] of llms.matchAll(/\]\((\S+?)\)/g)) {
+    validateAbsoluteUrl(url, 'llms.txt', 'URL', { external: true });
+  }
+}
+
 /** Root properties JSON Resume v1.0.0 allows; the schema forbids the rest. */
 const JSON_RESUME_ROOT_KEYS = new Set([
   '$schema',
