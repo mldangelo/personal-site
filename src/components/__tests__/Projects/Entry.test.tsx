@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 import type { Project } from '@/data/projects';
+import { withBasePath } from '@/lib/utils';
 import Entry from '../../Projects/Entry';
 
 const base: Project = {
@@ -85,7 +86,7 @@ describe('Entry', () => {
     expect(
       render(<Entry data={base} />).container.querySelector('img'),
     ).toBeNull();
-    expect(image).toHaveAttribute('src', '/images/test.jpg');
+    expect(image).toHaveAttribute('src', withBasePath('/images/test.jpg'));
     expect(image).toHaveAttribute('alt', '');
     expect(image).toHaveAttribute('loading', 'lazy');
     expect(

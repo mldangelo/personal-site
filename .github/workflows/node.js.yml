@@ -176,6 +176,13 @@ jobs:
         if: matrix.os == 'ubuntu-latest' && matrix.node-version != env.DEPLOY_NODE
         run: npm pkg set homepage=https://example.github.io/personal-site/
 
+      # The Test job runs at the upstream root URL, so a test that assumes one
+      # passes there and blocks a fork's first deployment. Run the suite again
+      # as the fork's own Test job will.
+      - name: Test at the project-site URL
+        if: matrix.os == 'ubuntu-latest' && matrix.node-version != env.DEPLOY_NODE
+        run: npm test
+
       # Stats use the public API anonymously, falling back to last-known floors
       # on rate limits. Do not expose a job token to application/dependency code.
       - name: Build

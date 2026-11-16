@@ -1,9 +1,16 @@
 import { render, screen, within } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { aboutMarkdown } from '@/data/about';
 import { createHeadingId } from '@/lib/anchors';
+import { prefixBasePath } from '@/lib/site-url.mjs';
 import AboutContent from '../Sections';
+
+// As a fork at https://user.github.io/repo/ publishes it.
+vi.mock('@/lib/utils', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@/lib/utils')>()),
+  withBasePath: (path: string) => prefixBasePath('/repo', path),
+}));
 
 const titles = Array.from(
   aboutMarkdown.matchAll(/^# (.+)$/gm),
@@ -33,6 +40,80 @@ function sectionNav() {
 }
 
 describe('AboutContent', () => {
+  // Each of these split the source text at a "# " line the parser would not
+  // call a heading, or rendered a section without the rest of the document.
+  it('divides the page where the parsed document has its headings', () => {
+    const { container } = render(
+      <AboutContent
+        markdown={[
+          '# Introduction',
+          '',
+          'See [the source][source].',
+          '',
+          '<!--',
+          '# Fun facts',
+          '',
+          '- A hidden fact',
+          '-->',
+          '',
+          '# Setup',
+          '',
+          '```sh',
+          '# install it',
+          'npm ci',
+          '```',
+          '',
+          '[source]: https://example.com/source',
+        ].join('\n')}
+      />,
+    );
+
+    expect(
+      within(sectionNav())
+        .getAllByRole('link')
+        .map((link) => link.textContent),
+    ).toEqual(['Introduction', 'Setup']);
+    expect(screen.getByRole('link', { name: 'the source' })).toHaveAttribute(
+      'href',
+      'https://example.com/source',
+    );
+    expect(container.querySelector('pre')).toHaveTextContent(
+      '# install it npm ci',
+    );
+    expect(container).not.toHaveTextContent(/hidden fact|-->/);
+  });
+
+  // Footnote definitions are not resolved into the text that cites them, so
+  // they must survive the division, and raw HTML is read while parsing.
+  it('keeps footnotes and raw HTML links working across sections', () => {
+    const { container } = render(
+      <AboutContent
+        markdown={[
+          '# Intro',
+          '',
+          'A claim.[^source] See <a href="/resume/">the résumé</a>.',
+          '',
+          '# Setup',
+          '',
+          '- An item',
+          '',
+          '[^source]: The note itself.',
+        ].join('\n')}
+      />,
+    );
+
+    const citation = container.querySelector('sup')?.closest('a');
+    const target = citation?.getAttribute('href')?.slice(1) ?? '';
+
+    expect(document.getElementById(target)).toHaveTextContent(
+      'The note itself.',
+    );
+    expect(screen.getByRole('link', { name: 'the résumé' })).toHaveAttribute(
+      'href',
+      '/repo/resume/',
+    );
+  });
+
   it('renders the intro unheaded and gives each section its variant', () => {
     const { container } = render(<AboutContent markdown={MARKDOWN} />);
 

@@ -84,6 +84,13 @@ function getArticleImage(post: Post): PostImage | undefined {
 
 export function generateStaticParams() {
   const slugs = getPostSlugs();
+  // The static export cannot build a dynamic route with no pages, and Next's
+  // own error blames a missing `generateStaticParams` instead.
+  if (slugs.length === 0 && process.env.NODE_ENV === 'production') {
+    throw new Error(
+      'content/writing/ has no published post. The export needs at least one; see "Writing" in docs/adapting-guide.md.',
+    );
+  }
   return slugs.map((slug) => ({ slug }));
 }
 
