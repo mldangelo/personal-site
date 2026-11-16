@@ -1,4 +1,4 @@
-import { type MarkdownToJSX, RuleType } from 'markdown-to-jsx';
+import { type MarkdownToJSX, RuleType } from 'markdown-to-jsx/react';
 import { createElement } from 'react';
 
 import { prefixSrcset } from './site-url.mjs';
