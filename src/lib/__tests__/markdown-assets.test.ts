@@ -112,6 +112,8 @@ describe('readMarkdownReferences', () => {
     '<svg><image id="i"><set attributeName="href" to="/images/private.png"></set></image></svg>',
     '<base href="/private/">',
     '<meta http-equiv="refresh" content="0;url=/private/">',
+    // React renders the prop spelling as `http-equiv`.
+    '<meta httpEquiv="refresh" content="0;url=/private/">',
   ])('fails closed for an uninspectable raw HTML fetch: %s', (markdown) => {
     expect(() => readMarkdownReferences(markdown)).toThrow(
       /not allowed|cannot be verified/i,

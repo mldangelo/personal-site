@@ -3,6 +3,7 @@
 import Markdown from 'markdown-to-jsx';
 import Image from 'next/image';
 import type {
+  ComponentProps,
   ElementType,
   HTMLAttributes,
   KeyboardEvent as ReactKeyboardEvent,
@@ -212,9 +213,20 @@ function scrollCodeFence(event: ReactKeyboardEvent<HTMLPreElement>) {
  * There is no landmark role: the preformatted content already supplies the
  * useful semantics, and repeated code-block regions would just add noise.
  */
-function CodeFence({ children }: { children?: ReactNode }) {
+function CodeFence({
+  children,
+  className,
+  dangerouslySetInnerHTML: raw,
+}: {
+  children?: ReactNode;
+  className?: string;
+  /** A raw `<pre>` arrives as its own inner HTML, not as children. */
+  dangerouslySetInnerHTML?: { __html: string };
+}) {
   const preRef = useRef<HTMLPreElement>(null);
-  const language = fenceLanguage(children);
+  const language =
+    fenceLanguage(children) ??
+    raw?.__html.match(/^<code\b[^>]*\bclass="[^"]*\blanguage-([\w-]+)/)?.[1];
 
   useEffect(() => {
     const pre = preRef.current;
@@ -254,7 +266,7 @@ function CodeFence({ children }: { children?: ReactNode }) {
       window.removeEventListener('resize', syncTabStop);
       observer?.disconnect();
     };
-  }, [children]);
+  }, [children, raw]);
 
   return (
     <div className="prose-fence">
@@ -266,8 +278,13 @@ function CodeFence({ children }: { children?: ReactNode }) {
           <span className="sr-only">{language} code block</span>
         </>
       ) : null}
-      <pre ref={preRef} onKeyDown={scrollCodeFence}>
-        {children}
+      <pre
+        ref={preRef}
+        onKeyDown={scrollCodeFence}
+        className={className || undefined}
+        dangerouslySetInnerHTML={raw}
+      >
+        {raw ? undefined : children}
       </pre>
     </div>
   );
@@ -364,13 +381,15 @@ export default function PostContent({
         overrides: {
           ...headingOverrides(headingPlan.aliases),
           p: {
-            component: ({ children }: { children?: ReactNode }) => {
+            component: ({ children, ...attributes }: ComponentProps<'p'>) => {
               const items = Children.toArray(children);
               const image =
                 items.length === 1 ? figureImage(items[0], ProseImage) : null;
 
+              // A raw paragraph keeps what its author wrote on it: `hidden`,
+              // an `id` a link targets, `lang`, `dir`.
               if (!image) {
-                return <p>{children}</p>;
+                return <p {...attributes}>{children}</p>;
               }
 
               return (

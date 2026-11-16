@@ -388,6 +388,15 @@ describe('drafts under a base path', () => {
 
 // A submit control can override a valid form destination, so both attributes are
 // checked at root and repository-site deployments.
+describe('rendered pages', () => {
+  rejects([
+    [
+      'has a meta refresh',
+      inHomeBody('<meta http-equiv="Refresh" content="0; url=about/">'),
+    ],
+  ]);
+});
+
 describe.each(['', BASE_PATH])('form targets at base path "%s"', (basePath) => {
   rejects(
     [

@@ -3,6 +3,10 @@ import { type MarkdownToJSX, RuleType, sanitizer } from 'markdown-to-jsx';
 import { smartQuotes } from './typography';
 import { withBasePath } from './utils';
 
+/** Raw HTML elements whose text is code, kept exactly as written. */
+const RAW_CODE_TAGS = new Set(['code', 'kbd', 'pre', 'samp', 'var']);
+let rawCodeDepth = 0;
+
 /**
  * The `renderRule` every Markdown renderer here shares: typographic quotes in
  * the text a reader sees.
@@ -17,8 +21,22 @@ import { withBasePath } from './utils';
  */
 export const smartQuotesRule: NonNullable<
   MarkdownToJSX.Options['renderRule']
-> = (next, node) =>
-  node.type === RuleType.text ? smartQuotes(node.text) : next();
+> = (next, node) => {
+  // Raw HTML code is parsed as ordinary text nodes, so it is skipped by tag:
+  // `<code>{"ok":true}</code>` copied with curly quotes no longer parses.
+  // Rendering is synchronous and depth-first, so a counter tracks the nesting.
+  if (node.type === RuleType.htmlBlock && RAW_CODE_TAGS.has(node.tag)) {
+    rawCodeDepth += 1;
+    try {
+      return next();
+    } finally {
+      rawCodeDepth -= 1;
+    }
+  }
+  return node.type === RuleType.text && rawCodeDepth === 0
+    ? smartQuotes(node.text)
+    : next();
+};
 
 /**
  * The `sanitizer` every Markdown renderer here shares: the library's own, then

@@ -144,6 +144,34 @@ describe('PostContent figures', () => {
   });
 });
 
+// Raw HTML in a post renders as its author wrote it.
+describe('PostContent raw HTML', () => {
+  it('keeps a raw code block, its contents, and its language', () => {
+    const html = markup(
+      '<pre><code class="language-js">const a = "b" &lt; c;</code></pre>\n',
+    );
+
+    expect(html).toContain(
+      '<code class="language-js">const a = "b" &lt; c;</code>',
+    );
+    expect(html).toContain('js code block');
+  });
+
+  it('keeps the attributes on a raw paragraph', () => {
+    expect(
+      markup('<p hidden id="note" lang="fr" dir="rtl">Bonjour</p>\n'),
+    ).toMatch(/<p hidden="" id="note" lang="fr" dir="rtl">Bonjour<\/p>/);
+  });
+
+  // Copied with curly quotes, `{"ok":true}` no longer parses as JSON.
+  it('sets quotes in prose but not in raw code', () => {
+    const html = markup('A "quote" and <code>{"ok":true}</code>.\n');
+
+    expect(html).toContain('A \u201cquote\u201d');
+    expect(html).toContain('<code>{&quot;ok&quot;:true}</code>');
+  });
+});
+
 describe('PostContent code fences', () => {
   const FENCE = '```text\nA deliberately long line\n```\n';
 

@@ -39,6 +39,11 @@ const UNINSPECTABLE_RESOURCE_TAGS = new Set([
   'style',
   'svg',
 ]);
+/** React prop names whose HTML attribute is spelled with a hyphen. */
+const REACT_ATTRIBUTE_NAMES = {
+  acceptcharset: 'accept-charset',
+  httpequiv: 'http-equiv',
+};
 const SAFE_RASTER_DATA_URL =
   /^data:image\/(?:avif|bmp|gif|jpeg|png|vnd\.microsoft\.icon|webp|x-icon)(?:[;,])/i;
 
@@ -156,9 +161,11 @@ export function readMarkdownReferences(markdown) {
       value.type === RuleType.htmlSelfClosing
     ) {
       const tag = String(value.tag ?? '').toLowerCase();
+      // React writes `httpEquiv` as `http-equiv`, so a camel-cased name is
+      // the HTML attribute it renders.
       const attributes = new Map(
         Object.entries(value.attrs ?? {}).map(([name, attributeValue]) => [
-          name.toLowerCase(),
+          REACT_ATTRIBUTE_NAMES[name.toLowerCase()] ?? name.toLowerCase(),
           attributeValue,
         ]),
       );
