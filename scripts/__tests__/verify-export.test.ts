@@ -554,10 +554,8 @@ describe('drafts', () => {
     ],
     [
       'srcset',
-      inDraftBody(
-        '<source srcset="data:image/png;base64,AAAA, /images/hidden.png 2x">',
-      ),
-      'ambiguous draft srcset syntax',
+      inDraftBody('<source srcset="/images/hidden.png nope">'),
+      'malformed draft srcset syntax',
     ],
     // Malformed frontmatter must fail here and at the route reader alike, or a
     // draft flag the reader rejects could pass this privacy boundary.

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import { SiteSchema } from '@/components/Schema';
+import FragmentHistory from '@/components/Template/FragmentHistory';
 import GoogleAnalytics from '@/components/Template/GoogleAnalytics';
 import Navigation from '@/components/Template/Navigation';
 import { MAIN_CONTENT_ID } from '@/components/Template/PageWrapper';
@@ -151,6 +152,7 @@ export default function RootLayout({
           Skip to content
         </a>
         <ScrollToTop />
+        <FragmentHistory />
         <Navigation />
         {children}
         <GoogleAnalytics />
