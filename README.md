@@ -120,8 +120,10 @@ agent runs them for you.
 
 ## Deploy
 
-Pushes to `main` deploy the same static build that CI validates. See the
-[adapting guide](./docs/adapting-guide.md#deployment-reference) for URL and
+Pushes to `main` deploy the same static build that CI validates. The site's
+address is one setting, `homepage` in `package.json`: a fork published at
+`https://YOUR-USER.github.io/personal-site/` sets that and nothing else. See the
+[adapting guide](./docs/adapting-guide.md#deployment-reference) for Pages and
 domain setup.
 
 ## Contributing

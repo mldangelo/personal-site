@@ -31,7 +31,7 @@ of inventing one, so anything you leave out comes back as a question.
 | Posts as Markdown, and links to writing published elsewhere           | `content/writing/`, `src/data/writing.ts`                                     |
 | The About page: biography, history, and lists                         | `src/data/about.ts`                                                           |
 | Social profile URLs and your X handle                                 | `src/data/contact.ts`, `TWITTER_HANDLE` in `src/lib/utils.ts`                 |
-| The final site URL                                                    | See the [deployment reference](#deployment-reference)                         |
+| The site's public URL, by default `https://YOUR-USER.github.io/REPO/` | `homepage` in `package.json`, the only place it is set                        |
 | Optional: a GA4 measurement ID                                        | A `NEXT_PUBLIC_GA_TRACKING_ID` repository variable                            |
 | Optional: colours, fonts, and a design direction                      | See [Visual identity](#visual-identity)                                       |
 
@@ -139,7 +139,8 @@ components.
 | Content                                                                   | Location                                                                                                               |
 | ------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
 | Name, role, employer, city, email, and personal statistics                | `src/data/profile.json`                                                                                                |
-| Canonical URL, X handle, one-line bio, and the portrait's path and size   | `src/lib/utils.ts`                                                                                                     |
+| The public URL, which every link, feed, and share URL derives from        | `homepage` in `package.json` (see [Changes inside the repository](#changes-inside-the-repository))                     |
+| X handle, one-line bio, and the portrait's path and size                  | `src/lib/utils.ts`                                                                                                     |
 | Social links                                                              | `src/data/contact.ts`                                                                                                  |
 | Homepage kicker, introduction, and employer links                         | `src/components/Template/Hero.tsx`                                                                                     |
 | Header monogram                                                           | `src/components/Template/Navigation.tsx`                                                                               |
@@ -148,7 +149,6 @@ components.
 | Aliases the contact page types into the address, which assume a catch-all | `messages` in `src/components/Contact/EmailLink.tsx`                                                                   |
 | The address length the contact page lays out for                          | The `contact-email` container query in `app/styles/pages/contact.css`                                                  |
 | Web app name and icon monogram                                            | Derived from `src/data/profile.json` by `npm run icons`                                                                |
-| Sitemap URL for crawlers                                                  | `public/robots.txt`                                                                                                    |
 | Upstream custom domain                                                    | `public/CNAME`, which a fork deletes (see [Actions outside the repository](#actions-outside-the-repository))           |
 | Writing description, on `/writing/` and in the RSS feed                   | `WRITING_DESCRIPTION` in `src/lib/schema.ts`                                                                           |
 | Source repository: the footer's Source link and the `/stats` counts       | `SOURCE_REPOSITORY` in `src/lib/telemetry.ts`, with fallback counts in `LAST_KNOWN` in `src/components/Stats/Site.tsx` |
@@ -278,23 +278,24 @@ both themes.
 
 ### Changes inside the repository
 
-A coding agent can prepare and verify the repository:
+The site's address is one setting: `homepage` in `package.json`, written with a
+trailing slash. Next's base path, canonical and share URLs, the RSS feed, the
+sitemap, `robots.txt`, and `resume.json` all derive from it, so the site works
+the same under a subpath as at a root URL.
 
-- Set `SITE_URL` in `src/lib/utils.ts` to the final public URL without a
-  trailing slash.
-- Set `homepage` in `package.json` to the same URL with a trailing slash.
-- Update `public/robots.txt` and other URL-bearing files, and delete
-  `public/CNAME`.
-- Build the site and inspect `out/`.
+- A fork that keeps its repository name is a GitHub Pages project site, served
+  under that name. This is the default:
+  `npm pkg set homepage=https://YOUR-USER.github.io/REPOSITORY/`.
+- A custom domain, or a repository named `YOUR-USER.github.io`, serves from the
+  root: `npm pkg set homepage=https://example.com/`.
+- Delete `public/CNAME`, which names the upstream domain.
 
-The site works as written at a root URL, such as a custom domain. A GitHub user
-or organization site also has a root URL, but its repository must be named
-[`<owner>.github.io`](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages).
-A fork left under another repository name is a project site at
-`https://YOUR-USER.github.io/REPOSITORY/` and needs more work. The workflow
-injects Next's `basePath`, but raw asset paths and absolute URLs created by the
-application still assume a root deployment. Updating `SITE_URL` and `homepage`
-alone is not enough for that case.
+Under a subpath, the development server serves the site there too, at
+`http://localhost:3000/REPOSITORY/`. Build the site and run the definition of
+done: the export gates fail on any address that misses the base path.
+
+When the workflow deploys from `main`, it reads the repository's Pages URL and
+stops before building if `homepage` disagrees, naming the value to set.
 
 ### Actions outside the repository
 
@@ -305,9 +306,12 @@ For GitHub Pages:
 
 1. In the fork's **Actions** tab, enable workflows. GitHub
    [disables workflows in forks by default](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#workflows-in-forked-repositories).
-2. To use the default root URL without a custom domain, rename the fork to
-   `YOUR-USER.github.io` in **Settings > General**.
-3. In **Settings > Pages**, choose **GitHub Actions** as the source.
+2. In **Settings > Pages**, choose **GitHub Actions** as the source. With
+   **Deploy from a branch**, Pages publishes the repository's README instead of
+   the site.
+3. Optional: to serve from `https://YOUR-USER.github.io/` rather than under the
+   repository's name, rename the fork to `YOUR-USER.github.io` in
+   **Settings > General** and set `homepage` to match.
 4. For a custom domain,
    [verify the domain](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/verifying-your-custom-domain-for-github-pages)
    in your profile or organization settings before attaching it to the
@@ -322,10 +326,9 @@ GitHub ignores `public/CNAME` when a custom Actions workflow publishes the
 site, so the upstream file does nothing in a fork except name someone else's
 domain.
 
-For another static host, the agent can build `out/` and prepare the deployment.
-Uploading it to the hosting account still requires explicit authorization. A
-subpath deployment also needs a matching Next `basePath` and an audit of raw
-assets and absolute URL construction.
+For another static host, set `homepage` to the URL it serves the site at, and
+the agent can build `out/` and prepare the deployment. Uploading it to the
+hosting account still requires explicit authorization.
 
 ### Security boundaries and hosting headers
 
@@ -336,7 +339,7 @@ sanitization. Treat any external content source you add as a new trust
 boundary.
 
 Only the deployment job can write to Pages. The build reads Pages settings to
-configure Next's base path and fetches public GitHub statistics without a token;
+check `homepage` against the Pages URL and fetches public GitHub statistics without a token;
 when that anonymous API is rate limited, `/stats` shows its last-known counts as
 floors instead of failing the export. Keep actions pinned to full commit SHAs;
 Dependabot maintains the pins.
@@ -353,17 +356,20 @@ actions, and no concrete clickjacking or MIME-sniffing exploit is known.
 
 ## Troubleshooting
 
-| Problem                                    | Check                                                                                         |
-| ------------------------------------------ | --------------------------------------------------------------------------------------------- |
-| `EBADENGINE` warning or install failure    | Run `nvm install`, then retry `npm ci`                                                        |
-| Port 3000 is in use                        | Run `npm run dev -- -p 3001`                                                                  |
-| Images do not appear                       | Use a URL such as `/images/photo.jpg`, not `public/images/photo.jpg`                          |
-| `missing "generateStaticParams()"`         | Keep at least one published Markdown post                                                     |
-| Assets return 404 on a project site        | Review the repository subpath limitation in the [deployment reference](#deployment-reference) |
-| The export verifier fails                  | Run `npm run build` first, then inspect the named file or route                               |
-| `npm run og:check` fails without a network | Run `npm run og:check:ledger`, its offline half, and leave the render check to CI             |
-| `npm run check-reflow` cannot find Chrome  | Set `CHROME_PATH` to a Chrome or Chromium executable                                          |
-| The icon test or `og:check` reports stale  | Run `npm run icons` or `npm run og`, then commit the files with their ledger                  |
+| Problem                                      | Check                                                                              |
+| -------------------------------------------- | ---------------------------------------------------------------------------------- |
+| `EBADENGINE` warning or install failure      | Run `nvm install`, then retry `npm ci`                                             |
+| Port 3000 is in use                          | Run `npm run dev -- -p 3001`                                                       |
+| Images do not appear                         | Use a URL such as `/images/photo.jpg`, not `public/images/photo.jpg`               |
+| `missing "generateStaticParams()"`           | Keep at least one published Markdown post                                          |
+| The deployed site shows the README           | In **Settings > Pages**, choose **GitHub Actions** as the source                   |
+| No workflow runs in the fork                 | Enable workflows in the fork's **Actions** tab                                     |
+| The deployment stops at the `homepage` check | Run the `npm pkg set homepage=…` command the error names, then commit and push     |
+| Pages loads without styles, or links 404     | Set `homepage` to the URL the site is served at, including its `/REPOSITORY/` path |
+| The export verifier fails                    | Run `npm run build` first, then inspect the named file or route                    |
+| `npm run og:check` fails without a network   | Run `npm run og:check:ledger`, its offline half, and leave the render check to CI  |
+| `npm run check-reflow` cannot find Chrome    | Set `CHROME_PATH` to a Chrome or Chromium executable                               |
+| The icon test or `og:check` reports stale    | Run `npm run icons` or `npm run og`, then commit the files with their ledger       |
 
 ## Getting help
 
