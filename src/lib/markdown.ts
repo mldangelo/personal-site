@@ -1,7 +1,10 @@
-import { type MarkdownToJSX, RuleType, sanitizer } from 'markdown-to-jsx';
+import { type MarkdownToJSX, RuleType } from 'markdown-to-jsx';
+import { createElement } from 'react';
+
+import { prefixSrcset } from './site-url.mjs';
 
 import { smartQuotes } from './typography';
-import { withBasePath } from './utils';
+import { BASE_PATH, withBasePath } from './utils';
 
 /**
  * The `renderRule` every Markdown renderer here shares: typographic quotes in
@@ -20,18 +23,36 @@ export const smartQuotesRule: NonNullable<
 > = (next, node) =>
   node.type === RuleType.text ? smartQuotes(node.text) : next();
 
+/** Element props that hold a single URL the browser fetches or follows. */
+const URL_PROPS = ['href', 'src', 'poster', 'action', 'formAction'];
+
 /**
- * The `sanitizer` every Markdown renderer here shares: the library's own, then
- * the base path on a root-relative URL, since `[About](/about/)` renders a raw
- * `href` that Next does not prefix. An `img` is the exception: `PostContent`
- * measures it by its path under `public/` and adds the base path itself.
+ * The `createElement` every Markdown renderer here shares: the base path on
+ * each root-relative URL an element carries, since Next prefixes none of an
+ * element's own attributes. Markdown links and images arrive here as `a` and
+ * `img`, and raw HTML with React's prop names (`srcSet`, `formAction`).
+ *
+ * An override component is passed by identity, not by tag name, and gets its
+ * props as written: `PostContent`'s image measures a file by its path under
+ * `public/` before prefixing it.
  */
-export const sanitizeUrl: NonNullable<MarkdownToJSX.Options['sanitizer']> = (
-  value,
-  tag,
-) => {
-  const safe = sanitizer(value);
-  return safe === null || tag === 'img' ? safe : withBasePath(safe);
+export const createElementWithBasePath: NonNullable<
+  MarkdownToJSX.Options['createElement']
+> = (tag, props, ...children) => {
+  if (typeof tag !== 'string' || !props) {
+    return createElement(tag, props, ...children);
+  }
+
+  const prefixed: Record<string, unknown> = { ...props };
+  for (const name of URL_PROPS) {
+    const value = prefixed[name];
+    if (typeof value === 'string') prefixed[name] = withBasePath(value);
+  }
+  if (typeof prefixed.srcSet === 'string') {
+    prefixed.srcSet = prefixSrcset(BASE_PATH, prefixed.srcSet);
+  }
+
+  return createElement(tag, prefixed, ...children);
 };
 
 /**
