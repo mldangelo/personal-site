@@ -4,6 +4,7 @@ import path from 'node:path';
 import { parseFrontmatter } from './frontmatter.mjs';
 
 import { validatePostFrontmatterData } from './post-frontmatter.mjs';
+import { publishedMarkdown } from './published-markdown.mjs';
 
 interface PostFrontmatter {
   title: string;
@@ -68,7 +69,7 @@ function readPost(slug: string): Post | null {
     path.relative(process.cwd(), fullPath),
   ) as PostFrontmatter;
 
-  return { ...frontmatter, slug, content };
+  return { ...frontmatter, slug, content: publishedMarkdown(content) };
 }
 
 function isSafeSlug(slug: string): boolean {
