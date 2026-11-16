@@ -118,7 +118,7 @@ export function parseSrcset(value) {
  * AST walk is deliberate: lists, tables, block quotes, and inline formatting
  * store descendants under different fields. Footnote text is the exception: the
  * parser keeps it as raw Markdown, which the renderer parses when it draws the
- * notes, so it is parsed here with the document's reference definitions.
+ * notes, so it is parsed here with the document's references.
  */
 export function readMarkdownReferences(markdown) {
   const references = [];
@@ -146,9 +146,7 @@ export function readMarkdownReferences(markdown) {
     if (!value || typeof value !== 'object') return;
 
     if (value.type === RuleType.refCollection) {
-      for (const footnote of footnoteDocuments(value.refs)) {
-        visit(parser(footnote));
-      }
+      visit(parseFootnotes(value.refs));
     } else if (value.type === RuleType.image) {
       add('image', value.target);
     } else if (value.type === RuleType.link) {
@@ -227,15 +225,41 @@ export function readMarkdownImageSources(markdown) {
     .map(({ target }) => target);
 }
 
-function footnoteDocuments(refs = {}) {
+const REFERENCE_PLACEHOLDER = 'markdown-assets:reference:';
+
+/**
+ * Each footnote's text parsed as a document of its own, with the reference
+ * definitions it may use. A definition points at a placeholder that is then
+ * swapped for its target: the targets are already decoded, and writing them
+ * back into Markdown would decode them a second time.
+ */
+function parseFootnotes(refs = {}) {
   const entries = Object.entries(refs);
-  const definitions = entries
-    .filter(([label]) => !label.startsWith('^'))
-    .map(([label, { target }]) => `[${label}]: <${target}>`)
+  const references = entries.filter(([label]) => !label.startsWith('^'));
+  const definitions = references
+    .map(([label], index) => `[${label}]: ${REFERENCE_PLACEHOLDER}${index}`)
     .join('\n');
+
+  function restore(node) {
+    if (Array.isArray(node)) {
+      for (const item of node) restore(item);
+      return;
+    }
+    if (!node || typeof node !== 'object') return;
+    if (node.target?.startsWith?.(REFERENCE_PLACEHOLDER)) {
+      const index = Number(node.target.slice(REFERENCE_PLACEHOLDER.length));
+      node.target = references[index]?.[1].target ?? node.target;
+    }
+    for (const child of Object.values(node)) restore(child);
+  }
+
   return entries
     .filter(([label]) => label.startsWith('^'))
-    .map(([, { target }]) => `${target}\n\n${definitions}`);
+    .map(([, { target }]) => {
+      const footnote = parser(`${target}\n\n${definitions}`);
+      restore(footnote);
+      return footnote;
+    });
 }
 
 function resourceKind(tag, attribute, attributes) {

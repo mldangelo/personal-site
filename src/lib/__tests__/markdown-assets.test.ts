@@ -73,6 +73,22 @@ describe('readMarkdownReferences', () => {
     ]);
   });
 
+  it('decodes a footnote reference destination once, as the renderer does', () => {
+    const markdown = [
+      'A claim.[^1]',
+      '',
+      '[^1]: ![chart][chart] and [the data][data].',
+      '',
+      '[chart]: /images/a&amp;amp;b.png',
+      '[data]: </downloads/a&gt;b.csv>',
+    ].join('\n');
+
+    expect(readMarkdownReferences(markdown)).toEqual([
+      image('/images/a&amp;b.png'),
+      { kind: 'link', target: '/downloads/a>b.csv' },
+    ]);
+  });
+
   it('ignores resource-looking text inside code', () => {
     expect(
       readMarkdownReferences(
