@@ -40,6 +40,7 @@ export default function SpeakingPage() {
             I talk about security for AI systems: prompt injection, agent
             security, and red teaming LLM applications. Most of it comes from
             building Promptfoo and now working on cyber products at OpenAI.
+            Organizing an event? <Link href="/contact/">Get in touch</Link>.
           </p>
         </header>
 
