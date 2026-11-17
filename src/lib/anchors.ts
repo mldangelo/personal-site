@@ -208,7 +208,9 @@ export function planMarkdownHeadingAnchors(
   }
 
   // Headings were slugified in document order as they parsed, so the nth
-  // heading node owns the nth planned id.
+  // heading node owns the nth planned id. The walk reaches every place the
+  // parser can put one, lists included, or a heading it skips would shift
+  // every later link onto an earlier heading's id.
   const outline: OutlineEntry[] = [];
   let headingIndex = 0;
   const walk = (nodes: readonly MarkdownToJSX.ASTNode[]): void => {
@@ -221,6 +223,12 @@ export function planMarkdownHeadingAnchors(
       }
       if ('children' in node && Array.isArray(node.children)) {
         walk(node.children);
+      }
+      if ('items' in node) {
+        for (const item of node.items) walk(item);
+      }
+      if (node.type === RuleType.table) {
+        for (const cell of [...node.header, ...node.cells.flat()]) walk(cell);
       }
     }
   };

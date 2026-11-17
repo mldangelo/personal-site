@@ -314,11 +314,12 @@ describe('PostContent heading anchors', () => {
   // have to agree, duplicates and code spans included.
   it("plans an outline whose ids are the rendered headings'", () => {
     const content =
-      '## One\n\nText.\n\n### Under\n\n## One\n\n## The `--flag`\n';
+      '## One\n\nText.\n\n### Under\n\n- ## In a list\n\n## One\n\n## The `--flag`\n';
     const { outline } = planMarkdownHeadingAnchors(content);
 
     expect(outline.map(({ title }) => title)).toEqual([
       'One',
+      'In a list',
       'One',
       'The --flag',
     ]);
