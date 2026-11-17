@@ -309,6 +309,30 @@ describe('PostContent heading anchors', () => {
     expectUniqueIds(html);
   });
 
+  // The layout's own ids: a heading taking `main-content` would steal the
+  // skip link's target.
+  it('leaves the page its own ids', () => {
+    expect(headingIds(markup('## Main Content\n\nText.\n'))).toEqual([
+      'main-content-2',
+    ]);
+  });
+
+  // Labels the slugifier empties, or slugifies alike, still get one note
+  // each, and each marker links to its own.
+  it('gives every footnote its own id, and its marker the matching link', () => {
+    const html = markup(
+      'A[^出典] B[^Note] C[^note!] D[^CASE].\n\n[^出典]: Source.\n[^Note]: One.\n[^note!]: Two.\n[^case]: Matched.\n',
+    );
+    const links = idsIn(html, /<a href="#([^"]*)"><sup>/g);
+
+    expect(links).toHaveLength(4);
+    expect(new Set(links).size).toBe(4);
+    expect(links.every((id) => id !== '' && html.includes(`id="${id}"`))).toBe(
+      true,
+    );
+    expectUniqueIds(html);
+  });
+
   it('keeps raw heading attributes and avoids raw and footnote ids', () => {
     const html = markup(
       '<h2 id="custom" class="special">Raw</h2>\n\n## Custom\n\n[^note]\n\n[^note]: Copy\n\n## note\n',

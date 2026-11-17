@@ -1,7 +1,7 @@
 'use client';
 
 import { decodeEntity } from 'markdown-to-jsx/entities';
-import Markdown from 'markdown-to-jsx/react';
+import Markdown, { RuleType } from 'markdown-to-jsx/react';
 import Image from 'next/image';
 import type {
   ComponentProps,
@@ -403,7 +403,22 @@ export default function PostContent({
         // published ids that differ from it.
         slugify: headingPlan.slugify,
         // Typographic quotes in text a reader sees; code is a different node.
-        renderRule: smartQuotesRule,
+        // The library links a footnote marker by its own slug of the label,
+        // which is empty for a label in another script and shared by two
+        // that differ only in punctuation; the plan's id is the note's.
+        renderRule: (next, node, renderChildren, state) => {
+          if (node.type === RuleType.footnoteReference) {
+            const id = headingPlan.footnoteId(node.text);
+            if (id) {
+              return (
+                <a key={state.key} href={`#${id}`}>
+                  <sup>{node.text}</sup>
+                </a>
+              );
+            }
+          }
+          return smartQuotesRule(next, node, renderChildren, state);
+        },
         createElement: createElementWithBasePath,
         overrides: {
           ...headingOverrides(headingPlan.aliases),
