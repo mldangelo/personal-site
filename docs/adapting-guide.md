@@ -35,8 +35,12 @@ of inventing one, so anything you leave out comes back as a question.
 | Optional: a GA4 measurement ID                                        | A `NEXT_PUBLIC_GA_TRACKING_ID` repository variable                            |
 | Optional: colours, fonts, and a design direction                      | See [Visual identity](#visual-identity)                                       |
 
-For anything you leave out, decide whether the agent should keep the upstream
-content with its original attribution, replace it, or remove the feature.
+For anything you leave out, decide whether the agent should replace it, remove
+the feature, or, for writing, link to the original. A post kept in
+`content/writing/` is published as yours: its metadata, share card, and
+structured data all name the site's owner, whatever the post itself says. To
+keep someone else's article on your Writing page, list it in
+`src/data/writing.ts` with a link to where they published it.
 
 ## Copyable requests
 
@@ -261,8 +265,8 @@ rg -n -i "Michael|mldangelo|dangelosaurus|mldangelo\\.com|OpenAI|Promptfoo" \
 
 Repeat it with any other upstream names or URLs the search uncovers. This
 catches details in page descriptions, tests, images, and links that a checklist
-can miss. Matches that stay are upstream content you chose to keep with its
-original attribution. `LICENSE` is left out of the search on purpose: it keeps
+can miss. Matches that stay should be links to upstream work you chose to keep,
+such as external writing entries. `LICENSE` is left out of the search on purpose: it keeps
 the upstream copyright line, which MIT requires.
 
 Some tests assert the site's public content, so exact-text expectations may
@@ -325,6 +329,25 @@ GitHub ignores `public/CNAME` when a custom Actions workflow publishes the
 site, so the upstream file does nothing in a fork except name someone else's
 domain.
 
+### What GitHub Pages leaves out
+
+- **Search engines read `robots.txt` only at a domain's root.** A project
+  site's own `/REPOSITORY/robots.txt` is never read, so the sitemap it names is
+  not found that way. Submit
+  `https://YOUR-USER.github.io/REPOSITORY/sitemap.xml` in Google Search
+  Console, or add a `Sitemap:` line for it to the `robots.txt` of your
+  `YOUR-USER.github.io` repository. A custom domain, or a repository named
+  `YOUR-USER.github.io`, serves from the root and needs neither.
+- **Hidden files are not deployed.** Both upload steps in the workflow leave
+  out paths that start with a dot, so a file in `public/.well-known/` is built
+  into `out/` and never reaches Pages. To publish one, set
+  `include-hidden-files: true` on the **Upload build artifacts** and **Package
+  GitHub Pages artifact** steps, then check the file on the deployed site.
+- **A deploy can be re-run for 7 days.** The validated build is kept for 7 days
+  (`retention-days: 7`), while GitHub allows re-running a workflow for 30. After
+  a week, re-run the whole workflow, or push again, so the site is built
+  afresh.
+
 For another static host, set `homepage` to the URL it serves the site at, and
 the agent can build `out/` and prepare the deployment. Uploading it to the
 hosting account still requires explicit authorization.
@@ -360,7 +383,9 @@ actions, and no concrete clickjacking or MIME-sniffing exploit is known.
 | `EBADENGINE` warning or install failure      | Run `nvm install`, then retry `npm ci`                                             |
 | Port 3000 is in use                          | Run `npm run dev -- -p 3001`                                                       |
 | Images do not appear                         | Use a URL such as `/images/photo.jpg`, not `public/images/photo.jpg`               |
-| `missing "generateStaticParams()"`           | Keep at least one published Markdown post                                          |
+| `content/writing/ has no published post`     | Keep at least one published Markdown post                                          |
+| Re-running a deploy cannot find its build    | The build is kept for 7 days; re-run the whole workflow, or push again             |
+| A file in `public/.well-known/` is missing   | See [What GitHub Pages leaves out](#what-github-pages-leaves-out)                  |
 | The deployed site shows the README           | In **Settings > Pages**, choose **GitHub Actions** as the source                   |
 | No workflow runs in the fork                 | Enable workflows in the fork's **Actions** tab                                     |
 | The deployment stops at the `homepage` check | Run the `npm pkg set homepage=…` command the error names, then commit and push     |
