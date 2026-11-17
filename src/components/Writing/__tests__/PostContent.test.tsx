@@ -160,6 +160,22 @@ describe('PostContent raw HTML', () => {
     expect(html).not.toMatch(/style=|<img|<b>/);
   });
 
+  // next/image would write a srcset of its own over the author's.
+  it('keeps a raw image as written: candidates, sizes, and id', () => {
+    const sizes = { '/og.png': { width: 1200, height: 630 } };
+    const html = markup(
+      'Intro.\n\n<img id="chart" src="/og.png" srcset="/og.png 1x, /og.png 2x" sizes="50vw" alt="A chart">\n\nText <img srcset="/og.png 1x" alt="Only candidates"> after.\n',
+      sizes,
+    );
+
+    expect(html).toMatch(
+      /<img[^>]*id="chart"[^>]*srcSet="\/og\.png 1x, \/og\.png 2x"[^>]*sizes="50vw"/,
+    );
+    expect(html).toMatch(
+      /<img[^>]*srcSet="\/og\.png 1x"[^>]*alt="Only candidates"/,
+    );
+  });
+
   it('keeps the attributes on a raw paragraph', () => {
     expect(
       markup('<p hidden id="note" lang="fr" dir="rtl">Bonjour</p>\n'),
