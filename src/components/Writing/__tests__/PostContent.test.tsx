@@ -3,6 +3,7 @@ import { StrictMode } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 
+import { planMarkdownHeadingAnchors } from '@/lib/anchors';
 import type { ImageSize } from '@/lib/imageSize';
 import { withBasePath } from '@/lib/utils';
 
@@ -307,6 +308,23 @@ describe('PostContent heading anchors', () => {
 
     expect(aliasIds(html)).toEqual(aliases);
     expectUniqueIds(html);
+  });
+
+  // The outline links to headings the renderer ids on its own, so the two
+  // have to agree, duplicates and code spans included.
+  it("plans an outline whose ids are the rendered headings'", () => {
+    const content =
+      '## One\n\nText.\n\n### Under\n\n## One\n\n## The `--flag`\n';
+    const { outline } = planMarkdownHeadingAnchors(content);
+
+    expect(outline.map(({ title }) => title)).toEqual([
+      'One',
+      'One',
+      'The --flag',
+    ]);
+    expect(outline.map(({ id }) => id)).toEqual(
+      idsIn(markup(content), /<h2[^>]*\bid="([^"]+)"/g),
+    );
   });
 
   it('keeps raw heading attributes and avoids raw and footnote ids', () => {

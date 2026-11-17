@@ -5,6 +5,7 @@ import PageWrapper from '@/components/Template/PageWrapper';
 import PostContent from '@/components/Writing/PostContent';
 import PostPager from '@/components/Writing/PostPager';
 import ReadingProgress from '@/components/Writing/ReadingProgress';
+import { planMarkdownHeadingAnchors } from '@/lib/anchors';
 import {
   type ImageSize,
   leadImageSource,
@@ -156,6 +157,9 @@ export async function generateMetadata({
   };
 }
 
+/** How many sections an essay needs before an outline earns its place. */
+const OUTLINE_MIN_SECTIONS = 6;
+
 export default async function PostPage({ params }: PageProps) {
   const { slug } = await params;
   const post = getPostBySlug(slug);
@@ -167,6 +171,7 @@ export default async function PostPage({ params }: PageProps) {
   const postUrl = canonicalPostUrl(post.slug);
   const writingUrl = `${SITE_URL}/writing/`;
   const allowMissingLocalImages = post.draft === true;
+  const { outline } = planMarkdownHeadingAnchors(post.content);
   const imageSizes = readPostImageSizes(post.content, {
     allowMissingLocalImages,
   });
@@ -199,6 +204,20 @@ export default async function PostPage({ params }: PageProps) {
           <h1 className="post-title">{smartQuotes(post.title)}</h1>
           <p className="post-description">{smartQuotes(post.description)}</p>
         </header>
+        {outline.length >= OUTLINE_MIN_SECTIONS ? (
+          // A long essay's sections, collapsed: one tap to see them, one more
+          // to go to one. A native disclosure, so it works without scripts.
+          <details className="post-outline">
+            <summary>In this essay</summary>
+            <ol>
+              {outline.map(({ id, title }) => (
+                <li key={id}>
+                  <a href={`#${id}`}>{smartQuotes(title)}</a>
+                </li>
+              ))}
+            </ol>
+          </details>
+        ) : null}
         <div className="post-content prose">
           <PostContent
             content={post.content}

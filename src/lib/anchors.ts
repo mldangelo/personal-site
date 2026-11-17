@@ -49,8 +49,16 @@ export function createUniqueHeadingIds(
   });
 }
 
+export interface OutlineEntry {
+  id: string;
+  /** The heading's text, without its Markdown. */
+  title: string;
+}
+
 interface MarkdownHeadingPlan {
   aliases: Map<string, string>;
+  /** The document's second-level headings, in order, with their ids. */
+  outline: OutlineEntry[];
   slugify: (source: string) => string;
 }
 
@@ -199,5 +207,36 @@ export function planMarkdownHeadingAnchors(
     claimedIds.add(legacy);
   }
 
-  return { aliases, slugify };
+  // Headings were slugified in document order as they parsed, so the nth
+  // heading node owns the nth planned id.
+  const outline: OutlineEntry[] = [];
+  let headingIndex = 0;
+  const walk = (nodes: readonly MarkdownToJSX.ASTNode[]): void => {
+    for (const node of nodes) {
+      if (node.type === RuleType.heading) {
+        if (node.level === 2) {
+          outline.push({ id: ids[headingIndex], title: textOf(node.children) });
+        }
+        headingIndex += 1;
+      }
+      if ('children' in node && Array.isArray(node.children)) {
+        walk(node.children);
+      }
+    }
+  };
+  walk(ast);
+
+  return { aliases, outline, slugify };
+}
+
+function textOf(nodes: readonly MarkdownToJSX.ASTNode[]): string {
+  return nodes
+    .map((node) => {
+      if ('text' in node && typeof node.text === 'string') return node.text;
+      if ('children' in node && Array.isArray(node.children)) {
+        return textOf(node.children);
+      }
+      return '';
+    })
+    .join('');
 }

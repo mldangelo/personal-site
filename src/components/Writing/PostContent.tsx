@@ -238,6 +238,16 @@ function rawPreText(html: string): string {
     });
 }
 
+/** Fence languages that hold prose rather than code. */
+const PROSE_LANGUAGES = new Set([
+  'markdown',
+  'md',
+  'plaintext',
+  'prompt',
+  'text',
+  'txt',
+]);
+
 function CodeFence({
   children,
   dangerouslySetInnerHTML: raw,
@@ -300,8 +310,12 @@ function CodeFence({
     };
   }, [children, raw]);
 
+  // A prompt or a Markdown example is read top to bottom, so on a narrow
+  // screen it wraps; code keeps its layout and scrolls sideways.
+  const prose = !language || PROSE_LANGUAGES.has(language.toLowerCase());
+
   return (
-    <div className="prose-fence">
+    <div className={prose ? 'prose-fence prose-fence--wrap' : 'prose-fence'}>
       {language ? (
         <>
           <span className="prose-fence-lang" aria-hidden="true">
