@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest';
 import profile from '@/data/profile.json';
 import { readColorToken } from '@/lib/tokens';
 import { readImageRenderer } from '../lib/image-renderer.mjs';
+import { monogramFor } from '../lib/monogram.mjs';
 
 /**
  * Keeps the committed icon set bound to the inputs that produced it, the way
@@ -72,6 +73,7 @@ describe('generated icon set', () => {
     const digest = [
       'scripts/generate-icons.mjs',
       'scripts/lib/fonts.mjs',
+      'scripts/lib/monogram.mjs',
       'scripts/lib/image-renderer.mjs',
       'src/lib/color-token.mjs',
     ]
@@ -188,5 +190,17 @@ describe('generated web app manifest', () => {
         icon.purpose?.split(' ').includes('maskable'),
       ),
     ).toBe(true);
+  });
+});
+
+describe('monogramFor', () => {
+  it.each([
+    ["Michael D'Angelo", 'MD'],
+    ['jean-luc picard', 'JL'],
+    // 𠮷 is one character in two UTF-16 units; its first unit alone is not
+    // a character at all.
+    ['𠮷田 太郎', '𠮷太'],
+  ])('reads %s as %s', (name, monogram) => {
+    expect(monogramFor(name)).toBe(monogram);
   });
 });

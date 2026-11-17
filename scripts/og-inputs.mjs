@@ -169,6 +169,17 @@ function isAutolink(node) {
  * as `codeBlock`, and only text nodes are counted, so image alt text, link
  * targets, reference definitions, list markers, and table pipes stay out.
  */
+/** The caption of a paragraph that holds only an image, or a linked one. */
+function captionOf(node) {
+  if (node.type !== RuleType.paragraph || node.children?.length !== 1) return;
+  const [child] = node.children;
+  const image =
+    child.type === RuleType.link && child.children?.length === 1
+      ? child.children[0]
+      : child;
+  return image.type === RuleType.image ? image.title : undefined;
+}
+
 export function countProseWords(markdown) {
   const prose = [];
 
@@ -184,6 +195,16 @@ export function countProseWords(markdown) {
       return;
     }
     if (value.type === RuleType.link && isAutolink(value)) return;
+    // A standalone image's title is its visible caption, and footnote bodies
+    // are kept as raw text until they render; a reader reads both.
+    const caption = captionOf(value);
+    if (caption) prose.push(caption);
+    if (value.type === RuleType.refCollection) {
+      for (const [label, { target }] of Object.entries(value.refs)) {
+        if (label.startsWith('^')) visit(parser(target));
+      }
+      return;
+    }
 
     for (const child of Object.values(value)) visit(child);
   }
