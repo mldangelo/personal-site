@@ -37,7 +37,47 @@ function supplementary(): Buffer {
   return table;
 }
 
+/**
+ * Format 4 with one segment, a–c, mapped through `glyphIdArray`, where b is a
+ * hole (glyph 0), and one segment, X, whose delta maps it to glyph 0.
+ */
+function withHoles(): Buffer {
+  // format, length, language, segCountX2 (3 segments), search fields
+  const header = [4, 0, 0, 6, 0, 0, 0];
+  const ends = [0x63, 0x58, 0xffff];
+  const starts = [0x61, 0x58, 0xffff];
+  const deltas = [0, 0x10000 - 0x58, 1];
+  // a–c read the glyph array, which follows the offsets: 3 words, then 2.
+  const rangeOffsets = [6, 0, 0];
+  const glyphs = [7, 0, 9];
+  const words = [
+    ...header,
+    ...ends,
+    0,
+    ...starts,
+    ...deltas,
+    ...rangeOffsets,
+    ...glyphs,
+  ];
+  const table = Buffer.alloc(words.length * 2);
+  words.forEach((word, index) => table.writeUInt16BE(word & 0xffff, index * 2));
+  return table;
+}
+
 describe('font coverage', () => {
+  // A code point inside a range can still map to `.notdef`, which draws
+  // nothing.
+  it('requires a real glyph, not just a code point inside a range', () => {
+    const covers = fontCoverage(fontWith(withHoles()));
+
+    expect([0x61, 0x62, 0x63, 0x58].map(covers)).toEqual([
+      true,
+      false,
+      true,
+      false,
+    ]);
+  });
+
   const latin = fontCoverage(fontWith(basicLatin()));
   const rare = fontCoverage(fontWith(supplementary()));
 

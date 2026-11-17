@@ -201,7 +201,11 @@ export function countProseWords(markdown) {
     if (caption) prose.push(caption);
     if (value.type === RuleType.refCollection) {
       for (const [label, { target }] of Object.entries(value.refs)) {
-        if (label.startsWith('^')) visit(parser(target));
+        // Read inline, as the renderer reads a note: on one line after a mark
+        // that is no word, where no block rule such as a fence can begin.
+        if (label.startsWith('^')) {
+          visit(parser(`· ${target.replace(/\s*\n\s*/g, ' ')}`));
+        }
       }
       return;
     }

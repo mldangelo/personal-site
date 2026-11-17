@@ -175,6 +175,8 @@ describe('post measurements', () => {
     ["Some ![x](/images/a.png 'tooltip only') text", 2],
     // Footnote bodies stay raw until they render, and a reader reads them.
     ['Claim.[^1]\n\n[^1]: Two more.', 3],
+    // A note is read inline, so a fence-shaped line in one is text.
+    ['Claim.[^1]\n\n[^1]: ~~~\n    two more words\n    ~~~', 4],
     ['latency < 50ms and throughput > 1k', 5],
     ['<strong>Two words</strong>', 2],
     ['Intro\n\n```js\nconst ignored = "one two three";\n```\n', 1],
