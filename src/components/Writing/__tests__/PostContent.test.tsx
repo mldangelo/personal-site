@@ -167,13 +167,12 @@ describe('PostContent raw HTML', () => {
       'Intro.\n\n<img id="chart" src="/og.png" srcset="/og.png 1x, /og.png 2x" sizes="50vw" alt="A chart">\n\nText <img srcset="/og.png 1x" alt="Only candidates"> after.\n',
       sizes,
     );
+    const og = withBasePath('/og.png');
 
-    expect(html).toMatch(
-      /<img[^>]*id="chart"[^>]*srcSet="\/og\.png 1x, \/og\.png 2x"[^>]*sizes="50vw"/,
+    expect(html).toContain(
+      `<img id="chart" src="${og}" srcSet="${og} 1x, ${og} 2x" sizes="50vw"`,
     );
-    expect(html).toMatch(
-      /<img[^>]*srcSet="\/og\.png 1x"[^>]*alt="Only candidates"/,
-    );
+    expect(html).toContain(`<img srcSet="${og} 1x" alt="Only candidates"`);
   });
 
   it('keeps the attributes on a raw paragraph', () => {
