@@ -1,6 +1,7 @@
 ---
 title: What I learned shipping 1,000+ PRs with Claude Code
 date: '2026-01-03'
+updated: '2026-11-17'
 description: 'Notes from using Claude Code in parallel git worktrees: Plan Mode, ultrathink, verification loops, and Chrome automation.'
 image: /images/writing/api-costs-july-2025.webp
 imageAlt: 'Anthropic API costs for July 2025 showing $9,986.20 in token usage'
@@ -23,7 +24,7 @@ Here's what I'm currently running:
 - **Two Max subscriptions.** I hit weekly limits on one account when I'm running multiple long sessions, so I rotate between two accounts. At my usage, Max pricing is materially cheaper than paying API rates for interactive dev.
 - **Ghostty with six panes + notifications.** Four panes are independent working copies of the same repo (git worktrees), plus two panes for other projects. I rely on Ghostty's bell/attention notifications as a scheduler: when a pane "dings," I either merge the diff or push it back with one follow-up.
 - **Four parallel worktrees.** Each task gets its own worktree so sessions don't collide, and I can review diffs in isolation.
-- **Opus 4.5 as my configured default.** Claude Code's default depends on the plan (in 2.0.76, Opus 4.5 on Max and Team, Sonnet 4.5 on Pro and the API), and I run Opus 4.5 as my personal default for this workflow because I care more about correctness than latency, and I'm usually running several sessions anyway.
+- **Opus 4.5 as my configured default.** Claude Code 2.0.76 used different defaults by plan, including Opus 4.5 on Max and Team. I run Opus 4.5 as my personal default for this workflow because I care more about correctness than latency, and I'm usually running several sessions anyway.
 - **Plan-first workflow.** For non-trivial tasks I start in Plan Mode, write the plan to a file, review it, then switch to implementation. More on this below.
 - **Cross-model verification.** I use the Codex CLI and Gemini CLI for second opinions. I also occasionally run isolated throwaway repros in separate environments to test edge cases without touching the main codebase.
 
@@ -151,31 +152,15 @@ The CLAUDE.md at the Promptfoo repo root just contains:
 @AGENTS.md
 ```
 
-The AGENTS.md file has the actual rules. An abridged excerpt, [as it stood when I wrote this](https://github.com/promptfoo/promptfoo/blob/5fb911af06af2e7829b64469ec27ded81f44a363/AGENTS.md):
-
-````markdown
-# AGENTS.md
-
-Guidance for AI agents working on this TypeScript codebase.
-
-## Build Commands
+The [AGENTS.md file as of January 3, 2026](https://github.com/promptfoo/promptfoo/blob/5fb911af06af2e7829b64469ec27ded81f44a363/AGENTS.md) lists the project's build and verification commands, including:
 
 ```bash
-# Core commands
-npm run build              # Build the project
-npm run build:clean        # Clean the dist directory
-npm run build:watch        # Watch and rebuild TypeScript files
-npm test                   # Run all tests
-npm run tsc                # Run TypeScript compiler
+npm run build
+npm test
+npm run tsc
 ```
 
-## Git Workflow (CRITICAL)
-
-- **NEVER** commit/push directly to main
-- **NEVER** use `--force` without explicit approval
-- **NEVER** comment on GitHub issues - only create PRs to address them
-- **ALWAYS create new commits** - never amend, squash, or rebase unless explicitly asked
-````
+It also keeps changes on branches, requires approval for force-pushes, directs agents to open PRs instead of commenting on issues, and requires new commits unless history edits were requested.
 
 ## Context rot and compounding mistakes
 

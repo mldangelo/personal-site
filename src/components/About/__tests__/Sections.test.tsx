@@ -115,6 +115,16 @@ describe('AboutContent', () => {
     );
   });
 
+  it('leaves the page its own ids', () => {
+    render(
+      <AboutContent markdown={'# Intro\n\nHi.\n\n# Main Content\n\n- One'} />,
+    );
+
+    expect(
+      screen.getByRole('heading', { name: /Main Content/ }),
+    ).not.toHaveAttribute('id', 'main-content');
+  });
+
   it('renders the intro unheaded and gives each section its variant', () => {
     const { container } = render(<AboutContent markdown={MARKDOWN} />);
 

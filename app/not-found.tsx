@@ -22,6 +22,9 @@ export default function NotFound() {
           <Link href="/" className="button">
             Go home
           </Link>
+          <Link href="/writing/" className="button button-secondary">
+            Browse writing
+          </Link>
           <Link href="/contact" className="button button-secondary">
             Contact me
           </Link>

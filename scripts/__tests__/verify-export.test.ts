@@ -402,8 +402,55 @@ describe('drafts under a base path', () => {
 describe('rendered pages', () => {
   rejects([
     [
+      'canonical is not an absolute URL',
+      replaceIn(ABOUT, `${CANONICAL}/"`, 'rel="canonical" href=""'),
+      'an empty canonical',
+    ],
+    [
+      'og:url is not an absolute URL',
+      replaceIn(
+        ABOUT,
+        'property="og:url" content="https://example.com/about/"',
+        'property="og:url" content=""',
+      ),
+      'an empty og:url',
+    ],
+    // The old reader found `href=` inside the tooltip and checked about/.
+    [
+      'internal link points at missing export: missing/',
+      inHomeBody('<a title="see href=about/" href="missing/">Broken</a>'),
+      'a broken link whose tooltip names a real page',
+    ],
+    [
+      'internal link points at missing fragment: /about/#nope',
+      inHomeBody('<a href="about/#nope:~:text=About">Gone</a>'),
+      'a text fragment after a missing id',
+    ],
+    [
+      'stylesheet url() points at missing export: /_next/static/media/gone.woff2',
+      addFile(
+        'out/_next/static/css/site.css',
+        '@font-face{src:url(/_next/static/media/gone.woff2)}',
+      ),
+      'a font only a stylesheet names',
+    ],
+    [
       'has a meta refresh',
       inHomeBody('<meta http-equiv="Refresh" content="0; url=about/">'),
+    ],
+  ]);
+
+  accepts([
+    [
+      'a text fragment after a real id, and stylesheet files that exist',
+      both(
+        inHomeBody('<a href="about/#section:~:text=About">Here</a>'),
+        addFile('out/_next/static/media/font.woff2'),
+        addFile(
+          'out/_next/static/css/site.css',
+          '@font-face{src:url("/_next/static/media/font.woff2")}a{background:url(data:image/png;base64,AAAA)}b{background:url(https://cdn.example/x.png)}',
+        ),
+      ),
     ],
   ]);
 });
