@@ -4,5 +4,8 @@ export interface MarkdownReference {
 }
 
 export function parseSrcset(value: string): string[];
-export function readMarkdownReferences(markdown: string): MarkdownReference[];
+export function readMarkdownReferences(
+  markdown: string,
+  options?: { blocks?: number },
+): MarkdownReference[];
 export function readMarkdownImageSources(markdown: string): string[];
