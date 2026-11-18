@@ -38,6 +38,25 @@ describe('PostContent block structure', () => {
 });
 
 describe('PostContent image sizing', () => {
+  it('preloads the responsive candidates instead of the fallback image', () => {
+    const html = renderToStaticMarkup(
+      <PostContent
+        content={
+          '<img src="/og.png" srcset="/og.png 1200w" sizes="50vw" alt="Card">'
+        }
+        imageSizes={OG_SIZE}
+        leadImage="/og.png"
+      />,
+    );
+    const document = new DOMParser().parseFromString(html, 'text/html');
+    const preload = document.querySelector('link[rel="preload"][as="image"]');
+    expect(preload?.getAttribute('imagesrcset')).toBe(
+      `${withBasePath('/og.png')} 1200w`,
+    );
+    expect(preload?.getAttribute('imagesizes')).toBe('50vw');
+    expect(preload?.hasAttribute('href')).toBe(false);
+  });
+
   it.each([
     ['a measured local image', '![Alt](/og.png)', {}, '630'],
     [

@@ -1,6 +1,7 @@
 ---
 title: Notes on the Eurostar chatbot "vulnerability" report
 date: '2026-01-05'
+updated: '2026-11-17'
 description: Looking at what makes something a vulnerability versus a hardening opportunity in LLM applications.
 ---
 
@@ -79,7 +80,7 @@ The author even acknowledges this: "these issues weren't desperately serious" an
 
 ---
 
-The real finding: there's an improper-output-handling bug (HTML rendering) that needed fixing, and by Pen Test Partners' account Eurostar eventually fixed it. The rest is about not trusting the client, not treating prompts as secrets, and not confusing guardrails with security.
+The real finding was an improper-output-handling bug: HTML rendering. [Pen Test Partners says Eurostar eventually fixed the reported vulnerabilities](https://www.pentestpartners.com/security-blog/eurostar-ai-vulnerability-when-a-chatbot-goes-off-the-rails/), though the report also says it could not confirm every issue was fully fixed. The rest is about not trusting the client, not treating prompts as secrets, and not confusing guardrails with security.
 
 ---
 

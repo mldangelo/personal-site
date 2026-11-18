@@ -377,16 +377,19 @@ export default function PostContent({
     }
 
     const { width, height } = sizeFor(measured);
+    const candidates = srcSet ? prefixSrcset(BASE_PATH, srcSet) : undefined;
 
     // On a wide screen the lead image is in the first viewport and usually the
     // largest paint, so the head fetches it at high priority. On a phone it is
     // below the fold, where fetching it early takes bandwidth from the opening
     // text, so there it stays lazy like every other image.
-    if (src && src === leadImage) {
-      preload(withBasePath(src), {
+    if (measured === leadImage) {
+      preload(withBasePath(measured), {
         as: 'image',
         fetchPriority: 'high',
         media: WIDE_SCREEN_QUERY,
+        imageSrcSet: candidates,
+        imageSizes: sizes,
       });
     }
 
@@ -398,7 +401,7 @@ export default function PostContent({
         <img
           id={id}
           src={src ? withBasePath(src) : undefined}
-          srcSet={prefixSrcset(BASE_PATH, srcSet)}
+          srcSet={candidates}
           sizes={sizes}
           alt={alt || ''}
           width={width}

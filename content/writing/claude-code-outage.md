@@ -1,6 +1,7 @@
 ---
 title: Notes on the Claude Code 2.1.0 outage
 date: '2026-01-08'
+updated: '2026-11-17'
 description: 'A changelog formatting change took down Claude Code. Lessons about parsing human docs as machine data.'
 ---
 
@@ -24,7 +25,7 @@ The [revert](https://github.com/anthropics/claude-code/pull/16686) landed 27 min
 
 The [commit that introduced the bug](https://github.com/anthropics/claude-code/commit/870624fc1581a70590e382f263e2972b3f1e56f5) came from `actions-user`, GitHub Actions automation. The release pipeline isn't in the [public workflows directory](https://github.com/anthropics/claude-code/tree/main/.github/workflows). Previous changelog entries like `## 2.0.76` had no dates. For 2.1.0, something in the internal automation added one.
 
-[Nineteen issues](https://github.com/anthropics/claude-code/issues?q=is%3Aissue+%22Invalid+Version%22+created%3A2026-01-07T20%3A03%3A52Z..2026-01-07T21%3A03%3A52Z) were filed within the hour. By the end of the next day, the largest threads ([#16682](https://github.com/anthropics/claude-code/issues/16682), [#16673](https://github.com/anthropics/claude-code/issues/16673), [#16678](https://github.com/anthropics/claude-code/issues/16678)) had drawn about 200 comments and 1,000 reactions between them.
+Users reported the startup failure in [#16682](https://github.com/anthropics/claude-code/issues/16682), [#16673](https://github.com/anthropics/claude-code/issues/16673), and [#16678](https://github.com/anthropics/claude-code/issues/16678).
 
 **A markdown document became an API, and nobody versioned the schema.**
 

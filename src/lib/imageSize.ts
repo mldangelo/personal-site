@@ -276,7 +276,10 @@ function exifQuarterTurn(buffer: Buffer, start: number, end: number): boolean {
   for (let index = 0; index < u16(directory); index += 1) {
     const entry = directory + 2 + index * 12;
     if (entry + 12 > end) return false;
-    if (u16(entry) === 0x0112) return u16(entry + 8) >= 5;
+    if (u16(entry) === 0x0112) {
+      const orientation = u16(entry + 8);
+      return orientation >= 5 && orientation <= 8;
+    }
   }
   return false;
 }

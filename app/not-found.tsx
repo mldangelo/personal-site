@@ -22,7 +22,6 @@ export default function NotFound() {
           <Link href="/" className="button">
             Go home
           </Link>
-          {/* Most dead links that reach a site like this were to an essay. */}
           <Link href="/writing/" className="button button-secondary">
             Browse writing
           </Link>
