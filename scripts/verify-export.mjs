@@ -283,8 +283,10 @@ function validateInternalTarget(raw, source, label) {
   }
   if (!targetPage) publicPageAssets.add(url.pathname);
 
-  const fragment = url.hash.slice(1);
-  if (!fragment || fragment.startsWith(':~:text=') || !targetPage) return;
+  // A text fragment follows `:~:` and names no element, so only the id before
+  // it has to exist: `#section:~:text=About` needs `section`.
+  const fragment = url.hash.slice(1).split(':~:')[0];
+  if (!fragment || !targetPage) return;
 
   let decodedFragment;
   try {
@@ -438,9 +440,11 @@ for (const record of records) {
   const canonicals = canonicalValues(html);
   checkUrlCount(canonicals, 'canonical links');
 
-  const canonicalUrl = canonicals[0]
-    ? validateAbsoluteUrl(canonicals[0], relativePath, 'canonical')
-    : undefined;
+  // An empty value is a link to nothing, not a missing one.
+  const canonicalUrl =
+    canonicals[0] !== undefined
+      ? validateAbsoluteUrl(canonicals[0], relativePath, 'canonical')
+      : undefined;
   if (
     isIndexable &&
     canonicalUrl &&
@@ -454,9 +458,10 @@ for (const record of records) {
   const ogUrls = metaValues(html, 'property', 'og:url');
   checkUrlCount(ogUrls, 'og:url tags');
 
-  const ogUrl = ogUrls[0]
-    ? validateAbsoluteUrl(ogUrls[0], relativePath, 'og:url')
-    : undefined;
+  const ogUrl =
+    ogUrls[0] !== undefined
+      ? validateAbsoluteUrl(ogUrls[0], relativePath, 'og:url')
+      : undefined;
   if (canonicalUrl && ogUrl && canonicalUrl.href !== ogUrl.href) {
     fail(
       relativePath,
@@ -679,6 +684,29 @@ for (const draft of drafts) {
         draft.source,
         `draft references a publicly exported ${kind}: ${url.pathname}`,
       );
+    }
+  }
+}
+
+/**
+ * Files a stylesheet asks for: fonts and images in `url()`. Pages link the
+ * stylesheet, so a font it loads is missing from no page's markup, and only
+ * a reader who sees the fallback face would notice.
+ */
+for (const file of walkFiles(OUT).filter((path) => path.endsWith('.css'))) {
+  const sheet = toUrlPath(relative(OUT, file));
+  const base = `${SITE_ORIGIN}${publicPathForRoute(`/${sheet}`)}`;
+  const css = readFileSync(file, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+  for (const [, quoted, single, bare] of css.matchAll(
+    /url\(\s*(?:"([^"]*)"|'([^']*)'|([^)\s]*))\s*\)/g,
+  )) {
+    const raw = quoted ?? single ?? bare;
+    if (!raw || /^(?:data:|#)/i.test(raw)) continue;
+    const url = URL.parse(raw, base);
+    if (!url || url.origin !== SITE_ORIGIN) continue;
+    if (isOutsideBasePath(url, sheet, 'stylesheet url()', raw)) continue;
+    if (!exportedFileExists(url.pathname)) {
+      fail(sheet, `stylesheet url() points at missing export: ${raw}`);
     }
   }
 }
@@ -982,5 +1010,5 @@ if (failures.length > 0) {
 
 console.log(
   `verify-export: ${pages.length} pages OK ` +
-    '(draft routes and referenced assets, robots, ids/fragments, canonicals, complete share metadata, icons/manifest, local images/media, internal links and form targets, sitemap/RSS, resume.json)',
+    '(draft routes and referenced assets, robots, ids/fragments, canonicals, complete share metadata, icons/manifest, local images/media, stylesheet files, internal links and form targets, sitemap/RSS, resume.json)',
 );

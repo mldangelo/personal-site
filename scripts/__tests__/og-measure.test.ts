@@ -44,6 +44,26 @@ const fits = async (inkRows: [number, number][]) =>
   });
 
 describe('rendered card geometry', () => {
+  // The site card's copy is the profile, not a post's frontmatter, so its
+  // failure has to say what to shorten there.
+  it('names the remedy for the card it is checking', async () => {
+    await expect(
+      assertCardGeometry(
+        await cardFixture([
+          [0, TOP_RULE - 1],
+          [90, LAST_ROW],
+        ]),
+        {
+          size: CARD_SIZE,
+          paper,
+          topRule: TOP_RULE,
+          readoutTop: READOUT_TOP,
+          remedy: 'shorten the name in src/data/profile.json',
+        },
+      ),
+    ).rejects.toThrow(/: shorten the name in src\/data\/profile\.json\./);
+  });
+
   it('accepts a card whose copy stops above the readout', async () => {
     await expect(
       fits([

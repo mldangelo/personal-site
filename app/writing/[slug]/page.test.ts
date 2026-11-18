@@ -68,6 +68,7 @@ const FIXTURES: Record<string, string> = {
   'zz-without-image-fixture': post([
     "title: 'A Post Without One'",
     "date: '2026-01-10'",
+    "updated: '2026-03-02'",
     "description: 'Names no image.'",
   ]),
 };
@@ -190,5 +191,30 @@ describe('writing post structured data', () => {
       url: `${SITE_URL}${url}`,
       ...size,
     });
+  });
+
+  // A revised post says when it changed, and one never revised keeps its
+  // publication date as both.
+  it.each([
+    ['zz-without-image-fixture', '2026-01-10', '2026-03-02'],
+    ['zz-with-image-fixture', '2026-01-09', '2026-01-09'],
+  ])('dates %s', async (slug, published, modified) => {
+    const posting = await blogPostingFor(slug);
+    const { openGraph } = await generateMetadata({
+      params: Promise.resolve({ slug }),
+    });
+
+    expect([posting.datePublished, posting.dateModified]).toEqual([
+      published,
+      modified,
+    ]);
+    expect(openGraph).toMatchObject({
+      publishedTime: published,
+      // `article:author` takes a profile's URL, not a name.
+      authors: [`${SITE_URL}/about/`],
+    });
+    expect(
+      (openGraph as { modifiedTime?: string } | undefined)?.modifiedTime,
+    ).toBe(published === modified ? undefined : modified);
   });
 });
