@@ -239,6 +239,14 @@
   pointer-events: none;
 }
 
+/* A prompt or a Markdown example wraps rather than scrolls: a reader pans
+   sideways for each line otherwise. Wrapping changes only the display, so a
+   copy keeps the original characters and newlines. */
+.prose-fence--wrap pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
 .prose pre code {
   background: none;
   padding: 0;
