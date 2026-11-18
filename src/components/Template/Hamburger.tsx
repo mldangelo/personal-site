@@ -4,13 +4,11 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal, flushSync } from 'react-dom';
-
+import { MENU_ID } from '@/lib/page-ids';
 import routes from '../../data/routes';
 import { isActiveRoute } from '../../lib/routes';
 import { smartQuotes } from '../../lib/typography';
 import SlideMenu from './SlideMenu';
-
-const MENU_ID = 'mobile-nav-menu';
 
 export default function Hamburger() {
   const pathname = usePathname();
