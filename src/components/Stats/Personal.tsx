@@ -33,6 +33,7 @@ export default function PersonalStats() {
           label: 'Countries visited',
           value: String(profile.countriesVisited),
           link: 'https://www.google.com/maps/d/embed?mid=1iBBTscqateQ93pWFVfHCUZXoDu8&z=2',
+          linkLabel: 'map',
         },
         { label: 'Current city', value: profile.currentCity },
       ]}

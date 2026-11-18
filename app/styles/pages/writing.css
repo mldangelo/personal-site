@@ -14,6 +14,23 @@
   margin-bottom: 2.5rem;
 }
 
+/* The section index's own spacing; the rest is components/section-nav.css. */
+.writing-nav {
+  margin: 0 0 var(--spacing-6);
+}
+
+/* A jump parks the rule above each heading clear of the sticky index, as on
+   About. */
+.writing-page .section-heading {
+  scroll-margin-top: calc(var(--header-height) + 5.5rem + var(--spacing-5));
+}
+
+@media (max-width: 735px) {
+  .writing-page .section-heading {
+    scroll-margin-top: calc(var(--header-height) + 4.5rem + var(--spacing-5));
+  }
+}
+
 /* ========================================
    BLOG POST PAGE
    Individual post layout and typography

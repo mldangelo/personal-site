@@ -27,16 +27,22 @@ describe('TableRow', () => {
 
   it('links a value inside the same kind of cell as a plain one', () => {
     renderRows(
-      { label: 'Forks', value: '979', link: 'https://example.com' },
+      {
+        label: 'Forks',
+        value: '979',
+        link: 'https://example.com',
+        linkLabel: 'on GitHub',
+      },
       { label: 'Number of spoons', value: '0' },
     );
 
     const [linked, plain] = screen.getAllByRole('cell');
 
-    expect(screen.getByRole('link', { name: '979' })).toHaveAttribute(
-      'href',
-      'https://example.com',
-    );
+    // Read out of its row, as in a list of links, the value alone names
+    // nothing, so the link says what it counts and where it goes.
+    expect(
+      screen.getByRole('link', { name: /^979\s*, Forks: on GitHub$/ }),
+    ).toHaveAttribute('href', 'https://example.com');
     expect(linked.className).toBe(plain.className);
     expect(plain.querySelector('a')).toBeNull();
   });
