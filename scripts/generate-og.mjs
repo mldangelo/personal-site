@@ -20,8 +20,9 @@
  */
 import { mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
-import { join } from 'node:path';
+import { basename, join } from 'node:path';
 import { createElement as h } from 'react';
+import { fontCoverage, uncoveredCharacters } from './lib/font-coverage.mjs';
 import { loadFont } from './lib/fonts.mjs';
 import { requireSharp } from './lib/image-renderer.mjs';
 import {
@@ -205,6 +206,9 @@ function siteCard() {
           color: ink,
           display: 'flex',
           flexDirection: 'column',
+          // A name too long for a line wraps where it can be seen, rather
+          // than running off the card's edge, where nothing would notice.
+          wordBreak: WORD_BREAK,
         },
       },
       h('span', {}, FIRST_NAME),
@@ -268,6 +272,7 @@ function postCard(post) {
 // versioned and the bytes checksummed, so this network read cannot silently
 // choose a newer font revision.
 const fonts = await Promise.all(fontSources.map(loadFont));
+const coverages = fonts.map(({ data }) => fontCoverage(data));
 
 /**
  * Renders one card and reads back the geometry it actually drew.
@@ -277,7 +282,21 @@ const fonts = await Promise.all(fontSources.map(loadFont));
  * disagrees. Measuring the rendered rows is what turns "should fit" into
  * "did fit", for the site card and post cards alike.
  */
-async function render(element, label) {
+async function render(element, label, { text, remedy }) {
+  const missing = uncoveredCharacters(text.join(' '), coverages);
+  if (missing.length > 0) {
+    throw new Error(
+      `${label}: the card fonts have no glyph for ${missing
+        .map(
+          (character) =>
+            `"${character}" (U+${character.codePointAt(0).toString(16).toUpperCase().padStart(4, '0')})`,
+        )
+        .join(
+          ', ',
+        )}. next/og would fetch an unpinned font for it, or draw nothing; add a pinned font that covers it to CARD_FONTS in scripts/og-inputs.mjs.`,
+    );
+  }
+
   const response = new ImageResponse(element, { ...size, fonts });
   const image = Buffer.from(await response.arrayBuffer());
 
@@ -287,6 +306,7 @@ async function render(element, label) {
       paper,
       topRule: TOP_RULE,
       readoutTop: readoutTop(size),
+      remedy,
     });
   } catch (error) {
     throw new Error(`${label}: ${error.message}`, { cause: error });
@@ -299,14 +319,39 @@ async function render(element, label) {
 // that fails halfway through would otherwise leave `public/` holding a mixed
 // set — some cards from this run, some from the last — with a ledger that
 // matches neither.
+const readoutText = (readout) =>
+  readout.flatMap(({ label, value }) => [label.toUpperCase(), value]);
 const rendered = [
-  { path: HOME_CARD_PATH, image: await render(siteCard(), 'The site card') },
+  {
+    path: HOME_CARD_PATH,
+    image: await render(siteCard(), 'The site card', {
+      text: [
+        '—',
+        AUTHOR,
+        profile.employer,
+        profile.focus,
+        ...readoutText(READOUT),
+      ],
+      remedy: 'shorten the name, employer, or focus in src/data/profile.json',
+    }),
+  },
 ];
 for (const post of posts) {
   rendered.push({
     slug: post.slug,
     path: post.path,
-    image: await render(postCard(post), `The share card for ${post.slug}`),
+    image: await render(postCard(post), `The share card for ${post.slug}`, {
+      text: [
+        '—',
+        AUTHOR,
+        post.dateLabel,
+        typeset(post.title),
+        typeset(post.description),
+        ...readoutText(post.readout),
+      ],
+      remedy:
+        'shorten the frontmatter copy, or take a size out of `TITLE_SIZES`',
+    }),
   });
 }
 
@@ -357,22 +402,36 @@ if (process.argv.includes('--check')) {
   process.exit(0);
 }
 
+// Read before anything is written: it records which cards the last run made.
+const previousLedger = await readFile(publicFile(root, LEDGER_PATH), 'utf8')
+  .then((text) => JSON.parse(text))
+  .catch(() => undefined);
+
 await mkdir(publicFile(root, POST_CARD_DIRECTORY), { recursive: true });
 await Promise.all(
   rendered.map(({ path, image }) => writeFile(publicFile(root, path), image)),
 );
 
 // A post that becomes a draft, or is renamed, must not leave its card behind:
-// `public/` is served verbatim, so a stale card stays fetchable forever.
+// `public/` is served verbatim, so a stale card stays fetchable forever. Only
+// a card the last run recorded in the ledger is this generator's to delete;
+// anything else in the folder is someone's, so it is named and left alone.
 const expected = new Set(posts.map((post) => `${post.slug}.png`));
-const stale = (await readdir(publicFile(root, POST_CARD_DIRECTORY))).filter(
+const generated = new Set(
+  (previousLedger?.posts ?? []).map(({ path }) => basename(path)),
+);
+const others = (await readdir(publicFile(root, POST_CARD_DIRECTORY))).filter(
   (file) => !expected.has(file),
 );
+const stale = others.filter((file) => generated.has(file));
 await Promise.all(
-  stale.map((file) =>
-    rm(join(publicFile(root, POST_CARD_DIRECTORY), file), { recursive: true }),
-  ),
+  stale.map((file) => rm(join(publicFile(root, POST_CARD_DIRECTORY), file))),
 );
+for (const file of others.filter((file) => !generated.has(file))) {
+  console.warn(
+    `Left public${POST_CARD_DIRECTORY}/${file} alone: it is not a card this generator wrote.`,
+  );
+}
 
 // The ledger is the commit marker for a generation run. Write it only after
 // every image and deletion succeeds, so an interrupted run stays visibly stale
