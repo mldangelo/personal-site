@@ -32,8 +32,8 @@
   "renderer": [
     {
       "name": "next",
-      "version": "16.4.5",
-      "integrity": "sha512-rmdfsWosjTUO+6R0S3KokoIk6Kj0sWDRTe86tZHdqaWH/oXq/udX3/4xb+YQi7aWbyEFoglDU54kaifLCdXbBw=="
+      "version": "16.4.6",
+      "integrity": "sha512-QZJiYhaZLJMo2KpkQGQIwvmd79WVsAWeYIU554a8d7zArS3si/IRy3lBNV/rtYhE70oLwdLYhPAXLPx8HwcwtA=="
     },
     {
       "name": "react",
