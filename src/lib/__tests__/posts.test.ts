@@ -30,6 +30,8 @@ describe('validatePostFrontmatterData', () => {
     [{ ...validFrontmatter, image: 'card.png' }, '"image"'],
     [{ ...validFrontmatter, image: '/card.png' }, '"imageAlt"'],
     [{ ...validFrontmatter, imageAlt: 'A card' }, '"image"'],
+    [{ ...validFrontmatter, updated: '2026-07-24' }, '"updated"'],
+    [{ ...validFrontmatter, updated: '2026-02-30' }, '"updated"'],
     // An unread key would publish without the setting its author meant.
     [{ ...validFrontmatter, Draft: true }, '"Draft" must be spelled "draft"'],
     [{ ...validFrontmatter, tags: ['ai'] }, '"tags" is not a frontmatter key'],

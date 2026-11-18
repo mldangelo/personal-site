@@ -249,7 +249,7 @@ export function blogPostingNode(
     description: post.description,
     inLanguage: SITE_LANGUAGE,
     datePublished: post.date,
-    dateModified: post.date,
+    dateModified: post.updated ?? post.date,
     author: PERSON_REF,
     publisher: PERSON_REF,
     image: {

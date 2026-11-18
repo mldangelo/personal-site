@@ -200,7 +200,7 @@ description: 'A short description for previews and search results.'
 Your content here.
 ```
 
-The required fields are `title`, `date`, and `description`. `draft: true` shows
+The required fields are `title`, `date`, and `description`. After revising a published post, add `updated` with the date of the change. `draft: true` shows
 a post during development without including it in the production export. An
 optional `image` must be paired with `imageAlt`. Images, in the frontmatter or
 the body, use root-relative paths to files under `public/`, such as

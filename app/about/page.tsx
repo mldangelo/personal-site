@@ -12,11 +12,24 @@ import { AUTHOR_NAME } from '@/lib/utils';
 
 const ABOUT_DESCRIPTION = `Learn about ${AUTHOR_NAME} - ${profile.role} at ${profile.employer} and builder across AI, security, and infrastructure.`;
 
-export const metadata: Metadata = createPageMetadata({
+const pageMetadata = createPageMetadata({
   title: 'About',
   description: ABOUT_DESCRIPTION,
   path: '/about/',
 });
+const [firstName, ...lastNames] = AUTHOR_NAME.split(' ');
+
+// The page posts name as their author, so it is a profile, as Open Graph's
+// `article:author` expects.
+export const metadata: Metadata = {
+  ...pageMetadata,
+  openGraph: {
+    ...pageMetadata.openGraph,
+    type: 'profile',
+    firstName,
+    lastName: lastNames.join(' '),
+  },
+};
 
 export default function AboutPage() {
   return (
