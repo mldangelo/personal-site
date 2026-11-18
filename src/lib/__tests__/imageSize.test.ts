@@ -170,6 +170,15 @@ describe('leadImageSource', () => {
     expect(leadImageSource(`${paragraph}\n\n${paragraph}`)).toBeUndefined();
   });
 
+  // A footnote example in a fence is text, wherever the fence falls.
+  it('reads a fence past the window as one block', () => {
+    expect(
+      leadImageSource(
+        `${paragraph}\n\n${paragraph}\n\n${paragraph}\n\n\`\`\`md\n[^1]: <iframe srcdoc="x"></iframe>\n\`\`\`\n`,
+      ),
+    ).toBeUndefined();
+  });
+
   it('resolves a reference-style lead image defined further down', () => {
     expect(
       leadImageSource(
