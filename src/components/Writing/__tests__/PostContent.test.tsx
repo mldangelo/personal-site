@@ -38,6 +38,25 @@ describe('PostContent block structure', () => {
 });
 
 describe('PostContent image sizing', () => {
+  it('preloads the responsive candidates instead of the fallback image', () => {
+    const html = renderToStaticMarkup(
+      <PostContent
+        content={
+          '<img src="/og.png" srcset="/og.png 1200w" sizes="50vw" alt="Card">'
+        }
+        imageSizes={OG_SIZE}
+        leadImage="/og.png"
+      />,
+    );
+    const document = new DOMParser().parseFromString(html, 'text/html');
+    const preload = document.querySelector('link[rel="preload"][as="image"]');
+    expect(preload?.getAttribute('imagesrcset')).toBe(
+      `${withBasePath('/og.png')} 1200w`,
+    );
+    expect(preload?.getAttribute('imagesizes')).toBe('50vw');
+    expect(preload?.hasAttribute('href')).toBe(false);
+  });
+
   it.each([
     ['a measured local image', '![Alt](/og.png)', {}, '630'],
     [
@@ -158,6 +177,21 @@ describe('PostContent raw HTML', () => {
     );
     expect(html).toContain('js code block');
     expect(html).not.toMatch(/style=|<img|<b>/);
+  });
+
+  // next/image would write a srcset of its own over the author's.
+  it('keeps a raw image as written: candidates, sizes, and id', () => {
+    const sizes = { '/og.png': { width: 1200, height: 630 } };
+    const html = markup(
+      'Intro.\n\n<img id="chart" src="/og.png" srcset="/og.png 1x, /og.png 2x" sizes="50vw" alt="A chart">\n\nText <img srcset="/og.png 1x" alt="Only candidates"> after.\n',
+      sizes,
+    );
+    const og = withBasePath('/og.png');
+
+    expect(html).toContain(
+      `<img id="chart" src="${og}" srcSet="${og} 1x, ${og} 2x" sizes="50vw"`,
+    );
+    expect(html).toContain(`<img srcSet="${og} 1x" alt="Only candidates"`);
   });
 
   it('keeps the attributes on a raw paragraph', () => {
