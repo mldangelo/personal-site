@@ -62,7 +62,7 @@
     "accent": "#36559a",
     "hairline": "rgba(35, 39, 46, 0.14)"
   },
-  "generatorDigest": "bb6bc37a91f4226b890ddd3baf9d2628c4dd992ad415fda1fe52b8f57c77ef35",
+  "generatorDigest": "ff05ca8758d3b95490bcd51c84aef39d40a2e1da5a22264bf6678b79bf9fe6ac",
   "imageDigest": "c65a73c3f62da10d330e50caae8bc74a1db46489dc83044dc78b96497cfda86a",
   "posts": [
     {
@@ -144,7 +144,7 @@
       "readout": [
         {
           "label": "Words",
-          "value": "1,911"
+          "value": "1,931"
         },
         {
           "label": "Unique external links",
@@ -152,10 +152,10 @@
         },
         {
           "label": "Reading time",
-          "value": "8 min"
+          "value": "9 min"
         }
       ],
-      "imageDigest": "6149173111b06f898eb987222738be4c71e00ba8b7d85ffd36292729e0764e7b"
+      "imageDigest": "186b5b42111f6fb702cbc59b42b32477209aef1d91aa8e16f27e7af517fda64a"
     }
   ]
 }
