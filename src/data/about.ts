@@ -6,7 +6,7 @@ I build products, companies, and teams across AI, security, and infrastructure. 
 
 I co-founded [Promptfoo](https://promptfoo.dev) before it joined OpenAI in 2026. I also co-founded [Arthena](https://www.ycombinator.com/companies/arthena) (acquired by Masterworks) and [Matroid](https://matroid.com), led engineering at [Smile ID](https://smile.id), and helped build satellites at [Planet](https://planet.com) and [Planetary Resources](https://en.wikipedia.org/wiki/Planetary_Resources).
 
-In my spare time, I enjoy investing in people and ideas through a [small venture fund](https://skepticalinvestments.biz), focusing on projects with high social impact. If you think I can be helpful to you or your cause, or if you're interested in collaborating, feel free to get in touch.
+In my spare time, I enjoy investing in people and ideas through a [small venture fund](https://skepticalinvestments.biz), focusing on projects with high social impact. If you think I can be helpful to you or your cause, or if you're interested in collaborating, feel free to [get in touch](/contact/).
 
 # Some history
 
@@ -44,7 +44,7 @@ Ask me in person for other stories that I'm afraid to share with the internet.
 # Travel / geography
 
 - I am originally from Buffalo, New York. I have since lived in Palo Alto, Mountain View, San Francisco, Seattle, and New York City.
-- I've been to ${profile.countriesVisited} countries, some of which I have forgotten, many of which I would like to revisit.
+- I've been to [${profile.countriesVisited} countries](/stats/), some of which I have forgotten, many of which I would like to revisit.
 - In 2016, I visited Canada, Ethiopia, Austria, Germany, Belgium, Ireland, Northern Ireland, Italy, Romania, Sweden, Norway, Svalbard, Panama, Costa Rica, Uganda, Japan, and the UAE, mostly in that order.
 - In 2017, I visited Canada, Japan, Denmark, Germany, Sweden, Estonia, Russia, the Netherlands, Belgium, the UK, Spain, Iceland, France, Switzerland, Ethiopia, and Luxembourg.
 - In 2018, I visited Canada, France, Italy, Israel, and the UK.

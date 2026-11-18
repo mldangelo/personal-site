@@ -3,7 +3,6 @@ import { StrictMode } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 
-import { planMarkdownHeadingAnchors } from '@/lib/anchors';
 import type { ImageSize } from '@/lib/imageSize';
 import { withBasePath } from '@/lib/utils';
 
@@ -39,6 +38,25 @@ describe('PostContent block structure', () => {
 });
 
 describe('PostContent image sizing', () => {
+  it('preloads the responsive candidates instead of the fallback image', () => {
+    const html = renderToStaticMarkup(
+      <PostContent
+        content={
+          '<img src="/og.png" srcset="/og.png 1200w" sizes="50vw" alt="Card">'
+        }
+        imageSizes={OG_SIZE}
+        leadImage="/og.png"
+      />,
+    );
+    const document = new DOMParser().parseFromString(html, 'text/html');
+    const preload = document.querySelector('link[rel="preload"][as="image"]');
+    expect(preload?.getAttribute('imagesrcset')).toBe(
+      `${withBasePath('/og.png')} 1200w`,
+    );
+    expect(preload?.getAttribute('imagesizes')).toBe('50vw');
+    expect(preload?.hasAttribute('href')).toBe(false);
+  });
+
   it.each([
     ['a measured local image', '![Alt](/og.png)', {}, '630'],
     [
@@ -159,6 +177,21 @@ describe('PostContent raw HTML', () => {
     );
     expect(html).toContain('js code block');
     expect(html).not.toMatch(/style=|<img|<b>/);
+  });
+
+  // next/image would write a srcset of its own over the author's.
+  it('keeps a raw image as written: candidates, sizes, and id', () => {
+    const sizes = { '/og.png': { width: 1200, height: 630 } };
+    const html = markup(
+      'Intro.\n\n<img id="chart" src="/og.png" srcset="/og.png 1x, /og.png 2x" sizes="50vw" alt="A chart">\n\nText <img srcset="/og.png 1x" alt="Only candidates"> after.\n',
+      sizes,
+    );
+    const og = withBasePath('/og.png');
+
+    expect(html).toContain(
+      `<img id="chart" src="${og}" srcSet="${og} 1x, ${og} 2x" sizes="50vw"`,
+    );
+    expect(html).toContain(`<img srcSet="${og} 1x" alt="Only candidates"`);
   });
 
   it('keeps the attributes on a raw paragraph', () => {
@@ -310,22 +343,28 @@ describe('PostContent heading anchors', () => {
     expectUniqueIds(html);
   });
 
-  // The outline links to headings the renderer ids on its own, so the two
-  // have to agree, duplicates and code spans included.
-  it("plans an outline whose ids are the rendered headings'", () => {
-    const content =
-      '## One\n\nText.\n\n### Under\n\n- ## In a list\n\n## One\n\n## The `--flag`\n';
-    const { outline } = planMarkdownHeadingAnchors(content);
-
-    expect(outline.map(({ title }) => title)).toEqual([
-      'One',
-      'In a list',
-      'One',
-      'The --flag',
+  // The layout's own ids: a heading taking `main-content` would steal the
+  // skip link's target.
+  it('leaves the page its own ids', () => {
+    expect(headingIds(markup('## Main Content\n\nText.\n'))).toEqual([
+      'main-content-2',
     ]);
-    expect(outline.map(({ id }) => id)).toEqual(
-      idsIn(markup(content), /<h2[^>]*\bid="([^"]+)"/g),
+  });
+
+  // Labels the slugifier empties, or slugifies alike, still get one note
+  // each, and each marker links to its own.
+  it('gives every footnote its own id, and its marker the matching link', () => {
+    const html = markup(
+      'A[^出典] B[^Note] C[^note!] D[^CASE].\n\n[^出典]: Source.\n[^Note]: One.\n[^note!]: Two.\n[^case]: Matched.\n',
     );
+    const links = idsIn(html, /<a href="#([^"]*)"><sup>/g);
+
+    expect(links).toHaveLength(4);
+    expect(new Set(links).size).toBe(4);
+    expect(links.every((id) => id !== '' && html.includes(`id="${id}"`))).toBe(
+      true,
+    );
+    expectUniqueIds(html);
   });
 
   it('keeps raw heading attributes and avoids raw and footnote ids', () => {

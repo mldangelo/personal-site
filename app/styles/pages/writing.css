@@ -14,6 +14,23 @@
   margin-bottom: 2.5rem;
 }
 
+/* The section index's own spacing; the rest is components/section-nav.css. */
+.writing-nav {
+  margin: 0 0 var(--spacing-6);
+}
+
+/* A jump parks the rule above each heading clear of the sticky index, as on
+   About. */
+.writing-page .section-heading {
+  scroll-margin-top: calc(var(--header-height) + 5.5rem + var(--spacing-5));
+}
+
+@media (max-width: 735px) {
+  .writing-page .section-heading {
+    scroll-margin-top: calc(var(--header-height) + 4.5rem + var(--spacing-5));
+  }
+}
+
 /* ========================================
    BLOG POST PAGE
    Individual post layout and typography
@@ -102,46 +119,6 @@
   color: var(--color-fg-light);
   margin: 0;
   line-height: var(--leading-snug);
-}
-
-/* A long essay's sections, collapsed under its header. */
-.post-outline {
-  max-width: var(--measure-read);
-  margin: -1.5rem 0 2.5rem;
-  border-bottom: var(--rule) solid var(--color-border);
-}
-
-.post-outline summary {
-  padding: 0.75rem 0;
-  font-family: var(--font-display);
-  font-size: var(--text-ui);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-fg-light);
-  cursor: pointer;
-}
-
-.post-outline summary:hover {
-  color: var(--color-fg-bold);
-}
-
-.post-outline ol {
-  margin: 0 0 1.25rem;
-  padding-left: 1.5rem;
-  font-family: var(--font-body);
-  font-size: var(--text-md);
-  line-height: var(--leading-snug);
-}
-
-.post-outline li + li {
-  margin-top: 0.5rem;
-}
-
-.post-outline a {
-  color: var(--color-fg);
-}
-
-.post-outline a:hover {
-  color: var(--color-accent);
 }
 
 /* Prose styling for markdown content */

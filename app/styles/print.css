@@ -85,11 +85,6 @@
     display: inline;
   }
 
-  /* Paper has every section in front of it already. */
-  .post-outline {
-    display: none;
-  }
-
   /* Contact details belong on a printed resume. Rendered as real markup in
      ResumePage rather than CSS content, so the line is selectable, linkable,
      and sourced from the same profile and contact data as the screen UI. */
