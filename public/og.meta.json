@@ -98,7 +98,7 @@
       "readout": [
         {
           "label": "Words",
-          "value": "406"
+          "value": "433"
         },
         {
           "label": "Unique external links",
@@ -109,7 +109,7 @@
           "value": "2 min"
         }
       ],
-      "imageDigest": "89c983fe636d4c0147424f506e7c8f5ddf2bf1b522f2f85aa66949a910a92b04"
+      "imageDigest": "30787e070724f2b59ea911abe423ef9e35bf2ae0c444403a3fe2b581a4459707"
     },
     {
       "slug": "eurostar-chatbot-analysis",
