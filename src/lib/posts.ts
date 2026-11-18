@@ -10,6 +10,8 @@ import { publishedMarkdown } from './published-markdown.mjs';
 interface PostFrontmatter {
   title: string;
   date: string;
+  /** The last revision a reader would notice, when there was one. */
+  updated?: string;
   description: string;
   draft?: boolean;
   /**

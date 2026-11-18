@@ -61,6 +61,7 @@ export const CARD_FONTS = [
 const GENERATOR_SOURCES = [
   'scripts/generate-og.mjs',
   'scripts/lib/fonts.mjs',
+  'scripts/lib/font-coverage.mjs',
   'scripts/lib/image-renderer.mjs',
   'scripts/og-inputs.mjs',
   'src/lib/color-token.mjs',
@@ -158,17 +159,6 @@ function isAutolink(node) {
   );
 }
 
-/**
- * Words of prose, with code, URLs, and markup left out.
- *
- * Counted off the same Markdown AST the site renders from, rather than by
- * unwriting the syntax with expressions. Stripping ``` fences and inline code
- * by hand missed both of the other ways to write a code block — `~~~` fences
- * and four-space indentation — and counted them as prose, inflating the words
- * and the reading time by the size of the code. The parser classifies all three
- * as `codeBlock`, and only text nodes are counted, so image alt text, link
- * targets, reference definitions, list markers, and table pipes stay out.
- */
 /** The caption of a paragraph that holds only an image, or a linked one. */
 function captionOf(node) {
   if (node.type !== RuleType.paragraph || node.children?.length !== 1) return;
@@ -180,6 +170,17 @@ function captionOf(node) {
   return image.type === RuleType.image ? image.title : undefined;
 }
 
+/**
+ * Words of prose, with code, URLs, and markup left out.
+ *
+ * Counted off the same Markdown AST the site renders from, rather than by
+ * unwriting the syntax with expressions. Stripping ``` fences and inline code
+ * by hand missed both of the other ways to write a code block — `~~~` fences
+ * and four-space indentation — and counted them as prose, inflating the words
+ * and the reading time by the size of the code. The parser classifies all three
+ * as `codeBlock`, and only text nodes are counted, so image alt text, link
+ * targets, reference definitions, list markers, and table pipes stay out.
+ */
 export function countProseWords(markdown) {
   const prose = [];
 
