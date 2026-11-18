@@ -32,8 +32,8 @@
   "renderer": [
     {
       "name": "next",
-      "version": "16.4.5",
-      "integrity": "sha512-rmdfsWosjTUO+6R0S3KokoIk6Kj0sWDRTe86tZHdqaWH/oXq/udX3/4xb+YQi7aWbyEFoglDU54kaifLCdXbBw=="
+      "version": "16.4.6",
+      "integrity": "sha512-QZJiYhaZLJMo2KpkQGQIwvmd79WVsAWeYIU554a8d7zArS3si/IRy3lBNV/rtYhE70oLwdLYhPAXLPx8HwcwtA=="
     },
     {
       "name": "react",
@@ -62,7 +62,7 @@
     "accent": "#36559a",
     "hairline": "rgba(35, 39, 46, 0.14)"
   },
-  "generatorDigest": "af332a05ed8580604e0ca5887c8cdc77df61d4d014d50f4479a1a354fbf74adc",
+  "generatorDigest": "bb6bc37a91f4226b890ddd3baf9d2628c4dd992ad415fda1fe52b8f57c77ef35",
   "imageDigest": "c65a73c3f62da10d330e50caae8bc74a1db46489dc83044dc78b96497cfda86a",
   "posts": [
     {
