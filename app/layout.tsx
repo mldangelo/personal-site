@@ -7,6 +7,7 @@ import Navigation from '@/components/Template/Navigation';
 import { MAIN_CONTENT_ID } from '@/components/Template/PageWrapper';
 import ScrollToTop from '@/components/Template/ScrollToTop';
 import { sharedOpenGraph, sharedTwitter } from '@/lib/metadata';
+import { THEME_SCRIPT_ID } from '@/lib/page-ids';
 import {
   THEME_COLOR_TOKEN,
   type ThemeColors,
@@ -139,7 +140,7 @@ export default function RootLayout({
             parser-blocking script runs before the page is painted, which is
             the entire point of this one. */}
         <script
-          id="theme-init"
+          id={THEME_SCRIPT_ID}
           dangerouslySetInnerHTML={{ __html: themeInitScript(CHROME_COLORS) }}
         />
         <SiteSchema />
