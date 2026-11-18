@@ -143,7 +143,10 @@ export async function generateMetadata({
         : {
             url,
             publishedTime: post.date,
-            authors: [AUTHOR_NAME],
+            ...(post.updated ? { modifiedTime: post.updated } : {}),
+            // A profile, not a name: `article:author` takes the URL of the
+            // author's `profile` page.
+            authors: [`${SITE_URL}/about/`],
           }),
       ...shareImage,
     },
