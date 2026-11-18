@@ -12,9 +12,17 @@ vi.stubGlobal('fetch', fetchMock);
 
 import Site from '../../Stats/Site';
 
+/** The value as a sighted reader sees it, without a link's hidden name. */
 function valueFor(label: string) {
-  return screen.getByText(label).closest('tr')?.querySelector('td')
-    ?.textContent;
+  const cell = screen
+    .getByText(label)
+    .closest('tr')
+    ?.querySelector('td')
+    ?.cloneNode(true) as HTMLElement | undefined;
+  for (const hidden of cell?.querySelectorAll('.sr-only') ?? []) {
+    hidden.remove();
+  }
+  return cell?.textContent;
 }
 
 function counts() {

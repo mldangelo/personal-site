@@ -4,7 +4,15 @@
  * Keeping this dependency-free lets both boundaries reject the same malformed
  * YAML before either a route or a generated public asset can be published.
  */
-const KEYS = ['title', 'date', 'description', 'draft', 'image', 'imageAlt'];
+const KEYS = [
+  'title',
+  'date',
+  'updated',
+  'description',
+  'draft',
+  'image',
+  'imageAlt',
+];
 
 export function validatePostFrontmatterData(value, source = 'post') {
   if (!isRecord(value)) {
@@ -34,6 +42,19 @@ export function validatePostFrontmatterData(value, source = 'post') {
     throw frontmatterError(
       source,
       '"date" must be a real calendar date in YYYY-MM-DD format',
+    );
+  }
+
+  // The last revision a reader would notice, not every commit: search
+  // engines and feed readers take it as the date the text changed.
+  const updated =
+    value.updated === undefined
+      ? undefined
+      : requiredText(value.updated, 'updated', source);
+  if (updated !== undefined && (!isCalendarDate(updated) || updated < date)) {
+    throw frontmatterError(
+      source,
+      '"updated" must be a real YYYY-MM-DD date no earlier than "date"',
     );
   }
 
@@ -72,6 +93,7 @@ export function validatePostFrontmatterData(value, source = 'post') {
   return {
     title,
     date,
+    ...(updated === undefined ? {} : { updated }),
     description,
     ...(value.draft === undefined ? {} : { draft: value.draft }),
     ...(image === undefined ? {} : { image }),
