@@ -1,7 +1,7 @@
 ---
 title: What I learned shipping 1,000+ PRs with Claude Code
 date: '2026-01-03'
-updated: '2026-10-05'
+updated: '2026-11-17'
 description: 'Notes from using Claude Code in parallel git worktrees: Plan Mode, ultrathink, verification loops, and Chrome automation.'
 image: /images/writing/api-costs-july-2025.webp
 imageAlt: 'Anthropic API costs for July 2025 showing $9,986.20 in token usage'
@@ -24,7 +24,7 @@ Here's what I'm currently running:
 - **Two Max subscriptions.** I hit weekly limits on one account when I'm running multiple long sessions, so I rotate between two accounts. At my usage, Max pricing is materially cheaper than paying API rates for interactive dev.
 - **Ghostty with six panes + notifications.** Four panes are independent working copies of the same repo (git worktrees), plus two panes for other projects. I rely on Ghostty's bell/attention notifications as a scheduler: when a pane "dings," I either merge the diff or push it back with one follow-up.
 - **Four parallel worktrees.** Each task gets its own worktree so sessions don't collide, and I can review diffs in isolation.
-- **Opus 4.5 as my configured default.** Claude Code defaults to Sonnet 4.5, but I run Opus 4.5 as my personal default for this workflow because I care more about correctness than latency, and I'm usually running several sessions anyway.
+- **Opus 4.5 as my configured default.** Claude Code 2.0.76 used different defaults by plan, including Opus 4.5 on Max and Team. I run Opus 4.5 as my personal default for this workflow because I care more about correctness than latency, and I'm usually running several sessions anyway.
 - **Plan-first workflow.** For non-trivial tasks I start in Plan Mode, write the plan to a file, review it, then switch to implementation. More on this below.
 - **Cross-model verification.** I use the Codex CLI and Gemini CLI for second opinions. I also occasionally run isolated throwaway repros in separate environments to test edge cases without touching the main codebase.
 
@@ -47,7 +47,7 @@ This is probably a bad idea. The flag disables all permission prompts for file e
 
 If you want this workflow without the risk, the official recommendation is to run it in an isolated environment (container or similar). Claude Code also offers `/sandbox` mode for filesystem and network isolation of bash commands, which is safer than bypassing permissions entirely.
 
-For anything unfamiliar, I start in Plan Mode first, then switch to implementation. Claude Code's write boundary is scoped to the directory it's started in, which helps for file edits, but bypassing permission prompts is still "arbitrary commands without human review."
+For anything unfamiliar, I start in Plan Mode first, then switch to implementation. Claude Code asks before editing files outside the directory it's started in, but [that boundary is a permission prompt](https://code.claude.com/docs/en/security), so this flag skips it too. Bypassing permission prompts is still "arbitrary commands without human review."
 
 For these specific repositories, with git as a safety net and the ability to quickly review diffs, I've decided the productivity gain is worth the risk. Your situation is probably different.
 
@@ -94,7 +94,7 @@ Example:
 ultrathink: audit this diff for security issues and behavior changes
 ```
 
-In Claude Code, `ultrathink` is the keyword that allocates a per-request thinking budget. Other phrases like "think hard" read like emphasis, but they don't allocate thinking tokens. This only works as described when `MAX_THINKING_TOKENS` is not set; if you've set that environment variable, it overrides the per-request `ultrathink` behavior.
+In Claude Code 2.0 (2.0.76 when I wrote this), `ultrathink` is the keyword that allocates a per-request thinking budget of 31,999 tokens. Other phrases like "think hard" read like emphasis, but they don't allocate thinking tokens. This only works as described when `MAX_THINKING_TOKENS` is not set; if you've set that environment variable, it overrides the per-request `ultrathink` behavior. Newer models reason adaptively instead of on a fixed budget, and there `ultrathink` [asks for deeper reasoning on that turn](https://code.claude.com/docs/en/model-config).
 
 ## Examples of what this enables
 
@@ -152,25 +152,15 @@ The CLAUDE.md at the Promptfoo repo root just contains:
 @AGENTS.md
 ```
 
-The AGENTS.md file has the actual rules:
+The [AGENTS.md file as of January 3, 2026](https://github.com/promptfoo/promptfoo/blob/5fb911af06af2e7829b64469ec27ded81f44a363/AGENTS.md) lists the project's build and verification commands, including:
 
-```markdown
-# Promptfoo Development Guide
-
-## Build Commands
-
-- Lint: `npm run lint`
-- Type check: `npm run type-check`
-- Tests: `npm test`
-- Build: `npm run build`
-
-## Critical Rules
-
-- Never edit files in `dist/` - they're generated
-- Never modify `package.json` dependencies without asking
-- Test files must end in `.test.ts` or `.test.tsx`
-- All API endpoints require authentication checks
+```bash
+npm run build
+npm test
+npm run tsc
 ```
+
+It also keeps changes on branches, requires approval for force-pushes, directs agents to open PRs instead of commenting on issues, and requires new commits unless history edits were requested.
 
 ## Context rot and compounding mistakes
 

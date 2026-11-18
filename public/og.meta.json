@@ -144,18 +144,18 @@
       "readout": [
         {
           "label": "Words",
-          "value": "1,931"
+          "value": "2,012"
         },
         {
           "label": "Unique external links",
-          "value": "17"
+          "value": "19"
         },
         {
           "label": "Reading time",
           "value": "9 min"
         }
       ],
-      "imageDigest": "186b5b42111f6fb702cbc59b42b32477209aef1d91aa8e16f27e7af517fda64a"
+      "imageDigest": "7b0885387a355ca8e5662ab5ddf5ea949f288829dce7e6e46c815bc3f61901d1"
     }
   ]
 }
