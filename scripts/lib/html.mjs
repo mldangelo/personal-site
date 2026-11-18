@@ -39,11 +39,26 @@ export function tags(html, name = '[a-z][\\w:-]*') {
   );
 }
 
+/**
+ * A tag's attributes, read one at a time from after its name, so text inside
+ * one value, such as a tooltip that says `href=/about/`, is never read as
+ * another. Names are lowercased; as in the HTML parser, the first of two
+ * with one name wins, and an attribute with no value is the empty string.
+ */
+export function attributes(tag) {
+  const result = new Map();
+  const body = tag.replace(/^<[^\s/>]+/, '');
+  for (const [, name, double, single, bare] of body.matchAll(
+    /([^\s"'>/=]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+)))?/g,
+  )) {
+    const key = name.toLowerCase();
+    if (!result.has(key)) result.set(key, double ?? single ?? bare ?? '');
+  }
+  return result;
+}
+
 export function attribute(tag, name) {
-  const match = tag.match(
-    new RegExp(`\\s${name}\\s*=\\s*(?:"([^"]*)"|'([^']*)'|([^\\s>]+))`, 'i'),
-  );
-  const value = match?.[1] ?? match?.[2] ?? match?.[3];
+  const value = attributes(tag).get(name.toLowerCase());
   return value === undefined ? undefined : decodeHtml(value);
 }
 
