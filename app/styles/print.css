@@ -35,6 +35,21 @@
 
   @page {
     margin: 16mm 14mm;
+
+    /* The running head and page number the résumé sets in its margins
+       (RunningHead). A margin box with no content is never drawn, so other
+       pages print as before. */
+    @top-left {
+      font-family: var(--font-display);
+      font-size: 8pt;
+      color: var(--color-fg-light);
+    }
+
+    @bottom-right {
+      font-family: var(--font-mono);
+      font-size: 8pt;
+      color: var(--color-fg-light);
+    }
   }
 
   html {
