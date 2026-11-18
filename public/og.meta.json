@@ -121,18 +121,18 @@
       "readout": [
         {
           "label": "Words",
-          "value": "868"
+          "value": "900"
         },
         {
           "label": "Unique external links",
-          "value": "9"
+          "value": "10"
         },
         {
           "label": "Reading time",
           "value": "4 min"
         }
       ],
-      "imageDigest": "bc879c38769f9836915b15e5e17b049820f9b08d5e01954e841f0a957eef8c8e"
+      "imageDigest": "e68743f7b2bd56e422a2494be4500db37110819274eb9875ab2e5ba4d9927e76"
     },
     {
       "slug": "shipping-with-claude-code",
