@@ -79,7 +79,13 @@ export async function inkBands(image, paper) {
  */
 export async function assertCardGeometry(
   image,
-  { size, paper, topRule, readoutTop },
+  {
+    size,
+    paper,
+    topRule,
+    readoutTop,
+    remedy = 'shorten the frontmatter copy, or take a size out of `TITLE_SIZES`',
+  },
 ) {
   const bands = await inkBands(image, paper);
   const first = bands[0];
@@ -98,8 +104,7 @@ export async function assertCardGeometry(
       `The rendered card's readout should be the last band of ink, at rows ` +
         `${readoutTop}-${size.height - 1}; it is ` +
         `${last ? `${last[0]}-${last[1]}` : 'absent'}. Copy has run into the ` +
-        'readout, which satori crops without reporting: shorten the ' +
-        'frontmatter copy, or take a size out of `TITLE_SIZES`.',
+        `readout, which satori crops without reporting: ${remedy}.`,
     );
   }
 

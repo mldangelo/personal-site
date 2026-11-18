@@ -32,8 +32,8 @@
   "renderer": [
     {
       "name": "next",
-      "version": "16.4.5",
-      "integrity": "sha512-rmdfsWosjTUO+6R0S3KokoIk6Kj0sWDRTe86tZHdqaWH/oXq/udX3/4xb+YQi7aWbyEFoglDU54kaifLCdXbBw=="
+      "version": "16.4.6",
+      "integrity": "sha512-QZJiYhaZLJMo2KpkQGQIwvmd79WVsAWeYIU554a8d7zArS3si/IRy3lBNV/rtYhE70oLwdLYhPAXLPx8HwcwtA=="
     },
     {
       "name": "react",
@@ -62,7 +62,7 @@
     "accent": "#36559a",
     "hairline": "rgba(35, 39, 46, 0.14)"
   },
-  "generatorDigest": "7229f7e14ac3641615ac7148026bd8fb59d7aeeac3245ae6e7567d145d2f88bd",
+  "generatorDigest": "ff05ca8758d3b95490bcd51c84aef39d40a2e1da5a22264bf6678b79bf9fe6ac",
   "imageDigest": "c65a73c3f62da10d330e50caae8bc74a1db46489dc83044dc78b96497cfda86a",
   "posts": [
     {
@@ -98,7 +98,7 @@
       "readout": [
         {
           "label": "Words",
-          "value": "406"
+          "value": "433"
         },
         {
           "label": "Unique external links",
@@ -109,7 +109,7 @@
           "value": "2 min"
         }
       ],
-      "imageDigest": "89c983fe636d4c0147424f506e7c8f5ddf2bf1b522f2f85aa66949a910a92b04"
+      "imageDigest": "30787e070724f2b59ea911abe423ef9e35bf2ae0c444403a3fe2b581a4459707"
     },
     {
       "slug": "eurostar-chatbot-analysis",
@@ -121,7 +121,7 @@
       "readout": [
         {
           "label": "Words",
-          "value": "889"
+          "value": "900"
         },
         {
           "label": "Unique external links",
@@ -132,7 +132,7 @@
           "value": "4 min"
         }
       ],
-      "imageDigest": "347966d38f7a2767f347d970cb27ffa5fa194c68a05fd11ab25c37cfef39024b"
+      "imageDigest": "e68743f7b2bd56e422a2494be4500db37110819274eb9875ab2e5ba4d9927e76"
     },
     {
       "slug": "shipping-with-claude-code",
@@ -144,7 +144,7 @@
       "readout": [
         {
           "label": "Words",
-          "value": "1,911"
+          "value": "1,931"
         },
         {
           "label": "Unique external links",
@@ -152,10 +152,10 @@
         },
         {
           "label": "Reading time",
-          "value": "8 min"
+          "value": "9 min"
         }
       ],
-      "imageDigest": "6149173111b06f898eb987222738be4c71e00ba8b7d85ffd36292729e0764e7b"
+      "imageDigest": "186b5b42111f6fb702cbc59b42b32477209aef1d91aa8e16f27e7af517fda64a"
     }
   ]
 }

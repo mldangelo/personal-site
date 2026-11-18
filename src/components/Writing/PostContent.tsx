@@ -1,7 +1,7 @@
 'use client';
 
 import { decodeEntity } from 'markdown-to-jsx/entities';
-import Markdown from 'markdown-to-jsx/react';
+import Markdown, { RuleType } from 'markdown-to-jsx/react';
 import Image from 'next/image';
 import type {
   ComponentProps,
@@ -28,7 +28,8 @@ import {
   isRootLocalImage,
   smartQuotesRule,
 } from '@/lib/markdown';
-import { withBasePath } from '@/lib/utils';
+import { prefixSrcset, splitSrcset } from '@/lib/site-url.mjs';
+import { BASE_PATH, withBasePath } from '@/lib/utils';
 
 interface PostContentProps {
   content: string;
@@ -238,6 +239,16 @@ function rawPreText(html: string): string {
     });
 }
 
+/** Fence languages that hold prose rather than code. */
+const PROSE_LANGUAGES = new Set([
+  'markdown',
+  'md',
+  'plaintext',
+  'prompt',
+  'text',
+  'txt',
+]);
+
 function CodeFence({
   children,
   dangerouslySetInnerHTML: raw,
@@ -300,8 +311,12 @@ function CodeFence({
     };
   }, [children, raw]);
 
+  // A prompt or a Markdown example is read top to bottom, so on a narrow
+  // screen it wraps; code keeps its layout and scrolls sideways.
+  const prose = !language || PROSE_LANGUAGES.has(language.toLowerCase());
+
   return (
-    <div className="prose-fence">
+    <div className={prose ? 'prose-fence prose-fence--wrap' : 'prose-fence'}>
       {language ? (
         <>
           <span className="prose-fence-lang" aria-hidden="true">
@@ -339,36 +354,69 @@ export default function PostContent({
   // figure path recognises an image without guessing from its props.
   function ProseImage({
     alt,
+    id,
+    sizes,
     src,
+    srcSet,
     title,
   }: {
     alt?: string;
+    id?: string;
+    sizes?: string;
     src?: string;
+    srcSet?: string;
     title?: string;
   }) {
     const captioned = useContext(CaptionedFigure);
+    // A raw image may name its files only as `srcset` candidates; the first
+    // one gives its shape.
+    const measured = src ?? (srcSet ? splitSrcset(srcSet)[0]?.url : undefined);
 
-    if (!src) {
+    if (!measured) {
       return null;
     }
 
-    const { width, height } = sizeFor(src);
+    const { width, height } = sizeFor(measured);
+    const candidates = srcSet ? prefixSrcset(BASE_PATH, srcSet) : undefined;
 
     // On a wide screen the lead image is in the first viewport and usually the
     // largest paint, so the head fetches it at high priority. On a phone it is
     // below the fold, where fetching it early takes bandwidth from the opening
     // text, so there it stays lazy like every other image.
-    if (src === leadImage) {
-      preload(withBasePath(src), {
+    if (measured === leadImage) {
+      preload(withBasePath(measured), {
         as: 'image',
         fetchPriority: 'high',
         media: WIDE_SCREEN_QUERY,
+        imageSrcSet: candidates,
+        imageSizes: sizes,
       });
+    }
+
+    // `next/image` writes a `srcset` of its own, so an image that brings its
+    // candidates and `sizes` is drawn as written.
+    if (srcSet) {
+      return (
+        // biome-ignore lint/performance/noImgElement: next/image would replace the author's srcset with its own
+        <img
+          id={id}
+          src={src ? withBasePath(src) : undefined}
+          srcSet={candidates}
+          sizes={sizes}
+          alt={alt || ''}
+          width={width}
+          height={height}
+          loading="lazy"
+          decoding="async"
+          title={captioned ? undefined : title}
+        />
+      );
     }
 
     return (
       <Image
-        src={withBasePath(src)}
+        id={id}
+        src={withBasePath(measured)}
         alt={alt || ''}
         width={width}
         height={height}
@@ -403,7 +451,22 @@ export default function PostContent({
         // published ids that differ from it.
         slugify: headingPlan.slugify,
         // Typographic quotes in text a reader sees; code is a different node.
-        renderRule: smartQuotesRule,
+        // The library links a footnote marker by its own slug of the label,
+        // which is empty for a label in another script and shared by two
+        // that differ only in punctuation; the plan's id is the note's.
+        renderRule: (next, node, renderChildren, state) => {
+          if (node.type === RuleType.footnoteReference) {
+            const id = headingPlan.footnoteId(node.text);
+            if (id) {
+              return (
+                <a key={state.key} href={`#${id}`}>
+                  <sup>{node.text}</sup>
+                </a>
+              );
+            }
+          }
+          return smartQuotesRule(next, node, renderChildren, state);
+        },
         createElement: createElementWithBasePath,
         overrides: {
           ...headingOverrides(headingPlan.aliases),

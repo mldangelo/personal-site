@@ -1,6 +1,7 @@
 ---
 title: Notes on the Claude Code 2.1.0 outage
 date: '2026-01-08'
+updated: '2026-11-17'
 description: 'A changelog formatting change took down Claude Code. Lessons about parsing human docs as machine data.'
 ---
 
@@ -18,13 +19,13 @@ The CLI parses these headings with [semver](https://github.com/npm/node-semver).
 
 How does a product with [$1B in annualized run-rate](https://www.anthropic.com/news/anthropic-acquires-bun-as-claude-code-reaches-usd1b-milestone) get taken down by a date in a markdown file?
 
-The changelog is fetched remotely and cached at `~/.claude/cache/changelog.md`. A server-side edit broke new sessions across versions, including users on 2.0.x who hadn't upgraded. A local CLI should not fail to boot because a remote text file changed.
+The changelog is fetched remotely and cached locally: as `cachedChangelog` in `~/.claude.json` on 2.0.x, and at `~/.claude/cache/changelog.md` from 2.1.0. A server-side edit broke new sessions across versions, including users on 2.0.x who hadn't upgraded. A local CLI should not fail to boot because a remote text file changed.
 
-The [revert](https://github.com/anthropics/claude-code/pull/16686) landed in two hours, but it was a data fix, not a code fix. The changelog was edited to remove the date. The client still can't handle malformed versions.
+The [revert](https://github.com/anthropics/claude-code/pull/16686) landed 27 minutes after the bad commit, but it was a data fix, not a code fix. The changelog was edited to remove the date. The code fix came about 40 minutes later: 2.1.1, which [includes hardening for this case](https://github.com/anthropics/claude-code/issues/16682#issuecomment-3721444980) and starts without the release notes instead of crashing. Clients older than 2.1.1 still can't handle a malformed version.
 
 The [commit that introduced the bug](https://github.com/anthropics/claude-code/commit/870624fc1581a70590e382f263e2972b3f1e56f5) came from `actions-user`, GitHub Actions automation. The release pipeline isn't in the [public workflows directory](https://github.com/anthropics/claude-code/tree/main/.github/workflows). Previous changelog entries like `## 2.0.76` had no dates. For 2.1.0, something in the internal automation added one.
 
-[Fifteen issues](https://github.com/anthropics/claude-code/issues?q=is%3Aissue+Invalid+Version+2.1.0) were filed in two hours. The largest threads ([#16682](https://github.com/anthropics/claude-code/issues/16682), [#16673](https://github.com/anthropics/claude-code/issues/16673), [#16678](https://github.com/anthropics/claude-code/issues/16678)) accumulated hundreds of comments and thousands of reactions.
+Users reported the startup failure in [#16682](https://github.com/anthropics/claude-code/issues/16682), [#16673](https://github.com/anthropics/claude-code/issues/16673), and [#16678](https://github.com/anthropics/claude-code/issues/16678).
 
 **A markdown document became an API, and nobody versioned the schema.**
 

@@ -108,21 +108,25 @@ export default async function SiteStats() {
           // visitors and answers everyone else with a 404. The repository page
           // shows both counts to anyone.
           link: REPOSITORY,
+          linkLabel: 'on GitHub',
         },
         {
           label: 'Watchers',
           value: count('subscribers_count'),
           link: REPOSITORY,
+          linkLabel: 'on GitHub',
         },
         {
           label: 'Forks',
           value: count('forks'),
           link: `${REPOSITORY}/network`,
+          linkLabel: 'on GitHub',
         },
         {
           label: 'Lines of TypeScript powering this site',
           value: formatCount(countSourceLines()),
           link: REPOSITORY,
+          linkLabel: 'on GitHub',
         },
         { label: 'Number of spoons', value: '0' },
       ]}
