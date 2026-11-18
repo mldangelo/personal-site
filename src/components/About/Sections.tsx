@@ -11,6 +11,7 @@ import SectionNav from '@/components/Template/SectionNav';
 import { createUniqueHeadingIds } from '@/lib/anchors';
 import { extractLogMarker } from '@/lib/logEntry';
 import { createElementWithBasePath, smartQuotesRule } from '@/lib/markdown';
+import { PAGE_IDS } from '@/lib/page-ids';
 import { smartQuotes } from '@/lib/typography';
 
 interface AboutContentProps {
@@ -166,7 +167,10 @@ function splitAboutMarkdown(markdown: string) {
 }
 
 function parseSections(chunks: AboutChunk[]): AboutSection[] {
-  const sectionIds = createUniqueHeadingIds(chunks.map(({ title }) => title));
+  const sectionIds = createUniqueHeadingIds(
+    chunks.map(({ title }) => title),
+    PAGE_IDS,
+  );
 
   // The id and the variant are read from the title as authored. Only what a
   // reader sees is converted, and once, so the nav and the heading agree.

@@ -76,7 +76,7 @@ export function parseSrcset(value) {
  * parser keeps it as raw Markdown, which the renderer parses when it draws the
  * notes, so it is parsed here with the document's references.
  */
-export function readMarkdownReferences(markdown) {
+export function readMarkdownReferences(markdown, { blocks } = {}) {
   const references = [];
   const seen = new Set();
 
@@ -173,7 +173,16 @@ export function readMarkdownReferences(markdown) {
     }
   }
 
-  visit(parser(markdown));
+  const tree = parser(markdown);
+  // With `blocks`, only the document's first top-level blocks; their links
+  // already carry targets resolved against the whole document.
+  visit(
+    blocks === undefined
+      ? tree
+      : tree
+          .filter((node) => node.type !== RuleType.refCollection)
+          .slice(0, blocks),
+  );
   return references;
 }
 

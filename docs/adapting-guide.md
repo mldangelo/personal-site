@@ -204,7 +204,7 @@ description: 'A short description for previews and search results.'
 Your content here.
 ```
 
-The required fields are `title`, `date`, and `description`. `draft: true` shows
+The required fields are `title`, `date`, and `description`. After revising a published post, add `updated` with the date of the change. `draft: true` shows
 a post during development without including it in the production export. An
 optional `image` must be paired with `imageAlt`. Images, in the frontmatter or
 the body, use root-relative paths to files under `public/`, such as
@@ -329,7 +329,7 @@ GitHub ignores `public/CNAME` when a custom Actions workflow publishes the
 site, so the upstream file does nothing in a fork except name someone else's
 domain.
 
-### What GitHub Pages leaves out
+### Project-site and deployment limits
 
 - **Search engines read `robots.txt` only at a domain's root.** A project
   site's own `/REPOSITORY/robots.txt` is never read, so the sitemap it names is
@@ -338,7 +338,7 @@ domain.
   Console, or add a `Sitemap:` line for it to the `robots.txt` of your
   `YOUR-USER.github.io` repository. A custom domain, or a repository named
   `YOUR-USER.github.io`, serves from the root and needs neither.
-- **Hidden files are not deployed.** Both upload steps in the workflow leave
+- **This workflow omits hidden files by default.** Both upload steps in the workflow leave
   out paths that start with a dot, so a file in `public/.well-known/` is built
   into `out/` and never reaches Pages. To publish one, set
   `include-hidden-files: true` on the **Upload build artifacts** and **Package
@@ -385,7 +385,7 @@ actions, and no concrete clickjacking or MIME-sniffing exploit is known.
 | Images do not appear                         | Use a URL such as `/images/photo.jpg`, not `public/images/photo.jpg`               |
 | `content/writing/ has no published post`     | Keep at least one published Markdown post                                          |
 | Re-running a deploy cannot find its build    | The build is kept for 7 days; re-run the whole workflow, or push again             |
-| A file in `public/.well-known/` is missing   | See [What GitHub Pages leaves out](#what-github-pages-leaves-out)                  |
+| A file in `public/.well-known/` is missing   | See [Project-site and deployment limits](#project-site-and-deployment-limits)      |
 | The deployed site shows the README           | In **Settings > Pages**, choose **GitHub Actions** as the source                   |
 | No workflow runs in the fork                 | Enable workflows in the fork's **Actions** tab                                     |
 | The deployment stops at the `homepage` check | Run the `npm pkg set homepage=…` command the error names, then commit and push     |
