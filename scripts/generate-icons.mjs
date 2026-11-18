@@ -35,6 +35,7 @@ import { createElement as h } from 'react';
 import { readColorToken } from '../src/lib/color-token.mjs';
 import { DISPLAY_FONT, loadFont } from './lib/fonts.mjs';
 import { readImageRenderer, requireSharp } from './lib/image-renderer.mjs';
+import { monogramFor } from './lib/monogram.mjs';
 
 // `next/og` ships as CommonJS with no ESM export condition, so it has to be
 // required rather than imported.
@@ -45,19 +46,6 @@ await requireSharp();
 const root = process.cwd();
 const MANIFEST_ICON_DIR = join(root, 'public', 'images', 'icons');
 const META_OUTPUT = join(root, 'scripts', 'icons.meta.json');
-
-/**
- * The monogram, derived from the profile name rather than typed in, so a fork
- * that changes the name gets its own initials.
- */
-function monogramFor(name) {
-  return name
-    .split(/[\s'’-]+/)
-    .filter(Boolean)
-    .map((word) => word[0].toUpperCase())
-    .slice(0, 2)
-    .join('');
-}
 
 /**
  * The mark: the monogram in the display face on a flat accent square.
@@ -250,6 +238,10 @@ const generatorSources = await Promise.all(
   [
     ['scripts/generate-icons.mjs', new URL(import.meta.url)],
     ['scripts/lib/fonts.mjs', new URL('./lib/fonts.mjs', import.meta.url)],
+    [
+      'scripts/lib/monogram.mjs',
+      new URL('./lib/monogram.mjs', import.meta.url),
+    ],
     [
       'scripts/lib/image-renderer.mjs',
       new URL('./lib/image-renderer.mjs', import.meta.url),

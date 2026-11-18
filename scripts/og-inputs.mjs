@@ -61,6 +61,7 @@ export const CARD_FONTS = [
 const GENERATOR_SOURCES = [
   'scripts/generate-og.mjs',
   'scripts/lib/fonts.mjs',
+  'scripts/lib/font-coverage.mjs',
   'scripts/lib/image-renderer.mjs',
   'scripts/og-inputs.mjs',
   'src/lib/color-token.mjs',
@@ -158,6 +159,17 @@ function isAutolink(node) {
   );
 }
 
+/** The caption of a paragraph that holds only an image, or a linked one. */
+function captionOf(node) {
+  if (node.type !== RuleType.paragraph || node.children?.length !== 1) return;
+  const [child] = node.children;
+  const image =
+    child.type === RuleType.link && child.children?.length === 1
+      ? child.children[0]
+      : child;
+  return image.type === RuleType.image ? image.title : undefined;
+}
+
 /**
  * Words of prose, with code, URLs, and markup left out.
  *
@@ -184,6 +196,20 @@ export function countProseWords(markdown) {
       return;
     }
     if (value.type === RuleType.link && isAutolink(value)) return;
+    // A standalone image's title is its visible caption, and footnote bodies
+    // are kept as raw text until they render; a reader reads both.
+    const caption = captionOf(value);
+    if (caption) prose.push(caption);
+    if (value.type === RuleType.refCollection) {
+      for (const [label, { target }] of Object.entries(value.refs)) {
+        // Read inline, as the renderer reads a note: on one line after a mark
+        // that is no word, where no block rule such as a fence can begin.
+        if (label.startsWith('^')) {
+          visit(parser(`· ${target.replace(/\s*\n\s*/g, ' ')}`));
+        }
+      }
+      return;
+    }
 
     for (const child of Object.values(value)) visit(child);
   }

@@ -5,6 +5,8 @@ import {
   RuleType,
 } from 'markdown-to-jsx/react';
 
+import { PAGE_IDS } from './page-ids';
+
 export function createHeadingId(title: string): string {
   const slug = title
     .normalize('NFKD')
@@ -51,6 +53,8 @@ export function createUniqueHeadingIds(
 
 interface MarkdownHeadingPlan {
   aliases: Map<string, string>;
+  /** The id of the note a footnote label names, matched without case. */
+  footnoteId: (label: string) => string | undefined;
   slugify: (source: string) => string;
 }
 
@@ -61,9 +65,11 @@ interface ReservedMarkdownIds {
 
 function collectReservedMarkdownIds(
   nodes: readonly MarkdownToJSX.ASTNode[],
+  reserved: Iterable<string>,
 ): ReservedMarkdownIds {
   const footnoteIds = new Map<string, string>();
-  const ids = new Set<string>();
+  const footnoteSources: string[] = [];
+  const ids = new Set<string>(reserved);
 
   const visit = (node: MarkdownToJSX.ASTNode): void => {
     if (
@@ -79,11 +85,7 @@ function collectReservedMarkdownIds(
     if (node.type === RuleType.refCollection) {
       for (const ref of Object.keys(node.refs)) {
         if (ref.startsWith('^') && ref.length > 1) {
-          const source = ref.slice(1);
-          const id = legacySlugify(source);
-
-          footnoteIds.set(source, id);
-          ids.add(id);
+          footnoteSources.push(ref.slice(1));
         }
       }
     }
@@ -115,6 +117,19 @@ function collectReservedMarkdownIds(
     visit(node);
   }
 
+  // A label the slugifier empties, such as one in another script, would give
+  // its note `id=""` and its marker `href="#"`, and two labels can slugify
+  // alike. Each note gets its own id, after every raw id is known.
+  for (const source of footnoteSources) {
+    const base = legacySlugify(source) || 'note';
+    let id = base;
+    for (let suffix = 2; ids.has(id); suffix += 1) {
+      id = `${base}-${suffix}`;
+    }
+    footnoteIds.set(source, id);
+    ids.add(id);
+  }
+
   return { footnoteIds, ids };
 }
 
@@ -129,6 +144,7 @@ function collectReservedMarkdownIds(
  */
 export function planMarkdownHeadingAnchors(
   markdown: string,
+  pageIds: Iterable<string> = PAGE_IDS,
 ): MarkdownHeadingPlan {
   const headings: Array<{ source: string; legacy: string }> = [];
 
@@ -142,7 +158,10 @@ export function planMarkdownHeadingAnchors(
     },
   });
 
-  const { footnoteIds, ids: reservedIds } = collectReservedMarkdownIds(ast);
+  const { footnoteIds, ids: reservedIds } = collectReservedMarkdownIds(
+    ast,
+    pageIds,
+  );
   const ids = createUniqueHeadingIds(
     headings.map(({ source }) => source),
     reservedIds,
@@ -199,5 +218,11 @@ export function planMarkdownHeadingAnchors(
     claimedIds.add(legacy);
   }
 
-  return { aliases, slugify };
+  const footnotesByLabel = new Map(
+    [...footnoteIds].map(([source, id]) => [source.toLowerCase(), id]),
+  );
+  const footnoteId = (label: string) =>
+    footnotesByLabel.get(label.toLowerCase());
+
+  return { aliases, footnoteId, slugify };
 }
