@@ -107,10 +107,7 @@ export default function useActiveSection<Id extends string>(
         document.documentElement.scrollHeight - window.innerHeight;
       const bottom = maxScroll - BOTTOM_TOLERANCE;
 
-      // A document that cannot scroll has no position to read. That is also
-      // what the mobile menu's scroll lock looks like from here: it fixes
-      // `<body>`, which zeroes `scrollY` and collapses the document to one
-      // screen. The reading from before the lock is the one to keep.
+      // A document that cannot scroll has no position to read.
       if (bottom <= 0) {
         return;
       }
