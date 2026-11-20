@@ -1,5 +1,5 @@
+import { SOURCE_REPOSITORY } from '@/lib/source-repository';
 import { countSourceLines } from '../../lib/loc';
-import { SOURCE_REPOSITORY } from '../../lib/telemetry';
 import Table from './Table';
 
 const COUNTS = ['stargazers_count', 'subscribers_count', 'forks'] as const;

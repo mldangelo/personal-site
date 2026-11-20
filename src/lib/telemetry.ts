@@ -44,10 +44,3 @@ export function ageAt(now: number, precision: number): string {
 export function utcDate(at: number): string {
   return new Date(at).toISOString().slice(0, 10);
 }
-
-/**
- * The repository this site is built from. The GitHub readings on `/stats`
- * describe it and its rows link into it, so a fork changes
- * this one constant.
- */
-export const SOURCE_REPOSITORY = 'mldangelo/personal-site';

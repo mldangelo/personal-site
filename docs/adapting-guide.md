@@ -136,24 +136,24 @@ never reaches the build.
 Identity data starts in shared files, but some text and links are written into
 components.
 
-| Content                                                                   | Location                                                                                                               |
-| ------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| Name, role, employer, city, email, and personal statistics                | `src/data/profile.json`                                                                                                |
-| The public URL, which every link, feed, and share URL derives from        | `homepage` in `package.json` (see [Changes inside the repository](#changes-inside-the-repository))                     |
-| X handle, one-line bio, and the portrait's path and size                  | `src/lib/utils.ts`                                                                                                     |
-| Social links                                                              | `src/data/contact.ts`                                                                                                  |
-| Homepage kicker, introduction, and employer links                         | `src/components/Template/Hero.tsx`                                                                                     |
-| Header monogram                                                           | `src/components/Template/Navigation.tsx`                                                                               |
-| Portrait                                                                  | `public/images/me.jpg`                                                                                                 |
-| Contact page note                                                         | `app/contact/page.tsx`                                                                                                 |
-| Aliases the contact page types into the address, which assume a catch-all | `messages` in `src/components/Contact/EmailLink.tsx`                                                                   |
-| The address length the contact page lays out for                          | The `contact-email` container query in `app/styles/pages/contact.css`                                                  |
-| Web app name and icon monogram                                            | Derived from `src/data/profile.json` by `npm run icons`                                                                |
-| Upstream custom domain                                                    | `public/CNAME`, which a fork deletes (see [Actions outside the repository](#actions-outside-the-repository))           |
-| Writing description, on `/writing/` and in the RSS feed                   | `WRITING_DESCRIPTION` in `src/lib/schema.ts`                                                                           |
-| Source repository: the footer's Source link and the `/stats` counts       | `SOURCE_REPOSITORY` in `src/lib/telemetry.ts`, with fallback counts in `LAST_KNOWN` in `src/components/Stats/Site.tsx` |
-| Vulnerability reporting contact                                           | `SECURITY.md`                                                                                                          |
-| Copyright notice                                                          | `LICENSE`, which keeps the upstream notice because MIT requires it; add your own line beside it                        |
+| Content                                                                   | Location                                                                                                     |
+| ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| Name, role, employer, city, email, and personal statistics                | `src/data/profile.json`                                                                                      |
+| The public URL, which every link, feed, and share URL derives from        | `homepage` in `package.json` (see [Changes inside the repository](#changes-inside-the-repository))           |
+| X handle, one-line bio, and the portrait's path and size                  | `src/lib/utils.ts`                                                                                           |
+| Social links                                                              | `src/data/contact.ts`                                                                                        |
+| Homepage kicker, introduction, and employer links                         | `src/components/Template/Hero.tsx`                                                                           |
+| Header monogram                                                           | `src/components/Template/Navigation.tsx`                                                                     |
+| Portrait                                                                  | `public/images/me.jpg`                                                                                       |
+| Contact page note                                                         | `app/contact/page.tsx`                                                                                       |
+| Aliases the contact page types into the address, which assume a catch-all | `messages` in `src/components/Contact/EmailLink.tsx`                                                         |
+| The address length the contact page lays out for                          | The `contact-email` container query in `app/styles/pages/contact.css`                                        |
+| Web app name and icon monogram                                            | Derived from `src/data/profile.json` by `npm run icons`                                                      |
+| Upstream custom domain                                                    | `public/CNAME`, which a fork deletes (see [Actions outside the repository](#actions-outside-the-repository)) |
+| Writing description, on `/writing/` and in the RSS feed                   | `WRITING_DESCRIPTION` in `src/lib/schema.ts`                                                                 |
+| Source repository: the footer's Source link and the `/stats` counts       | `repository` in `package.json`, with fallback counts in `LAST_KNOWN` in `src/components/Stats/Site.tsx`      |
+| Vulnerability reporting contact                                           | `SECURITY.md`                                                                                                |
+| Copyright notice                                                          | `LICENSE`, which keeps the upstream notice because MIT requires it; add your own line beside it              |
 
 Page titles and descriptions also contain personal copy in `app/layout.tsx` and
 the `page.tsx` files under `app/`. Structured data is assembled in
