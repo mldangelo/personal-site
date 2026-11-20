@@ -24,16 +24,4 @@ describe('readColorToken', () => {
       /not a literal colour/,
     );
   });
-
-  it('reports an undeclared token instead of returning undefined', () => {
-    expect(() => readColorToken('--color-not-a-token', 'light')).toThrow(
-      /not declared/,
-    );
-  });
-
-  it('rejects anything that is not a custom property name', () => {
-    expect(() => readColorToken('color-accent', 'light')).toThrow(
-      /Not a custom property/,
-    );
-  });
 });

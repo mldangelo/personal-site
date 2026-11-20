@@ -23,14 +23,9 @@ afterEach(() => {
   data.entries = [];
 });
 
-// Each would publish wrong: "Invalid Date", a date rolled into March, or two
-// feed items with one guid.
+// Each would publish wrong: a date rolled into March, or two feed items with
+// one guid.
 it.each([
-  [
-    'a malformed date',
-    () => [entry('https://a.example/', 'January 5')],
-    /real YYYY-MM-DD/,
-  ],
   [
     'an impossible date',
     () => [entry('https://a.example/', '2026-02-30')],

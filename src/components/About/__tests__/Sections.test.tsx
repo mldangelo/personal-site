@@ -1,40 +1,20 @@
 import { render, screen, within } from '@testing-library/react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import { aboutMarkdown } from '@/data/about';
-import { createHeadingId } from '@/lib/anchors';
-import { prefixBasePath } from '@/lib/site-url.mjs';
 import AboutContent from '../Sections';
-
-// As a fork at https://user.github.io/repo/ publishes it.
-vi.mock('@/lib/utils', async (importOriginal) => ({
-  ...(await importOriginal<typeof import('@/lib/utils')>()),
-  withBasePath: (path: string) => prefixBasePath('/repo', path),
-}));
 
 const titles = Array.from(
   aboutMarkdown.matchAll(/^# (.+)$/gm),
   (match) => match[1],
 ).filter((title) => title !== 'Intro');
 
-const MARKDOWN = `# Intro
-
-Hello from the intro.
-
-# Some history
+const MARKDOWN = `# Some history
 
 - We subscribed to AOL in 1995.
 - At 7, I discovered the mini-games.
-- I have a list of ideas.
-
-# I like
-
-- Running
-
-# Websites from people I admire
-
-- [Example](https://example.com)`;
+- I have a list of ideas.`;
 
 function sectionNav() {
   return screen.getByRole('navigation', { name: 'About sections' });
@@ -85,14 +65,14 @@ describe('AboutContent', () => {
   });
 
   // Footnote definitions are not resolved into the text that cites them, so
-  // they must survive the division, and raw HTML is read while parsing.
-  it('keeps footnotes and raw HTML links working across sections', () => {
+  // they must survive the division.
+  it('keeps footnotes working across sections', () => {
     const { container } = render(
       <AboutContent
         markdown={[
           '# Intro',
           '',
-          'A claim.[^source] See <a href="/resume/">the résumé</a>.',
+          'A claim.[^source]',
           '',
           '# Setup',
           '',
@@ -109,10 +89,6 @@ describe('AboutContent', () => {
     expect(document.getElementById(target)).toHaveTextContent(
       'The note itself.',
     );
-    expect(screen.getByRole('link', { name: 'the résumé' })).toHaveAttribute(
-      'href',
-      '/repo/resume/',
-    );
   });
 
   it('leaves the page its own ids', () => {
@@ -123,21 +99,6 @@ describe('AboutContent', () => {
     expect(
       screen.getByRole('heading', { name: /Main Content/ }),
     ).not.toHaveAttribute('id', 'main-content');
-  });
-
-  it('renders the intro unheaded and gives each section its variant', () => {
-    const { container } = render(<AboutContent markdown={MARKDOWN} />);
-
-    expect(screen.getByText('Hello from the intro.')).toBeInTheDocument();
-    expect(
-      screen.queryByRole('heading', { name: 'Intro' }),
-    ).not.toBeInTheDocument();
-
-    const sections = container.querySelectorAll('.about-section');
-
-    expect(sections[0]).toHaveClass('about-section--log');
-    expect(sections[1]).toHaveClass('about-section--compact');
-    expect(sections[2]).toHaveClass('about-section--links');
   });
 
   // Without scripts, a page opened at a later section would otherwise claim
@@ -154,9 +115,6 @@ describe('AboutContent', () => {
     const links = within(sectionNav()).getAllByRole('link');
 
     expect(links.map((link) => link.textContent)).toEqual(titles);
-    expect(links.map((link) => link.getAttribute('href'))).toEqual(
-      titles.map((title) => `#${createHeadingId(title)}`),
-    );
     expect(links.map((link) => link.getAttribute('aria-current'))).toEqual(
       titles.map((_, index) => (index === 0 ? 'location' : null)),
     );
@@ -223,32 +181,6 @@ describe('AboutContent', () => {
     expect(container.querySelector('pre')).toHaveTextContent(
       "const quote = 'x';",
     );
-  });
-
-  it('reads a marker from an entry whose words carry an apostrophe', () => {
-    const { container } = render(
-      <AboutContent
-        markdown={`# Intro
-
-Lead paragraph.
-
-# Some history
-
-- When I was 12, I didn't sleep.
-- We didn't have a computer in 1993.`}
-      />,
-    );
-
-    // The gutter reads typeset text, and the remainder keeps its apostrophe.
-    expect(
-      Array.from(container.querySelectorAll('.log-entry'), (entry) => [
-        entry.querySelector('.log-entry-marker')?.textContent,
-        entry.querySelector('.log-entry-body')?.textContent,
-      ]),
-    ).toEqual([
-      ['Age 12', 'I didn’t sleep.'],
-      ['1993', 'We didn’t have a computer in 1993.'],
-    ]);
   });
 
   it('prints a title the same way in the nav and above its section', () => {

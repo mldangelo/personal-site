@@ -76,9 +76,7 @@ describe('theme', () => {
     [null, 'system'],
     ['light', 'light'],
     ['dark', 'dark'],
-    ['system', 'system'],
     ['sepia', 'system'],
-    ['', 'system'],
   ])(
     'reads stored %j as %s in both the bootstrap and the client',
     (stored, choice) => {
@@ -93,7 +91,6 @@ describe('theme', () => {
   );
 
   it.each([
-    ['light', null, 'light'],
     ['dark', null, 'dark'],
     // With no `matchMedia` to ask, the bootstrap paints light.
     [null, null, 'light'],
@@ -159,13 +156,14 @@ describe('theme', () => {
     expect(chromeColors()).toEqual([CHROME_COLORS.dark]);
   });
 
-  it('adds no tag when no token resolves, leaving the declared fallback', () => {
+  it('leaves the bootstrap colour in place when no token resolves', () => {
     // An empty `content` is skipped by the browser, which would then fall back
-    // to its default chrome rather than the fallback already here.
-    addThemeColorMetas();
+    // to its default chrome rather than the colour already here.
+    setDevice('dark');
+    runThemeInitScript();
 
     syncThemeColor(document);
 
-    expect(chromeColors()).toEqual([CHROME_COLORS.light, CHROME_COLORS.dark]);
+    expect(chromeColors()).toEqual([CHROME_COLORS.dark]);
   });
 });

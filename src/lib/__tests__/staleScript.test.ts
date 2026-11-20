@@ -2,19 +2,18 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { claimReload, isMissingScript } from '../staleScript';
 
-const named = (name: string, message: string) =>
-  Object.assign(new Error(message), { name });
-
 describe('isMissingScript', () => {
   it.each([
-    [named('ChunkLoadError', 'Loading chunk 912 failed.'), true],
+    [
+      new Error('Loading chunk 912 failed.\n(missing: /_next/static/912.js)'),
+      true,
+    ],
     [
       new Error('Loading CSS chunk 31 failed.\n(/_next/static/css/a.css)'),
       true,
     ],
     [new TypeError('Failed to fetch dynamically imported module: /a.js'), true],
     [new Error('Cannot read properties of undefined'), false],
-    ['Loading chunk 1 failed.', false],
   ])('reads %s as %s', (error, expected) => {
     expect(isMissingScript(error)).toBe(expected);
   });

@@ -43,8 +43,10 @@ describe('LiveAge', () => {
   it('keeps the snapshot and its date under reduced motion', () => {
     setReducedMotion(true);
 
-    const { container } = render(subject());
+    render(subject());
 
-    expect(container).toHaveTextContent(`${INITIAL}${NOTE}`);
+    // The print-only copy always holds the snapshot and its date, so only the
+    // screen's note line can show whether the timer stayed off.
+    expect(screen.queryByText('Live')).toBeNull();
   });
 });

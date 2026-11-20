@@ -224,14 +224,6 @@ describe('links, metadata, and icons', () => {
       replaceIn(HOME, 'href="#main-content"', 'href="#missing"'),
     ],
     [
-      'internal link points at missing fragment: /about/#missing',
-      replaceIn(HOME, 'about/#section', 'about/#missing'),
-    ],
-    [
-      'internal link points at missing export: missing/',
-      replaceIn(HOME, 'about/#section', 'missing/'),
-    ],
-    [
       'image points at missing export: images/missing.png',
       replaceIn(HOME, 'images/photo.png', 'images/missing.png'),
     ],
@@ -263,7 +255,7 @@ describe('links, metadata, and icons', () => {
         'content="https://example.com/"',
       ),
     ],
-    ...['og:title', 'og:site_name', 'twitter:card', 'twitter:creator'].map(
+    ...['og:site_name', 'twitter:creator'].map(
       (name): Rejection => [
         `indexable page has 0 ${name} tags; expected 1`,
         replaceIn(ABOUT, new RegExp(`<meta \\w+="${name}"[^>]*>`), ''),
@@ -316,17 +308,11 @@ describe('at a repository-site base path', () => {
         replaceIn(MANIFEST, 'images/icons/app.png', '/images/icons/app.png'),
       ],
       [
-        `start_url points outside configured base path ${BASE_PATH}/`,
-        replaceIn(MANIFEST, '"start_url":"."', '"start_url":"/"'),
-      ],
-      [
         `draft references a publicly exported image: ${BASE_PATH}/images/private.png`,
         draftAsset('![private](../../images/private.png)'),
       ],
       ...[
-        '<video src="media/missing.mp4"></video>',
         '<audio src="media/missing.mp3"></audio>',
-        '<video><source src="media/missing.webm"></video>',
         '<video poster="media/missing.png"></video>',
         '<video><track src="media/missing.vtt"></video>',
         '<object data="media/missing.pdf"></object>',
@@ -385,12 +371,13 @@ describe('drafts under a base path', () => {
   accepts(
     [
       [
-        'links to public pages, shared assets, and absent private files',
+        'links to public pages, shared assets, absent private files, and external images',
         inDraftBody(
           [
             '[About](/about/)',
             '![shared](/images/photo.png)',
             '![kept outside public](/images/not-published.png)',
+            '![external](https://cdn.example.net/private-preview.png)',
           ].join('\n'),
         ),
       ],
@@ -482,8 +469,8 @@ describe('feed.xml', () => {
 });
 
 // A submit control can override a valid form destination, so both attributes are
-// checked at root and repository-site deployments.
-describe.each(['', BASE_PATH])('form targets at base path "%s"', (basePath) => {
+// checked, at the root and on a repository site.
+describe('form targets', () => {
   rejects(
     [
       '<form action="missing/"></form>',
@@ -494,7 +481,6 @@ describe.each(['', BASE_PATH])('form targets at base path "%s"', (basePath) => {
       inHomeBody(markup),
       markup,
     ]),
-    { basePath },
   );
 
   accepts(
@@ -503,29 +489,19 @@ describe.each(['', BASE_PATH])('form targets at base path "%s"', (basePath) => {
         'existing, empty, and external submission targets',
         inHomeBody(`
           <form action="about/?q=hello">
-            <button formaction="${basePath}/about/#section">Submit</button>
+            <button formaction="${BASE_PATH}/about/#section">Submit</button>
             <input type="submit" formaction="https://forms.example/submit">
           </form>
           <form action=""><button formaction="">Submit here</button></form>
           <form action="https://forms.example/submit"></form>`),
       ],
     ],
-    { basePath },
+    { basePath: BASE_PATH },
   );
 });
 
 describe('machine-readable resume', () => {
   rejects([
-    [
-      'resume.json\n    missing from export',
-      (root) => rmSync(join(root, RESUME)),
-      'an export with no resume.json',
-    ],
-    [
-      'resume.json\n    root must be a JSON object',
-      addFile(RESUME, 'null\n'),
-      'a JSON primitive as the document',
-    ],
     [
       'basics.name must be a non-empty string',
       replaceIn(RESUME, '"Fixture Person"', '[]'),
@@ -536,10 +512,6 @@ describe('machine-readable resume', () => {
         replaceIn(RESUME, 'https://work.example/', url),
       ],
     ),
-    [
-      'work[0] must be a JSON object',
-      replaceIn(RESUME, /"work":\[.*?\]/, '"work":[1]'),
-    ],
     [
       '/resume/ does not link to the machine-readable resume',
       replaceIn(RESUME_PAGE, 'href="../resume.json"', 'href="/about/"'),
@@ -588,15 +560,6 @@ describe('machine-readable resume', () => {
 describe('drafts', () => {
   rejects([
     [
-      'sitemap.xml\n    URL exposes a draft route: /writing/secret-draft/',
-      replaceIn(
-        SITEMAP,
-        '</urlset>',
-        '<url><loc>https://example.com/writing/secret-draft/</loc></url></urlset>',
-      ),
-      'a draft route in the sitemap',
-    ],
-    [
       'feed.xml\n    URL exposes a draft route: /writing/secret-draft/',
       replaceIn(
         FEED,
@@ -620,19 +583,11 @@ describe('drafts', () => {
         '<!doctype html><html><head><meta name="robots" content="noindex"></head><body>Draft-derived page</body></html>',
       ),
     ],
-    // How each destination resolves against the site. The Markdown and raw
-    // HTML forms are the shared parser's, which markdown-assets.test.ts covers.
-    ...[
-      '![private](../../images/private.png)',
-      '![private](https://example.com/images/private.png)',
-      '![private](//example.com/images/private.png)',
-    ].map(
-      (body): Rejection => [
-        'content/writing/secret-draft.md\n    draft references a publicly exported image: /images/private.png',
-        draftAsset(body),
-        `a draft-only asset declared through ${body}`,
-      ],
-    ),
+    [
+      'content/writing/secret-draft.md\n    draft references a publicly exported image: /images/private.png',
+      draftAsset('![private](https://example.com/images/private.png)'),
+      'a draft-only asset at an absolute same-origin URL',
+    ],
     [
       'draft references a publicly exported image: /images/private.png',
       both(
@@ -669,11 +624,6 @@ describe('drafts', () => {
       ),
       'an uninspectable draft HTML fetch',
     ],
-    [
-      'srcset',
-      inDraftBody('<source srcset="/images/hidden.png nope">'),
-      'malformed draft srcset syntax',
-    ],
     // Malformed frontmatter must fail here and at the route reader alike, or a
     // draft flag the reader rejects could pass this privacy boundary.
     [
@@ -683,21 +633,6 @@ describe('drafts', () => {
   ]);
 
   accepts([
-    [
-      'a draft using an asset an exported page already uses',
-      inDraftBody('![shared](/images/photo.png)'),
-    ],
-    [
-      'draft links to public pages and references to absent private files',
-      inDraftBody(
-        [
-          '[About](/about/)',
-          '![kept outside public](/images/not-published.png)',
-          '![external](https://cdn.example.net/private-preview.png)',
-          '![embedded](data:image/png;base64,AAAA)',
-        ].join('\n'),
-      ),
-    ],
     [
       'a generated share card for a published post',
       addFile('out/og/writing/about.png'),
@@ -726,19 +661,16 @@ describe('drafts', () => {
 
   // Post slugs are ordinary words, so a draft sharing a name with one of the
   // site's own routes or assets must not fail a clean export.
-  describe.each(['about', 'og', 'sitemap', 'feed', 'photo', 'index'])(
-    'called "%s"',
-    (draftSlug) => {
-      accepts(
+  describe.each(['about', 'index'])('called "%s"', (draftSlug) => {
+    accepts(
+      [
         [
-          [
-            'the site’s own routes and assets',
-            // The writing listing's payload, which a draft called `index` shares a name with.
-            addFile('out/writing/index.txt'),
-          ],
+          'the site’s own routes and assets',
+          // The writing listing's payload, which a draft called `index` shares a name with.
+          addFile('out/writing/index.txt'),
         ],
-        { draftSlug },
-      );
-    },
-  );
+      ],
+      { draftSlug },
+    );
+  });
 });

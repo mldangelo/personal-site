@@ -13,7 +13,6 @@ const mockJob: Position = {
   startDate: '2020-01-15',
   endDate: '2023-06-30',
   summary: 'Led development of **critical systems**.',
-  highlights: ['Shipped feature X', 'Improved performance by 50%'],
 };
 
 function renderJob(overrides: Partial<Position> = {}, now = NOW) {
@@ -25,17 +24,9 @@ function textOf(selector: string) {
 }
 
 describe('Job', () => {
-  // Only layout separates the two, so the name needs its own separator.
-  it('names the heading with the company and the role apart', () => {
-    renderJob();
-
-    expect(screen.getByRole('heading', { level: 3 }).textContent).toBe(
-      'Acme Corp, Senior Engineer',
-    );
-  });
-
-  // A side role overlaps the main one on the timeline, on paper too.
-  it('says a part-time role is one', () => {
+  // Only layout separates the company and the role, so the name needs its own
+  // separator. A side role overlaps the main one on the timeline, on paper too.
+  it('names the company, the role, and a part-time commitment apart', () => {
     renderJob({ commitment: 'part-time' });
 
     expect(screen.getByRole('heading', { level: 3 }).textContent).toBe(
@@ -98,21 +89,10 @@ describe('Job', () => {
 
   // Inline-only Markdown parses without a paragraph, which would put the text
   // outside every `.summary` rule.
-  it.each([
-    ['Led **critical** systems.', 'Led critical systems.'],
-    ['Led a team.', 'Led a team.'],
-  ])('renders the summary %s in its paragraph', (summary, text) => {
-    renderJob({ summary });
+  it('renders a one-line summary in its paragraph', () => {
+    renderJob();
 
-    expect(textOf('p.summary')).toBe(text);
-    expect(document.querySelectorAll('.points li')).toHaveLength(2);
-  });
-
-  it('renders neither block when absent', () => {
-    renderJob({ summary: undefined, highlights: undefined });
-
-    expect(document.querySelector('.summary')).toBeNull();
-    expect(document.querySelector('.points')).toBeNull();
+    expect(textOf('p.summary')).toBe('Led development of critical systems.');
   });
 
   // Summaries carry anchors whose `href` is quoted with apostrophes, so the

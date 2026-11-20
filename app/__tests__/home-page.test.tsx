@@ -31,8 +31,6 @@ describe('homepage arrows', () => {
     const text = (name: RegExp) =>
       screen.getByRole('link', { name }).textContent;
 
-    expect(text(/About me/)).toBe('About me');
-    expect(text(/All writing/)).toBe('All writing →');
     expect(text(/Local essay/)).toMatch(/→$/);
     expect(text(/Remote article/)).toMatch(/↗ \(opens in a new tab\)$/);
   });

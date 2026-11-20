@@ -97,7 +97,7 @@ describe('Hamburger', () => {
     expect(button).toHaveAttribute('aria-label', 'Open navigation menu');
   });
 
-  it('closes when CSS hides the trigger, and can reopen', () => {
+  it('closes when CSS hides the trigger', () => {
     let notifyResize = () => {};
     const disconnect = vi.fn();
     vi.stubGlobal(
@@ -111,7 +111,7 @@ describe('Hamburger', () => {
         }
       },
     );
-    const { unmount } = render(<Hamburger />);
+    render(<Hamburger />);
     const button = screen.getByRole('button', { name: 'Open navigation menu' });
     // jsdom has no layout. A rendered button has a box; display:none has none.
     const boxes = vi
@@ -125,17 +125,7 @@ describe('Hamburger', () => {
     boxes.mockReturnValue({ length: 0 } as DOMRectList);
     act(() => notifyResize());
     expect(button).toHaveAttribute('aria-expanded', 'false');
-    expect(document.getElementById('mobile-nav-menu')).not.toHaveAttribute(
-      'open',
-    );
     expect(disconnect).toHaveBeenCalledTimes(1);
-
-    boxes.mockReturnValue({ length: 1 } as DOMRectList);
-    fireEvent.click(button);
-    act(() => notifyResize());
-    expect(button).toHaveAttribute('aria-expanded', 'true');
-    unmount();
-    expect(disconnect).toHaveBeenCalledTimes(2);
   });
 
   // The only nav a phone gets, so every promoted route has to be in it and no

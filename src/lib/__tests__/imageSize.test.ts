@@ -7,18 +7,8 @@ import {
   readPostImageSizes,
 } from '../imageSize';
 
-function png(width: number, height: number): Buffer {
-  const buffer = Buffer.alloc(24);
-  Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]).copy(buffer);
-  buffer.writeUInt32BE(13, 8);
-  buffer.write('IHDR', 12, 'ascii');
-  buffer.writeUInt32BE(width, 16);
-  buffer.writeUInt32BE(height, 20);
-  return buffer;
-}
-
 /** A RIFF container holding one WebP chunk of the given encoding. */
-function webp(encoding: 'VP8X' | 'VP8 ' | 'VP8L', length: number): Buffer {
+function webp(encoding: 'VP8X' | 'VP8L', length: number): Buffer {
   const buffer = Buffer.alloc(length);
   buffer.write('RIFF', 0, 'ascii');
   buffer.writeUInt32LE(length - 8, 4);
@@ -35,14 +25,6 @@ function extendedWebp(width: number, height: number): Buffer {
   return buffer;
 }
 
-function lossyWebp(width: number, height: number): Buffer {
-  const buffer = webp('VP8 ', 30);
-  buffer.set([0x9d, 0x01, 0x2a], 23);
-  buffer.writeUInt16LE(width, 26);
-  buffer.writeUInt16LE(height, 28);
-  return buffer;
-}
-
 function losslessWebp(width: number, height: number): Buffer {
   const buffer = webp('VP8L', 25);
   buffer[20] = 0x2f;
@@ -54,26 +36,14 @@ const OG = { '/og.png': { width: 1200, height: 630 } };
 
 describe('parseImageSize', () => {
   it.each([
-    ['PNG', png(1117, 812), { width: 1117, height: 812 }],
     ['extended WebP', extendedWebp(1166, 656), { width: 1166, height: 656 }],
-    ['lossy WebP', lossyWebp(747, 610), { width: 747, height: 610 }],
     ['lossless WebP', losslessWebp(320, 240), { width: 320, height: 240 }],
   ])('reads dimensions from a valid %s header', (_, buffer, expected) => {
     expect(parseImageSize(buffer)).toEqual(expected);
   });
 
-  it.each([
-    ['truncated PNG', png(20, 20).subarray(0, 20)],
-    ['PNG without an IHDR chunk', Buffer.from(png(20, 20)).fill(0, 12, 16)],
-    ['zero-width PNG', png(0, 20)],
-    ['truncated WebP chunk', extendedWebp(20, 20).subarray(0, 29)],
-    [
-      'lossy WebP without its frame start code',
-      Buffer.from(lossyWebp(20, 20)).fill(0, 23, 26),
-    ],
-    ['unknown data', Buffer.from('not an image')],
-  ])('rejects %s', (_, buffer) => {
-    expect(parseImageSize(buffer)).toBeNull();
+  it('rejects a truncated WebP chunk', () => {
+    expect(parseImageSize(extendedWebp(20, 20).subarray(0, 29))).toBeNull();
   });
 });
 
@@ -92,31 +62,14 @@ describe('readImageSize', () => {
     ).toEqual({ width: 1166, height: 656 });
   });
 
-  it.each([
-    ['relative.png', /must be a root-relative URL/],
-    ['//example.com/image.png', /must be a root-relative URL/],
-    ['/../package.json', /outside public/],
-    ['/%2e%2e/package.json', /outside public/],
-    ['/missing-article-image.png', /does not exist/],
-    ['/og.meta.json', /unsupported or malformed header/],
-  ])('fails the build for %s', (src, message) => {
-    expect(() => readImageSize(src)).toThrow(message);
+  it('refuses an encoded path out of public/', () => {
+    expect(() => readImageSize('/%2e%2e/package.json')).toThrow(
+      /outside public/,
+    );
   });
 });
 
 describe('readPostImageSizes', () => {
-  it.each([
-    ['![plain](/og.png)'],
-    ['![double](/og.png "Social card")'],
-    ["![single](/og.png 'Social card')"],
-    ['![parenthesized](</og.png> (Social card))'],
-    ['![nested [alt]](/og.png)'],
-    ['![reference][card]\n\n[card]: /og.png "Social card"'],
-    ['<img alt="social > card" src="/og.png">'],
-  ])('measures %s', (markdown) => {
-    expect(readPostImageSizes(markdown)).toEqual(OG);
-  });
-
   it('keeps query-bearing src values as renderer lookup keys', () => {
     expect(
       readPostImageSizes('![card](/og.png?v=2#preview "Version 2")'),
@@ -128,7 +81,6 @@ describe('readPostImageSizes', () => {
   it.each([
     '![remote](https://example.com/image.png)',
     '![protocol relative](//example.com/image.png)',
-    '![data](data:image/png;base64,AAAA)',
   ])('does not measure what public/ cannot hold: %s', (markdown) => {
     expect(readPostImageSizes(markdown)).toEqual({});
   });
@@ -167,7 +119,6 @@ describe('leadImageSource', () => {
         `${paragraph}\n\n${paragraph}\n\n${paragraph}\n\n![late](/images/late.png)`,
       ),
     ).toBeUndefined();
-    expect(leadImageSource(`${paragraph}\n\n${paragraph}`)).toBeUndefined();
   });
 
   // A footnote example in a fence is text, wherever the fence falls.

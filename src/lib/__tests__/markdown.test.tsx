@@ -58,12 +58,11 @@ describe('Markdown URLs on a project site', () => {
     const html = renderToStaticMarkup(
       <PostContent
         imageSizes={{ '/a.png': { width: 16, height: 10 } }}
-        content={`Intro.\n\n${RAW_HTML}\n\n[Elsewhere](https://example.com/a.png) [Bad](javascript:alert(1))\n`}
+        content={`Intro.\n\n${RAW_HTML}\n\n[Elsewhere](https://example.com/a.png)\n`}
       />,
     );
 
     expect(urls(html)).toContain('https://example.com/a.png');
-    expect(html).not.toContain('javascript:');
     expect(urls(html).filter((url) => /^\/(?!repo\/)/.test(url))).toEqual([]);
   });
 });

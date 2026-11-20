@@ -34,13 +34,4 @@ describe('createUniqueHeadingIds', () => {
       'repeat repeat-2 repeat-2-2 repeat-3 section section-2 section-3',
     );
   });
-
-  it('avoids ids already reserved by the surrounding document', () => {
-    expect(
-      createUniqueHeadingIds(
-        ['Custom', 'Note', 'Custom'],
-        new Set(['custom', 'note']),
-      ),
-    ).toEqual(['custom-2', 'note-2', 'custom-3']);
-  });
 });

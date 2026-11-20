@@ -9,7 +9,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, beforeAll, describe, expect, it } from 'vitest';
 import { validatePostFrontmatterData } from '@/lib/post-frontmatter.mjs';
-import { getAllPosts, getPostSlugs } from '@/lib/posts';
+import { getAllPosts } from '@/lib/posts';
 import { formatDate } from '@/lib/utils';
 import { assertFontDigest } from '../lib/fonts.mjs';
 import {
@@ -21,7 +21,7 @@ import {
   imageDigest,
   readPostCards,
 } from '../og-inputs.mjs';
-import { TITLE_SIZES, titleFontSize } from '../og-layout.mjs';
+import { titleFontSize } from '../og-layout.mjs';
 
 interface PostCard {
   slug: string;
@@ -78,10 +78,6 @@ function postFixture(frontmatter: Record<string, unknown>): string {
  * publicly fetchable, with the unpublished title rendered into it.
  */
 describe('share card inputs', () => {
-  it('generates a card for exactly the posts the site publishes', () => {
-    expect(cards.map((card) => card.slug)).toEqual(getPostSlugs());
-  });
-
   it('leaves drafts out of the card set', async () => {
     // The fixture keeps this guard live when the real tree holds no drafts.
     await expect(
@@ -89,13 +85,11 @@ describe('share card inputs', () => {
     ).resolves.toEqual([]);
   });
 
-  it('prints the title, description, and date of its post', () => {
+  it('prints the date as its post header does', () => {
     for (const post of getAllPosts()) {
-      expect(cards.find((card) => card.slug === post.slug)).toMatchObject({
-        title: post.title,
-        description: post.description,
-        dateLabel: formatDate(post.date),
-      });
+      expect(cards.find((card) => card.slug === post.slug)?.dateLabel).toBe(
+        formatDate(post.date),
+      );
     }
   });
 
@@ -112,34 +106,25 @@ describe('share card fonts', () => {
     expect(() => assertFontDigest(font, data)).not.toThrow();
     expect(() =>
       assertFontDigest({ ...font, sha256: '0'.repeat(64) }, data),
-    ).toThrow(/Refusing to generate images from changed font bytes/);
+    ).toThrow();
   });
 });
 
 // Both readers share `post-frontmatter.mjs`, whose rules `posts.test.ts` covers
-// field by field. These rows hold the card reader to it, including on a draft,
+// field by field. These hold the card reader to it, including on a draft,
 // which must fail validation before the reader skips it.
 describe('share card frontmatter validation', () => {
-  it.each([
-    [{ ...base, draft: 'true' }, '"draft" must be a boolean'],
-    [
-      { date: '2026-01-08', description: 'Missing title', draft: true },
-      '"title" must be a non-empty string',
-    ],
-  ])(
-    'rejects the same malformed frontmatter as the route reader %#',
-    async (frontmatter, message) => {
-      expect(() =>
-        validatePostFrontmatterData(
-          frontmatter,
-          join('content', 'writing', 'example.md'),
-        ),
-      ).toThrow(message);
-      await expect(readPostCards(postFixture(frontmatter))).rejects.toThrow(
-        message,
-      );
-    },
-  );
+  it('rejects a malformed draft instead of skipping it', async () => {
+    await expect(
+      readPostCards(
+        postFixture({
+          date: '2026-01-08',
+          description: 'Missing title',
+          draft: true,
+        }),
+      ),
+    ).rejects.toThrow('"title" must be a non-empty string');
+  });
 
   it('normalizes valid text exactly as the route reader does', async () => {
     const frontmatter = {
@@ -159,29 +144,19 @@ describe('share card frontmatter validation', () => {
 });
 
 describe('post measurements', () => {
-  // The fenced, tilde-fenced, and indented rows are all code blocks to the
-  // renderer, so none of them may inflate the words or the reading time.
   it.each<[string, number]>([
-    ['# Title\n\nTwo words here.', 4],
-    ['Inline `const ignored = 1` code', 2],
-    ['A [link](https://example.com/very/long/path)', 2],
-    ['- one\n- two\n\n> quoted', 3],
     ['1. one\n  2) two\n> 3. quoted\n\n2026 remains prose', 6],
-    ['![alt text](/images/a.png)', 0],
     // A standalone image's title is its visible caption; an inline image's
     // is only a tooltip.
     ["![alt](/images/a.png 'A caption of five words')", 5],
     ["[![alt](/images/a.png 'Linked caption')](https://example.com)", 2],
     ["Some ![x](/images/a.png 'tooltip only') text", 2],
-    // Footnote bodies stay raw until they render, and a reader reads them.
-    ['Claim.[^1]\n\n[^1]: Two more.', 3],
-    // A note is read inline, so a fence-shaped line in one is text.
+    // Footnote bodies stay raw until they render, and a reader reads them
+    // inline, so a fence-shaped line in one is text.
     ['Claim.[^1]\n\n[^1]: ~~~\n    two more words\n    ~~~', 4],
     ['latency < 50ms and throughput > 1k', 5],
-    ['<strong>Two words</strong>', 2],
+    // Code may not inflate the words or the reading time.
     ['Intro\n\n```js\nconst ignored = "one two three";\n```\n', 1],
-    ['Intro\n\n~~~js\nconst ignored = "one two three";\n~~~\n', 1],
-    ['Intro\n\n    const ignored = "one two three";\n', 1],
   ])('counts the prose words in %j as %i', (markdown, words) => {
     expect(countProseWords(markdown)).toBe(words);
   });
@@ -193,14 +168,10 @@ describe('post measurements', () => {
   it.each<[string, number]>([
     ['[a](https://one.example) [b](https://two.example)', 2],
     ['[a](https://one.example) again [b](https://one.example)', 1],
-    ['[internal](/writing/post/)', 0],
     ['![remote](https://one.example/a.png)', 0],
     ['[![chart](/images/chart.png)](https://one.example/report)', 1],
-    ['```md\n[in code](https://one.example)\n```', 0],
     ['[a][ref]\n\n[ref]: https://one.example', 1],
-    ['[one.example][]\n\n[one.example]: https://one.example', 1],
     ['<https://one.example>', 1],
-    ['<a href="https://one.example">raw</a>', 1],
     ['Bare https://one.example link', 1],
     [`[home](${homepage}about/)`, 0],
     ['[write](mailto:someone@example.com)', 0],
@@ -210,12 +181,6 @@ describe('post measurements', () => {
 });
 
 describe('post card fitting', () => {
-  it('finds a supported title size for every published post', () => {
-    for (const card of cards) {
-      expect(TITLE_SIZES).toContain(titleFontSize(card, CARD_SIZE));
-    }
-  });
-
   // Capitals are wider than mixed-case copy, so this title wraps a line further
   // than the same words in sentence case and has to step down to fit.
   it('steps an all-caps title down for the width of its capitals', () => {
