@@ -9,12 +9,13 @@ const RELOAD_WINDOW_MS = 10_000;
  * a link it prefetched before the deploy fails when followed.
  */
 export function isMissingScript(error: unknown): boolean {
+  // Webpack's runtime names its error `ChunkLoadError` and always gives it
+  // this message.
   return (
     error instanceof Error &&
-    (error.name === 'ChunkLoadError' ||
-      /Loading (?:CSS )?chunk \S+ failed|Failed to fetch dynamically imported module/i.test(
-        error.message,
-      ))
+    /Loading (?:CSS )?chunk \S+ failed|Failed to fetch dynamically imported module/i.test(
+      error.message,
+    )
   );
 }
 
