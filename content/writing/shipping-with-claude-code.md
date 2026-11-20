@@ -1,7 +1,7 @@
 ---
 title: What I learned shipping 1,000+ PRs with Claude Code
 date: '2026-01-03'
-updated: '2026-11-17'
+updated: '2026-11-19'
 description: 'Notes from using Claude Code in parallel git worktrees: Plan Mode, ultrathink, verification loops, and Chrome automation.'
 image: /images/writing/api-costs-july-2025.webp
 imageAlt: 'Anthropic API costs for July 2025 showing $9,986.20 in token usage'
@@ -11,7 +11,7 @@ imageAlt: 'Anthropic API costs for July 2025 showing $9,986.20 in token usage'
 
 I spend most of my time building [Promptfoo](https://github.com/promptfoo/promptfoo), an open-source LLM evaluation tool. I was an avid Cursor user before experimenting with Claude Code earlier in 2025, but usage picked up significantly in July. By the end of that month I was spending close to $10K in API credits, just on interactive development work, not production traffic.
 
-![Anthropic API costs for July 2025 showing $9,986.20 in token usage](/images/writing/api-costs-july-2025.webp)
+![Anthropic API costs for July 2025 showing $9,986.20 in token usage](/images/writing/api-costs-july-2025.webp 'In July 2025, I used $9,986.20 of Anthropic API credits for interactive development.')
 
 Anthropic gave us a generous credit grant for Promptfoo, so this didn't actually cost us anything, but I'm grateful for their support. At that usage volume, switching to a Max subscription made sense. I now run two Max subscriptions because I hit the weekly usage limits on a single account.
 

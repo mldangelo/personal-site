@@ -144,7 +144,7 @@
       "readout": [
         {
           "label": "Words",
-          "value": "2,012"
+          "value": "2,025"
         },
         {
           "label": "Unique external links",
@@ -155,7 +155,7 @@
           "value": "9 min"
         }
       ],
-      "imageDigest": "7b0885387a355ca8e5662ab5ddf5ea949f288829dce7e6e46c815bc3f61901d1"
+      "imageDigest": "d53201d5abcdf6a5ffe0e1dcd03ba7e5f184c12d363e48e92d78fa147bd10500"
     }
   ]
 }
