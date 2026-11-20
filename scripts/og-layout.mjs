@@ -116,7 +116,7 @@ function estimateLines(text, fontSize, width, advances, tracking) {
 }
 
 /** Supported display sizes, largest first. */
-export const TITLE_SIZES = [100, 84, 72, 60, 50];
+const TITLE_SIZES = [100, 84, 72, 60, 50];
 
 /** First row of the readout rule, and so the first row copy may not reach. */
 export function readoutTop(size) {

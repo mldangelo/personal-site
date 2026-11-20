@@ -25,7 +25,7 @@ const INK_THRESHOLD = 8;
  * by its own rule and held open by the hairlines between its cells — is the
  * last, and copy that overflows into the readout merges the two.
  */
-export async function inkBands(image, paper) {
+async function inkBands(image, paper) {
   if (!image.subarray(0, 8).equals(SIGNATURE)) {
     throw new Error('Rendered card is not a PNG');
   }
