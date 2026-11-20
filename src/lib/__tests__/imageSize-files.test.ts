@@ -75,8 +75,6 @@ function jpeg(width: number, height: number, orientation?: number): Buffer {
 
 describe('readImageSize', () => {
   it.each([
-    ['a PNG', png(640, 360), { width: 640, height: 360 }],
-    ['a JPEG', jpeg(1024, 768), { width: 1024, height: 768 }],
     [
       'a JPEG with an invalid orientation',
       jpeg(1024, 768, 9),

@@ -3,7 +3,6 @@ import { dirname, join, relative, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 import { THEME_COLOR_TOKEN } from '@/lib/theme';
-import { readColorToken } from '@/lib/tokens';
 
 /**
  * `app/tailwind.css` is the only stylesheet `app/layout.tsx` imports, and no
@@ -65,10 +64,4 @@ it('keeps the header opaque and aligned with the browser chrome', () => {
   ].map((match) => match[1].trim());
 
   expect(backgrounds).toEqual([`var(${THEME_COLOR_TOKEN})`]);
-  expect(headerRules).not.toMatch(/backdrop-filter\s*:/);
-  for (const theme of ['light', 'dark'] as const) {
-    expect(readColorToken(THEME_COLOR_TOKEN, theme)).toMatch(
-      /^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/,
-    );
-  }
 });

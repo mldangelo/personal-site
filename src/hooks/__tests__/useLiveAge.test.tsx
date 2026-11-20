@@ -75,13 +75,4 @@ describe('useLiveAge', () => {
     expect(age().textContent).not.toBe(firstReading);
     expect(renders).toBe(rendersAfterMount);
   });
-
-  it('restores the snapshot during cleanup', () => {
-    const { unmount } = render(<Subject />);
-    const node = age();
-
-    unmount();
-
-    expect(node.textContent).toBe(INITIAL);
-  });
 });

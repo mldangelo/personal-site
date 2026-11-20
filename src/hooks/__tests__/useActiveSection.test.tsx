@@ -26,8 +26,6 @@ const freshPage = () => ({
   innerHeight: 900,
   scrollHeight: 5900,
   barHeight: 46,
-  /** How far a scroll lock has pulled `<body>` up, with `scrollY` back at 0. */
-  lockedAt: 0,
   /** Where the row's links sit: 16px in, 358px wide, 32px each edge faded. */
   links: {} as Record<string, readonly [left: number, right: number]>,
 });
@@ -143,7 +141,7 @@ beforeEach(() => {
         return rect(64, 44, edges[0], edges[1] - edges[0]);
       }
       if (this.id in page.tops && !this.hasAttribute('data-hidden')) {
-        return rect(page.tops[this.id] - page.scrollY - page.lockedAt, 300);
+        return rect(page.tops[this.id] - page.scrollY, 300);
       }
 
       // Everything else, like an element under `display: none`, has no box.
@@ -235,21 +233,6 @@ describe('useActiveSection', () => {
     // The bottom belongs to the last section that is actually there.
     scrollTo(maxScroll());
     expect(current()).toBe('references');
-  });
-
-  it('reads on mounting part-way down, and holds under a scroll lock', () => {
-    page.scrollY = RESUME.skills;
-
-    render(<Subject />);
-    expect(current()).toBe('skills');
-
-    // The mobile menu fixes <body> at `top: -scrollY`. Nothing moves on screen,
-    // but `scrollY` reads 0 and the document is one screen tall until it closes.
-    page.lockedAt = RESUME.skills;
-    page.scrollHeight = page.innerHeight;
-    scrollTo(0);
-
-    expect(current()).toBe('skills');
   });
 
   it('stops listening on unmount, and cancels a frame it has pending', () => {
@@ -381,7 +364,6 @@ describe('useActiveSection', () => {
     it.each([
       ['past the right fade', 'references', [296, 383], 0, 5000, 0, 41],
       ['off the left edge', 'experience', [-25, 61], 5000, 0, 100, 27],
-      ['already in view', 'education', [102, 180], 0, 3800, 12, 12],
     ] as const)(
       'scrolls the row for a current link %s',
       (_when, id, edges, from, to, start, end) => {

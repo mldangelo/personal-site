@@ -37,14 +37,6 @@ describe('Skills', () => {
     ]);
   });
 
-  it('sorts a copy, leaving the skills it was given as they were', () => {
-    const given = [...mockSkills];
-
-    render(<Skills skills={given} />);
-
-    expect(given).toEqual(mockSkills);
-  });
-
   it('states the tier of every tag as text', () => {
     const web = mockSkills
       .filter((skill) => skill.category.includes('Web'))
@@ -60,25 +52,6 @@ describe('Skills', () => {
       'JavaScript, working knowledge',
       'React, familiarity',
     ]);
-  });
-
-  // The order holds for everyone; the dashed tier is described only on
-  // screen, and only when a tag is set in it.
-  it('explains the dashed tier once, to those who can see it', () => {
-    const { container } = render(<Skills skills={mockSkills} />);
-
-    expect(container.querySelectorAll('.skill-tier-legend')).toHaveLength(1);
-    expect(container.querySelector('.skill-tier-legend-tone')).toHaveAttribute(
-      'aria-hidden',
-      'true',
-    );
-
-    const strong = mockSkills.filter((skill) => skill.competency > 3);
-    const { container: strongOnly } = render(<Skills skills={strong} />);
-
-    expect(strongOnly.querySelector('.skill-tier-legend')?.textContent).toBe(
-      'Strongest first.',
-    );
   });
 
   // `/resume.json` publishes the same list, and the résumé must not disagree

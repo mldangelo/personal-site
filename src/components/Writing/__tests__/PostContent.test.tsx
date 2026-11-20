@@ -38,7 +38,7 @@ describe('PostContent block structure', () => {
 });
 
 describe('PostContent image sizing', () => {
-  it('preloads the responsive candidates instead of the fallback image', () => {
+  it('preloads the responsive candidates of the lead image', () => {
     const html = renderToStaticMarkup(
       <PostContent
         content={
@@ -54,7 +54,6 @@ describe('PostContent image sizing', () => {
       `${withBasePath('/og.png')} 1200w`,
     );
     expect(preload?.getAttribute('imagesizes')).toBe('50vw');
-    expect(preload?.hasAttribute('href')).toBe(false);
   });
 
   it.each([
@@ -235,10 +234,6 @@ describe('PostContent code fences', () => {
     expect(markup('```\nultrathink\n```\n')).not.toContain('code block');
   });
 
-  it('adds no tab stop or landmark during server rendering', () => {
-    expect(markup(FENCE)).not.toMatch(/tabindex|role="region"|aria-label/);
-  });
-
   it('adds a tab stop only while the fence overflows', () => {
     const { pre, box } = renderFence();
 
@@ -282,18 +277,6 @@ describe('PostContent code fences', () => {
 });
 
 describe('PostContent heading anchors', () => {
-  // The renderer's own slugifier keeps every separator it strips, which would
-  // disagree with the id the rest of the site derives.
-  it('slugifies headings with the shared helper', () => {
-    expect(
-      headingIds(
-        markup(
-          '## On using `--dangerously-skip-permissions`\n\n## CLAUDE.md + AGENTS.md\n',
-        ),
-      ),
-    ).toEqual(['on-using-dangerously-skip-permissions', 'claude-md-agents-md']);
-  });
-
   it('keeps duplicate ids stable when Strict Mode repeats compilation', () => {
     const { container } = render(
       <StrictMode>

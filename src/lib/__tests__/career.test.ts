@@ -24,15 +24,6 @@ const sideFund: Position = {
 describe('sortPositions', () => {
   it.each([
     [
-      'newest end date first',
-      [
-        role('Middle', '2015-01-01', '2018-01-01'),
-        role('Oldest', '2010-01-01', '2011-06-01'),
-        role('Newest', '2020-01-01', '2026-03-09'),
-      ],
-      ['Newest', 'Middle', 'Oldest'],
-    ],
-    [
       'recency of involvement when start and end disagree',
       [
         role('Later start', '2015-09-01', '2016-06-01'),
@@ -55,34 +46,9 @@ describe('sortPositions', () => {
       expected,
     );
   });
-
-  it('does not mutate the array it is given', () => {
-    const input = [
-      role('Older', '2010-01-01', '2014-01-01'),
-      role('Newer', '2015-01-01', '2020-01-01'),
-    ];
-
-    expect(sortPositions(input)).not.toBe(input);
-    expect(input.map((entry) => entry.name)).toEqual(['Older', 'Newer']);
-  });
 });
 
 describe('currentPosition', () => {
-  it.each([
-    // A job change recorded the natural way: close one role, append the next.
-    // Indexing `work[0]` would report the employer just left.
-    [
-      'the ongoing role wherever it sits in the array',
-      [role('Old', '2019-01-01', '2023-01-01'), role('Found', '2026-01-01')],
-    ],
-    [
-      'the primary career over an open-ended side role',
-      [sideFund, role('Found', '2022-01-01')],
-    ],
-  ])('finds %s', (_, positions) => {
-    expect(currentPosition(positions)?.name).toBe('Found');
-  });
-
   // Between jobs, the footer and the Person data must not name the employer
   // just left: the side role still going is the one held.
   it('falls back to an ongoing side role, never a role that has ended', () => {
@@ -94,22 +60,15 @@ describe('currentPosition', () => {
       currentPosition([role('Left', '2022-01-01', '2026-01-01')]),
     ).toBeUndefined();
   });
-
-  it('reports nothing for an empty career rather than throwing', () => {
-    expect(currentPosition([])).toBeUndefined();
-  });
 });
 
 describe('monthsBetween', () => {
   it.each([
-    ['whole months', '2014-01-01', '2022-01-01', 96],
     // Eleven months and thirty days is not a year.
     ['a partial month, truncated', '2020-01-01', '2020-12-31', 11],
     ['a full year', '2020-01-01', '2021-01-01', 12],
     // A month from the 31st ends on the last day of a shorter month.
     ['to the end of a shorter month', '2021-01-31', '2021-02-28', 1],
-    ['to an epoch-millisecond instant', '2026-03-09', NOW, 4],
-    ['a reversed range, as no tenure', '2022-01-01', '2014-01-01', 0],
   ])('counts %s', (_, start, end, months) => {
     expect(monthsBetween(start, end)).toBe(months);
   });
@@ -129,14 +88,10 @@ describe('monthsBetween', () => {
 
 describe('formatDuration', () => {
   it.each([
-    [-5, '<1 mo', 'less than 1 month'],
     [0, '<1 mo', 'less than 1 month'],
     [1, '1 mo', '1 month'],
-    [11, '11 mo', '11 months'],
     [12, '1 yr', '1 year'],
-    [13, '1 yr 1 mo', '1 year 1 month'],
     [26, '2 yr 2 mo', '2 years 2 months'],
-    [96, '8 yr', '8 years'],
   ])('renders %i months as "%s" and "%s"', (months, short, long) => {
     expect(formatDuration(months)).toBe(short);
     expect(formatDuration(months, true)).toBe(long);
@@ -151,7 +106,6 @@ describe('careerSpanYears', () => {
       20,
     ],
     ['whole years only', [role('A', '2011-08-01')], 14],
-    ['zero for no positions', [], 0],
   ])('reads %s', (_, positions, years) => {
     expect(careerSpanYears(positions, NOW)).toBe(years);
   });

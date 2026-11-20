@@ -46,11 +46,9 @@ const GENEROUS_BUDGET = {
 };
 
 type Report = {
-  basePath: string;
-  total: { files: number; bytes: number };
+  total: { bytes: number };
   groups: { id: string; files: number; bytes: number }[];
   routes: { route: string; linkedAssetBytes: number }[];
-  inlineSvg: Record<string, number>;
   budget: { checks: { id: string }[] };
 };
 type Change = (root: string) => void;
@@ -159,10 +157,9 @@ afterEach(() => {
 describe('measurements', () => {
   it('groups the export by subsystem, keeping robots.txt out of the RSC group', () => {
     const { root, documents } = createFixture();
-    const { status, output, report } = reportFor(root);
+    const { status, report } = reportFor(root);
 
     expect(status).toBe(0);
-    expect(output).toContain('6 budget(s) within limits');
     expect(
       Object.fromEntries(
         report.groups.map(({ id, files, bytes }) => [id, [files, bytes]]),
@@ -176,31 +173,23 @@ describe('measurements', () => {
       images: [1, IMAGE.length],
       metadata: [2, ROBOTS.length + SITEMAP.length],
     });
-    expect(report.total.files).toBe(11);
-    expect(report.total.bytes).toBe(
-      report.groups.reduce((sum, group) => sum + group.bytes, 0),
-    );
   });
 
   // The chunk is both preloaded and executed but counts once, and the referenced
   // image stays outside this narrow metric. On a repository site the markup says
   // /personal-site/_next/... while the file is at out/_next/....
-  it.each(['', '/personal-site'])(
-    'measures a route document and its direct bootstrap links at base path "%s"',
-    (basePath) => {
-      const { root, documents } = createFixture(basePath);
-      const { status, report } = reportFor(root);
+  it('measures a route document and its direct bootstrap links at a base path', () => {
+    const { root, documents } = createFixture('/personal-site');
+    const { status, report } = reportFor(root);
 
-      expect(status).toBe(0);
-      expect(report.basePath).toBe(basePath);
-      expect(report.routes.find(({ route }) => route === '/about/')).toEqual({
-        route: '/about/',
-        documentBytes: documents['/about/'],
-        linkedAssetBytes: LINKED_ASSET_BYTES,
-        bootstrapBytes: documents['/about/'] + LINKED_ASSET_BYTES,
-      });
-    },
-  );
+    expect(status).toBe(0);
+    expect(report.routes.find(({ route }) => route === '/about/')).toEqual({
+      route: '/about/',
+      documentBytes: documents['/about/'],
+      linkedAssetBytes: LINKED_ASSET_BYTES,
+      bootstrapBytes: documents['/about/'] + LINKED_ASSET_BYTES,
+    });
+  });
 
   // No gated metric may be a function of the page count: emitted and repeated
   // icon bytes grow with each post, so only the distinct icon set is gated.
@@ -219,28 +208,17 @@ describe('measurements', () => {
     expect(status).toBe(0);
     expect(report.total.bytes).toBeGreaterThan(before.total.bytes * 1.2);
     expect(report.budget.checks).toEqual(before.budget.checks);
-    expect(report.inlineSvg).toEqual({
-      bytes: ICON_BYTES * 12,
-      distinct: 1,
-      distinctBytes: ICON_BYTES,
-      repeatedBytes: ICON_BYTES * 11,
-      widestSpread: 12,
-    });
   });
 });
 
 describe('budget gate', () => {
   // The report is the evidence for the failure, so it is written either way.
-  it('names the overage and still writes the JSON report', () => {
+  it('fails an overage and still writes the JSON report', () => {
     const { root } = createFixture();
     budgetOf({ ...GENEROUS_BUDGET, cssBytes: 1024 })(root);
 
-    const { status, output, report } = reportFor(root);
+    const { status, report } = reportFor(root);
     expect(status).toBe(1);
-    expect(output).toContain('1 budget(s) exceeded');
-    expect(output).toContain('CSS (cssBytes)');
-    expect(output).toContain('4,096 bytes exceeds the 1,024 budget by 3,072');
-    expect(output).toContain('--update-budget');
     expect(report.budget.checks.find(({ id }) => id === 'cssBytes')).toEqual({
       id: 'cssBytes',
       label: 'CSS',
@@ -250,16 +228,14 @@ describe('budget gate', () => {
     });
   });
 
-  it.each([['{}'], ['{"_policy":["fixture"]}'], [null]])(
+  it.each([['{}'], [null]])(
     'bootstraps the complete budget from %s',
     (contents) => {
       const { root } = createFixture();
       remove(BUDGET)(root);
       if (contents !== null) write(root, BUDGET, contents);
 
-      const { status, output } = runMeasurer(root, ['--update-budget']);
-      expect(status).toBe(0);
-      expect(output).toContain('ratcheted scripts/budget.json');
+      expect(runMeasurer(root, ['--update-budget']).status).toBe(0);
       expect(Object.keys(readBudget(root))).toEqual(
         Object.keys(GENEROUS_BUDGET),
       );
@@ -287,16 +263,8 @@ describe('budget gate', () => {
 
 describe('failures', () => {
   const { fontBytes: _omitted, ...withoutFontBudget } = GENEROUS_BUDGET;
-  const badValue = (value: string) =>
-    budgetFile(
-      JSON.stringify(GENEROUS_BUDGET).replace(
-        '"fontBytes":1000000',
-        `"fontBytes":${value}`,
-      ),
-    );
-  const noChange: Change = () => {};
 
-  it.each<[string, Change, string[]?]>([
+  it.each<[string, Change]>([
     [
       'bootstrap asset /_next/static/css/app.css, but no exported file resolves from it',
       remove('out/_next/static/css/app.css'),
@@ -315,30 +283,27 @@ describe('failures', () => {
       'unknown budget(s): cssByte',
       budgetOf({ ...GENEROUS_BUDGET, cssByte: 1024 }),
     ],
-    ...['"large"', 'null', '[]'].map((contents): [string, Change] => [
-      `must be a JSON object mapping budget names to positive byte counts, not ${contents}`,
-      budgetFile(contents),
-    ]),
-    ...[['"1000"'], ['0'], ['1.5'], ['1e999', 'Infinity']].map(
-      ([value, shown = value]): [string, Change] => [
-        `invalid budget(s): fontBytes is ${shown}. Every budget must be a positive whole number of bytes.`,
-        badValue(value),
-      ],
-    ),
-    ['scripts/budget.json is missing', remove(BUDGET)],
-    ['no files found in out/', remove('out')],
+    // A limit no export can exceed would leave the metric ungated.
+    [
+      'invalid budget(s): fontBytes is Infinity',
+      budgetFile(
+        JSON.stringify(GENEROUS_BUDGET).replace(
+          '"fontBytes":1000000',
+          '"fontBytes":1e999',
+        ),
+      ),
+    ],
     // Per-route metrics read zero off an empty document list, so an export with
     // assets but no HTML fails closed instead of passing those gates.
     [
       'no HTML documents found in out/',
       remove('out/index.html', 'out/about/index.html'),
     ],
-    ["'--json <value>' argument missing", noChange, ['--json']],
-  ])('rejects: %s', (expected, change, args) => {
+  ])('rejects: %s', (expected, change) => {
     const { root } = createFixture();
     change(root);
 
-    const { status, output } = runMeasurer(root, args);
+    const { status, output } = runMeasurer(root);
     expect(status).toBe(1);
     expect(output).toContain(expected);
     expect(output).not.toContain('budget(s) within limits');

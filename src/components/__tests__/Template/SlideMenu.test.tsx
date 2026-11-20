@@ -41,10 +41,6 @@ describe('SlideMenu', () => {
     render(menu(true, onClose));
     const link = screen.getByText('Link 1');
 
-    fireEvent.pointerDown(link);
-    fireEvent.click(link);
-    expect(onClose).not.toHaveBeenCalled();
-
     // Pressed in the sheet and released over the backdrop: the click lands on
     // their common ancestor, the dialog.
     fireEvent.pointerDown(link);

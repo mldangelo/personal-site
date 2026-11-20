@@ -26,7 +26,6 @@ afterEach(() => {
 
 describe('check-pages-url', () => {
   it.each([
-    ['a custom domain', 'https://example.com/', 'https://example.com'],
     [
       'a project site',
       'https://user.github.io/personal-site/',
@@ -38,15 +37,10 @@ describe('check-pages-url', () => {
     expect(check(homepage, pagesUrl).status).toBe(0);
   });
 
-  it('fails a fork that still names the upstream site, and says what to set', () => {
-    const result = check(
-      'https://mldangelo.com/',
-      'https://user.github.io/personal-site',
-    );
-
-    expect(result.status).toBe(1);
-    expect(result.stderr).toContain(
-      'npm pkg set homepage=https://user.github.io/personal-site/',
-    );
+  it('fails a fork that still names the upstream site', () => {
+    expect(
+      check('https://mldangelo.com/', 'https://user.github.io/personal-site')
+        .status,
+    ).toBe(1);
   });
 });

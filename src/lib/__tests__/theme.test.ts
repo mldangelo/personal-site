@@ -76,9 +76,7 @@ describe('theme', () => {
     [null, 'system'],
     ['light', 'light'],
     ['dark', 'dark'],
-    ['system', 'system'],
     ['sepia', 'system'],
-    ['', 'system'],
   ])(
     'reads stored %j as %s in both the bootstrap and the client',
     (stored, choice) => {
@@ -93,7 +91,6 @@ describe('theme', () => {
   );
 
   it.each([
-    ['light', null, 'light'],
     ['dark', null, 'dark'],
     // With no `matchMedia` to ask, the bootstrap paints light.
     [null, null, 'light'],

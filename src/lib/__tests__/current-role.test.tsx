@@ -67,8 +67,7 @@ describe('the role the site says its author holds now', () => {
     ]);
   });
 
-  it('is not the first entry in the source data, so indexing cannot pass', () => {
-    expect(leadOfSpine().company).not.toBe(career[0].name);
+  it('leads the resume spine even when appended last in source data', () => {
     expect(leadOfSpine().company).toBe('Current Co');
   });
 

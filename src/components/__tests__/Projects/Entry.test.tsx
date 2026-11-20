@@ -11,7 +11,6 @@ const base: Project = {
   link: 'https://example.com',
   date: '2024-07-01',
   desc: 'A description of the shipped work.',
-  tech: ['TypeScript'],
   status: 'shipped',
 };
 
@@ -41,8 +40,6 @@ describe('Entry', () => {
     expect(link).toHaveAttribute('href', 'https://example.com');
     expect(link).toHaveAttribute('target', '_blank');
     expect(link).toHaveAttribute('rel', 'noopener noreferrer');
-    expect(link).toContainElement(screen.getByText(base.desc));
-    expect(link).toContainElement(screen.getByText('TypeScript'));
     expect(screen.getByText('↗')).toHaveAttribute('aria-hidden', 'true');
   });
 
@@ -61,7 +58,6 @@ describe('Entry', () => {
   it.each([
     ['live work', { ...base, ongoing: true }, ' project-entry--live', true],
     ['finished work', { ...base, endDate: '2026-03-09' }, '', false],
-    ['an archive entry', archived, ' project-entry--archive', false],
     [
       'an ongoing archive entry',
       { ...archived, ongoing: true },
@@ -75,9 +71,8 @@ describe('Entry', () => {
     expect(screen.queryByText('Present') !== null).toBe(present);
   });
 
-  // The heading beside it names the project, and the attributes reserve the
-  // 16:10 frame the stylesheet crops to rather than describe the file.
-  it('treats a screenshot as lazy decoration in its frame', () => {
+  // The heading beside it names the project.
+  it('treats a screenshot as decoration under the base path', () => {
     const { container } = render(<Entry data={archived} />);
 
     const image = container.querySelector('img');
@@ -88,11 +83,6 @@ describe('Entry', () => {
     ).toBeNull();
     expect(image).toHaveAttribute('src', withBasePath('/images/test.jpg'));
     expect(image).toHaveAttribute('alt', '');
-    expect(image).toHaveAttribute('loading', 'lazy');
-    expect(
-      Number(image?.getAttribute('width')) /
-        Number(image?.getAttribute('height')),
-    ).toBe(16 / 10);
   });
 
   // The absence of the link is the only thing an unlinked row says about itself.

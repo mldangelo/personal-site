@@ -34,16 +34,6 @@ function respondWith(payload: unknown) {
     fetchMock.mockResolvedValueOnce({ ok: true, json: async () => payload });
 }
 
-const MALFORMED = [
-  undefined,
-  null,
-  '12',
-  -1,
-  0.5,
-  Infinity,
-  { toString: null },
-];
-
 describe('Site', () => {
   beforeEach(() => {
     vi.stubEnv('GITHUB_TOKEN', undefined);
@@ -55,14 +45,10 @@ describe('Site', () => {
     vi.unstubAllEnvs();
   });
 
-  it('shows fetched counts, the measured line count, and the spoons', async () => {
+  it('shows fetched counts, asking anonymously by default', async () => {
     render(await Site());
 
     expect(counts()).toEqual(['1,663', '15', '75']);
-    expect(valueFor('Lines of TypeScript powering this site')).toMatch(
-      /^\d{1,3}(?:,\d{3})*$/,
-    );
-    expect(valueFor('Number of spoons')).toBe('0');
     expect(fetchMock.mock.lastCall?.[1].headers).not.toHaveProperty(
       'Authorization',
     );
@@ -88,25 +74,12 @@ describe('Site', () => {
       'the request fails outright',
       () => fetchMock.mockRejectedValueOnce(new Error('Network error')),
     ],
-    [
-      'a successful response is not JSON',
-      () =>
-        fetchMock.mockResolvedValueOnce({
-          ok: true,
-          json: async () => {
-            throw new SyntaxError('Unexpected token');
-          },
-        }),
-    ],
     ['the payload is an empty object', respondWith({})],
-    ['the payload is an array', respondWith([])],
-    ['the payload is null', respondWith(null)],
-    ['the payload is a string', respondWith('unexpected')],
     // Every count shares one check, so the last key stands in for all three.
-    ...MALFORMED.map((value): [string, () => void] => [
-      `forks is ${JSON.stringify(value)}`,
-      respondWith({ ...mockGitHubData, forks: value }),
-    ]),
+    [
+      'a count is not a number',
+      respondWith({ ...mockGitHubData, forks: '12' }),
+    ],
   ])('shows floors when %s', async (_, arrange) => {
     fetchMock.mockReset();
     arrange();

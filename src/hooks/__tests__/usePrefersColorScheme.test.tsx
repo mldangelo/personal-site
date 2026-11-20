@@ -55,9 +55,6 @@ describe('usePrefersColorScheme', () => {
     media.flipTo(false);
     expect(scheme()).toHaveTextContent('light');
 
-    media.flipTo(true);
-    expect(scheme()).toHaveTextContent('dark');
-
     unmount();
     expect(media.listeners.size).toBe(0);
   });

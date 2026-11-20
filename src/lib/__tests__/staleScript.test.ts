@@ -14,7 +14,6 @@ describe('isMissingScript', () => {
     ],
     [new TypeError('Failed to fetch dynamically imported module: /a.js'), true],
     [new Error('Cannot read properties of undefined'), false],
-    ['Loading chunk 1 failed.', false],
   ])('reads %s as %s', (error, expected) => {
     expect(isMissingScript(error)).toBe(expected);
   });

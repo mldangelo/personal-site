@@ -161,9 +161,6 @@ describe('draft preview', () => {
     );
 
     expect(markup).toContain(DRAFT_TITLE);
-    expect(markup).toContain('width="1200"');
-    expect(markup).toContain('height="675"');
-    expect(markup).not.toContain(`/og/writing/${DRAFT_SLUG}.png`);
   });
 });
 

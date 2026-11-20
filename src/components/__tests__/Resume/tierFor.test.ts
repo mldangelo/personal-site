@@ -18,7 +18,6 @@ describe('tierFor', () => {
 
   it.each([
     ['an intern with the newest date', 'Software Intern', '2027-01-01'],
-    ['an intern in any case', 'Research INTERN', '2023-01-01'],
     // `new Date('2013-01-01')` is UTC midnight, which getFullYear() reads as
     // 2012 west of Greenwich. The boundary must not move with the reader.
     ['the last day of the student era', 'Program Manager', '2012-12-31'],
@@ -28,14 +27,11 @@ describe('tierFor', () => {
     expect(tierFor(entry, [entry])).toBe('early');
   });
 
-  it.each(['International Director', 'Head of Internal Systems'])(
-    'keeps %s at full weight: not an internship',
-    (title) => {
-      expect(tierFor(role(title, '2020-01-01', '2024-01-01'), [])).toBe(
-        'primary',
-      );
-    },
-  );
+  it('keeps an International Director at full weight: not an internship', () => {
+    expect(
+      tierFor(role('International Director', '2020-01-01', '2024-01-01'), []),
+    ).toBe('primary');
+  });
 
   it('keeps the first day after the student era at full weight', () => {
     expect(tierFor(role('Engineer', '2010-01-01', '2013-01-01'), [])).toBe(

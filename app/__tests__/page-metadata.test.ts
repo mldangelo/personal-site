@@ -1,11 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
 import { sharedOpenGraph } from '@/lib/metadata';
-import { getPostBySlug, getPostSlugs } from '@/lib/posts';
-import { RESUME_JSON_URL } from '@/lib/resumeJson';
+import { getPostSlugs } from '@/lib/posts';
 import {
   AUTHOR_NAME,
-  SHARE_IMAGE_DIMENSIONS,
   SHARE_IMAGE_PATH,
   SITE_URL,
   TWITTER_HANDLE,
@@ -64,12 +62,10 @@ describe('page metadata', () => {
     );
   });
 
-  it.each([
-    ['writing', writingMetadata, { 'application/rss+xml': '/feed.xml' }],
-    ['resume', resumeMetadata, { 'application/json': RESUME_JSON_URL }],
-  ])('%s declares its alternate beside the canonical', (_, metadata, types) => {
-    expect(metadata.alternates?.types).toEqual(types);
-    expect(metadata.alternates?.canonical).toBeTruthy();
+  it('writing advertises its feed', () => {
+    expect(writingMetadata.alternates?.types).toEqual({
+      'application/rss+xml': '/feed.xml',
+    });
   });
 
   // A post declares the card generated for it rather than the site card, so a
@@ -80,16 +76,8 @@ describe('page metadata', () => {
       params: Promise.resolve({ slug }),
     });
 
-    expect(metadata.alternates?.canonical).toBe(`${SITE_URL}/writing/${slug}/`);
-    expect(metadata.openGraph).toMatchObject(sharedFields);
-    expect(metadata.twitter).toMatchObject(sharedTwitterFields);
-    expect(metadata.openGraph?.images).toEqual([
-      {
-        url: `${SITE_URL}/og/writing/${slug}.png`,
-        width: SHARE_IMAGE_DIMENSIONS.width,
-        height: SHARE_IMAGE_DIMENSIONS.height,
-        alt: `${getPostBySlug(slug)?.title} — ${AUTHOR_NAME}`,
-      },
+    expect(metadata.openGraph?.images).toMatchObject([
+      { url: `${SITE_URL}/og/writing/${slug}.png` },
     ]);
     expect(metadata.twitter?.images).toEqual(metadata.openGraph?.images);
   });

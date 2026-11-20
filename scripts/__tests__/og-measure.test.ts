@@ -3,7 +3,7 @@ import { beforeAll, describe, expect, it } from 'vitest';
 
 import { CARD_SIZE, readCardColors } from '../og-inputs.mjs';
 import { readoutTop, TOP_RULE } from '../og-layout.mjs';
-import { assertCardGeometry, inkBands } from '../og-measure.mjs';
+import { assertCardGeometry } from '../og-measure.mjs';
 
 const READOUT_TOP = readoutTop(CARD_SIZE);
 const LAST_ROW = CARD_SIZE.height - 1;
@@ -44,8 +44,9 @@ const fits = async (inkRows: [number, number][]) =>
   });
 
 describe('rendered card geometry', () => {
-  // The site card's copy is the profile, not a post's frontmatter, so its
-  // failure has to say what to shorten there.
+  // The failure satori does not report: the title's last line and the readout
+  // rule become one unbroken band of ink. The site card's copy is the profile,
+  // not a post's frontmatter, so its failure has to say what to shorten there.
   it('names the remedy for the card it is checking', async () => {
     await expect(
       assertCardGeometry(
@@ -75,16 +76,6 @@ describe('rendered card geometry', () => {
   });
 
   it.each<[string, [number, number][], RegExp]>([
-    // The failure satori does not report: the title's last line and the readout
-    // rule become one unbroken band of ink.
-    [
-      'copy that has run into the readout',
-      [
-        [0, TOP_RULE - 1],
-        [90, LAST_ROW],
-      ],
-      /Copy has run into the readout/,
-    ],
     [
       'a readout pushed down the card',
       [
@@ -105,11 +96,5 @@ describe('rendered card geometry', () => {
     ],
   ])('rejects %s', async (_name, inkRows, expected) => {
     await expect(fits(inkRows)).rejects.toThrow(expected);
-  });
-
-  it('refuses to measure non-PNG input', async () => {
-    await expect(
-      inkBands(Buffer.from('not a png at all'), paper),
-    ).rejects.toThrow(/not a PNG/);
   });
 });

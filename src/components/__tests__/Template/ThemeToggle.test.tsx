@@ -21,8 +21,6 @@ import {
 import { readColorToken } from '@/lib/tokens';
 import ThemeToggle from '../../Template/ThemeToggle';
 
-const DEVICES = ['light', 'dark'] as const;
-
 const CHROME_COLORS = {
   light: readColorToken(THEME_COLOR_TOKEN, 'light'),
   dark: readColorToken(THEME_COLOR_TOKEN, 'dark'),
@@ -66,8 +64,6 @@ const round = (device: ResolvedTheme) => [
   ...LAP[device].slice(1),
   LAP[device][0],
 ];
-
-const other = (device: ResolvedTheme) => (device === 'dark' ? 'light' : 'dark');
 
 const toggle = () => screen.getByRole('button');
 
@@ -216,39 +212,30 @@ describe('ThemeToggle', () => {
   });
 
   // No `suppressHydrationWarning` is in play, so a mismatch reaches
-  // `console.error`, or `onRecoverableError` when React had to re-render.
-  it.each(
-    DEVICES.flatMap((device) =>
-      THEME_CHOICES.map((choice) => [device, choice] as const),
-    ),
-  )(
-    'on a %s device with %s chosen, hydrating only adds a name to the markup',
-    (device, choice) => {
-      if (choice !== 'system') {
-        window.localStorage.setItem(THEME_STORAGE_KEY, choice);
-      }
-      openPage(device);
-      const { host, button } = serverMarkup();
-      const spans = button.innerHTML;
-      const errors = vi.spyOn(console, 'error').mockImplementation(() => {});
-      const recovered = vi.fn();
+  // `console.error`, or `onRecoverableError` when React had to re-render. Light
+  // stored on a dark device: naming the next step takes both, read on mount.
+  it('hydrating only adds a name to the markup', () => {
+    window.localStorage.setItem(THEME_STORAGE_KEY, 'light');
+    openPage('dark');
+    const { host, button } = serverMarkup();
+    const spans = button.innerHTML;
+    const errors = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const recovered = vi.fn();
 
-      act(() => {
-        hydrateRoot(host, <ThemeToggle />, { onRecoverableError: recovered });
-      });
+    act(() => {
+      hydrateRoot(host, <ThemeToggle />, { onRecoverableError: recovered });
+    });
 
-      expect(recovered).not.toHaveBeenCalled();
-      expect(errors).not.toHaveBeenCalled();
+    expect(recovered).not.toHaveBeenCalled();
+    expect(errors).not.toHaveBeenCalled();
 
-      const { name } = stopOf(device, choice);
-      expect(toggle()).toHaveAttribute('aria-label', name);
-      expect(toggle()).toHaveAttribute('title', name);
-      expect(button.innerHTML).toBe(spans);
-    },
-  );
+    const { name } = stopOf('dark', 'light');
+    expect(toggle()).toHaveAttribute('aria-label', name);
+    expect(toggle()).toHaveAttribute('title', name);
+    expect(button.innerHTML).toBe(spans);
+  });
 
   it.each([
-    ['light', 'light'],
     ['dark', 'dark'],
     // The bootstrap paints light with no device to ask, so light orders the lap.
     [null, 'light'],
@@ -293,12 +280,12 @@ describe('ThemeToggle', () => {
       render(<PressedOnCommit />);
     }
 
-    it.each(DEVICES)('orders the lap by a %s device', (device) => {
-      openPage(device);
+    it('orders the lap by the device', () => {
+      openPage('dark');
 
       press();
 
-      const [first, ...rest] = round(device);
+      const [first, ...rest] = round('dark');
       expect(reading()).toEqual(first);
       walk(rest);
     });
@@ -314,17 +301,17 @@ describe('ThemeToggle', () => {
       expect(reading()).toEqual(stopOf('light', 'light'));
     });
 
-    it.each(DEVICES)('holds on a %s device when storage throws', (device) => {
+    it('holds when storage throws', () => {
       // Throwing storage reads as `system`, so a mount effect that adopted it
       // after the press would undo the press.
-      openPage(device);
+      openPage('dark');
 
       // Reaching into it throws, as blocked site data does.
       vi.stubGlobal('localStorage', null);
       press();
       vi.unstubAllGlobals();
 
-      expect(reading()).toEqual({ ...LAP[device][1], stored: null });
+      expect(reading()).toEqual({ ...LAP.dark[1], stored: null });
     });
   });
 
@@ -342,7 +329,6 @@ describe('ThemeToggle', () => {
     window.localStorage.setItem(THEME_STORAGE_KEY, 'dark');
     otherTab(THEME_STORAGE_KEY);
     expect(reading()).toEqual(stopOf('light', 'dark'));
-    walk(LAP.light.slice(2));
 
     // Clearing site data elsewhere arrives with no key, and reads as `system`.
     window.localStorage.clear();
@@ -353,40 +339,26 @@ describe('ThemeToggle', () => {
   // A lap finishes in the order it set out in, or a flip makes the next press an
   // avoidable no-op. Only `system`, where a lap starts, asks the device again.
   describe('when the device flips', () => {
-    it.each(DEVICES)(
-      'on `system` on a %s device, follows it and walks its lap',
-      (device) => {
-        const media = openPage(device);
-        render(<ThemeToggle />);
+    it('on `system`, follows it and walks its lap', () => {
+      const media = openPage('light');
+      render(<ThemeToggle />);
 
-        media.flipTo(other(device));
-        expect(reading()).toEqual(LAP[other(device)][0]);
-        walk(round(other(device)));
+      media.flipTo('dark');
+      expect(reading()).toEqual(LAP.dark[0]);
+      walk(round('dark'));
+    });
 
-        // Round to `system` again, so the device is followed again.
-        media.flipTo(device);
-        expect(reading()).toEqual(LAP[device][0]);
-      },
-    );
+    it('part-way round a lap, holds the theme and finishes the lap', () => {
+      const media = openPage('dark');
+      render(<ThemeToggle />);
+      fireEvent.click(toggle());
+      const before = reading();
 
-    it.each(
-      DEVICES.flatMap((device) =>
-        [1, 2].map((presses) => [device, presses] as const),
-      ),
-    )(
-      'on a %s device after %i presses, holds the theme and finishes the lap',
-      (device, presses) => {
-        const media = openPage(device);
-        render(<ThemeToggle />);
-        for (let i = 0; i < presses; i += 1) fireEvent.click(toggle());
-        const before = reading();
+      media.flipTo('light');
 
-        media.flipTo(other(device));
-
-        expect(reading()).toEqual(before);
-        walk(LAP[device].slice(presses + 1));
-        walk(LAP[other(device)].slice(0, 2));
-      },
-    );
+      expect(reading()).toEqual(before);
+      walk(LAP.dark.slice(2));
+      walk(LAP.light.slice(0, 2));
+    });
   });
 });

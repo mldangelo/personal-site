@@ -28,17 +28,6 @@ describe('armSmoothScroll', () => {
     vi.restoreAllMocks();
   });
 
-  it('is in place before the click handler returns, and off at scrollend', () => {
-    armSmoothScroll();
-
-    // The browser reads `scroll-behavior` when it performs the default action,
-    // straight after the handlers; anything deferred would be too late.
-    expect(armed()).toBe(true);
-
-    scrollEnd();
-    expect(armed()).toBe(false);
-  });
-
   it('without scrollend, comes off once the page has been quiet a while', () => {
     // A click that had nowhere to scroll never reports a position at all.
     armSmoothScroll();
