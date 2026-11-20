@@ -82,15 +82,6 @@ const LOG_MARKDOWN_OPTIONS: MarkdownToJSX.Options = {
   createElement: createElementWithBasePath,
 };
 
-interface AboutSection {
-  nodes: MarkdownToJSX.ASTNode[];
-  id: string;
-  /** As a reader sees it: the heading and the section nav both print this. */
-  title: string;
-  /** The layout its list takes, when the title names one. */
-  variant: string | undefined;
-}
-
 /**
  * Sections whose lists are chronological get the log treatment: entries
  * hang off a spine with a tick each, the same device the resume uses.
@@ -163,10 +154,6 @@ function splitAboutMarkdown(markdown: string) {
 
   if (footnotes) (chunks.at(-1)?.nodes ?? intro).unshift(footnotes);
 
-  return { intro, sections: parseSections(chunks) };
-}
-
-function parseSections(chunks: AboutChunk[]): AboutSection[] {
   const sectionIds = createUniqueHeadingIds(
     chunks.map(({ title }) => title),
     PAGE_IDS,
@@ -174,12 +161,14 @@ function parseSections(chunks: AboutChunk[]): AboutSection[] {
 
   // The id and the variant are read from the title as authored. Only what a
   // reader sees is converted, and once, so the nav and the heading agree.
-  return chunks.map(({ nodes, title }, index) => ({
+  const sections = chunks.map(({ nodes, title }, index) => ({
     nodes,
     id: sectionIds[index],
     title: smartQuotes(title),
     variant: sectionVariants[title],
   }));
+
+  return { intro, sections };
 }
 
 export default function AboutContent({ markdown }: AboutContentProps) {

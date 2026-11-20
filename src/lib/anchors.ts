@@ -90,24 +90,13 @@ function collectReservedMarkdownIds(
       }
     }
 
-    if ('children' in node && Array.isArray(node.children)) {
-      for (const child of node.children) {
-        visit(child);
-      }
-    }
-
-    if ('items' in node) {
-      for (const item of node.items) {
-        for (const child of item) {
-          visit(child);
-        }
-      }
-    }
-
-    if (node.type === RuleType.table) {
-      for (const cell of [...node.header, ...node.cells.flat()]) {
-        for (const child of cell) {
-          visit(child);
+    // Nodes nest in `children`, list `items`, and table `header` and
+    // `cells`: arrays up to three deep.
+    for (const value of Object.values(node)) {
+      if (!Array.isArray(value)) continue;
+      for (const child of value.flat(2)) {
+        if (child && typeof child === 'object') {
+          visit(child as MarkdownToJSX.ASTNode);
         }
       }
     }
@@ -144,7 +133,6 @@ function collectReservedMarkdownIds(
  */
 export function planMarkdownHeadingAnchors(
   markdown: string,
-  pageIds: Iterable<string> = PAGE_IDS,
 ): MarkdownHeadingPlan {
   const headings: Array<{ source: string; legacy: string }> = [];
 
@@ -160,19 +148,22 @@ export function planMarkdownHeadingAnchors(
 
   const { footnoteIds, ids: reservedIds } = collectReservedMarkdownIds(
     ast,
-    pageIds,
+    PAGE_IDS,
   );
   const ids = createUniqueHeadingIds(
     headings.map(({ source }) => source),
     reservedIds,
   );
   const renderIdsBySource = new Map<string, string[]>();
-
-  for (const [index, { source }] of headings.entries()) {
+  const plan = (source: string, id: string) => {
     renderIdsBySource.set(source, [
       ...(renderIdsBySource.get(source) ?? []),
-      ids[index],
+      id,
     ]);
+  };
+
+  for (const [index, { source }] of headings.entries()) {
+    plan(source, ids[index]);
   }
 
   // markdown-to-jsx calls the same slugifier for footnote footer ids after it
@@ -180,10 +171,7 @@ export function planMarkdownHeadingAnchors(
   // paired with the href the parser already emitted, including when a heading
   // and footnote use the exact same source text.
   for (const [source, id] of footnoteIds) {
-    renderIdsBySource.set(source, [
-      ...(renderIdsBySource.get(source) ?? []),
-      id,
-    ]);
+    plan(source, id);
   }
 
   const callsBySource = new Map<string, number>();
@@ -205,9 +193,8 @@ export function planMarkdownHeadingAnchors(
     return sourceIds[call % sourceIds.length];
   };
 
-  const canonicalIds = new Set(ids);
   const aliases = new Map<string, string>();
-  const claimedIds = new Set([...reservedIds, ...canonicalIds]);
+  const claimedIds = new Set([...reservedIds, ...ids]);
 
   for (const [index, { legacy }] of headings.entries()) {
     if (!legacy || claimedIds.has(legacy)) {

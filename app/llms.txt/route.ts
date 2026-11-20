@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import routes from '@/data/routes';
+import { RESUME_JSON_URL } from '@/lib/resumeJson';
 import { AUTHOR_NAME, SITE_DESCRIPTION, SITE_URL } from '@/lib/utils';
 import { getWritingItems } from '@/lib/writing';
 import { metadata as about } from '../about/page';
@@ -77,7 +78,7 @@ ${posts.join('\n')}
 
 ## Data
 
-${entry('Résumé as JSON Resume', `${SITE_URL}/resume.json`, 'The résumé in the JSON Resume v1.0.0 schema')}
+${entry('Résumé as JSON Resume', RESUME_JSON_URL, 'The résumé in the JSON Resume v1.0.0 schema')}
 ${entry('RSS feed', `${SITE_URL}/feed.xml`, 'Posts and articles, newest first')}
 ${entry('Sitemap', `${SITE_URL}/sitemap.xml`)}
 

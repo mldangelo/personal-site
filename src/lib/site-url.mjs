@@ -31,14 +31,28 @@ export function parseSiteUrl(homepage) {
 }
 
 /**
+ * The GitHub repository `package.json` `repository` names, given as a string
+ * or as `{ url }`, or `undefined` when it names none.
+ */
+export function parseGitHubRepository(repository) {
+  const url = typeof repository === 'string' ? repository : repository?.url;
+  const [, owner, name] =
+    /github\.com[/:]([^/]+)\/([^/]+?)(?:\.git)?\/?$/i.exec(url ?? '') ?? [];
+  return owner ? { owner, name } : undefined;
+}
+
+/** A path from the site's root, which a protocol-relative `//host` is not. */
+export function isRootRelative(path) {
+  return path.startsWith('/') && !path.startsWith('//');
+}
+
+/**
  * A root-relative path as a browser must request it. Next prefixes the base
  * path onto its own links, scripts, and metadata, but not onto a raw `src` or
  * `href`; other URLs pass through unchanged.
  */
 export function prefixBasePath(basePath, path) {
-  return path.startsWith('/') && !path.startsWith('//')
-    ? `${basePath}${path}`
-    : path;
+  return isRootRelative(path) ? `${basePath}${path}` : path;
 }
 
 /**

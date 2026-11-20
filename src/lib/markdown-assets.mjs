@@ -186,12 +186,6 @@ export function readMarkdownReferences(markdown, { blocks } = {}) {
   return references;
 }
 
-export function readMarkdownImageSources(markdown) {
-  return readMarkdownReferences(markdown)
-    .filter(({ kind }) => kind === 'image')
-    .map(({ target }) => target);
-}
-
 const REFERENCE_PLACEHOLDER = 'markdown-assets:reference:';
 
 /**

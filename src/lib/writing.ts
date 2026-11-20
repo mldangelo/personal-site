@@ -10,13 +10,8 @@ export interface WritingItem extends WritingEntry {
 
 /** Stable newest-first order; undated guides sort by title at the end. */
 export function compareWritingItems(a: WritingItem, b: WritingItem): number {
-  if (!a.date && !b.date) {
-    return a.title.localeCompare(b.title) || a.url.localeCompare(b.url);
-  }
-  if (!a.date) return 1;
-  if (!b.date) return -1;
-
   return (
+    Number(!a.date) - Number(!b.date) ||
     b.date.localeCompare(a.date) ||
     a.title.localeCompare(b.title) ||
     a.url.localeCompare(b.url)

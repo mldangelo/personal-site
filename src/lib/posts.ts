@@ -1,10 +1,6 @@
-import fs from 'node:fs';
 import path from 'node:path';
 
-import { parseFrontmatter } from './frontmatter.mjs';
-import { listPostFiles } from './post-files.mjs';
-
-import { validatePostFrontmatterData } from './post-frontmatter.mjs';
+import { listPostFiles, readPostFile } from './post-files.mjs';
 import { publishedMarkdown } from './published-markdown.mjs';
 
 interface PostFrontmatter {
@@ -45,24 +41,16 @@ function isPublished(post: Post): boolean {
 }
 
 /** Reads a post off disk without considering draft status. */
-function readPost({
-  slug,
-  path: fullPath,
-}: {
-  slug: string;
-  path: string;
-}): Post {
-  const fileContents = fs.readFileSync(fullPath, 'utf8');
-  const { data, content } = parseFrontmatter(fileContents);
+function readPost(file: { slug: string; path: string }): Post {
   // A TypeScript assertion on parsed YAML does not protect a static build:
   // malformed YAML would become `undefined` metadata, an invalid sort key, or
   // a truthy string masquerading as `draft`. The error names the file.
-  const frontmatter = validatePostFrontmatterData(
-    data,
-    path.relative(process.cwd(), fullPath),
-  ) as PostFrontmatter;
-
-  return { ...frontmatter, slug, content: publishedMarkdown(content) };
+  const { slug, frontmatter, content } = readPostFile(file);
+  return {
+    ...(frontmatter as PostFrontmatter),
+    slug,
+    content: publishedMarkdown(content),
+  };
 }
 
 /**
@@ -97,10 +85,9 @@ function readPublishedPosts(): Post[] {
 /**
  * Parsed posts, held for the life of the process.
  *
- * A static export reaches this from four independent entry points — the
- * sitemap, the feed, the writing index, and `generateStaticParams` — and then
- * twice more per post route, once in `generateMetadata` and once in the page.
- * Uncached, each of those re-walked the directory and re-parsed every file.
+ * A static export reads it from many routes, and twice more per post, once in
+ * `generateMetadata` and once in the page. Uncached, each read would re-walk
+ * the directory and re-parse every file.
  *
  * Skipped under `next dev` so edits to a post appear without a restart, which
  * is also the mode where drafts are visible.

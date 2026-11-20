@@ -4,7 +4,7 @@ import ContactIcons from '@/components/Contact/ContactIcons';
 import work from '@/data/resume/work';
 import routes from '@/data/routes';
 import { currentPosition } from '@/lib/career';
-import { SOURCE_REPOSITORY } from '@/lib/telemetry';
+import { SOURCE_REPOSITORY } from '@/lib/source-repository';
 import { smartQuotes } from '@/lib/typography';
 import { AUTHOR_NAME } from '@/lib/utils';
 

@@ -4,7 +4,7 @@
    ======================================== */
 
 /* The list itself is the register shared with /projects and /speaking
-   (cards.css); only the header row is the page's own. */
+   (cards.css). */
 .page-header {
   display: flex;
   flex-wrap: wrap;

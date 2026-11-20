@@ -11,11 +11,8 @@ import {
   vi,
 } from 'vitest';
 import { getPostBySlug, getPostSlugs } from '@/lib/posts';
-import {
-  SHARE_IMAGE_DIMENSIONS,
-  SHARE_IMAGE_PATH,
-  SITE_URL,
-} from '@/lib/utils';
+import { CARD_SIZE, HOME_CARD_PATH } from '@/lib/share-cards.mjs';
+import { SITE_URL } from '@/lib/utils';
 import PostPage, { generateMetadata } from './page';
 
 // `npm run og` draws a card for every real post, but none for these
@@ -150,7 +147,7 @@ describe('draft preview', () => {
     expect(metadata.robots).toEqual({ index: false, follow: false });
     expect(metadata.alternates).toBeUndefined();
     expect(metadata.openGraph?.url).toBeUndefined();
-    expect(serialized).toContain(SHARE_IMAGE_PATH);
+    expect(serialized).toContain(HOME_CARD_PATH);
     expect(serialized).not.toContain(`/og/writing/${DRAFT_SLUG}.png`);
   });
 
@@ -180,7 +177,7 @@ describe('writing post structured data', () => {
       'zz-without-image-fixture',
       {
         url: '/og/writing/zz-without-image-fixture.png',
-        ...SHARE_IMAGE_DIMENSIONS,
+        ...CARD_SIZE,
       },
     ],
   ])('publishes the right image for %s', async (slug, { url, ...size }) => {

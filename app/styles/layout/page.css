@@ -4,9 +4,9 @@
    ======================================== */
 
 /* Page container - flex column for sticky footer.
-   The header is fixed and body carries matching top padding, so a full 100vh
-   here made every short page exactly one header taller than the viewport and
-   scroll by 64px for nothing. dvh also tracks mobile browser chrome. */
+   The header is fixed and body carries matching top padding, so the height
+   leaves the header out: a full viewport would make every short page one
+   header taller than the screen. dvh also tracks mobile browser chrome. */
 .page-container {
   display: flex;
   flex-direction: column;

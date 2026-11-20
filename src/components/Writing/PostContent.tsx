@@ -23,12 +23,8 @@ import { preload } from 'react-dom';
 
 import { planMarkdownHeadingAnchors } from '@/lib/anchors';
 import type { ImageSize } from '@/lib/imageSize';
-import {
-  createElementWithBasePath,
-  isRootLocalImage,
-  smartQuotesRule,
-} from '@/lib/markdown';
-import { prefixSrcset, splitSrcset } from '@/lib/site-url.mjs';
+import { createElementWithBasePath, smartQuotesRule } from '@/lib/markdown';
+import { isRootRelative, prefixSrcset, splitSrcset } from '@/lib/site-url.mjs';
 import { BASE_PATH, withBasePath } from '@/lib/utils';
 
 interface PostContentProps {
@@ -212,14 +208,6 @@ function scrollCodeFence(event: ReactKeyboardEvent<HTMLPreElement>) {
 }
 
 /**
- * Makes a code fence keyboard-reachable only while it actually overflows.
- *
- * A short fence needs no extra tab stop. A wide one does, because horizontal
- * keyboard scrolling starts only after the scroll container receives focus.
- * There is no landmark role: the preformatted content already supplies the
- * useful semantics, and repeated code-block regions would just add noise.
- */
-/**
  * A raw `<pre>`'s body as the text it shows: tags dropped, entities decoded.
  * The parser keeps that body as opaque text, so as HTML it could carry markup
  * the Markdown checks never read: a `style` URL, an image, a script link.
@@ -249,6 +237,14 @@ const PROSE_LANGUAGES = new Set([
   'txt',
 ]);
 
+/**
+ * Makes a code fence keyboard-reachable only while it actually overflows.
+ *
+ * A short fence needs no extra tab stop. A wide one does, because horizontal
+ * keyboard scrolling starts only after the scroll container receives focus.
+ * There is no landmark role: the preformatted content already supplies the
+ * useful semantics, and repeated code-block regions would just add noise.
+ */
 function CodeFence({
   children,
   dangerouslySetInnerHTML: raw,
@@ -340,7 +336,7 @@ export default function PostContent({
 }: PostContentProps) {
   function sizeFor(src: string): ImageSize {
     const measuredSize = imageSizes[src];
-    if (isRootLocalImage(src) && !measuredSize && !allowMissingLocalImages) {
+    if (isRootRelative(src) && !measuredSize && !allowMissingLocalImages) {
       throw new Error(
         `Missing measured dimensions for local article image: ${src}`,
       );
@@ -429,7 +425,7 @@ export default function PostContent({
   /** A local figure that is not already a link links to its own file. */
   function opensFullSize(node: ReactNode, src: string): boolean {
     return (
-      isValidElement(node) && node.type === ProseImage && isRootLocalImage(src)
+      isValidElement(node) && node.type === ProseImage && isRootRelative(src)
     );
   }
 

@@ -1,5 +1,8 @@
 import fs from 'node:fs';
-import { join, relative } from 'node:path';
+import { join, relative, sep } from 'node:path';
+
+import { parseFrontmatter } from './frontmatter.mjs';
+import { validatePostFrontmatterData } from './post-frontmatter.mjs';
 
 /**
  * The post files in `content/writing/`, as every reader sees them: the site,
@@ -42,4 +45,16 @@ export function listPostFiles(directory) {
       return { slug, path };
     })
     .sort((a, b) => a.slug.localeCompare(b.slug));
+}
+
+/**
+ * One listed post, parsed and validated. `source` is its path from the
+ * working directory, with forward slashes on every platform, and every
+ * validation error names it.
+ */
+export function readPostFile({ slug, path }) {
+  const source = relative(process.cwd(), path).split(sep).join('/');
+  const { data, content } = parseFrontmatter(fs.readFileSync(path, 'utf8'));
+  const frontmatter = validatePostFrontmatterData(data, source);
+  return { slug, source, frontmatter, content };
 }

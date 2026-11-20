@@ -172,9 +172,9 @@ export function storeThemeChoice(choice: ThemeChoice): void {
  * no `matchMedia` to ask.
  *
  * Render from `usePrefersColorScheme` instead: it subscribes, which is what
- * keeps `system` live. This is for the two moments `ThemeToggle` needs the
- * device before that hook has reported: on mounting, and in a press that
- * lands earlier still. A press can be dispatched between hydration and the
+ * keeps `system` live. This is for when `ThemeToggle` needs the device before
+ * that hook has reported: on mounting, on another tab's change, and in a press
+ * that lands earlier still. A press can be dispatched between hydration and the
  * mount effects, to the hydration render's handler, where the hook still says
  * `null` — and ordering the cycle by a guess there brings the no-op first
  * press back for whichever device the guess is wrong about.

@@ -9,7 +9,10 @@
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, resolve, sep } from 'node:path';
 
-import { parseSiteUrl } from '../../src/lib/site-url.mjs';
+import {
+  parseGitHubRepository,
+  parseSiteUrl,
+} from '../../src/lib/site-url.mjs';
 
 /**
  * The site URL from `package.json` `homepage`, through the parser the site
@@ -40,13 +43,11 @@ export function readSiteConfig(root, label) {
  * so a link through it still reaches this site's files.
  */
 function pagesAddress(repository) {
-  const url = typeof repository === 'string' ? repository : repository?.url;
-  const [, owner, repo] =
-    /github\.com[/:]([^/]+)\/([^/]+?)(?:\.git)?\/?$/i.exec(url ?? '') ?? [];
+  const { owner, name } = parseGitHubRepository(repository) ?? {};
   if (!owner) return undefined;
 
   const host = `${owner}.github.io`.toLowerCase();
-  return { host, pathPrefix: repo.toLowerCase() === host ? '' : `/${repo}` };
+  return { host, pathPrefix: name.toLowerCase() === host ? '' : `/${name}` };
 }
 
 /** URLs always use forward slashes; `relative` uses the platform separator. */
@@ -73,7 +74,6 @@ export function exportLayout({ outDir, origin, basePath }) {
 
   const routeForPublicPath = (pathname) => {
     if (!basePath) return pathname;
-    if (pathname === `${basePath}/`) return '/';
     if (!pathname.startsWith(`${basePath}/`)) return undefined;
     return pathname.slice(basePath.length);
   };

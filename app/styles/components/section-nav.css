@@ -1,11 +1,12 @@
 /* ========================================
    SECTION NAV
-   The sticky index of a long page's sections: the résumé and About
+   The sticky index of a long page's sections: the résumé, About, and
+   writing pages
    ======================================== */
 
-/* Sentence-case labels on a rule, not a pill bar. The bar is the sticky, opaque part and the row inside it is the part that
-   scrolls and fades: a mask on the bar itself would let the page show through
-   its faded edges. */
+/* Sentence-case labels on a rule, not a pill bar. The bar is the sticky,
+   opaque part and the row inside it is the part that scrolls and fades: a
+   mask on the bar itself would let the page show through its faded edges. */
 .section-nav {
   position: sticky;
   top: var(--header-height);

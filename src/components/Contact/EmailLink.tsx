@@ -40,13 +40,11 @@ const messages = [
 ];
 
 interface AnimationState {
+  /** The message on screen; once past the last one, the cycle has ended. */
   idx: number;
   message: string;
   char: number;
-  isActive: boolean;
 }
-
-type AnimationAction = { type: 'TICK' };
 
 /**
  * The opening frame of a message. It already shows the first character, so the
@@ -57,41 +55,31 @@ function startOf(idx: number): AnimationState {
     idx,
     message: messages[idx].slice(0, 1),
     char: 2,
-    isActive: true,
   };
 }
 
-function animationReducer(
-  state: AnimationState,
-  action: AnimationAction,
-): AnimationState {
-  switch (action.type) {
-    case 'TICK': {
-      if (state.idx >= messages.length) {
-        return state;
-      }
-
-      const finished =
-        state.char - HOLD_TICKS_AFTER_MESSAGE >= messages[state.idx].length;
-
-      if (!finished) {
-        return {
-          ...state,
-          message: messages[state.idx].slice(0, state.char),
-          char: state.char + 1,
-          isActive: true,
-        };
-      }
-
-      const nextIdx = state.idx + 1;
-
-      if (nextIdx === messages.length) {
-        return { ...state, idx: messages.length, isActive: false };
-      }
-
-      return startOf(nextIdx);
-    }
+/** One tick of the cycle: the next character, or the next message. */
+function tick(state: AnimationState): AnimationState {
+  if (state.idx >= messages.length) {
+    return state;
   }
+
+  const finished =
+    state.char - HOLD_TICKS_AFTER_MESSAGE >= messages[state.idx].length;
+
+  if (!finished) {
+    return {
+      ...state,
+      message: messages[state.idx].slice(0, state.char),
+      char: state.char + 1,
+    };
+  }
+
+  const nextIdx = state.idx + 1;
+
+  return nextIdx === messages.length
+    ? { ...state, idx: nextIdx }
+    : startOf(nextIdx);
 }
 
 export default function EmailLink() {
@@ -99,23 +87,23 @@ export default function EmailLink() {
 
   // Opens on the real local part, already complete, so the first thing anyone
   // sees is the actual address — and it holds there before the cycle starts.
-  const [state, dispatch] = useReducer(animationReducer, {
+  const [state, dispatch] = useReducer(tick, {
     idx: 0,
     message: CONTACT_LOCAL_PART,
     char: messages[0].length,
-    isActive: true,
   });
 
   // Hover and focus each hold the animation, so leaving with the pointer
   // never restarts it under a keyboard user's focus.
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
-  const animating = state.isActive && !reducedMotion && !hovered && !focused;
+  const animating =
+    state.idx < messages.length && !reducedMotion && !hovered && !focused;
 
   useEffect(() => {
     if (!animating) return;
 
-    const id = setInterval(() => dispatch({ type: 'TICK' }), ANIMATION_TICK_MS);
+    const id = setInterval(dispatch, ANIMATION_TICK_MS);
     return () => clearInterval(id);
   }, [animating]);
 

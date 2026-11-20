@@ -202,13 +202,8 @@ function referencedBootstrapFiles(html, route) {
 
   const resolved = new Set();
   for (const reference of references) {
-    let url;
-    try {
-      url = new URL(reference, siteUrlForRoute(route));
-    } catch {
-      continue;
-    }
-    if (url.origin !== site.origin) continue;
+    const url = URL.parse(reference, siteUrlForRoute(route));
+    if (url?.origin !== site.origin) continue;
 
     const file = exportFileFor(url.pathname);
     if (!file) {

@@ -351,8 +351,8 @@
     content: ' (' attr(href) ')';
     font-family: var(--font-mono);
     font-size: 8pt;
-    /* The company sits in a bold display h3; a URL should read as an
-       annotation of it rather than as more of the heading. */
+    /* The company sits in a heading; a URL should read as an annotation
+       of it rather than as more of the heading. */
     font-weight: var(--font-weight-normal);
     letter-spacing: var(--tracking-normal);
     color: var(--color-fg-light);

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { MAIN_CONTENT_ID } from '@/components/Template/PageWrapper';
 import { createPageMetadata } from '@/lib/metadata';
+import { MAIN_CONTENT_ID } from '@/lib/page-ids';
 
 export const metadata: Metadata = createPageMetadata({
   title: 'Page not found',

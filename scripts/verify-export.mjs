@@ -11,13 +11,11 @@
  */
 import { existsSync, readFileSync } from 'node:fs';
 import { basename, extname, join, relative, resolve } from 'node:path';
-import { parseFrontmatter } from '../src/lib/frontmatter.mjs';
 import {
   parseSrcset,
   readMarkdownReferences,
 } from '../src/lib/markdown-assets.mjs';
-import { listPostFiles } from '../src/lib/post-files.mjs';
-import { validatePostFrontmatterData } from '../src/lib/post-frontmatter.mjs';
+import { listPostFiles, readPostFile } from '../src/lib/post-files.mjs';
 import { prefixBasePath } from '../src/lib/site-url.mjs';
 import {
   attribute,
@@ -41,6 +39,11 @@ const CONTENT = resolve(ROOT, 'content/writing');
 
 const failures = [];
 const fail = (page, message) => failures.push({ page, message });
+
+/** Each value listed more than once, once. */
+const duplicates = (values) => [
+  ...new Set(values.filter((value, index) => values.indexOf(value) !== index)),
+];
 
 /** Reports a same-origin URL outside the configured base path; true if it is. */
 function isOutsideBasePath(url, page, label, raw) {
@@ -80,9 +83,7 @@ function throughPagesAlias(url) {
     return url;
   }
   const rest = url.pathname.slice(alias.pathPrefix.length) || '/';
-  return new URL(
-    `${SITE_ORIGIN}${SITE_BASE_PATH}${rest}${url.search}${url.hash}`,
-  );
+  return new URL(`${siteUrlForRoute(rest)}${url.search}${url.hash}`);
 }
 
 const pages = walkFiles(OUT).filter((path) => path.endsWith('.html'));
@@ -92,19 +93,9 @@ if (pages.length === 0) {
   process.exit(1);
 }
 
-const posts = listPostFiles(CONTENT).map(({ slug, path }) => {
-  const source = toUrlPath(relative(ROOT, path));
-  const { data, content } = parseFrontmatter(readFileSync(path, 'utf8'));
-  const frontmatter = validatePostFrontmatterData(data, source);
-
-  return {
-    slug,
-    source,
-    content,
-    frontmatter,
-  };
-});
-const drafts = posts.filter(({ frontmatter }) => frontmatter.draft === true);
+const drafts = listPostFiles(CONTENT)
+  .map(readPostFile)
+  .filter(({ frontmatter }) => frontmatter.draft === true);
 const draftSlugs = drafts.map(({ slug }) => slug);
 
 function isDraftPath(pathname) {
@@ -416,9 +407,7 @@ for (const record of records) {
     }
   }
 
-  const duplicateIds = [
-    ...new Set(ids.filter((id, index) => ids.indexOf(id) !== index)),
-  ];
+  const duplicateIds = duplicates(ids);
   if (duplicateIds.length > 0) {
     fail(relativePath, `duplicate ids: ${duplicateIds.join(', ')}`);
   }
@@ -695,7 +684,7 @@ for (const draft of drafts) {
  */
 for (const file of walkFiles(OUT).filter((path) => path.endsWith('.css'))) {
   const sheet = toUrlPath(relative(OUT, file));
-  const base = `${SITE_ORIGIN}${publicPathForRoute(`/${sheet}`)}`;
+  const base = siteUrlForRoute(`/${sheet}`);
   const css = readFileSync(file, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
   for (const [, quoted, single, bare] of css.matchAll(
     /url\(\s*(?:"([^"]*)"|'([^']*)'|([^)\s]*))\s*\)/g,
@@ -723,15 +712,9 @@ if (!existsSync(sitemapPath)) {
   if (locations.length === 0) {
     fail('sitemap.xml', 'contains no <loc> entries');
   }
-  const duplicates = [
-    ...new Set(
-      locations.filter(
-        (location, index) => locations.indexOf(location) !== index,
-      ),
-    ),
-  ];
-  if (duplicates.length > 0) {
-    fail('sitemap.xml', `duplicate URLs: ${duplicates.join(', ')}`);
+  const repeated = duplicates(locations);
+  if (repeated.length > 0) {
+    fail('sitemap.xml', `duplicate URLs: ${repeated.join(', ')}`);
   }
 
   const sitemapRoutes = new Set();
@@ -806,7 +789,7 @@ if (!existsSync(feedPath)) {
     validateAbsoluteUrl(url, 'feed.xml', 'URL', { external: true });
   }
   // A reader treats items with one guid as one item.
-  for (const guid of new Set(guids.filter((g, i) => guids.indexOf(g) !== i))) {
+  for (const guid of duplicates(guids)) {
     fail('feed.xml', `has more than one item with guid ${guid}`);
   }
 }
@@ -852,13 +835,10 @@ const JSON_RESUME_ROOT_KEYS = new Set([
  * have to make the same promise or a summary mentioning a generic passes
  * `npm test` and then fails this gate with a message naming the wrong cause.
  *
- * The name must be followed by whitespace, `/`, or `>`, which rules out the
- * common generics (`Map<string, number>`, `Set<T>`, `Promise<Response>`). It
- * does not rule out all of them: a single-letter type parameter that happens
- * to spell an element name still matches, so `List<b>` and `Array<U>` read as
- * tags. That residue is deliberate — the alternative is letting a real `<b>`
- * through — and it is why this is a whitelist and not `<[a-z/]...>`, which
- * fires on every generic. Unhandled elements stay in the list so a construct
+ * The name must be followed by whitespace, `/`, or `>`, which rules out
+ * `Set<T>` and `Promise<Response>`, though not a type parameter that spells an
+ * element name: `List<b>` and `Array<U>` read as tags, rather than a real `<b>`
+ * getting through. Unhandled elements stay in the list so a construct
  * `toPlainText` does not yet strip still surfaces here rather than shipping.
  */
 const HTML_TAG =
@@ -884,6 +864,8 @@ const resumeJsonPath = join(OUT, 'resume.json');
 if (!existsSync(resumeJsonPath)) {
   fail('resume.json', 'missing from export');
 } else {
+  const isObject = (value) =>
+    value !== null && typeof value === 'object' && !Array.isArray(value);
   let resume;
   try {
     resume = JSON.parse(readFileSync(resumeJsonPath, 'utf8'));
@@ -891,10 +873,7 @@ if (!existsSync(resumeJsonPath)) {
     fail('resume.json', `is not valid JSON: ${error.message}`);
   }
 
-  if (
-    resume !== undefined &&
-    (resume === null || typeof resume !== 'object' || Array.isArray(resume))
-  ) {
+  if (resume !== undefined && !isObject(resume)) {
     fail('resume.json', 'root must be a JSON object');
   } else if (resume !== undefined) {
     for (const key of Object.keys(resume)) {
@@ -915,11 +894,7 @@ if (!existsSync(resumeJsonPath)) {
       fail('resume.json', 'work is missing or empty');
     } else {
       resume.work.forEach((entry, index) => {
-        if (
-          entry === null ||
-          typeof entry !== 'object' ||
-          Array.isArray(entry)
-        ) {
+        if (!isObject(entry)) {
           fail('resume.json', `work[${index}] must be a JSON object`);
         }
       });

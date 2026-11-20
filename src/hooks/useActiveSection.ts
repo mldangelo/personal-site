@@ -90,13 +90,8 @@ export default function useActiveSection<Id extends string>(
   const key = ids.join(' ');
 
   useEffect(() => {
-    const sectionIds = key === '' ? [] : (key.split(' ') as Id[]);
-
-    if (sectionIds.length === 0) {
-      setActiveId(undefined);
-      return;
-    }
-
+    // Every caller renders the nav only with sections to list.
+    const sectionIds = key.split(' ') as Id[];
     const nav = navRef.current;
     let frame = 0;
     let held = '';

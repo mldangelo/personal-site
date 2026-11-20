@@ -1,12 +1,12 @@
 /* ========================================
    TAG COMPONENTS
-   Tech tags, skill tags, and chips
+   Tech tags and skill tags
    ======================================== */
 
 /* One row per group: its name in the résumé's gutter, its tags beside it on
    the name's baseline. The two measures are the ones `.resume-content` gives
-   the experience spine, so the tags stand under the roles above them. Stacked
-   label-over-tags, six groups took most of a screen to list thirty words. */
+   the experience spine, so the tags stand under the roles above them, and
+   six groups take a few lines rather than a screen. */
 .skill-groups {
   display: grid;
   gap: 0.875rem;

@@ -2,12 +2,8 @@ import { describe, expect, it } from 'vitest';
 
 import { sharedOpenGraph } from '@/lib/metadata';
 import { getPostSlugs } from '@/lib/posts';
-import {
-  AUTHOR_NAME,
-  SHARE_IMAGE_PATH,
-  SITE_URL,
-  TWITTER_HANDLE,
-} from '@/lib/utils';
+import { HOME_CARD_PATH } from '@/lib/share-cards.mjs';
+import { AUTHOR_NAME, SITE_URL, TWITTER_HANDLE } from '@/lib/utils';
 import { metadata as aboutMetadata } from '../about/page';
 import { metadata as contactMetadata } from '../contact/page';
 import { metadata as notFoundMetadata } from '../not-found';
@@ -55,11 +51,9 @@ describe('page metadata', () => {
       ...share,
     });
     expect(JSON.stringify(metadata.openGraph?.images)).toContain(
-      SHARE_IMAGE_PATH,
+      HOME_CARD_PATH,
     );
-    expect(JSON.stringify(metadata.twitter?.images)).toContain(
-      SHARE_IMAGE_PATH,
-    );
+    expect(JSON.stringify(metadata.twitter?.images)).toContain(HOME_CARD_PATH);
   });
 
   it('writing advertises its feed', () => {
