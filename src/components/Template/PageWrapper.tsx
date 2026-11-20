@@ -8,9 +8,6 @@ interface PageWrapperProps {
   footer?: 'full' | 'links';
 }
 
-/** Target for the skip link in the root layout. */
-export { MAIN_CONTENT_ID };
-
 /** The structure every page shares: its main landmark, then the footer. */
 export default function PageWrapper({
   children,

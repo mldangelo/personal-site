@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 
-import { MAIN_CONTENT_ID } from '@/components/Template/PageWrapper';
+import { MAIN_CONTENT_ID } from '@/lib/page-ids';
 import { claimReload, isMissingScript } from '@/lib/staleScript';
 import { withBasePath } from '@/lib/utils';
 

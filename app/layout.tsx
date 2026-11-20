@@ -4,10 +4,9 @@ import { SiteSchema } from '@/components/Schema';
 import FragmentHistory from '@/components/Template/FragmentHistory';
 import GoogleAnalytics from '@/components/Template/GoogleAnalytics';
 import Navigation from '@/components/Template/Navigation';
-import { MAIN_CONTENT_ID } from '@/components/Template/PageWrapper';
 import ScrollToTop from '@/components/Template/ScrollToTop';
 import { sharedOpenGraph, sharedTwitter } from '@/lib/metadata';
-import { THEME_SCRIPT_ID } from '@/lib/page-ids';
+import { MAIN_CONTENT_ID, THEME_SCRIPT_ID } from '@/lib/page-ids';
 import {
   THEME_COLOR_TOKEN,
   type ThemeColors,
