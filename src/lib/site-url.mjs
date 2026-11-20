@@ -30,15 +30,18 @@ export function parseSiteUrl(homepage) {
   return { origin: url.origin, basePath, siteUrl: `${url.origin}${basePath}` };
 }
 
+/** A path from the site's root, which a protocol-relative `//host` is not. */
+export function isRootRelative(path) {
+  return path.startsWith('/') && !path.startsWith('//');
+}
+
 /**
  * A root-relative path as a browser must request it. Next prefixes the base
  * path onto its own links, scripts, and metadata, but not onto a raw `src` or
  * `href`; other URLs pass through unchanged.
  */
 export function prefixBasePath(basePath, path) {
-  return path.startsWith('/') && !path.startsWith('//')
-    ? `${basePath}${path}`
-    : path;
+  return isRootRelative(path) ? `${basePath}${path}` : path;
 }
 
 /**

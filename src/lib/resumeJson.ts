@@ -113,9 +113,9 @@ interface JsonResume {
  * are plain strings. Each employer's own URL remains available separately on
  * the work entry.
  *
- * Only the anchor tags are stripped, so technical prose such as comparisons
- * and `Map<K, V>` survives; any other markup stays visible to the export
- * verifier.
+ * Only the inline elements below are stripped, so technical prose such as
+ * comparisons and `Map<K, V>` survives; any other markup stays visible to the
+ * export verifier.
  */
 export function toPlainText(value: string): string {
   return (

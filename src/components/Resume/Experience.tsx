@@ -9,19 +9,11 @@ interface ExperienceProps {
   now: DateInput;
 }
 
-/** Year before which a role is treated as student-era. */
-const STUDENT_ERA_BEFORE = 2013;
-
 /**
- * Year from an ISO date, read from the string rather than parsed.
- *
- * `new Date('2013-01-01')` is UTC midnight, which `getFullYear()` renders as
- * 2012 anywhere west of Greenwich, so parsing would move the student-era
- * boundary with the reader's timezone.
+ * A role that ended before this is student-era. Compared as a string, like
+ * every ISO date here, so the boundary cannot move with the reader's timezone.
  */
-function isoYear(date: string): number {
-  return Number.parseInt(date.slice(0, 4), 10);
-}
+const STUDENT_ERA_BEFORE = '2013';
 
 function isEarlyCareer(job: Position): boolean {
   // A whole word: "International Director" and "Internal Systems" are not
@@ -30,7 +22,7 @@ function isEarlyCareer(job: Position): boolean {
     return true;
   }
 
-  return Boolean(job.endDate && isoYear(job.endDate) < STUDENT_ERA_BEFORE);
+  return Boolean(job.endDate && job.endDate < STUDENT_ERA_BEFORE);
 }
 
 /**

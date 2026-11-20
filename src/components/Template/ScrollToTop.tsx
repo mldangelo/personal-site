@@ -14,7 +14,8 @@ import { useEffect, useRef } from 'react';
  *
  * `instant`, so the reset cannot pick up the smooth scrolling a section-nav
  * click arms for its own jump (`src/lib/smoothScroll.ts`) when a route change
- * follows before that jump has finished. *
+ * follows before that jump has finished.
+ *
  * It also moves focus into the new page when the change left it nowhere. A
  * link inside the page being left goes with that page, so focus falls back to
  * `<body>`, and the next Tab starts wherever the browser guesses. The new
@@ -27,13 +28,11 @@ export default function ScrollToTop() {
   const isFirstRender = useRef(true);
 
   useEffect(() => {
-    // Skip initial render to avoid unnecessary scroll on page load
     if (isFirstRender.current) {
       isFirstRender.current = false;
       return;
     }
 
-    // Instant scroll to top on route change
     window.scrollTo({ top: 0, behavior: 'instant' });
 
     if (document.activeElement === document.body) {

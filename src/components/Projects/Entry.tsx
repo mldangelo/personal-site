@@ -11,9 +11,8 @@ interface EntryProps {
 }
 
 /**
- * The 16:10 frame a screenshot is cropped to, at twice its largest rendered
- * size. The files themselves run from 1.49:1 to 2.35:1, so these describe the
- * shape every thumbnail shares rather than any one image.
+ * The 16:10 frame every thumbnail is cropped to, at twice its largest rendered
+ * size.
  */
 const THUMBNAIL = { width: 240, height: 150 } as const;
 

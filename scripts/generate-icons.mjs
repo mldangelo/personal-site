@@ -59,7 +59,7 @@ const META_OUTPUT = join(root, 'scripts', 'icons.meta.json');
  * proportionally larger type to stay legible, and the maskable variant needs
  * smaller type to stay inside Android's 80%-diameter safe circle.
  */
-function mark(size, ratio, colors, monogram) {
+function mark(size, ratio, monogram) {
   return h(
     'div',
     {
@@ -69,7 +69,7 @@ function mark(size, ratio, colors, monogram) {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        background: colors.accent,
+        background: accent,
       },
     },
     h(
@@ -85,7 +85,7 @@ function mark(size, ratio, colors, monogram) {
           // charging it symmetrically, which pushed the ink 1.6% right of
           // centre on a 512px tile. Two capitals do not need the correction.
           letterSpacing: '0',
-          color: colors.onAccent,
+          color: onAccent,
         },
       },
       monogram,
@@ -93,11 +93,11 @@ function mark(size, ratio, colors, monogram) {
   );
 }
 
-async function renderPng(size, ratio, colors, monogram, font) {
-  const response = new ImageResponse(mark(size, ratio, colors, monogram), {
+async function renderPng(size, ratio, monogram) {
+  const response = new ImageResponse(mark(size, ratio, monogram), {
     width: size,
     height: size,
-    fonts: [font],
+    fonts: [display],
   });
 
   return Buffer.from(await response.arrayBuffer());
@@ -143,14 +143,13 @@ const accent = readColorToken('--color-accent', 'light', root);
 const onAccent = readColorToken('--color-on-accent', 'light', root);
 const bgLight = readColorToken('--color-bg-alt', 'light', root);
 
-const colors = { accent, onAccent };
 const MONOGRAM = monogramFor(profile.name);
 
 /**
  * Every raster the set needs, and the type size each one uses.
  *
- * The 16px entry drops to a single initial: two 800-weight capitals inside 16
- * pixels resolve to a smudge, and one legible letter beats two illegible ones.
+ * The 16px entry drops to a single initial: two capitals inside 16 pixels
+ * resolve to a smudge, and one legible letter beats two illegible ones.
  */
 const RASTERS = [
   { size: 16, ratio: 0.78, text: MONOGRAM[0] },
@@ -172,7 +171,7 @@ const rendered = new Map();
 for (const { size, ratio, text, key } of RASTERS) {
   rendered.set(
     key ?? String(size),
-    await renderPng(size, ratio, colors, text ?? MONOGRAM, display),
+    await renderPng(size, ratio, text ?? MONOGRAM),
   );
 }
 
@@ -236,21 +235,12 @@ await Promise.all(
  */
 const generatorSources = await Promise.all(
   [
-    ['scripts/generate-icons.mjs', new URL(import.meta.url)],
-    ['scripts/lib/fonts.mjs', new URL('./lib/fonts.mjs', import.meta.url)],
-    [
-      'scripts/lib/monogram.mjs',
-      new URL('./lib/monogram.mjs', import.meta.url),
-    ],
-    [
-      'scripts/lib/image-renderer.mjs',
-      new URL('./lib/image-renderer.mjs', import.meta.url),
-    ],
-    [
-      'src/lib/color-token.mjs',
-      new URL('../src/lib/color-token.mjs', import.meta.url),
-    ],
-  ].map(async ([path, url]) => [path, await readFile(url, 'utf8')]),
+    'scripts/generate-icons.mjs',
+    'scripts/lib/fonts.mjs',
+    'scripts/lib/monogram.mjs',
+    'scripts/lib/image-renderer.mjs',
+    'src/lib/color-token.mjs',
+  ].map(async (path) => [path, await readFile(join(root, path), 'utf8')]),
 );
 const inputs = {
   accent,

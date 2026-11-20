@@ -60,8 +60,7 @@ const root = process.cwd();
 // The stats page reads the same profile file, so the cards cannot silently
 // drift from the public facts elsewhere on the site.
 const {
-  profile,
-  profileSnapshot,
+  profileSnapshot: profile,
   size,
   fonts: fontSources,
   colors,
@@ -74,14 +73,6 @@ const { ink, paper, body, graphite, accent, hairline } = colors;
 
 await requireSharp();
 
-/* ---------------------------------------------------------------------------
- * Layout.
- *
- * satori lays a card out but reports nothing back, so a post title one line
- * taller than the card expects would silently collide with the readout rule.
- * The title size is therefore chosen up front from an estimate, and every
- * number that estimate assumes is the same constant the styles use.
- * ------------------------------------------------------------------------- */
 /**
  * The site card reports selected static profile facts.
  *
@@ -338,7 +329,6 @@ const rendered = [
 ];
 for (const post of posts) {
   rendered.push({
-    slug: post.slug,
     path: post.path,
     image: await render(postCard(post), `The share card for ${post.slug}`, {
       text: [
@@ -362,7 +352,7 @@ const ledger = {
   size,
   fonts: fontSources,
   renderer,
-  profile: profileSnapshot,
+  profile,
   colors,
   generatorDigest,
   imageDigest: digests.get(HOME_CARD_PATH),

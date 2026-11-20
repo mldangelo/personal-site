@@ -72,11 +72,3 @@ export const createElementWithBasePath: NonNullable<
 
   return createElement(tag, prefixed, ...children);
 };
-
-/**
- * An image source that names a file under `public/`: root-relative, and not
- * protocol-relative.
- */
-export function isRootLocalImage(src: string): boolean {
-  return src.startsWith('/') && !src.startsWith('//');
-}

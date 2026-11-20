@@ -8,4 +8,3 @@ export function readMarkdownReferences(
   markdown: string,
   options?: { blocks?: number },
 ): MarkdownReference[];
-export function readMarkdownImageSources(markdown: string): string[];

@@ -3,10 +3,10 @@ import { extname, join } from 'node:path';
 
 const SOURCE_ROOTS = ['app', 'src'];
 const SOURCE_EXTENSIONS = new Set(['.ts', '.tsx']);
-const SKIP_DIRECTORIES = new Set(['__tests__', 'node_modules', '.next', 'out']);
+const SKIP_DIRECTORIES = new Set(['__tests__']);
 
 function isTestFile(name: string): boolean {
-  return /\.(test|spec)\.tsx?$/.test(name) || name.startsWith('vitest.');
+  return /\.(test|spec)\.tsx?$/.test(name);
 }
 
 /**
@@ -16,10 +16,6 @@ function isTestFile(name: string): boolean {
  * empty final segment from `split`, which is not a line.
  */
 function countLines(contents: string): number {
-  if (contents === '') {
-    return 0;
-  }
-
   const segments = contents.split('\n');
 
   return segments[segments.length - 1] === ''

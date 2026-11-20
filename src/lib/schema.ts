@@ -196,7 +196,7 @@ export function profilePageNode(options: PageNodeOptions): SchemaNode {
   };
 }
 
-/** A WebPage subtype for pages that primarily list things (e.g. writing, archive). */
+/** A WebPage subtype for pages that list things, such as `/writing`. */
 export function collectionPageNode(options: PageNodeOptions): SchemaNode {
   return {
     ...baseWebPage('CollectionPage', options),

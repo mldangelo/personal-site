@@ -1,12 +1,13 @@
 import type { Metadata } from 'next';
 
-import { SiteSchema } from '@/components/Schema';
+import { SchemaGraph } from '@/components/Schema';
 import FragmentHistory from '@/components/Template/FragmentHistory';
 import GoogleAnalytics from '@/components/Template/GoogleAnalytics';
 import Navigation from '@/components/Template/Navigation';
 import ScrollToTop from '@/components/Template/ScrollToTop';
 import { sharedOpenGraph, sharedTwitter } from '@/lib/metadata';
 import { MAIN_CONTENT_ID, THEME_SCRIPT_ID } from '@/lib/page-ids';
+import { personNode, websiteNode } from '@/lib/schema';
 import {
   THEME_COLOR_TOKEN,
   type ThemeColors,
@@ -142,7 +143,8 @@ export default function RootLayout({
           id={THEME_SCRIPT_ID}
           dangerouslySetInnerHTML={{ __html: themeInitScript(CHROME_COLORS) }}
         />
-        <SiteSchema />
+        {/* Every route inherits these; page graphs reference them by `@id`. */}
+        <SchemaGraph nodes={[websiteNode(), personNode()]} />
       </head>
       <body>
         {/* First focusable element on the page. The About and Resume pages

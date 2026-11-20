@@ -73,7 +73,6 @@ export function exportLayout({ outDir, origin, basePath }) {
 
   const routeForPublicPath = (pathname) => {
     if (!basePath) return pathname;
-    if (pathname === `${basePath}/`) return '/';
     if (!pathname.startsWith(`${basePath}/`)) return undefined;
     return pathname.slice(basePath.length);
   };

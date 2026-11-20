@@ -7,31 +7,19 @@ import {
 } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { afterEach, beforeAll, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
+import { formatDate } from '@/lib/dates.mjs';
 import { validatePostFrontmatterData } from '@/lib/post-frontmatter.mjs';
-import { getAllPosts } from '@/lib/posts';
-import { formatDate } from '@/lib/utils';
 import { assertFontDigest } from '../lib/fonts.mjs';
 import {
   CARD_FONTS,
   CARD_SIZE,
   countProseWords,
   countUniqueExternalLinks,
-  formatCardDate,
   imageDigest,
   readPostCards,
 } from '../og-inputs.mjs';
 import { titleFontSize } from '../og-layout.mjs';
-
-interface PostCard {
-  slug: string;
-  path: string;
-  title: string;
-  description: string;
-  date: string;
-  dateLabel: string;
-  readout: { label: string; value: string }[];
-}
 
 const ROOT = process.cwd();
 const base = {
@@ -40,12 +28,6 @@ const base = {
   description: 'Fixture description.',
 };
 const temporaryRoots: string[] = [];
-
-let cards: PostCard[] = [];
-
-beforeAll(async () => {
-  cards = (await readPostCards(ROOT)) as PostCard[];
-});
 
 afterEach(() => {
   for (const root of temporaryRoots.splice(0)) {
@@ -85,16 +67,8 @@ describe('share card inputs', () => {
     ).resolves.toEqual([]);
   });
 
-  it('prints the date as its post header does', () => {
-    for (const post of getAllPosts()) {
-      expect(cards.find((card) => card.slug === post.slug)?.dateLabel).toBe(
-        formatDate(post.date),
-      );
-    }
-  });
-
   it('formats a date without drifting a day west of Greenwich', () => {
-    expect(formatCardDate('2026-01-08')).toBe('January 8, 2026');
+    expect(formatDate('2026-01-08')).toBe('January 8, 2026');
   });
 });
 
@@ -133,9 +107,7 @@ describe('share card frontmatter validation', () => {
       description: '  Fixture description.  ',
       draft: false,
     };
-    const [card] = (await readPostCards(
-      postFixture(frontmatter),
-    )) as PostCard[];
+    const [card] = await readPostCards(postFixture(frontmatter));
     const { title, date, description } =
       validatePostFrontmatterData(frontmatter);
 

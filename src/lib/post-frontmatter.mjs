@@ -47,10 +47,11 @@ export function validatePostFrontmatterData(value, source = 'post') {
 
   // The last revision a reader would notice, not every commit: search
   // engines and feed readers take it as the date the text changed.
-  const updated =
-    value.updated === undefined
+  const optionalText = (field) =>
+    value[field] === undefined
       ? undefined
-      : requiredText(value.updated, 'updated', source);
+      : requiredText(value[field], field, source);
+  const updated = optionalText('updated');
   if (updated !== undefined && (!isCalendarDate(updated) || updated < date)) {
     throw frontmatterError(
       source,
@@ -62,14 +63,8 @@ export function validatePostFrontmatterData(value, source = 'post') {
     throw frontmatterError(source, '"draft" must be a boolean when provided');
   }
 
-  const image =
-    value.image === undefined
-      ? undefined
-      : requiredText(value.image, 'image', source);
-  const imageAlt =
-    value.imageAlt === undefined
-      ? undefined
-      : requiredText(value.imageAlt, 'imageAlt', source);
+  const image = optionalText('image');
+  const imageAlt = optionalText('imageAlt');
 
   if (image && (!image.startsWith('/') || image.startsWith('//'))) {
     throw frontmatterError(

@@ -1,30 +1,12 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-import { isRootLocalImage } from './markdown';
-import {
-  readMarkdownImageSources,
-  readMarkdownReferences,
-} from './markdown-assets.mjs';
+import { readMarkdownReferences } from './markdown-assets.mjs';
+import { isRootRelative } from './site-url.mjs';
 
 export interface ImageSize {
   width: number;
   height: number;
-}
-
-/** A local article image that cannot be safely measured at build time. */
-class ImageSizeError extends Error {
-  /** Set only for a missing file, the one failure a draft preview may skip. */
-  readonly code?: 'NOT_FOUND';
-
-  constructor(
-    message: string,
-    options?: ErrorOptions & { code?: 'NOT_FOUND' },
-  ) {
-    super(message, options);
-    this.name = 'ImageSizeError';
-    this.code = options?.code;
-  }
 }
 
 const PNG_SIGNATURE = Buffer.from([
@@ -82,23 +64,22 @@ export function readImageSize(publicPath: string): ImageSize {
   try {
     buffer = readFileSync(filePath);
   } catch (error) {
-    const missing = getNodeErrorCode(error) === 'ENOENT';
-    throw new ImageSizeError(
-      missing
+    throw new Error(
+      isMissingFile(error)
         ? `Local image does not exist: ${publicPath}`
         : `Local image could not be read: ${publicPath}`,
-      { cause: error, code: missing ? 'NOT_FOUND' : undefined },
+      { cause: error },
     );
   }
 
   const size = parseImageSize(buffer);
   if (!size) {
-    throw new ImageSizeError(
+    throw new Error(
       `Local image has an unsupported or malformed header: ${publicPath}`,
     );
   }
   if (!isComplete(buffer)) {
-    throw new ImageSizeError(`Local image is truncated: ${publicPath}`);
+    throw new Error(`Local image is truncated: ${publicPath}`);
   }
 
   return size;
@@ -106,12 +87,11 @@ export function readImageSize(publicPath: string): ImageSize {
 
 function resolvePublicImage(publicPath: string): string {
   if (
-    !publicPath.startsWith('/') ||
-    publicPath.startsWith('//') ||
+    !isRootRelative(publicPath) ||
     publicPath.includes('\\') ||
     publicPath.includes('\0')
   ) {
-    throw new ImageSizeError(
+    throw new Error(
       `Local image path must be a root-relative URL: ${publicPath}`,
     );
   }
@@ -121,32 +101,27 @@ function resolvePublicImage(publicPath: string): string {
     const rawPathname = publicPath.split(/[?#]/, 1)[0];
     pathname = decodeURIComponent(rawPathname);
   } catch (error) {
-    throw new ImageSizeError(
-      `Local image path is not a valid URL: ${publicPath}`,
-      { cause: error },
-    );
+    throw new Error(`Local image path is not a valid URL: ${publicPath}`, {
+      cause: error,
+    });
   }
 
   if (pathname.includes('\\') || pathname.includes('\0')) {
-    throw new ImageSizeError(
+    throw new Error(
       `Local image path contains an invalid separator: ${publicPath}`,
     );
   }
 
   const publicDirectory = resolve(process.cwd(), 'public');
   if (pathname.split('/').includes('..')) {
-    throw new ImageSizeError(
-      `Local image resolves outside public/: ${publicPath}`,
-    );
+    throw new Error(`Local image resolves outside public/: ${publicPath}`);
   }
 
   return resolve(publicDirectory, `.${pathname}`);
 }
 
-function getNodeErrorCode(error: unknown): string | undefined {
-  return error instanceof Error && 'code' in error
-    ? String(error.code)
-    : undefined;
+function isMissingFile(error: unknown): boolean {
+  return (error as NodeJS.ErrnoException | undefined)?.code === 'ENOENT';
 }
 
 function png(buffer: Buffer): ImageSize | null {
@@ -308,24 +283,23 @@ export function readPostImageSizes(
 ): Record<string, ImageSize> {
   const sizes: Record<string, ImageSize> = {};
 
-  for (const src of readMarkdownImageSources(markdown)) {
-    if (isRootLocalImage(src)) {
+  for (const { kind, target: src } of readMarkdownReferences(markdown)) {
+    if (kind !== 'image') continue;
+    if (isRootRelative(src)) {
       try {
         sizes[src] = readImageSize(src);
       } catch (error) {
+        // A missing file is the one failure a draft preview may skip.
         if (
           options.allowMissingLocalImages &&
-          error instanceof ImageSizeError &&
-          error.code === 'NOT_FOUND'
+          isMissingFile((error as Error).cause)
         ) {
           continue;
         }
         throw error;
       }
     } else if (!isExternalImage(src)) {
-      throw new ImageSizeError(
-        `Local article image path must be root-relative: ${src}`,
-      );
+      throw new Error(`Local article image path must be root-relative: ${src}`);
     }
   }
 

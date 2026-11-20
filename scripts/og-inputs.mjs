@@ -14,10 +14,9 @@ import { join } from 'node:path';
 import { parser, RuleType } from 'markdown-to-jsx/markdown';
 
 import { readColorToken } from '../src/lib/color-token.mjs';
-import { parseFrontmatter } from '../src/lib/frontmatter.mjs';
+import { formatDate } from '../src/lib/dates.mjs';
 import { readMarkdownReferences } from '../src/lib/markdown-assets.mjs';
-import { listPostFiles } from '../src/lib/post-files.mjs';
-import { validatePostFrontmatterData } from '../src/lib/post-frontmatter.mjs';
+import { listPostFiles, readPostFile } from '../src/lib/post-files.mjs';
 import { DISPLAY_FONT } from './lib/fonts.mjs';
 import { readImageRenderer } from './lib/image-renderer.mjs';
 import { readSiteConfig } from './lib/site.mjs';
@@ -65,9 +64,11 @@ const GENERATOR_SOURCES = [
   'scripts/lib/image-renderer.mjs',
   'scripts/og-inputs.mjs',
   'src/lib/color-token.mjs',
+  'src/lib/dates.mjs',
   'src/lib/frontmatter.mjs',
   'scripts/og-layout.mjs',
   'src/lib/markdown-assets.mjs',
+  'src/lib/post-files.mjs',
   'src/lib/post-frontmatter.mjs',
 ];
 
@@ -90,10 +91,6 @@ const CONTENT_DIRECTORY = join('content', 'writing');
 
 /** Words per minute used for the reading-time readout. */
 const READING_WORDS_PER_MINUTE = 225;
-
-function postCardPath(slug) {
-  return `${POST_CARD_DIRECTORY}/${slug}.png`;
-}
 
 /** Resolves a root-relative public URL to its file on disk. */
 export function publicFile(root, publicPath) {
@@ -132,11 +129,6 @@ export function readCardColors(root = process.cwd()) {
   );
 }
 
-/**
- * Slugs are filenames, and a card path is built from them, so hold them to the
- * same shape `isSafeSlug` in `src/lib/posts.ts` accepts. A post whose slug that
- * function rejects has no route to share anyway.
- */
 /**
  * The site's own origin, through the `homepage` reader the export scripts use.
  *
@@ -239,36 +231,16 @@ export function countUniqueExternalLinks(markdown) {
   for (const { kind, target } of readMarkdownReferences(markdown)) {
     if (kind !== 'link') continue;
 
-    let url;
-    try {
-      url = new URL(target, origin);
-    } catch {
-      continue;
-    }
+    const url = URL.parse(target, origin);
 
     // Same-origin absolute links are navigation, not outbound references.
-    if (!['http:', 'https:'].includes(url.protocol)) continue;
+    if (!['http:', 'https:'].includes(url?.protocol)) continue;
     if (url.origin === origin) continue;
 
     external.add(url.href);
   }
 
   return external.size;
-}
-
-/**
- * The date exactly as the post header prints it.
- *
- * Noon avoids the timezone shift that makes a UTC-midnight date render as the
- * previous day west of Greenwich — the same reason `formatDate` in
- * `src/lib/utils.ts` parses at noon. A test pins the two together.
- */
-export function formatCardDate(date) {
-  return new Date(`${date}T12:00:00`).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
 }
 
 /**
@@ -307,20 +279,17 @@ function measurePost(markdown) {
 export async function readPostCards(root = process.cwd()) {
   const cards = [];
 
-  for (const { slug, path } of listPostFiles(join(root, CONTENT_DIRECTORY))) {
-    const { data, content } = parseFrontmatter(await readFile(path, 'utf8'));
-    const source = join(CONTENT_DIRECTORY, `${slug}.md`);
-    const frontmatter = validatePostFrontmatterData(data, source);
-
+  const files = listPostFiles(join(root, CONTENT_DIRECTORY));
+  for (const { slug, frontmatter, content } of files.map(readPostFile)) {
     if (frontmatter.draft === true) continue;
 
     cards.push({
       slug,
-      path: postCardPath(slug),
+      path: `${POST_CARD_DIRECTORY}/${slug}.png`,
       title: frontmatter.title,
       description: frontmatter.description,
       date: frontmatter.date,
-      dateLabel: formatCardDate(frontmatter.date),
+      dateLabel: formatDate(frontmatter.date),
       readout: measurePost(content),
     });
   }
@@ -358,7 +327,6 @@ export async function readCardInputs(root = process.cwd()) {
     .digest('hex');
 
   return {
-    profile,
     size: CARD_SIZE,
     fonts: CARD_FONTS,
     profileSnapshot,
