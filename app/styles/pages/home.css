@@ -199,7 +199,7 @@
 }
 
 /* → and ↗ are in none of the self-hosted subsets, so one system face draws
-   every arrow, as on the résumé. */
+   every arrow. */
 .home-writing-all span,
 .home-writing-arrow {
   font-family: system-ui, sans-serif;

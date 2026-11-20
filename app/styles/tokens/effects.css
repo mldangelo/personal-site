@@ -7,8 +7,8 @@
 @theme {
   /* ===================
      BORDER RADIUS
-     Near-square. `--radius-full` survives for the theme
-     toggle and status dots, where a circle is the point.
+     Near-square. `--radius-full` is for the timeline ticks,
+     where a circle is the point.
      =================== */
   --radius-xs: 1px;
   --radius-sm: 2px;

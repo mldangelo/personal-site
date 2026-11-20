@@ -193,11 +193,10 @@ a.project-entry:focus-visible .project-entry-external {
   transform: translate(1px, -1px);
 }
 
-/* Decoration beside a titled row, cropped to one shape. The screenshots run
-   from 1.49:1 to 2.35:1; fitted whole into a shared frame, each one showed a
-   different amount of grey bar. The ratio is restated here because the width
-   and height attributes only supply it until the file loads — after that the
-   image's own shape would take over and move the row. */
+/* Decoration beside a titled row, in one 16:10 frame. The ratio is restated
+   here because the width and height attributes only supply it until the file
+   loads — after that a file of another shape would take over and move the
+   row. */
 .project-entry-thumb {
   grid-column: 3;
   grid-row: 1;

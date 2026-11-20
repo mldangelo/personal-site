@@ -40,7 +40,7 @@
   /* ===================
      FOCUS RING
      Blue for controls on paper; ink around blue-filled controls so
-     the ring remains distinct from the fill. Contrast is tested below.
+     the ring remains distinct from the fill. `contrast.test.ts` holds both.
      =================== */
   --color-focus-ring: var(--color-accent);
   --color-focus-ring-fill: var(--color-fg-bold);

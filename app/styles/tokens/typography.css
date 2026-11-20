@@ -28,7 +28,7 @@
   /* ===================
      FONT SIZES (rem — absolute, so nesting never compounds)
      =================== */
-  --text-ui: 0.8125rem; /* 13px — nav, buttons, filters, section indexes */
+  --text-ui: 0.8125rem; /* 13px — nav, buttons, section indexes */
   --text-xs: 0.75rem; /* 12px */
   --text-sm: 0.875rem; /* 14px */
   --text-base: 1rem; /* 16px */

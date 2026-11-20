@@ -19,9 +19,8 @@
   width: 100%;
 }
 
-/* Both cells, not just `td`. Labels became `th[scope="row"]` for screen
-   readers, which dropped them out of this rule and left half-width row
-   rules and mismatched alignment. */
+/* Both cells, not just `td`: each label is a `th[scope="row"]`, and a rule
+   on `td` alone draws half-width row rules and misaligns the cells. */
 .stat-table th,
 .stat-table td {
   padding-block: 1rem;
