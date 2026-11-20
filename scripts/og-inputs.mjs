@@ -17,16 +17,16 @@ import { readColorToken } from '../src/lib/color-token.mjs';
 import { formatDate } from '../src/lib/dates.mjs';
 import { readMarkdownReferences } from '../src/lib/markdown-assets.mjs';
 import { listPostFiles, readPostFile } from '../src/lib/post-files.mjs';
+import { CARD_SIZE, postCardPath } from '../src/lib/share-cards.mjs';
 import { DISPLAY_FONT } from './lib/fonts.mjs';
 import { readImageRenderer } from './lib/image-renderer.mjs';
 import { readSiteConfig } from './lib/site.mjs';
 
-/** Every card is a `summary_large_image`, so every card is this size. */
-export const CARD_SIZE = { width: 1200, height: 630 };
-
-export const HOME_CARD_PATH = '/og.png';
-/** One card per published post, named after its slug. */
-export const POST_CARD_DIRECTORY = '/og/writing';
+export {
+  CARD_SIZE,
+  HOME_CARD_PATH,
+  POST_CARD_DIRECTORY,
+} from '../src/lib/share-cards.mjs';
 export const LEDGER_PATH = '/og.meta.json';
 
 /** The three type roles, as exact checksummed TTFs (see `lib/fonts.mjs`). */
@@ -70,6 +70,7 @@ const GENERATOR_SOURCES = [
   'src/lib/markdown-assets.mjs',
   'src/lib/post-files.mjs',
   'src/lib/post-frontmatter.mjs',
+  'src/lib/share-cards.mjs',
 ];
 
 /**
@@ -285,7 +286,7 @@ export async function readPostCards(root = process.cwd()) {
 
     cards.push({
       slug,
-      path: `${POST_CARD_DIRECTORY}/${slug}.png`,
+      path: postCardPath(slug),
       title: frontmatter.title,
       description: frontmatter.description,
       date: frontmatter.date,

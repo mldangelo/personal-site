@@ -1,13 +1,8 @@
 import type { Metadata } from 'next';
 
 import profile from '@/data/profile.json';
-import {
-  AUTHOR_NAME,
-  SHARE_IMAGE_DIMENSIONS,
-  SHARE_IMAGE_PATH,
-  SITE_URL,
-  TWITTER_HANDLE,
-} from './utils';
+import { CARD_SIZE, HOME_CARD_PATH } from './share-cards.mjs';
+import { AUTHOR_NAME, SITE_URL, TWITTER_HANDLE } from './utils';
 
 interface PageMetadataOptions {
   title: string;
@@ -35,9 +30,9 @@ export const sharedOpenGraph: Metadata['openGraph'] = {
   siteName: AUTHOR_NAME,
   images: [
     {
-      url: SHARE_IMAGE_PATH,
-      width: SHARE_IMAGE_DIMENSIONS.width,
-      height: SHARE_IMAGE_DIMENSIONS.height,
+      url: HOME_CARD_PATH,
+      width: CARD_SIZE.width,
+      height: CARD_SIZE.height,
       alt: SHARE_IMAGE_ALT,
     },
   ],
@@ -47,7 +42,7 @@ export const sharedTwitter: Metadata['twitter'] = {
   card: 'summary_large_image',
   site: TWITTER_HANDLE,
   creator: TWITTER_HANDLE,
-  images: [SHARE_IMAGE_PATH],
+  images: [HOME_CARD_PATH],
 };
 
 export function createPageMetadata({

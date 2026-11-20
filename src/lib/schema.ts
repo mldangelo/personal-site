@@ -4,11 +4,10 @@ import degrees from '@/data/resume/degrees';
 import work from '@/data/resume/work';
 import { currentPosition } from '@/lib/career';
 import type { Post } from '@/lib/posts';
+import { CARD_SIZE, HOME_CARD_PATH } from '@/lib/share-cards.mjs';
 import {
   AUTHOR_NAME,
   canonicalPostUrl,
-  SHARE_IMAGE_DIMENSIONS,
-  SHARE_IMAGE_PATH,
   SITE_DESCRIPTION,
   SITE_IMAGE_DIMENSIONS,
   SITE_IMAGE_PATH,
@@ -234,9 +233,9 @@ export function blogPostingNode(
 ): SchemaNode {
   const url = canonicalPostUrl(post.slug);
   const image = articleImage ?? {
-    url: `${SITE_URL}${SHARE_IMAGE_PATH}`,
-    width: SHARE_IMAGE_DIMENSIONS.width,
-    height: SHARE_IMAGE_DIMENSIONS.height,
+    url: `${SITE_URL}${HOME_CARD_PATH}`,
+    width: CARD_SIZE.width,
+    height: CARD_SIZE.height,
   };
 
   return {
