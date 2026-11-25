@@ -46,7 +46,7 @@
   "devDependencies": {
     "@biomejs/biome": "^2.6.7",
     "@next/bundle-analyzer": "^16.4.6",
-    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/jest-dom": "^8.0.0",
     "@testing-library/react": "^16.3.3",
     "@types/node": "^26.6.6",
     "@types/react": "^19.3.0",
